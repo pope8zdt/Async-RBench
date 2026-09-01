@@ -103,6 +103,16 @@ python -m pytest -q
 
 如上述任一命令失败，不要启动付费模型实验。保存完整错误输出并报告 commit SHA、Python 版本、Docker 版本和操作系统。
 
+### 5.1 关于克隆测试中的 skip 项
+
+仓库有意不随库发布大体积作者本地输入（`upstream/*` 上游源码树、
+`candidate_cases/`、`candidate_instances/` 生产数据、`artifacts/*` 运行时产物）。
+依赖这些资源的测试通过 `tests/author_local.py` 守卫：资源缺失时以明确原因跳过
+（`author-local resource is not part of the repository checkout: ...`），因此
+**干净克隆上 pytest 应当通过且只出现 skip，不出现 failed/error**；在作者机器上
+这些资源齐全，同一批测试全部正常执行。克隆基线：482 collected 左右，0 失败，
+skip 数为上述作者本地测试之和。若克隆上出现 failed/error，请报告 commit SHA。
+
 ## 6. 选择注册实例
 
 打开 `cases/registry.json`，选择负责人分配的 `calibration` 或 `development` 实例。运行时实例键格式为：
