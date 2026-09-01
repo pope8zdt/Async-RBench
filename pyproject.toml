@@ -10,7 +10,10 @@ requires-python = ">=3.11"
 dependencies = ["PyYAML>=6.0"]
 
 [project.optional-dependencies]
-test = ["pytest>=8.0,<10"]
+# filelock/jsonschema were undeclared dependencies of the scripts/ tooling and
+# of imported test modules; `.[test]` must be self-sufficient for the full
+# framework test run on a fresh clone.
+test = ["pytest>=8.0,<10", "jsonschema>=4.0", "filelock>=3.0"]
 
 [project.scripts]
 async-rbench = "async_rbench.cli:main"
