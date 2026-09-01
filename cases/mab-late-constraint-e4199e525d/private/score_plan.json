@@ -1,0 +1,396 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority",
+      "dimension": "event_intake",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "evidence_group": "res064_pingpong.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Validate source identity and table-tennis authority evidence before finalizing.",
+      "forbidden_behavior": "Do not finalize the provisional 5Q or accept an unbound result.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.01_classify_authority",
+      "independence_key": "res064_pingpong.cf.01_classify_authority",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "mutation_id": "res064_pingpong.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.receipt"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_from_authority",
+      "dimension": "state_revision",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "evidence_group": "res064_pingpong.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Revise skill selection and opponent adaptation from the authoritative method while preserving source framing.",
+      "forbidden_behavior": "Do not ignore the authority or replace it with generic robot learning.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.02_revise_from_authority",
+      "independence_key": "res064_pingpong.cf.02_revise_from_authority",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "resolve_authority",
+      "mutation_id": "res064_pingpong.mutation.02_revise_from_authority",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.evidence"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_selective_replan",
+      "dimension": "plan_revision",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "evidence_group": "res064_pingpong.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Update dependent trials, metrics, and expected results without erasing unaffected literature findings.",
+      "forbidden_behavior": "Do not leave evaluation disconnected from the revised method.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.03_selective_replan",
+      "independence_key": "res064_pingpong.cf.03_selective_replan",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "selective_replan",
+      "mutation_id": "res064_pingpong.mutation.03_selective_replan",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.evidence"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:revise_affected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure",
+      "dimension": "closure",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "evidence_group": "res064_pingpong.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final 5Q and closure from receipt, native binding, and preserved facts.",
+      "forbidden_behavior": "Do not close without exact 5Q, digests, and preservation checks.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.04_verify_closure",
+      "independence_key": "res064_pingpong.cf.04_verify_closure",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "mutation_id": "res064_pingpong.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.closure"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.source_native_resolution"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not finalize the provisional 5Q or accept an unbound result.",
+      "family": "wait_for_authority",
+      "id": "res064_pingpong.mutation.01_classify_authority",
+      "may_fail": [],
+      "must_fail": [
+        "res064_pingpong.cf.01_classify_authority"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "targets": [
+        "res064_pingpong.cf.01_classify_authority",
+        "mab_late_constraint_e4199e525d.event.receipt",
+        "mab_late_constraint_e4199e525d.event.evidence",
+        "mab_late_constraint_e4199e525d.closure",
+        "mab_late_constraint_e4199e525d.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore the authority or replace it with generic robot learning.",
+      "family": "resolve_authority",
+      "id": "res064_pingpong.mutation.02_revise_from_authority",
+      "may_fail": [],
+      "must_fail": [
+        "res064_pingpong.cf.02_revise_from_authority"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "targets": [
+        "res064_pingpong.cf.02_revise_from_authority",
+        "mab_late_constraint_e4199e525d.event.receipt",
+        "mab_late_constraint_e4199e525d.event.evidence",
+        "mab_late_constraint_e4199e525d.closure",
+        "mab_late_constraint_e4199e525d.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not leave evaluation disconnected from the revised method.",
+      "family": "selective_replan",
+      "id": "res064_pingpong.mutation.03_selective_replan",
+      "may_fail": [],
+      "must_fail": [
+        "res064_pingpong.cf.03_selective_replan"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "targets": [
+        "res064_pingpong.cf.03_selective_replan",
+        "mab_late_constraint_e4199e525d.event.receipt",
+        "mab_late_constraint_e4199e525d.event.evidence",
+        "mab_late_constraint_e4199e525d.closure",
+        "mab_late_constraint_e4199e525d.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close without exact 5Q, digests, and preservation checks.",
+      "family": "rederive_from_authority",
+      "id": "res064_pingpong.mutation.04_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "res064_pingpong.cf.04_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "targets": [
+        "res064_pingpong.cf.04_verify_closure",
+        "mab_late_constraint_e4199e525d.event.receipt",
+        "mab_late_constraint_e4199e525d.event.evidence",
+        "mab_late_constraint_e4199e525d.closure",
+        "mab_late_constraint_e4199e525d.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Delayed research receipt is authentic and case/source bound.",
+      "id": "mab_late_constraint_e4199e525d.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt carries the table-tennis-specific authoritative method and evaluation plan.",
+      "id": "mab_late_constraint_e4199e525d.event.evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_authority_is_table_tennis_specific",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and re-verifies the revised proposal.",
+      "id": "mab_late_constraint_e4199e525d.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_closure_consumes_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Proposal stays pinned to research:064.",
+      "id": "mab_late_constraint_e4199e525d.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_source_pin",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Private report binds Evaluator.evaluate_task_research.",
+      "id": "mab_late_constraint_e4199e525d.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exactly five required questions are emitted and Q1 is one question.",
+      "id": "mab_late_constraint_e4199e525d.fiveq.exact",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_exact_fiveq",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Problem targets unseen-human competitive table tennis.",
+      "id": "mab_late_constraint_e4199e525d.problem.anchor",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_problem_anchor",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Method couples calibrated skill descriptors, online opponent adaptation, and fallback.",
+      "id": "mab_late_constraint_e4199e525d.method.anchor",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_method_anchor",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Evaluation uses source-specific trials and independent metrics.",
+      "id": "mab_late_constraint_e4199e525d.evaluation.plan",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_evaluation_plan",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Closure preserves unaffected source facts and evidence digests.",
+      "id": "mab_late_constraint_e4199e525d.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ]
+}

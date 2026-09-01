@@ -1,0 +1,187 @@
+{
+  "case_id": "mab-late-constraint-9bcba02feb",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_stale",
+      "forbidden_behavior": "Do not treat arrival order as authority.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar009_outfit.cf.01_classify_stale",
+      "must_still_pass": [
+        "mab_late_constraint_9bcba02feb.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_9bcba02feb.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "Validate delivered offer identity and compare its revision with the persisted agreement.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_exclude_stale",
+      "forbidden_behavior": "Do not let a late older offer overwrite current terms.",
+      "gate": "reject_late_stale",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar009_outfit.cf.02_exclude_stale",
+      "must_still_pass": [
+        "mab_late_constraint_9bcba02feb.source.pin"
+      ],
+      "mutation_family": "reject_late_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_9bcba02feb.event.chronology"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "Reject the superseded offer and preserve the newer product-specific agreement.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "critical": true,
+      "decision_group": "03_verify_closure",
+      "forbidden_behavior": "Do not close from stale price or omit product constraints.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar009_outfit.cf.03_verify_closure",
+      "must_still_pass": [
+        "mab_late_constraint_9bcba02feb.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_9bcba02feb.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Reverify price, product terms, chronology, and receipt-bound closure.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.source_native_resolution"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.source_native_resolution"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.source_native_resolution",
+        "target": "req.02.preserve_unaffected"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_unaffected",
+        "target": "req.03.receipt_bound_closure"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.receipt_bound_closure",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.source_native_resolution",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_unaffected",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.receipt_bound_closure",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.source_native_resolution",
+      "req.02.preserve_unaffected",
+      "req.03.receipt_bound_closure",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An older superseded offer arrives after current agreement persistence.",
+    "before_state": "Task-specific provisional state is persisted without evaluator truth.",
+    "event_id": "evt.bar009_outfit.late_out_of_order_superseded_result",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "source-native-rebuild",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Classify and consume task-specific evaluator delivery.",
+      "id": "req.01.source_native_resolution",
+      "observable_probe": "mab_late_constraint_9bcba02feb.event.chronology",
+      "public_evidence": "case-bound receipt"
+    },
+    {
+      "description": "Revise only affected findings and preserve source constraints.",
+      "id": "req.02.preserve_unaffected",
+      "observable_probe": "mab_late_constraint_9bcba02feb.output.schema",
+      "public_evidence": "preserved source facts"
+    },
+    {
+      "description": "Reverify source semantics against exact receipt.",
+      "id": "req.03.receipt_bound_closure",
+      "observable_probe": "mab_late_constraint_9bcba02feb.closure",
+      "public_evidence": "receipt-bound closure"
+    }
+  ]
+}

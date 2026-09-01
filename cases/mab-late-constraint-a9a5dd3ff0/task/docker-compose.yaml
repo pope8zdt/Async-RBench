@@ -1,0 +1,5 @@
+services:
+  client:
+    build: .
+    working_dir: /app
+    command: ["bash","-lc","mkdir -p /app/output_data && sleep infinity"]

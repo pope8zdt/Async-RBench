@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Provisional work cannot close until the delayed authority is consumed and reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_monocular_expre",
+      "req.02.formulate_exactly_one_questi",
+      "req.03.specify_capture_data_express",
+      "req.04.integrate_the_delayed_occlus",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The returned benchmark closes the proposal with explicit coverage, metrics, ablations, and expected novel-pose outcomes.",
+    "before_state": "The proposal names monocular avatar ambiguity but lacks an authoritative coverage protocol for expressions, hands, body poses, and occlusions.",
+    "event_id": "evt.mab_dependency_unblock_472d.avatar_coverage_benchmark_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_472d.avatar_coverage_benchmark_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close occlusion_coverage_benchmark_completed.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

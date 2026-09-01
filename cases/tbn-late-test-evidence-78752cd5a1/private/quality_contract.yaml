@@ -1,0 +1,79 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "tbn_late_test_evidence_78752cd5a1.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "tbn_late_test_evidence_78752cd5a1.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "tbn_late_test_e_bf2865.cf.01_classify_scope_delta",
+          "tbn_late_test_e_bf2865.cf.02_revise_affected",
+          "tbn_late_test_e_bf2865.cf.03_preserve_unaffected",
+          "tbn_late_test_e_bf2865.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "tbn_late_test_evidence_78752cd5a1.event.receipt",
+          "tbn_late_test_evidence_78752cd5a1.event.probes",
+          "tbn_late_test_evidence_78752cd5a1.closure",
+          "tbn_late_test_evidence_78752cd5a1.source.pin",
+          "tbn_late_test_evidence_78752cd5a1.upstream.test_report_file_exists_example",
+          "tbn_late_test_evidence_78752cd5a1.upstream.test_vul_file",
+          "tbn_late_test_evidence_78752cd5a1.upstream.test_cwe_id",
+          "tbn_late_test_evidence_78752cd5a1.upstream.test_hkey_basic_cases",
+          "tbn_late_test_evidence_78752cd5a1.upstream.test_hkey_error_cases",
+          "tbn_late_test_evidence_78752cd5a1.upstream.test_hkey_real_world_examples"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "You need to identify and fix the vulnerability in the code according to the Common Weakness Enumeration (CWE).",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "b1e643d56e8da9c2475623654018e5e514a6125bd0b6cd06d758e1a2000cedf8",
+        "task_id": "fix-code-vulnerability",
+        "task_path": "cases/tbn-late-test-evidence-78752cd5a1/private/source_task.yaml"
+      }
+    ]
+  }
+}

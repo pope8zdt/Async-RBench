@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Provisional work cannot close until the delayed authority is consumed and reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_authenticated_coac",
+      "req.02.implement_video_upload_movem",
+      "req.03.implement_current_historical",
+      "req.04.integrate_delayed_metric_cal",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The returned calibration fixes metric semantics and limits while preserving dashboards and collaboration history.",
+    "before_state": "Videos and workspace activity exist, but units, metric ranges, and large-file limits are unresolved.",
+    "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

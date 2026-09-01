@@ -1,0 +1,28 @@
+{
+  "minimum_official_score": 1.0,
+  "required_semantic_checks": [
+    "official_metric_01",
+    "persisted_target_state",
+    "post_event_reverification"
+  ],
+  "checks": [
+    {
+      "id": "official_metric_01",
+      "kind": "official_osworld_metric",
+      "metric": "compare_audios",
+      "expected": {
+        "type": "cloud_file",
+        "path": "https://huggingface.co/datasets/xlangai/ubuntu_osworld_file_cache/resolve/main/multi_apps/778efd0a-153f-4842-9214-f05fc176b877/planet.wav",
+        "dest": "gold_planet.wav"
+      }
+    },
+    {
+      "id": "persisted_target_state",
+      "kind": "checkpoint_state_digest"
+    },
+    {
+      "id": "post_event_reverification",
+      "kind": "event_to_evaluator_order"
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-late-constraint-4412b3e2d6",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_stale_add_the_90_day_battery_age_a",
+      "forbidden_behavior": "Do not handle classify_stale by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_the_90_day_battery_a"
+        ]
+      },
+      "id": "01_classify_stale_add_the_90_day_bat",
+      "must_still_pass": [
+        "mab_late_constraint_4412.sem.27.the_final_artifact_records_a"
+      ],
+      "mutation_family": "accept_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_4412b3e2d6.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform classify_stale for 'Add the 90-day battery-age and one-year replacement terms to the offer.' while retaining valid prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_the_90_day_battery_a"
+    },
+    {
+      "critical": false,
+      "decision_group": "exclude_stale_recalculate_price_and_quanti",
+      "forbidden_behavior": "Do not handle exclude_stale by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer specified a fresh-battery assurance requirement.'.",
+      "gate": "reject_late_stale",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_the_90_day_battery_a"
+        ]
+      },
+      "id": "02_exclude_stale_recalculate_price_",
+      "must_still_pass": [
+        "mab_late_constraint_4412.sem.27.the_final_artifact_records_a"
+      ],
+      "mutation_family": "rollback_to_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_4412b3e2d6.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform exclude_stale for 'Recalculate price and quantity for consolidated shipping.' while retaining valid prior result 'Buyer specified a fresh-battery assurance requirement.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.add_the_90_day_battery_a"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_submit_the_revised_offer_thr",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_the_90_day_battery_a"
+        ]
+      },
+      "id": "03_verify_closure_submit_the_revised",
+      "must_still_pass": [
+        "mab_late_constraint_4412.sem.27.the_final_artifact_records_a"
+      ],
+      "mutation_family": "mix_lineages",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_4412b3e2d6.closure.receipt"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform verify_closure for 'Submit the revised offer through the bargaining tool.' while retaining valid prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.add_the_90_day_battery_a"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.add_the_90_day_battery_a"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.recalculate_price_and_qu"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.submit_the_revised_offer"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.finalize_with_explicit_b"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.add_the_90_day_battery_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.recalculate_price_and_qu",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.submit_the_revised_offer",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.finalize_with_explicit_b",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.add_the_90_day_battery_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.recalculate_price_and_qu",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.submit_the_revised_offer",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.finalize_with_explicit_b",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_the_90_day_battery_a",
+      "req.02.recalculate_price_and_qu",
+      "req.03.submit_the_revised_offer",
+      "req.04.finalize_with_explicit_b",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.",
+    "before_state": "Delay the battery-and-logistics counteroffer until the buyer has prepared its initial price anchor.",
+    "event_id": "evt.mab_late_constraint_4412.late_or_out_of_order_sup",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Add the 90-day battery-age and one-year replacement terms to the offer.",
+      "id": "req.01.add_the_90_day_battery_a",
+      "observable_probe": "mab_late_constraint_4412.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for add_the_90_day_battery_age_and_one_y"
+    },
+    {
+      "description": "Recalculate price and quantity for consolidated shipping.",
+      "id": "req.02.recalculate_price_and_qu",
+      "observable_probe": "mab_late_constraint_4412.sem.02.the_final_negotiation_ledger",
+      "public_evidence": "source instruction and workstream result for recalculate_price_and_quantity_for_c"
+    },
+    {
+      "description": "Submit the revised offer through the bargaining tool.",
+      "id": "req.03.submit_the_revised_offer",
+      "observable_probe": "mab_late_constraint_4412.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for submit_the_revised_offer_through_the"
+    },
+    {
+      "description": "Finalize with explicit battery, shipping, quantity, and price terms.",
+      "id": "req.04.finalize_with_explicit_b",
+      "observable_probe": "mab_late_constraint_4412.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for finalize_with_explicit_battery_shipp"
+    }
+  ]
+}

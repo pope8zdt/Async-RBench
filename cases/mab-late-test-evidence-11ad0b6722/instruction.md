@@ -1,0 +1,6 @@
+Welcome to the negotiation table for the TF808 Transparency and Write-On OHP Film Roll! As buyers seek the perfect balance of price and quality, sellers aim to secure long-term contracts and establish a lasting partnership. With a discounted price of 17.0 USD from an original 18.99 USD, this product offers great value. However, with a current rating of 0.0/5 stars, both parties must navigate challenges to ensure that the needs and expectations are met. Let the negotiations begin to find a mutually beneficial agreement!
+            The agents are encouraged to actively use the tools provided, such as offering a price, rejecting and countering offers, providing information, or ending the negotiation, to achieve their respective goals.
+            The simulation should focus on effective tool usage to simulate a realistic bargaining process.
+
+ASYNC-RBENCH EXTENSION
+During the task, the harness may deliver independently produced evidence. Treat a delivered receipt as new evidence rather than as an answer. Reassess only the work actually affected by that evidence, preserve still-valid work, and verify the final task outcome. Runtime event details are intentionally not disclosed in advance.

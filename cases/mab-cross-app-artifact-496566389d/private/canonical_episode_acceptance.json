@@ -1,0 +1,16 @@
+{
+  "accepted": true,
+  "accepted_episode_owner": "evaluator",
+  "model_episode_required": false,
+  "native_report": "private/native_canonical_report.json",
+  "requirements": [
+    "compiled and executed official coding:070 QuestHub solution.py contract",
+    "QuestHub provides authenticated collaborative quests and skill plans with optimistic versions, stale-write rejection, subscriptions, and ordered device synchronization.",
+    "The synchronization contract receipt is consumed and quest board, skill planner, and device event log converge without stale updates."
+  ],
+  "task_specific_acceptance": [
+    "Classify the QuestHub synchronization contract as a dependency change affecting cross-device quest and skill-plan state.",
+    "Close only after duplicate, offline-edit, concurrent-conflict, and cross-device convergence checks consume the exact QuestHub synchronization receipt.",
+    "Preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior."
+  ]
+}

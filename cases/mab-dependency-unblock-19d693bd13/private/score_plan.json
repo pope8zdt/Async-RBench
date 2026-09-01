@@ -1,0 +1,360 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_invasive_species_scope_added",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-dependency-unblock-19d693bd13.invasive_species_scope_added",
+      "evidence_group": "mab_dependency_unblo.cf.01_classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.replace_stored_health_wi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_scope_delta: An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_stored_health_wi"
+        ]
+      },
+      "id": "mab_code18_ecosphere.cf.01_classify_scope_delta",
+      "independence_key": "mab_code18_ecosphere.cf.01_classify_scope_delta",
+      "measurement_type": "control",
+      "mutation_id": "mab_code18_ecosphere.mutation.01_classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_dependency_unblock_19d693bd13.event.receipt"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_stored_health_wi"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_invasive_species_scope_added",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-dependency-unblock-19d693bd13.invasive_species_scope_added",
+      "evidence_group": "mab_dependency_unblo.cf.02_revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.replace_stored_health_wi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_stored_health_wi"
+        ]
+      },
+      "id": "mab_code18_ecosphere.cf.02_revise_affected",
+      "independence_key": "mab_code18_ecosphere.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "mab_code18_ecosphere.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_19d693bd13.event.authority_probe"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.replace_stored_health_wi"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_invasive_species_scope_added",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab-dependency-unblock-19d693bd13.invasive_species_scope_added",
+      "evidence_group": "mab_dependency_unblo.cf.03_preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.replace_stored_health_wi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_stored_health_wi"
+        ]
+      },
+      "id": "mab_code18_ecosphere.cf.03_preserve_unaffected",
+      "independence_key": "mab_code18_ecosphere.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "mab_code18_ecosphere.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_19d693bd13.event.authority_probe"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.replace_stored_health_wi"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_invasive_species_scope_added",
+      "dimension": "closure",
+      "event_id": "evt.mab-dependency-unblock-19d693bd13.invasive_species_scope_added",
+      "evidence_group": "mab_dependency_unblo.cf.04_verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.replace_stored_health_wi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_stored_health_wi"
+        ]
+      },
+      "id": "mab_code18_ecosphere.cf.04_verify_closure",
+      "independence_key": "mab_code18_ecosphere.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_code18_ecosphere.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_19d693bd13.closure"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.replace_stored_health_wi"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "family": "wait_for_authority",
+      "id": "mab_code18_ecosphere.mutation.01_classify_scope_delta",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code18_ecosphere.cf.01_classify_scope_delta"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_19d693bd13.source.pin"
+      ],
+      "targets": [
+        "mab_code18_ecosphere.cf.01_classify_scope_delta",
+        "mab_dependency_unblock_19d693bd13.event.receipt",
+        "mab_dependency_unblock_19d693bd13.event.authority_probe",
+        "mab_dependency_unblock_19d693bd13.closure",
+        "mab_dependency_unblock_19d693bd13.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "family": "resolve_authority",
+      "id": "mab_code18_ecosphere.mutation.02_revise_affected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code18_ecosphere.cf.02_revise_affected"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_19d693bd13.source.pin"
+      ],
+      "targets": [
+        "mab_code18_ecosphere.cf.02_revise_affected",
+        "mab_dependency_unblock_19d693bd13.event.receipt",
+        "mab_dependency_unblock_19d693bd13.event.authority_probe",
+        "mab_dependency_unblock_19d693bd13.closure",
+        "mab_dependency_unblock_19d693bd13.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "family": "selective_replan",
+      "id": "mab_code18_ecosphere.mutation.03_preserve_unaffected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code18_ecosphere.cf.03_preserve_unaffected"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_19d693bd13.source.pin"
+      ],
+      "targets": [
+        "mab_code18_ecosphere.cf.03_preserve_unaffected",
+        "mab_dependency_unblock_19d693bd13.event.receipt",
+        "mab_dependency_unblock_19d693bd13.event.authority_probe",
+        "mab_dependency_unblock_19d693bd13.closure",
+        "mab_dependency_unblock_19d693bd13.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "family": "rederive_from_authority",
+      "id": "mab_code18_ecosphere.mutation.04_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code18_ecosphere.cf.04_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_19d693bd13.source.pin"
+      ],
+      "targets": [
+        "mab_code18_ecosphere.cf.04_verify_closure",
+        "mab_dependency_unblock_19d693bd13.event.receipt",
+        "mab_dependency_unblock_19d693bd13.event.authority_probe",
+        "mab_dependency_unblock_19d693bd13.closure",
+        "mab_dependency_unblock_19d693bd13.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific ecosystem_tick_contract_completed receipt is authentic and bound to coding:018 and mab-dependency-unblock-19d693bd13.",
+      "id": "mab_dependency_unblock_19d693bd13.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned EcoSphere_Manager authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_19d693bd13.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The completed tick contract replaces stored health and inert fields without erasing player collaboration, habitats, or scenario history.",
+      "id": "mab_dependency_unblock_19d693bd13.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:018.",
+      "id": "mab_dependency_unblock_19d693bd13.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and deterministic_ecosystem_tick_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_19d693bd13.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_ecosphere_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A deterministic seeded tick applies species, food, water, climate, pollution, and disaster effects atomically and derives ecosystem health from the resulting state.",
+      "id": "mab_dependency_unblock_19d693bd13.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_ecosphere_tick_is_deterministic_atomic_and_health_is_derived",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: player_roles, collaboration_messages, habitat_assignments, scenario_history.",
+      "id": "mab_dependency_unblock_19d693bd13.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_ecosphere_collaboration_habitats_and_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The completed tick contract replaces stored health and inert fields without erasing player collaboration, habitats, or scenario history.",
+      "id": "mab_dependency_unblock_19d693bd13.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_ecosphere_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

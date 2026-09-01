@@ -1,0 +1,261 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "mab_dependency_unblock_71568ae6c9_classify_scope_delta_01",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_71568ae6c9.task_scope_or_dependency_change",
+      "evidence_group": "mab_dependency_unblock_7.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.replace_the_provisional_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Classify the recovered map checkpoint as a dependency-state change that releases multiplayer only for the validated map revision. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_the_provisional_"
+        ]
+      },
+      "id": "mab_code54_galactic.cf.01_classify_scope_delta_8ae6c9",
+      "independence_key": "mab_code54_galactic.cf.01_classify_scope_delta_8ae6c9",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "mab_code54_galactic.mutation.01_classify_scope_delta_8ae6c9",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_dependency_unblock_71568ae6c9.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "required_behavior": "Classify the recovered map checkpoint as a dependency-state change that releases multiplayer only for the validated map revision. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_the_provisional_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "mab_dependency_unblock_71568ae6c9_revise_affected_02",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_71568ae6c9.task_scope_or_dependency_change",
+      "evidence_group": "mab_dependency_unblock_7.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.persist_team_coordinatio"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Unblock matchmaking, chat, and synchronized actions from the validated map checkpoint and reject actions tied to stale map revisions. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.persist_team_coordinatio"
+        ]
+      },
+      "id": "mab_code54_galactic.cf.02_revise_affected_8ae6c9",
+      "independence_key": "mab_code54_galactic.cf.02_revise_affected_8ae6c9",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "mutation_id": "mab_code54_galactic.mutation.02_revise_affected_8ae6c9",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_71568ae6c9.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "Unblock matchmaking, chat, and synchronized actions from the validated map checkpoint and reject actions tied to stale map revisions. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.persist_team_coordinatio"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "mab_dependency_unblock_71568ae6c9_preserve_unaffected_03",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_71568ae6c9.task_scope_or_dependency_change",
+      "evidence_group": "mab_dependency_unblock_7.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.integrate_capture_defens"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and map-independent test results. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.integrate_capture_defens"
+        ]
+      },
+      "id": "mab_code54_galactic.cf.03_preserve_unaffected_8ae6c9",
+      "independence_key": "mab_code54_galactic.cf.03_preserve_unaffected_8ae6c9",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "mutation_id": "mab_code54_galactic.mutation.03_preserve_unaffected_8ae6c9",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_71568ae6c9.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "required_behavior": "Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and map-independent test results. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.integrate_capture_defens"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "mab_dependency_unblock_71568ae6c9_verify_closure_04",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_71568ae6c9.task_scope_or_dependency_change",
+      "evidence_group": "mab_dependency_unblock_7.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.run_fixed_seed_balance_a"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Close only after fixed-seed map invariants, multiplayer synchronization, stale-action rejection, scoring/progression, and UI checks consume the exact checkpoint receipt. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.run_fixed_seed_balance_a"
+        ]
+      },
+      "id": "mab_code54_galactic.cf.04_verify_closure_8ae6c9",
+      "independence_key": "mab_code54_galactic.cf.04_verify_closure_8ae6c9",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "mab_code54_galactic.mutation.04_verify_closure_8ae6c9",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_71568ae6c9.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "required_behavior": "Close only after fixed-seed map invariants, multiplayer synchronization, stale-action rejection, scoring/progression, and UI checks consume the exact checkpoint receipt. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.run_fixed_seed_balance_a"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_dependency_unblock_71568ae6c9.task_scope_or_dependency_change",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The recovered map worker delivers an authoritative fixed-seed checkpoint proving objective placement, destructible terrain, power-ups, and balance invariants, which releases the multiplayer dependency.",
+        "before": "Validated character customization and adaptive-AI state exist while multiplayer, synchronization, scoring integration, and UI closure remain blocked on map validation.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

@@ -1,0 +1,195 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_blog_pdf_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_31978.delayed_authoritative_result",
+      "evidence_group": "osw_blogs_319.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "canonical_title_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed canonical_open_blog_tabs; preserve unaffected chrome/os state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "open_tab_inventory",
+          "canonical_title_resolution"
+        ]
+      },
+      "id": "osw_blogs_319.cf.01_classify_authority_blog_pdf_oswor",
+      "independence_key": "osw_blogs_319.cf.01_classify_authority_blog_pdf_oswor",
+      "measurement_type": "control",
+      "mutation_id": "osw_blogs_319.mutation.01_classify_authority_blog_pdf_oswor",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_319788e71d.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.identify_every_blog_arti"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_blog_pdf_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_31978.delayed_authoritative_result",
+      "evidence_group": "osw_blogs_319.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "canonical_title_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed canonical_open_blog_tabs; preserve unaffected chrome/os state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "open_tab_inventory",
+          "canonical_title_resolution"
+        ]
+      },
+      "id": "osw_blogs_319.cf.02_revise_affected_blog_pdf_oswor",
+      "independence_key": "osw_blogs_319.cf.02_revise_affected_blog_pdf_oswor",
+      "measurement_type": "control",
+      "mutation_id": "osw_blogs_319.mutation.02_revise_affected_blog_pdf_oswor",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_319788e71d.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.use_each_page_s_canonica"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_blog_pdf_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_31978.delayed_authoritative_result",
+      "evidence_group": "osw_blogs_319.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "canonical_title_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed canonical_open_blog_tabs; preserve unaffected chrome/os state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "open_tab_inventory",
+          "canonical_title_resolution"
+        ]
+      },
+      "id": "osw_blogs_319.cf.03_verify_closure_blog_pdf_oswor",
+      "independence_key": "osw_blogs_319.cf.03_verify_closure_blog_pdf_oswor",
+      "measurement_type": "control",
+      "mutation_id": "osw_blogs_319.mutation.03_verify_closure_blog_pdf_oswor",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_319788e71d.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.print_exactly_one_readab"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_02",
+      "event_id": "evt.osw_cross_app_artifact_31978.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The tab worker returns exactly two canonical blog URL/title pairs; both and only those pages must be printed as readable title-named PDFs.",
+        "before": "Chrome contains the source browsing session, but the complete set of currently open blog tabs and canonical page titles has not yet been returned.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

@@ -1,0 +1,65 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency_unblock_3361c7af50.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency_unblock_3361c7af50.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency_unblock_3361c7af50.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_dependency_unblock_3361c7af50.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "Declared native pytest failing surface remains green: lib/matplotlib/tests/test_pickle.py (1 assertions)",
+      "id": "swe_dependency_unblock_3361c7af50.native.pytest_01_lib_matplotlib_tests_test_pickle_py",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_01_lib_matplotlib_tests_test_pickle_py",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: lib/matplotlib/tests/test_pickle.py (181 assertions)",
+      "id": "swe_dependency_unblock_3361c7af50.native.pytest_02_lib_matplotlib_tests_test_pickle_py",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_02_lib_matplotlib_tests_test_pickle_py",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

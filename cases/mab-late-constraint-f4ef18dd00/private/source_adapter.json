@@ -1,0 +1,28 @@
+{
+  "benchmark": "MultiAgentBench",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "private_copy": "private/source_manifests/01-native_case.json",
+      "sha256": "92c8e6ee193e8577ce6b26ae6faea1780fcb7019d485a1a4a17d0a619b83178c",
+      "source": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "private_copy": "private/source_manifests/03-official_task.json",
+      "sha256": "a458a2ecc2e21792783e6e1a387980c11fe778f04fa1528f3622ac7ae4907e5d",
+      "source": "private/source_manifests/03-official_task.json"
+    },
+    {
+      "private_copy": "private/source_manifests/04-native_config.yaml",
+      "sha256": "0533e9c2a6dbc191409d3292fcd5ffbd273fd2d9ef98262966fff4187c76bc11",
+      "source": "private/source_manifests/04-native_config.yaml"
+    }
+  ],
+  "runtime_plan": {
+    "environment_strategy": "deterministic source-bound bargaining ledger",
+    "event_injection": "evaluator-owned production_delivery_slot_confirmed",
+    "missing_environment_is_reconstructable": true,
+    "oracle": "private task-specific negotiation implementation"
+  },
+  "source_task_id": "bargaining:032"
+}

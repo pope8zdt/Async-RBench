@@ -1,0 +1,240 @@
+{
+  "case_id": "swe-dependency-unblock-126ea8db6f",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta:req.01.register_the_timeout_opt",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Register the timeout option in the shared run-task option helper used by both CLIs.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.register_the_timeout_opt"
+        ]
+      },
+      "id": "01_classify_scope_delta_register_the_timeout_opt",
+      "must_still_pass": [],
+      "mutation_family": "under_invalidate",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_126ea8db6f.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "After receiving authoritative event 'A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.', perform classify_scope_delta for 'Register the timeout option in the shared run-task option helper used by both CLIs.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.register_the_timeout_opt"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.copy_the_parsed_timeout_",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Copy the parsed timeout into ad-hoc and console task dictionaries.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.copy_the_parsed_timeout_"
+        ]
+      },
+      "id": "02_revise_affected_copy_the_parsed_timeout_",
+      "must_still_pass": [],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_126ea8db6f.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.', perform revise_affected for 'Copy the parsed timeout into ad-hoc and console task dictionaries.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.copy_the_parsed_timeout_"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected:req.03.register_and_propagate_c",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Register and propagate console extra-vars into variable loading.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.register_and_propagate_c"
+        ]
+      },
+      "id": "03_preserve_unaffected_register_and_propagate_c",
+      "must_still_pass": [],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_126ea8db6f.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "After receiving authoritative event 'A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.', perform preserve_unaffected for 'Register and propagate console extra-vars into variable loading.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.register_and_propagate_c"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.04.add_timeout_to_task_incl",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add timeout to task_include's valid keyword set.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_timeout_to_task_incl"
+        ]
+      },
+      "id": "04_verify_closure_add_timeout_to_task_incl",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_126ea8db6f.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "After receiving authoritative event 'A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.', perform verify_closure for 'Add timeout to task_include's valid keyword set.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_timeout_to_task_incl"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.register_the_timeout_opt"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.copy_the_parsed_timeout_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.register_and_propagate_c"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_timeout_to_task_incl"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.register_the_timeout_opt",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.copy_the_parsed_timeout_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.register_and_propagate_c",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_timeout_to_task_incl",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.register_the_timeout_opt",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.copy_the_parsed_timeout_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.register_and_propagate_c",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_timeout_to_task_incl",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.register_the_timeout_opt",
+      "req.02.copy_the_parsed_timeout_",
+      "req.03.register_and_propagate_c",
+      "req.04.add_timeout_to_task_incl",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+    "event_id": "evt.swe_dependency_unblock_126ea8db6f.cli_option_flow_scope_delta",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Register the timeout option in the shared run-task option helper used by both CLIs.",
+      "id": "req.01.register_the_timeout_opt",
+      "observable_probe": "swe_dependency_unblock_1.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for register_the_timeout_option_in_the_s"
+    },
+    {
+      "description": "Copy the parsed timeout into ad-hoc and console task dictionaries.",
+      "id": "req.02.copy_the_parsed_timeout_",
+      "observable_probe": "swe_dependency_unblock_1.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for copy_the_parsed_timeout_into_ad_hoc_"
+    },
+    {
+      "description": "Register and propagate console extra-vars into variable loading.",
+      "id": "req.03.register_and_propagate_c",
+      "observable_probe": "swe_dependency_unblock_1.sem.03.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for register_and_propagate_console_extra"
+    },
+    {
+      "description": "Add timeout to task_include's valid keyword set.",
+      "id": "req.04.add_timeout_to_task_incl",
+      "observable_probe": "swe_dependency_unblock_1.sem.04.register_the_timeout_option_",
+      "public_evidence": "source instruction and workstream result for add_timeout_to_task_include_s_valid_"
+    }
+  ]
+}

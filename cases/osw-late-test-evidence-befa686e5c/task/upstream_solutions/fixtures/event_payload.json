@@ -1,0 +1,46 @@
+{
+  "schema_version": "async-rbench-osworld-event-v1",
+  "case_id": "osw-late-test-evidence-befa686e5c",
+  "source_task_id": "osworld:multi_apps:26150609-0da3-4a7d-8868-0faf9c5f01bb",
+  "task_assertion": "Food spawn coordinates are 10-pixel grid aligned and in bounds, so the Snake can reach food and the official OSWorld test suite passes.",
+  "state": {
+    "project_path": "/home/user/Desktop/snake",
+    "fixed_file": "food.py",
+    "grid_size": 10,
+    "width": 600,
+    "height": 400,
+    "initial_spawn_grid_aligned": true,
+    "respawn_grid_aligned": true,
+    "in_bounds": true,
+    "snake_reaches_food": true,
+    "official_test_passed": true
+  },
+  "upstream_dependency_graph": [
+    {
+      "id": "upstream_worker_01",
+      "depends_on": [],
+      "description": "Audit food.py, snake.py, settings.py, and the movement/grid invariants."
+    },
+    {
+      "id": "upstream_worker_02",
+      "depends_on": [
+        "upstream_worker_01"
+      ],
+      "description": "Reproduce the mismatch between arbitrary Food coordinates and 10-pixel Snake movement."
+    },
+    {
+      "id": "upstream_worker_03",
+      "depends_on": [
+        "upstream_worker_02"
+      ],
+      "description": "Patch Food initialization/respawn to use grid-aligned in-bounds coordinates."
+    },
+    {
+      "id": "upstream_worker_04",
+      "depends_on": [
+        "upstream_worker_03"
+      ],
+      "description": "Run the official test.py suite and release its authoritative result."
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_ba52abb8a2.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_ba52abb8a2.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-extension-path",
+      "must_fail": [
+        "osw_dependency_unblock_ba52abb8a2.osworld.extension_path"
+      ],
+      "path": "task/negative_mutations/wrong_extension_path.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_extension_7.cf.01_classify_authority_enable_developer_m",
+          "osw_extension_7.cf.02_revise_affected_use_load_unpacked_",
+          "osw_extension_7.cf.03_verify_closure_resolve_any_report"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_ba52abb8a2.event.receipt",
+          "osw_dependency_unblock_ba52abb8a2.event.probes",
+          "osw_dependency_unblock_ba52abb8a2.closure",
+          "osw_dependency_unblock_ba52abb8a2.source.pin",
+          "osw_dependency_unblock_ba52abb8a2.osworld.extension_result",
+          "osw_dependency_unblock_ba52abb8a2.osworld.identity",
+          "osw_dependency_unblock_ba52abb8a2.osworld.official_score",
+          "osw_dependency_unblock_ba52abb8a2.osworld.extension_path"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Chrome extensions",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "969d4c3bb380c7b665113b77f678917af06d50d8caf11e771b93db933b0ba6b1",
+        "task_id": "osworld:chrome:6766f2b8-8a72-417f-a9e5-56fcaa735837",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

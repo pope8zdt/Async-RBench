@@ -1,0 +1,96 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "swe-dependency-unblock-db84717172",
+  "benchmark": "SWE-bench",
+  "source_binding": {
+    "instance_id": "django__django-12262",
+    "repo": "django/django",
+    "base_commit": "69331bb851c34f05bc77e9fc24020fe6908b9cd5",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "split": "test",
+    "variant": "swe_bench",
+    "problem_statement_sha256": "eb0c9b99667bc7666a6ff518747eaa71c6d392f727583d3f90cabe5cf4afe994",
+    "harness_revision": "7a21e05772954cc81471ae19d56f436cecf43c54"
+  },
+  "native_runtime": {
+    "adapter": "swebench.harness.run_evaluation",
+    "isolation": "official Docker instance image",
+    "final_state": "git working tree patch"
+  },
+  "event_protocol": {
+    "producer": "independent reproduction/test worker in a clean clone of the same base commit",
+    "payload": "raw command, exit status, and bounded stdout/stderr from selected reproduction tests",
+    "release_predicate": "main working tree has a non-empty persisted diff while worker is running",
+    "rollback": "post-result patch history remains; the agent must amend/revert real files"
+  },
+  "state_attestation": {
+    "baseline_probe": "git HEAD plus clean index/worktree digest",
+    "checkpoint_probe": "git diff --binary plus untracked-file content digest",
+    "change_required": true,
+    "journal_owner": "host harness outside /testbed"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "entrypoint": "swebench.harness.run_evaluation",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "instance_id": "django__django-12262",
+    "FAIL_TO_PASS": [
+      "test_inclusion_tag_errors (template_tests.test_custom.InclusionTagTests)",
+      "test_inclusion_tags (template_tests.test_custom.InclusionTagTests)",
+      "test_simple_tag_errors (template_tests.test_custom.SimpleTagTests)",
+      "test_simple_tags (template_tests.test_custom.SimpleTagTests)"
+    ],
+    "PASS_TO_PASS": [
+      "test_decorated_filter (template_tests.test_custom.CustomFilterTests)",
+      "test_filter (template_tests.test_custom.CustomFilterTests)",
+      "test_15070_use_l10n (template_tests.test_custom.InclusionTagTests)",
+      "test_include_tag_missing_context (template_tests.test_custom.InclusionTagTests)",
+      "test_inclusion_tag_registration (template_tests.test_custom.InclusionTagTests)",
+      "test_inclusion_tags_from_template (template_tests.test_custom.InclusionTagTests)",
+      "test_no_render_side_effect (template_tests.test_custom.InclusionTagTests)",
+      "test_render_context_is_cleared (template_tests.test_custom.InclusionTagTests)",
+      "test_simple_tag_escaping_autoescape_off (template_tests.test_custom.SimpleTagTests)",
+      "test_simple_tag_explicit_escaping (template_tests.test_custom.SimpleTagTests)",
+      "test_simple_tag_format_html_escaping (template_tests.test_custom.SimpleTagTests)",
+      "test_simple_tag_missing_context (template_tests.test_custom.SimpleTagTests)",
+      "test_simple_tag_naive_escaping (template_tests.test_custom.SimpleTagTests)",
+      "test_simple_tag_registration (template_tests.test_custom.SimpleTagTests)",
+      "test_load_annotated_function (template_tests.test_custom.TemplateTagLoadingTests)",
+      "test_load_error (template_tests.test_custom.TemplateTagLoadingTests)",
+      "test_load_error_egg (template_tests.test_custom.TemplateTagLoadingTests)",
+      "test_load_working_egg (template_tests.test_custom.TemplateTagLoadingTests)"
+    ],
+    "docker_image": null,
+    "selected_test_files": null
+  },
+  "quality_gates": {
+    "official_instance_bound": true,
+    "native_tests_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

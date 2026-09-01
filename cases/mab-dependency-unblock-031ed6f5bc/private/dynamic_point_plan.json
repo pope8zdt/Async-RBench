@@ -1,0 +1,143 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_duplicate_implement_validation_and_acc",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_0.duplicate_or_replayed_co",
+      "evidence_group": "mab_dependency_unb.classify_duplicate",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_validation_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A validation specialist returns accepted-row representation, consistency/completeness rules, error codes, and row-level fixture outcomes.', perform classify_duplicate for 'Implement validation and accepted/rejected row partitioning.' while retaining valid prior result 'CSV, spreadsheet-adapter, and database-row ingestion produce a common raw-row stream.'.",
+      "forbidden_behavior": "Do not handle classify_duplicate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'CSV, spreadsheet-adapter, and database-row ingestion produce a common raw-row stream.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_validation_and"
+        ]
+      },
+      "id": "mab_code87_dataflow.cf.01_classify_duplicate_implement_validati",
+      "independence_key": "mab_code87_dataflow.cf.01_classify_duplicate_implement_validati",
+      "measurement_type": "control",
+      "mutation_id": "mab_code87_dataflow.mutation.01_classify_duplicate_implement_validati",
+      "obligation": "classify_duplicate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_031ed6f5bc.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_duplicate:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_validation_and"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_idempotency_change_transformation_to_con",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_0.duplicate_or_replayed_co",
+      "evidence_group": "mab_dependency_unb.preserve_idempotency",
+      "evidence_spec": {
+        "primary_fact": "idempotency_decision",
+        "subject": "req.01.implement_validation_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A validation specialist returns accepted-row representation, consistency/completeness rules, error codes, and row-level fixture outcomes.', perform preserve_idempotency for 'Change transformation to consume only the returned accepted-row representation.' while retaining valid prior result 'Pipeline stage state and deterministic export scaffolding are implemented.'.",
+      "forbidden_behavior": "Do not handle preserve_idempotency by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Pipeline stage state and deterministic export scaffolding are implemented.'.",
+      "gate": "deduplicate_completion",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_validation_and"
+        ]
+      },
+      "id": "mab_code87_dataflow.cf.02_preserve_idempotency_change_transformat",
+      "independence_key": "mab_code87_dataflow.cf.02_preserve_idempotency_change_transformat",
+      "measurement_type": "control",
+      "mutation_id": "mab_code87_dataflow.mutation.02_preserve_idempotency_change_transformat",
+      "obligation": "preserve_idempotency",
+      "outcome_anchors": [
+        "mab_dependency_unblock_031ed6f5bc.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:preserve_idempotency:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.implement_validation_and"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_dependency_unblock_0.duplicate_or_replayed_co",
+      "event_theme": "duplicate_or_replayed_completion",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "A validation specialist returns accepted-row representation, consistency/completeness rules, error codes, and row-level fixture outcomes.",
+        "before": "The delayed validation contract gates downstream transformation after ingestion work has completed.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

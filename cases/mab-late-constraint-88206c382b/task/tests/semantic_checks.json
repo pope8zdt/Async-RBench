@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The late-offer receipt is authentic and bound to bargaining:014.",
+      "id": "mab_late_constraint_88206c382b.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The receipt proves the delivered offer is older than the accepted current revision.",
+      "id": "mab_late_constraint_88206c382b.event.chronology",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_late_offer_is_task_specific_and_stale",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the receipt while keeping the current qualified agreement.",
+      "id": "mab_late_constraint_88206c382b.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_receipt_and_rejects_stale",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The negotiation remains pinned to bargaining:014.",
+      "id": "mab_late_constraint_88206c382b.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_source_pin_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Private evidence binds Evaluator.evaluate_task_world and agreement_reached to bargaining:014.",
+      "id": "mab_late_constraint_88206c382b.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_world_evaluator_binding",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The accepted agreement is the exact current revision, not the late stale offer.",
+      "id": "mab_late_constraint_88206c382b.agreement.current",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_current_revision_is_accepted",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The agreement price satisfies this case's seller floor and buyer ceiling.",
+      "id": "mab_late_constraint_88206c382b.price.bounds",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_price_respects_case_specific_bounds",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The agreement preserves product-specific terms for Women Western Cowgirl pointed-toe rhinestone ankle booties.",
+      "id": "mab_late_constraint_88206c382b.product.terms",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_product_specific_terms",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The stale revision is recorded as superseded and cannot overwrite the accepted agreement.",
+      "id": "mab_late_constraint_88206c382b.stale.excluded",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_stale_offer_is_excluded",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The negotiation ledger, evidence digest, chronology, and preservation fields are complete.",
+      "id": "mab_late_constraint_88206c382b.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schema_evidence_and_preservation",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

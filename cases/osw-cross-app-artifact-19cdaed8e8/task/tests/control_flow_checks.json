@@ -1,0 +1,198 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_aws_invoice_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+      "evidence_group": "osw_invoice_19.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "invoice_field_extraction"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "osw_invoice_19.cf.01_classify_authority_aws_invoice_os",
+      "independence_key": "osw_invoice_19.cf.01_classify_authority_aws_invoice_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_invoice_19.mutation.01_classify_authority_aws_invoice_os",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.locate_the_december_aws_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_aws_invoice_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+      "evidence_group": "osw_invoice_19.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "invoice_field_extraction"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "osw_invoice_19.cf.02_revise_affected_aws_invoice_os",
+      "independence_key": "osw_invoice_19.cf.02_revise_affected_aws_invoice_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_invoice_19.mutation.02_revise_affected_aws_invoice_os",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_the_exact_invoi"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_aws_invoice_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+      "evidence_group": "osw_invoice_19.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "invoice_field_extraction"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "osw_invoice_19.cf.03_verify_closure_aws_invoice_os",
+      "independence_key": "osw_invoice_19.cf.03_verify_closure_aws_invoice_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_invoice_19.mutation.03_verify_closure_aws_invoice_os",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.append_the_aws_2023_12_a"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_02"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_03",
+      "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The mail worker returns the exact December AWS attachment and normalized billing fields, enabling a correctly named PDF copy and one matching tally row.",
+        "before": "The Bills folder, receipts directory and tally layout are inspectable, but the authoritative December invoice message and fields have not yet been joined.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

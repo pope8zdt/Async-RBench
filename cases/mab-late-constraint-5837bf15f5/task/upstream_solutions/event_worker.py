@@ -1,0 +1,6 @@
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-late-constraint-5837bf15f5';SOURCE_ID='bargaining:041';EVENT='plush_safety_scope_clarified';THEME='task_scope_or_dependency_change';AUTHORITY={'power_requirement': 'none', 'material_check': 'child_safe_plush', 'seam_test': 'passed', 'unit_price': 13.99, 'minimum_batch': 60, 'replacement_days': 30}
+def digest(path):return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+def main():
+ p=argparse.ArgumentParser();p.add_argument('--output',default='/app/output_data/event_receipt.json');a=p.parse_args();s=time.time();probes={x:digest(x) for x in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']};d={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':THEME,'meaning':'Product authority removes the irrelevant battery condition and adds child-safe plush material, a passed seam test, $13.99 price, 60-unit minimum, and 30-day replacement.','authority':AUTHORITY,'worker_started_at':s,'worker_finished_at':time.time(),'worker_exit_code':0,'probes':probes};d['receipt_sha256']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest();pathlib.Path(a.output).write_text(json.dumps(d,sort_keys=True)+'\n')
+if __name__=='__main__':main()

@@ -1,0 +1,16 @@
+{
+  "accepted": true,
+  "accepted_episode_owner": "evaluator",
+  "model_episode_required": false,
+  "native_report": "private/native_canonical_report.json",
+  "requirements": [
+    "compiled official coding:087 solution.py contract",
+    "Ingestion normalizes CSV, spreadsheet, and database rows; validation partitions accepted and rejected rows; only accepted rows are transformed and exported once.",
+    "A replayed validation completion is deduplicated and cannot duplicate transformation or export side effects."
+  ],
+  "task_specific_acceptance": [
+    "Ingestion normalizes CSV, spreadsheet, and database rows; validation partitions accepted and rejected rows; only accepted rows are transformed and exported once.",
+    "A replayed validation completion is deduplicated and cannot duplicate transformation or export side effects.",
+    "Preserve raw_rows, source_types, export_configuration."
+  ]
+}

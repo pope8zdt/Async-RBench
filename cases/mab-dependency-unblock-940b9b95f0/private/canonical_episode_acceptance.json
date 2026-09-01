@@ -1,0 +1,15 @@
+{
+  "accepted": true,
+  "accepted_episode_owner": "evaluator",
+  "model_episode_required": false,
+  "native_report": "private/native_canonical_report.json",
+  "requirements": [
+    "Fresh normalized traffic, transit, and weather conditions deterministically adjust candidate legs and recompute fastest, cheapest, and greenest rankings; stale snapshots are ignored.",
+    "Recovered conditions replace static rankings without erasing preferences, feedback, shared destinations, or accepted-route history.",
+    "four upstream results"
+  ],
+  "task_specific_acceptance": [
+    "Fresh normalized traffic, transit, and weather conditions deterministically adjust candidate legs and recompute fastest, cheapest, and greenest rankings; stale snapshots are ignored.",
+    "Preserve user_preferences, feedback_history, shared_destinations, accepted_route_history."
+  ]
+}

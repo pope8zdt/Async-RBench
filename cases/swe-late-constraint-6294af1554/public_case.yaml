@@ -1,0 +1,173 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/testbed"
+    }
+  ],
+  "case_id": "swe-late-constraint-6294af1554",
+  "format_version": 2,
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "resolve_requirement_01"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_01"
+      ],
+      "id": "resolve_requirement_02"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_02"
+      ],
+      "id": "resolve_requirement_03"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_03"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_tasks": [
+    {
+      "benchmark": "swe-bench",
+      "id": "pylint-dev__pylint-8898",
+      "source_sha256": "1ef5ef80b29bcfb5902b6818e58a576cf6d97b66fb7b354fa1392451954a6c98",
+      "upstream_path": "candidate_cases/rebuild-to-100/runtime-swe-first5/swe-late-constraint-6294af1554/private/source_task.yaml"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench source-native rebuild: pylint-dev__pylint-8898",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 1: Revise the splitter to satisfy every reported boundary case.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Revise the splitter to satisfy every reported boundary case. Write a JSON report to /app/output_data/workstreams/requirement_worker_01.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 2: Compile every resulting regex and assert the intended pattern count.",
+      "id": "requirement_worker_02",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Compile every resulting regex and assert the intended pattern count. Write a JSON report to /app/output_data/workstreams/requirement_worker_02.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 3: Verify ordinary top-level comma-separated patterns and configuration loading remain compatible.",
+      "id": "requirement_worker_03",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Verify ordinary top-level comma-separated patterns and configuration loading remain compatible. Write a JSON report to /app/output_data/workstreams/requirement_worker_03.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    }
+  ]
+}

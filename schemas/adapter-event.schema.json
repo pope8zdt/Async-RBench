@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://async_rbench.local/schemas/adapter-event.schema.json",
+  "title": "Async-RBench adapter event",
+  "type": "object",
+  "required": ["type"],
+  "properties": {
+    "type": {"enum": ["participant_metadata","participant_runtime_metadata","agent_progress","infrastructure_failure","ready","fork_bundle_captured","child_spawned","child_started","child_progress_checkpoint","child_completed","child_cancelled","delegation_validation_error","main_action","result_consumed","artifact_committed","verification_requested","episode_ended"]},
+    "child_id": {"type": "string", "minLength": 1},
+    "completion_id": {"type": "string", "minLength": 1},
+    "action_id": {"type": "string", "minLength": 1},
+    "work_units": {"type": "array", "minItems": 1, "maxItems": 1, "items": {"type": "string"}},
+    "lineage_completion_ids": {"type": "array", "items": {"type": "string"}},
+    "passed": {"type": "boolean"},
+    "observed_digest": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "evaluator_observed": {"const": true},
+    "evaluator_owned": {"const": true},
+    "initiated_by": {"enum": ["main","scaffold_shutdown","infrastructure"]}
+  },
+  "allOf": [
+    {"if": {"properties": {"type": {"const": "child_spawned"}}}, "then": {"required": ["child_id","parent_id","work_units"]}},
+    {"if": {"properties": {"type": {"const": "infrastructure_failure"}}}, "then": {"required": ["component","detail"]}},
+    {"if": {"properties": {"type": {"const": "child_progress_checkpoint"}}}, "then": {"required": ["child_id","phase","tokens"], "properties": {"phase": {"const": "first_model_turn_finished"}, "tokens": {"type": "integer", "minimum": 0}}}},
+    {"if": {"properties": {"type": {"const": "child_completed"}}}, "then": {"required": ["child_id","completion_id","result_kind","payload"]}},
+    {"if": {"properties": {"type": {"const": "delegation_validation_error"}}}, "then": {"required": ["requested_workstream","reason","budget_consumed"]}},
+    {"if": {"properties": {"type": {"const": "artifact_committed"}}}, "then": {"required": ["artifact_id","version","lineage_completion_ids","observed_digest","observed_path","evaluator_observed"]}},
+    {"if": {"properties": {"type": {"const": "verification_requested"}}}, "then": {"required": ["check_id","passed","lineage_completion_ids","evaluator_owned"]}}
+  ],
+  "additionalProperties": true
+}

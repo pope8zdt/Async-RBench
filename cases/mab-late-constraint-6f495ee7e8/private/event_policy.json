@@ -1,0 +1,30 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.identify_the_old_offer_as_la",
+      "req.02.replace_price_and_delivery_w",
+      "req.03.close_through_a_chronologica",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+    "before_state": "A provisional Kohler Genuine Part 1266657 Valve Kit bargain exists before current_genuine_part_delivery_counter.",
+    "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

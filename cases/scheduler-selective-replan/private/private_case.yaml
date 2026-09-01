@@ -1,0 +1,267 @@
+format_version: 2
+case_id: scheduler-selective-replan
+classification:
+  primary_event_theme: conflicting_valid_results
+  secondary_event_themes:
+  - partial_then_complete_result
+  async_scenario_class: result_eventful
+capabilities:
+- selective_invalidation
+- conflict_arbitration
+- cascading_replan
+workstream_bindings:
+  bucket1_optimizer:
+    result_kind: result_01
+    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/task_file/output_data/plan_b1.jsonl';
+      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(p); rows=[l for l in open(p,encoding='utf-8') if l.strip()];
+      assert len(rows)==int(e['row_count']); assert hashlib.sha256(open(p,'rb').read()).hexdigest()==e['plan_revision'];
+      assert all('request_id' in json.loads(l) and 'shape' in json.loads(l) for l
+      in rows)"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      plan_path:
+        type: string
+      row_count:
+        type: integer
+      plan_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+    event_assets: []
+  bucket2_optimizer:
+    result_kind: result_02
+    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/task_file/output_data/plan_b2.jsonl';
+      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(p); rows=[l for l in open(p,encoding='utf-8') if l.strip()];
+      assert len(rows)==int(e['row_count']); assert hashlib.sha256(open(p,'rb').read()).hexdigest()==e['plan_revision'];
+      assert all('request_id' in json.loads(l) and 'shape' in json.loads(l) for l
+      in rows)"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      plan_path:
+        type: string
+      row_count:
+        type: integer
+      plan_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+    event_assets: []
+  global_shape_allocator:
+    result_kind: result_03
+    validator_command: python3 -c "import base64,json,os; p='/app/task_file/output_data/global_shape_plan.json';
+      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); assert d['combined_unique_shapes']==len(d['global_shape_set'])<=8;
+      assert d['combined_unique_shapes']==int(e['shape_count']); assert len(d['global_shape_set'])==len(e['global_shape_set'])"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      shape_count:
+        type: integer
+      global_shape_set:
+        type: array
+    event_assets: []
+  bucket1_validator:
+    result_kind: result_04
+    validator_command: python3 -c "import base64,json,os; p='/app/task_file/output_data/validator_reports/bucket1.json';
+      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(p); r=json.load(open(p,encoding='utf-8')); assert bool(r['passes'])==bool(e['bucket1_passes']);
+      assert r['bucket']=='bucket1'; assert r['plan_revision']==e['bucket1_plan_revision'];
+      assert float(r['metrics']['pad_ratio'])==float(e['bucket1_pad_ratio']); assert
+      float(r['metrics']['cost'])==float(e['bucket1_cost'])"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      bucket1_passes:
+        type: boolean
+      bucket1_plan_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+      bucket1_pad_ratio:
+        type: number
+      bucket1_cost:
+        type: number
+    event_assets: []
+  bucket2_validator:
+    result_kind: result_05
+    validator_command: python3 -c "import base64,json,os; p='/app/task_file/output_data/validator_reports/bucket2.json';
+      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(p); r=json.load(open(p,encoding='utf-8')); a=json.load(open('/app/task_file/events/bucket2_authority.json',encoding='utf-8'));
+      assert bool(r['passes'])==bool(e['bucket2_passes']); assert r['bucket']=='bucket2';
+      assert r['plan_revision']==e['bucket2_plan_revision']; assert float(r['metrics']['pad_ratio'])==float(e['bucket2_pad_ratio']);
+      assert float(r['metrics']['cost'])==float(e['bucket2_cost']); assert r['authority_receipt']==e['source_receipt']==a['authority_receipt']"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      bucket2_passes:
+        type: boolean
+      bucket2_plan_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+      bucket2_pad_ratio:
+        type: number
+      bucket2_cost:
+        type: number
+      source_receipt:
+        type: string
+        pattern: sc-bucket2-authority-[0-9a-f]{16}
+    event_assets:
+    - /app/task_file/events/bucket2_authority.json
+result_contract:
+  allowed_result_kinds:
+  - result_01
+  - result_02
+  - result_03
+  - result_04
+  - result_05
+  rule: At child spawn assign semantic work_units; at completion tag the result with
+    the matching kind. The gateway, not the main agent, receives completion first.
+authoritative_result_kind: result_05
+superseded_result_kind: result_04
+scenarios:
+  linear:
+    events: []
+  async:
+    events:
+    - id: sc_a_b1
+      at: 2
+      result: result_04
+      invalidates_artifacts: []
+      reopens_milestones: []
+    - id: sc_a_b2
+      at: 4
+      result: result_05
+      invalidates_artifacts:
+      - global_shape_plan
+      - combined_config_artifact
+      reopens_milestones:
+      - replan_failing_bucket
+      - final_validation
+artifact_observers: {}
+hidden_checks:
+  shape_budget_respected: python3 /app/task_file/scripts/validate_plan.py --requests-bucket1
+    /app/task_file/input_data/requests_bucket_1.jsonl --requests-bucket2 /app/task_file/input_data/requests_bucket_2.jsonl
+    --plan-b1 /app/task_file/output_data/plan_b1.jsonl --plan-b2 /app/task_file/output_data/plan_b2.jsonl
+    --shape-budget 8 --out /tmp/dtb2_rv_shape.json >/dev/null && python3 -c "import
+    json; r=json.load(open('/tmp/dtb2_rv_shape.json',encoding='utf-8')); assert r['combined_unique_shapes']<=8"
+  both_buckets_pass_thresholds: python3 /app/task_file/scripts/validate_plan.py --requests-bucket1
+    /app/task_file/input_data/requests_bucket_1.jsonl --requests-bucket2 /app/task_file/input_data/requests_bucket_2.jsonl
+    --plan-b1 /app/task_file/output_data/plan_b1.jsonl --plan-b2 /app/task_file/output_data/plan_b2.jsonl
+    --shape-budget 8 --out /tmp/dtb2_rv_both.json >/dev/null && python3 -c "import
+    json; r=json.load(open('/tmp/dtb2_rv_both.json',encoding='utf-8')); assert r['valid']"
+  replanned_bucket_recovery: python3 -c "import hashlib,json; m=json.load(open('/app/task_file/output_data/decision_manifest.json',encoding='utf-8'));
+    rn=1 if m['replanned_bucket']=='bucket1' else 2; import pathlib; final=pathlib.Path('/app/task_file/output_data/plan_b%d.jsonl'%rn);
+    snap=pathlib.Path('/app/task_file/output_data/first_pass/plan_b%d.jsonl'%rn);
+    assert final.is_file() and snap.is_file(); assert hashlib.sha256(final.read_bytes()).hexdigest()!=hashlib.sha256(snap.read_bytes()).hexdigest();
+    reqs={json.loads(l)['request_id']:json.loads(l) for l in open('/app/task_file/input_data/requests_bucket_%d.jsonl'%rn,encoding='utf-8')
+    if l.strip()}; plan=[json.loads(l) for l in open(final,encoding='utf-8') if l.strip()];
+    assert all(int(plan_entry['shape']['seq_align'])>=(int(reqs[plan_entry['request_id']]['prompt_len'])+63)//64*64
+    for plan_entry in plan)"
+reverification_anchors:
+  shape_budget_respected:
+  - result_03
+  both_buckets_pass_thresholds:
+  - result_04
+  - result_05
+  replanned_bucket_recovery:
+  - result_05
+stale_predicate:
+  type: revision_mismatch
+  authoritative_fields:
+  - bucket2_plan_revision
+  superseded_fields:
+  - bucket1_plan_revision
+stale_revalidation:
+  candidate_checks:
+  - both_buckets_pass_thresholds
+  - shape_budget_respected
+  artifact_checks:
+    global_shape_plan:
+    - shape_budget_respected
+    combined_config_artifact:
+    - both_buckets_pass_thresholds
+    - shape_budget_respected
+information_sufficiency:
+- workstream_id: bucket1_optimizer
+  requirement_ids:
+  - scheduler_native_async_closure
+  public_inputs:
+  - /app/task_file/output_data/plan_b1.jsonl
+  required_output_fields:
+  - plan_path
+  - row_count
+  - plan_revision
+  review_status: reviewed
+- workstream_id: bucket2_optimizer
+  requirement_ids:
+  - scheduler_native_async_closure
+  public_inputs:
+  - /app/task_file/output_data/plan_b2.jsonl
+  required_output_fields:
+  - plan_path
+  - row_count
+  - plan_revision
+  review_status: reviewed
+- workstream_id: global_shape_allocator
+  requirement_ids:
+  - scheduler_native_async_closure
+  public_inputs:
+  - /app/task_file/output_data/global_shape_plan.json
+  required_output_fields:
+  - shape_count
+  - global_shape_set
+  review_status: reviewed
+- workstream_id: bucket1_validator
+  requirement_ids:
+  - scheduler_native_async_closure
+  public_inputs:
+  - /app/task_file/scripts/baseline_packer.py
+  - /app/task_file/scripts/validate_plan.py
+  - /app/task_file/input_data/requests_bucket_1.jsonl
+  - /app/task_file/input_data/requests_bucket_2.jsonl
+  required_output_fields:
+  - bucket1_passes
+  - bucket1_plan_revision
+  - bucket1_pad_ratio
+  - bucket1_cost
+  review_status: reviewed
+- workstream_id: bucket2_validator
+  requirement_ids:
+  - scheduler_native_async_closure
+  public_inputs:
+  - /app/task_file/scripts/baseline_packer.py
+  - /app/task_file/scripts/validate_plan.py
+  - /app/task_file/input_data/requests_bucket_1.jsonl
+  - /app/task_file/input_data/requests_bucket_2.jsonl
+  - /app/task_file/events/bucket2_authority.json
+  required_output_fields:
+  - bucket2_passes
+  - bucket2_plan_revision
+  - source_receipt
+  - bucket2_pad_ratio
+  - bucket2_cost
+  review_status: reviewed
+legacy_metadata:
+  metrics:
+    primary:
+    - test_point_pass_rate
+    - dynamic_test_point_pass_rate
+    - baseline_condition_test_point_pass_rate
+    - control_flow_test_point_pass_rate
+    - all_condition_test_point_pass_rate
+    - scenario_construction_rate
+    - parallel_effect
+    - replanning_drop
+    - signed_task_order_effect
+    diagnostics:
+    - semantic_category_pass_rates
+    - stale_retention_rate
+    - recovery_latency
+    - obsolete_work_ratio
+    - reverification_completeness
+    - token_consumption
+  implementation: structure-derived
+  upstream_commit: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  asset_copies:
+  - from: upstream/terminal-bench/original-tasks-locked/llm-inference-batching-scheduler/task_file/scripts/cost_model.py
+    to: task/task_file/scripts/cost_model.py
+  - from: upstream/terminal-bench/original-tasks-locked/llm-inference-batching-scheduler/task_file/scripts/baseline_packer.py
+    to: task/task_file/scripts/baseline_packer.py
+  - from: upstream/terminal-bench/original-tasks-locked/llm-inference-batching-scheduler/task_file/scripts/__init__.py
+    to: task/task_file/scripts/__init__.py

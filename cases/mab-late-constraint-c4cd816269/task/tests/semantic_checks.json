@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Late-offer receipt is authentic and case/source bound.",
+      "id": "mab_late_constraint_c4cd816269.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Delivered offer is demonstrably older than the accepted revision.",
+      "id": "mab_late_constraint_c4cd816269.event.chronology",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_late_offer_is_stale",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the receipt while preserving the current agreement.",
+      "id": "mab_late_constraint_c4cd816269.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_closure_rejects_stale",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Agreement stays pinned to bargaining:019.",
+      "id": "mab_late_constraint_c4cd816269.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_source_pin",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Private report binds Evaluator.evaluate_task_world and agreement_reached.",
+      "id": "mab_late_constraint_c4cd816269.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exact current revision remains accepted.",
+      "id": "mab_late_constraint_c4cd816269.agreement.current",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_current_revision",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Price satisfies this case seller floor and buyer ceiling.",
+      "id": "mab_late_constraint_c4cd816269.price.bounds",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_price_bounds",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Terms are specific to Blue Brianna Women's Reading Glasses with Case.",
+      "id": "mab_late_constraint_c4cd816269.product.terms",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_product_terms",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Superseded offer cannot overwrite current terms.",
+      "id": "mab_late_constraint_c4cd816269.stale.excluded",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_stale_excluded",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Ledger preserves chronology, evidence, and source priorities.",
+      "id": "mab_late_constraint_c4cd816269.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

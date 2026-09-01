@@ -1,0 +1,84 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-audio-role",
+      "must_fail": [
+        "osw_cross_app_artifact_c3093402e5.native.background_audio"
+      ],
+      "path": "task/negative_mutations/wrong_audio_role.sh"
+    },
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_c3093402e5.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_c3093402e5.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_audio_6.cf.01_classify_scope_delta_verify_planet_wav_",
+          "osw_audio_6.cf.02_revise_affected_configure_planet_w",
+          "osw_audio_6.cf.03_preserve_unaffected_enable_continuatio",
+          "osw_audio_6.cf.04_verify_closure_save_the_presentat"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_c3093402e5.event.receipt",
+          "osw_cross_app_artifact_c3093402e5.event.probes",
+          "osw_cross_app_artifact_c3093402e5.closure",
+          "osw_cross_app_artifact_c3093402e5.source.pin",
+          "osw_cross_app_artifact_c3093402e5.native.first_slide_audio",
+          "osw_cross_app_artifact_c3093402e5.native.background_audio",
+          "osw_cross_app_artifact_c3093402e5.native.saved_presentation",
+          "osw_cross_app_artifact_c3093402e5.native.vlc_source"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "background audio",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "524684f768d1377150869c6b2dd4e8b6e733c62a429befd812537a47763c21cf",
+        "task_id": "osworld:multi_apps:778efd0a-153f-4842-9214-f05fc176b877",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

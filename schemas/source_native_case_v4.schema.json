@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "case_id", "benchmark", "source_binding", "native_runtime", "event_protocol", "state_attestation", "modes", "native_evaluator", "quality_gates"],
+  "properties": {
+    "schema_version": {"const": "async-rbench-source-native-case-v4"},
+    "case_id": {"type": "string"},
+    "benchmark": {"enum": ["OSWorld", "SWE-bench", "MultiAgentBench"]},
+    "source_binding": {"type": "object"},
+    "native_runtime": {"type": "object"},
+    "event_protocol": {"type": "object"},
+    "state_attestation": {"type": "object", "required": ["baseline_probe", "checkpoint_probe", "change_required", "journal_owner"]},
+    "modes": {"type": "object", "required": ["react", "linear", "async"]},
+    "native_evaluator": {"type": "object"},
+    "quality_gates": {"type": "object"}
+  }
+}

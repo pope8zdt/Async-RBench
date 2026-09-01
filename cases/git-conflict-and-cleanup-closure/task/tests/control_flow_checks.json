@@ -1,0 +1,93 @@
+{
+  "version": "4",
+  "checks": [
+    {
+      "id": "gc.cf.wait_for_authority_recovery",
+      "gate": "wait_for_authority",
+      "dimension": "event_intake",
+      "gate_args": {
+        "artifacts": [
+          "recovery_report"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "gc.rec.recovery_source_object_db",
+        "gc.rec.authority_hash_consistent"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "gc.cf.reject_late_stale_negative",
+      "gate": "reject_late_stale",
+      "dimension": "state_revision",
+      "gate_args": {
+        "artifacts": [
+          "recovery_report"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "gc.excl.negative_scans_excluded",
+        "gc.excl.negative_scan_reports_negative"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "gc.cf.cancel_superseded_negative_scan",
+      "gate": "timely_cancellation",
+      "dimension": "plan_revision",
+      "gate_args": {
+        "workstreams": [
+          "ref_history_scanner",
+          "pack_scanner"
+        ]
+      },
+      "outcome_anchors": [
+        "gc.excl.scan_set_preserved",
+        "gc.excl.authority_scan_positive"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "gc.cf.rederive_cleanup",
+      "gate": "rederive_from_authority",
+      "dimension": "closure",
+      "gate_args": {
+        "artifacts": [
+          "cleanup_report"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "gc.closure.closure_verified",
+        "gc.closure.cleanup_reports_consistent"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    }
+  ]
+}

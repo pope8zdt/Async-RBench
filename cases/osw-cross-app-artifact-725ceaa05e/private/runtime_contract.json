@@ -1,0 +1,31 @@
+{
+  "assets": [
+    "official task configuration",
+    "os snapshot",
+    "gimp snapshot",
+    "pdf snapshot",
+    "private source assets",
+    "private native fixture",
+    "private delayed payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "os",
+    "gimp",
+    "pdf",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:multi_apps:a503b07f-9119-456b-b75d-f5146737d24f in pinned os; truth is private.",
+  "event_injection": "Release delayed receipt-image locator result after upstream checkpoint.",
+  "hidden_tests": "compare_pdf_images, native digest, output_paths, pdf_shape, pdf_fidelity, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "os",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private receipt_pdf_osworld.sh scores compare_pdf_images.",
+  "requires_authored_private_oracle": false
+}
+

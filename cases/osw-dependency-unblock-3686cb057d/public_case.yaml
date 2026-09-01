@@ -1,0 +1,159 @@
+{
+  "format_version": 2,
+  "case_id": "osw-dependency-unblock-3686cb057d",
+  "title": "Async-RBench OSWorld libreoffice_calc: period_rate_formula_and_maximum",
+  "task_instruction_path": "task/task.yaml",
+  "source_tasks": [
+    {
+      "benchmark": "OSWorld",
+      "id": "osworld:libreoffice_calc:21ab7b40-77c2-4ae6-8321-e00d3a086c73"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/app"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "inspect_source",
+      "depends_on": []
+    },
+    {
+      "id": "checkpoint_valid_work",
+      "depends_on": [
+        "inspect_source"
+      ]
+    },
+    {
+      "id": "consume_async_evidence",
+      "depends_on": [
+        "checkpoint_valid_work"
+      ]
+    },
+    {
+      "id": "reverify_and_close",
+      "depends_on": [
+        "consume_async_evidence"
+      ]
+    }
+  ],
+  "public_checks": [],
+  "workstreams": [
+    {
+      "id": "upstream_worker_01",
+      "priority": "normal",
+      "task": "Resolve Period Rate (%) as Annual Rate divided by Period per year.",
+      "expected_output": "Private source-native evidence for formula_interpretation.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_02",
+      "priority": "normal",
+      "task": "Compute and validate all 24 row values for C2:C25.",
+      "expected_output": "Private source-native evidence for row_computation.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_03",
+      "priority": "high",
+      "task": "Identify the unique maximum row and required green font style.",
+      "expected_output": "Private source-native evidence for maximum_and_style_detection.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    }
+  ]
+}

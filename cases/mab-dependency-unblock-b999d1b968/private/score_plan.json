@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_performance_metric_contract_co",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
+      "evidence_group": "mab_code08_teamcollab.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_users_and_dated_pr"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_and_dated_pr"
+        ]
+      },
+      "id": "mab_code08_teamcollab.cf.01_classify_authority_performance_metric",
+      "independence_key": "mab_code08_teamcollab.cf.01_classify_authority_performance_metric",
+      "measurement_type": "control",
+      "mutation_id": "mab_code08_teamcollab.mutation.01_classify_authority_performance_metric",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_b999d1b968.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_and_dated_pr"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_performance_metric_contract_co",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
+      "evidence_group": "mab_code08_teamcollab.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_uniquely_assigned"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_uniquely_assigned"
+        ]
+      },
+      "id": "mab_code08_teamcollab.cf.02_revise_affected_performance_metric",
+      "independence_key": "mab_code08_teamcollab.cf.02_revise_affected_performance_metric",
+      "measurement_type": "control",
+      "mutation_id": "mab_code08_teamcollab.mutation.02_revise_affected_performance_metric",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_b999d1b968.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_uniquely_assigned"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_performance_metric_contract_co",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
+      "evidence_group": "mab_code08_teamcollab.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_project_task_messa"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_project_task_messa"
+        ]
+      },
+      "id": "mab_code08_teamcollab.cf.03_verify_closure_performance_metric",
+      "independence_key": "mab_code08_teamcollab.cf.03_verify_closure_performance_metric",
+      "measurement_type": "control",
+      "mutation_id": "mab_code08_teamcollab.mutation.03_verify_closure_performance_metric",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_b999d1b968.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_project_task_messa"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "family": "wait_for_authority",
+      "id": "mab_code08_teamcollab.mutation.01_classify_authority_performance_metric",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code08_teamcollab.cf.01_classify_authority_performance_metric"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_b999d1b968.source.pin"
+      ],
+      "targets": [
+        "mab_code08_teamcollab.cf.01_classify_authority_performance_metric",
+        "mab_dependency_unblock_b999d1b968.event.receipt",
+        "mab_dependency_unblock_b999d1b968.event.authority_probe",
+        "mab_dependency_unblock_b999d1b968.closure",
+        "mab_dependency_unblock_b999d1b968.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "family": "resolve_authority",
+      "id": "mab_code08_teamcollab.mutation.02_revise_affected_performance_metric",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code08_teamcollab.cf.02_revise_affected_performance_metric"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_b999d1b968.source.pin"
+      ],
+      "targets": [
+        "mab_code08_teamcollab.cf.02_revise_affected_performance_metric",
+        "mab_dependency_unblock_b999d1b968.event.receipt",
+        "mab_dependency_unblock_b999d1b968.event.authority_probe",
+        "mab_dependency_unblock_b999d1b968.closure",
+        "mab_dependency_unblock_b999d1b968.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "family": "rederive_from_authority",
+      "id": "mab_code08_teamcollab.mutation.03_verify_closure_performance_metric",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code08_teamcollab.cf.03_verify_closure_performance_metric"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_b999d1b968.source.pin"
+      ],
+      "targets": [
+        "mab_code08_teamcollab.cf.03_verify_closure_performance_metric",
+        "mab_dependency_unblock_b999d1b968.event.receipt",
+        "mab_dependency_unblock_b999d1b968.event.authority_probe",
+        "mab_dependency_unblock_b999d1b968.closure",
+        "mab_dependency_unblock_b999d1b968.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific performance_metric_contract_completed receipt bound to coding:008.",
+      "id": "mab_dependency_unblock_b999d1b968.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Team_Collaboration_Manager authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_b999d1b968.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "id": "mab_dependency_unblock_b999d1b968.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:008.",
+      "id": "mab_dependency_unblock_b999d1b968.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes TeamCollaborationManager and the team collaboration closure.",
+      "id": "mab_dependency_unblock_b999d1b968.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_team_output_schema_projects_tasks_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Projects enforce dates and membership; tasks enforce unique assignment and ordered status; dashboards compute authoritative completion metrics.",
+      "id": "mab_dependency_unblock_b999d1b968.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_team_task_transitions_concurrent_assignment_and_metrics",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Messages, attachments, feedback, task status, and report evidence remain available after the event.",
+      "id": "mab_dependency_unblock_b999d1b968.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_team_messages_attachments_feedback_and_reports_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed metric contract is consumed before performance dashboards and reports are finalized.",
+      "id": "mab_dependency_unblock_b999d1b968.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_team_event_metric_contract_and_final_reverification",
+      "relevance_tier": "base"
+    }
+  ]
+}

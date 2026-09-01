@@ -1,0 +1,186 @@
+{
+  "version": "1",
+  "families": [
+    {
+      "id": "sm.mut.base_artifact_corruption",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "patch_saved_list_base_artifacts",
+      "description": "Damage required output files or the corrected initial saved-list state",
+      "variants": [
+        "missing_saved_list",
+        "malformed_saved_json",
+        "retain_out_of_range",
+        "omit_in_range_catalog"
+      ],
+      "must_fail": [
+        "sm.base.output_files_exist",
+        "sm.base.saved_list_well_formed",
+        "sm.base.out_of_range_removed",
+        "sm.base.in_range_unsaved_added"
+      ]
+    },
+    {
+      "id": "sm.mut.late_listing_integration",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "patch_late_listing_merge",
+      "description": "Drop, alter or duplicate an authoritative late listing during integration",
+      "variants": [
+        "drop_vasastan",
+        "drop_sodermalm",
+        "alter_price_city",
+        "duplicate_listing_id"
+      ],
+      "must_fail": [
+        "sm.integrate.vasastan_added",
+        "sm.integrate.sodermalm_added",
+        "sm.integrate.metadata_preserved",
+        "sm.integrate.no_duplicates"
+      ]
+    },
+    {
+      "id": "sm.mut.notification_selection",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "patch_notification_decisions",
+      "description": "Corrupt recipient, ordering or match filtering in asynchronous notifications",
+      "variants": [
+        "drop_first_message",
+        "drop_second_message",
+        "notify_over_budget",
+        "wrong_recipient"
+      ],
+      "must_fail": [
+        "sm.notify.exactly_two_messages",
+        "sm.notify.first_names_vasastan",
+        "sm.notify.second_names_sodermalm",
+        "sm.notify.no_message_lofts",
+        "sm.notify.no_message_other_decoys",
+        "sm.notify.to_linnea"
+      ]
+    },
+    {
+      "id": "sm.mut.event_monitor_evidence",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "patch_event_monitor_report",
+      "description": "Damage event coverage, ordering, actions or ignored-reason evidence",
+      "variants": [
+        "missing_report",
+        "drop_feed_event",
+        "mark_match_ignored",
+        "mark_decoy_acted",
+        "authority_stream_revision_mismatch"
+      ],
+      "must_fail": [
+        "sm.eval.monitor_report_exists",
+        "sm.eval.all_events_evaluated",
+        "sm.eval.matching_events_acted",
+        "sm.eval.decoys_ignored"
+      ]
+    },
+    {
+      "id": "sm.mut.closure_consistency",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "patch_closure_manifest_and_reports",
+      "description": "Break cross-artifact closure between saved listings, notifications, monitor and manifest",
+      "variants": [
+        "close_before_window",
+        "wrong_final_ids",
+        "mismatch_notifications",
+        "wrong_initial_plan"
+      ],
+      "must_fail": [
+        "sm.closure.final_saved_closure",
+        "sm.closure.notifications_match_additions",
+        "sm.closure.wait_for_window_closed",
+        "sm.closure.manifest_closure_verified",
+        "sm.closure.report_matches_deliverables",
+        "sm.closure.manifest_initial_plan"
+      ]
+    },
+    {
+      "id": "sm.mut.control_wait_cancel",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "mutate_wait_and_cancellation_trace",
+      "description": "Remove the authority wait or cancel the wrong monitoring workstream",
+      "variants": [
+        "omit_authority_wait",
+        "wait_wrong_artifact",
+        "cancel_matching_monitor",
+        "omit_monitor_cancel"
+      ],
+      "must_fail": [
+        "sm.cf.wait_authority",
+        "sm.cf.cancel_stale_monitor"
+      ]
+    },
+    {
+      "id": "sm.mut.control_stale_rederive",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "mutate_stale_rejection_and_rederivation_trace",
+      "description": "Accept a stale result or finalize without re-deriving from authority",
+      "variants": [
+        "accept_late_stale",
+        "reject_authoritative_result",
+        "omit_rederive",
+        "rederive_from_stale_snapshot"
+      ],
+      "must_fail": [
+        "sm.cf.reject_late_stale",
+        "sm.cf.rederive_authority"
+      ]
+    },
+    {
+      "id": "sm.mut.critical_notification_crosscheck",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "cross_corrupt_notification_authority",
+      "description": "Create self-inconsistent notification evidence across independent deliverables",
+      "variants": [
+        "count_only_forgery",
+        "swap_message_order",
+        "message_without_addition",
+        "addition_without_message"
+      ],
+      "must_fail": [
+        "sm.notify.exactly_two_messages",
+        "sm.notify.first_names_vasastan",
+        "sm.notify.second_names_sodermalm",
+        "sm.notify.no_message_lofts"
+      ]
+    },
+    {
+      "id": "sm.mut.critical_closure_crosscheck",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "cross_corrupt_listing_closure",
+      "description": "Create a superficially complete but non-closed final snapshot",
+      "variants": [
+        "manifest_only_closed",
+        "report_only_closed",
+        "late_event_omitted",
+        "initial_plan_rewritten"
+      ],
+      "must_fail": [
+        "sm.closure.final_saved_closure",
+        "sm.closure.notifications_match_additions",
+        "sm.closure.wait_for_window_closed",
+        "sm.closure.manifest_closure_verified",
+        "sm.closure.report_matches_deliverables",
+        "sm.closure.manifest_initial_plan"
+      ]
+    },
+    {
+      "id": "sm.mut.critical_control_crosscheck",
+      "case_id": "gaia2-stockholm-moveout",
+      "operation": "cross_corrupt_async_control_evidence",
+      "description": "Forge control declarations without the corresponding asynchronous decision",
+      "variants": [
+        "declare_reject_without_event",
+        "declare_rederive_without_authority",
+        "stale_result_then_rederive",
+        "authority_result_then_reject"
+      ],
+      "must_fail": [
+        "sm.cf.reject_late_stale",
+        "sm.cf.rederive_authority"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:788b3701-3ec9-4b67-b679-418bfa726c22",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/788b3701-3ec9-4b67-b679-418bfa726c22.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "chrome snapshot",
+      "private source assets",
+      "private native fixture",
+      "private event payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "chrome",
+      "nautilus",
+      "filesystem",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:788b3701-3ec9-4b67-b679-418bfa726c22 in pinned chrome; evaluator truth remains private.",
+    "event_injection": "Release next_chapter_repository_result only after 2 persisted upstream result(s).",
+    "hidden_tests": "diff_text_file, native digest, archive_inventory, next_chapter, output_path, gold_content, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "chrome",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private next_chapter_osworld.sh scores diff_text_file.",
+    "requires_authored_private_oracle": false
+  }
+}
+

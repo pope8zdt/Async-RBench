@@ -1,0 +1,260 @@
+format_version: 2
+case_id: secure-release
+classification:
+  primary_event_theme: late_or_out_of_order_superseded_result
+  secondary_event_themes:
+  - delayed_authoritative_result
+  async_scenario_class: result_eventful
+capabilities:
+- stale_result_rejection
+- selective_invalidation
+- verification_reopen
+workstream_bindings:
+  sanitize_history:
+    result_kind: result_01
+    validator_command: test -s /tmp/sanitized.bundle && git -C /app/repo bundle verify
+      /tmp/sanitized.bundle >/dev/null && tmp=$(mktemp -d) && git init -q "$tmp" &&
+      git -C "$tmp" fetch -q /tmp/sanitized.bundle 'refs/heads/*:refs/heads/*' &&
+      test -z "$(git -C "$tmp" fsck --full --no-reflogs --unreachable 2>/dev/null)"
+      && for oid in $(git -C "$tmp" cat-file --batch-all-objects --batch-check='%(objectname)');
+      do git -C "$tmp" cat-file -p "$oid" 2>/dev/null | grep -Fq 'secret[' && exit
+      1; done; python3 -c "import base64,json,os,subprocess,sys; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      head=lambda b:subprocess.check_output(['git','-C',sys.argv[1],'rev-parse',b],text=True).strip();
+      assert e['main_head']==head('main') and e['dev_head']==head('dev')" "$tmp" &&
+      rm -rf "$tmp"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      secret_blob_present_after_sanitize:
+        type: boolean
+        const: false
+      fsck_after_sanitize_empty:
+        type: boolean
+        const: true
+      main_head:
+        type: string
+        pattern: '[0-9a-f]{40}'
+      dev_head:
+        type: string
+        pattern: '[0-9a-f]{40}'
+    event_assets:
+    - /app/events/authoritative-release.bundle
+  release_infrastructure:
+    result_kind: result_02
+    validator_command: test -s /tmp/nginx-git-infrastructure/nginx/nginx.conf && test
+      "$(cat /tmp/nginx-git-infrastructure/nginx/index.html)" = 'Welcome to the benchmark
+      webserver' && test "$(cat /tmp/nginx-git-infrastructure/nginx/404.html)" = 'Page
+      not found - Please check your URL' && grep -Eq 'PasswordAuthentication[[:space:]]+yes'
+      /tmp/nginx-git-infrastructure/ssh/sshd_config && test -x /tmp/nginx-git-infrastructure/git/repositories/main.git/hooks/post-receive
+      && test -x /tmp/nginx-git-infrastructure/git/repositories/dev.git/hooks/post-receive
+      && grep -Eq 'limit_req_zone.*rate=10r/s' /tmp/nginx-git-infrastructure/nginx/nginx.conf
+      && grep -Eq 'limit_req.*burst=10' /tmp/nginx-git-infrastructure/nginx/nginx.conf
+      && grep -q 'benchmark-access.log' /tmp/nginx-git-infrastructure/nginx/nginx.conf
+      && grep -q 'benchmark-error.log' /tmp/nginx-git-infrastructure/nginx/nginx.conf
+      && grep -Eq 'error_page[[:space:]]+404[[:space:]]+/404.html' /tmp/nginx-git-infrastructure/nginx/nginx.conf
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      git_repositories_created:
+        type: boolean
+        const: true
+      post_receive_hooks_configured:
+        type: boolean
+        const: true
+      rate_limiting_enabled:
+        type: boolean
+        const: true
+      detailed_logging_enabled:
+        type: boolean
+        const: true
+      custom_404_enabled:
+        type: boolean
+        const: true
+      password_ssh_auth_enabled:
+        type: boolean
+        const: true
+    event_assets: []
+  security_patch:
+    result_kind: result_03
+    validator_command: test -s /app/deliverables/bottle_crlf_fix.patch && test -s
+      /app/deliverables/validation_test.py && python3 -m py_compile /app/deliverables/validation_test.py
+      && for branch in main dev; do tmp=$(mktemp -d); git -C /app/repo archive "$branch"
+      | tar -x -C "$tmp" && (cd "$tmp" && git apply /app/deliverables/bottle_crlf_fix.patch)
+      && python3 -c "import importlib.util,pytest,sys; s=importlib.util.spec_from_file_location('b',sys.argv[1]);
+      m=importlib.util.module_from_spec(s); s.loader.exec_module(m); assert all(pytest.raises(ValueError,f,'X'+c+'Y')
+      for c in ('\n','\r','\0') for f in (m._hkey,m._hval))" "$tmp/bottle.py" || exit
+      1; rm -rf "$tmp"; done && python3 -c "import base64,json,os,subprocess; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      head=lambda b:subprocess.check_output(['git','-C','/app/repo','rev-parse',b],text=True).strip();
+      assert e['tested_main_head']==head('main') and e['tested_dev_head']==head('dev')"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      tested_main_head:
+        type: string
+        pattern: '[0-9a-f]{40}'
+      tested_dev_head:
+        type: string
+        pattern: '[0-9a-f]{40}'
+      crlf_test_result:
+        type: string
+        min_items: 1
+      patch_status:
+        type: string
+        min_items: 1
+    event_assets: []
+result_contract:
+  allowed_result_kinds:
+  - result_03
+  - result_01
+  - result_02
+  rule: At child spawn assign semantic work_units; at completion tag the result with
+    the matching kind. The gateway, not the main agent, receives completion first.
+authoritative_result_kind: result_01
+superseded_result_kind: result_03
+scenarios:
+  linear:
+    events: []
+  async:
+    events:
+    - id: sr_a_patch
+      at: 2
+      result: result_03
+      invalidates_artifacts: []
+      reopens_milestones: []
+    - id: sr_a_rewrite
+      at: 5
+      result: result_01
+      invalidates_artifacts:
+      - vulnerability_patch
+      - security_report
+      - git_server
+      - release_manifest
+      - pre_event_verification
+      reopens_milestones:
+      - fix_vulnerability_all_refs
+      - deploy_clean_refs
+      - final_qa
+artifact_observers:
+  vulnerability_patch: (git -C /app/repo show main:bottle.py; git -C /app/repo show
+    dev:bottle.py) | sha256sum | awk '{print $1}'
+  pre_event_verification: >-
+    (cat /app/release-manifest.json; curl -kfsS https://127.0.0.1:8443/index.html;
+    curl -kfsS https://127.0.0.1:8443/dev/index.html; curl -fsS http://127.0.0.1:8080/)
+    | sha256sum | awk '{print $1}'
+hidden_checks:
+  history_clean: test "$(cat /app/secret.txt)" = 'secret[lost_and_found_in_git]' &&
+    for oid in $(git -C /app/repo cat-file --batch-all-objects --batch-check='%(objectname)');
+    do git -C /app/repo cat-file -p "$oid" 2>/dev/null | grep -Fq 'secret[' && exit
+    1; done; exit 0
+  security_patch_all_refs: for branch in main dev; do git -C /app/repo show "$branch:bottle.py"
+    > "/tmp/dtb2-bottle-$branch.py" && DTB2_BRANCH="$branch" python3 -c "import os,importlib.util,pytest;
+    path='/tmp/dtb2-bottle-'+os.environ['DTB2_BRANCH']+'.py'; spec=importlib.util.spec_from_file_location('dtb2_bottle',path);
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module);
+    assert all(pytest.raises(ValueError,func,'X'+control+'Y') for control in ('\n','\r','\0')
+    for func in (module._hkey,module._hval)); assert module._hkey('content_type')=='Content-Type';
+    assert module._hval('ordinary value')=='ordinary value'" || exit 1; done
+  deployment_lineage: python3 -c "import json,subprocess; g=lambda *a:subprocess.check_output(['git',*a],text=True).strip();
+    m=json.load(open('/app/release-manifest.json')); assert m['deployed_main']==g('-C','/git/project.git','rev-parse','refs/heads/main')==g('-C','/app/repo','rev-parse','main');
+    assert m['deployed_dev']==g('-C','/git/project.git','rev-parse','refs/heads/dev')==g('-C','/app/repo','rev-parse','dev')"
+  nginx_runtime: nginx -t && test "$(curl -fsS http://127.0.0.1:8080/)" = 'Welcome
+    to the benchmark webserver' && test "$(curl -sS -o /tmp/dtb2-404.txt -w '%{http_code}'
+    http://127.0.0.1:8080/dtb2-missing)" = '404' && test "$(cat /tmp/dtb2-404.txt)"
+    = 'Page not found - Please check your URL' && test -s /var/log/nginx/benchmark-access.log
+reverification_anchors:
+  history_clean:
+  - result_01
+  security_patch_all_refs:
+  - result_01
+  deployment_lineage:
+  - result_01
+  - result_02
+  nginx_runtime:
+  - result_02
+stale_predicate:
+  type: revision_mismatch
+  authoritative_fields:
+  - main_head
+  - dev_head
+  superseded_fields:
+  - tested_main_head
+  - tested_dev_head
+stale_revalidation:
+  candidate_checks:
+  - security_patch_all_refs
+  artifact_checks:
+    vulnerability_patch:
+    - security_patch_all_refs
+    security_report:
+    - security_patch_all_refs
+    git_server:
+    - deployment_lineage
+    release_manifest:
+    - security_patch_all_refs
+    - deployment_lineage
+information_sufficiency:
+- workstream_id: security_patch
+  requirement_ids:
+  - secure_release_native_async_closure
+  public_inputs:
+  - /app/deliverables/bottle_crlf_fix.patch
+  - /app/deliverables/validation_test.py
+  - /app/deliverables/evidence.txt
+  - /app/deliverables/README.md
+  required_output_fields:
+  - tested_main_head
+  - tested_dev_head
+  - crlf_test_result
+  - patch_status
+  review_status: reviewed
+- workstream_id: sanitize_history
+  requirement_ids:
+  - secure_release_native_async_closure
+  public_inputs:
+  - /tmp/sanitized.bundle
+  required_output_fields:
+  - secret_blob_present_after_sanitize
+  - fsck_after_sanitize_empty
+  - main_head
+  - dev_head
+  review_status: reviewed
+- workstream_id: release_infrastructure
+  requirement_ids:
+  - secure_release_native_async_closure
+  public_inputs:
+  - /tmp/nginx-git-infrastructure/nginx/nginx.conf
+  - /tmp/nginx-git-infrastructure/nginx/index.html
+  - /tmp/nginx-git-infrastructure/nginx/404.html
+  - /tmp/nginx-git-infrastructure/ssh/sshd_config
+  - /tmp/nginx-git-infrastructure/git/repositories/main.git/hooks/post-receive
+  - /tmp/nginx-git-infrastructure/git/repositories/dev.git/hooks/post-receive
+  required_output_fields:
+  - git_repositories_created
+  - post_receive_hooks_configured
+  - rate_limiting_enabled
+  - detailed_logging_enabled
+  - custom_404_enabled
+  - password_ssh_auth_enabled
+  review_status: reviewed
+legacy_metadata:
+  metrics:
+    primary:
+    - test_point_pass_rate
+    - dynamic_test_point_pass_rate
+    - baseline_condition_test_point_pass_rate
+    - control_flow_test_point_pass_rate
+    - all_condition_test_point_pass_rate
+    - scenario_construction_rate
+    - parallel_effect
+    - replanning_drop
+    - signed_task_order_effect
+    diagnostics:
+    - semantic_category_pass_rates
+    - stale_retention_rate
+    - recovery_latency
+    - obsolete_work_ratio
+    - reverification_completeness
+    - token_consumption
+  implementation: real-instance-derived
+  upstream_commit: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  asset_copies:
+  - from: upstream/terminal-bench/original-tasks-locked/git-leak-recovery/challenge-setup.sh
+    to: cases/secure-release/task/assets/challenge-setup.sh
+  - from: upstream/terminal-bench/original-tasks-locked/git-multibranch/default.conf
+    to: cases/secure-release/task/assets/default.conf

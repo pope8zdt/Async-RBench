@@ -1,0 +1,348 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_vlc_persistence_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_22ed3b1d66.delayed_authoritative_result",
+      "evidence_group": "osw_vlc_22.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "vlc_play_and_exit_setting"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed vlc_play_and_exit_setting; preserve unaffected vlc state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_vlc_22.cf.01_classify_authority_vlc_persistence_osworld",
+      "independence_key": "osw_vlc_22.cf.01_classify_authority_vlc_persistence_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_vlc_22.mutation.01_classify_authority_vlc_persistence_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_22ed3b1d66.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.config_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_vlc_persistence_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_22ed3b1d66.delayed_authoritative_result",
+      "evidence_group": "osw_vlc_22.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "vlc_play_and_exit_setting"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed vlc_play_and_exit_setting; preserve unaffected vlc state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_vlc_22.cf.02_revise_affected_vlc_persistence_osworld",
+      "independence_key": "osw_vlc_22.cf.02_revise_affected_vlc_persistence_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_vlc_22.mutation.02_revise_affected_vlc_persistence_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_22ed3b1d66.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preference_value"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure_vlc_persistence_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_22ed3b1d66.delayed_authoritative_result",
+      "evidence_group": "osw_vlc_22.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "vlc_play_and_exit_setting"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed vlc_play_and_exit_setting; preserve unaffected vlc state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_vlc_22.cf.03_verify_closure_vlc_persistence_osworld",
+      "independence_key": "osw_vlc_22.cf.03_verify_closure_vlc_persistence_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_vlc_22.mutation.03_verify_closure_vlc_persistence_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_22ed3b1d66.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.single_effective_assignment"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "family": "wait_for_authority",
+      "id": "osw_vlc_22.mutation.01_classify_authority_vlc_persistence_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_vlc_22.cf.01_classify_authority_vlc_persistence_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_22ed3b1d66.source.pin"
+      ],
+      "targets": [
+        "osw_vlc_22.cf.01_classify_authority_vlc_persistence_osworld",
+        "osw_dependency_unblock_22ed3b1d66.event.receipt",
+        "osw_dependency_unblock_22ed3b1d66.event.probes",
+        "osw_dependency_unblock_22ed3b1d66.closure",
+        "osw_dependency_unblock_22ed3b1d66.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "family": "resolve_authority",
+      "id": "osw_vlc_22.mutation.02_revise_affected_vlc_persistence_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_vlc_22.cf.02_revise_affected_vlc_persistence_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_22ed3b1d66.source.pin"
+      ],
+      "targets": [
+        "osw_vlc_22.cf.02_revise_affected_vlc_persistence_osworld",
+        "osw_dependency_unblock_22ed3b1d66.event.receipt",
+        "osw_dependency_unblock_22ed3b1d66.event.probes",
+        "osw_dependency_unblock_22ed3b1d66.closure",
+        "osw_dependency_unblock_22ed3b1d66.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "family": "rederive_from_authority",
+      "id": "osw_vlc_22.mutation.03_verify_closure_vlc_persistence_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_vlc_22.cf.03_verify_closure_vlc_persistence_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_22ed3b1d66.source.pin"
+      ],
+      "targets": [
+        "osw_vlc_22.cf.03_verify_closure_vlc_persistence_osworld",
+        "osw_dependency_unblock_22ed3b1d66.event.receipt",
+        "osw_dependency_unblock_22ed3b1d66.event.probes",
+        "osw_dependency_unblock_22ed3b1d66.closure",
+        "osw_dependency_unblock_22ed3b1d66.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed authoritative receipt.",
+      "id": "osw_dependency_unblock_22ed3b1d66.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All three task-specific upstream workers completed with observable probes.",
+      "id": "osw_dependency_unblock_22ed3b1d66.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies source semantics.",
+      "id": "osw_dependency_unblock_22ed3b1d66.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_dependency_unblock_22ed3b1d66.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:vlc:5ac2891a-eacd-4954-b339-98abba077adb and check_play_and_exit.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private source fixture.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The active VLC configuration contains one effective play-and-exit=0 setting and VLC no longer exits automatically at end of playback.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The active vlcrc path is exact.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.config_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_config_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "play-and-exit changes from 1 to 0.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.preference_value",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_preference_value",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exactly one effective assignment remains and no enabled conflict survives.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.single_effective_assignment",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_single_effective_assignment",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The setting persists after VLC restart.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.restart_persistence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_restart_persistence",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "End-of-playback auto-exit is disabled.",
+      "id": "osw_dependency_unblock_22ed3b1d66.osworld.playback_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_playback_behavior",
+      "relevance_tier": "base"
+    }
+  ]
+}

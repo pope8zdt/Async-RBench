@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific strategy_contract_completed receipt is authentic and bound to coding:011 and mab-dependency-unblock-593d775fd8.",
+      "id": "mab_dependency_unblock_593d775fd8.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned Board_Game_Team_Collaborator authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_593d775fd8.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Structured strategy analysis remains advisory and cannot alter leaderboard totals, game rules, turn order, or team membership.",
+      "id": "mab_dependency_unblock_593d775fd8.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:011.",
+      "id": "mab_dependency_unblock_593d775fd8.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and ranked_boardgame_strategy_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_593d775fd8.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_boardgame_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recommendations are deterministic ranked structures keyed by game, composition, score trend, and role metrics; only game-permitted role changes may be applied.",
+      "id": "mab_dependency_unblock_593d775fd8.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_boardgame_ranked_recommendations_follow_trend_and_permitted_roles",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: leaderboard_totals, game_rules, turn_order, team_membership.",
+      "id": "mab_dependency_unblock_593d775fd8.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_boardgame_advice_preserves_leaderboard_rules_turns_and_membership",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Structured strategy analysis remains advisory and cannot alter leaderboard totals, game rules, turn order, or team membership.",
+      "id": "mab_dependency_unblock_593d775fd8.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_boardgame_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

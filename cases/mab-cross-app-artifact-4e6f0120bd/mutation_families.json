@@ -1,0 +1,335 @@
+{
+  "families": [
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: The calendar_adapter_contract_delivered receipt is authentic and bound to coding:059 and mab-cross-app-artifact-4e6f0120bd.",
+      "id": "mab_code59_cross.mut.01_receipt",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: The calendar_adapter_contract_delivered receipt is authentic and bound to coding:059 and mab-cross-app-artifact-4e6f0120bd.",
+      "id": "mab_code59_cross.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: The evaluator-owned Office Task Collaborator event worker completes and records observable post-baseline probes.",
+      "id": "mab_code59_cross.mut.02_authority_probe",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_authority_probe_evidence",
+        "corrupt_authority_probe_value",
+        "replay_stale_authority_probe_state",
+        "satisfy_manifest_without_authority_probe_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: The evaluator-owned Office Task Collaborator event worker completes and records observable post-baseline probes.",
+      "id": "mab_code59_cross.mut.02_authority_probe_crosscheck",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_authority_probe_red",
+        "artifact_green_authority_probe_stale",
+        "receipt_valid_authority_probe_foreign",
+        "partial_closure_hides_authority_probe_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: The exact calendar contract receipt is consumed and the synchronized task/calendar closure is reverified.",
+      "id": "mab_code59_cross.mut.03_closure",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: The exact calendar contract receipt is consumed and the synchronized task/calendar closure is reverified.",
+      "id": "mab_code59_cross.mut.03_closure_crosscheck",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: The task remains bound to the official MultiAgentBench source task coding:059.",
+      "id": "mab_code59_cross.mut.04_pin",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: The task remains bound to the official MultiAgentBench source task coding:059.",
+      "id": "mab_code59_cross.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: The submitted deliverable follows the official coding:059 solution.py output contract and emits the calendar_deadline_sync_contract evaluator closure schema.",
+      "id": "mab_code59_cross.mut.05_output_schema",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.output_schema"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_output_schema_evidence",
+        "corrupt_output_schema_value",
+        "replay_stale_output_schema_state",
+        "satisfy_manifest_without_output_schema_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: The submitted deliverable follows the official coding:059 solution.py output contract and emits the calendar_deadline_sync_contract evaluator closure schema.",
+      "id": "mab_code59_cross.mut.05_output_schema_crosscheck",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.output_schema"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_output_schema_red",
+        "artifact_green_output_schema_stale",
+        "receipt_valid_output_schema_foreign",
+        "partial_closure_hides_output_schema_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: Calendar synchronization uses task-specific provider events while task assignment, status, messaging, dashboards, and reports remain functional.",
+      "id": "mab_code59_cross.mut.06_task_behavior",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.task_behavior"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_task_behavior_evidence",
+        "corrupt_task_behavior_value",
+        "replay_stale_task_behavior_state",
+        "satisfy_manifest_without_task_behavior_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: Calendar synchronization uses task-specific provider events while task assignment, status, messaging, dashboards, and reports remain functional.",
+      "id": "mab_code59_cross.mut.06_task_behavior_crosscheck",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.task_behavior"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_task_behavior_red",
+        "artifact_green_task_behavior_stale",
+        "receipt_valid_task_behavior_foreign",
+        "partial_closure_hides_task_behavior_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: Valid prior Office Task Collaborator work is preserved: assignments, messaging, dashboards, project_reports, authentication, authorization.",
+      "id": "mab_code59_cross.mut.07_preservation",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.preservation"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_preservation_evidence",
+        "corrupt_preservation_value",
+        "replay_stale_preservation_state",
+        "satisfy_manifest_without_preservation_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: Valid prior Office Task Collaborator work is preserved: assignments, messaging, dashboards, project_reports, authentication, authorization.",
+      "id": "mab_code59_cross.mut.07_preservation_crosscheck",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.preservation"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_preservation_red",
+        "artifact_green_preservation_stale",
+        "receipt_valid_preservation_foreign",
+        "partial_closure_hides_preservation_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: The exact calendar contract receipt is consumed and the synchronized task/calendar closure is reverified.",
+      "id": "mab_code59_cross.mut.08_event_closure",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.event_closure"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_event_closure_evidence",
+        "corrupt_event_closure_value",
+        "replay_stale_event_closure_state",
+        "satisfy_manifest_without_event_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: The exact calendar contract receipt is consumed and the synchronized task/calendar closure is reverified.",
+      "id": "mab_code59_cross.mut.08_event_closure_crosscheck",
+      "must_fail": [
+        "mab_cross_app_artifact_4e6f0120bd.source.event_closure"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_event_closure_red",
+        "artifact_green_event_closure_stale",
+        "receipt_valid_event_closure_foreign",
+        "partial_closure_hides_event_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: Classify the delivered calendar adapter contract as a dependency change scoped to deadline synchronization, not as a replacement for the task domain model. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "id": "mab_code59_cross.mut.09_01_classify_scope_delta_0120",
+      "must_fail": [
+        "mab_code59_cross.cf.01_classify_scope_delta_0120bd"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: Classify the delivered calendar adapter contract as a dependency change scoped to deadline synchronization, not as a replacement for the task domain model. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "id": "mab_code59_cross.mut.09_01_classify_scope_delta_0120_crosscheck",
+      "must_fail": [
+        "mab_code59_cross.cf.01_classify_scope_delta_0120bd"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_scope_delta_0120_red",
+        "artifact_green_01_classify_scope_delta_0120_stale",
+        "receipt_valid_01_classify_scope_delta_0120_foreign",
+        "partial_closure_hides_01_classify_scope_delta_0120_failure"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: Rebind calendar create, update, and cancellation to stable provider IDs and the delivered timezone, retry, and conflict semantics. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "id": "mab_code59_cross.mut.10_02_revise_affected_0120bd",
+      "must_fail": [
+        "mab_code59_cross.cf.02_revise_affected_0120bd"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: Preserve existing projects, assignments, statuses, dashboards, messaging, authentication, and authorization while revising only calendar integration artifacts. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "id": "mab_code59_cross.mut.11_03_preserve_unaffected_0120b",
+      "must_fail": [
+        "mab_code59_cross.cf.03_preserve_unaffected_0120bd"
+      ],
+      "operation": "mutate_control_selective_replan",
+      "variants": [
+        "omit_selective_replan_decision",
+        "apply_selective_replan_to_wrong_scope",
+        "use_stale_evidence_for_selective_replan",
+        "declare_selective_replan_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Directly challenge: Close only after fake-adapter checks prove moved deadlines, conflicts, retries, and deletion and the manifest consumes this exact calendar receipt. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "id": "mab_code59_cross.mut.12_04_verify_closure_0120bd",
+      "must_fail": [
+        "mab_code59_cross.cf.04_verify_closure_0120bd"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "description": "Cross-check independent evidence for: Close only after fake-adapter checks prove moved deadlines, conflicts, retries, and deletion and the manifest consumes this exact calendar receipt. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "id": "mab_code59_cross.mut.12_04_verify_closure_0120bd_crosscheck",
+      "must_fail": [
+        "mab_code59_cross.cf.04_verify_closure_0120bd"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_04_verify_closure_0120bd_red",
+        "artifact_green_04_verify_closure_0120bd_stale",
+        "receipt_valid_04_verify_closure_0120bd_foreign",
+        "partial_closure_hides_04_verify_closure_0120bd_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

@@ -1,0 +1,87 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_watch_closure.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.closure.receipt"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-watch-counter-terms",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.counter_terms"
+      ],
+      "path": "task/negative_mutations/wrong_watch_counter_terms.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_barwatch_4412.cf.01_classify_stale_add_the_90_day_bat",
+          "mab_barwatch_4412.cf.02_exclude_stale_recalculate_price_",
+          "mab_barwatch_4412.cf.03_verify_closure_submit_the_revised"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_constraint_4412b3e2d6.event.receipt",
+          "mab_late_constraint_4412b3e2d6.event.probes",
+          "mab_late_constraint_4412b3e2d6.closure.receipt",
+          "mab_late_constraint_4412b3e2d6.source.pin",
+          "mab_late_constraint_4412b3e2d6.source.stale_revision",
+          "mab_late_constraint_4412b3e2d6.source.counter_terms",
+          "mab_late_constraint_4412b3e2d6.source.acceptance",
+          "mab_late_constraint_4412b3e2d6.source.ledger_order"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "battery condition",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "logistics costs",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "original price",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "9e81f87f6fb3900cf858cad33f08c75b1ae4a7e6d11a07c649158678bfdb640f",
+        "task_id": "bargaining:008",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

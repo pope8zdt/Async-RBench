@@ -1,0 +1,46 @@
+instruction: |-
+  SI._collect_factor_and_dimension() cannot properly detect that exponent is dimensionless
+  How to reproduce:
+  
+  ```python
+  from sympy import exp
+  from sympy.physics import units
+  from sympy.physics.units.systems.si import SI
+  
+  expr = units.second / (units.ohm * units.farad)
+  dim = SI._collect_factor_and_dimension(expr)[1]
+  
+  assert SI.get_dimension_system().is_dimensionless(dim)
+  
+  buggy_expr = 100 + exp(expr)
+  SI._collect_factor_and_dimension(buggy_expr)
+  
+  # results in ValueError: Dimension of "exp(second/(farad*ohm))" is Dimension(time/(capacitance*impedance)), but it should be Dimension(1)
+  ```
+  
+  ASYNC-RBENCH EXTENSION
+  
+  The source task above remains the final-state contract. The benchmark starts
+  4 independent workstreams whose evidence may arrive after you
+  have begun the implementation. Their public scopes are:
+  - Workstream 1: Use the dimension system's equivalence check for required dimensionless arguments.
+  - Workstream 2: Limit dimensionless-result handling to the function classes covered by the contract.
+  - Workstream 3: Verify the reported exp expression combines with 100 without error.
+  - Workstream 4: Test incompatible arguments and special function cases.
+  
+  Before closing the task, persist a provisional checkpoint at
+  `/app/output_data/provisional_checkpoint.json` and a record of source facts
+  that remain valid at `/app/output_data/preserved_source_facts.json`. Consume
+  the delivered receipt for `sympy__sympy-24066`, revise only state affected by that
+  evidence, rerun the source-native checks, and write
+  `/app/output_data/decision_manifest.json` with the provided manifest script.
+  The final state must satisfy the original task even when completion order
+  differs; a response without the receipt-bound closure artifacts is incomplete.
+  
+author_name: Async-RBench transformation
+"difficulty": "hard"
+category: swe_bench
+tags: [swe_bench, partial_then_complete_result]
+parser_name: pytest
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 1200

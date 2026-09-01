@@ -1,0 +1,48 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:8e116af7-7db7-4e35-a68b-b0939c066c78",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/8e116af7-7db7-4e35-a68b-b0939c066c78.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "libreoffice_calc snapshot",
+      "os snapshot",
+      "image snapshot",
+      "pdf snapshot",
+      "private source assets",
+      "private native fixture",
+      "private delayed payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "libreoffice_calc",
+      "os",
+      "image",
+      "pdf",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:8e116af7-7db7-4e35-a68b-b0939c066c78 in pinned libreoffice_calc; truth is private.",
+    "event_injection": "Release delayed normalized receipt records after upstream checkpoint.",
+    "hidden_tests": "compare_table, native digest, output_path, preserved_rows, expense_rows, running_balances, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "libreoffice_calc",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private bookkeeping_osworld.sh scores compare_table.",
+    "requires_authored_private_oracle": false
+  }
+}
+

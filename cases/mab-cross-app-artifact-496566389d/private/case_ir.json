@@ -1,0 +1,248 @@
+{
+  "case_id": "mab-cross-app-artifact-496566389d",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_496566389d_classify_scope_delta_01",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_quest_and_skill_plan"
+        ]
+      },
+      "id": "01_classify_scope_delta_66389d",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_496566389d.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "Classify the QuestHub synchronization contract as a dependency change affecting cross-device quest and skill-plan state. Preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.map_quest_and_skill_plan"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_496566389d_revise_affected_02",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.add_revision_and_idempot"
+        ]
+      },
+      "id": "02_revise_affected_66389d",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_496566389d.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Apply delivered record mapping, revisions, event payloads, idempotency keys, and deterministic conflict rules to synchronization artifacts. Preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.add_revision_and_idempot"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_496566389d_preserve_unaffected_03",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_deterministic_"
+        ]
+      },
+      "id": "03_preserve_unaffected_66389d",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_496566389d.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "Preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior while revising synchronization. Preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.implement_deterministic_"
+    },
+    {
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_496566389d_verify_closure_04",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_tests_for_duplicate_"
+        ]
+      },
+      "id": "04_verify_closure_66389d",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_496566389d.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "Close only after duplicate, offline-edit, concurrent-conflict, and cross-device convergence checks consume the exact QuestHub synchronization receipt. Preserve quest and skill-plan user flows, authentication, authorization, and backend route behavior.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_tests_for_duplicate_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.map_quest_and_skill_plan"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.add_revision_and_idempot"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_deterministic_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_tests_for_duplicate_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.map_quest_and_skill_plan",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.add_revision_and_idempot",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_deterministic_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_tests_for_duplicate_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.map_quest_and_skill_plan",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.add_revision_and_idempot",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_deterministic_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_tests_for_duplicate_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.map_quest_and_skill_plan",
+      "req.02.add_revision_and_idempot",
+      "req.03.implement_deterministic_",
+      "req.04.add_tests_for_duplicate_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The synchronization worker delivers QuestHub quest and skill-plan record mapping, revision fields, event payloads, idempotency keys, and deterministic concurrent-edit conflict rules.",
+    "before_state": "Quest and skill-plan interfaces, authentication, backend routes, and provisional cross-device synchronization are functional before the synchronization dependency contract arrives.",
+    "event_id": "evt.mab_cross_app_artifact_496566389d.task_scope_or_dependency_change",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Map QuestHub quest and skill-plan records to the delivered synchronization contract.",
+      "id": "req.01.map_quest_and_skill_plan",
+      "observable_probe": "mab_cross_app_artifact_4.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source-native QuestHub artifact and closure evidence for: Map QuestHub quest and skill-plan records to the delivered synchronization contract."
+    },
+    {
+      "description": "Add revisions and idempotency keys to cross-device synchronization events.",
+      "id": "req.02.add_revision_and_idempot",
+      "observable_probe": "mab_cross_app_artifact_4.sem.02.the_requested_program_passes",
+      "public_evidence": "source-native QuestHub artifact and closure evidence for: Add revisions and idempotency keys to cross-device synchronization events."
+    },
+    {
+      "description": "Resolve concurrent and offline edits deterministically without duplicate side effects.",
+      "id": "req.03.implement_deterministic_",
+      "observable_probe": "mab_cross_app_artifact_4.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source-native QuestHub artifact and closure evidence for: Resolve concurrent and offline edits deterministically without duplicate side effects."
+    },
+    {
+      "description": "Verify duplicate delivery, offline edits, conflicting updates, and cross-device convergence.",
+      "id": "req.04.add_tests_for_duplicate_",
+      "observable_probe": "mab_cross_app_artifact_4.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source-native QuestHub artifact and closure evidence for: Verify duplicate delivery, offline edits, conflicting updates, and cross-device convergence."
+    }
+  ]
+}

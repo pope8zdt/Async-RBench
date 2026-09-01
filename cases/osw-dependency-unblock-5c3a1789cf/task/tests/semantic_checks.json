@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The event receipt is authentic and bound to the real OSWorld task.",
+      "id": "osw_dependency_unblock_5c3a1789cf.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The delayed OSWorld evidence producer completed with observable probes.",
+      "id": "osw_dependency_unblock_5c3a1789cf.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and records source-semantic reverification.",
+      "id": "osw_dependency_unblock_5c3a1789cf.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains bound to its pinned OSWorld source task.",
+      "id": "osw_dependency_unblock_5c3a1789cf.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native result is bound to osworld:chrome:1704f00f-79e6-43a7-961b-cedd3724d5fd and check_direct_json_object.",
+      "id": "osw_dependency_unblock_5c3a1789cf.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official OSWorld evaluator score is exactly 1.",
+      "id": "osw_dependency_unblock_5c3a1789cf.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native evidence digest matches the evaluator-owned fixture.",
+      "id": "osw_dependency_unblock_5c3a1789cf.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The final rental state uses Zürich, a Monday-to-Friday interval, large category, and PRICE sorting.",
+      "id": "osw_dependency_unblock_5c3a1789cf.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final Zürich large-car rental interval state satisfies its task-specific OSWorld invariant.",
+      "id": "osw_dependency_unblock_5c3a1789cf.osworld.state",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_zurich_relative_date_interval",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

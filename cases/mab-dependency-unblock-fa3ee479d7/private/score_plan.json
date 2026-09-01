@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_group_integrity_contract_compl",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_fa3e.group_integrity_contract_completed",
+      "evidence_group": "mab_code07_craft.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_profiles_and_valid"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed media, leadership, membership, and task-integrity contract unblocks collaborative craft projects while preserving profiles, posts, feedback, messages, and search state.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_profiles_and_valid"
+        ]
+      },
+      "id": "mab_code07_craft.cf.01_classify_authority_group_integrity_co",
+      "independence_key": "mab_code07_craft.cf.01_classify_authority_group_integrity_co",
+      "measurement_type": "control",
+      "mutation_id": "mab_code07_craft.mutation.01_classify_authority_group_integrity_co",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fa3ee479d7.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_profiles_and_valid"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_group_integrity_contract_compl",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_fa3e.group_integrity_contract_completed",
+      "evidence_group": "mab_code07_craft.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_leader_managed_gro"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed media, leadership, membership, and task-integrity contract unblocks collaborative craft projects while preserving profiles, posts, feedback, messages, and search state.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_leader_managed_gro"
+        ]
+      },
+      "id": "mab_code07_craft.cf.02_revise_affected_group_integrity_co",
+      "independence_key": "mab_code07_craft.cf.02_revise_affected_group_integrity_co",
+      "measurement_type": "control",
+      "mutation_id": "mab_code07_craft.mutation.02_revise_affected_group_integrity_co",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fa3ee479d7.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_leader_managed_gro"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_group_integrity_contract_compl",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_fa3e.group_integrity_contract_completed",
+      "evidence_group": "mab_code07_craft.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_comments_helpfulne"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed media, leadership, membership, and task-integrity contract unblocks collaborative craft projects while preserving profiles, posts, feedback, messages, and search state.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_comments_helpfulne"
+        ]
+      },
+      "id": "mab_code07_craft.cf.03_verify_closure_group_integrity_co",
+      "independence_key": "mab_code07_craft.cf.03_verify_closure_group_integrity_co",
+      "measurement_type": "control",
+      "mutation_id": "mab_code07_craft.mutation.03_verify_closure_group_integrity_co",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fa3ee479d7.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_comments_helpfulne"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "family": "wait_for_authority",
+      "id": "mab_code07_craft.mutation.01_classify_authority_group_integrity_co",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code07_craft.cf.01_classify_authority_group_integrity_co"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_fa3ee479d7.source.pin"
+      ],
+      "targets": [
+        "mab_code07_craft.cf.01_classify_authority_group_integrity_co",
+        "mab_dependency_unblock_fa3ee479d7.event.receipt",
+        "mab_dependency_unblock_fa3ee479d7.event.authority_probe",
+        "mab_dependency_unblock_fa3ee479d7.closure",
+        "mab_dependency_unblock_fa3ee479d7.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "family": "resolve_authority",
+      "id": "mab_code07_craft.mutation.02_revise_affected_group_integrity_co",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code07_craft.cf.02_revise_affected_group_integrity_co"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_fa3ee479d7.source.pin"
+      ],
+      "targets": [
+        "mab_code07_craft.cf.02_revise_affected_group_integrity_co",
+        "mab_dependency_unblock_fa3ee479d7.event.receipt",
+        "mab_dependency_unblock_fa3ee479d7.event.authority_probe",
+        "mab_dependency_unblock_fa3ee479d7.closure",
+        "mab_dependency_unblock_fa3ee479d7.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "family": "rederive_from_authority",
+      "id": "mab_code07_craft.mutation.03_verify_closure_group_integrity_co",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code07_craft.cf.03_verify_closure_group_integrity_co"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_fa3ee479d7.source.pin"
+      ],
+      "targets": [
+        "mab_code07_craft.cf.03_verify_closure_group_integrity_co",
+        "mab_dependency_unblock_fa3ee479d7.event.receipt",
+        "mab_dependency_unblock_fa3ee479d7.event.authority_probe",
+        "mab_dependency_unblock_fa3ee479d7.closure",
+        "mab_dependency_unblock_fa3ee479d7.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific group_integrity_contract_completed receipt bound to coding:007.",
+      "id": "mab_dependency_unblock_fa3ee479d7.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned CollaborateCraft crafting community authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_fa3ee479d7.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A delayed media, leadership, membership, and task-integrity contract unblocks collaborative craft projects while preserving profiles, posts, feedback, messages, and search state.",
+      "id": "mab_dependency_unblock_fa3ee479d7.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:007.",
+      "id": "mab_dependency_unblock_fa3ee479d7.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes CollaborateCraft and the craft_group_integrity_closure.",
+      "id": "mab_dependency_unblock_fa3ee479d7.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_craft_output_schema_profiles_posts_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Media validation, leader-only invitations/assignments, member comments/messages, progress, voting, and search obey the returned integrity contract.",
+      "id": "mab_dependency_unblock_fa3ee479d7.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_craft_media_leadership_membership_assignment_and_progress_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves profiles, tagged posts, group state, comments and votes, private and group messages.",
+      "id": "mab_dependency_unblock_fa3ee479d7.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_craft_comments_votes_messages_and_search_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed integrity authority unblocks safe group collaboration and revalidates search without erasing content.",
+      "id": "mab_dependency_unblock_fa3ee479d7.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_craft_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

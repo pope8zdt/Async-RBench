@@ -1,0 +1,44 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:df67aebb-fb3a-44fd-b75b-51b6012df509",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/df67aebb-fb3a-44fd-b75b-51b6012df509.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "chrome snapshot",
+      "libreoffice_writer snapshot",
+      "private source assets",
+      "private native fixture",
+      "private delayed payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "chrome",
+      "libreoffice_writer",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:df67aebb-fb3a-44fd-b75b-51b6012df509 in pinned vscode; truth is private.",
+    "event_injection": "Release delayed DBLP published-record resolution after upstream checkpoint.",
+    "hidden_tests": "compare_text_file, native digest, output_path, bibtex_coverage, published_preference, bibtex_format, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "vscode",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private dblp_bibtex_osworld.sh scores compare_text_file.",
+    "requires_authored_private_oracle": false
+  }
+}
+

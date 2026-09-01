@@ -1,0 +1,86 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "swe-late-constraint-17e23e3eb3",
+  "benchmark": "SWE-bench",
+  "source_binding": {
+    "instance_id": "sympy__sympy-22714",
+    "repo": "sympy/sympy",
+    "base_commit": "3ff4717b6aef6086e78f01cdfa06f64ae23aed7e",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "split": "test",
+    "variant": "swe_bench",
+    "problem_statement_sha256": "8f4d48e9d985d6bbdd7b61fbdf1342c381f26da9849ebd45c4b78252fdaf1f11",
+    "harness_revision": "7a21e05772954cc81471ae19d56f436cecf43c54"
+  },
+  "native_runtime": {
+    "adapter": "swebench.harness.run_evaluation",
+    "isolation": "official Docker instance image",
+    "final_state": "git working tree patch"
+  },
+  "event_protocol": {
+    "producer": "independent reproduction/test worker in a clean clone of the same base commit",
+    "payload": "raw command, exit status, and bounded stdout/stderr from selected reproduction tests",
+    "release_predicate": "main working tree has a non-empty persisted diff while worker is running",
+    "rollback": "post-result patch history remains; the agent must amend/revert real files"
+  },
+  "state_attestation": {
+    "baseline_probe": "git HEAD plus clean index/worktree digest",
+    "checkpoint_probe": "git diff --binary plus untracked-file content digest",
+    "change_required": true,
+    "journal_owner": "host harness outside /testbed"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "entrypoint": "swebench.harness.run_evaluation",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "instance_id": "sympy__sympy-22714",
+    "FAIL_TO_PASS": [
+      "test_issue_22684"
+    ],
+    "PASS_TO_PASS": [
+      "test_point",
+      "test_point3D",
+      "test_Point2D",
+      "test_issue_9214",
+      "test_issue_11617",
+      "test_transform",
+      "test_concyclic_doctest_bug",
+      "test_arguments",
+      "test_unit",
+      "test_dot",
+      "test__normalize_dimension"
+    ],
+    "docker_image": null,
+    "selected_test_files": null
+  },
+  "quality_gates": {
+    "official_instance_bound": true,
+    "native_tests_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

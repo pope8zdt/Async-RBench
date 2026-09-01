@@ -1,0 +1,88 @@
+instruction: |-
+  Work on the exact assets and APIs of four original Terminal-Bench tasks.
+  Reconstruct the model implied by /app/weights.pt and /app/dataset.pt, tune only
+  output_layer, and save the improved TorchScript model as /app/model.pt.
+  Implement the original ColumnParallelLinear and RowParallelLinear APIs in
+  /app/parallel_linear.py and the original AFAB LLaMA pipeline function in
+  /app/pipeline_parallel.py. Produce the two shape-aware batching plans in the
+  original /app/task_file/output_data locations and satisfy its cost thresholds.
+
+  Preserve these exact original APIs and behaviors:
+    ColumnParallelLinear(torch.nn.Module):
+      __init__(self, in_features, out_features, bias, master_weight)
+    RowParallelLinear(torch.nn.Module):
+      __init__(self, in_features, out_features, bias, master_weight)
+  ColumnParallelLinear shards rows of the [out_features, in_features] master
+  weight/output dimension and bias, then returns the full all-gathered output.
+  RowParallelLinear shards columns of the master weight/input dimension, accepts
+  the already-scattered input, sums partial outputs with all-reduce, and keeps a
+  full bias. Initialize bias to zero. Outputs and weight/bias gradients must match
+  nn.Linear for Gloo world_size 1, 2 and 4.
+
+  /app/pipeline_parallel.py must export exactly:
+    train_step_pipeline_afab(model, inputs, targets, device, dtype)
+  where model is LlamaForCausalLM and inputs/targets are lists of microbatches.
+  Partition layers roughly evenly across the initialized process-group ranks,
+  execute all microbatch forwards before all backwards, use hidden-state-shaped
+  inter-stage communication, and on the final rank compute cross-entropy scaled
+  by the number of microbatches. Do not use hooks. It must match reference
+  activations/gradients for world_size 1 and 2.
+
+  For batching, include every request exactly once; use one identical shape per
+  batch with seq_align a multiple of 64 and at least ceil(prompt_len/64)*64,
+  heads_align=32 and hidden_align=4096. Use at most 8 unique shapes across both
+  buckets. Required maxima are: bucket 1 cost 3.0e11, pad_ratio 0.055,
+  p95_latency 2.1e6 ms and sequential_timecost 2.7e8 ms; bucket 2 cost 4.8e10,
+  pad_ratio 0.15, p95_latency 2.1e5 ms and sequential_timecost 3.2e7 ms.
+
+  The profile inputs are inspected in isolated workstreams. After accepting a
+  delivered profile observation, promote any reported profile artifact needed
+  for final integration into the main workspace. Write
+  /app/deployment.json selecting
+  a feasible backend and recording profile_version, world_size, model_sha256,
+  implementation_sha256, plan_b1_sha256 and plan_b2_sha256. Also write
+  /app/batch-lineage.json with the same final profile/backend and both plan hashes.
+  Use the canonical deployment backend values "tensor_parallel", "pipeline", or
+  "cpu"; CPU execution of the pipeline implementation is still recorded as
+  "pipeline". Backend recommendations returned by subagents must use these same
+  canonical values.
+  Select backend, profile_version and world_size from the profile evidence you
+  determine applies to the final deployment. implementation_sha256 must hash the implementation selected by that
+  backend. /app/batch-lineage.json must contain exactly these
+  four keys and no extras: backend, profile_version, plan_b1_sha256,
+  plan_b2_sha256; its values must match /app/deployment.json and the final files.
+
+  INITIAL CONCURRENT WORKSTREAMS (BENCHMARK-STARTED)
+
+  The benchmark has already started three isolated workstreams for you. The
+  ASYNC_RBENCH_INITIAL_WAVE notice at the start of the episode lists their child ids,
+  workstream ids, task summaries and status. You are NOT required to create them
+  and will never be scored on having spawned the initial team: one investigates
+  and builds a tensor-parallel candidate; one independently inspects hardware
+  profile constraints and returns an evidence-backed feasible
+  backend recommendation; and one independently reconstructs and tunes the model
+  from the supplied weights/dataset and returns a verified /app/model.pt candidate.
+  Keep the profile investigations separate. Their results may return out of
+  order. Determine applicability from the reported profile contents, revisions
+  and verified files; the prompt does not identify a preferred completion. You
+  own the orchestration after the wave
+  starts: wait, accept or reject deliveries, cancel work that is no longer
+  useful, and use spawn_subagent only to re-delegate a workstream whose child
+  must be rebuilt. The main agent remains responsible for PP, batching, final
+  integration, and any missing work.
+
+  Require the TP branch to report observed evidence fields
+  profile_version, backend, world_size and verification_passed. Require the
+  profile-inspection branch to report profile_version, world_size,
+  tensor_parallel_supported, pipeline_parallel_supported and recommended_backend.
+  These fields must contain observations from the actual files/tests, not goals.
+
+  When delivered evidence changes a prior assumption, retain unaffected work,
+  revise dependent artifacts, and reverify final numerical and plan properties.
+author_name: Async-RBench transformation
+difficulty: hard
+category: model-systems
+tags: [pytorch, distributed, batching, asynchronous-replanning]
+parser_name: pytest
+max_agent_timeout_sec: 2400
+max_test_timeout_sec: 1200

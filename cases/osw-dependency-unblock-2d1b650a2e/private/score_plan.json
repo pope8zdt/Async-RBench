@@ -1,0 +1,302 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "dnt_profile_authority",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dnt_2d1b650a2e.delayed_profile_authority",
+      "evidence_group": "osw_dnt_13:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.02.enable_do_not_track"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Accept the delayed case-bound Chrome profile receipt as authority for enable_do_not_track=true.",
+      "forbidden_behavior": "Do not treat a visual toggle click or completion order as persisted profile authority.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.enable_do_not_track"
+        ]
+      },
+      "id": "osw_dnt_13.cf.01_accept_profile_authority",
+      "independence_key": "osw_dnt_13.cf.01_accept_profile_authority",
+      "measurement_type": "control",
+      "mutation_id": "osw_dnt_13.mutation.01_accept_profile_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.event.receipt"
+      ],
+      "precondition": "The delayed profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.02.enable_do_not_track"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "dnt_state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dnt_2d1b650a2e.delayed_profile_authority",
+      "evidence_group": "osw_dnt_13:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.enable_do_not_track"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reconcile only the Do Not Track preference to the receipt-authorized true value.",
+      "forbidden_behavior": "Do not retain an unverified toggle state or reset unrelated privacy preferences.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.enable_do_not_track"
+        ]
+      },
+      "id": "osw_dnt_13.cf.02_reconcile_dnt_preference",
+      "independence_key": "osw_dnt_13.cf.02_reconcile_dnt_preference",
+      "measurement_type": "control",
+      "mutation_id": "osw_dnt_13.mutation.02_reconcile_dnt_preference",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.event.probes"
+      ],
+      "precondition": "The delayed profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.enable_do_not_track"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "dnt_closure_reverification",
+      "dimension": "closure",
+      "event_id": "evt.osw_dnt_2d1b650a2e.delayed_profile_authority",
+      "evidence_group": "osw_dnt_13:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.verify_persisted_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Re-read the final Chrome profile and close only when enable_do_not_track remains true.",
+      "forbidden_behavior": "Do not close on the click alone or omit post-event persisted-state verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_persisted_state"
+        ]
+      },
+      "id": "osw_dnt_13.cf.03_reverify_persisted_dnt",
+      "independence_key": "osw_dnt_13.cf.03_reverify_persisted_dnt",
+      "measurement_type": "control",
+      "mutation_id": "osw_dnt_13.mutation.03_reverify_persisted_dnt",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.closure"
+      ],
+      "precondition": "The delayed profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_persisted_state"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not treat a visual toggle click or completion order as persisted profile authority.",
+      "family": "wait_for_authority",
+      "id": "osw_dnt_13.mutation.01_accept_profile_authority",
+      "may_fail": [],
+      "must_fail": [
+        "osw_dnt_13.cf.01_accept_profile_authority"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ],
+      "targets": [
+        "osw_dnt_13.cf.01_accept_profile_authority",
+        "osw_dependency_unblock_2d1b650a2e.event.receipt",
+        "osw_dependency_unblock_2d1b650a2e.event.probes",
+        "osw_dependency_unblock_2d1b650a2e.closure",
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not retain an unverified toggle state or reset unrelated privacy preferences.",
+      "family": "resolve_authority",
+      "id": "osw_dnt_13.mutation.02_reconcile_dnt_preference",
+      "may_fail": [],
+      "must_fail": [
+        "osw_dnt_13.cf.02_reconcile_dnt_preference"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ],
+      "targets": [
+        "osw_dnt_13.cf.02_reconcile_dnt_preference",
+        "osw_dependency_unblock_2d1b650a2e.event.receipt",
+        "osw_dependency_unblock_2d1b650a2e.event.probes",
+        "osw_dependency_unblock_2d1b650a2e.closure",
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close on the click alone or omit post-event persisted-state verification.",
+      "family": "rederive_from_authority",
+      "id": "osw_dnt_13.mutation.03_reverify_persisted_dnt",
+      "may_fail": [],
+      "must_fail": [
+        "osw_dnt_13.cf.03_reverify_persisted_dnt"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ],
+      "targets": [
+        "osw_dnt_13.cf.03_reverify_persisted_dnt",
+        "osw_dependency_unblock_2d1b650a2e.event.receipt",
+        "osw_dependency_unblock_2d1b650a2e.event.probes",
+        "osw_dependency_unblock_2d1b650a2e.closure",
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The event receipt is authentic and bound to the real OSWorld task.",
+      "id": "osw_dependency_unblock_2d1b650a2e.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The delayed OSWorld evidence producer completed with observable probes.",
+      "id": "osw_dependency_unblock_2d1b650a2e.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and records source-semantic reverification.",
+      "id": "osw_dependency_unblock_2d1b650a2e.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains bound to its pinned OSWorld source task.",
+      "id": "osw_dependency_unblock_2d1b650a2e.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native result is bound to osworld:chrome:030eeff7-b492-4218-b312-701ec99ee0cc and exact_match.",
+      "id": "osw_dependency_unblock_2d1b650a2e.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official OSWorld evaluator score is exactly 1.",
+      "id": "osw_dependency_unblock_2d1b650a2e.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native evidence digest matches the evaluator-owned fixture.",
+      "id": "osw_dependency_unblock_2d1b650a2e.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The persisted Chrome profile has enable_do_not_track set to true.",
+      "id": "osw_dependency_unblock_2d1b650a2e.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final Chrome Do Not Track state satisfies its task-specific OSWorld invariant.",
+      "id": "osw_dependency_unblock_2d1b650a2e.osworld.state",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_do_not_track_is_true",
+      "relevance_tier": "base"
+    }
+  ]
+}

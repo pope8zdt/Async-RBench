@@ -1,0 +1,216 @@
+format_version: 2
+case_id: gaia2-stockholm-moveout
+title: 'Stockholm move-out: keep the in-range saved list and notify on every late
+  matching listing'
+task_instruction_path: task/task.yaml
+source_tasks:
+- id: scenario_universe_21_xvc7uo
+  benchmark: gaia2
+  source_sha256: 614f90b7f13ed6952e1d210cf47929a389c005be8c47d42708049cf59c101a46
+  evidence_notes: Structure-derived transformation of the official GAIA2 scenario
+    semantics (saved-list maintenance + late listing notifications). Local case assets
+    are an editorial re-implementation; the numeric Linnea budget (1800 SEK) is derived
+    from the scenario's 1000-1800 range bound and documented in PROVENANCE.md.
+milestones:
+- id: read_apps
+  depends_on: []
+- id: compute_initial_plan
+  depends_on:
+  - read_apps
+- id: finalize_saved_list
+  depends_on:
+  - compute_initial_plan
+- id: send_notification
+  depends_on:
+  - finalize_saved_list
+- id: monitor_window
+  depends_on:
+  - compute_initial_plan
+- id: closure_verification
+  depends_on:
+  - finalize_saved_list
+  - send_notification
+  - monitor_window
+artifacts:
+- id: saved_list_artifact
+  path: /app/output_data/saved_list_final.json
+- id: planned_saved_list_ops
+  path: /app/output_data/planned_ops.json
+- id: notification_artifact
+  path: /app/output_data/notifications.jsonl
+- id: monitor_report_artifact
+  path: /app/output_data/event_monitor_report.json
+- id: decision_manifest
+  path: /app/output_data/decision_manifest.json
+workstreams:
+- id: app_state_reader_A
+  task: 'Read the RentAFlat saved-list app under /app/task_file/app/raf_saved_list.json
+    and report the snapshot brief: saved_list_path, listing_count (the number of saved
+    entries) and saved_list_revision (sha256 of the file). These are observations,
+    not goals.'
+  targets:
+  - saved_list_artifact
+  expected_output: A brief reporting saved_list_path, listing_count and saved_list_revision
+    for the saved-list snapshot.
+  priority: high
+  required_evidence_fields:
+  - saved_list_path
+  - listing_count
+  - saved_list_revision
+  evidence_schema:
+    saved_list_path:
+      type: string
+    listing_count:
+      type: integer
+    saved_list_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+  allowed_files:
+  - /app/task_file/app/raf_saved_list.json
+  required_files:
+  - /app/task_file/app/raf_saved_list.json
+  public_result_contract: {}
+- id: app_state_reader_B
+  task: 'Read the RentAFlat catalog app under /app/task_file/app/raf_catalog.json
+    and report the inventory: catalog_path, catalog_count (the number of catalog entries)
+    and inventory_revision (sha256 of the file). These are observations, not goals.'
+  targets:
+  - saved_list_artifact
+  expected_output: An inventory report of catalog_path, catalog_count and inventory_revision.
+  priority: high
+  required_evidence_fields:
+  - catalog_path
+  - catalog_count
+  - inventory_revision
+  evidence_schema:
+    catalog_path:
+      type: string
+    catalog_count:
+      type: integer
+    inventory_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+  allowed_files:
+  - /app/task_file/app/raf_catalog.json
+  required_files:
+  - /app/task_file/app/raf_catalog.json
+  public_result_contract: {}
+- id: contact_budget_reader
+  task: Read the Contacts app under /app/task_file/app/contacts.json, locate the record
+    for the friend who is moving to Stockholm, and report contact_path, contact_id
+    and budget_sek (the friend's recorded rent budget). These are observations, not
+    goals.
+  targets:
+  - saved_list_artifact
+  expected_output: The friend's contact record with contact_path, contact_id and budget_sek.
+  priority: high
+  required_evidence_fields:
+  - contact_path
+  - contact_id
+  - budget_sek
+  evidence_schema:
+    contact_path:
+      type: string
+    contact_id:
+      type: string
+    budget_sek:
+      type: integer
+  allowed_files:
+  - /app/task_file/app/contacts.json
+  required_files:
+  - /app/task_file/app/contacts.json
+  public_result_contract: {}
+- id: event_monitor
+  task: 'Monitor the deterministic listing event feed under /app/task_file/event_feed.
+    Poll scripts/read_events.py with an increasing --tick to observe new listings
+    over the simulated window, and report the stream as observations: feed_path, stream_revision
+    (sha256 of feed.jsonl), stream_sequence (highest event seq observed so far) and
+    events_seen (how many events have been delivered so far). Keep polling until the
+    feed''s window closes.'
+  targets:
+  - monitor_report_artifact
+  expected_output: A listing-event-stream observation reporting feed_path, stream_revision,
+    stream_sequence and events_seen.
+  priority: high
+  required_evidence_fields:
+  - feed_path
+  - stream_revision
+  - stream_sequence
+  - events_seen
+  evidence_schema:
+    feed_path:
+      type: string
+    stream_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    stream_sequence:
+      type: integer
+    events_seen:
+      type: integer
+  allowed_files:
+  - /app/task_file/event_feed/feed.jsonl
+  - /app/task_file/event_feed/feed_meta.json
+  required_files:
+  - /app/task_file/event_feed/feed.jsonl
+  public_result_contract: {}
+- id: action_planner
+  task: 'From the saved-list snapshot and the catalog inventory, compute the corrected
+    saved-list operation plan: keep every non-matching-city listing untouched, drop
+    saved listings that fall outside the saved-search criteria, and add unsaved listings
+    that fall inside them. The criteria are recorded in the saved-list app''s search_preferences.
+    Write the plan to /app/output_data/planned_ops.json with corrected_saved_ids,
+    removed_ids and added_ids, and report plan_path, plan_revision (sha256 of the
+    file) and ops_count as observations, not goals.'
+  targets:
+  - saved_list_artifact
+  expected_output: A corrected saved-list operation plan written to planned_ops.json
+    with plan_path, plan_revision and ops_count.
+  priority: high
+  required_evidence_fields:
+  - plan_path
+  - plan_revision
+  - ops_count
+  evidence_schema:
+    plan_path:
+      type: string
+    plan_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    ops_count:
+      type: integer
+  allowed_files:
+  - /app/output_data/planned_ops.json
+  required_files:
+  - /app/output_data/planned_ops.json
+  public_result_contract: {}
+- id: world_state_validator
+  task: 'Verify the final world state once the main agent has produced it: /app/output_data/saved_list_final.json
+    (the final saved list) and /app/output_data/notifications.jsonl (the Messages
+    log). Report verification_passed (whether the final state is internally consistent),
+    final_revision (sha256 of saved_list_final.json) and notifications_count (number
+    of notification lines). These are observations, not goals.'
+  targets:
+  - saved_list_artifact
+  - notification_artifact
+  expected_output: A final-world-state verification reporting verification_passed,
+    final_revision and notifications_count.
+  priority: high
+  required_evidence_fields:
+  - verification_passed
+  - final_revision
+  - notifications_count
+  evidence_schema:
+    verification_passed:
+      type: boolean
+    final_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    notifications_count:
+      type: integer
+  allowed_files:
+  - /app/output_data/saved_list_final.json
+  - /app/output_data/notifications.jsonl
+  required_files:
+  - /app/output_data/saved_list_final.json
+  public_result_contract: {}
+public_checks: []

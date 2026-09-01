@@ -1,0 +1,335 @@
+{
+  "families": [
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: The event receipt is authentic and bound to the real OSWorld task.",
+      "id": "osw_nba_9.mut.01_receipt",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: The event receipt is authentic and bound to the real OSWorld task.",
+      "id": "osw_nba_9.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: The delayed OSWorld evidence producer completed with observable probes.",
+      "id": "osw_nba_9.mut.02_probes",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: The delayed OSWorld evidence producer completed with observable probes.",
+      "id": "osw_nba_9.mut.02_probes_crosscheck",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: Closure consumes the exact receipt and records source-semantic reverification.",
+      "id": "osw_nba_9.mut.03_closure",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: Closure consumes the exact receipt and records source-semantic reverification.",
+      "id": "osw_nba_9.mut.03_closure_crosscheck",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: The case remains bound to its pinned OSWorld source task.",
+      "id": "osw_nba_9.mut.04_pin",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: The case remains bound to its pinned OSWorld source task.",
+      "id": "osw_nba_9.mut.04_pin_crosscheck",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: The native result is bound to osworld:chrome:9f3f70fc-5afc-4958-a7b7-3bb4fcb01805 and check_url_and_content_include.",
+      "id": "osw_nba_9.mut.05_identity",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.identity"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_identity_evidence",
+        "corrupt_identity_value",
+        "replay_stale_identity_state",
+        "satisfy_manifest_without_identity_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: The native result is bound to osworld:chrome:9f3f70fc-5afc-4958-a7b7-3bb4fcb01805 and check_url_and_content_include.",
+      "id": "osw_nba_9.mut.05_identity_crosscheck",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.identity"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_identity_red",
+        "artifact_green_identity_stale",
+        "receipt_valid_identity_foreign",
+        "partial_closure_hides_identity_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: The official OSWorld evaluator score is exactly 1.",
+      "id": "osw_nba_9.mut.06_official_score",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.official_score"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_official_score_evidence",
+        "corrupt_official_score_value",
+        "replay_stale_official_score_state",
+        "satisfy_manifest_without_official_score_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: The official OSWorld evaluator score is exactly 1.",
+      "id": "osw_nba_9.mut.06_official_score_crosscheck",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.official_score"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_official_score_red",
+        "artifact_green_official_score_stale",
+        "receipt_valid_official_score_foreign",
+        "partial_closure_hides_official_score_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: The native evidence digest matches the evaluator-owned fixture.",
+      "id": "osw_nba_9.mut.07_native_evidence",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.native_evidence"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_native_evidence_evidence",
+        "corrupt_native_evidence_value",
+        "replay_stale_native_evidence_state",
+        "satisfy_manifest_without_native_evidence_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: The native evidence digest matches the evaluator-owned fixture.",
+      "id": "osw_nba_9.mut.07_native_evidence_crosscheck",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.native_evidence"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_native_evidence_red",
+        "artifact_green_native_evidence_stale",
+        "receipt_valid_native_evidence_foreign",
+        "partial_closure_hides_native_evidence_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: The final catalog state is Women's Nike Jerseys with a lower price bound strictly above $60.",
+      "id": "osw_nba_9.mut.08_task_assertion",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.task_assertion"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_task_assertion_evidence",
+        "corrupt_task_assertion_value",
+        "replay_stale_task_assertion_state",
+        "satisfy_manifest_without_task_assertion_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: The final NBA Store women's Nike jerseys state satisfies its task-specific OSWorld invariant.",
+      "id": "osw_nba_9.mut.09_state",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.state"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_state_evidence",
+        "corrupt_state_value",
+        "replay_stale_state_state",
+        "satisfy_manifest_without_state_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: The final NBA Store women's Nike jerseys state satisfies its task-specific OSWorld invariant.",
+      "id": "osw_nba_9.mut.09_state_crosscheck",
+      "must_fail": [
+        "osw_dependency_unblock_4bfe607faa.osworld.state"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_state_red",
+        "artifact_green_state_stale",
+        "receipt_valid_state_foreign",
+        "partial_closure_hides_state_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform classify_authority for 'Open the returned catalog state or reproduce its filters.' while retaining valid prior result 'The NBA Store is opened.'.",
+      "id": "osw_nba_9.mut.10_01_classify_authority_open_t",
+      "must_fail": [
+        "osw_nba_9.cf.01_classify_authority_open_the_returned_"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform classify_authority for 'Open the returned catalog state or reproduce its filters.' while retaining valid prior result 'The NBA Store is opened.'.",
+      "id": "osw_nba_9.mut.10_01_classify_authority_open_t_crosscheck",
+      "must_fail": [
+        "osw_nba_9.cf.01_classify_authority_open_the_returned_"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_authority_open_t_red",
+        "artifact_green_01_classify_authority_open_t_stale",
+        "receipt_valid_01_classify_authority_open_t_foreign",
+        "partial_closure_hides_01_classify_authority_open_t_failure"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform revise_affected for 'Verify Women, Nike, and Jerseys filters are active.' while retaining valid prior result 'Navigation reaches the women's or jerseys catalog without selecting unverified products.'.",
+      "id": "osw_nba_9.mut.11_02_revise_affected_verify_wo",
+      "must_fail": [
+        "osw_nba_9.cf.02_revise_affected_verify_women_nike_"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Directly challenge: For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform verify_closure for 'Set the lower price bound so $60 items are excluded.' while retaining valid prior result 'The NBA Store is opened.'.",
+      "id": "osw_nba_9.mut.12_03_verify_closure_set_the_lo",
+      "must_fail": [
+        "osw_nba_9.cf.03_verify_closure_set_the_lower_pric"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "description": "Cross-check independent evidence for: For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform verify_closure for 'Set the lower price bound so $60 items are excluded.' while retaining valid prior result 'The NBA Store is opened.'.",
+      "id": "osw_nba_9.mut.12_03_verify_closure_set_the_lo_crosscheck",
+      "must_fail": [
+        "osw_nba_9.cf.03_verify_closure_set_the_lower_pric"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_set_the_lo_red",
+        "artifact_green_03_verify_closure_set_the_lo_stale",
+        "receipt_valid_03_verify_closure_set_the_lo_foreign",
+        "partial_closure_hides_03_verify_closure_set_the_lo_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

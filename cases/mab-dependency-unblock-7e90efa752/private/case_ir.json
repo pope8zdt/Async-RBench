@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-7e90efa752",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_migrate_attendee_references_",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Coach and player profile storage is implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.migrate_attendee_referen"
+        ]
+      },
+      "id": "01_classify_completeness_migrate_attendee_r",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "treat_partial_as_final",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_7e90efa752.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "For event 'A specialist returns the player-profile API, including identifiers, availability intervals, roles, permissions, and deletion behavior.', perform classify_completeness for 'Migrate attendee references to stable player identifiers.' while retaining valid prior result 'Coach and player profile storage is implemented.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.migrate_attendee_referen"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_enforce_profile_availability",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Scheduling and announcement services use a provisional player interface.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.migrate_attendee_referen"
+        ]
+      },
+      "id": "02_revise_affected_enforce_profile_av",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "drop_confirmed_partial",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_7e90efa752.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A specialist returns the player-profile API, including identifiers, availability intervals, roles, permissions, and deletion behavior.', perform revise_affected for 'Enforce profile availability when scheduling events.' while retaining valid prior result 'Scheduling and announcement services use a provisional player interface.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.migrate_attendee_referen"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_apply_coach_and_player_permi",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Coach and player profile storage is implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.migrate_attendee_referen"
+        ]
+      },
+      "id": "03_verify_closure_apply_coach_and_pl",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_7e90efa752.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'A specialist returns the player-profile API, including identifiers, availability intervals, roles, permissions, and deletion behavior.', perform verify_closure for 'Apply coach and player permissions to announcements.' while retaining valid prior result 'Coach and player profile storage is implemented.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.migrate_attendee_referen"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.migrate_attendee_referen"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.enforce_profile_availabi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.apply_coach_and_player_p"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_tests_for_profile_de"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.migrate_attendee_referen",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.enforce_profile_availabi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.apply_coach_and_player_p",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_tests_for_profile_de",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.migrate_attendee_referen",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.enforce_profile_availabi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.apply_coach_and_player_p",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_tests_for_profile_de",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.migrate_attendee_referen",
+      "req.02.enforce_profile_availabi",
+      "req.03.apply_coach_and_player_p",
+      "req.04.add_tests_for_profile_de",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A specialist returns the player-profile API, including identifiers, availability intervals, roles, permissions, and deletion behavior.",
+    "before_state": "Delay the foundational profile contract until scheduling and communication adapters exist against a provisional interface.",
+    "event_id": "evt.mab_dependency_unblock_7.partial_then_complete_re",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Migrate attendee references to stable player identifiers.",
+      "id": "req.01.migrate_attendee_referen",
+      "observable_probe": "mab_dependency_unblock_7.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for migrate_attendee_references_to_stabl"
+    },
+    {
+      "description": "Enforce profile availability when scheduling events.",
+      "id": "req.02.enforce_profile_availabi",
+      "observable_probe": "mab_dependency_unblock_7.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for enforce_profile_availability_when_sc"
+    },
+    {
+      "description": "Apply coach and player permissions to announcements.",
+      "id": "req.03.apply_coach_and_player_p",
+      "observable_probe": "mab_dependency_unblock_7.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for apply_coach_and_player_permissions_t"
+    },
+    {
+      "description": "Add tests for profile deletion, schedule conflicts, and authorization.",
+      "id": "req.04.add_tests_for_profile_de",
+      "observable_probe": "mab_dependency_unblock_7.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_tests_for_profile_deletion_sched"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "assets": [
+    "problem statement",
+    "base commit",
+    "FAIL_TO_PASS",
+    "PASS_TO_PASS",
+    "selected reproduction command"
+  ],
+  "docker": [
+    "pinned base image",
+    "repository checkout",
+    "test dependencies",
+    "non-root participant workspace"
+  ],
+  "environment_strategy": "rebuild official SWE-bench instance image from repo/base_commit when image is absent",
+  "event_injection": "run reproduction/regression worker in a clean clone and release bounded output after a persisted main diff",
+  "hidden_tests": "unchanged native SWE tests plus patch-scope, lineage, stale-patch and post-event regression assertions",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "swebench.harness.run_evaluation",
+    "final_state": "git working tree patch",
+    "isolation": "official Docker instance image"
+  },
+  "native_test_count": 182,
+  "oracle": "apply an evaluator-owned correct patch, then execute FAIL_TO_PASS and PASS_TO_PASS"
+}

@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority:req.01.add_an_await_expression_",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_08463030bf.nested_await_ast_authority_result",
+      "evidence_group": "swe_dependency__7e696b:classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.add_an_await_expression_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An isolated compiler worker returns the authoritative nested-await traversal and async-thunk output result without crossing nested function boundaries.', perform classify_authority for 'Add an await-expression AST builder consistent with existing builders.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add an await-expression AST builder consistent with existing builders.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_an_await_expression_"
+        ]
+      },
+      "id": "swe_dependency__7e696b.cf.01_classify_authority_add_an_await_expression_",
+      "independence_key": "swe_dependency__7e696b.cf.01_classify_authority_add_an_await_expression_",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__7e696b.mutation.01_classify_authority_add_an_await_expression_",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_08463030bf.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_an_await_expression_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected:req.02.detect_await_expressions",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_08463030bf.nested_await_ast_authority_result",
+      "evidence_group": "swe_dependency__7e696b:revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.detect_await_expressions"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An isolated compiler worker returns the authoritative nested-await traversal and async-thunk output result without crossing nested function boundaries.', perform revise_affected for 'Detect await expressions recursively without crossing nested function scopes.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Detect await expressions recursively without crossing nested function scopes.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.detect_await_expressions"
+        ]
+      },
+      "id": "swe_dependency__7e696b.cf.02_revise_affected_detect_await_expressions",
+      "independence_key": "swe_dependency__7e696b.cf.02_revise_affected_detect_await_expressions",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__7e696b.mutation.02_revise_affected_detect_await_expressions",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_08463030bf.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.detect_await_expressions"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure:req.03.emit_async_thunks_only_w",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_08463030bf.nested_await_ast_authority_result",
+      "evidence_group": "swe_dependency__7e696b:verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.emit_async_thunks_only_w"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An isolated compiler worker returns the authoritative nested-await traversal and async-thunk output result without crossing nested function boundaries.', perform verify_closure for 'Emit async thunks only when their expression requires await.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Emit async thunks only when their expression requires await.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.emit_async_thunks_only_w"
+        ]
+      },
+      "id": "swe_dependency__7e696b.cf.03_verify_closure_emit_async_thunks_only_w",
+      "independence_key": "swe_dependency__7e696b.cf.03_verify_closure_emit_async_thunks_only_w",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__7e696b.mutation.03_verify_closure_emit_async_thunks_only_w",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_08463030bf.closure"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.emit_async_thunks_only_w"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.swe_dependency_unblock_08463030bf.nested_await_ast_authority_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An isolated compiler worker returns the authoritative nested-await traversal and async-thunk output result without crossing nested function boundaries.",
+        "before": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

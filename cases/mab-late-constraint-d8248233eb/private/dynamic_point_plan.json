@@ -1,0 +1,230 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "event_intake",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-late-constraint-d8248233eb.warranty_contract_terms_delivered",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "warranty_contract_terms_delivered"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_d824.cf.01_classify_authority",
+      "independence_key": "mab_late_constraint_d824.cf.01_classify_authority",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_d824.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_d8248233eb.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_d824.cf.01_classify_authority]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "warranty_contract_terms_delivered"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-late-constraint-d8248233eb.warranty_contract_terms_delivered",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "warranty_contract_terms_delivered"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_d824.cf.02_revise_affected",
+      "independence_key": "mab_late_constraint_d824.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_d824.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_d8248233eb.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_d824.cf.02_revise_affected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "warranty_contract_terms_delivered"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "plan_revision",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab-late-constraint-d8248233eb.warranty_contract_terms_delivered",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "warranty_contract_terms_delivered"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_d824.cf.03_preserve_unaffected",
+      "independence_key": "mab_late_constraint_d824.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_d824.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_d8248233eb.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_d824.cf.03_preserve_unaffected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "warranty_contract_terms_delivered"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "closure",
+      "dimension": "closure",
+      "event_id": "evt.mab-late-constraint-d8248233eb.warranty_contract_terms_delivered",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "warranty_contract_terms_delivered"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_d824.cf.04_verify_closure",
+      "independence_key": "mab_late_constraint_d824.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_d824.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_d8248233eb.closure"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_d824.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "warranty_contract_terms_delivered"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab-late-constraint-d8248233eb.warranty_contract_terms_delivered",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+        "before": "A provisional Two-Piece Keychain Set bargain exists before warranty_contract_terms_delivered.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

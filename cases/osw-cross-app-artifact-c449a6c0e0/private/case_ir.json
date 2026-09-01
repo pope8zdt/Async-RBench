@@ -1,0 +1,191 @@
+{
+  "case_id": "osw-cross-app-artifact-c449a6c0e0",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_presenter_notes_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_notes_c449.cf.01_classify_authority_presenter_notes_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c449a6c0e0.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed ordered_presenter_notes; preserve unaffected libreoffice_impress/libreoffice_writer state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_presenter_notes_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_notes_c449.cf.02_revise_affected_presenter_notes_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c449a6c0e0.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed ordered_presenter_notes; preserve unaffected libreoffice_impress/libreoffice_writer state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.slide_coverage"
+    },
+    {
+      "critical": true,
+      "decision_group": "03_verify_closure_presenter_notes_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_notes_c449.cf.03_verify_closure_presenter_notes_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c449a6c0e0.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed ordered_presenter_notes; preserve unaffected libreoffice_impress/libreoffice_writer state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.note_order"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.output_path"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.slide_coverage"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.note_order"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.output_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.slide_coverage",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.note_order",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.slide_coverage",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.note_order",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.slide_coverage",
+      "req.03.note_order",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The presentation worker returns eight non-empty presenter notes from slides 1,2,3,4,5,6,8,9 in slide order, excluding the empty slide 7.",
+    "before_state": "Impress and Writer can be prepared, but slide-by-slide presenter-note text and source-slide order are unresolved.",
+    "event_id": "evt.osw_cross_app_artifact_c449a6c0e0.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "notes.docx is saved on Desktop.",
+      "id": "req.01.output_path",
+      "observable_probe": "osw_cross_app_artifact_c449a6c0e0.osworld.output_path",
+      "public_evidence": "source instruction and task-specific output_path result"
+    },
+    {
+      "description": "All nine slides are inspected and only the eight non-empty note slides are selected.",
+      "id": "req.02.slide_coverage",
+      "observable_probe": "osw_cross_app_artifact_c449a6c0e0.osworld.slide_coverage",
+      "public_evidence": "source instruction and task-specific slide_coverage result"
+    },
+    {
+      "description": "The exact eight note strings and digest preserve slide order.",
+      "id": "req.03.note_order",
+      "observable_probe": "osw_cross_app_artifact_c449a6c0e0.osworld.note_order",
+      "public_evidence": "source instruction and task-specific note_order result"
+    }
+  ]
+}

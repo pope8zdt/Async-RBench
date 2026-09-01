@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.keep_the_provisional_buyer_p",
+      "req.02.authenticate_the_production_",
+      "req.03.revise_price_warranty_and_lo",
+      "req.04.close_with_the_confirmed_chi",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Production control confirms a $21.95 chisel, a four-day delivery slot, 12-month warranty, and consolidated logistics.",
+    "before_state": "A provisional Grey Pneumatic CH105 3/4-inch Flat 18-inch Long Chisel bargain exists before production_delivery_slot_confirmed.",
+    "event_id": "evt.mab-late-constraint-f4ef18dd00.production_delivery_slot_confirmed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-f4ef18dd00.production_delivery_slot_confirmed",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

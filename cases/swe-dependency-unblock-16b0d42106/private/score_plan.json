@@ -1,0 +1,344 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta:req.01.add_or_invoke_a_program_",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_16b0d42106.program_wide_ffi_scope_delta",
+      "evidence_group": "swe_dependency__0960e4:classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.add_or_invoke_a_program_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.', perform classify_scope_delta for 'Add or invoke a program-wide FFI signature consistency check before LLVM declaration reuse.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add or invoke a program-wide FFI signature consistency check before LLVM declaration reuse.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_or_invoke_a_program_"
+        ]
+      },
+      "id": "swe_dependency__0960e4.cf.01_classify_scope_delta_add_or_invoke_a_program_",
+      "independence_key": "swe_dependency__0960e4.cf.01_classify_scope_delta_add_or_invoke_a_program_",
+      "measurement_type": "control",
+      "mutation_family": "under_invalidate",
+      "mutation_id": "swe_dependency__0960e4.mutation.01_classify_scope_delta_add_or_invoke_a_program_",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_16b0d42106.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_or_invoke_a_program_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected:req.02.compare_return_parameter",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_16b0d42106.program_wide_ffi_scope_delta",
+      "evidence_group": "swe_dependency__0960e4:revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.compare_return_parameter"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.', perform revise_affected for 'Compare return, parameter, and variadic components and emit a source diagnostic on mismatch.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Compare return, parameter, and variadic components and emit a source diagnostic on mismatch.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.compare_return_parameter"
+        ]
+      },
+      "id": "swe_dependency__0960e4.cf.02_revise_affected_compare_return_parameter",
+      "independence_key": "swe_dependency__0960e4.cf.02_revise_affected_compare_return_parameter",
+      "measurement_type": "control",
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "swe_dependency__0960e4.mutation.02_revise_affected_compare_return_parameter",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_16b0d42106.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.compare_return_parameter"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected:req.03.retain_successful_reuse_",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_dependency_unblock_16b0d42106.program_wide_ffi_scope_delta",
+      "evidence_group": "swe_dependency__0960e4:preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.retain_successful_reuse_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.', perform preserve_unaffected for 'Retain successful reuse for identical declarations across packages.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Retain successful reuse for identical declarations across packages.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.retain_successful_reuse_"
+        ]
+      },
+      "id": "swe_dependency__0960e4.cf.03_preserve_unaffected_retain_successful_reuse_",
+      "independence_key": "swe_dependency__0960e4.cf.03_preserve_unaffected_retain_successful_reuse_",
+      "measurement_type": "control",
+      "mutation_family": "over_invalidate",
+      "mutation_id": "swe_dependency__0960e4.mutation.03_preserve_unaffected_retain_successful_reuse_",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_16b0d42106.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.retain_successful_reuse_"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure:req.04.add_multi_package_compil",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_16b0d42106.program_wide_ffi_scope_delta",
+      "evidence_group": "swe_dependency__0960e4:verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.add_multi_package_compil"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.', perform verify_closure for 'Add multi-package compiler tests for identical and independently varied incompatible signatures.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add multi-package compiler tests for identical and independently varied incompatible signatures.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_multi_package_compil"
+        ]
+      },
+      "id": "swe_dependency__0960e4.cf.04_verify_closure_add_multi_package_compil",
+      "independence_key": "swe_dependency__0960e4.cf.04_verify_closure_add_multi_package_compil",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__0960e4.mutation.04_verify_closure_add_multi_package_compil",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_16b0d42106.closure"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_multi_package_compil"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add or invoke a program-wide FFI signature consistency check before LLVM declaration reuse.'.",
+      "family": "wait_for_authority",
+      "id": "swe_dependency__0960e4.mutation.01_classify_scope_delta_add_or_invoke_a_program_",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__0960e4.cf.01_classify_scope_delta_add_or_invoke_a_program_"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_16b0d42106.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__0960e4.cf.01_classify_scope_delta_add_or_invoke_a_program_",
+        "swe_dependency_unblock_16b0d42106.event.receipt",
+        "swe_dependency_unblock_16b0d42106.event.probes",
+        "swe_dependency_unblock_16b0d42106.closure",
+        "swe_dependency_unblock_16b0d42106.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Compare return, parameter, and variadic components and emit a source diagnostic on mismatch.'.",
+      "family": "resolve_authority",
+      "id": "swe_dependency__0960e4.mutation.02_revise_affected_compare_return_parameter",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__0960e4.cf.02_revise_affected_compare_return_parameter"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_16b0d42106.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__0960e4.cf.02_revise_affected_compare_return_parameter",
+        "swe_dependency_unblock_16b0d42106.event.receipt",
+        "swe_dependency_unblock_16b0d42106.event.probes",
+        "swe_dependency_unblock_16b0d42106.closure",
+        "swe_dependency_unblock_16b0d42106.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Retain successful reuse for identical declarations across packages.'.",
+      "family": "selective_replan",
+      "id": "swe_dependency__0960e4.mutation.03_preserve_unaffected_retain_successful_reuse_",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__0960e4.cf.03_preserve_unaffected_retain_successful_reuse_"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_16b0d42106.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__0960e4.cf.03_preserve_unaffected_retain_successful_reuse_",
+        "swe_dependency_unblock_16b0d42106.event.receipt",
+        "swe_dependency_unblock_16b0d42106.event.probes",
+        "swe_dependency_unblock_16b0d42106.closure",
+        "swe_dependency_unblock_16b0d42106.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add multi-package compiler tests for identical and independently varied incompatible signatures.'.",
+      "family": "rederive_from_authority",
+      "id": "swe_dependency__0960e4.mutation.04_verify_closure_add_multi_package_compil",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__0960e4.cf.04_verify_closure_add_multi_package_compil"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_16b0d42106.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__0960e4.cf.04_verify_closure_add_multi_package_compil",
+        "swe_dependency_unblock_16b0d42106.event.receipt",
+        "swe_dependency_unblock_16b0d42106.event.probes",
+        "swe_dependency_unblock_16b0d42106.closure",
+        "swe_dependency_unblock_16b0d42106.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency_unblock_16b0d42106.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency_unblock_16b0d42106.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency_unblock_16b0d42106.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_dependency_unblock_16b0d42106.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "The native Pony compiler rejects cross-package FFI signature and internal-ABI conflicts with diagnostics.",
+      "id": "swe_dependency_unblock_16b0d42106.native.ponyc_ffi_conflicts",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_ponyc_ffi_conflicts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "The native compiler still reuses compatible FFI declarations across packages.",
+      "id": "swe_dependency_unblock_16b0d42106.native.ponyc_ffi_compatible",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_ponyc_ffi_compatible",
+      "relevance_tier": "base"
+    }
+  ]
+}

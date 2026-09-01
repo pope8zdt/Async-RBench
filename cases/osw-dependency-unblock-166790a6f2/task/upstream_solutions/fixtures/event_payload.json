@@ -1,0 +1,42 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-166790a6f2",
+  "source_task_id": "osworld:multi_apps:f8369178-fafe-40c2-adc4-b9b08a125456",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "gnome_theme_state",
+  "upstream_dependency_graph": [
+    {
+      "id": "theme_source_resolution",
+      "app": "Chrome theme-source worker",
+      "description": "Resolve the Orchis package from gnome-look.org."
+    },
+    {
+      "id": "theme_installation",
+      "app": "GNOME filesystem worker",
+      "description": "Install the Orchis theme into a discoverable GNOME theme location.",
+      "depends_on": [
+        "theme_source_resolution"
+      ]
+    },
+    {
+      "id": "gtk_theme_probe",
+      "app": "GNOME settings worker",
+      "description": "Read org.gnome.desktop.interface gtk-theme and confirm Orchis.",
+      "depends_on": [
+        "theme_installation"
+      ]
+    }
+  ],
+  "state": {
+    "theme_name": "Orchis",
+    "theme_source": "gnome-look.org",
+    "theme_installed": true,
+    "gsettings_schema": "org.gnome.desktop.interface",
+    "gsettings_key": "gtk-theme",
+    "gsettings_output": "'Orchis'",
+    "theme_applied": true
+  },
+  "task_assertion": "The Orchis theme is installed from gnome-look.org and the GNOME gtk-theme preference resolves to Orchis under the official check_list evaluator.",
+  "finding": "The delayed GNOME preference probe returns Orchis from org.gnome.desktop.interface gtk-theme after the theme package is installed."
+}
+

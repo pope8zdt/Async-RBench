@@ -1,0 +1,250 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_speedtest_measurement_result",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_late_test_evidence_67c3504794.delayed_authoritative_result",
+      "evidence_group": "osw_speed_67c3.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "speedtest_measurement_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for speedtest_measurement_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_speed_67c3.cf.01_classify_authority_speedtest_measurement_result",
+      "independence_key": "osw_speed_67c3.cf.01_classify_authority_speedtest_measurement_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_speed_67c3.mutation.01_classify_authority_speedtest_measurement_result",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_late_test_evidence_67c3504794.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_speedtest_measurement_result",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_late_test_evidence_67c3504794.delayed_authoritative_result",
+      "evidence_group": "osw_speed_67c3.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "speedtest_measurement_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for speedtest_measurement_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_speed_67c3.cf.02_revise_affected_speedtest_measurement_result",
+      "independence_key": "osw_speed_67c3.cf.02_revise_affected_speedtest_measurement_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_speed_67c3.mutation.02_revise_affected_speedtest_measurement_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_67c3504794.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.metric_coverage"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_speedtest_measurement_result",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_late_test_evidence_67c3504794.delayed_authoritative_result",
+      "evidence_group": "osw_speed_67c3.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "speedtest_measurement_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for speedtest_measurement_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_speed_67c3.cf.03_preserve_unaffected_speedtest_measurement_result",
+      "independence_key": "osw_speed_67c3.cf.03_preserve_unaffected_speedtest_measurement_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_speed_67c3.mutation.03_preserve_unaffected_speedtest_measurement_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_67c3504794.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.line_format"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_speedtest_measurement_result",
+      "dimension": "closure",
+      "event_id": "evt.osw_late_test_evidence_67c3504794.delayed_authoritative_result",
+      "evidence_group": "osw_speed_67c3.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "speedtest_measurement_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for speedtest_measurement_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_speed_67c3.cf.04_verify_closure_speedtest_measurement_result",
+      "independence_key": "osw_speed_67c3.cf.04_verify_closure_speedtest_measurement_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_speed_67c3.mutation.04_verify_closure_speedtest_measurement_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_late_test_evidence_67c3504794.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.service_identity"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_03",
+      "event_id": "evt.osw_late_test_evidence_67c3504794.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The delayed speedtest result supplies three complete metric lines—Ping, Download, and Upload—written to ~/Test/Speed/results.txt with one metric per line and a single separator space.",
+        "before": "The output directory and measurement request are known, but live speedtest metrics do not exist until the remote test completes.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

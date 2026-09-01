@@ -1,0 +1,59 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-95969c461f",
+  "source_task_id": "osworld:multi_apps:5bc63fb9-276a-4439-a7c1-9dc76401737f",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "gemini_responses_and_iliad_ranges",
+  "upstream_dependency_graph": [
+    {
+      "id": "json_schema_traversal",
+      "app": "JSON/Writer",
+      "description": "Traverse the nested JSON response structure."
+    },
+    {
+      "id": "gemini_value_filter",
+      "app": "JSON worker",
+      "description": "Select all six Gemini string values in source order.",
+      "depends_on": [
+        "json_schema_traversal"
+      ]
+    },
+    {
+      "id": "iliad_range_detection",
+      "app": "Text worker",
+      "description": "Locate all 33 case-sensitive Iliad occurrences in the selected values.",
+      "depends_on": [
+        "gemini_value_filter"
+      ]
+    },
+    {
+      "id": "paragraph_plan",
+      "app": "LibreOffice Writer",
+      "description": "Map one response per paragraph and preserve all highlight ranges.",
+      "depends_on": [
+        "iliad_range_detection"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/Desktop/gemini_results.docx",
+    "source_json_sha256": "e3a0583d6458487e37ea5351fc3a11b18f093c5c0d0be4a488338f0f402a3784",
+    "response_count": 6,
+    "nonempty_paragraph_count": 6,
+    "response_lengths": [
+      2781,
+      112,
+      1995,
+      112,
+      2278,
+      1435
+    ],
+    "iliad_occurrence_count": 33,
+    "highlighted_iliad_count": 33,
+    "source_order_preserved": true,
+    "gold_docx_sha256": "01e3ad9bebaee3c028f7fd8635e9c6de69b4e57fd4fa5ae53447a73fd42dc0f8"
+  },
+  "task_assertion": "gemini_results.docx contains six Gemini responses in source order and highlights all 33 Iliad occurrences.",
+  "finding": "The JSON worker returns six Gemini values in source order and all 33 Iliad occurrences with exact highlight ranges."
+}
+

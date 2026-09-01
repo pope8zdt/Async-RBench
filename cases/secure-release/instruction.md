@@ -1,0 +1,3 @@
+# Secure Release (real-instance-derived)
+
+The executable participant instruction is [task/task.yaml](task/task.yaml). This case uses the exact `git-leak-recovery` setup script, Bottle commit and vulnerability transformation from `fix-code-vulnerability`, plus real Git and Nginx deployment surfaces. The authority workstream alone receives an evaluator-scoped post-sanitization release bundle whose main/dev commits differ from the initially visible refs. Private scoring checks that final patch, report, deployment and manifest are rebuilt on that observed baseline while independent infrastructure remains usable; the upstream task suites are not replayed.

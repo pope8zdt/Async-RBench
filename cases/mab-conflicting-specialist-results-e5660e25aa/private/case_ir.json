@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-e5660e25aa",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_education_vacuum_receipt",
+      "forbidden_behavior": "Do not finalize the Education diagnosis before the database:006 maintenance receipt or infer authority from unrelated scan volume.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.associate_the_returned_s"
+        ]
+      },
+      "id": "01_classify_authority_education_vacuum_receipt",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_e5660e25aa.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After the provisional Education diagnosis exists, classify the delayed database:006 receipt as authoritative only when it proves VACUUM FULL executed and exactly 500 maintenance rows remain.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.associate_the_returned_s"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_from_authority_education_vacuum",
+      "forbidden_behavior": "Do not retain a displaced provisional FETCH_LARGE_DATA attribution or erase completed non-vacuum observations.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.associate_the_returned_s"
+        ]
+      },
+      "id": "02_revise_from_authority_education_vacuum",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_e5660e25aa.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Revise the affected Education diagnosis to VACUUM from the host maintenance checkpoint while preserving completed dead-tuple, index, lock, and insertion observations.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.associate_the_returned_s"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_education_vacuum",
+      "forbidden_behavior": "Do not close without reverifying VACUUM against both the executed flag and the 500 remaining maintenance rows.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.associate_the_returned_s"
+        ]
+      },
+      "id": "03_verify_closure_education_vacuum",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_e5660e25aa.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Rederive the final Education diagnosis from the VACUUM FULL receipt and preserved matrix, remove stale fetch attribution, and verify the native answer contract.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.associate_the_returned_s"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.associate_the_returned_s"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.update_the_cause_matrix_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.remove_the_displaced_pro"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.return_the_final_exact_t"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.associate_the_returned_s",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.update_the_cause_matrix_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.remove_the_displaced_pro",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.return_the_final_exact_t",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.associate_the_returned_s",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.update_the_cause_matrix_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.remove_the_displaced_pro",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.return_the_final_exact_t",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.associate_the_returned_s",
+      "req.02.update_the_cause_matrix_",
+      "req.03.remove_the_displaced_pro",
+      "req.04.return_the_final_exact_t",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:006 checkpoint proves VACUUM FULL executed and 500 maintenance rows remain, authoritatively confirming VACUUM.",
+    "before_state": "The Education database hypothesis matrix and pre-maintenance observations are persisted provisionally.",
+    "event_id": "evt.mab_education_e566.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Validate the delayed database:006 receipt proves VACUUM FULL executed with 500 maintenance rows remaining.",
+      "id": "req.01.associate_the_returned_s",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for associate_the_returned_statements_wi"
+    },
+    {
+      "description": "Revise the affected Education diagnosis to VACUUM from the host maintenance checkpoint.",
+      "id": "req.02.update_the_cause_matrix_",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for update_the_cause_matrix_to_support_f"
+    },
+    {
+      "description": "Preserve completed dead-tuple, index, lock, and insertion observations while removing stale fetch attribution.",
+      "id": "req.03.remove_the_displaced_pro",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for remove_the_displaced_provisional_cau"
+    },
+    {
+      "description": "Rederive and verify the receipt-bound Education answer under the native output contract.",
+      "id": "req.04.return_the_final_exact_t",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for return_the_final_exact_two_label_dia"
+    }
+  ]
+}

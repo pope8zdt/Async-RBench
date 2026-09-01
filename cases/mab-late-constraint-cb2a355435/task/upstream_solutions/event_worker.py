@@ -1,0 +1,6 @@
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-late-constraint-cb2a355435';SOURCE_ID='bargaining:044';EVENT='collectible_authenticity_warranty_delivered';THEME='delayed_authoritative_result';AUTHORITY={'unit_price': 21.99, 'series': 'Black Series', 'character': 'Princess Leia Endor', 'packaging': 'sealed', 'warranty_months': 12, 'delivery_days': 4}
+def digest(path):return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+def main():
+ p=argparse.ArgumentParser();p.add_argument('--output',default='/app/output_data/event_receipt.json');a=p.parse_args();s=time.time();probes={x:digest(x) for x in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']};d={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':THEME,'meaning':'An authenticity report confirms the sealed Black Series Princess Leia Endor figure at $21.99 with a 12-month warranty and four-day delivery.','authority':AUTHORITY,'worker_started_at':s,'worker_finished_at':time.time(),'worker_exit_code':0,'probes':probes};d['receipt_sha256']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest();pathlib.Path(a.output).write_text(json.dumps(d,sort_keys=True)+'\n')
+if __name__=='__main__':main()

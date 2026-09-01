@@ -1,0 +1,212 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/app"
+    }
+  ],
+  "case_id": "mab-late-constraint-fc88525ce2",
+  "format_version": 2,
+  "implementation": "real-instance-derived",
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "resolve_requirement_01"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_01"
+      ],
+      "id": "resolve_requirement_02"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_02"
+      ],
+      "id": "resolve_requirement_03"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_03"
+      ],
+      "id": "resolve_requirement_04"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_04"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_tasks": [
+    {
+      "benchmark": "MultiAgentBench",
+      "id": "bargaining:022"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench individualized rebuild: bargaining:022",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Choose a quantity compatible with the production lead time.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Choose a quantity compatible with the production lead time."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Counter or accept the 90-day replacement coverage explicitly.",
+      "id": "requirement_worker_02",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Counter or accept the 90-day replacement coverage explicitly."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Revise the quantity, price, and delivery schedule in one offer.",
+      "id": "requirement_worker_03",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Revise the quantity, price, and delivery schedule in one offer."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_04.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Submit the offer and record agreement or termination.",
+      "id": "requirement_worker_04",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_04.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Submit the offer and record agreement or termination."
+    }
+  ]
+}

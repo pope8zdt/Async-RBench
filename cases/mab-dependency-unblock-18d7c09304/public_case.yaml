@@ -1,0 +1,126 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/app"
+    }
+  ],
+  "case_id": "mab-dependency-unblock-18d7c09304",
+  "format_version": 2,
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "persist_provisional"
+    },
+    {
+      "depends_on": [
+        "persist_provisional"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_fidelity": [],
+  "source_tasks": [
+    {
+      "benchmark": "MultiAgentBench",
+      "id": "database:021"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench source-native database diagnosis: database:021",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "A provisional diagnosis and preserved task-specific findings.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Persist a provisional five-hypothesis assessment for the healthcare management database without assuming evaluator truth."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "A receipt-bound authority finding with no participant-visible private truth before delivery.",
+      "id": "requirement_worker_02",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Validate the delayed database:021 authority receipt and its database checkpoint before revising the affected diagnosis."
+    }
+  ]
+}

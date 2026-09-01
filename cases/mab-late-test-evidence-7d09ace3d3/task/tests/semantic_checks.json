@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific language_edge_test_evidence_replayed receipt bound to coding:010.",
+      "id": "mab_late_test_evidence_7d09ace3d3.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned LanguageCollaborator authority runs after three upstream results.",
+      "id": "mab_late_test_evidence_7d09ace3d3.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A replayed edge-test completion must be deduplicated while retaining multi-user exercises, real-time feedback, access control, submissions, and independent peer reviews.",
+      "id": "mab_late_test_evidence_7d09ace3d3.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:010.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes LanguageCollaborator and all three required exercise types.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_language_output_schema_exercise_types_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Quiz and writing feedback, sharing authorization, and independent peer reviews follow language-task rules.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_language_feedback_sharing_authorization_and_peer_review_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Users, exercises, submissions, feedback, and peer-review history survive evidence replay.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_language_writing_feedback_and_learning_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Duplicate edge evidence is deduplicated by evidence_id and closes the case only once.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_language_duplicate_edge_evidence_is_idempotent_and_closes_once",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

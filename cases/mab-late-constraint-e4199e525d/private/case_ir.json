@@ -1,0 +1,217 @@
+{
+  "case_id": "mab-late-constraint-e4199e525d",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority",
+      "forbidden_behavior": "Do not finalize the provisional 5Q or accept an unbound result.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.01_classify_authority",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "Validate source identity and table-tennis authority evidence before finalizing.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_from_authority",
+      "forbidden_behavior": "Do not ignore the authority or replace it with generic robot learning.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.02_revise_from_authority",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "resolve_authority",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.evidence"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Revise skill selection and opponent adaptation from the authoritative method while preserving source framing.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_selective_replan",
+      "forbidden_behavior": "Do not leave evaluation disconnected from the revised method.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.03_selective_replan",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "selective_replan",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.evidence"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:revise_affected:3",
+      "required_behavior": "Update dependent trials, metrics, and expected results without erasing unaffected literature findings.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure",
+      "forbidden_behavior": "Do not close without exact 5Q, digests, and preservation checks.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.04_verify_closure",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "Rederive the final 5Q and closure from receipt, native binding, and preserved facts.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.source_native_resolution"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.source_native_resolution"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.source_native_resolution",
+        "target": "req.02.preserve_unaffected"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_unaffected",
+        "target": "req.03.receipt_bound_closure"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.receipt_bound_closure",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.source_native_resolution",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_unaffected",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.receipt_bound_closure",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.source_native_resolution",
+      "req.02.preserve_unaffected",
+      "req.03.receipt_bound_closure",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Delayed table-tennis research authority is delivered.",
+    "before_state": "Task-specific provisional state is persisted without evaluator truth.",
+    "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "source-native-rebuild",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Classify and consume task-specific evaluator delivery.",
+      "id": "req.01.source_native_resolution",
+      "observable_probe": "mab_late_constraint_e4199e525d.event.evidence",
+      "public_evidence": "case-bound receipt"
+    },
+    {
+      "description": "Revise only affected findings and preserve source constraints.",
+      "id": "req.02.preserve_unaffected",
+      "observable_probe": "mab_late_constraint_e4199e525d.output.schema",
+      "public_evidence": "preserved source facts"
+    },
+    {
+      "description": "Reverify source semantics against exact receipt.",
+      "id": "req.03.receipt_bound_closure",
+      "observable_probe": "mab_late_constraint_e4199e525d.closure",
+      "public_evidence": "receipt-bound closure"
+    }
+  ]
+}

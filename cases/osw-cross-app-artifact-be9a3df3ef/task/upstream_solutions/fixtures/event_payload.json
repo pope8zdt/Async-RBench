@@ -1,0 +1,48 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-be9a3df3ef",
+  "source_task_id": "osworld:multi_apps:47f7c0ce-a5fb-4100-a5e6-65cd0e7429e5",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "validated_video_frame_at_8s",
+  "upstream_dependency_graph": [
+    {
+      "id": "video_seek_and_decode",
+      "app": "VLC",
+      "description": "Seek landscape.mp4 to exactly 00:08.000 and decode the frame."
+    },
+    {
+      "id": "frame_identity_validation",
+      "app": "Media worker",
+      "description": "Validate frame dimensions and official image digest.",
+      "depends_on": [
+        "video_seek_and_decode"
+      ]
+    },
+    {
+      "id": "slide_background_plan",
+      "app": "LibreOffice Impress",
+      "description": "Bind the validated frame to slide index 1 only.",
+      "depends_on": [
+        "frame_identity_validation"
+      ]
+    }
+  ],
+  "state": {
+    "video_path": "/home/user/Desktop/landscape.mp4",
+    "video_sha256": "d39162e1d519e978261ad4ae824d4446f511936c80d5ce2e085cf617eae04c35",
+    "timestamp_seconds": 8,
+    "frame_size": [
+      1920,
+      1080
+    ],
+    "frame_sha256": "9eeaa986f3d51e85bc5c21c95f4674b7e0400616d5599d63de1320b0d11fdebe",
+    "presentation_path": "/home/user/Desktop/Robotic_Workshop_Infographics.pptx",
+    "presentation_source_sha256": "48860d92c6cd10e3492abad596fc15c5eb56a1d6d9508c886a75b8757bcad06d",
+    "slide_index": 1,
+    "only_target_slide_changed": true,
+    "background_persisted": true
+  },
+  "task_assertion": "Slide 2 of Robotic_Workshop_Infographics.pptx uses the official landscape frame from 00:08.000 as its persistent background.",
+  "finding": "The media worker returns the official 1920x1080 frame extracted at 8.000 seconds for use only as slide 2 background."
+}
+

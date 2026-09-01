@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_replace_snapshot_synchroniza",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_9.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.classify_critical_path",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.replace_snapshot_synchro"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A backend specialist returns the task-specific room event contract for sessions, participants, edit operations, playback position, votes, and leaderboard updates.', perform classify_critical_path for 'Replace snapshot synchronization with the returned ordered edit events.' while retaining valid prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_snapshot_synchro"
+        ]
+      },
+      "id": "mab_code72_mashup.cf.01_classify_critical_path_replace_snapshot_s",
+      "independence_key": "mab_code72_mashup.cf.01_classify_critical_path_replace_snapshot_s",
+      "measurement_type": "control",
+      "mutation_id": "mab_code72_mashup.mutation.01_classify_critical_path_replace_snapshot_s",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_dependency_unblock_9739b40e89.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_snapshot_synchro"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_implement_join_leave_resync_",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_9.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.resource_triage",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.replace_snapshot_synchro"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A backend specialist returns the task-specific room event contract for sessions, participants, edit operations, playback position, votes, and leaderboard updates.', perform resource_triage for 'Implement join, leave, resync, and playback-position handling.' while retaining valid prior result 'Room and chat interfaces emit provisional synchronization events.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Room and chat interfaces emit provisional synchronization events.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_snapshot_synchro"
+        ]
+      },
+      "id": "mab_code72_mashup.cf.02_resource_triage_implement_join_lea",
+      "independence_key": "mab_code72_mashup.cf.02_resource_triage_implement_join_lea",
+      "measurement_type": "control",
+      "mutation_id": "mab_code72_mashup.mutation.02_resource_triage_implement_join_lea",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_dependency_unblock_9739b40e89.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.replace_snapshot_synchro"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_enforce_one_idempotent_vote_",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_9.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.replace_snapshot_synchro"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A backend specialist returns the task-specific room event contract for sessions, participants, edit operations, playback position, votes, and leaderboard updates.', perform verify_closure for 'Enforce one idempotent vote per user and mashup.' while retaining valid prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_snapshot_synchro"
+        ]
+      },
+      "id": "mab_code72_mashup.cf.03_verify_closure_enforce_one_idempo",
+      "independence_key": "mab_code72_mashup.cf.03_verify_closure_enforce_one_idempo",
+      "measurement_type": "control",
+      "mutation_id": "mab_code72_mashup.mutation.03_verify_closure_enforce_one_idempo",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_9739b40e89.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.replace_snapshot_synchro"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code72_mashup.mutation.01_classify_critical_path_replace_snapshot_s",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code72_mashup.cf.01_classify_critical_path_replace_snapshot_s"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_9739b40e89.source.pin"
+      ],
+      "targets": [
+        "mab_code72_mashup.cf.01_classify_critical_path_replace_snapshot_s",
+        "mab_dependency_unblock_9739b40e89.event.receipt",
+        "mab_dependency_unblock_9739b40e89.event.authority_probe",
+        "mab_dependency_unblock_9739b40e89.closure",
+        "mab_dependency_unblock_9739b40e89.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Room and chat interfaces emit provisional synchronization events.'.",
+      "family": "resource_triage",
+      "id": "mab_code72_mashup.mutation.02_resource_triage_implement_join_lea",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code72_mashup.cf.02_resource_triage_implement_join_lea"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_9739b40e89.source.pin"
+      ],
+      "targets": [
+        "mab_code72_mashup.cf.02_resource_triage_implement_join_lea",
+        "mab_dependency_unblock_9739b40e89.event.receipt",
+        "mab_dependency_unblock_9739b40e89.event.authority_probe",
+        "mab_dependency_unblock_9739b40e89.closure",
+        "mab_dependency_unblock_9739b40e89.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code72_mashup.mutation.03_verify_closure_enforce_one_idempo",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code72_mashup.cf.03_verify_closure_enforce_one_idempo"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_9739b40e89.source.pin"
+      ],
+      "targets": [
+        "mab_code72_mashup.cf.03_verify_closure_enforce_one_idempo",
+        "mab_dependency_unblock_9739b40e89.event.receipt",
+        "mab_dependency_unblock_9739b40e89.event.authority_probe",
+        "mab_dependency_unblock_9739b40e89.closure",
+        "mab_dependency_unblock_9739b40e89.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific room_event_contract_completed receipt bound to coding:072.",
+      "id": "mab_dependency_unblock_9739b40e89.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned MusicMashupBattle authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_9739b40e89.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The delayed backend contract replaces snapshots while room history, chat, private membership, and mashup versions remain intact.",
+      "id": "mab_dependency_unblock_9739b40e89.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:072.",
+      "id": "mab_dependency_unblock_9739b40e89.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and ordered_mashup_room_closure obey the task-specific four-upstream schema.",
+      "id": "mab_dependency_unblock_9739b40e89.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_mashup_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Room events apply in sequence, gaps require resync, playback positions are revision-bound, and each user/mashup vote is idempotent before leaderboard updates.",
+      "id": "mab_dependency_unblock_9739b40e89.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_mashup_ordered_events_resync_playback_votes_and_leaderboard",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves room_history, chat_messages, private_room_membership, mashup_versions.",
+      "id": "mab_dependency_unblock_9739b40e89.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_mashup_room_history_chat_membership_and_versions_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed backend contract replaces snapshots while room history, chat, private membership, and mashup versions remain intact.",
+      "id": "mab_dependency_unblock_9739b40e89.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_mashup_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

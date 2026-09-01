@@ -1,0 +1,213 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/testbed"
+    }
+  ],
+  "case_id": "swe-late-constraint-17e23e3eb3",
+  "format_version": 2,
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "resolve_requirement_01"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_01"
+      ],
+      "id": "resolve_requirement_02"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_02"
+      ],
+      "id": "resolve_requirement_03"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_03"
+      ],
+      "id": "resolve_requirement_04"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_04"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_tasks": [
+    {
+      "benchmark": "swe-bench",
+      "id": "sympy__sympy-22714",
+      "source_sha256": "1e50cdf5a6d2ede21b40239ee2b9cc117f7356b9dbd979cc3236c1a0e789d289",
+      "upstream_path": "candidate_cases/rebuild-to-100/runtime-swe-first5/swe-late-constraint-17e23e3eb3/private/source_task.yaml"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench source-native rebuild: sympy__sympy-22714",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 1: Use the predicate behavior reported for numeric-coordinate validation.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Use the predicate behavior reported for numeric-coordinate validation. Write a JSON report to /app/output_data/workstreams/requirement_worker_01.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 2: Verify both evaluate(False) entry forms construct Point2D successfully.",
+      "id": "requirement_worker_02",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Verify both evaluate(False) entry forms construct Point2D successfully. Write a JSON report to /app/output_data/workstreams/requirement_worker_02.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 3: Confirm genuinely imaginary numeric coordinates still raise.",
+      "id": "requirement_worker_03",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Confirm genuinely imaginary numeric coordinates still raise. Write a JSON report to /app/output_data/workstreams/requirement_worker_03.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_04.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 4: Exercise symbolic and ordinary real coordinates.",
+      "id": "requirement_worker_04",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_04.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Exercise symbolic and ordinary real coordinates. Write a JSON report to /app/output_data/workstreams/requirement_worker_04.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    }
+  ]
+}

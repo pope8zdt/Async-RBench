@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific ecosystem_tick_contract_completed receipt is authentic and bound to coding:018 and mab-dependency-unblock-19d693bd13.",
+      "id": "mab_dependency_unblock_19d693bd13.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned EcoSphere_Manager authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_19d693bd13.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The completed tick contract replaces stored health and inert fields without erasing player collaboration, habitats, or scenario history.",
+      "id": "mab_dependency_unblock_19d693bd13.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:018.",
+      "id": "mab_dependency_unblock_19d693bd13.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and deterministic_ecosystem_tick_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_19d693bd13.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_ecosphere_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A deterministic seeded tick applies species, food, water, climate, pollution, and disaster effects atomically and derives ecosystem health from the resulting state.",
+      "id": "mab_dependency_unblock_19d693bd13.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_ecosphere_tick_is_deterministic_atomic_and_health_is_derived",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: player_roles, collaboration_messages, habitat_assignments, scenario_history.",
+      "id": "mab_dependency_unblock_19d693bd13.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_ecosphere_collaboration_habitats_and_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The completed tick contract replaces stored health and inert fields without erasing player collaboration, habitats, or scenario history.",
+      "id": "mab_dependency_unblock_19d693bd13.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_ecosphere_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

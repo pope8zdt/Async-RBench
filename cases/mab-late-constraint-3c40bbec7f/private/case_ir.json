@@ -1,0 +1,248 @@
+{
+  "case_id": "mab-late-constraint-3c40bbec7f",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_recovery_safety_scope_added",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_active_perception_s"
+        ]
+      },
+      "id": "01_classify_scope_delta_recovery_safety_scop",
+      "must_still_pass": [
+        "mab_late_constraint_3c40bbec7f.source.preservation"
+      ],
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_3c40bbec7f.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_active_perception_s"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_recovery_safety_scope_added",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.explain_perception_planning"
+        ]
+      },
+      "id": "02_revise_affected_recovery_safety_scop",
+      "must_still_pass": [
+        "mab_late_constraint_3c40bbec7f.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_3c40bbec7f.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.explain_perception_planning"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_recovery_safety_scope_added",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_real_robot_navigatio"
+        ]
+      },
+      "id": "03_preserve_unaffected_recovery_safety_scop",
+      "must_still_pass": [
+        "mab_late_constraint_3c40bbec7f.source.preservation"
+      ],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_3c40bbec7f.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.specify_real_robot_navigatio"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_recovery_safety_scope_added",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.integrate_the_late_unsafe_ac"
+        ]
+      },
+      "id": "04_verify_closure_recovery_safety_scop",
+      "must_still_pass": [
+        "mab_late_constraint_3c40bbec7f.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_3c40bbec7f.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.integrate_the_late_unsafe_ac"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.preserve_active_perception_s"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.explain_perception_planning"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.specify_real_robot_navigatio"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_late_unsafe_ac"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.preserve_active_perception_s",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.explain_perception_planning",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.specify_real_robot_navigatio",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_late_unsafe_ac",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.preserve_active_perception_s",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.explain_perception_planning",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.specify_real_robot_navigatio",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_late_unsafe_ac",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_active_perception_s",
+      "req.02.explain_perception_planning",
+      "req.03.specify_real_robot_navigatio",
+      "req.04.integrate_the_late_unsafe_ac",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The scope-expanded proposal jointly measures success, recovery, safety violations, interventions, and failure-specific behavior.",
+    "before_state": "The proposal measures success and recovery but lacks explicit unsafe-action and human-intervention constraints.",
+    "event_id": "evt.mab_late_constraint_3c40.recovery_safety_scope_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Preserve active perception, situated reasoning, primitives, verification, and replanning.",
+      "id": "req.01.preserve_active_perception_s",
+      "observable_probe": "mab_late_constraint_3c40bbec7f.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Explain perception, planning/API, grasp, and visual-verification failure modes.",
+      "id": "req.02.explain_perception_planning",
+      "observable_probe": "mab_late_constraint_3c40bbec7f.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Specify real-robot navigation/manipulation tasks, SR, SSR, RR, failure and ablation protocols.",
+      "id": "req.03.specify_real_robot_navigatio",
+      "observable_probe": "mab_late_constraint_3c40bbec7f.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the late unsafe-action and intervention scope while preserving recovery evaluation.",
+      "id": "req.04.integrate_the_late_unsafe_ac",
+      "observable_probe": "mab_late_constraint_3c40bbec7f.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

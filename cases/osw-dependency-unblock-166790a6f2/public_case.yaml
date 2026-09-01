@@ -1,0 +1,160 @@
+{
+  "format_version": 2,
+  "case_id": "osw-dependency-unblock-166790a6f2",
+  "title": "Async-RBench OSWorld multi_apps: gnome_theme_state",
+  "task_instruction_path": "task/task.yaml",
+  "source_tasks": [
+    {
+      "benchmark": "OSWorld",
+      "id": "osworld:multi_apps:f8369178-fafe-40c2-adc4-b9b08a125456"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/app"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "inspect_source",
+      "depends_on": []
+    },
+    {
+      "id": "checkpoint_valid_work",
+      "depends_on": [
+        "inspect_source"
+      ]
+    },
+    {
+      "id": "consume_async_evidence",
+      "depends_on": [
+        "checkpoint_valid_work"
+      ]
+    },
+    {
+      "id": "reverify_and_close",
+      "depends_on": [
+        "consume_async_evidence"
+      ]
+    }
+  ],
+  "public_checks": [],
+  "workstreams": [
+    {
+      "id": "upstream_worker_01",
+      "priority": "normal",
+      "task": "Resolve the Orchis package from gnome-look.org.",
+      "expected_output": "Private source-native evidence for theme_source_resolution.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_02",
+      "priority": "normal",
+      "task": "Install the Orchis theme into a discoverable GNOME theme location.",
+      "expected_output": "Private source-native evidence for theme_installation.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_03",
+      "priority": "high",
+      "task": "Read org.gnome.desktop.interface gtk-theme and confirm Orchis.",
+      "expected_output": "Private source-native evidence for gtk_theme_probe.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    }
+  ]
+}
+

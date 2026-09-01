@@ -1,0 +1,43 @@
+{
+  "anomaly": "LOCK_CONTENTION",
+  "anomaly_driver": "bounded PostgreSQL workload matching MARBLE anomaly semantics",
+  "canonical_episode_owner": "evaluator",
+  "case_id": "mab-conflicting-specialist-results-9ec14bb2f1",
+  "errors": [],
+  "evaluator_binding_score": 1.0,
+  "evidence_sha256": "bd2449c5466652ee1f79f6a7433093683df327ecce051192fc28598df645712f",
+  "host_checkpoint": {
+    "after": {
+      "pg_version": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "tables": 6,
+      "txid": 1158
+    },
+    "anomaly_evidence": {
+      "blocker_lock_rows": 4,
+      "waiter_timeout_observed": true
+    },
+    "before": {
+      "tables": 5,
+      "txid": 1153
+    },
+    "owner": "host_runtime",
+    "sha256": "5932d06eb74bb685d2600424226fcc2a4d802528b7dd3df0516e0990f02a20c7"
+  },
+  "model_episode_executed": false,
+  "native_evaluator_metrics": {
+    "predicted": "LOCK_CONTENTION",
+    "root_cause": [
+      "LOCK_CONTENTION"
+    ]
+  },
+  "native_evaluator_verified": true,
+  "passed": true,
+  "postgres_environment_reset": true,
+  "resource_lock": "exclusive_serial_postgres",
+  "schema_version": "async-rbench-mab-db-native-canonical-v1",
+  "source_init_sql_attempted": true,
+  "source_init_sql_error": null,
+  "source_native_marble_verified": true,
+  "source_task_id": "database:005",
+  "upstream_marble_evaluator": "marble.evaluator.evaluator.Evaluator.evaluate_task_db"
+}

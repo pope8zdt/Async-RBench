@@ -1,0 +1,30 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_price_only_provis",
+      "req.02.replace_it_with_the_current_",
+      "req.03.close_through_an_auditable_o",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The current seller counter offers the verified birthday banner at $13.49 with a 12-event commitment and 30-day replacement, superseding the quality-unverified $12 offer.",
+    "before_state": "A provisional One Happy Camper High Chair Banner bargain exists before current_quality_contract_counter.",
+    "event_id": "evt.mab-late-constraint-19947db02f.current_quality_contract_counter",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-19947db02f.current_quality_contract_counter",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

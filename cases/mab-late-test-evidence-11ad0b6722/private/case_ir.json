@@ -1,0 +1,228 @@
+{
+  "case_id": "mab-late-test-evidence-11ad0b6722",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_authority",
+      "must_still_pass": [],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_test_evidence_11ad0b6722.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: Independent write-on and transparency evidence requires a 20-roll acceptance sample before a $14.75 twelve-month quarterly commitment can become valid.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "quality_evidence_and_contract_tier_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "must_still_pass": [],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_test_evidence_11ad0b6722.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: Independent write-on and transparency evidence requires a 20-roll acceptance sample before a $14.75 twelve-month quarterly commitment can become valid.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "quality_evidence_and_contract_tier_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "must_still_pass": [],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_test_evidence_11ad0b6722.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: Independent write-on and transparency evidence requires a 20-roll acceptance sample before a $14.75 twelve-month quarterly commitment can become valid.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "quality_evidence_and_contract_tier_delivered"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "must_still_pass": [],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_test_evidence_11ad0b6722.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: Independent write-on and transparency evidence requires a 20-roll acceptance sample before a $14.75 twelve-month quarterly commitment can become valid.",
+      "stage_tag": "closure",
+      "task_requirement_id": "quality_evidence_and_contract_tier_delivered"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.add_the_20_roll_acceptan"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.condition_the_annual_com"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.revise_the_price_and_qua"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.submit_the_offer_and_rec"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.add_the_20_roll_acceptan",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.condition_the_annual_com",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_the_price_and_qua",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.submit_the_offer_and_rec",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.add_the_20_roll_acceptan",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.condition_the_annual_com",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_the_price_and_qua",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.submit_the_offer_and_rec",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_the_20_roll_acceptan",
+      "req.02.condition_the_annual_com",
+      "req.03.revise_the_price_and_qua",
+      "req.04.submit_the_offer_and_rec",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Independent write-on and transparency evidence requires a 20-roll acceptance sample before a $14.75 twelve-month quarterly commitment can become valid.",
+    "before_state": "Task-specific provisional work exists before quality_evidence_and_contract_tier_delivered.",
+    "event_id": "evt.mab-late-test-evidence-11ad0b6722.quality_evidence_and_contract_tier_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Add the 20-roll acceptance sample and objective quality checks.",
+      "id": "req.01.add_the_20_roll_acceptan",
+      "observable_probe": "mab_late_test_evidence_1.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for add_the_20_roll_acceptance_sample_an"
+    },
+    {
+      "description": "Condition the annual commitment on sample approval.",
+      "id": "req.02.condition_the_annual_com",
+      "observable_probe": "mab_late_test_evidence_1.sem.02.the_final_negotiation_ledger",
+      "public_evidence": "source instruction and workstream result for condition_the_annual_commitment_on_s"
+    },
+    {
+      "description": "Revise the price and quarterly volume in the next offer.",
+      "id": "req.03.revise_the_price_and_qua",
+      "observable_probe": "mab_late_test_evidence_1.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for revise_the_price_and_quarterly_volum"
+    },
+    {
+      "description": "Submit the offer and record agreement or termination.",
+      "id": "req.04.submit_the_offer_and_rec",
+      "observable_probe": "mab_late_test_evidence_1.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for submit_the_offer_and_record_agreemen"
+    }
+  ]
+}

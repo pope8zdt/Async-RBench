@@ -1,0 +1,360 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_recovery_safety_scope_added",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_constraint_3c40.recovery_safety_scope_added",
+      "evidence_group": "mab_research47_comerobot.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.preserve_active_perception_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_scope_delta: A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_active_perception_s"
+        ]
+      },
+      "id": "mab_research47_comerobot.cf.01_classify_scope_delta_recovery_safety_sc",
+      "independence_key": "mab_research47_comerobot.cf.01_classify_scope_delta_recovery_safety_sc",
+      "measurement_type": "control",
+      "mutation_id": "mab_research47_comerobot.mutation.01_classify_scope_delta_recovery_safety_sc",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_3c40bbec7f.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_active_perception_s"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_recovery_safety_scope_added",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_late_constraint_3c40.recovery_safety_scope_added",
+      "evidence_group": "mab_research47_comerobot.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.explain_perception_planning"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.explain_perception_planning"
+        ]
+      },
+      "id": "mab_research47_comerobot.cf.02_revise_affected_recovery_safety_sc",
+      "independence_key": "mab_research47_comerobot.cf.02_revise_affected_recovery_safety_sc",
+      "measurement_type": "control",
+      "mutation_id": "mab_research47_comerobot.mutation.02_revise_affected_recovery_safety_sc",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_3c40bbec7f.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.explain_perception_planning"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_recovery_safety_scope_added",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_late_constraint_3c40.recovery_safety_scope_added",
+      "evidence_group": "mab_research47_comerobot.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.specify_real_robot_navigatio"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_real_robot_navigatio"
+        ]
+      },
+      "id": "mab_research47_comerobot.cf.03_preserve_unaffected_recovery_safety_sc",
+      "independence_key": "mab_research47_comerobot.cf.03_preserve_unaffected_recovery_safety_sc",
+      "measurement_type": "control",
+      "mutation_id": "mab_research47_comerobot.mutation.03_preserve_unaffected_recovery_safety_sc",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_3c40bbec7f.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.specify_real_robot_navigatio"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_recovery_safety_scope_added",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_constraint_3c40.recovery_safety_scope_added",
+      "evidence_group": "mab_research47_comerobot.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.integrate_the_late_unsafe_ac"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.integrate_the_late_unsafe_ac"
+        ]
+      },
+      "id": "mab_research47_comerobot.cf.04_verify_closure_recovery_safety_sc",
+      "independence_key": "mab_research47_comerobot.cf.04_verify_closure_recovery_safety_sc",
+      "measurement_type": "control",
+      "mutation_id": "mab_research47_comerobot.mutation.04_verify_closure_recovery_safety_sc",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_3c40bbec7f.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.integrate_the_late_unsafe_ac"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "family": "wait_for_authority",
+      "id": "mab_research47_comerobot.mutation.01_classify_scope_delta_recovery_safety_sc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research47_comerobot.cf.01_classify_scope_delta_recovery_safety_sc"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_3c40bbec7f.source.pin"
+      ],
+      "targets": [
+        "mab_research47_comerobot.cf.01_classify_scope_delta_recovery_safety_sc",
+        "mab_late_constraint_3c40bbec7f.event.receipt",
+        "mab_late_constraint_3c40bbec7f.event.authority_probe",
+        "mab_late_constraint_3c40bbec7f.closure",
+        "mab_late_constraint_3c40bbec7f.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "family": "resolve_authority",
+      "id": "mab_research47_comerobot.mutation.02_revise_affected_recovery_safety_sc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research47_comerobot.cf.02_revise_affected_recovery_safety_sc"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_3c40bbec7f.source.pin"
+      ],
+      "targets": [
+        "mab_research47_comerobot.cf.02_revise_affected_recovery_safety_sc",
+        "mab_late_constraint_3c40bbec7f.event.receipt",
+        "mab_late_constraint_3c40bbec7f.event.authority_probe",
+        "mab_late_constraint_3c40bbec7f.closure",
+        "mab_late_constraint_3c40bbec7f.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "family": "selective_replan",
+      "id": "mab_research47_comerobot.mutation.03_preserve_unaffected_recovery_safety_sc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research47_comerobot.cf.03_preserve_unaffected_recovery_safety_sc"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_3c40bbec7f.source.pin"
+      ],
+      "targets": [
+        "mab_research47_comerobot.cf.03_preserve_unaffected_recovery_safety_sc",
+        "mab_late_constraint_3c40bbec7f.event.receipt",
+        "mab_late_constraint_3c40bbec7f.event.authority_probe",
+        "mab_late_constraint_3c40bbec7f.closure",
+        "mab_late_constraint_3c40bbec7f.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+      "family": "rederive_from_authority",
+      "id": "mab_research47_comerobot.mutation.04_verify_closure_recovery_safety_sc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research47_comerobot.cf.04_verify_closure_recovery_safety_sc"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_3c40bbec7f.source.pin"
+      ],
+      "targets": [
+        "mab_research47_comerobot.cf.04_verify_closure_recovery_safety_sc",
+        "mab_late_constraint_3c40bbec7f.event.receipt",
+        "mab_late_constraint_3c40bbec7f.event.authority_probe",
+        "mab_late_constraint_3c40bbec7f.closure",
+        "mab_late_constraint_3c40bbec7f.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific recovery_safety_scope_added receipt bound to research:047.",
+      "id": "mab_late_constraint_3c40bbec7f.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned COME-robot closed-loop navigation and manipulation research task authority runs after three upstream results.",
+      "id": "mab_late_constraint_3c40bbec7f.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A late safety and intervention scope expands COME-robot recovery evaluation while preserving active perception, situated reasoning, action primitives, verification, and replanning.",
+      "id": "mab_late_constraint_3c40bbec7f.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench research:047.",
+      "id": "mab_late_constraint_3c40bbec7f.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The result has exactly five questions and a COME-robot safety closure.",
+      "id": "mab_late_constraint_3c40bbec7f.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_exact_five_question_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The proposal covers active perception, callable primitives, plan verification, replanning, recovery taxonomy, safety, and human-intervention metrics.",
+      "id": "mab_late_constraint_3c40bbec7f.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_task_specific_method_data_metrics_and_ablations",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "It preserves open-world navigation/manipulation, GPT-4V reasoning, scene rebuilding, and closed-loop feedback.",
+      "id": "mab_late_constraint_3c40bbec7f.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_source_premises_and_structure_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The late safety scope selectively augments the existing recovery plan and preserves unaffected robot tasks.",
+      "id": "mab_late_constraint_3c40bbec7f.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

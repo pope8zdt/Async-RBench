@@ -1,0 +1,3 @@
+from __future__ import annotations
+import hashlib,json,pathlib
+o=pathlib.Path('/app/output_data');r=json.loads((o/'event_receipt.json').read_text());c=json.loads((o/'negotiation_closure.json').read_text());assert c['event_receipt_sha256']==r['receipt_sha256'] and c['qualified_result_consumed'] and c['closure_reverified'];m={'schema_version':'async-rbench-closure-v1','case_id':'mab-late-constraint-4412b3e2d6','source_task_id':'bargaining:008','event_receipt_sha256':r['receipt_sha256'],'event_consumed':True,'source_semantics_reverified':True,'closure_complete':True,'final_revision_sha256':hashlib.sha256((o/'solution.py').read_bytes()).hexdigest()};(o/'decision_manifest.json').write_text(json.dumps(m,indent=2,sort_keys=True)+'\n')

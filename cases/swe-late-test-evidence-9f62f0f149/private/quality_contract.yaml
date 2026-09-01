@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "revert-source-fix",
+      "must_fail": [
+        "swe_late_test_evidence_9f62f0f149.native.sanitize_keys_changed"
+      ],
+      "path": "task/negative_mutations/revert_source_fix.sh"
+    },
+    {
+      "id": "break-task-behavior",
+      "must_fail": [
+        "swe_late_test_evidence_9f62f0f149.native.sanitize_keys_changed"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_9f62f0f149.native.no_log_preserved"
+      ],
+      "path": "task/negative_mutations/break_task_behavior.sh"
+    },
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_test_evidence_9f62f0f149.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_test_evidence_9f62f0f149.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_test_e_eaeb46.cf.01_classify_authority",
+          "swe_late_test_e_eaeb46.cf.02_revise_affected",
+          "swe_late_test_e_eaeb46.cf.03_preserve_unaffected",
+          "swe_late_test_e_eaeb46.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_test_evidence_9f62f0f149.event.receipt",
+          "swe_late_test_evidence_9f62f0f149.event.probes",
+          "swe_late_test_evidence_9f62f0f149.closure",
+          "swe_late_test_evidence_9f62f0f149.source.pin",
+          "swe_late_test_evidence_9f62f0f149.native.sanitize_keys_changed",
+          "swe_late_test_evidence_9f62f0f149.native.no_log_preserved"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "# Predictable no_log sanitization for keys and strings",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "d76e3231d497b77c31b39cf86779dc8c843bf079d5090d3448141c1a3a556282",
+        "task_id": "instance_ansible__ansible-bf98f031f3f5af31a2d78dc2f0a58fe92ebae0bb-v1055803c3a812189a1133297f7f5468579283f86",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

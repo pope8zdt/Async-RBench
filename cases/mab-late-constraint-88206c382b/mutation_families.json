@@ -1,0 +1,365 @@
+{
+  "families": [
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: The late-offer receipt is authentic and bound to bargaining:014.",
+      "id": "mab_bar014_8820.mut.01_receipt",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: The late-offer receipt is authentic and bound to bargaining:014.",
+      "id": "mab_bar014_8820.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: The receipt proves the delivered offer is older than the accepted current revision.",
+      "id": "mab_bar014_8820.mut.02_chronology",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.event.chronology"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_chronology_evidence",
+        "corrupt_chronology_value",
+        "replay_stale_chronology_state",
+        "satisfy_manifest_without_chronology_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: The receipt proves the delivered offer is older than the accepted current revision.",
+      "id": "mab_bar014_8820.mut.02_chronology_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.event.chronology"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_chronology_red",
+        "artifact_green_chronology_stale",
+        "receipt_valid_chronology_foreign",
+        "partial_closure_hides_chronology_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: Closure consumes the receipt while keeping the current qualified agreement.",
+      "id": "mab_bar014_8820.mut.03_closure",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: Closure consumes the receipt while keeping the current qualified agreement.",
+      "id": "mab_bar014_8820.mut.03_closure_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: The negotiation remains pinned to bargaining:014.",
+      "id": "mab_bar014_8820.mut.04_pin",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: The negotiation remains pinned to bargaining:014.",
+      "id": "mab_bar014_8820.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: Private evidence binds Evaluator.evaluate_task_world and agreement_reached to bargaining:014.",
+      "id": "mab_bar014_8820.mut.05_binding",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.native.binding"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_binding_evidence",
+        "corrupt_binding_value",
+        "replay_stale_binding_state",
+        "satisfy_manifest_without_binding_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: Private evidence binds Evaluator.evaluate_task_world and agreement_reached to bargaining:014.",
+      "id": "mab_bar014_8820.mut.05_binding_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.native.binding"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_binding_red",
+        "artifact_green_binding_stale",
+        "receipt_valid_binding_foreign",
+        "partial_closure_hides_binding_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: The accepted agreement is the exact current revision, not the late stale offer.",
+      "id": "mab_bar014_8820.mut.06_current",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.agreement.current"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_current_evidence",
+        "corrupt_current_value",
+        "replay_stale_current_state",
+        "satisfy_manifest_without_current_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: The accepted agreement is the exact current revision, not the late stale offer.",
+      "id": "mab_bar014_8820.mut.06_current_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.agreement.current"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_current_red",
+        "artifact_green_current_stale",
+        "receipt_valid_current_foreign",
+        "partial_closure_hides_current_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: The agreement price satisfies this case's seller floor and buyer ceiling.",
+      "id": "mab_bar014_8820.mut.07_bounds",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.price.bounds"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_bounds_evidence",
+        "corrupt_bounds_value",
+        "replay_stale_bounds_state",
+        "satisfy_manifest_without_bounds_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: The agreement price satisfies this case's seller floor and buyer ceiling.",
+      "id": "mab_bar014_8820.mut.07_bounds_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.price.bounds"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_bounds_red",
+        "artifact_green_bounds_stale",
+        "receipt_valid_bounds_foreign",
+        "partial_closure_hides_bounds_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: The agreement preserves product-specific terms for Women Western Cowgirl pointed-toe rhinestone ankle booties.",
+      "id": "mab_bar014_8820.mut.08_terms",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.product.terms"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_terms_evidence",
+        "corrupt_terms_value",
+        "replay_stale_terms_state",
+        "satisfy_manifest_without_terms_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: The agreement preserves product-specific terms for Women Western Cowgirl pointed-toe rhinestone ankle booties.",
+      "id": "mab_bar014_8820.mut.08_terms_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.product.terms"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_terms_red",
+        "artifact_green_terms_stale",
+        "receipt_valid_terms_foreign",
+        "partial_closure_hides_terms_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: The stale revision is recorded as superseded and cannot overwrite the accepted agreement.",
+      "id": "mab_bar014_8820.mut.09_excluded",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.stale.excluded"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_excluded_evidence",
+        "corrupt_excluded_value",
+        "replay_stale_excluded_state",
+        "satisfy_manifest_without_excluded_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: The stale revision is recorded as superseded and cannot overwrite the accepted agreement.",
+      "id": "mab_bar014_8820.mut.09_excluded_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.stale.excluded"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_excluded_red",
+        "artifact_green_excluded_stale",
+        "receipt_valid_excluded_foreign",
+        "partial_closure_hides_excluded_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: The negotiation ledger, evidence digest, chronology, and preservation fields are complete.",
+      "id": "mab_bar014_8820.mut.10_schema",
+      "must_fail": [
+        "mab_late_constraint_88206c382b.output.schema"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_schema_evidence",
+        "corrupt_schema_value",
+        "replay_stale_schema_state",
+        "satisfy_manifest_without_schema_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: Validate the delivered offer identity and compare its revision with the accepted current agreement.",
+      "id": "mab_bar014_8820.mut.11_01_classify_stale",
+      "must_fail": [
+        "mab_bar014_8820.cf.01_classify_stale"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: Validate the delivered offer identity and compare its revision with the accepted current agreement.",
+      "id": "mab_bar014_8820.mut.11_01_classify_stale_crosscheck",
+      "must_fail": [
+        "mab_bar014_8820.cf.01_classify_stale"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_stale_red",
+        "artifact_green_01_classify_stale_stale",
+        "receipt_valid_01_classify_stale_foreign",
+        "partial_closure_hides_01_classify_stale_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: Reject the superseded offer and preserve the newer qualified agreement and its product-specific terms.",
+      "id": "mab_bar014_8820.mut.12_02_exclude_stale",
+      "must_fail": [
+        "mab_bar014_8820.cf.02_exclude_stale"
+      ],
+      "operation": "mutate_control_reject_late_stale",
+      "variants": [
+        "omit_reject_late_stale_decision",
+        "apply_reject_late_stale_to_wrong_scope",
+        "use_stale_evidence_for_reject_late_stale",
+        "declare_reject_late_stale_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Directly challenge: Reverify price bounds, product terms, chronology, and receipt-bound closure from the current revision.",
+      "id": "mab_bar014_8820.mut.13_03_verify_closure",
+      "must_fail": [
+        "mab_bar014_8820.cf.03_verify_closure"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "description": "Cross-check independent evidence for: Reverify price bounds, product terms, chronology, and receipt-bound closure from the current revision.",
+      "id": "mab_bar014_8820.mut.13_03_verify_closure_crosscheck",
+      "must_fail": [
+        "mab_bar014_8820.cf.03_verify_closure"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_red",
+        "artifact_green_03_verify_closure_stale",
+        "receipt_valid_03_verify_closure_foreign",
+        "partial_closure_hides_03_verify_closure_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

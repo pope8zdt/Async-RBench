@@ -1,0 +1,41 @@
+{
+  "benchmark": "OSWorld",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "private_copy": "private/source_manifests/01-native_case.json",
+      "source": "upstream/osworld/evaluation_examples/examples/chrome/1704f00f-79e6-43a7-961b-cedd3724d5fd.json"
+    },
+    {
+      "private_copy": "private/official_task.json",
+      "source": "pinned official OSWorld task configuration"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task config",
+      "Chrome snapshot",
+      "native evaluator target",
+      "host-owned event receipt"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "Chrome",
+      "pyautogui bridge",
+      "state observer sidecar"
+    ],
+    "environment_strategy": "run the pinned OSWorld Chrome task in its source-native desktop environment",
+    "event_injection": "delayed Europe/Zurich date-resolution receipt",
+    "hidden_tests": "official check_direct_json_object evaluator plus receipt binding, selective revision, preservation, and post-event reverification",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "chrome",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "replay the official task and score with check_direct_json_object",
+    "requires_authored_private_oracle": false
+  },
+  "source_task_id": "osworld:chrome:1704f00f-79e6-43a7-961b-cedd3724d5fd"
+}

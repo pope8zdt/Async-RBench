@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_be9a3df3ef.delayed_authoritative_result",
+  "authority_rule": "Delayed validated_video_frame_at_8s is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.timestamp",
+      "req.02.frame_identity",
+      "req.03.presentation_target",
+      "req.04.selective_change",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The media worker returns the official 1920x1080 frame extracted at 8.000 seconds for use only as slide 2 background.",
+    "before_state": "Slide 2 and VLC can be prepared, but the exact frame at 00:08.000 and its image identity have not yet been delivered.",
+    "event_id": "evt.osw_cross_app_artifact_be9a3df3ef.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

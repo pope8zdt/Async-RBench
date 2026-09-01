@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific challenge_test_evidence_replayed receipt bound to coding:091.",
+      "id": "mab_late_test_evidence_4c6c77884e.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned FamilyCodeQuest authority runs after three upstream results.",
+      "id": "mab_late_test_evidence_4c6c77884e.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "id": "mab_late_test_evidence_4c6c77884e.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:091.",
+      "id": "mab_late_test_evidence_4c6c77884e.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes FamilyCodeQuest and the four-upstream family_code_quest_test_closure.",
+      "id": "mab_late_test_evidence_4c6c77884e.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_familyquest_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Sorting challenges handle empty, duplicate, and negative inputs, and replayed evidence is idempotently consumed once.",
+      "id": "mab_late_test_evidence_4c6c77884e.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_familyquest_sort_boundaries_and_duplicate_evidence_are_idempotent",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves shared sessions, collaborative edits, saved progress, and hint history across test-evidence integration.",
+      "id": "mab_late_test_evidence_4c6c77884e.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_familyquest_collaboration_progress_and_feedback_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The test-specialist receipt, evidence identity, registered cases, and final closure are bound without duplicate application.",
+      "id": "mab_late_test_evidence_4c6c77884e.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_familyquest_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

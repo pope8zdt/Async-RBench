@@ -1,0 +1,191 @@
+{
+  "case_id": "osw-dependency-unblock-3686cb057d",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_period_rate_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_period_368.cf.01_classify_authority_period_rate_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_3686cb057d.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed period_rate_formula_and_maximum; preserve unaffected libreoffice_calc state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_schema"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_period_rate_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_period_368.cf.02_revise_affected_period_rate_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_3686cb057d.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed period_rate_formula_and_maximum; preserve unaffected libreoffice_calc state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.formula_coverage"
+    },
+    {
+      "critical": true,
+      "decision_group": "03_verify_closure_period_rate_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_period_368.cf.03_verify_closure_period_rate_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_3686cb057d.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed period_rate_formula_and_maximum; preserve unaffected libreoffice_calc state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.numeric_results"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.output_schema"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.formula_coverage"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.numeric_results"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.output_schema",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.formula_coverage",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.numeric_results",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.output_schema",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.formula_coverage",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.numeric_results",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_schema",
+      "req.02.formula_coverage",
+      "req.03.numeric_results",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The Calc worker returns A/B as the period-rate formula for rows 2–25, all 24 numeric results, and the unique maximum 14.724 at C20 with green font.",
+    "before_state": "The workbook and target column can be prepared, but the validated formula, 24 row results and maximum row are pending.",
+    "event_id": "evt.osw_dependency_unblock_3686cb057d.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The source workbook path, header and result range are exact.",
+      "id": "req.01.output_schema",
+      "observable_probe": "osw_dependency_unblock_3686cb057d.osworld.output_schema",
+      "public_evidence": "source instruction and task-specific output_schema result"
+    },
+    {
+      "description": "All 24 rows use the A/B period-rate rule.",
+      "id": "req.02.formula_coverage",
+      "observable_probe": "osw_dependency_unblock_3686cb057d.osworld.formula_coverage",
+      "public_evidence": "source instruction and task-specific formula_coverage result"
+    },
+    {
+      "description": "All 24 task-specific numeric values are preserved.",
+      "id": "req.03.numeric_results",
+      "observable_probe": "osw_dependency_unblock_3686cb057d.osworld.numeric_results",
+      "public_evidence": "source instruction and task-specific numeric_results result"
+    }
+  ]
+}

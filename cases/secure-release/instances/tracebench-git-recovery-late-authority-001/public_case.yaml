@@ -1,0 +1,171 @@
+format_version: 2
+case_id: secure-release
+title: Sanitize, patch, and deploy a revisioned release
+task_instruction_path: task/task.yaml
+source_tasks:
+- id: git-leak-recovery
+  upstream_path: upstream/terminal-bench/original-tasks-locked/git-leak-recovery
+  benchmark: terminal-bench
+- id: fix-code-vulnerability
+  upstream_path: upstream/terminal-bench/original-tasks-locked/fix-code-vulnerability
+  benchmark: terminal-bench
+- id: git-multibranch
+  upstream_path: upstream/terminal-bench/original-tasks-locked/git-multibranch
+  benchmark: terminal-bench
+- id: nginx-request-logging
+  upstream_path: upstream/terminal-bench/original-tasks-locked/nginx-request-logging
+  benchmark: terminal-bench
+milestones:
+- id: sanitize_history
+  depends_on: []
+- id: fix_vulnerability_all_refs
+  depends_on:
+  - sanitize_history
+- id: configure_git_and_nginx
+  depends_on: []
+- id: deploy_clean_refs
+  depends_on:
+  - sanitize_history
+  - fix_vulnerability_all_refs
+  - configure_git_and_nginx
+- id: final_qa
+  depends_on:
+  - deploy_clean_refs
+artifacts:
+- id: sanitized_repo
+  path: /app/repo
+- id: vulnerability_patch
+  path: /app/repo:bottle.py@main,dev
+- id: security_report
+  path: /app/report.jsonl
+- id: git_server
+  path: /git/project.git
+- id: nginx_config
+  path: /etc/nginx
+- id: release_manifest
+  path: /app/release-manifest.json
+- id: pre_event_verification
+  path: runtime:qa
+workstreams:
+- id: security_patch
+  task: 'Fix the Bottle CRLF header injection vulnerability (CWE-93) for the current
+    main and dev refs: both branch versions must reject newline, carriage-return and
+    NUL header names/values with ValueError. Do not rewrite or commit either ref;
+    produce one unified patch that git apply can apply cleanly to both current branch
+    snapshots, test the patched snapshots, and write the promotable patch and syntactically
+    valid test to /app/deliverables/bottle_crlf_fix.patch and /app/deliverables/validation_test.py.
+    Report the exact 40-hex tested_main_head and tested_dev_head revisions plus crlf_test_result
+    and patch_status as observations, not task goals.'
+  targets:
+  - vulnerability_patch
+  expected_output: CWE-93 patch tested against the pre-rewrite refs, reporting tested_main_head,
+    tested_dev_head, crlf_test_result and patch_status.
+  priority: normal
+  required_evidence_fields:
+  - tested_main_head
+  - tested_dev_head
+  - crlf_test_result
+  - patch_status
+  evidence_schema:
+    tested_main_head:
+      type: string
+      pattern: '[0-9a-f]{40}'
+    tested_dev_head:
+      type: string
+      pattern: '[0-9a-f]{40}'
+    crlf_test_result:
+      type: string
+      min_items: 1
+    patch_status:
+      type: string
+      min_items: 1
+  allowed_files:
+  - /app/deliverables/bottle_crlf_fix.patch
+  - /app/deliverables/validation_test.py
+  - /app/deliverables/evidence.txt
+  - /app/deliverables/README.md
+  required_files:
+  - /app/deliverables/bottle_crlf_fix.patch
+  - /app/deliverables/validation_test.py
+  public_result_contract: {}
+- id: sanitize_history
+  task: Inspect and sanitize reachable and unreachable Git history in /app/repo. Recover
+    the leaked secret, remove it from every Git object without losing legitimate history,
+    inspect any additional inputs available in this isolated workspace, and report
+    the resulting main/dev commit ids plus a promotable sanitized bundle.
+  targets:
+  - sanitized_repo
+  expected_output: Sanitized Git history, observed commit ids and promotable bundle.
+  priority: high
+  required_evidence_fields:
+  - secret_blob_present_after_sanitize
+  - fsck_after_sanitize_empty
+  - main_head
+  - dev_head
+  evidence_schema:
+    secret_blob_present_after_sanitize:
+      type: boolean
+    fsck_after_sanitize_empty:
+      type: boolean
+    main_head:
+      type: string
+      pattern: '[0-9a-f]{40}'
+    dev_head:
+      type: string
+      pattern: '[0-9a-f]{40}'
+  allowed_files:
+  - /tmp/sanitized.bundle
+  required_files:
+  - /tmp/sanitized.bundle
+  public_result_contract: {}
+- id: release_infrastructure
+  task: 'Prepare the independent Git/nginx deployment infrastructure: synchronous
+    post-receive deploys (main to https://localhost:8443/index.html, dev to https://localhost:8443/dev/index.html,
+    within three seconds), the HTTP-8080 nginx site (10r/s rate limit burst 10, exact
+    custom 404/index content, detailed access/error logs) and password SSH authentication.
+    Build a promotable template under /tmp/nginx-git-infrastructure containing
+    nginx/nginx.conf, nginx/index.html, nginx/404.html, ssh/sshd_config and executable
+    main.git/dev.git post-receive hooks at the declared repository paths. Do not perform
+    the final release integration; the main agent owns it.'
+  targets:
+  - git_server
+  - nginx_config
+  expected_output: 'Independent Git/nginx deployment infrastructure prepared: git
+    server, nginx site, rate limiting and logging; not the final release integration.'
+  priority: normal
+  required_evidence_fields:
+  - git_repositories_created
+  - post_receive_hooks_configured
+  - rate_limiting_enabled
+  - detailed_logging_enabled
+  - custom_404_enabled
+  - password_ssh_auth_enabled
+  evidence_schema:
+    git_repositories_created:
+      type: boolean
+    post_receive_hooks_configured:
+      type: boolean
+    rate_limiting_enabled:
+      type: boolean
+    detailed_logging_enabled:
+      type: boolean
+    custom_404_enabled:
+      type: boolean
+    password_ssh_auth_enabled:
+      type: boolean
+  allowed_files:
+  - /tmp/nginx-git-infrastructure/nginx/nginx.conf
+  - /tmp/nginx-git-infrastructure/nginx/index.html
+  - /tmp/nginx-git-infrastructure/nginx/404.html
+  - /tmp/nginx-git-infrastructure/ssh/sshd_config
+  - /tmp/nginx-git-infrastructure/git/repositories/main.git/hooks/post-receive
+  - /tmp/nginx-git-infrastructure/git/repositories/dev.git/hooks/post-receive
+  required_files:
+  - /tmp/nginx-git-infrastructure/nginx/nginx.conf
+  - /tmp/nginx-git-infrastructure/nginx/index.html
+  - /tmp/nginx-git-infrastructure/nginx/404.html
+  - /tmp/nginx-git-infrastructure/ssh/sshd_config
+  - /tmp/nginx-git-infrastructure/git/repositories/main.git/hooks/post-receive
+  - /tmp/nginx-git-infrastructure/git/repositories/dev.git/hooks/post-receive
+  public_result_contract: {}
+public_checks: []

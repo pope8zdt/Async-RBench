@@ -1,0 +1,224 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_duplicate_implement_validation_and_acc",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_0.duplicate_or_replayed_co",
+      "evidence_group": "mab_dependency_unb.classify_duplicate",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_validation_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A validation specialist returns accepted-row representation, consistency/completeness rules, error codes, and row-level fixture outcomes.', perform classify_duplicate for 'Implement validation and accepted/rejected row partitioning.' while retaining valid prior result 'CSV, spreadsheet-adapter, and database-row ingestion produce a common raw-row stream.'.",
+      "forbidden_behavior": "Do not handle classify_duplicate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'CSV, spreadsheet-adapter, and database-row ingestion produce a common raw-row stream.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_validation_and"
+        ]
+      },
+      "id": "mab_code87_dataflow.cf.01_classify_duplicate_implement_validati",
+      "independence_key": "mab_code87_dataflow.cf.01_classify_duplicate_implement_validati",
+      "measurement_type": "control",
+      "mutation_id": "mab_code87_dataflow.mutation.01_classify_duplicate_implement_validati",
+      "obligation": "classify_duplicate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_031ed6f5bc.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_duplicate:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_validation_and"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_idempotency_change_transformation_to_con",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_0.duplicate_or_replayed_co",
+      "evidence_group": "mab_dependency_unb.preserve_idempotency",
+      "evidence_spec": {
+        "primary_fact": "idempotency_decision",
+        "subject": "req.01.implement_validation_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A validation specialist returns accepted-row representation, consistency/completeness rules, error codes, and row-level fixture outcomes.', perform preserve_idempotency for 'Change transformation to consume only the returned accepted-row representation.' while retaining valid prior result 'Pipeline stage state and deterministic export scaffolding are implemented.'.",
+      "forbidden_behavior": "Do not handle preserve_idempotency by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Pipeline stage state and deterministic export scaffolding are implemented.'.",
+      "gate": "deduplicate_completion",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_validation_and"
+        ]
+      },
+      "id": "mab_code87_dataflow.cf.02_preserve_idempotency_change_transformat",
+      "independence_key": "mab_code87_dataflow.cf.02_preserve_idempotency_change_transformat",
+      "measurement_type": "control",
+      "mutation_id": "mab_code87_dataflow.mutation.02_preserve_idempotency_change_transformat",
+      "obligation": "preserve_idempotency",
+      "outcome_anchors": [
+        "mab_dependency_unblock_031ed6f5bc.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:preserve_idempotency:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.implement_validation_and"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_duplicate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'CSV, spreadsheet-adapter, and database-row ingestion produce a common raw-row stream.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code87_dataflow.mutation.01_classify_duplicate_implement_validati",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code87_dataflow.cf.01_classify_duplicate_implement_validati"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_031ed6f5bc.source.pin"
+      ],
+      "targets": [
+        "mab_code87_dataflow.cf.01_classify_duplicate_implement_validati",
+        "mab_dependency_unblock_031ed6f5bc.event.receipt",
+        "mab_dependency_unblock_031ed6f5bc.event.authority_probe",
+        "mab_dependency_unblock_031ed6f5bc.closure",
+        "mab_dependency_unblock_031ed6f5bc.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle preserve_idempotency by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Pipeline stage state and deterministic export scaffolding are implemented.'.",
+      "family": "deduplicate_completion",
+      "id": "mab_code87_dataflow.mutation.02_preserve_idempotency_change_transformat",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code87_dataflow.cf.02_preserve_idempotency_change_transformat"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_031ed6f5bc.source.pin"
+      ],
+      "targets": [
+        "mab_code87_dataflow.cf.02_preserve_idempotency_change_transformat",
+        "mab_dependency_unblock_031ed6f5bc.event.receipt",
+        "mab_dependency_unblock_031ed6f5bc.event.authority_probe",
+        "mab_dependency_unblock_031ed6f5bc.closure",
+        "mab_dependency_unblock_031ed6f5bc.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The validation_contract_replayed receipt is authentic and bound to coding:087 and mab-dependency-unblock-031ed6f5bc.",
+      "id": "mab_dependency_unblock_031ed6f5bc.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned DataFlowCoordinator authority runs after the persisted baseline and records probes.",
+      "id": "mab_dependency_unblock_031ed6f5bc.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A replayed validation completion is deduplicated and cannot duplicate transformation or export side effects.",
+      "id": "mab_dependency_unblock_031ed6f5bc.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to official MultiAgentBench coding:087.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and the validated_data_pipeline_closure closure satisfy the task-specific output schema.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dataflow_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Ingestion normalizes CSV, spreadsheet, and database rows; validation partitions accepted and rejected rows; only accepted rows are transformed and exported once.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dataflow_validation_partition_and_stage_order",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: raw_rows, source_types, export_configuration.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dataflow_invalid_rows_never_reach_export_and_replay_is_idempotent",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A replayed validation completion is deduplicated and cannot duplicate transformation or export side effects.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dataflow_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

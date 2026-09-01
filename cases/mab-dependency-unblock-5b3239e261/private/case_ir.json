@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-5b3239e261",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_video_metric_calibration_compl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_authenticated_coac"
+        ]
+      },
+      "id": "01_classify_authority_video_metric_calibra",
+      "must_still_pass": [
+        "mab_dependency_unblock_5b3239e261.source.preservation"
+      ],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_authenticated_coac"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_video_metric_calibration_compl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_video_upload_movem"
+        ]
+      },
+      "id": "02_revise_affected_video_metric_calibra",
+      "must_still_pass": [
+        "mab_dependency_unblock_5b3239e261.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_video_upload_movem"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_video_metric_calibration_compl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_current_historical"
+        ]
+      },
+      "id": "03_verify_closure_video_metric_calibra",
+      "must_still_pass": [
+        "mab_dependency_unblock_5b3239e261.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_current_historical"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_authenticated_coac"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_video_upload_movem"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_current_historical"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_delayed_metric_cal"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_authenticated_coac",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_video_upload_movem",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_current_historical",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_delayed_metric_cal",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_authenticated_coac",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_video_upload_movem",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_current_historical",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_delayed_metric_cal",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_authenticated_coac",
+      "req.02.implement_video_upload_movem",
+      "req.03.implement_current_historical",
+      "req.04.integrate_delayed_metric_cal",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The returned calibration fixes metric semantics and limits while preserving dashboards and collaboration history.",
+    "before_state": "Videos and workspace activity exist, but units, metric ranges, and large-file limits are unresolved.",
+    "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement authenticated coach, player, and analyst roles with appropriate access.",
+      "id": "req.01.implement_authenticated_coac",
+      "observable_probe": "mab_dependency_unblock_5b3239e261.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement video upload, movement analysis, speed, accuracy, agility, and large-file handling.",
+      "id": "req.02.implement_video_upload_movem",
+      "observable_probe": "mab_dependency_unblock_5b3239e261.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement current/historical dashboards and collaborative text, image, video, and training plans.",
+      "id": "req.03.implement_current_historical",
+      "observable_probe": "mab_dependency_unblock_5b3239e261.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate delayed metric calibration and reverify role, metric, concurrency, and invalid-input behavior.",
+      "id": "req.04.integrate_delayed_metric_cal",
+      "observable_probe": "mab_dependency_unblock_5b3239e261.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

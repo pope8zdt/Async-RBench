@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The delayed database:023 receipt is authentic and bound to this case and source.",
+      "id": "mab_dependency_unblock_a145b96b70.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The receipt carries the exact transportation operations authority checkpoint and task-specific anomaly evidence.",
+      "id": "mab_dependency_unblock_a145b96b70.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_task_specific_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "The final closure consumes the exact receipt and re-verifies source semantics.",
+      "id": "mab_dependency_unblock_a145b96b70.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The diagnosis remains pinned to database:023 and its official source revision.",
+      "id": "mab_dependency_unblock_a145b96b70.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private report passed the upstream MARBLE database evaluator for database:023.",
+      "id": "mab_dependency_unblock_a145b96b70.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evaluator_binding_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The selected diagnosis exactly matches the evaluator-owned official root for this transportation operations task.",
+      "id": "mab_dependency_unblock_a145b96b70.diagnosis.exact",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_selected_database_cause_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The displaced tentative cause is excluded instead of being merged into the final answer.",
+      "id": "mab_dependency_unblock_a145b96b70.tentative.excluded",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_tentative_diagnosis_is_excluded",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The diagnosis consumes the native evidence digest, checkpoint digest, and the post-checkpoint bulk-write probe recording exactly 5,000 inserted rows and the resulting relation bytes.",
+      "id": "mab_dependency_unblock_a145b96b70.authority.evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_authority_evidence_is_consumed",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The database_diagnosis schema preserves the task-specific transportation operations findings and closure flags.",
+      "id": "mab_dependency_unblock_a145b96b70.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_database_diagnosis_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

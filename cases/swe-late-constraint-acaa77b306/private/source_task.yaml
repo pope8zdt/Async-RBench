@@ -1,0 +1,3 @@
+{
+  "instruction": "Add the experimental stable-output decompression parameter so callers with a sufficiently large, immutable output buffer can avoid the internal output allocation and copy. Fix single-pass handling for empty frames and preserve safe behavior for undersized or modified buffers. Validate the change with the native streaming and fuzz regressions."
+}

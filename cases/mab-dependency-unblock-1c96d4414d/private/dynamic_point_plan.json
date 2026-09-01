@@ -1,0 +1,207 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "mab_dependency_unblock_1c96d4414d_classify_stale_01",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_1c96d4414d.late_or_out_of_order_superseded_result",
+      "evidence_group": "mab_dependency_unblock_1.classify_stale",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.validate_and_normalize_u"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Classify the analyst edit with expected sequence 41 as stale against authoritative accepted sequence 42. Preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_and_normalize_u"
+        ]
+      },
+      "id": "mab_code19_sports.cf.01_classify_stale_d4414d",
+      "independence_key": "mab_code19_sports.cf.01_classify_stale_d4414d",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_dependency_unblock_1.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "accept_stale",
+      "mutation_id": "mab_code19_sports.mutation.01_classify_stale_d4414d",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1c96d4414d.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "relevance_tier": "critical",
+      "required_behavior": "Classify the analyst edit with expected sequence 41 as stale against authoritative accepted sequence 42. Preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.validate_and_normalize_u"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "mab_dependency_unblock_1c96d4414d_exclude_stale_02",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_1c96d4414d.late_or_out_of_order_superseded_result",
+      "evidence_group": "mab_dependency_unblock_1.exclude_stale",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.aggregate_only_compatibl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reject the stale analyst edit without applying its note, comment, chat, metric, or report mutations and retain accepted sequence 42. Preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.aggregate_only_compatibl"
+        ]
+      },
+      "id": "mab_code19_sports.cf.02_exclude_stale_d4414d",
+      "independence_key": "mab_code19_sports.cf.02_exclude_stale_d4414d",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_dependency_unblock_1.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "rollback_to_stale",
+      "mutation_id": "mab_code19_sports.mutation.02_exclude_stale_d4414d",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1c96d4414d.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "relevance_tier": "direct",
+      "required_behavior": "Reject the stale analyst edit without applying its note, comment, chat, metric, or report mutations and retain accepted sequence 42. Preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.aggregate_only_compatibl"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "mab_dependency_unblock_1c96d4414d_verify_closure_03",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_1c96d4414d.late_or_out_of_order_superseded_result",
+      "evidence_group": "mab_dependency_unblock_1.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.apply_role_permissions_t"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Close only after team isolation, accepted match data, player metrics, dashboards, reports, and role permissions are reverified on the authoritative sequence and bound to this receipt. Preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.apply_role_permissions_t"
+        ]
+      },
+      "id": "mab_code19_sports.cf.03_verify_closure_d4414d",
+      "independence_key": "mab_code19_sports.cf.03_verify_closure_d4414d",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_dependency_unblock_1.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "mix_lineages",
+      "mutation_id": "mab_code19_sports.mutation.03_verify_closure_d4414d",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1c96d4414d.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "required_behavior": "Close only after team isolation, accepted match data, player metrics, dashboards, reports, and role permissions are reverified on the authoritative sequence and bound to this receipt. Preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.apply_role_permissions_t"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_dependency_unblock_1c96d4414d.late_or_out_of_order_superseded_result",
+      "event_theme": "late_or_out_of_order_superseded_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "A late analyst edit arrives with expected sequence 41 after the authoritative collaboration sequence has advanced to 42; it is superseded and must not mutate accepted notes or reports.",
+        "before": "Team-isolated match uploads, normalized player metrics, role permissions, and collaboration sequence 42 are accepted before a concurrent analyst result returns.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

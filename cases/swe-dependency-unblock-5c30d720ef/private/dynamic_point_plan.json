@@ -1,0 +1,180 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority:req.01.add_inert_to_the_shared_",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_5c30d720ef.inert_boolean_attribute_authority",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.add_inert_to_the_shared_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.', perform classify_authority for 'Add `inert` to the shared boolean-attribute classification.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add `inert` to the shared boolean-attribute classification.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_dependency__f75f4b.cf.01_classify_authority",
+      "independence_key": "swe_dependency__f75f4b.cf.01_classify_authority",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__f75f4b.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_5c30d720ef.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__f75f4b.cf.01_classify_authority]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_inert_to_the_shared_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected:req.02.verify_true_emits_a_pres",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_5c30d720ef.inert_boolean_attribute_authority",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.verify_true_emits_a_pres"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.', perform revise_affected for 'Verify true emits a present boolean attribute and false omits it in SSR.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Verify true emits a present boolean attribute and false omits it in SSR.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_dependency__f75f4b.cf.02_revise_affected",
+      "independence_key": "swe_dependency__f75f4b.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__f75f4b.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_5c30d720ef.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__f75f4b.cf.02_revise_affected]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.verify_true_emits_a_pres"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure:req.03.check_spread_and_direct_",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_5c30d720ef.inert_boolean_attribute_authority",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.check_spread_and_direct_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.', perform verify_closure for 'Check spread and direct-attribute serialization paths.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Check spread and direct-attribute serialization paths.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_dependency__f75f4b.cf.03_verify_closure",
+      "independence_key": "swe_dependency__f75f4b.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__f75f4b.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_5c30d720ef.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__f75f4b.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.check_spread_and_direct_"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.swe_dependency_unblock_5c30d720ef.inert_boolean_attribute_authority",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.",
+        "before": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

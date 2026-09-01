@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-d8248233eb",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_authority",
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_d8248233eb.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "warranty_contract_terms_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_d8248233eb.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "warranty_contract_terms_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_d8248233eb.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "warranty_contract_terms_delivered"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_d8248233eb.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "stage_tag": "closure",
+      "task_requirement_id": "warranty_contract_terms_delivered"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.01.keep_the_provisional_price_s"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.02.validate_the_two_piece_scope"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.03.revise_price_and_contract_du"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.04.close_with_one_receipt_bound"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.keep_the_provisional_price_s",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.validate_the_two_piece_scope",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_price_and_contract_du",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_with_one_receipt_bound",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.keep_the_provisional_price_s",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.validate_the_two_piece_scope",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_price_and_contract_du",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_with_one_receipt_bound",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.keep_the_provisional_price_s",
+      "req.02.validate_the_two_piece_scope",
+      "req.03.revise_price_and_contract_du",
+      "req.04.close_with_one_receipt_bound",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+    "before_state": "A provisional Two-Piece Keychain Set bargain exists before warranty_contract_terms_delivered.",
+    "event_id": "evt.mab-late-constraint-d8248233eb.warranty_contract_terms_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Keep the provisional price separate from pending support.",
+      "id": "req.01.keep_the_provisional_price_s",
+      "observable_probe": "mab_late_constraint_d8248233eb.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Validate the two-piece scope, warranty, and response time.",
+      "id": "req.02.validate_the_two_piece_scope",
+      "observable_probe": "mab_late_constraint_d8248233eb.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Revise price and contract duration from the service authority.",
+      "id": "req.03.revise_price_and_contract_du",
+      "observable_probe": "mab_late_constraint_d8248233eb.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close with one receipt-bound support and purchasing agreement.",
+      "id": "req.04.close_with_one_receipt_bound",
+      "observable_probe": "mab_late_constraint_d8248233eb.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

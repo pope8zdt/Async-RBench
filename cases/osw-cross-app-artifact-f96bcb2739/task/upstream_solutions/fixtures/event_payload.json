@@ -1,0 +1,47 @@
+{
+  "schema_version": "async-rbench-osworld-event-v1",
+  "case_id": "osw-cross-app-artifact-f96bcb2739",
+  "source_task_id": "osworld:multi_apps:7f35355e-02a6-45b5-b140-f0be698bcf85",
+  "task_assertion": "After CSV export, 12 missing Stock Price cells are imputed with the mean of 48 observed prices (39.20125), producing median 25.27 written as the only content of result.txt.",
+  "state": {
+    "source_path": "/home/user/Desktop/stock.xlsx",
+    "result_path": "/home/user/Desktop/result.txt",
+    "table_rows": 60,
+    "observed_prices": 48,
+    "missing_prices": 12,
+    "imputation_mean": 39.20125,
+    "median_after_imputation": 25.27,
+    "result_text": "25.27",
+    "csv_exported": true,
+    "code_used": true,
+    "only_numeric": true
+  },
+  "upstream_dependency_graph": [
+    {
+      "id": "upstream_worker_01",
+      "depends_on": [],
+      "description": "Export the five-column stock workbook table to CSV without losing blank Stock Price cells."
+    },
+    {
+      "id": "upstream_worker_02",
+      "depends_on": [
+        "upstream_worker_01"
+      ],
+      "description": "Compute the Stock Price mean from the 48 observed values and identify 12 missing values."
+    },
+    {
+      "id": "upstream_worker_03",
+      "depends_on": [
+        "upstream_worker_02"
+      ],
+      "description": "Impute all missing values and independently compute the 60-value median."
+    },
+    {
+      "id": "upstream_worker_04",
+      "depends_on": [
+        "upstream_worker_03"
+      ],
+      "description": "Write only 25.27 to result.txt and run compare_result_files."
+    }
+  ]
+}

@@ -1,0 +1,348 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_vscode_keybinding_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_3e78382c85.delayed_authoritative_result",
+      "evidence_group": "osw_keybind_3e.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "vscode_tree_find_keybinding_identity"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed vscode_tree_find_keybinding_identity; preserve unaffected vscode state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_keybind_3e.cf.01_classify_authority_vscode_keybinding_osworld",
+      "independence_key": "osw_keybind_3e.cf.01_classify_authority_vscode_keybinding_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_keybind_3e.mutation.01_classify_authority_vscode_keybinding_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_3e78382c85.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_vscode_keybinding_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_3e78382c85.delayed_authoritative_result",
+      "evidence_group": "osw_keybind_3e.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "vscode_tree_find_keybinding_identity"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed vscode_tree_find_keybinding_identity; preserve unaffected vscode state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_keybind_3e.cf.02_revise_affected_vscode_keybinding_osworld",
+      "independence_key": "osw_keybind_3e.cf.02_revise_affected_vscode_keybinding_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_keybind_3e.mutation.02_revise_affected_vscode_keybinding_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_3e78382c85.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.entry_identity"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure_vscode_keybinding_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_3e78382c85.delayed_authoritative_result",
+      "evidence_group": "osw_keybind_3e.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "vscode_tree_find_keybinding_identity"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed vscode_tree_find_keybinding_identity; preserve unaffected vscode state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_keybind_3e.cf.03_verify_closure_vscode_keybinding_osworld",
+      "independence_key": "osw_keybind_3e.cf.03_verify_closure_vscode_keybinding_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_keybind_3e.mutation.03_verify_closure_vscode_keybinding_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_3e78382c85.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.context_scope"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "family": "wait_for_authority",
+      "id": "osw_keybind_3e.mutation.01_classify_authority_vscode_keybinding_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_keybind_3e.cf.01_classify_authority_vscode_keybinding_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_3e78382c85.source.pin"
+      ],
+      "targets": [
+        "osw_keybind_3e.cf.01_classify_authority_vscode_keybinding_osworld",
+        "osw_dependency_unblock_3e78382c85.event.receipt",
+        "osw_dependency_unblock_3e78382c85.event.probes",
+        "osw_dependency_unblock_3e78382c85.closure",
+        "osw_dependency_unblock_3e78382c85.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "family": "resolve_authority",
+      "id": "osw_keybind_3e.mutation.02_revise_affected_vscode_keybinding_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_keybind_3e.cf.02_revise_affected_vscode_keybinding_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_3e78382c85.source.pin"
+      ],
+      "targets": [
+        "osw_keybind_3e.cf.02_revise_affected_vscode_keybinding_osworld",
+        "osw_dependency_unblock_3e78382c85.event.receipt",
+        "osw_dependency_unblock_3e78382c85.event.probes",
+        "osw_dependency_unblock_3e78382c85.closure",
+        "osw_dependency_unblock_3e78382c85.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "family": "rederive_from_authority",
+      "id": "osw_keybind_3e.mutation.03_verify_closure_vscode_keybinding_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_keybind_3e.cf.03_verify_closure_vscode_keybinding_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_3e78382c85.source.pin"
+      ],
+      "targets": [
+        "osw_keybind_3e.cf.03_verify_closure_vscode_keybinding_osworld",
+        "osw_dependency_unblock_3e78382c85.event.receipt",
+        "osw_dependency_unblock_3e78382c85.event.probes",
+        "osw_dependency_unblock_3e78382c85.closure",
+        "osw_dependency_unblock_3e78382c85.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed authoritative receipt.",
+      "id": "osw_dependency_unblock_3e78382c85.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All three task-specific upstream workers completed with observable probes.",
+      "id": "osw_dependency_unblock_3e78382c85.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies source semantics.",
+      "id": "osw_dependency_unblock_3e78382c85.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_dependency_unblock_3e78382c85.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:vs_code:ea98c5d7-3cf9-4f9b-8ad3-366b58e0fcae and check_json_keybindings.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private source fixture.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "VS Code keybindings contain the exact scoped -list.find Ctrl+F removal entry while unrelated Ctrl+F behavior remains intact.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The active VS Code user keybindings path is exact.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The ctrl+f and -list.find pair is exact.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.entry_identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_entry_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The listFocus && listSupportsFind context is exact.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.context_scope",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_context_scope",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exactly one matching entry exists in valid JSON.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.unique_valid_entry",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_unique_valid_entry",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Only Tree View Find is disabled; unrelated Ctrl+F remains.",
+      "id": "osw_dependency_unblock_3e78382c85.osworld.scoped_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_scoped_behavior",
+      "relevance_tier": "base"
+    }
+  ]
+}

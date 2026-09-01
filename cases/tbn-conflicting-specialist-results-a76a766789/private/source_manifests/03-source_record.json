@@ -1,0 +1,45 @@
+{
+  "prior_work": [
+    {
+      "id": "step:37",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "<returncode>0</returncode> <output> </output>"
+    }
+  ],
+  "independent_event": {
+    "id": "evidence:34",
+    "kind": "observation",
+    "app": null,
+    "function": null,
+    "description": "downstream_invalidation"
+  },
+  "affected_work": [
+    {
+      "id": "required-response:evidence:34",
+      "kind": "required_response",
+      "app": null,
+      "function": null,
+      "description": "The main branch begins merging, reporting, or selecting an implementation from the results already available."
+    }
+  ],
+  "superseded_work": [
+    {
+      "id": "provisional:required-response:evidence:34",
+      "description": "Provisional pre-authority variant of: The main branch begins merging, reporting, or selecting an implementation from the results already available.",
+      "migration_derived": true
+    }
+  ],
+  "event_sequence": [
+    {
+      "id": "evidence:34",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "downstream_invalidation",
+      "producer": "independent_environment_or_trace_producer",
+      "authority": "authoritative"
+    }
+  ]
+}

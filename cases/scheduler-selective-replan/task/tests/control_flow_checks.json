@@ -1,0 +1,92 @@
+{
+  "version": "4",
+  "checks": [
+    {
+      "id": "sc.cf.wait_all_validators",
+      "gate": "wait_for_authority",
+      "dimension": "event_intake",
+      "gate_args": {
+        "artifacts": [
+          "combined_config_artifact"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sc.closure.both_validators_pass",
+        "sc.closure.wait_for_all_validators"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sc.cf.reject_late_stale",
+      "gate": "reject_late_stale",
+      "dimension": "state_revision",
+      "gate_args": {
+        "artifacts": [
+          "combined_config_artifact"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sc.replan.coverage",
+        "sc.replan.cost_threshold"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sc.cf.cancel_failing_only",
+      "gate": "timely_cancellation",
+      "dimension": "plan_revision",
+      "gate_args": {
+        "workstreams": [
+          "bucket2_optimizer"
+        ]
+      },
+      "outcome_anchors": [
+        "sc.preserve.final_matches_snapshot",
+        "sc.preserve.preserved_bucket_valid"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sc.cf.rederive_combined",
+      "gate": "rederive_from_authority",
+      "dimension": "closure",
+      "gate_args": {
+        "artifacts": [
+          "combined_config_artifact"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sc.closure.full_recompute_passes",
+        "sc.global.max_shapes"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "supporting",
+      "execution_modes": [
+        "async"
+      ]
+    }
+  ]
+}

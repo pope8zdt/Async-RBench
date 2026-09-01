@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_provisional_offer",
+      "req.02.classify_the_no_power_produc",
+      "req.03.revise_quantity_and_price_wi",
+      "req.04.close_with_the_corrected_pro",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Product authority clarifies that the organizer has no power requirement; quality is the velvet ring holder, with a 60-unit minimum at $17.49.",
+    "before_state": "A provisional Jewelry Organizer Stand with Velvet Ring Holder bargain exists before product_quality_scope_clarified.",
+    "event_id": "evt.mab-late-constraint-3aa3bf3cca.product_quality_scope_clarified",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-3aa3bf3cca.product_quality_scope_clarified",
+  "forbidden_shortcut": "Do not ignore the event, retain superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

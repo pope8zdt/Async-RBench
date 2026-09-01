@@ -1,0 +1,135 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_cross_app_artifact_f96bcb2739.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_cross_app_artifact_f96bcb2739.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_cross_app_artifact_f96bcb2739.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_cross_app_artifact_f96bcb2739.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:7f35355e-02a6-45b5-b140-f0be698bcf85 and compare_result_files.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "After CSV export, 12 missing Stock Price cells are imputed with the mean of 48 observed prices (39.20125), producing median 25.27 written as the only content of result.txt.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The workbook has 60 data rows: 48 observed and 12 missing prices.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.row_accounting",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_row_accounting",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The imputation mean is 39.20125.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.mean",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_mean",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The post-imputation median is 25.27.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.median",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_median",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "result.txt contains only the numeric answer.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.result_text",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_result_text",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "CSV export and code-based computation are both represented.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.workflow",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_workflow",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

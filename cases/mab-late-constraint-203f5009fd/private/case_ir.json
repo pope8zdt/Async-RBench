@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-late-constraint-203f5009fd",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_align_backend_routes_and_val",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "01_classify_critical_path_align_backend_rout",
+      "must_still_pass": [
+        "mab_late_constraint_203f.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "required_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform classify_critical_path for 'Align backend routes and validation with the returned endpoint matrix.' while retaining valid prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_enforce_department_and_role_",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Frontend task views and backend handlers exist behind provisional authorization checks.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "02_resource_triage_enforce_department",
+      "must_still_pass": [
+        "mab_late_constraint_203f.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "required_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform resource_triage for 'Enforce department and role permissions in every handler.' while retaining valid prior result 'Frontend task views and backend handlers exist behind provisional authorization checks.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_update_frontend_visibility_a",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "03_verify_closure_update_frontend_vi",
+      "must_still_pass": [
+        "mab_late_constraint_203f.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform verify_closure for 'Update frontend visibility and requests to match the same contract.' while retaining valid prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.align_backend_routes_and"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.enforce_department_and_r"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.update_frontend_visibili"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_mutation_tests_for_f"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.align_backend_routes_and",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.enforce_department_and_r",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.update_frontend_visibili",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_mutation_tests_for_f",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.align_backend_routes_and",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.enforce_department_and_r",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.update_frontend_visibili",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_mutation_tests_for_f",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.align_backend_routes_and",
+      "req.02.enforce_department_and_r",
+      "req.03.update_frontend_visibili",
+      "req.04.add_mutation_tests_for_f",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.",
+    "before_state": "The RBAC/API matrix arrives after core operations and permissive provisional frontend/backend integration exist.",
+    "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Align backend routes and validation with the returned endpoint matrix.",
+      "id": "req.01.align_backend_routes_and",
+      "observable_probe": "mab_late_constraint_203f.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for align_backend_routes_and_validation_"
+    },
+    {
+      "description": "Enforce department and role permissions in every handler.",
+      "id": "req.02.enforce_department_and_r",
+      "observable_probe": "mab_late_constraint_203f.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for enforce_department_and_role_permissi"
+    },
+    {
+      "description": "Update frontend visibility and requests to match the same contract.",
+      "id": "req.03.update_frontend_visibili",
+      "observable_probe": "mab_late_constraint_203f.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for update_frontend_visibility_and_reque"
+    },
+    {
+      "description": "Add mutation tests for forbidden cross-department access and altered endpoint fields.",
+      "id": "req.04.add_mutation_tests_for_f",
+      "observable_probe": "mab_late_constraint_203f.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_mutation_tests_for_forbidden_cro"
+    }
+  ]
+}

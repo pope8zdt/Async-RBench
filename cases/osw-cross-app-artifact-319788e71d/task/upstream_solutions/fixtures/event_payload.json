@@ -1,0 +1,45 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-319788e71d",
+  "source_task_id": "osworld:multi_apps:da922383-bfa4-4cd3-bbad-6bebab3d7742",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "canonical_open_blog_tabs",
+  "upstream_dependency_graph": [
+    {
+      "id": "open_tab_inventory",
+      "app": "Chrome",
+      "description": "Inventory all currently open blog tabs and exclude non-blog tabs."
+    },
+    {
+      "id": "canonical_title_resolution",
+      "app": "Chrome",
+      "description": "Resolve each inventoried blog URL to the displayed canonical article title.",
+      "depends_on": [
+        "open_tab_inventory"
+      ]
+    }
+  ],
+  "state": {
+    "output_dir": "/home/user/Documents/Blog",
+    "files": [
+      "LLM Powered Autonomous Agents.pdf",
+      "Thinking about High-Quality Human Data.pdf"
+    ],
+    "titles": [
+      "LLM Powered Autonomous Agents",
+      "Thinking about High-Quality Human Data"
+    ],
+    "urls": [
+      "https://lilianweng.github.io/posts/2023-06-23-agent/",
+      "https://lilianweng.github.io/posts/2024-02-05-human-data-quality/"
+    ],
+    "readable": [
+      true,
+      true
+    ],
+    "one_pdf_per_tab": true
+  },
+  "task_assertion": "The Blog folder contains exactly two readable PDFs named for the two open articles: LLM Powered Autonomous Agents and Thinking about High-Quality Human Data.",
+  "finding": "The tab worker returns exactly two canonical blog URL/title pairs; both and only those pages must be printed as readable title-named PDFs."
+}
+

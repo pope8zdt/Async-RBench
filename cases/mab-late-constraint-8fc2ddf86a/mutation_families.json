@@ -1,0 +1,395 @@
+{
+  "families": [
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: Receipt digest is authentic and bound to this exact case and bargaining source.",
+      "id": "mab_late_constraint_8fc2.mut.01_receipt",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: Receipt digest is authentic and bound to this exact case and bargaining source.",
+      "id": "mab_late_constraint_8fc2.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: The independent worker observed both provisional and executable artifacts.",
+      "id": "mab_late_constraint_8fc2.mut.02_probes",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: The independent worker observed both provisional and executable artifacts.",
+      "id": "mab_late_constraint_8fc2.mut.02_probes_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: Final closure consumes the exact receipt and records the authoritative bargain: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.03_closure",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: Final closure consumes the exact receipt and records the authoritative bargain: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.03_closure_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: The package remains pinned to bargaining:036 and its official record.",
+      "id": "mab_late_constraint_8fc2.mut.04_pin",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: The package remains pinned to bargaining:036 and its official record.",
+      "id": "mab_late_constraint_8fc2.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: The private fixture binds the exact evaluator, source task, artifact schema, and dependency depth.",
+      "id": "mab_late_constraint_8fc2.mut.05_native_binding",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.native_binding"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_native_binding_evidence",
+        "corrupt_native_binding_value",
+        "replay_stale_native_binding_state",
+        "satisfy_manifest_without_native_binding_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: The private fixture binds the exact evaluator, source task, artifact schema, and dependency depth.",
+      "id": "mab_late_constraint_8fc2.mut.05_native_binding_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.native_binding"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_native_binding_red",
+        "artifact_green_native_binding_stale",
+        "receipt_valid_native_binding_foreign",
+        "partial_closure_hides_native_binding_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: 925 Sterling Silver Butterfly Dangle Chain Earrings executes its offer-authority-counter-finalize workflow.",
+      "id": "mab_late_constraint_8fc2.mut.06_core_behavior",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.core_behavior"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_core_behavior_evidence",
+        "corrupt_core_behavior_value",
+        "replay_stale_core_behavior_state",
+        "satisfy_manifest_without_core_behavior_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: 925 Sterling Silver Butterfly Dangle Chain Earrings executes its offer-authority-counter-finalize workflow.",
+      "id": "mab_late_constraint_8fc2.mut.06_core_behavior_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.core_behavior"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_core_behavior_red",
+        "artifact_green_core_behavior_stale",
+        "receipt_valid_core_behavior_foreign",
+        "partial_closure_hides_core_behavior_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: The injected authority payload exactly represents: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.07_event_behavior",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.event_behavior"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_event_behavior_evidence",
+        "corrupt_event_behavior_value",
+        "replay_stale_event_behavior_state",
+        "satisfy_manifest_without_event_behavior_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: The injected authority payload exactly represents: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.07_event_behavior_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.event_behavior"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_event_behavior_red",
+        "artifact_green_event_behavior_stale",
+        "receipt_valid_event_behavior_foreign",
+        "partial_closure_hides_event_behavior_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: Stale revisions and unauthorized authority payloads are rejected independently.",
+      "id": "mab_late_constraint_8fc2.mut.08_edge_behavior",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.edge_behavior"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_edge_behavior_evidence",
+        "corrupt_edge_behavior_value",
+        "replay_stale_edge_behavior_state",
+        "satisfy_manifest_without_edge_behavior_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: Stale revisions and unauthorized authority payloads are rejected independently.",
+      "id": "mab_late_constraint_8fc2.mut.08_edge_behavior_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.edge_behavior"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_edge_behavior_red",
+        "artifact_green_edge_behavior_stale",
+        "receipt_valid_edge_behavior_foreign",
+        "partial_closure_hides_edge_behavior_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: Unaffected source priorities remain preserved: butterfly_earring_identity, buyer_price_quality_priority, seller_logistics_goal.",
+      "id": "mab_late_constraint_8fc2.mut.09_preservation",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.preservation"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_preservation_evidence",
+        "corrupt_preservation_value",
+        "replay_stale_preservation_state",
+        "satisfy_manifest_without_preservation_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: Unaffected source priorities remain preserved: butterfly_earring_identity, buyer_price_quality_priority, seller_logistics_goal.",
+      "id": "mab_late_constraint_8fc2.mut.09_preservation_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.preservation"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_preservation_red",
+        "artifact_green_preservation_stale",
+        "receipt_valid_preservation_foreign",
+        "partial_closure_hides_preservation_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: Final selected terms and the bargaining-tool chronology match this task-specific authority.",
+      "id": "mab_late_constraint_8fc2.mut.10_final_terms",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.final_terms"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_final_terms_evidence",
+        "corrupt_final_terms_value",
+        "replay_stale_final_terms_state",
+        "satisfy_manifest_without_final_terms_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: Final selected terms and the bargaining-tool chronology match this task-specific authority.",
+      "id": "mab_late_constraint_8fc2.mut.10_final_terms_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2ddf86a.source.final_terms"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_final_terms_red",
+        "artifact_green_final_terms_stale",
+        "receipt_valid_final_terms_foreign",
+        "partial_closure_hides_final_terms_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: classify_scope_delta: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.11_01_classify_scope_delta",
+      "must_fail": [
+        "mab_late_constraint_8fc2.cf.01_classify_scope_delta"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: classify_scope_delta: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.11_01_classify_scope_delta_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2.cf.01_classify_scope_delta"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_scope_delta_red",
+        "artifact_green_01_classify_scope_delta_stale",
+        "receipt_valid_01_classify_scope_delta_foreign",
+        "partial_closure_hides_01_classify_scope_delta_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: revise_affected: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.12_02_revise_affected",
+      "must_fail": [
+        "mab_late_constraint_8fc2.cf.02_revise_affected"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: preserve_unaffected: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.13_03_preserve_unaffected",
+      "must_fail": [
+        "mab_late_constraint_8fc2.cf.03_preserve_unaffected"
+      ],
+      "operation": "mutate_control_selective_replan",
+      "variants": [
+        "omit_selective_replan_decision",
+        "apply_selective_replan_to_wrong_scope",
+        "use_stale_evidence_for_selective_replan",
+        "declare_selective_replan_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Directly challenge: verify_closure: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.14_04_verify_closure",
+      "must_fail": [
+        "mab_late_constraint_8fc2.cf.04_verify_closure"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "description": "Cross-check independent evidence for: verify_closure: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "id": "mab_late_constraint_8fc2.mut.14_04_verify_closure_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_8fc2.cf.04_verify_closure"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_04_verify_closure_red",
+        "artifact_green_04_verify_closure_stale",
+        "receipt_valid_04_verify_closure_foreign",
+        "partial_closure_hides_04_verify_closure_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

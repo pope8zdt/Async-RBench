@@ -1,0 +1,31 @@
+{
+  "assets": [
+    "official task configuration",
+    "chrome snapshot",
+    "os snapshot",
+    "writer snapshot",
+    "private source assets",
+    "private native fixture",
+    "private delayed payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "chrome",
+    "os",
+    "writer",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:multi_apps:7ff48d5b-2df2-49da-b500-a5150ffc7f18 in pinned multiapps; truth remains private.",
+  "event_injection": "Release delayed verified_futian_24h_locations after a persisted cross-app checkpoint.",
+  "hidden_tests": "fuzzy_place_math, native digest, output_path, location_count, eligibility, chinese_addresses, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "multiapps",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private futian_locations_osworld.sh scores fuzzy_place_math.",
+  "requires_authored_private_oracle": false
+}
+

@@ -1,0 +1,259 @@
+{
+  "async_depth": 2,
+  "case_id": "osw-cross-app-artifact-110bdf766b",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_bookkeeping_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "receipt_inventory",
+          "receipt_normalization"
+        ]
+      },
+      "id": "01_classify_authority_bookkeeping_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_110bdf766b.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_110bdf766b.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed normalized_receipt_records; preserve unaffected libreoffice_calc/os/image/pdf state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_existing_bo"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_bookkeeping_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "receipt_inventory",
+          "receipt_normalization"
+        ]
+      },
+      "id": "02_revise_affected_bookkeeping_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_110bdf766b.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_110bdf766b.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed normalized_receipt_records; preserve unaffected libreoffice_calc/os/image/pdf state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.append_exactly_five_expe"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_bookkeeping_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "receipt_inventory",
+          "receipt_normalization"
+        ]
+      },
+      "id": "03_verify_closure_bookkeeping_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_110bdf766b.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_110bdf766b.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed normalized_receipt_records; preserve unaffected libreoffice_calc/os/image/pdf state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.recalculate_the_running_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "depends_on",
+        "source": "upstream.receipt_inventory",
+        "target": "upstream.receipt_normalization"
+      },
+      {
+        "relation": "produces",
+        "source": "upstream.receipt_normalization",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.preserve_the_existing_bo"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.preserve_the_existing_bo",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.append_exactly_five_expe"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.append_exactly_five_expe",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.recalculate_the_running_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.recalculate_the_running_",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.04.save_the_completed_workb"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.save_the_completed_workb",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "OS/Image/PDF",
+        "description": "Inventory the five receipt artifacts and bind one record to each source file.",
+        "id": "upstream.receipt_inventory",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "OCR artifact worker",
+        "description": "Normalize date, merchant, description, amount and source identity for each inventoried receipt.",
+        "id": "upstream.receipt_normalization",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.preserve_the_existing_bo",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.append_exactly_five_expe",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.recalculate_the_running_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.save_the_completed_workb",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_existing_bo",
+      "req.02.append_exactly_five_expe",
+      "req.03.recalculate_the_running_",
+      "req.04.save_the_completed_workb",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The receipt worker returns five source-bound normalized expense records; only the appended transaction rows and dependent running balances must be completed.",
+    "before_state": "The original workbook layout and receipt inventory are available, but receipt values have not yet been normalized authoritatively.",
+    "event_id": "evt.osw_cross_app_artifact_110bd.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Preserve the existing bookkeeping workbook rows 1 through 8.",
+      "id": "req.01.preserve_the_existing_bo",
+      "observable_probe": "osw_cross_app_artifact_110bdf766b.osworld.identity",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Append exactly five Expense rows from the delayed normalized receipt records.",
+      "id": "req.02.append_exactly_five_expe",
+      "observable_probe": "osw_cross_app_artifact_110bdf766b.osworld.official_score",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Recalculate the running balance for every appended row.",
+      "id": "req.03.recalculate_the_running_",
+      "observable_probe": "osw_cross_app_artifact_110bdf766b.osworld.native_evidence",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Save the completed workbook to the official OSWorld result path.",
+      "id": "req.04.save_the_completed_workb",
+      "observable_probe": "osw_cross_app_artifact_110bdf766b.osworld.task_assertion",
+      "public_evidence": "source instruction and delayed receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "OS/Image/PDF",
+      "description": "Inventory the five receipt artifacts and bind one record to each source file.",
+      "id": "receipt_inventory"
+    },
+    {
+      "app": "OCR artifact worker",
+      "depends_on": [
+        "receipt_inventory"
+      ],
+      "description": "Normalize date, merchant, description, amount and source identity for each inventoried receipt.",
+      "id": "receipt_normalization"
+    }
+  ]
+}

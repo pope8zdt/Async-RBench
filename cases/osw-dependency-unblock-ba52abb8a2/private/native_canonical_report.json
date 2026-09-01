@@ -1,0 +1,133 @@
+{
+  "anomaly": "INSERT_LARGE_DATA",
+  "canonical": {
+    "canonical_oracle": true,
+    "checkpoint_changed": true,
+    "control_checks_passed": true,
+    "control_ids": [
+      "01_classify_authority_enable_developer_m",
+      "02_revise_affected_use_load_unpacked_",
+      "03_verify_closure_resolve_any_report"
+    ],
+    "episode": "canonical",
+    "equivalent_solution": false,
+    "event_receipt": {
+      "producer": "evaluator_owned_read_only_snapshot_worker",
+      "raw_evidence": {
+        "target_url": "extensionpref:canonical"
+      },
+      "release_after_digest": "fa85af61604b047b267c06cf13fabc93b33fe2b00ce1514ce5078ab2ac29b2ca"
+    },
+    "expected_pass": true,
+    "hidden_checks_passed": true,
+    "model_episode_executed": false,
+    "negative_counterexample": false,
+    "observed_expected_outcome": true,
+    "official_evaluator_executed": true,
+    "official_score": 1.0,
+    "real_vm_executed": true,
+    "semantic_check_ids": [
+      "official_metric_01",
+      "persisted_target_state",
+      "post_event_reverification"
+    ],
+    "url": "extensionpref:canonical"
+  },
+  "case_id": "osw-dependency-unblock-ba52abb8a2",
+  "counterexamples": [
+    {
+      "canonical_oracle": false,
+      "checkpoint_changed": true,
+      "control_checks_passed": false,
+      "control_ids": [],
+      "episode": "negative_wrong_topic",
+      "equivalent_solution": false,
+      "event_receipt": {
+        "producer": "evaluator_owned_read_only_snapshot_worker",
+        "raw_evidence": {
+          "target_url": "shell:cp '/home/user/.config/google-chrome/Default/Preferences' /tmp/unchanged-chrome-preferences.json"
+        },
+        "release_after_digest": "1dbe7e400dd44297a900da00c09f1f88138d0a419ca19eba46736b5768267b2d"
+      },
+      "expected_pass": false,
+      "hidden_checks_passed": false,
+      "model_episode_executed": false,
+      "negative_counterexample": true,
+      "observed_expected_outcome": true,
+      "official_evaluator_executed": true,
+      "official_score": 0.0,
+      "real_vm_executed": true,
+      "semantic_check_ids": [],
+      "url": "shell:cp '/home/user/.config/google-chrome/Default/Preferences' /tmp/unchanged-chrome-preferences.json"
+    },
+    {
+      "canonical_oracle": false,
+      "checkpoint_changed": true,
+      "control_checks_passed": false,
+      "control_ids": [],
+      "episode": "negative_wrong_site",
+      "equivalent_solution": false,
+      "event_receipt": {
+        "producer": "evaluator_owned_read_only_snapshot_worker",
+        "raw_evidence": {
+          "target_url": "extensionpref:negative"
+        },
+        "release_after_digest": "60be044c16610372aa6a49c1e0f8e3c8e18f890466078b00820936e31ab167a1"
+      },
+      "expected_pass": false,
+      "hidden_checks_passed": false,
+      "model_episode_executed": false,
+      "negative_counterexample": true,
+      "observed_expected_outcome": true,
+      "official_evaluator_executed": true,
+      "official_score": 0.0,
+      "real_vm_executed": true,
+      "semantic_check_ids": [],
+      "url": "extensionpref:negative"
+    }
+  ],
+  "episode_owner": "evaluator",
+  "equivalent": {
+    "canonical_oracle": false,
+    "checkpoint_changed": true,
+    "control_checks_passed": true,
+    "control_ids": [
+      "01_classify_authority_enable_developer_m",
+      "02_revise_affected_use_load_unpacked_",
+      "03_verify_closure_resolve_any_report"
+    ],
+    "episode": "equivalent",
+    "equivalent_solution": true,
+    "event_receipt": {
+      "producer": "evaluator_owned_read_only_snapshot_worker",
+      "raw_evidence": {
+        "target_url": "extensionpref:equivalent"
+      },
+      "release_after_digest": "441ab7cc0e33fc20b62a5d8177be00498bd8e12a49d5e92ca6f32c7d17d2a036"
+    },
+    "expected_pass": true,
+    "hidden_checks_passed": true,
+    "model_episode_executed": false,
+    "negative_counterexample": false,
+    "observed_expected_outcome": true,
+    "official_evaluator_executed": true,
+    "official_score": 1.0,
+    "real_vm_executed": true,
+    "semantic_check_ids": [
+      "official_metric_01",
+      "persisted_target_state",
+      "post_event_reverification"
+    ],
+    "url": "extensionpref:equivalent"
+  },
+  "evidence_sha256": "fa85af61604b047b267c06cf13fabc93b33fe2b00ce1514ce5078ab2ac29b2ca",
+  "host_checkpoint": {
+    "checkpoint_sha256": "fa85af61604b047b267c06cf13fabc93b33fe2b00ce1514ce5078ab2ac29b2ca",
+    "owner": "host_runtime"
+  },
+  "model_episode_executed": false,
+  "native_evaluator_verified": true,
+  "passed": true,
+  "schema_version": "async-rbench-osworld-canonical-family-v1",
+  "source_native_marble_verified": true
+}

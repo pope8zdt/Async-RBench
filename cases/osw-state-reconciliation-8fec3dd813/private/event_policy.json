@@ -1,0 +1,33 @@
+{
+  "theme": "partial_then_complete_result",
+  "event_id": "evt.osw_state_reconciliation_8fec3dd813.partial_then_complete_result",
+  "authority_rule": "workspace_window_and_tab_state is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.project_archive",
+      "req.02.nautilus_window",
+      "req.03.terminal_window",
+      "req.04.chrome_tabs",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The completed state combines the audited OSWorld archive, an OSWorld Nautilus window, a terminal rooted at ~/Documents/Projects/OSWorld, and the exact GitHub and Python documentation tabs.",
+    "before_state": "Project extraction can finish before desktop-window and browser-tab observations; each observation alone is only partial workspace evidence.",
+    "event_id": "evt.osw_state_reconciliation_8fec3dd813.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

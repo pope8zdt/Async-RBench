@@ -1,0 +1,187 @@
+{
+  "case_id": "mab-dependency-unblock-309c3b9f50",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_checkpoint",
+      "forbidden_behavior": "Do not finalize from the provisional diagnosis or accept a receipt without the exact case/source and checkpoint evidence.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "01_classify_authority_checkpoint",
+      "must_still_pass": [
+        "mab_dependency_unblock_309c3b9f50.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_309c3b9f50.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After the provisional transportation operations diagnosis is persisted, accept the delayed database:016 receipt only after validating its identity and the post-checkpoint blocker/waiter probe showing a timed-out waiter and live blocker lock rows.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_from_authority",
+      "forbidden_behavior": "Do not retain the displaced tentative cause and do not erase unaffected specialist findings.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "02_revise_from_authority",
+      "must_still_pass": [
+        "mab_dependency_unblock_309c3b9f50.source.pin"
+      ],
+      "mutation_family": "resolve_authority",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_309c3b9f50.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Use the post-checkpoint blocker/waiter probe showing a timed-out waiter and live blocker lock rows to revise the affected diagnosis while preserving the completed transportation operations findings.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    },
+    {
+      "critical": true,
+      "decision_group": "03_verify_closure",
+      "forbidden_behavior": "Do not declare closure without rechecking the exact cause, authority digests, preservation list, and output schema.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "03_verify_closure",
+      "must_still_pass": [
+        "mab_dependency_unblock_309c3b9f50.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_309c3b9f50.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Rederive the final transportation operations diagnosis from the delayed authority receipt, native evaluator binding, and preserved hypothesis record.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.authority_bound_database_diagnosis"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.authority_bound_database_diagnosis",
+        "target": "req.02.preserve_unaffected_findings"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_unaffected_findings",
+        "target": "req.03.receipt_bound_closure"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.receipt_bound_closure",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.authority_bound_database_diagnosis",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_unaffected_findings",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.receipt_bound_closure",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.authority_bound_database_diagnosis",
+      "req.02.preserve_unaffected_findings",
+      "req.03.receipt_bound_closure",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:016 authority receipt releases the post-checkpoint blocker/waiter probe showing a timed-out waiter and live blocker lock rows.",
+    "before_state": "The transportation operations schema review and provisional hypothesis matrix are persisted without evaluator truth.",
+    "event_id": "evt.mab_transport_db016.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "source-native-rebuild",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Validate the delayed database:016 receipt and its task-specific database evidence.",
+      "id": "req.01.authority_bound_database_diagnosis",
+      "observable_probe": "mab_dependency_unblock_309c3b9f50.authority.evidence",
+      "public_evidence": "case-bound evaluator receipt"
+    },
+    {
+      "description": "Preserve still-valid findings for transportation operations while revising only the displaced diagnosis.",
+      "id": "req.02.preserve_unaffected_findings",
+      "observable_probe": "mab_dependency_unblock_309c3b9f50.output.schema",
+      "public_evidence": "preserved hypothesis record"
+    },
+    {
+      "description": "Rederive and verify the final diagnosis under the native database evaluator contract.",
+      "id": "req.03.receipt_bound_closure",
+      "observable_probe": "mab_dependency_unblock_309c3b9f50.closure",
+      "public_evidence": "receipt-bound closure"
+    }
+  ]
+}

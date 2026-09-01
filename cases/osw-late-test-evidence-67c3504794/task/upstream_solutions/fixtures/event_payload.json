@@ -1,0 +1,50 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-late-test-evidence-67c3504794",
+  "source_task_id": "osworld:multi_apps:26660ad1-6ebb-4f59-8cba-a8432dfe8d38",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "speedtest_measurement_result",
+  "upstream_dependency_graph": [
+    {
+      "id": "speedtest_execution",
+      "app": "Chrome speedtest worker",
+      "description": "Run the measurement at speedtest.net and wait for completion."
+    },
+    {
+      "id": "result_extraction",
+      "app": "Browser result worker",
+      "description": "Extract Ping, Download, and Upload values from the completed result.",
+      "depends_on": [
+        "speedtest_execution"
+      ]
+    },
+    {
+      "id": "results_file_validation",
+      "app": "Filesystem worker",
+      "description": "Write and validate the three single-space metric lines.",
+      "depends_on": [
+        "result_extraction"
+      ]
+    }
+  ],
+  "state": {
+    "service_url": "https://www.speedtest.net/",
+    "output_path": "/home/user/Test/Speed/results.txt",
+    "metric_lines": [
+      "Ping 18 ms",
+      "Download 96.4 Mbps",
+      "Upload 31.7 Mbps"
+    ],
+    "metric_order": [
+      "Ping",
+      "Download",
+      "Upload"
+    ],
+    "line_count": 3,
+    "single_space_after_metric": true,
+    "all_values_nonempty": true
+  },
+  "task_assertion": "~/Test/Speed/results.txt contains exactly one non-empty Ping, Download, and Upload metric line, each formatted as metric name, one space, then its measured value.",
+  "finding": "The delayed speedtest result supplies three complete metric lines—Ping, Download, and Upload—written to ~/Test/Speed/results.txt with one metric per line and a single separator space."
+}
+

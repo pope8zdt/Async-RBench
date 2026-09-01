@@ -1,0 +1,218 @@
+{
+  "case_id": "osw-dependency-unblock-ba52abb8a2",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_enable_developer_mode_if_it_",
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions page is open.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enable_developer_mode_if"
+        ]
+      },
+      "id": "01_classify_authority_enable_developer_m",
+      "must_still_pass": [
+        "osw_dependency_unblock_b.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_ba52abb8a2.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "For event 'An archive worker returns the concrete extracted extension directory on the Desktop and confirms that its root contains a valid manifest.json.', perform classify_authority for 'Enable Developer mode if it is not already enabled.' while retaining valid prior result 'Chrome's extensions page is open.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.enable_developer_mode_if"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_use_load_unpacked_with_the_r",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Developer mode is enabled or ready to enable.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enable_developer_mode_if"
+        ]
+      },
+      "id": "02_revise_affected_use_load_unpacked_",
+      "must_still_pass": [
+        "osw_dependency_unblock_b.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_ba52abb8a2.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'An archive worker returns the concrete extracted extension directory on the Desktop and confirms that its root contains a valid manifest.json.', perform revise_affected for 'Use Load unpacked with the returned manifest-root directory.' while retaining valid prior result 'Developer mode is enabled or ready to enable.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.enable_developer_mode_if"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_resolve_any_reported_manifes",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions page is open.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enable_developer_mode_if"
+        ]
+      },
+      "id": "03_verify_closure_resolve_any_report",
+      "must_still_pass": [
+        "osw_dependency_unblock_b.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_ba52abb8a2.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'An archive worker returns the concrete extracted extension directory on the Desktop and confirms that its root contains a valid manifest.json.', perform verify_closure for 'Resolve any reported manifest error without selecting a parent archive directory.' while retaining valid prior result 'Chrome's extensions page is open.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.enable_developer_mode_if"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.enable_developer_mode_if"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.use_load_unpacked_with_t"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.resolve_any_reported_man"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.verify_the_extension_app"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.enable_developer_mode_if",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.use_load_unpacked_with_t",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.resolve_any_reported_man",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.verify_the_extension_app",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.enable_developer_mode_if",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.use_load_unpacked_with_t",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.resolve_any_reported_man",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.verify_the_extension_app",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.enable_developer_mode_if",
+      "req.02.use_load_unpacked_with_t",
+      "req.03.resolve_any_reported_man",
+      "req.04.verify_the_extension_app",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An archive worker returns the concrete extracted extension directory on the Desktop and confirms that its root contains a valid manifest.json.",
+    "before_state": "Deliver the validated extraction directory after Chrome preparation and after navigation has drifted to an unrelated sign-in page.",
+    "event_id": "evt.osw_dependency_unblock_b.delayed_authoritative_re",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Enable Developer mode if it is not already enabled.",
+      "id": "req.01.enable_developer_mode_if",
+      "observable_probe": "osw_dependency_unblock_b.sem.01.the_persisted_desktop_artifa",
+      "public_evidence": "source instruction and workstream result for enable_developer_mode_if_it_is_not_a"
+    },
+    {
+      "description": "Use Load unpacked with the returned manifest-root directory.",
+      "id": "req.02.use_load_unpacked_with_t",
+      "observable_probe": "osw_dependency_unblock_b.sem.02.the_required_result_artifact",
+      "public_evidence": "source instruction and workstream result for use_load_unpacked_with_the_returned_"
+    },
+    {
+      "description": "Resolve any reported manifest error without selecting a parent archive directory.",
+      "id": "req.03.resolve_any_reported_man",
+      "observable_probe": "osw_dependency_unblock_b.sem.03.enable_developer_mode_if_it_",
+      "public_evidence": "source instruction and workstream result for resolve_any_reported_manifest_error_"
+    },
+    {
+      "description": "Verify the extension appears enabled in Chrome.",
+      "id": "req.04.verify_the_extension_app",
+      "observable_probe": "osw_dependency_unblock_b.sem.04.use_load_unpacked_with_the_r",
+      "public_evidence": "source instruction and workstream result for verify_the_extension_appears_enabled"
+    }
+  ]
+}

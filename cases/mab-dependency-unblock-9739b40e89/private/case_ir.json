@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-9739b40e89",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_replace_snapshot_synchroniza",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_snapshot_synchro"
+        ]
+      },
+      "id": "01_classify_critical_path_replace_snapshot_s",
+      "must_still_pass": [
+        "mab_dependency_unblock_9.sem.28.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_dependency_unblock_9739b40e89.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "required_behavior": "For event 'A backend specialist returns the task-specific room event contract for sessions, participants, edit operations, playback position, votes, and leaderboard updates.', perform classify_critical_path for 'Replace snapshot synchronization with the returned ordered edit events.' while retaining valid prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_snapshot_synchro"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_implement_join_leave_resync_",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Room and chat interfaces emit provisional synchronization events.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_snapshot_synchro"
+        ]
+      },
+      "id": "02_resource_triage_implement_join_lea",
+      "must_still_pass": [
+        "mab_dependency_unblock_9.sem.28.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_dependency_unblock_9739b40e89.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "required_behavior": "For event 'A backend specialist returns the task-specific room event contract for sessions, participants, edit operations, playback position, votes, and leaderboard updates.', perform resource_triage for 'Implement join, leave, resync, and playback-position handling.' while retaining valid prior result 'Room and chat interfaces emit provisional synchronization events.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.replace_snapshot_synchro"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_enforce_one_idempotent_vote_",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_snapshot_synchro"
+        ]
+      },
+      "id": "03_verify_closure_enforce_one_idempo",
+      "must_still_pass": [
+        "mab_dependency_unblock_9.sem.28.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_9739b40e89.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'A backend specialist returns the task-specific room event contract for sessions, participants, edit operations, playback position, votes, and leaderboard updates.', perform verify_closure for 'Enforce one idempotent vote per user and mashup.' while retaining valid prior result 'Track selection, effect configuration, and local mashup preview are implemented.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.replace_snapshot_synchro"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.replace_snapshot_synchro"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_join_leave_res"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.enforce_one_idempotent_v"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.update_leaderboard_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.replace_snapshot_synchro",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_join_leave_res",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.enforce_one_idempotent_v",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.update_leaderboard_state",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.replace_snapshot_synchro",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_join_leave_res",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.enforce_one_idempotent_v",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.update_leaderboard_state",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.replace_snapshot_synchro",
+      "req.02.implement_join_leave_res",
+      "req.03.enforce_one_idempotent_v",
+      "req.04.update_leaderboard_state",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A backend specialist returns the task-specific room event contract for sessions, participants, edit operations, playback position, votes, and leaderboard updates.",
+    "before_state": "Delay the backend event contract until audio/UI work and provisional room synchronization have been implemented.",
+    "event_id": "evt.mab_dependency_unblock_9.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Replace snapshot synchronization with the returned ordered edit events.",
+      "id": "req.01.replace_snapshot_synchro",
+      "observable_probe": "mab_dependency_unblock_9.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for replace_snapshot_synchronization_wit"
+    },
+    {
+      "description": "Implement join, leave, resync, and playback-position handling.",
+      "id": "req.02.implement_join_leave_res",
+      "observable_probe": "mab_dependency_unblock_9.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for implement_join_leave_resync_and_play"
+    },
+    {
+      "description": "Enforce one idempotent vote per user and mashup.",
+      "id": "req.03.enforce_one_idempotent_v",
+      "observable_probe": "mab_dependency_unblock_9.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for enforce_one_idempotent_vote_per_user"
+    },
+    {
+      "description": "Update leaderboard state from accepted vote events.",
+      "id": "req.04.update_leaderboard_state",
+      "observable_probe": "mab_dependency_unblock_9.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for update_leaderboard_state_from_accept"
+    }
+  ]
+}

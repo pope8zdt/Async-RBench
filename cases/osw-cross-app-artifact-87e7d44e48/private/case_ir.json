@@ -1,0 +1,281 @@
+{
+  "async_depth": 3,
+  "case_id": "osw-cross-app-artifact-87e7d44e48",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_futian_locations_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "01_classify_authority_futian_locations_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_87e7d44e48.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed verified_futian_24h_locations; preserve unaffected chrome/os/writer state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_futian_locations_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "02_revise_affected_futian_locations_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_87e7d44e48.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed verified_futian_24h_locations; preserve unaffected chrome/os/writer state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.location_count"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_futian_locations_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "03_verify_closure_futian_locations_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_87e7d44e48.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed verified_futian_24h_locations; preserve unaffected chrome/os/writer state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.eligibility"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "depends_on",
+        "source": "upstream.location_research",
+        "target": "upstream.futian_eligibility_filter"
+      },
+      {
+        "relation": "depends_on",
+        "source": "upstream.futian_eligibility_filter",
+        "target": "upstream.chinese_address_normalization"
+      },
+      {
+        "relation": "produces",
+        "source": "upstream.chinese_address_normalization",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.output_path"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.output_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.location_count"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.location_count",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.eligibility"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.eligibility",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.04.chinese_addresses"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.chinese_addresses",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "Chrome",
+        "description": "Research Shenzhen 24-hour self-service endorsement machine listings.",
+        "id": "upstream.location_research",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "Chrome",
+        "description": "Keep only Futian District entries explicitly eligible for 24-hour service.",
+        "id": "upstream.futian_eligibility_filter",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "Writer",
+        "description": "Normalize five distinct qualifying addresses in Chinese.",
+        "id": "upstream.chinese_address_normalization",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.location_count",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.eligibility",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.chinese_addresses",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.location_count",
+      "req.03.eligibility",
+      "req.04.chinese_addresses",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The research worker returns five distinct rule-listed Futian addresses verified as 24-hour self-service endorsement locations.",
+    "before_state": "The blank Writer document is open, but authoritative Futian eligibility and Chinese addresses still require browser research.",
+    "event_id": "evt.osw_cross_app_artifact_87e7d44e48.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Use exactly five distinct qualifying Futian locations.",
+      "id": "req.01.output_path",
+      "observable_probe": "osw_cross_app_artifact_87e7d44e48.osworld.output_path",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Write every address in Chinese.",
+      "id": "req.02.location_count",
+      "observable_probe": "osw_cross_app_artifact_87e7d44e48.osworld.location_count",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Exclude non-Futian, non-24-hour, English-only and duplicate entries.",
+      "id": "req.03.eligibility",
+      "observable_probe": "osw_cross_app_artifact_87e7d44e48.osworld.eligibility",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Save the addresses in the already-open AllLocations.docx.",
+      "id": "req.04.chinese_addresses",
+      "observable_probe": "osw_cross_app_artifact_87e7d44e48.osworld.chinese_addresses",
+      "public_evidence": "source instruction and delayed authority receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "Chrome",
+      "description": "Research Shenzhen 24-hour self-service endorsement machine listings.",
+      "id": "location_research"
+    },
+    {
+      "app": "Chrome",
+      "depends_on": [
+        "location_research"
+      ],
+      "description": "Keep only Futian District entries explicitly eligible for 24-hour service.",
+      "id": "futian_eligibility_filter"
+    },
+    {
+      "app": "Writer",
+      "depends_on": [
+        "futian_eligibility_filter"
+      ],
+      "description": "Normalize five distinct qualifying addresses in Chinese.",
+      "id": "chinese_address_normalization"
+    }
+  ]
+}

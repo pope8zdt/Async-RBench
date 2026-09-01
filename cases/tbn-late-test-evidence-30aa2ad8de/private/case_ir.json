@@ -1,0 +1,197 @@
+{
+  "case_id": "tbn-late-test-evidence-30aa2ad8de",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_the_main_agent_continues_con",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.the_main_agent_continues"
+        ]
+      },
+      "id": "01_classify_scope_delta_the_main_agent_con",
+      "must_still_pass": [
+        "tbn_late_test_evidence_3.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con",
+        "tbn_late_test_evidence_3.sem.02.no_stale_action_survives_in_",
+        "tbn_late_test_evidence_3.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_late_test_evidence_3.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con, tbn_late_test_evidence_3.sem.02.no_stale_action_survives_in_, tbn_late_test_evidence_3.sem.03.no_unrelated_or_duplicate_ac, tbn_late_test_evidence_3.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'late_authoritative_result', perform classify_scope_delta for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.the_main_agent_continues"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_the_main_agent_continues_con",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.the_main_agent_continues"
+        ]
+      },
+      "id": "02_revise_affected_the_main_agent_con",
+      "must_still_pass": [
+        "tbn_late_test_evidence_3.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con",
+        "tbn_late_test_evidence_3.sem.02.no_stale_action_survives_in_",
+        "tbn_late_test_evidence_3.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_late_test_evidence_3.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con, tbn_late_test_evidence_3.sem.02.no_stale_action_survives_in_, tbn_late_test_evidence_3.sem.03.no_unrelated_or_duplicate_ac, tbn_late_test_evidence_3.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'late_authoritative_result', perform revise_affected for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.the_main_agent_continues"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_the_main_agent_continues_con",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.the_main_agent_continues"
+        ]
+      },
+      "id": "03_preserve_unaffected_the_main_agent_con",
+      "must_still_pass": [
+        "tbn_late_test_evidence_3.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con",
+        "tbn_late_test_evidence_3.sem.02.no_stale_action_survives_in_",
+        "tbn_late_test_evidence_3.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_late_test_evidence_3.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con, tbn_late_test_evidence_3.sem.02.no_stale_action_survives_in_, tbn_late_test_evidence_3.sem.03.no_unrelated_or_duplicate_ac, tbn_late_test_evidence_3.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'late_authoritative_result', perform preserve_unaffected for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.the_main_agent_continues"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_the_main_agent_continues_con",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.the_main_agent_continues"
+        ]
+      },
+      "id": "04_verify_closure_the_main_agent_con",
+      "must_still_pass": [
+        "tbn_late_test_evidence_3.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con",
+        "tbn_late_test_evidence_3.sem.02.no_stale_action_survives_in_",
+        "tbn_late_test_evidence_3.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_late_test_evidence_3.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con, tbn_late_test_evidence_3.sem.02.no_stale_action_survives_in_, tbn_late_test_evidence_3.sem.03.no_unrelated_or_duplicate_ac, tbn_late_test_evidence_3.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'late_authoritative_result', perform verify_closure for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.the_main_agent_continues"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.the_main_agent_continues"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.the_main_agent_continues",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.the_main_agent_continues",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.the_main_agent_continues",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "late_authoritative_result",
+    "before_state": "useful source work is already persisted",
+    "event_id": "evt.tbn_late_test_evidence_3.task_scope_or_dependency",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The main agent continues configuration, deployment, or completion preparation while the probe runs.",
+      "id": "req.01.the_main_agent_continues",
+      "observable_probe": "tbn_late_test_evidence_3.sem.01.the_main_agent_continues_con",
+      "public_evidence": "source instruction and workstream result for the_main_agent_continues_configurati"
+    }
+  ]
+}

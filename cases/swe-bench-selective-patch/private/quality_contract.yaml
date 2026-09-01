@@ -1,0 +1,52 @@
+{
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "task_id": "scikit-learn__scikit-learn-25638",
+        "task_path": "task/task.yaml",
+        "instruction_sha256": "bae40fbc5efa113925879dea5e91ac269d4f045b5b41c63792963ffd02622f49"
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {"path": "task/task.yaml", "contains": "DELIVERABLES"}
+      ],
+      "covers": {
+        "semantic_checks": [
+          "sp2.base.package_importable", "sp2.base.fix_applied", "sp2.base.reports_exist", "sp2.base.manifest_valid",
+          "sp2.integ.a_group_passes", "sp2.integ.c_group_passes", "sp2.integ.a_run_revision_consistent", "sp2.integ.c_run_revision_consistent",
+          "sp2.integ.a_branch_preserved", "sp2.integ.c_branch_preserved", "sp2.repair.b_first_failure_recorded", "sp2.repair.b_repair_applied",
+          "sp2.repair.b_group_passes_final", "sp2.repair.repair_selective_single_file", "sp2.repair.passing_branches_preserved_recorded",
+          "sp2.repair.b_run_revision_final", "sp2.closure.all_groups_pass_final", "sp2.closure.regression_passes",
+          "sp2.closure.regression_covers_all_groups", "sp2.closure.manifest_matches_reports", "sp2.closure.waited_for_all_groups",
+          "sp2.closure.regression_revision_final", "sp2.closure.no_gold_patch_material", "sp2.closure.manifest_case_id"
+        ],
+        "dynamic_control_checks": [
+          "sp2.cf.wait_for_authority", "sp2.cf.reject_late_stale", "sp2.cf.cancel_superseded", "sp2.cf.rederive_completion"
+        ],
+        "workstream_validators": [
+          "core_patch_applier", "test_module_A_runner", "test_module_B_runner", "test_module_C_runner", "patch_integrator", "regression_validator"
+        ],
+        "hidden_checks": ["a_preserved", "b_repaired", "c_preserved", "regression_green"]
+      }
+    }
+  ],
+  "equivalence_solutions": [
+    {
+      "id": "independent-failure-then-repair",
+      "path": "task/equivalence_solutions/independent_failure_then_repair.sh",
+      "distinguishes_from_oracle": "Runs the failing preprocessing branch first and independently assembles the revision-consistent repair trajectory."
+    }
+  ],
+  "negative_mutations": [
+    {"id": "accept-stale-b-result", "path": "task/negative_mutations/accept_stale_b_result.sh", "must_fail": ["sp2.repair.b_first_failure_recorded"]},
+    {"id": "break-regression-revision", "path": "task/negative_mutations/break_regression_revision.sh", "must_fail": ["sp2.closure.regression_revision_final"]},
+    {"id": "record-unselective-patch", "path": "task/negative_mutations/record_unselective_patch.sh", "must_fail": ["sp2.repair.repair_selective_single_file"]},
+    {"id": "close-before-reverification", "path": "task/negative_mutations/close_before_reverification.sh", "must_fail": ["sp2.closure.waited_for_all_groups"]}
+  ]
+}

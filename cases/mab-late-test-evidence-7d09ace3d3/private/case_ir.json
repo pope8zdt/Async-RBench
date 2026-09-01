@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-late-test-evidence-7d09ace3d3",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_duplicate_language_edge_test_evidence_re",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_unique_users_and_g"
+        ]
+      },
+      "id": "01_classify_duplicate_language_edge_test_e",
+      "must_still_pass": [
+        "mab_late_test_evidence_7d09ace3d3.source.preservation"
+      ],
+      "mutation_family": "classify_duplicate",
+      "obligation": "classify_duplicate",
+      "outcome_anchors": [
+        "mab_late_test_evidence_7d09ace3d3.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_duplicate:1",
+      "required_behavior": "classify_duplicate: A replayed edge-test completion must be deduplicated while retaining multi-user exercises, real-time feedback, access control, submissions, and independent peer reviews.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_unique_users_and_g"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_idempotency_language_edge_test_evidence_re",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "gate": "deduplicate_completion",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_sharing_authorizat"
+        ]
+      },
+      "id": "02_preserve_idempotency_language_edge_test_e",
+      "must_still_pass": [
+        "mab_late_test_evidence_7d09ace3d3.source.preservation"
+      ],
+      "mutation_family": "preserve_idempotency",
+      "obligation": "preserve_idempotency",
+      "outcome_anchors": [
+        "mab_late_test_evidence_7d09ace3d3.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:preserve_idempotency:2",
+      "required_behavior": "preserve_idempotency: A replayed edge-test completion must be deduplicated while retaining multi-user exercises, real-time feedback, access control, submissions, and independent peer reviews.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_sharing_authorizat"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_language_edge_test_evidence_re",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_submissions_and_in"
+        ]
+      },
+      "id": "03_verify_closure_language_edge_test_e",
+      "must_still_pass": [
+        "mab_late_test_evidence_7d09ace3d3.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_test_evidence_7d09ace3d3.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A replayed edge-test completion must be deduplicated while retaining multi-user exercises, real-time feedback, access control, submissions, and independent peer reviews.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_submissions_and_in"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_unique_users_and_g"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_sharing_authorizat"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_submissions_and_in"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.consume_the_replayed_edge_te"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_unique_users_and_g",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_sharing_authorizat",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_submissions_and_in",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.consume_the_replayed_edge_te",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_unique_users_and_g",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_sharing_authorizat",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_submissions_and_in",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.consume_the_replayed_edge_te",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_unique_users_and_g",
+      "req.02.implement_sharing_authorizat",
+      "req.03.implement_submissions_and_in",
+      "req.04.consume_the_replayed_edge_te",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The evidence is consumed once, private access and review rules are reverified, and no duplicate learning side effects are created.",
+    "before_state": "Collaborative exercises and reviews exist, but the edge-test completion may be delivered more than once.",
+    "event_id": "evt.mab_late_test_evidence_7d09.language_edge_test_evidence_replayed",
+    "primary_event_theme": "duplicate_or_replayed_completion",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement unique users and grammar, vocabulary, and writing exercises.",
+      "id": "req.01.implement_unique_users_and_g",
+      "observable_probe": "mab_late_test_evidence_7d09ace3d3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement sharing authorization and immediate quiz/writing feedback.",
+      "id": "req.02.implement_sharing_authorizat",
+      "observable_probe": "mab_late_test_evidence_7d09ace3d3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement submissions and independent peer reviews while preserving learning history.",
+      "id": "req.03.implement_submissions_and_in",
+      "observable_probe": "mab_late_test_evidence_7d09ace3d3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Consume the replayed edge-test evidence idempotently and reverify closure exactly once.",
+      "id": "req.04.consume_the_replayed_edge_te",
+      "observable_probe": "mab_late_test_evidence_7d09ace3d3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

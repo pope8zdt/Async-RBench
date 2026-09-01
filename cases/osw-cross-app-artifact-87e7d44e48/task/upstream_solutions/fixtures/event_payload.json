@@ -1,0 +1,48 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-87e7d44e48",
+  "source_task_id": "osworld:multi_apps:7ff48d5b-2df2-49da-b500-a5150ffc7f18",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "verified_futian_24h_locations",
+  "upstream_dependency_graph": [
+    {
+      "id": "location_research",
+      "app": "Chrome",
+      "description": "Research Shenzhen 24-hour self-service endorsement machine listings."
+    },
+    {
+      "id": "futian_eligibility_filter",
+      "app": "Chrome",
+      "description": "Keep only Futian District entries explicitly eligible for 24-hour service.",
+      "depends_on": [
+        "location_research"
+      ]
+    },
+    {
+      "id": "chinese_address_normalization",
+      "app": "Writer",
+      "description": "Normalize five distinct qualifying addresses in Chinese.",
+      "depends_on": [
+        "futian_eligibility_filter"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/Desktop/AllLocations.docx",
+    "location_count": 5,
+    "distinct": true,
+    "language": "zh-CN",
+    "district": "福田区",
+    "service_hours": "24-hour",
+    "addresses": [
+      "深圳市福田区益田路5055号信息枢纽大厦西门一楼",
+      "深圳市福田区福华三路111号北三门会展中心警务室",
+      "深圳市福田区正义街1号",
+      "福田区莲科路18号莲花一村警务室",
+      "深圳市福田区彩云路2-8长城盛世家园一期C座一楼一期管理处旁边"
+    ]
+  },
+  "task_assertion": "AllLocations.docx contains exactly five distinct Chinese Futian addresses accepted by the official fuzzy_place_math rule.",
+  "finding": "The research worker returns five distinct rule-listed Futian addresses verified as 24-hour self-service endorsement locations."
+}
+

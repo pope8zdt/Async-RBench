@@ -1,0 +1,17 @@
+{
+  "accepted": true,
+  "accepted_episode_owner": "evaluator",
+  "model_episode_required": false,
+  "native_report": "private/native_canonical_report.json",
+  "requirements": [
+    "official coding:004 solution.py contract",
+    "Normalized quotes are currency-converted before best-price selection; unavailable or stale quotes cannot trigger threshold alerts, including a lower second-retailer quote case.",
+    "Recovered multi-retailer comparison replaces scalar prices while user thresholds, groups, shared alerts, and notification preferences remain intact."
+  ],
+  "task_specific_acceptance": [
+    "Normalized quotes are currency-converted before best-price selection; unavailable or stale quotes cannot trigger threshold alerts, including a lower second-retailer quote case.",
+    "Recovered multi-retailer comparison replaces scalar prices while user thresholds, groups, shared alerts, and notification preferences remain intact.",
+    "Preserve user_thresholds, group_membership, shared_alerts, notification_preferences.",
+    "Four upstream results form the end-to-end dependency graph."
+  ]
+}

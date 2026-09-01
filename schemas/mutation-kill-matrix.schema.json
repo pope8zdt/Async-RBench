@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Async-RBench executed mutation evidence",
+  "type": "object",
+  "required": ["schema_version", "rows"],
+  "properties": {
+    "schema_version": {"const": "2.0"},
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "mutation_id", "case_id", "family_id", "variant", "executed",
+          "target_point_ids", "killed_point_ids", "artifact_mutation_sha256",
+          "baseline_verifier", "mutated_verifier"
+        ],
+        "properties": {
+          "mutation_id": {"type": "string", "minLength": 1},
+          "case_id": {"type": "string", "minLength": 1},
+          "family_id": {"type": "string", "minLength": 1},
+          "variant": {"type": "string", "minLength": 1},
+          "executed": {"const": true},
+          "target_point_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "killed_point_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "artifact_mutation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "baseline_verifier": {"$ref": "#/$defs/report"},
+          "mutated_verifier": {"$ref": "#/$defs/report"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "$defs": {
+    "report": {
+      "type": "object",
+      "required": ["report_path", "report_sha256"],
+      "properties": {
+        "report_path": {"type": "string", "minLength": 1},
+        "report_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

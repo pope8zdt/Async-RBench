@@ -1,0 +1,20 @@
+Add voice-broadcast recording models and a recordings store with explicit state-change events, lifecycle management, and public exports while preserving existing voice-broadcast component behavior.
+
+ASYNC-RBENCH EXTENSION
+
+The source task above remains the final-state contract. The benchmark starts
+4 independent workstreams whose evidence may arrive after you
+have begun the implementation. Their public scopes are:
+- Workstream 1: Move every reported per-recording state transition into VoiceBroadcastRecording.
+- Workstream 2: Implement VoiceBroadcastRecordingsStore ownership and current-recording selection according to the graph.
+- Workstream 3: Route startNewVoiceBroadcastRecording through the store.
+- Workstream 4: Update each reported consumer to subscribe to model or store events instead of legacy state.
+
+Before closing the task, persist a provisional checkpoint at
+`/app/output_data/provisional_checkpoint.json` and a record of source facts
+that remain valid at `/app/output_data/preserved_source_facts.json`. Consume
+the delivered receipt for `instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan`, revise only state affected by that
+evidence, rerun the source-native checks, and write
+`/app/output_data/decision_manifest.json` with the provided manifest script.
+The final state must satisfy the original task even when completion order
+differs; a response without the receipt-bound closure artifacts is incomplete.

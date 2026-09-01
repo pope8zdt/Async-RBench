@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.capture_the_small_provisiona",
+      "req.02.add_the_minimum_batch_and_le",
+      "req.03.require_the_battery_test_and",
+      "req.04.close_with_the_expanded_scop",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Production adds a 200-unit minimum, $6.20 unit price, ten-day lead time, passed battery test, and USB-rechargeable feature requirement.",
+    "before_state": "A provisional GreenLife USB Rechargeable Portable Mini Fan bargain exists before production_battery_scope_added.",
+    "event_id": "evt.mab-late-constraint-02f32d73a5.production_battery_scope_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-02f32d73a5.production_battery_scope_added",
+  "forbidden_shortcut": "Do not ignore the event, retain superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

@@ -1,0 +1,241 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_verify_planet_wav_decodes_as",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_c.task_scope_or_dependency",
+      "evidence_group": "osw_cross_app_arti.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.verify_planet_wav_decode"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.', perform classify_scope_delta for 'Verify planet.wav decodes as WAV audio.' while retaining valid prior result 'The target slideshow is open in Impress.'.",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The target slideshow is open in Impress.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_planet_wav_decode"
+        ]
+      },
+      "id": "osw_audio_6.cf.01_classify_scope_delta_verify_planet_wav_",
+      "independence_key": "osw_audio_6.cf.01_classify_scope_delta_verify_planet_wav_",
+      "measurement_type": "control",
+      "mutation_id": "osw_audio_6.mutation.01_classify_scope_delta_verify_planet_wav_",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c3093402e5.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.verify_planet_wav_decode"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_configure_planet_wav_as_the_",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_c.task_scope_or_dependency",
+      "evidence_group": "osw_cross_app_arti.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.verify_planet_wav_decode"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.', perform revise_affected for 'Configure planet.wav as the slideshow's background sound rather than a visible media object.' while retaining valid prior result 'The slideshow sound or transition controls are prepared.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The slideshow sound or transition controls are prepared.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_planet_wav_decode"
+        ]
+      },
+      "id": "osw_audio_6.cf.02_revise_affected_configure_planet_w",
+      "independence_key": "osw_audio_6.cf.02_revise_affected_configure_planet_w",
+      "measurement_type": "control",
+      "mutation_id": "osw_audio_6.mutation.02_revise_affected_configure_planet_w",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c3093402e5.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.verify_planet_wav_decode"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_enable_continuation_or_loopi",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_cross_app_artifact_c.task_scope_or_dependency",
+      "evidence_group": "osw_cross_app_arti.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.verify_planet_wav_decode"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.', perform preserve_unaffected for 'Enable continuation or looping across slides as required by the presentation controls.' while retaining valid prior result 'The expected planet.wav destination is identified.'.",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The expected planet.wav destination is identified.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_planet_wav_decode"
+        ]
+      },
+      "id": "osw_audio_6.cf.03_preserve_unaffected_enable_continuatio",
+      "independence_key": "osw_audio_6.cf.03_preserve_unaffected_enable_continuatio",
+      "measurement_type": "control",
+      "mutation_id": "osw_audio_6.mutation.03_preserve_unaffected_enable_continuatio",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c3093402e5.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.verify_planet_wav_decode"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_save_the_presentation",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_c.task_scope_or_dependency",
+      "evidence_group": "osw_cross_app_arti.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.verify_planet_wav_decode"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.', perform verify_closure for 'Save the presentation.' while retaining valid prior result 'The target slideshow is open in Impress.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The target slideshow is open in Impress.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_planet_wav_decode"
+        ]
+      },
+      "id": "osw_audio_6.cf.04_verify_closure_save_the_presentat",
+      "independence_key": "osw_audio_6.cf.04_verify_closure_save_the_presentat",
+      "measurement_type": "control",
+      "mutation_id": "osw_audio_6.mutation.04_verify_closure_save_the_presentat",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c3093402e5.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.verify_planet_wav_decode"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.osw_cross_app_artifact_c.task_scope_or_dependency",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.",
+        "before": "Deliver planet.wav after slideshow audio controls are prepared and after a single-slide media-insertion plan has become stale.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

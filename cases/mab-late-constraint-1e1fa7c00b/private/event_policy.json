@@ -1,0 +1,30 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.identify_the_old_quote_as_la",
+      "req.02.replace_only_price_and_deliv",
+      "req.03.close_through_a_chronologica",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The current freight-backed counter offers the heavy-duty rustic turtle doorstop at $25.49 with seven-day delivery and supersedes the unverified $22 quote.",
+    "before_state": "A provisional Vintage Cast Iron Turtle Door Stopper bargain exists before freight_finish_counter_supersedes_quote.",
+    "event_id": "evt.mab-late-constraint-1e1fa7c00b.freight_finish_counter_supersedes_quote",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-1e1fa7c00b.freight_finish_counter_supersedes_quote",
+  "forbidden_shortcut": "Do not ignore the event, retain superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

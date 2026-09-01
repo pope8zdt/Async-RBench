@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_align_backend_routes_and_val",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+      "evidence_group": "mab_late_constrain.classify_critical_path",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.align_backend_routes_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform classify_critical_path for 'Align backend routes and validation with the returned endpoint matrix.' while retaining valid prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "mab_code40_teamsyncpro.cf.01_classify_critical_path_align_backend_rout",
+      "independence_key": "mab_code40_teamsyncpro.cf.01_classify_critical_path_align_backend_rout",
+      "measurement_type": "control",
+      "mutation_id": "mab_code40_teamsyncpro.mutation.01_classify_critical_path_align_backend_rout",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_enforce_department_and_role_",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+      "evidence_group": "mab_late_constrain.resource_triage",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.align_backend_routes_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform resource_triage for 'Enforce department and role permissions in every handler.' while retaining valid prior result 'Frontend task views and backend handlers exist behind provisional authorization checks.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Frontend task views and backend handlers exist behind provisional authorization checks.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "mab_code40_teamsyncpro.cf.02_resource_triage_enforce_department",
+      "independence_key": "mab_code40_teamsyncpro.cf.02_resource_triage_enforce_department",
+      "measurement_type": "control",
+      "mutation_id": "mab_code40_teamsyncpro.mutation.02_resource_triage_enforce_department",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_update_frontend_visibility_a",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+      "evidence_group": "mab_late_constrain.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.align_backend_routes_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform verify_closure for 'Update frontend visibility and requests to match the same contract.' while retaining valid prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "mab_code40_teamsyncpro.cf.03_verify_closure_update_frontend_vi",
+      "independence_key": "mab_code40_teamsyncpro.cf.03_verify_closure_update_frontend_vi",
+      "measurement_type": "control",
+      "mutation_id": "mab_code40_teamsyncpro.mutation.03_verify_closure_update_frontend_vi",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+      "event_theme": "straggler_under_resource_pressure",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.",
+        "before": "The RBAC/API matrix arrives after core operations and permissive provisional frontend/backend integration exist.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

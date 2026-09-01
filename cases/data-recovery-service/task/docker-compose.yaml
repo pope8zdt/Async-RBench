@@ -1,0 +1,6 @@
+services:
+  client:
+    build: .
+    image: async_rbench-data-recovery-service:locked
+    command: ["bash", "-lc", "sleep infinity"]
+    ports: ["15328:5328"]

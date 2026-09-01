@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+mkdir -p /app/output_data
+python3 - <<'PY'
+import json,pathlib
+out=pathlib.Path('/app/output_data')
+(out/'research_proposal.md').write_text("**[Question 1] - What is the problem?**\nThe problem is whether a plain non-hierarchical visual Mamba can remain spatially continuous and resolution-flexible when tokens are dynamically pruned for efficient dense prediction.\n\n**[Question 2] - Why is it interesting and important?**\nPlain encoders are easier to reuse in systems such as SAM, DINOv2, CLIP, and LLaVA, but practical deployment also needs lower token cost. Preserving 2D state continuity during pruning could make one simple encoder useful across classification, segmentation, and detection.\n\n**[Question 3] - Why is it hard?**\nMamba makes B, C, and Delta token dependent, so removing a token changes both the scan path and the hidden-state dynamics. Raster or bidirectional shortcuts can introduce spatial jumps, and a policy learned at one resolution may break adjacency or calibration at another.\n\n**[Question 4] - Why hasn't it been solved before?**\nViM and VMamba study scan organization, while PlainMamba emphasizes continuous 2D scanning; pruning work usually treats tokens as transformer units rather than state-transition links. These lines do not jointly constrain topology, hidden-state alignment, and resolution transfer.\n\n**[Question 5] - What are the key components of my approach and results?**\nTopoScan-Mamba uses the method resolution-flexible continuous 2D scanning with pruning-aware hidden-state alignment and token-importance calibration. We evaluate ImageNet-1K, ADE20K, and COCO using top-1 accuracy, mIoU, AP, FLOPs, latency, and scan-discontinuity rate; expected results retain dense-task quality while reducing compute and eliminating pruning-induced scan jumps.\n")
+(out/'provisional_checkpoint.json').write_text(json.dumps({'status':'provisional_5q_persisted','source_task_id':'research:051'},sort_keys=True)+'\n')
+(out/'preserved_source_facts.json').write_text(json.dumps({'preserved':["plain encoders are reusable", "selective scan is token dependent", "adjacent scans avoid spatial discontinuity"]},sort_keys=True)+'\n')
+PY
+python3 - <<'PY'
+import hashlib,json,pathlib,time
+p={'schema_version':'async-rbench-event-receipt-v1','case_id':'mab-late-constraint-383afddcb0','source_task_id':'research:051','event':'delayed_authoritative_research_result','result_kind':'result_02','released_at':3,'worker_started_at':time.time(),'worker_finished_at':time.time(),'worker_exit_code':0,'authority':{'title':'TopoScan-Mamba: pruning-aware continuous 2D state-space vision','method':'resolution-flexible continuous 2D scanning with pruning-aware hidden-state alignment and token-importance calibration','anchors':["PlainMamba", "continuous 2D scanning", "spatial adjacency", "token-dependent B C and Delta"],'datasets':["ImageNet-1K", "ADE20K", "COCO"],'metrics':["top-1 accuracy", "mIoU", "AP", "FLOPs", "latency", "scan-discontinuity rate"]},'native_evidence_sha256':'5d2bb6319923a931be0f9eeef35a1e253f6611526e0370942c419dae7572e6a9'}
+p['receipt_sha256']=hashlib.sha256(json.dumps(p,sort_keys=True,separators=(',',':')).encode()).hexdigest(); pathlib.Path('/app/output_data/event_receipt.json').write_text(json.dumps(p,sort_keys=True)+'\n')
+PY
+python3 /app/task_file/scripts/write_manifest.py

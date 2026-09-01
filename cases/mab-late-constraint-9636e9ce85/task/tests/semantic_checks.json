@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific dependency_approval_sla_policy_added receipt bound to coding:061.",
+      "id": "mab_late_constraint_9636e9ce85.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Office_Task_Collaboration_Manager authority runs after three upstream results.",
+      "id": "mab_late_constraint_9636e9ce85.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A late dependency, approval, and SLA policy changes task completion and alert behavior while assignments, comments, audit history, and report snapshots remain intact.",
+      "id": "mab_late_constraint_9636e9ce85.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:061.",
+      "id": "mab_late_constraint_9636e9ce85.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes OfficeTaskCollaborationManager and the office_dependency_policy_closure.",
+      "id": "mab_late_constraint_9636e9ce85.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_output_schema_task_assignment_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Completion requires finished dependencies and manager approval for high-priority work; overdue alerts target assignee and manager.",
+      "id": "mab_late_constraint_9636e9ce85.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_dependency_approval_status_and_overdue_alert_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves assignments, delegation, comments, audit history, and report snapshots.",
+      "id": "mab_late_constraint_9636e9ce85.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_delegation_comments_audit_and_reports_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The late policy selectively revises status and alert behavior and is bound to the final closure receipt.",
+      "id": "mab_late_constraint_9636e9ce85.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

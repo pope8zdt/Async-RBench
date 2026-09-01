@@ -1,0 +1,248 @@
+{
+  "case_id": "swe-late-test-evidence-345fb5c6a6",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_restore_expected_variable_fi",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located variable field cross-reference construction and Python-domain object resolution.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.restore_expected_variabl"
+        ]
+      },
+      "id": "01_classify_scope_delta_restore_expected_v",
+      "must_still_pass": [
+        "swe_late_test_evidence_3.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_test_evidence_345fb5c6a6.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "For event 'A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.', perform classify_scope_delta for 'Restore expected variable-field autolinking.' while retaining valid prior result 'Located variable field cross-reference construction and Python-domain object resolution.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.restore_expected_variabl"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_use_the_attribute_role_for_i",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Prepared an initial change to the variable field role.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.restore_expected_variabl"
+        ]
+      },
+      "id": "02_revise_affected_use_the_attribute_",
+      "must_still_pass": [
+        "swe_late_test_evidence_3.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_345fb5c6a6.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.', perform revise_affected for 'Use the attribute role for instance and class variable fields where appropriate.' while retaining valid prior result 'Prepared an initial change to the variable field role.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.restore_expected_variabl"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_constrain_reference_specific",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located variable field cross-reference construction and Python-domain object resolution.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.restore_expected_variabl"
+        ]
+      },
+      "id": "03_preserve_unaffected_constrain_referenc",
+      "must_still_pass": [
+        "swe_late_test_evidence_3.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_345fb5c6a6.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "For event 'A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.', perform preserve_unaffected for 'Constrain reference-specific attribute lookup to the active class or module before broader matching.' while retaining valid prior result 'Located variable field cross-reference construction and Python-domain object resolution.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.restore_expected_variabl"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_add_same_name_variables_acro",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Prepared an initial change to the variable field role.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.restore_expected_variabl"
+        ]
+      },
+      "id": "04_verify_closure_add_same_name_vari",
+      "must_still_pass": [
+        "swe_late_test_evidence_3.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_345fb5c6a6.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "For event 'A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.', perform verify_closure for 'Add same-name variables across classes and packages plus existing successful-xref control cases.' while retaining valid prior result 'Prepared an initial change to the variable field role.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.restore_expected_variabl"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.restore_expected_variabl"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.use_the_attribute_role_f"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.constrain_reference_spec"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_same_name_variables_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.restore_expected_variabl",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.use_the_attribute_role_f",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.constrain_reference_spec",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_same_name_variables_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.restore_expected_variabl",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.use_the_attribute_role_f",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.constrain_reference_spec",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_same_name_variables_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.restore_expected_variabl",
+      "req.02.use_the_attribute_role_f",
+      "req.03.constrain_reference_spec",
+      "req.04.add_same_name_variables_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.",
+    "before_state": "The regression classification arrives after the broad no-link patch has been implemented.",
+    "event_id": "evt.swe_late_test_evidence_3.task_scope_or_dependency",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Restore expected variable-field autolinking.",
+      "id": "req.01.restore_expected_variabl",
+      "observable_probe": "swe_late_test_evidence_3.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for restore_expected_variable_field_auto"
+    },
+    {
+      "description": "Use the attribute role for instance and class variable fields where appropriate.",
+      "id": "req.02.use_the_attribute_role_f",
+      "observable_probe": "swe_late_test_evidence_3.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for use_the_attribute_role_for_instance_"
+    },
+    {
+      "description": "Constrain reference-specific attribute lookup to the active class or module before broader matching.",
+      "id": "req.03.constrain_reference_spec",
+      "observable_probe": "swe_late_test_evidence_3.sem.03.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for constrain_reference_specific_attribu"
+    },
+    {
+      "description": "Add same-name variables across classes and packages plus existing successful-xref control cases.",
+      "id": "req.04.add_same_name_variables_",
+      "observable_probe": "swe_late_test_evidence_3.sem.04.restore_expected_variable_fi",
+      "public_evidence": "source instruction and workstream result for add_same_name_variables_across_class"
+    }
+  ]
+}

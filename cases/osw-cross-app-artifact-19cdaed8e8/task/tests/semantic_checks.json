@@ -1,0 +1,115 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed receipt.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Independent worker completed with probes.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes receipt and reverifies semantics.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:415ef462-bed3-493a-ac36-ca8c6d23bf1b and compare_table + check_list.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Evidence digest matches private fixture.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The December AWS invoice is saved as aws-invoice-2312.pdf and the tally ends with AWS, 2023.12, 10.02.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The invoice PDF and tally workbook use the required source-native paths.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.output_paths",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_invoice_output_paths",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The copied December invoice preserves the official PDF evidence and billing period.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.invoice_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_invoice_pdf_evidence",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The appended tally row is AWS, 2023.12, 10.02.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.tally_row",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_tally_row",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

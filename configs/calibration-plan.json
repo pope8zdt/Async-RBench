@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "status": "ready_to_execute_after_preflight",
+  "purpose": "Single-model small-scale protocol calibration with DeepSeek V4 Pro; not a paper result and not sufficient to freeze the evaluation contract.",
+  "case_selection": {
+    "registry_split": "calibration",
+    "use_all_current_seed_families": true,
+    "selection_rule": "One seed instance per registered family, plus an additional instance only when it supplies a distinct event design."
+  },
+  "execution_modes": ["linear", "async"],
+  "repetitions_per_model_mode": 3,
+  "paired_seed": 2026,
+  "guidance": "incentive",
+  "model_panel": [
+    {"model_id": "deepseek-v4-pro", "model_family": "deepseek", "profile": "configs/model-profiles/deepseek-v4-pro.yaml"}
+  ],
+  "scope_limit": "This run calibrates endpoint compatibility, resource ceilings, failure modes, token use, and point responsiveness for one model. The later freeze audit still requires at least five models from at least three model families.",
+  "run_policy": {
+    "backend": "real_api_only",
+    "precondition": "Every selected instance must pass build, Oracle, hidden verifier, conformance, registry, and mutation-design audits.",
+    "retry_infrastructure_failure_only": true,
+    "maximum_infrastructure_retries": 1,
+    "participant_failure_is_not_retried": true,
+    "preserve_raw_run_artifacts": true,
+    "record_profile_and_bundle_digests": true
+  },
+  "decision_gates": {
+    "minimum_pilot_models": 5,
+    "minimum_model_families": 3,
+    "minimum_repetitions_per_model_mode": 3,
+    "minimum_executed_mutants_per_case": 40,
+    "minimum_mutation_kill_rate": 0.95,
+    "minimum_critical_mutation_kill_rate": 1.0,
+    "maximum_mean_async_X": 0.85,
+    "maximum_single_model_async_X": 0.98,
+    "minimum_non_degenerate_point_fraction": 0.8,
+    "maximum_absolute_phi": 0.8
+  },
+  "freeze_rule": "Do not change evaluation_contract.json status to frozen until calibration-audit reports zero gaps and all resulting changes have been reviewed."
+}

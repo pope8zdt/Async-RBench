@@ -1,0 +1,19 @@
+{
+  "case_id": "osw-dependency-unblock-4bfe607faa",
+  "protocol": "runtime_receipt_v1",
+  "delivery_transport": "The evaluator injects the delayed receipt through the agent result gateway; it is not a filesystem resource.",
+  "participant_visible_event_fields": [
+    "receipt_id",
+    "result_kind",
+    "released_at",
+    "evidence"
+  ],
+  "required_evidence": [
+    "/app/output_data/event_receipt.json"
+  ],
+  "privacy": {
+    "evaluator_truth_visible": false,
+    "event_payload_predeclared": false,
+    "private_fixture_access": "prohibited: do not search, read, or poll evaluator-private fixture paths; wait for result_delivered instead"
+  }
+}

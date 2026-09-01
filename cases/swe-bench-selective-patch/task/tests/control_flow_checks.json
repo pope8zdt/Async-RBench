@@ -1,0 +1,93 @@
+{
+  "version": "4",
+  "checks": [
+    {
+      "id": "sp2.cf.wait_for_authority",
+      "gate": "wait_for_authority",
+      "dimension": "event_intake",
+      "gate_args": {
+        "artifacts": [
+          "integrated_fix"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sp2.closure.waited_for_all_groups",
+        "sp2.closure.regression_passes"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sp2.cf.reject_late_stale",
+      "gate": "reject_late_stale",
+      "dimension": "state_revision",
+      "gate_args": {
+        "artifacts": [
+          "integrated_fix"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sp2.repair.b_first_failure_recorded",
+        "sp2.closure.waited_for_all_groups"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sp2.cf.cancel_superseded",
+      "gate": "timely_cancellation",
+      "dimension": "plan_revision",
+      "gate_args": {
+        "workstreams": [
+          "test_module_B_runner"
+        ]
+      },
+      "outcome_anchors": [
+        "sp2.repair.b_first_failure_recorded",
+        "sp2.repair.b_repair_applied"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sp2.cf.rederive_completion",
+      "gate": "rederive_from_authority",
+      "dimension": "closure",
+      "gate_args": {
+        "artifacts": [
+          "integrated_fix",
+          "full_regression"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sp2.closure.manifest_matches_reports",
+        "sp2.closure.regression_revision_final"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_shared_budget_policy_completed",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_c275.shared_budget_policy_completed",
+      "evidence_group": "mab_code12_budgetsync.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_users_profiles_mul"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness: A complete shared-budget policy replaces provisional arithmetic-only handling with integer-money, role, notification, goal, and adaptation semantics.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close shared_budget_policy_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_profiles_mul"
+        ]
+      },
+      "id": "mab_code12_budgetsync.cf.01_classify_completeness_shared_budget_poli",
+      "independence_key": "mab_code12_budgetsync.cf.01_classify_completeness_shared_budget_poli",
+      "measurement_type": "control",
+      "mutation_id": "mab_code12_budgetsync.mutation.01_classify_completeness_shared_budget_poli",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_c27563df83.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_profiles_mul"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_shared_budget_policy_completed",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_c275.shared_budget_policy_completed",
+      "evidence_group": "mab_code12_budgetsync.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_categorized_income"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A complete shared-budget policy replaces provisional arithmetic-only handling with integer-money, role, notification, goal, and adaptation semantics.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close shared_budget_policy_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_categorized_income"
+        ]
+      },
+      "id": "mab_code12_budgetsync.cf.02_revise_affected_shared_budget_poli",
+      "independence_key": "mab_code12_budgetsync.cf.02_revise_affected_shared_budget_poli",
+      "measurement_type": "control",
+      "mutation_id": "mab_code12_budgetsync.mutation.02_revise_affected_shared_budget_poli",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_c27563df83.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_categorized_income"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_shared_budget_policy_completed",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_c275.shared_budget_policy_completed",
+      "evidence_group": "mab_code12_budgetsync.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_dashboards_goals_a"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A complete shared-budget policy replaces provisional arithmetic-only handling with integer-money, role, notification, goal, and adaptation semantics.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close shared_budget_policy_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_dashboards_goals_a"
+        ]
+      },
+      "id": "mab_code12_budgetsync.cf.03_verify_closure_shared_budget_poli",
+      "independence_key": "mab_code12_budgetsync.cf.03_verify_closure_shared_budget_poli",
+      "measurement_type": "control",
+      "mutation_id": "mab_code12_budgetsync.mutation.03_verify_closure_shared_budget_poli",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_c27563df83.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_dashboards_goals_a"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_c275.shared_budget_policy_completed",
+      "event_theme": "partial_then_complete_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The complete policy enforces exact money, access roles, alerts, goals, and suggestions without losing prior transactions.",
+        "before": "Profiles, budgets, and transactions exist under a provisional policy without authoritative money-unit and role semantics.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

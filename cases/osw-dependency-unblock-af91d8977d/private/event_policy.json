@@ -1,0 +1,31 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_af91d8977d.delayed_authoritative_result",
+  "authority_rule": "terminal_focus_command_context is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, overwrite confirmed partial work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_dependency_unblock_af91d8977d.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "VS Code and the user keybindings file are available, but the exact editor-focus command and terminal-only context are unresolved.",
+    "after_state": "The keybinding resolver returns the exact scoped entry ctrl+j, workbench.action.focusActiveEditorGroup, when terminalFocus.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.entry_identity",
+      "req.03.terminal_scope",
+      "req.04.unique_valid_entry",
+      "final_state"
+    ]
+  }
+}

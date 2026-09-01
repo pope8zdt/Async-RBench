@@ -1,0 +1,159 @@
+{
+  "format_version": 2,
+  "case_id": "osw-dependency-unblock-201b3549f3",
+  "title": "Async-RBench OSWorld multi_apps: instructor_dependency_install_plan",
+  "task_instruction_path": "task/task.yaml",
+  "source_tasks": [
+    {
+      "benchmark": "OSWorld",
+      "id": "osworld:multi_apps:69acbb55-d945-4927-a87b-8480e1a5bb7e"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/app"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "inspect_source",
+      "depends_on": []
+    },
+    {
+      "id": "checkpoint_valid_work",
+      "depends_on": [
+        "inspect_source"
+      ]
+    },
+    {
+      "id": "consume_async_evidence",
+      "depends_on": [
+        "checkpoint_valid_work"
+      ]
+    },
+    {
+      "id": "reverify_and_close",
+      "depends_on": [
+        "consume_async_evidence"
+      ]
+    }
+  ],
+  "public_checks": [],
+  "workstreams": [
+    {
+      "id": "upstream_worker_01",
+      "priority": "normal",
+      "task": "Resolve the authoritative repository URL, package name and pinned revision.",
+      "expected_output": "Private source-native evidence for repository_metadata_resolution.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_02",
+      "priority": "normal",
+      "task": "Resolve the package dependency ranges required for installation.",
+      "expected_output": "Private source-native evidence for dependency_lock_resolution.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_03",
+      "priority": "high",
+      "task": "Install the project and verify the official INSTRUCTOR import without an Error result.",
+      "expected_output": "Private source-native evidence for import_smoke_validation.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    }
+  ]
+}

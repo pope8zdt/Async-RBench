@@ -1,0 +1,91 @@
+Dear Research Team,
+
+            You are collaborating to generate a new research idea based on the following Introduction:
+
+            **Introduction**
+
+             
+
+I INTRODUCTION
+
+
+Robot learning has made inspiring progress in recent years, resulting in robots that can cook [1], clean up [2], or even perform backflips [3]. While the capabilities of learned robot policies have increased dramatically, achieving human-level performance in terms of accuracy, speed and generality still remains a grand challenge in many domains. One such domain is table tennis – a physically demanding sport which requires human players to undergo years of training to achieve an advanced level of proficiency. Indeed, competitive matches are often breathtakingly dynamic, involving complex motion, rapid eye-hand coordination, and high-level strategies that adapt to the opponent’s strengths and weaknesses. For a robotic table tennis system to mimic these abilities it needs high-speed motion, precise control, real-time decision-making and human-robot interaction. Thanks to these demanding requirements, table tennis provides a rich environment to advance robotic capabilities and has served as a benchmark for robotics research since the 1980s [4]. Numerous table tennis robots have been developed since and progress has been made on returning the ball to the opponent’s side [5], hitting to a target position [6], smashing [7], cooperative rallying [8], and many other critical aspects of table tennis [9]. Yet no prior work has tackled the competitive game in which a robot plays a full game of table tennis against a previously unseen human opponent.
+
+
+In this paper, we present the first learned robot agent that can play competitive table tennis at human level, as depicted in Figure 1. The robot uses a combination of techniques (known and novel) in order to acquire skills at different levels of abstraction. Table tennis players must be prepared to return balls across a wide variety of positions, speeds, and spins (i.e. angular velocities) and competitive players must know how to manipulate these factors to set up advantageous plays or exploit opponent weaknesses. Thus, there are two levels of play: the high level strategic decisions and the low level physical skills required to execute those strategies. This organization adds an additional layer of challenge to robotic sports where, unlike a purely strategic game like chess or go, the policy not only needs to decide the most advantageous move, but also needs to have the physical skills to perform it and may even have to choose a less strategically optimal action if it is not confident in successful execution. To address this challenge, we propose a hierarchical and modular policy architecture. Our system consists of multiple low-level skill policies and a high-level controller that selects between them. Each low-level skill policy specializes in a specific aspect of table tennis, such as forehand topspin, backhand targeting, or forehand serve. Training is efficient — each skill builds on top of the same foundation policy for a given category (e.g. forehand, backhand), and once a good skill has been trained it can always be subsequently specialized. In addition to learning the policy itself, we collect and store information both offline and online about the strengths, weaknesses, and limitations of each low-level skill. The resulting skill descriptors provide the robot with important information regarding its abilities and shortcomings. In turn, a high-level controller, responsible for
+
+            **Your Task**
+
+            1. **Literature Review**: Analyze the Introduction provided and conduct a brief literature review to understand the current state of research in this area.
+
+            2. **Brainstorming**: Collaboratively brainstorm potential research ideas that build upon or address gaps in the Introduction.
+
+            3. **Summarization**: Summarize your collective ideas.
+
+            4. **Formulate a New Research Idea**: Develop a new research proposal in the format of the '5q', defined below:
+
+               **Here is a high-level summarized insight of a research field Machine Learning.**
+
+               **Here are the five core questions:**
+
+               **[Question 1] - What is the problem?**
+
+               Formulate the specific research question you aim to address. Only output one question and do not include any more information.
+
+               **[Question 2] - Why is it interesting and important?**
+
+               Explain the broader implications of solving this problem for the research community.
+               Discuss how such a paper will affect future research.
+               Discuss how addressing this question could advance knowledge or lead to practical applications.
+
+               **[Question 3] - Why is it hard?**
+
+               Discuss the challenges and complexities involved in solving this problem.
+               Explain why naive or straightforward approaches may fail.
+               Identify any technical, theoretical, or practical obstacles that need to be overcome. MAKE IT CLEAR.
+
+               **[Question 4] - Why hasn't it been solved before?**
+
+               Identify gaps or limitations in previous research or existing solutions.
+               Discuss any barriers that have prevented this problem from being solved until now.
+               Explain how your approach differs from or improves upon prior work. MAKE IT CLEAR.
+
+               **[Question 5] - What are the key components of my approach and results?**
+
+               Outline your proposed methodology in detail, including the method, dataset, and metrics that you plan to use.
+               Describe the expected outcomes. MAKE IT CLEAR.
+
+            Please work together to produce the '5q' for your proposed research idea.
+
+            Good luck!
+
+You should answer the task in the fllowing format:
+                **[Question 1] - What is the problem?**
+
+                Formulate the specific research question you aim to address. Only output one question and do not include any more information.
+
+                **[Question 2] - Why is it interesting and important?**
+
+                Explain the broader implications of solving this problem for the research community.
+                Discuss how such a paper will affect future research.
+                Discuss how addressing this question could advance knowledge or lead to practical applications.
+
+                **[Question 3] - Why is it hard?**
+
+                Discuss the challenges and complexities involved in solving this problem.
+                Explain why naive or straightforward approaches may fail.
+                Identify any technical, theoretical, or practical obstacles that need to be overcome. MAKE IT CLEAR.
+
+                **[Question 4] - Why hasn't it been solved before?**
+
+                Identify gaps or limitations in previous research or existing solutions.
+                Discuss any barriers that have prevented this problem from being solved until now.
+                Explain how your approach differs from or improves upon prior work. MAKE IT CLEAR.
+
+                **[Question 5] - What are the key components of my approach and results?**
+
+                Outline your proposed methodology in detail, including the method, dataset, and metrics that you plan to use.
+                Describe the expected outcomes. MAKE IT CLEAR.
+
+ASYNC-RBENCH EXTENSION
+Source task: research:064. Persist a provisional five-question proposal before the delayed evaluator-owned research result arrives. Validate its receipt, revise only the affected method and evaluation plan, preserve unaffected literature findings, and write a receipt-bound closure under /app/output_data.

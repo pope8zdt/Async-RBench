@@ -1,0 +1,372 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "event_intake",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-late-constraint-f4ef18dd00.production_delivery_slot_confirmed",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "production_delivery_slot_confirmed"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: Production control confirms a $21.95 chisel, a four-day delivery slot, 12-month warranty, and consolidated logistics.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_f4ef.cf.01_classify_authority",
+      "independence_key": "mab_late_constraint_f4ef.cf.01_classify_authority",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_f4ef.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_f4ef18dd00.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_f4ef.cf.01_classify_authority]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "production_delivery_slot_confirmed"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-late-constraint-f4ef18dd00.production_delivery_slot_confirmed",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "production_delivery_slot_confirmed"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: Production control confirms a $21.95 chisel, a four-day delivery slot, 12-month warranty, and consolidated logistics.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_f4ef.cf.02_revise_affected",
+      "independence_key": "mab_late_constraint_f4ef.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_f4ef.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_f4ef18dd00.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_f4ef.cf.02_revise_affected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "production_delivery_slot_confirmed"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "plan_revision",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab-late-constraint-f4ef18dd00.production_delivery_slot_confirmed",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "production_delivery_slot_confirmed"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: Production control confirms a $21.95 chisel, a four-day delivery slot, 12-month warranty, and consolidated logistics.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_f4ef.cf.03_preserve_unaffected",
+      "independence_key": "mab_late_constraint_f4ef.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_f4ef.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_f4ef18dd00.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_f4ef.cf.03_preserve_unaffected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "production_delivery_slot_confirmed"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "closure",
+      "dimension": "closure",
+      "event_id": "evt.mab-late-constraint-f4ef18dd00.production_delivery_slot_confirmed",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "production_delivery_slot_confirmed"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: Production control confirms a $21.95 chisel, a four-day delivery slot, 12-month warranty, and consolidated logistics.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_f4ef.cf.04_verify_closure",
+      "independence_key": "mab_late_constraint_f4ef.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_f4ef.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_f4ef18dd00.closure"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_f4ef.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "production_delivery_slot_confirmed"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "family": "wait_for_authority",
+      "id": "mab_late_constraint_f4ef.mutation.01_classify_authority",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_f4ef.cf.01_classify_authority"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_f4ef18dd00.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_f4ef.cf.01_classify_authority",
+        "mab_late_constraint_f4ef18dd00.event.receipt",
+        "mab_late_constraint_f4ef18dd00.event.probes",
+        "mab_late_constraint_f4ef18dd00.closure",
+        "mab_late_constraint_f4ef18dd00.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "family": "resolve_authority",
+      "id": "mab_late_constraint_f4ef.mutation.02_revise_affected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_f4ef.cf.02_revise_affected"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_f4ef18dd00.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_f4ef.cf.02_revise_affected",
+        "mab_late_constraint_f4ef18dd00.event.receipt",
+        "mab_late_constraint_f4ef18dd00.event.probes",
+        "mab_late_constraint_f4ef18dd00.closure",
+        "mab_late_constraint_f4ef18dd00.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "family": "selective_replan",
+      "id": "mab_late_constraint_f4ef.mutation.03_preserve_unaffected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_f4ef.cf.03_preserve_unaffected"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_f4ef18dd00.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_f4ef.cf.03_preserve_unaffected",
+        "mab_late_constraint_f4ef18dd00.event.receipt",
+        "mab_late_constraint_f4ef18dd00.event.probes",
+        "mab_late_constraint_f4ef18dd00.closure",
+        "mab_late_constraint_f4ef18dd00.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "family": "rederive_from_authority",
+      "id": "mab_late_constraint_f4ef.mutation.04_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_f4ef.cf.04_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_f4ef18dd00.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_f4ef.cf.04_verify_closure",
+        "mab_late_constraint_f4ef18dd00.event.receipt",
+        "mab_late_constraint_f4ef18dd00.event.probes",
+        "mab_late_constraint_f4ef18dd00.closure",
+        "mab_late_constraint_f4ef18dd00.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt digest is authentic and bound to this exact case and bargaining source.",
+      "id": "mab_late_constraint_f4ef18dd00.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent worker observed both provisional and executable artifacts.",
+      "id": "mab_late_constraint_f4ef18dd00.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact receipt and records the authoritative bargain: Production control confirms a $21.95 chisel, a four-day delivery slot, 12-month warranty, and consolidated logistics.",
+      "id": "mab_late_constraint_f4ef18dd00.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The package remains pinned to bargaining:032 and its official record.",
+      "id": "mab_late_constraint_f4ef18dd00.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private fixture binds the exact evaluator, source task, artifact schema, and dependency depth.",
+      "id": "mab_late_constraint_f4ef18dd00.source.native_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding_and_schema",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Grey Pneumatic CH105 3/4-inch Flat 18-inch Long Chisel executes its offer-authority-counter-finalize workflow.",
+      "id": "mab_late_constraint_f4ef18dd00.source.core_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_core_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The injected authority payload exactly represents: Production control confirms a $21.95 chisel, a four-day delivery slot, 12-month warranty, and consolidated logistics.",
+      "id": "mab_late_constraint_f4ef18dd00.source.event_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Stale revisions and unauthorized authority payloads are rejected independently.",
+      "id": "mab_late_constraint_f4ef18dd00.source.edge_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_edge_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Unaffected source priorities remain preserved: chisel_identity, buyer_timely_delivery_priority, seller_production_demand_goal.",
+      "id": "mab_late_constraint_f4ef18dd00.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_closure_and_preservation",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Final selected terms and the bargaining-tool chronology match this task-specific authority.",
+      "id": "mab_late_constraint_f4ef18dd00.source.final_terms",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_final_terms_and_tool_sequence",
+      "relevance_tier": "base"
+    }
+  ]
+}

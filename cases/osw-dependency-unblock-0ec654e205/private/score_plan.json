@@ -1,0 +1,348 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_sentence_spacing_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_0ec654e205.delayed_authoritative_result",
+      "evidence_group": "osw_writer_0ec.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "first_paragraph_sentence_boundaries"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed first_paragraph_sentence_boundaries; preserve unaffected libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_writer_0ec.cf.01_classify_authority_sentence_spacing_osworld",
+      "independence_key": "osw_writer_0ec.cf.01_classify_authority_sentence_spacing_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_writer_0ec.mutation.01_classify_authority_sentence_spacing_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0ec654e205.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_sentence_spacing_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_0ec654e205.delayed_authoritative_result",
+      "evidence_group": "osw_writer_0ec.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "first_paragraph_sentence_boundaries"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed first_paragraph_sentence_boundaries; preserve unaffected libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_writer_0ec.cf.02_revise_affected_sentence_spacing_osworld",
+      "independence_key": "osw_writer_0ec.cf.02_revise_affected_sentence_spacing_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_writer_0ec.mutation.02_revise_affected_sentence_spacing_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0ec654e205.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.source_identity"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure_sentence_spacing_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_0ec654e205.delayed_authoritative_result",
+      "evidence_group": "osw_writer_0ec.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "first_paragraph_sentence_boundaries"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed first_paragraph_sentence_boundaries; preserve unaffected libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_writer_0ec.cf.03_verify_closure_sentence_spacing_osworld",
+      "independence_key": "osw_writer_0ec.cf.03_verify_closure_sentence_spacing_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_writer_0ec.mutation.03_verify_closure_sentence_spacing_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0ec654e205.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.sentence_boundaries"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "family": "wait_for_authority",
+      "id": "osw_writer_0ec.mutation.01_classify_authority_sentence_spacing_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_writer_0ec.cf.01_classify_authority_sentence_spacing_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_0ec654e205.source.pin"
+      ],
+      "targets": [
+        "osw_writer_0ec.cf.01_classify_authority_sentence_spacing_osworld",
+        "osw_dependency_unblock_0ec654e205.event.receipt",
+        "osw_dependency_unblock_0ec654e205.event.probes",
+        "osw_dependency_unblock_0ec654e205.closure",
+        "osw_dependency_unblock_0ec654e205.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "family": "resolve_authority",
+      "id": "osw_writer_0ec.mutation.02_revise_affected_sentence_spacing_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_writer_0ec.cf.02_revise_affected_sentence_spacing_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_0ec654e205.source.pin"
+      ],
+      "targets": [
+        "osw_writer_0ec.cf.02_revise_affected_sentence_spacing_osworld",
+        "osw_dependency_unblock_0ec654e205.event.receipt",
+        "osw_dependency_unblock_0ec654e205.event.probes",
+        "osw_dependency_unblock_0ec654e205.closure",
+        "osw_dependency_unblock_0ec654e205.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "family": "rederive_from_authority",
+      "id": "osw_writer_0ec.mutation.03_verify_closure_sentence_spacing_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_writer_0ec.cf.03_verify_closure_sentence_spacing_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_0ec654e205.source.pin"
+      ],
+      "targets": [
+        "osw_writer_0ec.cf.03_verify_closure_sentence_spacing_osworld",
+        "osw_dependency_unblock_0ec654e205.event.receipt",
+        "osw_dependency_unblock_0ec654e205.event.probes",
+        "osw_dependency_unblock_0ec654e205.closure",
+        "osw_dependency_unblock_0ec654e205.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed authoritative receipt.",
+      "id": "osw_dependency_unblock_0ec654e205.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All three task-specific upstream workers completed with observable probes.",
+      "id": "osw_dependency_unblock_0ec654e205.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies source semantics.",
+      "id": "osw_dependency_unblock_0ec654e205.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_dependency_unblock_0ec654e205.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:libreoffice_writer:88fe4b2d-3040-4c70-9a70-546a47764b48 and compare_docx_files.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private source fixture.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The first paragraph is split into seven sentences with one empty paragraph between adjacent sentences, while the rest of the guideline is preserved.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The opened guideline DOCX is saved in place.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The exact 28-paragraph source and first paragraph are bound.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.source_identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_source_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The first paragraph becomes seven sentences with six between-sentence blank lines.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.sentence_boundaries",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sentence_boundaries",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "All 27 later paragraphs remain unchanged.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.tail_preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_tail_preservation",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The four official OR-evaluator gold variants remain bound.",
+      "id": "osw_dependency_unblock_0ec654e205.osworld.accepted_variants",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_accepted_gold_variants",
+      "relevance_tier": "base"
+    }
+  ]
+}

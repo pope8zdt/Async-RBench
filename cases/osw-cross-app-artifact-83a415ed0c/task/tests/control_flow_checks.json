@@ -1,0 +1,198 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_concat_docx_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_83a415ed0c.delayed_authoritative_result",
+      "evidence_group": "osw_concat_83.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "ordered_txt_manifest_and_content"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed ordered_txt_manifest_and_content; preserve unaffected vs_code/libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_concat_83.cf.01_classify_authority_concat_docx_osworld",
+      "independence_key": "osw_concat_83.cf.01_classify_authority_concat_docx_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_concat_83.mutation.01_classify_authority_concat_docx_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_83a415ed0c.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_concat_docx_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_83a415ed0c.delayed_authoritative_result",
+      "evidence_group": "osw_concat_83.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "ordered_txt_manifest_and_content"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed ordered_txt_manifest_and_content; preserve unaffected vs_code/libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_concat_83.cf.02_revise_affected_concat_docx_osworld",
+      "independence_key": "osw_concat_83.cf.02_revise_affected_concat_docx_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_concat_83.mutation.02_revise_affected_concat_docx_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_83a415ed0c.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.file_manifest"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_concat_docx_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_83a415ed0c.delayed_authoritative_result",
+      "evidence_group": "osw_concat_83.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "ordered_txt_manifest_and_content"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed ordered_txt_manifest_and_content; preserve unaffected vs_code/libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_concat_83.cf.03_verify_closure_concat_docx_osworld",
+      "independence_key": "osw_concat_83.cf.03_verify_closure_concat_docx_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_concat_83.mutation.03_verify_closure_concat_docx_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_83a415ed0c.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.separator_free_content"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_02"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_03",
+      "event_id": "evt.osw_cross_app_artifact_83a415ed0c.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The project worker returns exactly 1.txt through 5.txt in order and their separator-free 2249-character concatenation.",
+        "before": "Writer setup may be prepared, but the complete ordered project text manifest and authoritative concatenation are still pending.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

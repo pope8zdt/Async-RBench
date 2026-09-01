@@ -1,0 +1,4 @@
+I am making a guideline for students of my course and would like to separate each sentence in the the first paragraph to improve readability. Please separate each sentence by creating one empty line space after each of them, as I am having hard time separating them one by one.
+
+ASYNC-RBENCH EXTENSION
+Consume delayed authoritative evidence after the checkpoint, revise only affected desktop state, and reverify closure.

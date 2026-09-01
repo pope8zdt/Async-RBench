@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_adapt_frontend_messages_to_t",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_0.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.classify_critical_path",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.adapt_frontend_messages_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A backend specialist returns the WebSocket canvas-operation protocol, revision fields, acknowledgements, and deterministic conflict-resolution rules.', perform classify_critical_path for 'Adapt frontend messages to the returned protocol.' while retaining valid prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adapt_frontend_messages_"
+        ]
+      },
+      "id": "mab_code75_artcollab.cf.01_classify_critical_path_adapt_frontend_mes",
+      "independence_key": "mab_code75_artcollab.cf.01_classify_critical_path_adapt_frontend_mes",
+      "measurement_type": "control",
+      "mutation_id": "mab_code75_artcollab.mutation.01_classify_critical_path_adapt_frontend_mes",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0daa930906.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.adapt_frontend_messages_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_implement_server_broadcastin",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_0.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.resource_triage",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.adapt_frontend_messages_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A backend specialist returns the WebSocket canvas-operation protocol, revision fields, acknowledgements, and deterministic conflict-resolution rules.', perform resource_triage for 'Implement server broadcasting, acknowledgement, and conflict resolution.' while retaining valid prior result 'Authentication and session scaffolding are present.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication and session scaffolding are present.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adapt_frontend_messages_"
+        ]
+      },
+      "id": "mab_code75_artcollab.cf.02_resource_triage_implement_server_b",
+      "independence_key": "mab_code75_artcollab.cf.02_resource_triage_implement_server_b",
+      "measurement_type": "control",
+      "mutation_id": "mab_code75_artcollab.mutation.02_resource_triage_implement_server_b",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0daa930906.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.adapt_frontend_messages_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_two_client_tests_for_ord",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_0.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.adapt_frontend_messages_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A backend specialist returns the WebSocket canvas-operation protocol, revision fields, acknowledgements, and deterministic conflict-resolution rules.', perform verify_closure for 'Add two-client tests for ordered, duplicate, and concurrent operations.' while retaining valid prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adapt_frontend_messages_"
+        ]
+      },
+      "id": "mab_code75_artcollab.cf.03_verify_closure_add_two_client_tes",
+      "independence_key": "mab_code75_artcollab.cf.03_verify_closure_add_two_client_tes",
+      "measurement_type": "control",
+      "mutation_id": "mab_code75_artcollab.mutation.03_verify_closure_add_two_client_tes",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0daa930906.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.adapt_frontend_messages_"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code75_artcollab.mutation.01_classify_critical_path_adapt_frontend_mes",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code75_artcollab.cf.01_classify_critical_path_adapt_frontend_mes"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_0daa930906.source.pin"
+      ],
+      "targets": [
+        "mab_code75_artcollab.cf.01_classify_critical_path_adapt_frontend_mes",
+        "mab_dependency_unblock_0daa930906.event.receipt",
+        "mab_dependency_unblock_0daa930906.event.authority_probe",
+        "mab_dependency_unblock_0daa930906.closure",
+        "mab_dependency_unblock_0daa930906.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication and session scaffolding are present.'.",
+      "family": "resource_triage",
+      "id": "mab_code75_artcollab.mutation.02_resource_triage_implement_server_b",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code75_artcollab.cf.02_resource_triage_implement_server_b"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_0daa930906.source.pin"
+      ],
+      "targets": [
+        "mab_code75_artcollab.cf.02_resource_triage_implement_server_b",
+        "mab_dependency_unblock_0daa930906.event.receipt",
+        "mab_dependency_unblock_0daa930906.event.authority_probe",
+        "mab_dependency_unblock_0daa930906.closure",
+        "mab_dependency_unblock_0daa930906.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code75_artcollab.mutation.03_verify_closure_add_two_client_tes",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code75_artcollab.cf.03_verify_closure_add_two_client_tes"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_0daa930906.source.pin"
+      ],
+      "targets": [
+        "mab_code75_artcollab.cf.03_verify_closure_add_two_client_tes",
+        "mab_dependency_unblock_0daa930906.event.receipt",
+        "mab_dependency_unblock_0daa930906.event.authority_probe",
+        "mab_dependency_unblock_0daa930906.closure",
+        "mab_dependency_unblock_0daa930906.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The canvas_protocol_straggler_completed receipt is authentic and bound to coding:075 and mab-dependency-unblock-0daa930906.",
+      "id": "mab_dependency_unblock_0daa930906.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned ArtCollab authority runs after the persisted baseline and records probes.",
+      "id": "mab_dependency_unblock_0daa930906.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The delayed WebSocket protocol closes two-client synchronization while layers, tools, project history, and authenticated users remain intact.",
+      "id": "mab_dependency_unblock_0daa930906.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to official MultiAgentBench coding:075.",
+      "id": "mab_dependency_unblock_0daa930906.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and the artcollab_synchronized_canvas_closure closure satisfy the task-specific output schema.",
+      "id": "mab_dependency_unblock_0daa930906.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_artcollab_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Canvas operations receive revision-bound acknowledgements, replayed op_ids are idempotent, and concurrent edits resolve deterministically by Lamport time then actor.",
+      "id": "mab_dependency_unblock_0daa930906.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_artcollab_revision_ack_duplicate_and_conflict_resolution",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: layers, local_tools, project_history, authenticated_users.",
+      "id": "mab_dependency_unblock_0daa930906.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_artcollab_layers_history_and_two_client_order_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed WebSocket protocol closes two-client synchronization while layers, tools, project history, and authenticated users remain intact.",
+      "id": "mab_dependency_unblock_0daa930906.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_artcollab_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

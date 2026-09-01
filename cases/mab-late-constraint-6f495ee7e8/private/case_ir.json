@@ -1,0 +1,179 @@
+{
+  "case_id": "mab-late-constraint-6f495ee7e8",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_stale",
+      "mutation_family": "classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "classify_stale: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_exclude_stale",
+      "mutation_family": "exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "exclude_stale: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "stage_tag": "closure",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.identify_the_old_offer_as_la"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.replace_price_and_delivery_w"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.close_through_a_chronologica"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.identify_the_old_offer_as_la",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.replace_price_and_delivery_w",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.close_through_a_chronologica",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.identify_the_old_offer_as_la",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.replace_price_and_delivery_w",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.close_through_a_chronologica",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.identify_the_old_offer_as_la",
+      "req.02.replace_price_and_delivery_w",
+      "req.03.close_through_a_chronologica",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+    "before_state": "A provisional Kohler Genuine Part 1266657 Valve Kit bargain exists before current_genuine_part_delivery_counter.",
+    "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Identify the old offer as lacking genuine-part evidence.",
+      "id": "req.01.identify_the_old_offer_as_la",
+      "observable_probe": "mab_late_constraint_6f495ee7e8.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Replace price and delivery with the current authenticated counter.",
+      "id": "req.02.replace_price_and_delivery_w",
+      "observable_probe": "mab_late_constraint_6f495ee7e8.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Close through a chronological bargaining-tool ledger.",
+      "id": "req.03.close_through_a_chronologica",
+      "observable_probe": "mab_late_constraint_6f495ee7e8.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    }
+  ]
+}

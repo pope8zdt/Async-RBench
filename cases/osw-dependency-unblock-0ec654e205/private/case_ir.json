@@ -1,0 +1,191 @@
+{
+  "case_id": "osw-dependency-unblock-0ec654e205",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_sentence_spacing_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_writer_0ec.cf.01_classify_authority_sentence_spacing_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0ec654e205.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed first_paragraph_sentence_boundaries; preserve unaffected libreoffice_writer state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_sentence_spacing_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_writer_0ec.cf.02_revise_affected_sentence_spacing_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0ec654e205.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed first_paragraph_sentence_boundaries; preserve unaffected libreoffice_writer state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.source_identity"
+    },
+    {
+      "critical": true,
+      "decision_group": "03_verify_closure_sentence_spacing_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_writer_0ec.cf.03_verify_closure_sentence_spacing_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0ec654e205.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed first_paragraph_sentence_boundaries; preserve unaffected libreoffice_writer state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.sentence_boundaries"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.output_path"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.source_identity"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.sentence_boundaries"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.output_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.source_identity",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.sentence_boundaries",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.source_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.sentence_boundaries",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.source_identity",
+      "req.03.sentence_boundaries",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The Writer analysis returns seven first-paragraph sentences and six required between-sentence empty paragraphs while preserving the remaining 27 source paragraphs.",
+    "before_state": "The source document and later paragraphs can be preserved, but exact first-paragraph sentence boundaries and empty-line insertion points are pending.",
+    "event_id": "evt.osw_dependency_unblock_0ec654e205.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The opened guideline DOCX is saved in place.",
+      "id": "req.01.output_path",
+      "observable_probe": "osw_dependency_unblock_0ec654e205.osworld.output_path",
+      "public_evidence": "source instruction and task-specific output_path result"
+    },
+    {
+      "description": "The exact 28-paragraph source and first paragraph are bound.",
+      "id": "req.02.source_identity",
+      "observable_probe": "osw_dependency_unblock_0ec654e205.osworld.source_identity",
+      "public_evidence": "source instruction and task-specific source_identity result"
+    },
+    {
+      "description": "The first paragraph becomes seven sentences with six between-sentence blank lines.",
+      "id": "req.03.sentence_boundaries",
+      "observable_probe": "osw_dependency_unblock_0ec654e205.osworld.sentence_boundaries",
+      "public_evidence": "source instruction and task-specific sentence_boundaries result"
+    }
+  ]
+}

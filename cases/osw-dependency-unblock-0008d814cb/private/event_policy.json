@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Resolve the conflict using task evidence and declared authority, preserving valid non-conflicting work.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.validate_the_returned_pl",
+      "req.02.update_the_matrix_to_sup",
+      "req.03.remove_only_the_displace",
+      "req.04.produce_the_exact_two_ca",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The read-path specialist reports repeated sequential scans and large aggregate reads over the unindexed 1.4 GB table.",
+    "before_state": "Measured live read behavior arrives after a schema-driven tentative diagnosis has been drafted.",
+    "event_id": "evt.osw_dependency_unblock_0eciali.conflicting_valid_result",
+    "primary_event_theme": "conflicting_valid_results",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.osw_dependency_unblock_0eciali.conflicting_valid_result",
+  "forbidden_shortcut": "Do not select a result by arrival order or invalidate all prior work.",
+  "required_decisions": [
+    "classify_conflict",
+    "arbitrate_evidence",
+    "replan_affected_scope"
+  ],
+  "theme": "conflicting_valid_results"
+}

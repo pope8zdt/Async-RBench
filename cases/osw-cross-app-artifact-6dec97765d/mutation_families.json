@@ -1,0 +1,515 @@
+{
+  "families": [
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: Authentic case-bound asynchronous receipt.",
+      "id": "osw_vscode_6dec.mut.01_receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: Authentic case-bound asynchronous receipt.",
+      "id": "osw_vscode_6dec.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_vscode_6dec.mut.02_probes",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_vscode_6dec.mut.02_probes_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_vscode_6dec.mut.03_closure",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_vscode_6dec.mut.03_closure_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_vscode_6dec.mut.04_pin",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_vscode_6dec.mut.04_pin_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: Bound to osworld:multi_apps:510f64c8-9bcc-4be1-8d30-638705850618 and check_include_exclude+compare_config.",
+      "id": "osw_vscode_6dec.mut.05_identity",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.identity"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_identity_evidence",
+        "corrupt_identity_value",
+        "replay_stale_identity_state",
+        "satisfy_manifest_without_identity_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: Bound to osworld:multi_apps:510f64c8-9bcc-4be1-8d30-638705850618 and check_include_exclude+compare_config.",
+      "id": "osw_vscode_6dec.mut.05_identity_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.identity"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_identity_red",
+        "artifact_green_identity_stale",
+        "receipt_valid_identity_foreign",
+        "partial_closure_hides_identity_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: Official evaluator score equals one.",
+      "id": "osw_vscode_6dec.mut.06_official_score",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.official_score"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_official_score_evidence",
+        "corrupt_official_score_value",
+        "replay_stale_official_score_state",
+        "satisfy_manifest_without_official_score_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: Official evaluator score equals one.",
+      "id": "osw_vscode_6dec.mut.06_official_score_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.official_score"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_official_score_red",
+        "artifact_green_official_score_stale",
+        "receipt_valid_official_score_foreign",
+        "partial_closure_hides_official_score_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: Native evidence digest matches the private official-source fixture.",
+      "id": "osw_vscode_6dec.mut.07_native_evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.native_evidence"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_native_evidence_evidence",
+        "corrupt_native_evidence_value",
+        "replay_stale_native_evidence_state",
+        "satisfy_manifest_without_native_evidence_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: Native evidence digest matches the private official-source fixture.",
+      "id": "osw_vscode_6dec.mut.07_native_evidence_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.native_evidence"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_native_evidence_red",
+        "artifact_green_native_evidence_stale",
+        "receipt_valid_native_evidence_foreign",
+        "partial_closure_hides_native_evidence_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: VS Code is launched from the terminal with /home/user/Desktop/project, shell history contains the code command, and the OpenProject evaluator reports project.",
+      "id": "osw_vscode_6dec.mut.08_task_assertion",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.task_assertion"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_task_assertion_evidence",
+        "corrupt_task_assertion_value",
+        "replay_stale_task_assertion_state",
+        "satisfy_manifest_without_task_assertion_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: VS Code is launched from the terminal with /home/user/Desktop/project, shell history contains the code command, and the OpenProject evaluator reports project.",
+      "id": "osw_vscode_6dec.mut.08_task_assertion_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.task_assertion"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_task_assertion_red",
+        "artifact_green_task_assertion_stale",
+        "receipt_valid_task_assertion_foreign",
+        "partial_closure_hides_task_assertion_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: The exact Desktop project folder is targeted.",
+      "id": "osw_vscode_6dec.mut.09_project_path",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.project_path"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_project_path_evidence",
+        "corrupt_project_path_value",
+        "replay_stale_project_path_state",
+        "satisfy_manifest_without_project_path_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: The exact Desktop project folder is targeted.",
+      "id": "osw_vscode_6dec.mut.09_project_path_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.project_path"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_project_path_red",
+        "artifact_green_project_path_stale",
+        "receipt_valid_project_path_foreign",
+        "partial_closure_hides_project_path_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: The three expected project assets remain present.",
+      "id": "osw_vscode_6dec.mut.10_project_assets",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.project_assets"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_project_assets_evidence",
+        "corrupt_project_assets_value",
+        "replay_stale_project_assets_state",
+        "satisfy_manifest_without_project_assets_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: The three expected project assets remain present.",
+      "id": "osw_vscode_6dec.mut.10_project_assets_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.project_assets"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_project_assets_red",
+        "artifact_green_project_assets_stale",
+        "receipt_valid_project_assets_foreign",
+        "partial_closure_hides_project_assets_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: Shell history proves the code command came from the terminal.",
+      "id": "osw_vscode_6dec.mut.11_terminal_history",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.terminal_history"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_terminal_history_evidence",
+        "corrupt_terminal_history_value",
+        "replay_stale_terminal_history_state",
+        "satisfy_manifest_without_terminal_history_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: Shell history proves the code command came from the terminal.",
+      "id": "osw_vscode_6dec.mut.11_terminal_history_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.terminal_history"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_terminal_history_red",
+        "artifact_green_terminal_history_stale",
+        "receipt_valid_terminal_history_foreign",
+        "partial_closure_hides_terminal_history_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: The VS Code evaluator extension reports project.",
+      "id": "osw_vscode_6dec.mut.12_open_project_probe",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.open_project_probe"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_open_project_probe_evidence",
+        "corrupt_open_project_probe_value",
+        "replay_stale_open_project_probe_state",
+        "satisfy_manifest_without_open_project_probe_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: The VS Code evaluator extension reports project.",
+      "id": "osw_vscode_6dec.mut.12_open_project_probe_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.open_project_probe"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_open_project_probe_red",
+        "artifact_green_open_project_probe_stale",
+        "receipt_valid_open_project_probe_foreign",
+        "partial_closure_hides_open_project_probe_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: VS Code is active on the project folder.",
+      "id": "osw_vscode_6dec.mut.13_vscode_state",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.vscode_state"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_vscode_state_evidence",
+        "corrupt_vscode_state_value",
+        "replay_stale_vscode_state_state",
+        "satisfy_manifest_without_vscode_state_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: VS Code is active on the project folder.",
+      "id": "osw_vscode_6dec.mut.13_vscode_state_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.vscode_state"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_vscode_state_red",
+        "artifact_green_vscode_state_stale",
+        "receipt_valid_vscode_state_foreign",
+        "partial_closure_hides_vscode_state_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: Both official evaluator branches pass.",
+      "id": "osw_vscode_6dec.mut.14_official_checks",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.official_checks"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_official_checks_evidence",
+        "corrupt_official_checks_value",
+        "replay_stale_official_checks_state",
+        "satisfy_manifest_without_official_checks_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: Both official evaluator branches pass.",
+      "id": "osw_vscode_6dec.mut.14_official_checks_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.official_checks"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_official_checks_red",
+        "artifact_green_official_checks_stale",
+        "receipt_valid_official_checks_foreign",
+        "partial_closure_hides_official_checks_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: classify_completeness for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "id": "osw_vscode_6dec.mut.15_01_classify_completeness_ter",
+      "must_fail": [
+        "osw_vscode_6dec.cf.01_classify_completeness_terminal_vscode_project"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: classify_completeness for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "id": "osw_vscode_6dec.mut.15_01_classify_completeness_ter_crosscheck",
+      "must_fail": [
+        "osw_vscode_6dec.cf.01_classify_completeness_terminal_vscode_project"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_completeness_ter_red",
+        "artifact_green_01_classify_completeness_ter_stale",
+        "receipt_valid_01_classify_completeness_ter_foreign",
+        "partial_closure_hides_01_classify_completeness_ter_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: revise_affected for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "id": "osw_vscode_6dec.mut.16_02_revise_affected_terminal_",
+      "must_fail": [
+        "osw_vscode_6dec.cf.02_revise_affected_terminal_vscode_project"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: preserve_unaffected for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "id": "osw_vscode_6dec.mut.17_03_preserve_unaffected_termi",
+      "must_fail": [
+        "osw_vscode_6dec.cf.03_preserve_unaffected_terminal_vscode_project"
+      ],
+      "operation": "mutate_control_selective_replan",
+      "variants": [
+        "omit_selective_replan_decision",
+        "apply_selective_replan_to_wrong_scope",
+        "use_stale_evidence_for_selective_replan",
+        "declare_selective_replan_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Directly challenge: verify_closure for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "id": "osw_vscode_6dec.mut.18_04_verify_closure_terminal_v",
+      "must_fail": [
+        "osw_vscode_6dec.cf.04_verify_closure_terminal_vscode_project"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "description": "Cross-check independent evidence for: verify_closure for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "id": "osw_vscode_6dec.mut.18_04_verify_closure_terminal_v_crosscheck",
+      "must_fail": [
+        "osw_vscode_6dec.cf.04_verify_closure_terminal_vscode_project"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_04_verify_closure_terminal_v_red",
+        "artifact_green_04_verify_closure_terminal_v_stale",
+        "receipt_valid_04_verify_closure_terminal_v_foreign",
+        "partial_closure_hides_04_verify_closure_terminal_v_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

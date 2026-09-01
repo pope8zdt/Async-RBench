@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_98b42677e4.delayed_authoritative_result",
+  "authority_rule": "Delayed latest_notes_first_embedded_image is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.mail_identity",
+      "req.02.attachment_identity",
+      "req.03.first_image",
+      "req.04.wallpaper_state",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The mail worker identifies the newest Notes message Lecture Document, decodes lecture-notes.docx, and returns its first embedded image.",
+    "before_state": "Thunderbird Notes and wallpaper settings can be prepared, but the newest-message attachment and first embedded image identity are still unresolved.",
+    "event_id": "evt.osw_cross_app_artifact_98b42677e4.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

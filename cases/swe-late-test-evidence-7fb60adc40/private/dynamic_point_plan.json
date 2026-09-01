@@ -1,0 +1,238 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_use_identity_based_sentinel_",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_test_evidence_7.task_scope_or_dependency",
+      "evidence_group": "swe_late_test_evid.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.use_identity_based_senti"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.', perform classify_scope_delta for 'Use identity-based sentinel detection compatible with the reported implementations.' while retaining valid prior result 'Locate `num_mock_patch_args` and reproduce ndarray-valued `patch(new=...)` collection.'.",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `num_mock_patch_args` and reproduce ndarray-valued `patch(new=...)` collection.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_identity_based_senti"
+        ]
+      },
+      "id": "swe_late_test_e_5a91fc.cf.01_classify_scope_delta_use_identity_based",
+      "independence_key": "swe_late_test_e_5a91fc.cf.01_classify_scope_delta_use_identity_based",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_5a91fc.mutation.01_classify_scope_delta_use_identity_based",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_test_evidence_7fb60adc40.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.use_identity_based_senti"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_assert_collection_succeeds_a",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_test_evidence_7.task_scope_or_dependency",
+      "evidence_group": "swe_late_test_evid.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.use_identity_based_senti"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.', perform revise_affected for 'Assert collection succeeds and patched-argument counting is correct for ndarray `new`.' while retaining valid prior result 'Draft a comparison-safe sentinel check.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comparison-safe sentinel check.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_identity_based_senti"
+        ]
+      },
+      "id": "swe_late_test_e_5a91fc.cf.02_revise_affected_assert_collection_",
+      "independence_key": "swe_late_test_e_5a91fc.cf.02_revise_affected_assert_collection_",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_5a91fc.mutation.02_revise_affected_assert_collection_",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_7fb60adc40.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.use_identity_based_senti"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_verify_default_patches_still",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_test_evidence_7.task_scope_or_dependency",
+      "evidence_group": "swe_late_test_evid.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.use_identity_based_senti"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.', perform preserve_unaffected for 'Verify default patches still inject arguments and run compatibility tests.' while retaining valid prior result 'Locate `num_mock_patch_args` and reproduce ndarray-valued `patch(new=...)` collection.'.",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `num_mock_patch_args` and reproduce ndarray-valued `patch(new=...)` collection.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_identity_based_senti"
+        ]
+      },
+      "id": "swe_late_test_e_5a91fc.cf.03_preserve_unaffected_verify_default_pat",
+      "independence_key": "swe_late_test_e_5a91fc.cf.03_preserve_unaffected_verify_default_pat",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_5a91fc.mutation.03_preserve_unaffected_verify_default_pat",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_7fb60adc40.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.use_identity_based_senti"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_use_identity_based_sentinel_",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_test_evidence_7.task_scope_or_dependency",
+      "evidence_group": "swe_late_test_evid.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.use_identity_based_senti"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.', perform verify_closure for 'Use identity-based sentinel detection compatible with the reported implementations.' while retaining valid prior result 'Draft a comparison-safe sentinel check.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comparison-safe sentinel check.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_identity_based_senti"
+        ]
+      },
+      "id": "swe_late_test_e_5a91fc.cf.04_verify_closure_use_identity_based",
+      "independence_key": "swe_late_test_e_5a91fc.cf.04_verify_closure_use_identity_based",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_5a91fc.mutation.04_verify_closure_use_identity_based",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_7fb60adc40.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.use_identity_based_senti"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_03",
+      "event_id": "evt.swe_late_test_evidence_7.task_scope_or_dependency",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.",
+        "before": "Return the sentinel matrix after a generic comparison replacement has been proposed.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

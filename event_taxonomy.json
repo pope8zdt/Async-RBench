@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "execution_modes": [
+    "linear",
+    "async"
+  ],
+  "case_family_definition": "The eight event_themes are the benchmark's eight case families. Each registered case belongs to exactly one family through primary_event_theme.",
+  "counting_rule": "Each case is counted exactly once by primary_event_theme. Capabilities are independent multi-label measurements and are never added to event-theme counts.",
+  "trajectory_policy": "Trajectories may support discovery, source review, workload decomposition and provenance. They are forbidden as participant input, oracle truth, verifier input or action-sequence scoring targets.",
+  "async_scenario_classes": [
+    "result_eventful",
+    "live_eventful",
+    "resource_eventful"
+  ],
+  "stimulus_event_types": [
+    "result_delivery",
+    "completion_replay",
+    "child_timeout",
+    "child_crash",
+    "implicit_error_result",
+    "task_scope_revision",
+    "dependency_graph_revision",
+    "resource_pressure",
+    "deadline_update"
+  ],
+  "event_themes": [
+    {
+      "id": "delayed_authoritative_result",
+      "description": "An independently produced authoritative result becomes available after provisional downstream work has begun.",
+      "allowed_scenario_classes": ["result_eventful", "live_eventful"],
+      "stimulus_event_types": ["result_delivery"]
+    },
+    {
+      "id": "late_or_out_of_order_superseded_result",
+      "description": "A superseded result arrives late or out of order after a newer authority is available.",
+      "allowed_scenario_classes": ["result_eventful"],
+      "stimulus_event_types": ["result_delivery"]
+    },
+    {
+      "id": "partial_then_complete_result",
+      "description": "A useful partial result is followed by a more complete result that changes required integration work.",
+      "allowed_scenario_classes": ["result_eventful", "live_eventful"],
+      "stimulus_event_types": ["result_delivery"]
+    },
+    {
+      "id": "conflicting_valid_results",
+      "description": "Two independently valid-looking results conflict and require arbitration rather than blind aggregation.",
+      "allowed_scenario_classes": ["result_eventful"],
+      "stimulus_event_types": ["result_delivery"]
+    },
+    {
+      "id": "duplicate_or_replayed_completion",
+      "description": "The gateway replays an already delivered completion without creating a second child completion.",
+      "allowed_scenario_classes": ["result_eventful"],
+      "stimulus_event_types": ["completion_replay"]
+    },
+    {
+      "id": "child_failure_or_implicit_error",
+      "description": "A child times out, crashes, or returns a structurally valid payload whose evidence represents an implicit failure.",
+      "allowed_scenario_classes": ["result_eventful", "resource_eventful"],
+      "stimulus_event_types": ["child_timeout", "child_crash", "implicit_error_result"]
+    },
+    {
+      "id": "task_scope_or_dependency_change",
+      "description": "New evaluator-owned information changes the task scope or dependency graph while work is in flight.",
+      "allowed_scenario_classes": ["live_eventful"],
+      "stimulus_event_types": ["task_scope_revision", "dependency_graph_revision", "result_delivery"]
+    },
+    {
+      "id": "straggler_under_resource_pressure",
+      "description": "A straggler remains in flight while concurrency, token, or deadline pressure constrains the main agent's choices.",
+      "allowed_scenario_classes": ["resource_eventful"],
+      "stimulus_event_types": ["resource_pressure", "deadline_update"]
+    }
+  ]
+}

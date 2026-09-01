@@ -1,0 +1,96 @@
+{
+  "version": "4",
+  "checks": [
+    {
+      "id": "dm.cf.wait_profile_before_backend",
+      "gate": "wait_for_authority",
+      "dimension": "event_intake",
+      "gate_args": {
+        "artifacts": [
+          "deployment",
+          "batch_lineage"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "dm.authority.backend_feasible",
+        "dm.stale.provisional_profile_rejected"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "dm.cf.reject_provisional_tp",
+      "gate": "reject_late_stale",
+      "dimension": "state_revision",
+      "gate_args": {
+        "artifacts": [
+          "deployment",
+          "batch_lineage"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "dm.stale.tensor_candidate_rejected",
+        "dm.stale.provisional_implementation_rejected"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "dm.cf.cancel_tp_child",
+      "gate": "timely_cancellation",
+      "dimension": "plan_revision",
+      "gate_args": {
+        "workstreams": [
+          "implement_tp"
+        ]
+      },
+      "outcome_anchors": [
+        "dm.stale.provisional_implementation_rejected"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "dm.cf.regenerate_batches_from_v2",
+      "gate": "rederive_from_authority",
+      "dimension": "closure",
+      "gate_args": {
+        "artifacts": [
+          "batch_plan_1",
+          "batch_plan_2",
+          "deployment"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "dm.plans.bucket1_complete_unique",
+        "dm.plans.final_shape_contract",
+        "dm.lineage.batch_lineage_exact"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    }
+  ]
+}

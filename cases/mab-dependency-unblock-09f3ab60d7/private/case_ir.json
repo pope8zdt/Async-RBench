@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-09f3ab60d7",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_failure_integrate_per_line_coverage_",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "01_classify_failure_integrate_per_line",
+      "must_still_pass": [
+        "mab_dependency_unblock_0.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "promote_failed_result",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "required_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform classify_failure for 'Integrate per-line coverage statuses before building the combined report.' while retaining valid prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    },
+    {
+      "critical": false,
+      "decision_group": "recover_or_redelegate_exclude_nonexecutable_lines_",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Integration and heatmap consumers are scaffolded against provisional coverage percentages.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "02_recover_or_redelegate_exclude_nonexecuta",
+      "must_still_pass": [
+        "mab_dependency_unblock_0.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "omit_recovery",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "required_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform recover_or_redelegate for 'Exclude nonexecutable lines from the percentage denominator.' while retaining valid prior result 'Integration and heatmap consumers are scaffolded against provisional coverage percentages.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_generate_heatmap_intensity_f",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "03_verify_closure_generate_heatmap_i",
+      "must_still_pass": [
+        "mab_dependency_unblock_0.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "false_success",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform verify_closure for 'Generate heatmap intensity from the returned statuses.' while retaining valid prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.integrate_per_line_cover"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.exclude_nonexecutable_li"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.generate_heatmap_intensi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_a_mutation_that_remo"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.integrate_per_line_cover",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.exclude_nonexecutable_li",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.generate_heatmap_intensi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_a_mutation_that_remo",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.integrate_per_line_cover",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.exclude_nonexecutable_li",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.generate_heatmap_intensi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_a_mutation_that_remo",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.integrate_per_line_cover",
+      "req.02.exclude_nonexecutable_li",
+      "req.03.generate_heatmap_intensi",
+      "req.04.add_a_mutation_that_remo",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.",
+    "before_state": "The required coverage-module contract arrives after complexity, sizing, and integration consumers have been prepared.",
+    "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+    "primary_event_theme": "child_failure_or_implicit_error",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Integrate per-line coverage statuses before building the combined report.",
+      "id": "req.01.integrate_per_line_cover",
+      "observable_probe": "mab_dependency_unblock_0.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for integrate_per_line_coverage_statuses"
+    },
+    {
+      "description": "Exclude nonexecutable lines from the percentage denominator.",
+      "id": "req.02.exclude_nonexecutable_li",
+      "observable_probe": "mab_dependency_unblock_0.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for exclude_nonexecutable_lines_from_the"
+    },
+    {
+      "description": "Generate heatmap intensity from the returned statuses.",
+      "id": "req.03.generate_heatmap_intensi",
+      "observable_probe": "mab_dependency_unblock_0.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for generate_heatmap_intensity_from_the_"
+    },
+    {
+      "description": "Add a mutation that removes one tested branch and verify percentage and heatmap changes.",
+      "id": "req.04.add_a_mutation_that_remo",
+      "observable_probe": "mab_dependency_unblock_0.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_a_mutation_that_removes_one_test"
+    }
+  ]
+}

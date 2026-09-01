@@ -1,0 +1,75 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_16b0d42106.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_16b0d42106.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__0960e4.cf.01_classify_scope_delta_add_or_invoke_a_program_",
+          "swe_dependency__0960e4.cf.02_revise_affected_compare_return_parameter",
+          "swe_dependency__0960e4.cf.03_preserve_unaffected_retain_successful_reuse_",
+          "swe_dependency__0960e4.cf.04_verify_closure_add_multi_package_compil"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_16b0d42106.event.receipt",
+          "swe_dependency_unblock_16b0d42106.event.probes",
+          "swe_dependency_unblock_16b0d42106.closure",
+          "swe_dependency_unblock_16b0d42106.source.pin",
+          "swe_dependency_unblock_16b0d42106.native.ponyc_ffi_conflicts",
+          "swe_dependency_unblock_16b0d42106.native.ponyc_ffi_compatible"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Fix codegen failures on incompatible FFI declarations",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "b03fa23ed490a7ab6157f64db1f745fd12dbb1515014312da9d4040874d3dbcf",
+        "task_id": "ponylang__ponyc-2205",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

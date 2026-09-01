@@ -1,0 +1,31 @@
+{
+  "authority_rule": "The newest valid authority supersedes the earlier result for the affected closure only.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.choose_or_counter_the_wa",
+      "req.02.state_the_exact_coverage",
+      "req.03.submit_a_revised_price_a",
+      "req.04.finalize_only_with_expli",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The seller role offers $45 per filter pack with a 90-day defect warranty, or $48 with a one-year replacement warranty and dedicated support, preserving its stated margin floor.",
+    "before_state": "Deliver the margin-constrained warranty tiers after the buyer has drafted maximum coverage at its lowest price.",
+    "event_id": "evt.mab_late_constraint_23f2.late_or_out_of_order_sup",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_constraint_23f2.late_or_out_of_order_sup",
+  "forbidden_shortcut": "Do not retain or merge a displaced result merely because it arrived first.",
+  "required_decisions": [
+    "identify_supersession",
+    "reject_stale_result",
+    "selective_replan"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

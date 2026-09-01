@@ -1,0 +1,83 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "A separately frozen entrypoint recreates the same task-specific behavior and receipt-bound closure without invoking the oracle script.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_dependency_unblock_0daa930906.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_dependency_unblock_0daa930906.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-task-semantics",
+      "must_fail": [
+        "mab_dependency_unblock_0daa930906.source.task_behavior"
+      ],
+      "path": "task/negative_mutations/wrong_task_semantics.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_code75_artcollab.cf.01_classify_critical_path_adapt_frontend_mes",
+          "mab_code75_artcollab.cf.02_resource_triage_implement_server_b",
+          "mab_code75_artcollab.cf.03_verify_closure_add_two_client_tes"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_dependency_unblock_0daa930906.event.receipt",
+          "mab_dependency_unblock_0daa930906.event.authority_probe",
+          "mab_dependency_unblock_0daa930906.closure",
+          "mab_dependency_unblock_0daa930906.source.pin",
+          "mab_dependency_unblock_0daa930906.source.output_schema",
+          "mab_dependency_unblock_0daa930906.source.task_behavior",
+          "mab_dependency_unblock_0daa930906.source.preservation",
+          "mab_dependency_unblock_0daa930906.source.event_closure"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "The harness then",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "fe9212a59060688e61a9ab1b9526eb61b0f2aa9f0be5e2319bcd4a37f42da6a7",
+        "task_id": "coding:075",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

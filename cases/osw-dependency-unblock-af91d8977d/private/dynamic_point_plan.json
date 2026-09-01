@@ -1,0 +1,195 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_terminal_focus_keybinding_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_af91d8977d.delayed_authoritative_result",
+      "evidence_group": "osw_focus_af91.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "terminal_focus_command_context"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for terminal_focus_command_context; preserve unaffected vscode state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, overwrite confirmed partial work, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02"
+        ]
+      },
+      "id": "osw_focus_af91.cf.01_classify_authority_terminal_focus_keybinding_osworld",
+      "independence_key": "osw_focus_af91.cf.01_classify_authority_terminal_focus_keybinding_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_focus_af91.mutation.01_classify_authority_terminal_focus_keybinding_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af91d8977d.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_terminal_focus_keybinding_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_af91d8977d.delayed_authoritative_result",
+      "evidence_group": "osw_focus_af91.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "terminal_focus_command_context"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for terminal_focus_command_context; preserve unaffected vscode state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, overwrite confirmed partial work, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02"
+        ]
+      },
+      "id": "osw_focus_af91.cf.02_revise_affected_terminal_focus_keybinding_osworld",
+      "independence_key": "osw_focus_af91.cf.02_revise_affected_terminal_focus_keybinding_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_focus_af91.mutation.02_revise_affected_terminal_focus_keybinding_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af91d8977d.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.entry_identity"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure_terminal_focus_keybinding_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_af91d8977d.delayed_authoritative_result",
+      "evidence_group": "osw_focus_af91.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "terminal_focus_command_context"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for terminal_focus_command_context; preserve unaffected vscode state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, overwrite confirmed partial work, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02"
+        ]
+      },
+      "id": "osw_focus_af91.cf.03_verify_closure_terminal_focus_keybinding_osworld",
+      "independence_key": "osw_focus_af91.cf.03_verify_closure_terminal_focus_keybinding_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_focus_af91.mutation.03_verify_closure_terminal_focus_keybinding_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af91d8977d.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.terminal_scope"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_02",
+      "event_id": "evt.osw_dependency_unblock_af91d8977d.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The keybinding resolver returns the exact scoped entry ctrl+j, workbench.action.focusActiveEditorGroup, when terminalFocus.",
+        "before": "VS Code and the user keybindings file are available, but the exact editor-focus command and terminal-only context are unresolved.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

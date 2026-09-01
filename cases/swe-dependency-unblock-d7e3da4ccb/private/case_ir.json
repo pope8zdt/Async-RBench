@@ -1,0 +1,218 @@
+{
+  "case_id": "swe-dependency-unblock-d7e3da4ccb",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_emit_source_read_for_include",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located top-level `source-read` emission in Sphinx input processing.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.emit_source_read_for_inc"
+        ]
+      },
+      "id": "01_classify_completeness_emit_source_read_f",
+      "must_still_pass": [
+        "swe_dependency_unblock_d.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "treat_partial_as_final",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "swe_dependency_unblock_d7e3da4ccb.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "For event 'A pipeline analysis reports the included-file text stage at which slicing and decoding are complete but reST parsing has not begun, together with the source identifier expected by `source-read` handlers.', perform classify_completeness for 'Emit `source-read` for included text at the identified pre-parse stage.' while retaining valid prior result 'Located top-level `source-read` emission in Sphinx input processing.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.emit_source_read_for_inc"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_pass_a_mutable_source_contai",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located the Sphinx include directive and its file-reading path.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.emit_source_read_for_inc"
+        ]
+      },
+      "id": "02_revise_affected_pass_a_mutable_sou",
+      "must_still_pass": [
+        "swe_dependency_unblock_d.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "drop_confirmed_partial",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_d7e3da4ccb.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A pipeline analysis reports the included-file text stage at which slicing and decoding are complete but reST parsing has not begun, together with the source identifier expected by `source-read` handlers.', perform revise_affected for 'Pass a mutable source container and the included file’s source identifier.' while retaining valid prior result 'Located the Sphinx include directive and its file-reading path.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.emit_source_read_for_inc"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_preserve_include_slicing_and",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located top-level `source-read` emission in Sphinx input processing.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.emit_source_read_for_inc"
+        ]
+      },
+      "id": "03_verify_closure_preserve_include_s",
+      "must_still_pass": [
+        "swe_dependency_unblock_d.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_d7e3da4ccb.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'A pipeline analysis reports the included-file text stage at which slicing and decoding are complete but reST parsing has not begun, together with the source identifier expected by `source-read` handlers.', perform verify_closure for 'Preserve include slicing and encoding behavior.' while retaining valid prior result 'Located top-level `source-read` emission in Sphinx input processing.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.emit_source_read_for_inc"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.emit_source_read_for_inc"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.pass_a_mutable_source_co"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.preserve_include_slicing"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.build_a_fixture_whose_ex"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.emit_source_read_for_inc",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.pass_a_mutable_source_co",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.preserve_include_slicing",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.build_a_fixture_whose_ex",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.emit_source_read_for_inc",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.pass_a_mutable_source_co",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.preserve_include_slicing",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.build_a_fixture_whose_ex",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.emit_source_read_for_inc",
+      "req.02.pass_a_mutable_source_co",
+      "req.03.preserve_include_slicing",
+      "req.04.build_a_fixture_whose_ex",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A pipeline analysis reports the included-file text stage at which slicing and decoding are complete but reST parsing has not begun, together with the source identifier expected by `source-read` handlers.",
+    "before_state": "The event-ordering result arrives while the main patch is targeting the include directive but before the hook position is fixed.",
+    "event_id": "evt.swe_dependency_unblock_d.partial_then_complete_re",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Emit `source-read` for included text at the identified pre-parse stage.",
+      "id": "req.01.emit_source_read_for_inc",
+      "observable_probe": "swe_dependency_unblock_d.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for emit_source_read_for_included_text_a"
+    },
+    {
+      "description": "Pass a mutable source container and the included file’s source identifier.",
+      "id": "req.02.pass_a_mutable_source_co",
+      "observable_probe": "swe_dependency_unblock_d.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for pass_a_mutable_source_container_and_"
+    },
+    {
+      "description": "Preserve include slicing and encoding behavior.",
+      "id": "req.03.preserve_include_slicing",
+      "observable_probe": "swe_dependency_unblock_d.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for preserve_include_slicing_and_encodin"
+    },
+    {
+      "description": "Build a fixture whose extension replaces tokens in both top-level and included literal blocks.",
+      "id": "req.04.build_a_fixture_whose_ex",
+      "observable_probe": "swe_dependency_unblock_d.sem.04.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for build_a_fixture_whose_extension_repl"
+    }
+  ]
+}

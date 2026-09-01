@@ -1,0 +1,203 @@
+{
+  "case_id": "mab-late-constraint-f395d7243c",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_stale",
+      "must_still_pass": [],
+      "mutation_family": "classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_f395d7243c.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "classify_stale: A current logistics counter offers 240 units once at $8.40 or quarterly reorders totaling 960 annually at $8.10; the stale frequent-small-order plan is excluded.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "logistics_tiers_countered"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_exclude_stale",
+      "must_still_pass": [],
+      "mutation_family": "exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_f395d7243c.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "exclude_stale: A current logistics counter offers 240 units once at $8.40 or quarterly reorders totaling 960 annually at $8.10; the stale frequent-small-order plan is excluded.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "logistics_tiers_countered"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_verify_closure",
+      "must_still_pass": [],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_f395d7243c.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A current logistics counter offers 240 units once at $8.40 or quarterly reorders totaling 960 annually at $8.10; the stale frequent-small-order plan is excluded.",
+      "stage_tag": "closure",
+      "task_requirement_id": "logistics_tiers_countered"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.choose_between_the_one_t"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.revise_quantity_reorder_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.submit_the_selected_pack"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.record_agreement_or_impa"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.choose_between_the_one_t",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.revise_quantity_reorder_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.submit_the_selected_pack",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.record_agreement_or_impa",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.choose_between_the_one_t",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.revise_quantity_reorder_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.submit_the_selected_pack",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.record_agreement_or_impa",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.choose_between_the_one_t",
+      "req.02.revise_quantity_reorder_",
+      "req.03.submit_the_selected_pack",
+      "req.04.record_agreement_or_impa",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A current logistics counter offers 240 units once at $8.40 or quarterly reorders totaling 960 annually at $8.10; the stale frequent-small-order plan is excluded.",
+    "before_state": "Task-specific provisional work exists before logistics_tiers_countered.",
+    "event_id": "evt.mab-late-constraint-f395d7243c.logistics_tiers_countered",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Choose between the one-time and annual-volume logistics tiers.",
+      "id": "req.01.choose_between_the_one_t",
+      "observable_probe": "mab_late_constraint_f395.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for choose_between_the_one_time_and_annu"
+    },
+    {
+      "description": "Revise quantity, reorder cadence, and price together.",
+      "id": "req.02.revise_quantity_reorder_",
+      "observable_probe": "mab_late_constraint_f395.sem.02.the_final_negotiation_ledger",
+      "public_evidence": "source instruction and workstream result for revise_quantity_reorder_cadence_and_"
+    },
+    {
+      "description": "Submit the selected package as a counteroffer.",
+      "id": "req.03.submit_the_selected_pack",
+      "observable_probe": "mab_late_constraint_f395.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for submit_the_selected_package_as_a_cou"
+    },
+    {
+      "description": "Record agreement or impasse through the bargaining tools.",
+      "id": "req.04.record_agreement_or_impa",
+      "observable_probe": "mab_late_constraint_f395.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for record_agreement_or_impasse_through_"
+    }
+  ]
+}

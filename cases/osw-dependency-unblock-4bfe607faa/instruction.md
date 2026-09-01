@@ -1,0 +1,15 @@
+Browse women's Nike jerseys and retain only listings priced over $60.
+
+ASYNC-RBENCH EXTENSION
+After a useful browser-state checkpoint, the evaluator injects the delayed
+result through the agent event stream (a `result_delivered` message). Treat
+that delivered result as new evidence rather than as an answer: revise only
+affected work, preserve still-valid browser state, and reverify the final
+persisted OSWorld outcome. Do not search, read, or poll evaluator-private
+fixtures or `/async_rbench` paths for a result, and do not use retry/sleep
+loops to wait for one; those paths are intentionally absent from the
+participant workspace. Continue useful browser work and consume the next
+gateway delivery when it arrives. The delivered payload is the authority
+receipt: persist it verbatim as `/app/output_data/event_receipt.json`, then
+reverify and write the closure manifest. Event payload details remain private
+until that evaluator delivery.

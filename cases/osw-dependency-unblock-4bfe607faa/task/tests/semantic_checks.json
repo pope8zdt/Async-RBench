@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The event receipt is authentic and bound to the real OSWorld task.",
+      "id": "osw_dependency_unblock_4bfe607faa.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The delayed OSWorld evidence producer completed with observable probes.",
+      "id": "osw_dependency_unblock_4bfe607faa.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and records source-semantic reverification.",
+      "id": "osw_dependency_unblock_4bfe607faa.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains bound to its pinned OSWorld source task.",
+      "id": "osw_dependency_unblock_4bfe607faa.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native result is bound to osworld:chrome:9f3f70fc-5afc-4958-a7b7-3bb4fcb01805 and check_url_and_content_include.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official OSWorld evaluator score is exactly 1.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native evidence digest matches the evaluator-owned fixture.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The final catalog state is Women's Nike Jerseys with a lower price bound strictly above $60.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final NBA Store women's Nike jerseys state satisfies its task-specific OSWorld invariant.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.state",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_nike_womens_jersey_filter_state",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

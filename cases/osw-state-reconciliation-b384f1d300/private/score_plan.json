@@ -1,0 +1,408 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_next_chapter_repository_result",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_state_reconciliation_b384f1d300.delayed_authoritative_result",
+      "evidence_group": "osw_chapter_b384.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "next_chapter_repository_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for next_chapter_repository_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_chapter_b384.cf.01_classify_authority_next_chapter_repository_result",
+      "independence_key": "osw_chapter_b384.cf.01_classify_authority_next_chapter_repository_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_chapter_b384.mutation.01_classify_authority_next_chapter_repository_result",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_state_reconciliation_b384f1d300.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.archive_inventory"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_next_chapter_repository_result",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_state_reconciliation_b384f1d300.delayed_authoritative_result",
+      "evidence_group": "osw_chapter_b384.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "next_chapter_repository_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for next_chapter_repository_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_chapter_b384.cf.02_revise_affected_next_chapter_repository_result",
+      "independence_key": "osw_chapter_b384.cf.02_revise_affected_next_chapter_repository_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_chapter_b384.mutation.02_revise_affected_next_chapter_repository_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_b384f1d300.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.next_chapter"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_next_chapter_repository_result",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_state_reconciliation_b384f1d300.delayed_authoritative_result",
+      "evidence_group": "osw_chapter_b384.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "next_chapter_repository_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for next_chapter_repository_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_chapter_b384.cf.03_preserve_unaffected_next_chapter_repository_result",
+      "independence_key": "osw_chapter_b384.cf.03_preserve_unaffected_next_chapter_repository_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_chapter_b384.mutation.03_preserve_unaffected_next_chapter_repository_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_b384f1d300.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_next_chapter_repository_result",
+      "dimension": "closure",
+      "event_id": "evt.osw_state_reconciliation_b384f1d300.delayed_authoritative_result",
+      "evidence_group": "osw_chapter_b384.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "next_chapter_repository_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for next_chapter_repository_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_chapter_b384.cf.04_verify_closure_next_chapter_repository_result",
+      "independence_key": "osw_chapter_b384.cf.04_verify_closure_next_chapter_repository_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_chapter_b384.mutation.04_verify_closure_next_chapter_repository_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_state_reconciliation_b384f1d300.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.gold_content"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "wait_for_authority",
+      "id": "osw_chapter_b384.mutation.01_classify_authority_next_chapter_repository_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_chapter_b384.cf.01_classify_authority_next_chapter_repository_result"
+      ],
+      "must_still_pass": [
+        "osw_state_reconciliation_b384f1d300.source.pin"
+      ],
+      "targets": [
+        "osw_chapter_b384.cf.01_classify_authority_next_chapter_repository_result",
+        "osw_state_reconciliation_b384f1d300.event.receipt",
+        "osw_state_reconciliation_b384f1d300.event.probes",
+        "osw_state_reconciliation_b384f1d300.closure",
+        "osw_state_reconciliation_b384f1d300.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "resolve_authority",
+      "id": "osw_chapter_b384.mutation.02_revise_affected_next_chapter_repository_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_chapter_b384.cf.02_revise_affected_next_chapter_repository_result"
+      ],
+      "must_still_pass": [
+        "osw_state_reconciliation_b384f1d300.source.pin"
+      ],
+      "targets": [
+        "osw_chapter_b384.cf.02_revise_affected_next_chapter_repository_result",
+        "osw_state_reconciliation_b384f1d300.event.receipt",
+        "osw_state_reconciliation_b384f1d300.event.probes",
+        "osw_state_reconciliation_b384f1d300.closure",
+        "osw_state_reconciliation_b384f1d300.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "selective_replan",
+      "id": "osw_chapter_b384.mutation.03_preserve_unaffected_next_chapter_repository_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_chapter_b384.cf.03_preserve_unaffected_next_chapter_repository_result"
+      ],
+      "must_still_pass": [
+        "osw_state_reconciliation_b384f1d300.source.pin"
+      ],
+      "targets": [
+        "osw_chapter_b384.cf.03_preserve_unaffected_next_chapter_repository_result",
+        "osw_state_reconciliation_b384f1d300.event.receipt",
+        "osw_state_reconciliation_b384f1d300.event.probes",
+        "osw_state_reconciliation_b384f1d300.closure",
+        "osw_state_reconciliation_b384f1d300.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "rederive_from_authority",
+      "id": "osw_chapter_b384.mutation.04_verify_closure_next_chapter_repository_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_chapter_b384.cf.04_verify_closure_next_chapter_repository_result"
+      ],
+      "must_still_pass": [
+        "osw_state_reconciliation_b384f1d300.source.pin"
+      ],
+      "targets": [
+        "osw_chapter_b384.cf.04_verify_closure_next_chapter_repository_result",
+        "osw_state_reconciliation_b384f1d300.event.receipt",
+        "osw_state_reconciliation_b384f1d300.event.probes",
+        "osw_state_reconciliation_b384f1d300.closure",
+        "osw_state_reconciliation_b384f1d300.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_state_reconciliation_b384f1d300.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 3 task-specific upstream workers completed with observable probes.",
+      "id": "osw_state_reconciliation_b384f1d300.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_state_reconciliation_b384f1d300.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_state_reconciliation_b384f1d300.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:788b3701-3ec9-4b67-b679-418bfa726c22 and diff_text_file.",
+      "id": "osw_state_reconciliation_b384f1d300.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_state_reconciliation_b384f1d300.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_state_reconciliation_b384f1d300.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Early Buildings.tex is the next chapter absent from the seven-file archive and its saved content exactly matches the official 5045-byte gold text.",
+      "id": "osw_state_reconciliation_b384f1d300.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The audited archive contains exactly the seven previously downloaded chapter files.",
+      "id": "osw_state_reconciliation_b384f1d300.osworld.archive_inventory",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_archive_inventory",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The repository reconciliation selects Early Buildings.tex.",
+      "id": "osw_state_reconciliation_b384f1d300.osworld.next_chapter",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_next_chapter",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The next chapter is saved in the requested collection folder.",
+      "id": "osw_state_reconciliation_b384f1d300.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The output exactly matches the audited 5045-byte, 76-line gold chapter.",
+      "id": "osw_state_reconciliation_b384f1d300.osworld.gold_content",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_gold_content",
+      "relevance_tier": "base"
+    }
+  ]
+}

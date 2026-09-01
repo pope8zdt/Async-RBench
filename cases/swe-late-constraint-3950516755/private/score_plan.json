@@ -1,0 +1,202 @@
+{
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate AST generation in `Expression.compile`.'.",
+      "family": "wait_for_authority",
+      "id": "swe_late_constr_b45961.mutation.01_classify_critical_path",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_b45961.cf.01_classify_critical_path"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_3950516755.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_b45961.cf.01_classify_critical_path",
+        "swe_late_constraint_3950516755.event.receipt",
+        "swe_late_constraint_3950516755.event.probes",
+        "swe_late_constraint_3950516755.closure",
+        "swe_late_constraint_3950516755.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Create compile/evaluate checks for ordinary identifiers and boolean-like tokens.'.",
+      "family": "resource_triage",
+      "id": "swe_late_constr_b45961.mutation.02_resource_triage",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_b45961.cf.02_resource_triage"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_3950516755.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_b45961.cf.02_resource_triage",
+        "swe_late_constraint_3950516755.event.receipt",
+        "swe_late_constraint_3950516755.event.probes",
+        "swe_late_constraint_3950516755.closure",
+        "swe_late_constraint_3950516755.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate AST generation in `Expression.compile`.'.",
+      "family": "rederive_from_authority",
+      "id": "swe_late_constr_b45961.mutation.03_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_b45961.cf.03_verify_closure"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_3950516755.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_b45961.cf.03_verify_closure",
+        "swe_late_constraint_3950516755.event.receipt",
+        "swe_late_constraint_3950516755.event.probes",
+        "swe_late_constraint_3950516755.closure",
+        "swe_late_constraint_3950516755.source.pin"
+      ]
+    }
+  ],
+  "points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_generate_a_crash_safe_ast_pr",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_constraint_3950.straggler_under_resource",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.generate_a_crash_safe_as"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A version specialist reports compilation and evaluation semantics for `True`, `False`, and `None` on supported Python versions, including debug builds.', perform classify_critical_path for 'Generate a crash-safe AST preserving the reported expression lookup behavior.' while retaining valid prior result 'Locate AST generation in `Expression.compile`.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate AST generation in `Expression.compile`.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_late_constr_b45961.cf.01_classify_critical_path",
+      "independence_key": "swe_late_constr_b45961.cf.01_classify_critical_path",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_b45961.mutation.01_classify_critical_path",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "swe_late_constraint_3950516755.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_constr_b45961.cf.01_classify_critical_path]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.generate_a_crash_safe_as"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_assert_compilation_and_evalu",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_constraint_3950.straggler_under_resource",
+      "evidence_group": "plan_revision:2",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.generate_a_crash_safe_as"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A version specialist reports compilation and evaluation semantics for `True`, `False`, and `None` on supported Python versions, including debug builds.', perform resource_triage for 'Assert compilation and evaluation for all three special identifiers and compound expressions.' while retaining valid prior result 'Create compile/evaluate checks for ordinary identifiers and boolean-like tokens.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Create compile/evaluate checks for ordinary identifiers and boolean-like tokens.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "cancel_workstreams": [
+          "requirement_worker_03"
+        ],
+        "preserve_workstreams": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "swe_late_constr_b45961.cf.02_resource_triage",
+      "independence_key": "swe_late_constr_b45961.cf.02_resource_triage",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_b45961.mutation.02_resource_triage",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "swe_late_constraint_3950516755.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_constr_b45961.cf.02_resource_triage]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.generate_a_crash_safe_as"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_run_mark_expression_tests_on",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_constraint_3950.straggler_under_resource",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.generate_a_crash_safe_as"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A version specialist reports compilation and evaluation semantics for `True`, `False`, and `None` on supported Python versions, including debug builds.', perform verify_closure for 'Run mark-expression tests on the available interpreter and retain ordinary identifier behavior.' while retaining valid prior result 'Locate AST generation in `Expression.compile`.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate AST generation in `Expression.compile`.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_late_constr_b45961.cf.03_verify_closure",
+      "independence_key": "swe_late_constr_b45961.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_b45961.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_3950516755.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_constr_b45961.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.generate_a_crash_safe_as"
+    }
+  ]
+}

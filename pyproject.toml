@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "async-rbench"
+version = "0.2.0"
+description = "Benchmark for asynchronous result integration and dynamic replanning"
+requires-python = ">=3.11"
+dependencies = ["PyYAML>=6.0"]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0,<10"]
+
+[project.scripts]
+async-rbench = "async_rbench.cli:main"
+async-rbench-eval = "async_rbench.eval_cli:main"
+async-rbench-reference-adapter = "async_rbench.profiles.reference_scaffold_api.adapter:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["async_rbench*"]

@@ -1,0 +1,213 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/testbed"
+    }
+  ],
+  "case_id": "swe-dependency-unblock-3361c7af50",
+  "format_version": 2,
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "resolve_requirement_01"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_01"
+      ],
+      "id": "resolve_requirement_02"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_02"
+      ],
+      "id": "resolve_requirement_03"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_03"
+      ],
+      "id": "resolve_requirement_04"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_04"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_tasks": [
+    {
+      "benchmark": "swe-bench",
+      "id": "matplotlib__matplotlib-25332",
+      "source_sha256": "78c38ea9ff9fda1c9ee826d5689e9d2067c3bf4b5ea94e3c6c1eadba7522354a",
+      "upstream_path": "cases/swe-dependency-unblock-3361c7af50/private/source_task.yaml"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench source-native rebuild: matplotlib__matplotlib-25332",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 1: Update Figure serialization to omit the alignment-group state containing weak references.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Update Figure serialization to omit the alignment-group state containing weak references. Write a JSON report to /app/output_data/workstreams/requirement_worker_01.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 2: Recreate fresh alignment Groupers when the figure is restored.",
+      "id": "requirement_worker_02",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Recreate fresh alignment Groupers when the figure is restored. Write a JSON report to /app/output_data/workstreams/requirement_worker_02.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 3: Verify pickle round-tripping after align_labels() and confirm the unpickled figure can perform alignment again.",
+      "id": "requirement_worker_03",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Verify pickle round-tripping after align_labels() and confirm the unpickled figure can perform alignment again. Write a JSON report to /app/output_data/workstreams/requirement_worker_03.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_04.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 4: Run the targeted figure and serialization tests, including a control figure that was never aligned.",
+      "id": "requirement_worker_04",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_04.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Independently investigate and verify this source-task requirement: Run the targeted figure and serialization tests, including a control figure that was never aligned. Write a JSON report to /app/output_data/workstreams/requirement_worker_04.json and return its path, the observed workspace revision SHA-256, and a concise finding."
+    }
+  ]
+}

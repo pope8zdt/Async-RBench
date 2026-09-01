@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific audio_analysis_straggler_completed receipt is authentic and bound to coding:009 and mab-dependency-unblock-3005dbb57f.",
+      "id": "mab_dependency_unblock_3005dbb57f.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned Music_Collaboration_Hub authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_3005dbb57f.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The delayed audio schema closes progression and visualization events while loop-version isolation, concurrent edits, chat, and history remain intact.",
+      "id": "mab_dependency_unblock_3005dbb57f.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:009.",
+      "id": "mab_dependency_unblock_3005dbb57f.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and versioned_loop_analysis_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_3005dbb57f.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_music_hub_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Each immutable loop version receives detected key, Roman-numeral progression, confidence, and fixed-size waveform bins; transposition changes the key without mixing concurrent versions.",
+      "id": "mab_dependency_unblock_3005dbb57f.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_music_hub_version_isolation_transposition_and_fixed_bins",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: loop_versions, concurrent_edits, chat_messages, collaboration_history.",
+      "id": "mab_dependency_unblock_3005dbb57f.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_music_hub_chat_concurrent_edits_and_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed audio schema closes progression and visualization events while loop-version isolation, concurrent edits, chat, and history remain intact.",
+      "id": "mab_dependency_unblock_3005dbb57f.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_music_hub_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

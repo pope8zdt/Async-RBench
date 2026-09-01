@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific seller_warranty_tiers_arrived receipt bound to bargaining:020.",
+      "id": "mab_late_constraint_23f25a7748.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned 16x25x1 MERV 13 Air Filters bargaining task authority runs after three upstream results.",
+      "id": "mab_late_constraint_23f25a7748.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The late seller warranty authority supersedes an earlier buyer draft while transcript, rejected offers, buyer priorities, and the seller margin floor remain auditable.",
+      "id": "mab_late_constraint_23f25a7748.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench bargaining:020.",
+      "id": "mab_late_constraint_23f25a7748.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The negotiation implementation and air_filter_warranty_agreement_closure expose the task-specific four-upstream bargaining contract and required summary sections.",
+      "id": "mab_late_constraint_23f25a7748.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_air_filter_output_schema_summary_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Late seller tiers supersede earlier drafts; stale offers cannot overwrite newer authority; final agreements state price, coverage period, replacement obligation, and support above the seller margin floor.",
+      "id": "mab_late_constraint_23f25a7748.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_air_filter_late_authority_supersedes_stale_offer_and_finalizes_explicit_terms",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves negotiation_transcript, rejected_offers, buyer_priorities, seller_margin_floor.",
+      "id": "mab_late_constraint_23f25a7748.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_air_filter_margin_rejections_transcript_and_priorities_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The late seller authority replaces the superseded buyer draft while all role actions and explicit agreement terms remain auditable.",
+      "id": "mab_late_constraint_23f25a7748.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_air_filter_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

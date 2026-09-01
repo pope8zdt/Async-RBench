@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_the_20_roll_acceptan",
+      "req.02.condition_the_annual_com",
+      "req.03.revise_the_price_and_qua",
+      "req.04.submit_the_offer_and_rec",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Independent write-on and transparency evidence requires a 20-roll acceptance sample before a $14.75 twelve-month quarterly commitment can become valid.",
+    "before_state": "Task-specific provisional work exists before quality_evidence_and_contract_tier_delivered.",
+    "event_id": "evt.mab-late-test-evidence-11ad0b6722.quality_evidence_and_contract_tier_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-test-evidence-11ad0b6722.quality_evidence_and_contract_tier_delivered",
+  "forbidden_shortcut": "Do not ignore the event, retain a superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

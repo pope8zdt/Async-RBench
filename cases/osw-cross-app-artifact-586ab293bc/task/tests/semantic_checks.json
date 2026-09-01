@@ -1,0 +1,115 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed receipt.",
+      "id": "osw_cross_app_artifact_586ab293bc.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Independent worker completed with probes.",
+      "id": "osw_cross_app_artifact_586ab293bc.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes receipt and reverifies semantics.",
+      "id": "osw_cross_app_artifact_586ab293bc.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_586ab293bc.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:d9b7c649-c975-4f53-88f5-940b29c47247 and compare_table.",
+      "id": "osw_cross_app_artifact_586ab293bc.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_586ab293bc.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Evidence digest matches private fixture.",
+      "id": "osw_cross_app_artifact_586ab293bc.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Desktop/report.xlsx contains the latest five Daily-folder messages in chronological order with exact sender, subject, CC and attachment fields.",
+      "id": "osw_cross_app_artifact_586ab293bc.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "report.xlsx uses the required desktop path and five official headers.",
+      "id": "osw_cross_app_artifact_586ab293bc.osworld.output_path_headers",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_report_path_and_headers",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The report has five rows ordered 25, 27, 28, 29, 30 January.",
+      "id": "osw_cross_app_artifact_586ab293bc.osworld.row_count_order",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_latest_five_chronological_order",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Every sender, subject, CC and attachment count matches the official table.",
+      "id": "osw_cross_app_artifact_586ab293bc.osworld.mail_rows",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_mail_rows",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

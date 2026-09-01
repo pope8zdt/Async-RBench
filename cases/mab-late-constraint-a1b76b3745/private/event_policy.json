@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_provisional_offer",
+      "req.02.classify_the_no_power_clarif",
+      "req.03.add_batch_shelf_life_price_a",
+      "req.04.close_without_retaining_the_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Product authority clarifies that the spray has no battery; condition is established by a sealed-lot certificate with 24-month shelf life, at $17.50 for 60 units and five-day delivery.",
+    "before_state": "A provisional Delay Spray for Him bargain exists before sealed_lot_scope_clarified.",
+    "event_id": "evt.mab-late-constraint-a1b76b3745.sealed_lot_scope_clarified",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-a1b76b3745.sealed_lot_scope_clarified",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

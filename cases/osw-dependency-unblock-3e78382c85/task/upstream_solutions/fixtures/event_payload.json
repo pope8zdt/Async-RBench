@@ -1,0 +1,42 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-3e78382c85",
+  "source_task_id": "osworld:vs_code:ea98c5d7-3cf9-4f9b-8ad3-366b58e0fcae",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "vscode_tree_find_keybinding_identity",
+  "upstream_dependency_graph": [
+    {
+      "id": "tree_find_command_resolution",
+      "app": "VS Code",
+      "description": "Resolve the Explorer Tree View Find command identity."
+    },
+    {
+      "id": "context_expression_resolution",
+      "app": "VS Code",
+      "description": "Resolve the exact listFocus && listSupportsFind context.",
+      "depends_on": [
+        "tree_find_command_resolution"
+      ]
+    },
+    {
+      "id": "scoped_negation_validation",
+      "app": "VS Code",
+      "description": "Validate that only Tree View Find loses Ctrl+F and unrelated bindings remain.",
+      "depends_on": [
+        "context_expression_resolution"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/.config/Code/User/keybindings.json",
+    "key": "ctrl+f",
+    "command": "-list.find",
+    "when": "listFocus && listSupportsFind",
+    "matching_entry_count": 1,
+    "valid_json": true,
+    "tree_view_find_disabled": true,
+    "unrelated_ctrl_f_preserved": true
+  },
+  "task_assertion": "VS Code keybindings contain the exact scoped -list.find Ctrl+F removal entry while unrelated Ctrl+F behavior remains intact.",
+  "finding": "The keybinding worker returns the exact scoped removal entry: key ctrl+f, command -list.find, when listFocus && listSupportsFind."
+}

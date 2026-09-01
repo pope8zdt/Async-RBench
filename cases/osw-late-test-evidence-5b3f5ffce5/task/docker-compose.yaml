@@ -1,0 +1,7 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["bash", "-lc", "sleep infinity"]
+

@@ -1,0 +1,91 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "mab-late-constraint-3c40bbec7f",
+  "benchmark": "MultiAgentBench",
+  "source_binding": {
+    "task_id": "research:047",
+    "scenario": "research",
+    "jsonl_path": "upstream/marble/multiagentbench/research/research_main.jsonl",
+    "line_number": 47,
+    "record_sha256": "24e6b1f2a773e39c3066841f8c9225594e5e5c596080158a431f23f52708ec16",
+    "upstream_revision": "8d60fa17b5596b44458a52d4296061b9fc13d6f2"
+  },
+  "native_runtime": {
+    "adapter": "marble.engine.Engine",
+    "environment": {
+      "max_iterations": "",
+      "name": "",
+      "type": ""
+    },
+    "roles": [
+      {
+        "agent_id": "agent1",
+        "profile": "I am a researcher dedicated to enhancing the capabilities of agents in understanding and executing complex written instructions through advanced reinforcement learning (RL) techniques. My recent work has focused on language reward shaping (LRS), where I critically examined its effectiveness and identified inherent brittleness in existing methods. I demonstrated that agents trained with LRS rewards often converge more slowly than those using pure RL, highlighting the need for more robust designs.\n\nIn my exploration of large language models (LLMs), I developed a novel approach that constructs an action schema library to generate diverse interpretations of natural language descriptions. This method, combined with a semantic validation and ranking module, allows for fully automated planning without expert intervention, significantly improving scalability and accessibility in AI planning.\n\nAdditionally, I have investigated the vulnerabilities of vision-language models (VLMs) as reward signals in sparse environments. My research revealed that noise in reward signals can severely hinder agent performance, leading to the introduction of BiMI (Binary Mutual Information), a noise-resilient reward function. This innovation has shown remarkable improvements in agent performance, making VLM-based reward models more practical for real-world applications.\n\nThrough my work, I aim to bridge the gap between natural language understanding and effective agent behavior, paving the way for more intuitive and capable AI systems.",
+        "type": "BaseAgent"
+      },
+      {
+        "agent_id": "agent2",
+        "profile": "I am a researcher dedicated to advancing the fields of planning and decision-making in artificial intelligence. My work primarily focuses on width-based algorithms, which have demonstrated state-of-the-art performance in classical planning and have been successfully adapted to both model-based and model-free settings. I have explored various innovative techniques, such as classical count-based novelty and regression-based supervised learning, to enhance exploration and learning efficiency in planning tasks.\n\nMy recent contributions include developing novel algorithms that leverage action novelty rank for generalized planning and creating a robust framework for goal recognition that aligns more closely with human inference. I have also investigated the integration of language reward shaping in reinforcement learning, revealing critical vulnerabilities and proposing noise-resilient reward functions to improve agent performance.\n\nIn multi-agent planning, I have addressed privacy concerns by employing best-first width search techniques, demonstrating their effectiveness in decentralized settings. My research extends to epistemic planning, where I have introduced functional STRIPS to enhance scalability and expressiveness.\n\nAdditionally, I have developed Planimation, an open-source framework for visualizing planning solutions, and explored the use of Monte Carlo Tree Search for generating diverse and high-quality plans in complex environments. My work on transhumeral prostheses highlights the application of goal recognition systems using time series data, showcasing the potential for improving assistive technologies.\n\nThrough my research, I aim to bridge theoretical advancements with practical applications, contributing to the development of intelligent systems that can effectively navigate complex decision-making scenarios.",
+        "type": "BaseAgent"
+      },
+      {
+        "agent_id": "agent3",
+        "profile": "I am a researcher dedicated to advancing the field of natural language processing (NLP) through innovative methodologies that address the challenges of low-resource languages, model bias, and the complexities of language understanding. My recent work focuses on enhancing cross-lingual projection and model transfer, where I developed a debiasing layer that corrects errors in projected annotations, achieving state-of-the-art results in low-resource settings.\n\nI have also explored the integration of syntactic structures in coreference resolution, demonstrating the importance of constituent trees alongside dependency trees. My research extends to probabilistic methods for machine translation quality estimation, where I emphasize the significance of uncertainty in predictions. Additionally, I have contributed to user geolocation modeling and dialect detection, leveraging neural networks to achieve superior performance on benchmark datasets.\n\nMy work on adversarial learning aims to create fairer models by employing diverse discriminators to mitigate bias effectively. I am passionate about developing robust models that generalize well across domains, ensuring that they are not only effective but also equitable. Through my research, I strive to push the boundaries of NLP, making significant strides in understanding and processing human language in all its complexity.",
+        "type": "BaseAgent"
+      }
+    ],
+    "final_state": "MARBLE environment and tool transcript"
+  },
+  "event_protocol": {
+    "producer": "an actual MARBLE role executes with its declared profile and tools",
+    "payload": "the role's native message/tool result with provenance and logical clock",
+    "release_predicate": "coordinator committed at least one environment action after launching the role",
+    "rollback": "messages and tool calls remain in the native transcript; correction is additive and auditable"
+  },
+  "state_attestation": {
+    "baseline_probe": "serialized MARBLE environment state and transcript sequence zero",
+    "checkpoint_probe": "environment digest plus strictly increased native tool/action sequence",
+    "change_required": true,
+    "journal_owner": "MARBLE engine logger, not an agent workspace file"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "metrics": {
+      "diversity_of_perspectives": true,
+      "engagement_level": true,
+      "evaluate_llm": "",
+      "relevance": true
+    },
+    "agreement_or_environment_state": true
+  },
+  "quality_gates": {
+    "official_scenario_bound": true,
+    "native_roles_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

@@ -1,0 +1,183 @@
+format_version: 2
+case_id: distributed-model-runtime
+classification:
+  primary_event_theme: delayed_authoritative_result
+  secondary_event_themes:
+  - task_scope_or_dependency_change
+  async_scenario_class: result_eventful
+capabilities:
+- late_revision_adoption
+- inflight_cancellation
+- cascading_replan
+workstream_bindings:
+  implement_tp:
+    result_kind: result_01
+    validator_command: python3 -c "import importlib.util,os,torch,torch.distributed
+      as dist,torch.nn.functional as F; os.environ.update(MASTER_ADDR='127.0.0.1',MASTER_PORT='12479');
+      dist.init_process_group('gloo',rank=0,world_size=1); s=importlib.util.spec_from_file_location('tp','/app/parallel_linear.py');
+      m=importlib.util.module_from_spec(s); s.loader.exec_module(m); torch.manual_seed(177);
+      w=torch.randn(12,8); x=torch.randn(3,8); assert torch.allclose(m.ColumnParallelLinear(8,12,False,w.clone())(x),F.linear(x,w),atol=1e-5);
+      assert torch.allclose(m.RowParallelLinear(8,12,False,w.clone())(x),F.linear(x,w),atol=1e-5);
+      dist.destroy_process_group()"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      profile_version:
+        type: string
+        const: v1
+      backend:
+        type: string
+        const: gloo
+      world_size:
+        type: integer
+        const: 4
+      verification_passed:
+        type: boolean
+        const: true
+    event_assets: []
+  select_backend:
+    result_kind: result_02
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      p=json.load(open('/app/profiles/authoritative.json')); assert p=={'version':'v2','world_size':2,'interconnect':'ethernet','tensor_parallel_supported':False,'pipeline_parallel_supported':True};
+      assert (e['profile_version'],e['world_size'],e['tensor_parallel_supported'],e['pipeline_parallel_supported'],e['recommended_backend'])==(p['version'],p['world_size'],p['tensor_parallel_supported'],p['pipeline_parallel_supported'],'pipeline')"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      profile_version:
+        type: string
+        const: v2
+      world_size:
+        type: integer
+        const: 2
+      tensor_parallel_supported:
+        type: boolean
+        const: false
+      pipeline_parallel_supported:
+        type: boolean
+        const: true
+      recommended_backend:
+        type: string
+        const: pipeline
+    event_assets:
+    - /app/profiles/authoritative.json
+  recover_model:
+    result_kind: result_03
+    validator_command: python3 -c "import torch; m=torch.jit.load('/app/model.pt').eval();
+      x=torch.randn(1,4,64); y=m(x,x); assert y.shape==x.shape and torch.isfinite(y).all()"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      model_loadable:
+        type: boolean
+        const: true
+    event_assets: []
+result_contract:
+  allowed_result_kinds:
+  - result_01
+  - result_02
+  - result_03
+  rule: Tag the provisional TP deployment and authoritative hardware profile distinctly;
+    completion is visible to the main agent only after gateway delivery.
+authoritative_result_kind: result_02
+superseded_result_kind: result_01
+scenarios:
+  linear:
+    events: []
+  async:
+    events:
+    - id: dm_a_tp
+      at: 1
+      result: result_01
+      invalidates_artifacts: []
+      reopens_milestones: []
+    - id: dm_a_profile
+      at: 3
+      result: result_02
+      invalidates_artifacts:
+      - tp_candidate
+      - batch_plan_1
+      - batch_plan_2
+      - deployment
+      - batch_lineage
+      - pre_event_verification
+      reopens_milestones:
+      - select_backend
+      - schedule_batches
+      - final_qa
+artifact_observers:
+  pre_event_verification: >-
+    python -c "import hashlib,json,torch; torch.jit.load('/app/model.pt');
+    d=json.load(open('/app/deployment.json')); assert d['backend']=='pipeline';
+    paths=['/app/model.pt','/app/pipeline_parallel.py','/app/task_file/output_data/plan_b1.jsonl','/app/task_file/output_data/plan_b2.jsonl'];
+    h=hashlib.sha256(); [(h.update(open(p,'rb').read()),h.update(b'\0')) for p in paths];
+    print(h.hexdigest())"
+hidden_checks:
+  model_integrity: python -c "import torch; torch.jit.load('/app/model.pt')"
+  backend_feasibility: python -c "import json; d=json.load(open('/app/deployment.json'));
+    assert (d['backend'],d['profile_version'],d['world_size'])==('pipeline','v2',2)"
+  batch_plan: python -c "from pathlib import Path; assert Path('/app/task_file/output_data/plan_b1.jsonl').stat().st_size>0;
+    assert Path('/app/task_file/output_data/plan_b2.jsonl').stat().st_size>0"
+  deployment_lineage: python -c "import hashlib,json; h=lambda p:hashlib.sha256(open(p,'rb').read()).hexdigest();
+    d=json.load(open('/app/deployment.json')); assert d['model_sha256']==h('/app/model.pt');
+    assert d['implementation_sha256']==h('/app/pipeline_parallel.py'); assert d['plan_b1_sha256']==h('/app/task_file/output_data/plan_b1.jsonl');
+    assert d['plan_b2_sha256']==h('/app/task_file/output_data/plan_b2.jsonl')"
+reverification_anchors: {}
+stale_predicate: null
+stale_revalidation: {}
+information_sufficiency:
+- workstream_id: implement_tp
+  public_inputs:
+  - /app/parallel_linear.py
+  - /app/simple_test.py
+  required_output_fields:
+  - profile_version
+  - backend
+  - world_size
+  - verification_passed
+  review_status: reviewed
+  requirement_ids:
+  - distributed-model-runtime.complete_task_and_async_closure
+- workstream_id: select_backend
+  public_inputs: []
+  required_output_fields:
+  - profile_version
+  - world_size
+  - tensor_parallel_supported
+  - pipeline_parallel_supported
+  - recommended_backend
+  review_status: reviewed
+  requirement_ids:
+  - distributed-model-runtime.complete_task_and_async_closure
+- workstream_id: recover_model
+  public_inputs:
+  - /app/model.pt
+  required_output_fields:
+  - model_loadable
+  review_status: reviewed
+  requirement_ids:
+  - distributed-model-runtime.complete_task_and_async_closure
+legacy_metadata:
+  metrics:
+    primary:
+    - test_point_pass_rate
+    - dynamic_test_point_pass_rate
+    - baseline_condition_test_point_pass_rate
+    - control_flow_test_point_pass_rate
+    - all_condition_test_point_pass_rate
+    - scenario_construction_rate
+    - parallel_effect
+    - replanning_drop
+    - signed_task_order_effect
+    diagnostics:
+    - semantic_category_pass_rates
+    - stale_retention_rate
+    - recovery_latency
+    - obsolete_work_ratio
+    - reverification_completeness
+    - token_consumption
+  implementation: real-instance-derived
+  upstream_commit: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  asset_copies:
+  - from: upstream/terminal-bench/original-tasks-locked/pytorch-model-recovery/weights.pt
+    to: cases/distributed-model-runtime/task/assets/weights.pt
+  - from: upstream/terminal-bench/original-tasks-locked/pytorch-model-recovery/dataset.pt
+    to: cases/distributed-model-runtime/task/assets/dataset.pt
+  - from: upstream/terminal-bench/original-tasks-locked/llm-inference-batching-scheduler/task_file
+    to: cases/distributed-model-runtime/task/assets/task_file

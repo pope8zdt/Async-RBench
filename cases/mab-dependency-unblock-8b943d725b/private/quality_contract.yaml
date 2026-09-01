@@ -1,0 +1,91 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses an independent receipt construction while satisfying the same native diagnosis and causal closure.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_dependency_unblock_8b943d725b.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_dependency_unblock_8b943d725b.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-database-diagnosis",
+      "must_fail": [
+        "mab_dependency_unblock_8b943d725b.diagnosis.exact"
+      ],
+      "path": "task/negative_mutations/wrong_database_diagnosis.sh"
+    },
+    {
+      "id": "ignored-database-authority",
+      "must_fail": [
+        "mab_dependency_unblock_8b943d725b.authority.evidence"
+      ],
+      "path": "task/negative_mutations/ignored_database_authority.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "dep_db019.cf.01_classify_authority_checkpoint",
+          "dep_db019.cf.02_revise_from_authority",
+          "dep_db019.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_dependency_unblock_8b943d725b.event.receipt",
+          "mab_dependency_unblock_8b943d725b.event.probes",
+          "mab_dependency_unblock_8b943d725b.closure",
+          "mab_dependency_unblock_8b943d725b.source.pin",
+          "mab_dependency_unblock_8b943d725b.native.binding",
+          "mab_dependency_unblock_8b943d725b.diagnosis.exact",
+          "mab_dependency_unblock_8b943d725b.tentative.excluded",
+          "mab_dependency_unblock_8b943d725b.authority.evidence",
+          "mab_dependency_unblock_8b943d725b.output.schema"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "social media",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "44bf414de2aff462e3640d190138616f0661631b06f3d2be6a708ef1a0b31a00",
+        "task_id": "database:019",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

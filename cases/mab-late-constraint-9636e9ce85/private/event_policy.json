@@ -1,0 +1,32 @@
+{
+  "authority_rule": "The live scope delta changes only its dependency closure and preserves unaffected commitments.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_roles_task_c",
+      "req.02.implement_dependencies_comme",
+      "req.03.implement_overdue_alerts_and",
+      "req.04.integrate_the_late_dependenc",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Completion and alerts follow the returned dependency/approval/SLA policy while assignments, comments, audit history, and reports are preserved.",
+    "before_state": "Tasks can be marked done and alerts generated under provisional rules that ignore dependency closure and high-priority approval.",
+    "event_id": "evt.mab_late_constraint_9636.dependency_approval_sla_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_constraint_9636.dependency_approval_sla_added",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close dependency_approval_sla_policy_added.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

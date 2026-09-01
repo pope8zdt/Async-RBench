@@ -1,0 +1,91 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_75855f9fc5.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_75855f9fc5.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_dependency_unblock_75855f9fc5.osworld.state"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_dependency_unblock_75855f9fc5.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_bookmarks_14.cf.01_accept_bookmark_authority",
+          "osw_bookmarks_14.cf.02_create_only_if_absent",
+          "osw_bookmarks_14.cf.03_reverify_bookmark_bar"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_75855f9fc5.event.receipt",
+          "osw_dependency_unblock_75855f9fc5.event.probes",
+          "osw_dependency_unblock_75855f9fc5.closure",
+          "osw_dependency_unblock_75855f9fc5.source.pin",
+          "osw_dependency_unblock_75855f9fc5.osworld.identity",
+          "osw_dependency_unblock_75855f9fc5.osworld.official_score",
+          "osw_dependency_unblock_75855f9fc5.osworld.native_evidence",
+          "osw_dependency_unblock_75855f9fc5.osworld.task_assertion",
+          "osw_dependency_unblock_75855f9fc5.osworld.state"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Favorites",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "a8a6a0fa25e51903c20b9fb7a079ec31a208c8ad30d40c98a7171e1918d11ec9",
+        "task_id": "osworld:chrome:2ad9387a-65d8-4e33-ad5b-7580065a27ca",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "accepted": true,
+  "accepted_episode_owner": "evaluator",
+  "model_episode_required": false,
+  "native_report": "private/native_canonical_report.json",
+  "requirements": [
+    "compiled and executed official coding:054 Galactic Conquest solution.py contract",
+    "Galactic Conquest enforces character-to-AI-to-map-to-multiplayer dependencies, map objectives, synchronized action sequence checks, capture scoring, and winner progression.",
+    "The validated map checkpoint releases multiplayer for one map revision while stale actions are rejected and accepted scores and progression are preserved."
+  ],
+  "task_specific_acceptance": [
+    "Classify the recovered map checkpoint as a dependency-state change that releases multiplayer only for the validated map revision.",
+    "Close only after fixed-seed map invariants, multiplayer synchronization, stale-action rejection, scoring/progression, and UI checks consume the exact checkpoint receipt.",
+    "Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests."
+  ]
+}

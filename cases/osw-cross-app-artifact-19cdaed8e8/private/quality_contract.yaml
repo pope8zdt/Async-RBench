@@ -1,0 +1,90 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Equivalent private source-native scoring path.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_19cdaed8e8.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_19cdaed8e8.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_cross_app_artifact_19cdaed8e8.osworld.tally_row"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_19cdaed8e8.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_invoice_19.cf.01_classify_authority_aws_invoice_os",
+          "osw_invoice_19.cf.02_revise_affected_aws_invoice_os",
+          "osw_invoice_19.cf.03_verify_closure_aws_invoice_os"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_19cdaed8e8.event.receipt",
+          "osw_cross_app_artifact_19cdaed8e8.event.probes",
+          "osw_cross_app_artifact_19cdaed8e8.closure",
+          "osw_cross_app_artifact_19cdaed8e8.source.pin",
+          "osw_cross_app_artifact_19cdaed8e8.osworld.identity",
+          "osw_cross_app_artifact_19cdaed8e8.osworld.official_score",
+          "osw_cross_app_artifact_19cdaed8e8.osworld.native_evidence",
+          "osw_cross_app_artifact_19cdaed8e8.osworld.task_assertion",
+          "osw_cross_app_artifact_19cdaed8e8.osworld.output_paths",
+          "osw_cross_app_artifact_19cdaed8e8.osworld.invoice_evidence",
+          "osw_cross_app_artifact_19cdaed8e8.osworld.tally_row"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "8dac1762e79516fa4caf5209fbb234b16c3a5507e912491c64d80655a4fedd67",
+        "task_id": "osworld:multi_apps:415ef462-bed3-493a-ac36-ca8c6d23bf1b",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

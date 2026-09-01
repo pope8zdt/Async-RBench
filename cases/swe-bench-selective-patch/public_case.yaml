@@ -1,0 +1,230 @@
+format_version: 2
+case_id: swe-bench-selective-patch
+title: SWE-bench selective patch with independent test-module groups
+task_instruction_path: task/task.yaml
+source_tasks:
+- id: scikit-learn__scikit-learn-25638
+  upstream_path: upstream/swe-bench
+  benchmark: swe-bench
+  upstream_commit: 1faa91cade0562ba62b66c1c99e71f7b72d96f13
+  source_sha256: 5deca928e57a86c4377e6756f3f3690809283e316ca2a8e03617f1838c78a0d3
+milestones:
+- id: apply_fix
+  depends_on: []
+- id: run_module_group_a
+  depends_on:
+  - apply_fix
+- id: run_module_group_b
+  depends_on:
+  - apply_fix
+- id: run_module_group_c
+  depends_on:
+  - apply_fix
+- id: repair_preprocessing_path
+  depends_on:
+  - run_module_group_b
+- id: integrate_fix
+  depends_on:
+  - run_module_group_a
+  - run_module_group_b
+  - run_module_group_c
+  - repair_preprocessing_path
+- id: full_regression
+  depends_on:
+  - integrate_fix
+- id: completion
+  depends_on:
+  - full_regression
+artifacts:
+- id: module_group_reports
+  path: /app/output_data/module_groups
+- id: applied_fix
+  path: /app/output_data/applied_fix.json
+- id: integrated_fix
+  path: /app/output_data/integrated_fix.json
+- id: full_regression
+  path: /app/output_data/regression_result.json
+- id: decision_manifest
+  path: /app/output_data/decision_manifest.json
+- id: fix_source
+  path: /app/task_file/src/sklearn/utils/multiclass.py
+workstreams:
+- id: core_patch_applier
+  task: Repair the sklearn package at /app/task_file/src/sklearn, changing only sklearn/utils/multiclass.py.
+    Run record_fix.py --stage final and report the observed fix revision, emitted
+    source receipt, patched path and report path.
+  targets:
+  - fix_source
+  - applied_fix
+  expected_output: An applied_fix.json recording the final fix revision (sha256 of
+    sklearn/utils/multiclass.py) and the patched path.
+  priority: high
+  required_evidence_fields:
+  - fix_revision
+  - source_receipt
+  - patched_path
+  - report_path
+  evidence_schema:
+    fix_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    patched_path:
+      type: string
+    report_path:
+      type: string
+    source_receipt:
+      type: string
+      pattern: 'sp2-fix-authority-[0-9a-f]{16}'
+  allowed_files:
+  - /app/output_data/applied_fix.json
+  - /app/task_file/src/sklearn/utils/multiclass.py
+  required_files:
+  - /app/output_data/applied_fix.json
+  public_result_contract: {}
+- id: test_module_A_runner
+  task: Run module group A (sklearn.metrics) via /app/task_file/scripts/run_module_group_a.py
+    and record its result under /app/output_data/module_groups/A_result.json. If the
+    group fails on an earlier run, preserve the failing report as A_result_initial.json
+    before re-running. Report group, passed, run_revision and report_path as observations,
+    not goals.
+  targets:
+  - module_group_reports
+  expected_output: A module-group report for group A recording whether its tests passed
+    against the current fix revision.
+  priority: normal
+  required_evidence_fields:
+  - group
+  - passed
+  - run_revision
+  - report_path
+  evidence_schema:
+    group:
+      type: string
+    passed:
+      type: boolean
+    run_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    report_path:
+      type: string
+  allowed_files:
+  - /app/output_data/module_groups/A_result.json
+  required_files:
+  - /app/output_data/module_groups/A_result.json
+  public_result_contract: {}
+- id: test_module_B_runner
+  task: Run module group B (sklearn.preprocessing) via /app/task_file/scripts/run_module_group_b.py
+    and record its result under /app/output_data/module_groups/B_result.json. If the
+    group is run more than once, archive the earlier report before replacing it. Report
+    group, passed, run_revision and report_path as observations, not goals.
+  targets:
+  - module_group_reports
+  expected_output: A module-group report for group B recording whether its tests passed
+    against the current fix revision.
+  priority: normal
+  required_evidence_fields:
+  - group
+  - passed
+  - run_revision
+  - report_path
+  evidence_schema:
+    group:
+      type: string
+    passed:
+      type: boolean
+    run_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    report_path:
+      type: string
+  allowed_files:
+  - /app/output_data/module_groups/B_result.json
+  - /app/output_data/module_groups/B_result_initial.json
+  required_files:
+  - /app/output_data/module_groups/B_result.json
+  public_result_contract: {}
+- id: test_module_C_runner
+  task: Run module group C (sklearn.utils.multiclass) via /app/task_file/scripts/run_module_group_c.py
+    and record its result under /app/output_data/module_groups/C_result.json. If the
+    group fails on an earlier run, preserve the failing report as C_result_initial.json
+    before re-running. Report group, passed, run_revision and report_path as observations,
+    not goals.
+  targets:
+  - module_group_reports
+  expected_output: A module-group report for group C recording whether its tests passed
+    against the current fix revision.
+  priority: normal
+  required_evidence_fields:
+  - group
+  - passed
+  - run_revision
+  - report_path
+  evidence_schema:
+    group:
+      type: string
+    passed:
+      type: boolean
+    run_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    report_path:
+      type: string
+  allowed_files:
+  - /app/output_data/module_groups/C_result.json
+  required_files:
+  - /app/output_data/module_groups/C_result.json
+  public_result_contract: {}
+- id: patch_integrator
+  task: Inspect the available module-group reports and run /app/task_file/scripts/record_integrated.py
+    to record the integration verdict. Report fix_revision, integrated_groups and
+    report_path as observations, not goals.
+  targets:
+  - integrated_fix
+  expected_output: An integrated_fix.json naming the final fix revision and the integrated
+    module groups.
+  priority: high
+  required_evidence_fields:
+  - fix_revision
+  - integrated_groups
+  - report_path
+  evidence_schema:
+    fix_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    integrated_groups:
+      type: array
+      min_items: 3
+    report_path:
+      type: string
+  allowed_files:
+  - /app/output_data/integrated_fix.json
+  required_files:
+  - /app/output_data/integrated_fix.json
+  public_result_contract: {}
+- id: regression_validator
+  task: Run the full regression via /app/task_file/scripts/run_regression.py and write
+    /app/output_data/regression_result.json. Report passed, regression_revision and
+    report_path as observations, not goals.
+  targets:
+  - full_regression
+  expected_output: A regression_result.json reporting whether the full regression
+    suite passed against the final fix revision.
+  priority: high
+  required_evidence_fields:
+  - passed
+  - regression_revision
+  - report_path
+  evidence_schema:
+    passed:
+      type: boolean
+    regression_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    report_path:
+      type: string
+  allowed_files:
+  - /app/output_data/regression_result.json
+  required_files:
+  - /app/output_data/regression_result.json
+  public_result_contract: {}
+public_checks: []

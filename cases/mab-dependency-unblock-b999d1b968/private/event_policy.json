@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Provisional work cannot close until the delayed authority is consumed and reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_and_dated_pr",
+      "req.02.implement_uniquely_assigned",
+      "req.03.implement_project_task_messa",
+      "req.04.integrate_the_delayed_metric",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The returned contract fixes unique assignment and performance calculations while preserving messages, feedback, and task history.",
+    "before_state": "Projects, tasks, and collaboration history exist, but duration origin and concurrent-assignment semantics are unresolved.",
+    "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "async-rbench-osworld-event-v1",
+  "case_id": "osw-dependency-unblock-346b788fd5",
+  "source_task_id": "osworld:gimp:d16c99dc-2a1e-46f2-b350-d97c86c85c15",
+  "task_assertion": "The exported resized.png has a 512-pixel dog-layer height with preserved aspect ratio and background structure, and passes both bound OSWorld evaluators.",
+  "state": {
+    "output_path": "/home/user/Desktop/resized.png",
+    "source_canvas_width": 1578,
+    "source_canvas_height": 948,
+    "target_layer_height": 512,
+    "ignore_transparent": true,
+    "aspect_ratio_preserved": true,
+    "structure_similarity_passed": true,
+    "background_layer_preserved": true
+  },
+  "upstream_dependency_graph": [
+    {
+      "id": "upstream_worker_01",
+      "depends_on": [],
+      "description": "Audit the two-layer XCF and identify the dog layer independently of the background."
+    },
+    {
+      "id": "upstream_worker_02",
+      "depends_on": [
+        "upstream_worker_01"
+      ],
+      "description": "Derive the proportional scale that makes the dog layer exactly 512 pixels high."
+    },
+    {
+      "id": "upstream_worker_03",
+      "depends_on": [
+        "upstream_worker_02"
+      ],
+      "description": "Resize only the dog layer and export /home/user/Desktop/resized.png."
+    },
+    {
+      "id": "upstream_worker_04",
+      "depends_on": [
+        "upstream_worker_03"
+      ],
+      "description": "Run check_image_size and check_structure_sim_resized and release the joined native result."
+    }
+  ]
+}

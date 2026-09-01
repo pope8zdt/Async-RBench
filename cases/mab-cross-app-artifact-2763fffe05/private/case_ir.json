@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-cross-app-artifact-2763fffe05",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_2763fffe05_classify_authority_01",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve authentication, project membership, editor behavior, realtime subscriptions, and external review integration.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_editor_saves_to_immu"
+        ]
+      },
+      "id": "01_classify_authority_fffe05",
+      "must_still_pass": [
+        "mab_cross_app_artifact_2.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_2763fffe05.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "Recognize the delivered BookSynergy revision schema as the authority over provisional content and revision objects. Preserve authentication, project membership, editor behavior, realtime subscriptions, and external review integration.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.map_editor_saves_to_immu"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_2763fffe05_revise_affected_02",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve authentication, project membership, editor behavior, realtime subscriptions, and external review integration.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.bind_reviews_and_approva"
+        ]
+      },
+      "id": "02_revise_affected_fffe05",
+      "must_still_pass": [
+        "mab_cross_app_artifact_2.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_2763fffe05.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Rebuild saves, parent links, review approvals, contributor-role checks, and publication transitions from the authoritative revision schema. Preserve authentication, project membership, editor behavior, realtime subscriptions, and external review integration.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.bind_reviews_and_approva"
+    },
+    {
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_2763fffe05_verify_closure_03",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve authentication, project membership, editor behavior, realtime subscriptions, and external review integration.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.enforce_contributor_role"
+        ]
+      },
+      "id": "03_verify_closure_fffe05",
+      "must_still_pass": [
+        "mab_cross_app_artifact_2.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_2763fffe05.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Close only after concurrent revision, stale-parent rejection, rollback, review approval, publication, subscriber, and external-review checks consume the exact schema receipt. Preserve authentication, project membership, editor behavior, realtime subscriptions, and external review integration.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.enforce_contributor_role"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.map_editor_saves_to_immu"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.bind_reviews_and_approva"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.enforce_contributor_role"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_tests_for_concurrent"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.map_editor_saves_to_immu",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.bind_reviews_and_approva",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.enforce_contributor_role",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_tests_for_concurrent",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.map_editor_saves_to_immu",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.bind_reviews_and_approva",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.enforce_contributor_role",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_tests_for_concurrent",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.map_editor_saves_to_immu",
+      "req.02.bind_reviews_and_approva",
+      "req.03.enforce_contributor_role",
+      "req.04.add_tests_for_concurrent",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The data specialist delivers the authoritative book, section, immutable revision-parent, review, contributor-role, and publication-transition schema.",
+    "before_state": "Authentication, projects, editor surfaces, realtime subscribers, external review hooks, and provisional content objects are functional while the revision schema remains pending.",
+    "event_id": "evt.mab_cross_app_artifact_2763fffe05.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Map editor saves to immutable revisions with explicit parent links.",
+      "id": "req.01.map_editor_saves_to_immu",
+      "observable_probe": "mab_cross_app_artifact_2.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source-native BookSynergy artifact and closure evidence for: Map editor saves to immutable revisions with explicit parent links."
+    },
+    {
+      "description": "Bind reviews and approvals to immutable revision identifiers.",
+      "id": "req.02.bind_reviews_and_approva",
+      "observable_probe": "mab_cross_app_artifact_2.sem.02.the_requested_program_passes",
+      "public_evidence": "source-native BookSynergy artifact and closure evidence for: Bind reviews and approvals to immutable revision identifiers."
+    },
+    {
+      "description": "Enforce contributor roles and legal publication-state transitions.",
+      "id": "req.03.enforce_contributor_role",
+      "observable_probe": "mab_cross_app_artifact_2.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source-native BookSynergy artifact and closure evidence for: Enforce contributor roles and legal publication-state transitions."
+    },
+    {
+      "description": "Verify concurrent revisions, stale-parent rejection, rollback, review approval, and publication behavior.",
+      "id": "req.04.add_tests_for_concurrent",
+      "observable_probe": "mab_cross_app_artifact_2.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source-native BookSynergy artifact and closure evidence for: Verify concurrent revisions, stale-parent rejection, rollback, review approval, and publication behavior."
+    }
+  ]
+}

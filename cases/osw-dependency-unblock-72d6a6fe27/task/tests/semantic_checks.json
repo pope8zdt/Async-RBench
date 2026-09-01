@@ -1,0 +1,135 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_dependency_unblock_72d6a6fe27.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 3 task-specific upstream workers completed with observable probes.",
+      "id": "osw_dependency_unblock_72d6a6fe27.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_dependency_unblock_72d6a6fe27.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_dependency_unblock_72d6a6fe27.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:os:5812b315-e7bd-4265-b51f-863c02174c28 and check_include_exclude.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The charles account authenticates with the requested password, uses /home/test1 as its home, and /home/test1 is group-writable as required by the official command-line evaluator.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The requested charles account authenticates successfully.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.account_identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_account_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The passwd home is exactly /home/test1.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.home_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_home_binding",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The declared access scope contains only /home/test1.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.access_scope",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_access_scope",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official group-write and success-string probes pass.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.permission_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_permission_probe",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private official password checker has the audited digest.",
+      "id": "osw_dependency_unblock_72d6a6fe27.osworld.check_script_identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_check_script_identity",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

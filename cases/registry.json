@@ -1,0 +1,2417 @@
+{
+  "schema_version": "2",
+  "note": "Official registered cases and immutable instances. path is relative to cases/<case_id>; seed-1 uses the case root. candidate_cases/ are not auto-discovered.",
+  "terminology": {
+    "case_family": "One of the eight primary_event_theme categories defined in event_taxonomy.json.",
+    "case_id": "One registered case unit within a case family.",
+    "instance_id": "One immutable protocol instance of a registered case.",
+    "legacy_registry_field": "case_families is retained as a schema-v2 compatibility field; its entries are registered cases, not the eight case families."
+  },
+  "case_families": [
+    {
+      "case_id": "data-recovery-service",
+      "benchmark": "terminal-bench",
+      "control_prefix": "dr",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "distributed-model-runtime",
+      "benchmark": "terminal-bench",
+      "control_prefix": "dm",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "secure-release",
+      "benchmark": "terminal-bench",
+      "control_prefix": "sr",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        },
+        {
+          "instance_id": "tracebench-git-recovery-late-authority-001",
+          "path": "instances/tracebench-git-recovery-late-authority-001",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "gaia2-stockholm-moveout",
+      "benchmark": "gaia2",
+      "control_prefix": "sm",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "scheduler-selective-replan",
+      "benchmark": "terminal-bench",
+      "control_prefix": "sc",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "git-conflict-and-cleanup-closure",
+      "benchmark": "terminal-bench",
+      "control_prefix": "gc",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-bench-selective-patch",
+      "benchmark": "swe-bench",
+      "control_prefix": "sp2",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__cf8907",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-8902c7f431",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__3f6bf3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-3950516755",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_constr_b45961",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-7ce47cda27",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_constr_777efc",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "tbn-conflicting-specialist-results-a76a766789",
+      "benchmark": "terminal-bench",
+      "control_prefix": "tbn_conflicting_bb224d",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "tbn-conflicting-specialist-results-f3324bac38",
+      "benchmark": "terminal-bench",
+      "control_prefix": "tbn_conflicting_7491e3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "benchmark": "terminal-bench",
+      "control_prefix": "tbn_late_test_e_63515a",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-78752cd5a1",
+      "benchmark": "terminal-bench",
+      "control_prefix": "tbn_late_test_e_bf2865",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-9685a54f22",
+      "benchmark": "terminal-bench",
+      "control_prefix": "tbn_late_test_e_7bb776",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "benchmark": "terminal-bench",
+      "control_prefix": "tbn_partial_fai_e5a821",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-d7e3da4ccb",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__fd059b",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3f6d310987",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__a10662",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_constr_be439e",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-6294af1554",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_constr_0828f3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-test-evidence-7fb60adc40",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_test_e_5a91fc",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-test-evidence-345fb5c6a6",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_test_e_2c3331",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4a74272d52",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__618bee",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__715eb7",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-3a01a4fcef",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_constr_5168ff",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-test-evidence-739f820ffd",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_test_e_438b1a",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-866543c501",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__5be9a9",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-148b2c69f6",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_constr_6d07d3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-5f19377089",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db11",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-ce3ff5b928",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db01",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f1d6fd6fd",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db09",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-cf7b930f57",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db04",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-0298f78d18",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflicting_sp",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-0c3537087a",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db10",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db07",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-9ec14bb2f1",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db05",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-e5660e25aa",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db06",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-eda6fc53e2",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_conflict_db03",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-4e6f0120bd",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code59_cross",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-b5a48861d5",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code63_cross",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-2763fffe05",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code64_cross",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-496566389d",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code70_cross",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1c96d4414d",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code19_sports",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-71568ae6c9",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code54_galactic",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3fa1a02dd5",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__a4ec16",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__e3ff13",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-db84717172",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__380499",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-20b0004f10",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_constr_d9e9aa",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-acaa77b306",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_constr_6fbe9a",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-test-evidence-b844373562",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_test_e_49a9b6",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-test-evidence-cb3e057923",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_test_e_1c17f1",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-18d7c09304",
+      "benchmark": "multiagentbench",
+      "control_prefix": "dep_db021",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-309c3b9f50",
+      "benchmark": "multiagentbench",
+      "control_prefix": "dep_db016",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-8aed4c43dd",
+      "benchmark": "multiagentbench",
+      "control_prefix": "dep_db013",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-8b943d725b",
+      "benchmark": "multiagentbench",
+      "control_prefix": "dep_db019",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-a145b96b70",
+      "benchmark": "multiagentbench",
+      "control_prefix": "dep_db023",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-b69316f186",
+      "benchmark": "multiagentbench",
+      "control_prefix": "dep_db018",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-0008d814cb",
+      "benchmark": "osworld",
+      "control_prefix": "osw_dependency_unblock_0",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-1a3f65b5b8",
+      "benchmark": "osworld",
+      "control_prefix": "osw_steam_12",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-5c3a1789cf",
+      "benchmark": "osworld",
+      "control_prefix": "osw_dependency_unblock_5",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-2d1b650a2e",
+      "benchmark": "osworld",
+      "control_prefix": "osw_dnt_13",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-4bfe607faa",
+      "benchmark": "osworld",
+      "control_prefix": "osw_nba_9",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-75855f9fc5",
+      "benchmark": "osworld",
+      "control_prefix": "osw_bookmarks_14",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-00437a10dc",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__1b60a8",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-126ea8db6f",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__4ef2cb",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__7a0f94",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-50946f0528",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__45b651",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-031ed6f5bc",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code87_dataflow",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-09f3ab60d7",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code14_macao",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0d4cb0c77d",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code21_teamsync",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0daa930906",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code75_artcollab",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code02_foodchain",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-16b0d42106",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__0960e4",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-cross-app-artifact-7bfdfeaa3c",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code66_music",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-53e5b92cf8",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__d608cb",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-82115ba350",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__c77f74",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-08463030bf",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__7e696b",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-5c30d720ef",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__f75f4b",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-58ecc4be05",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__75a1a9",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-19cdaed8e8",
+      "benchmark": "osworld",
+      "control_prefix": "osw_invoice_19",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-319788e71d",
+      "benchmark": "osworld",
+      "control_prefix": "osw_blogs_319",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-586ab293bc",
+      "benchmark": "osworld",
+      "control_prefix": "osw_mailreport_586",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-725ceaa05e",
+      "benchmark": "osworld",
+      "control_prefix": "osw_receiptpdf_725",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "benchmark": "osworld",
+      "control_prefix": "osw_bookkeeping_110",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-133984c167",
+      "benchmark": "osworld",
+      "control_prefix": "osw_bibtex_133",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-83a415ed0c",
+      "benchmark": "osworld",
+      "control_prefix": "osw_concat_83",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-87e7d44e48",
+      "benchmark": "osworld",
+      "control_prefix": "osw_futian_87",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-95969c461f",
+      "benchmark": "osworld",
+      "control_prefix": "osw_gemini_959",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-98b42677e4",
+      "benchmark": "osworld",
+      "control_prefix": "osw_wallpaper_98",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-9923123786",
+      "benchmark": "osworld",
+      "control_prefix": "osw_grades_992",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-be9a3df3ef",
+      "benchmark": "osworld",
+      "control_prefix": "osw_slidebg_be9",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-aa71803693",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_bargain05_elephant",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code91_familyquest",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0394988930",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_research30_fdiv",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_bargain03_rhapsody",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-107bc4fe3f",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code17_maze",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-9636e9ce85",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code61_office",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-fc88525ce2",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_fc",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-11ad0b6722",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_test_evidence",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-311fc423ac",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_31",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-3a268eae01",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_3a",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-efb76e596e",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_ef",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-f395d7243c",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_f3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-9bcba02feb",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_bargaining009_late",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c4cd816269",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_bargaining019_late",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-89a5f5d134",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c7d591d986",
+      "benchmark": "multiagentbench",
+      "control_prefix": "bar007_charlie",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-db9b3a6953",
+      "benchmark": "multiagentbench",
+      "control_prefix": "bar004_cart",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-e4199e525d",
+      "benchmark": "multiagentbench",
+      "control_prefix": "res064_pingpong",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-472d364155",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_research25_exavatar",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-ed6082b496",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code01_culture",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-13dc7627a3",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_research44_sequence",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-79372889b3",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_research56_magvit",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-60efb2bdee",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code05_officesched",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-5585821bdf",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_research27_driveexpl",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-fe0736601e",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code03_schedule",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-fa3ee479d7",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code07_craft",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-eb55acdb83",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_eb55",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-f4ef18dd00",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_f4ef",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-5aedbb79af",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_5aed",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-a1b76b3745",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_a1b7",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-e5b9a7c681",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_e5b9",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-8fc2ddf86a",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_8fc2",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-024b5afe02",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_024b",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-32f347d363",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_32f3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-af91d8977d",
+      "benchmark": "osworld",
+      "control_prefix": "osw_focus_af91",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-02f32d73a5",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_02f3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-1e1fa7c00b",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_1e1f",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-3aa3bf3cca",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_3aa3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-53ea21919b",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_53ea",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-99180ff520",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_9918",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-a8830cee22",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_a883",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-a9a5dd3ff0",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_a9a5",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-3c40bbec7f",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_research47_comerobot",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-19947db02f",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_1994",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-5837bf15f5",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_5837",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-637224fe05",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_6372",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-6f495ee7e8",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_6f49",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-7557a58e80",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_7557",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-d8248233eb",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_d824",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-e4a188e60e",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_e4a1",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-23f25a7748",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_bargain20_filter",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-f96bcb2739",
+      "benchmark": "osworld",
+      "control_prefix": "osw_stock_f96b",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-6dec97765d",
+      "benchmark": "osworld",
+      "control_prefix": "osw_vscode_6dec",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-8e188f4a86",
+      "benchmark": "osworld",
+      "control_prefix": "osw_merge_8e18",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-346b788fd5",
+      "benchmark": "osworld",
+      "control_prefix": "osw_dog_346b",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-e804a9f769",
+      "benchmark": "osworld",
+      "control_prefix": "osw_secret_e804",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-late-test-evidence-befa686e5c",
+      "benchmark": "osworld",
+      "control_prefix": "osw_snake_befa",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-late-test-evidence-f5d523fc9a",
+      "benchmark": "osworld",
+      "control_prefix": "osw_sar_f5d5",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-state-reconciliation-6f2dfbe1f4",
+      "benchmark": "osworld",
+      "control_prefix": "osw_green_6f2d",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-720c69400a",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code04_price",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-3005dbb57f",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code09_musichub",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-593d775fd8",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code11_boardgame",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-a36888cf46",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code22_drift",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-0e3747a21b",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_bar001_0e37",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-203f5009fd",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code40_teamsyncpro",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-88206c382b",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_bar014_8820",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-2cf6576816",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code68_multiserve",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-7e90efa752",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code52_teamsync",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-8d29bb0513",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code41_travel",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-940b9b95f0",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code15_matp",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-94c68e7815",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code20_quest",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-9739b40e89",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code72_mashup",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code16_project",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-19d693bd13",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code18_ecosphere",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-test-evidence-94f318cd83",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_test_e_fc3041",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-test-evidence-9f62f0f149",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_test_e_eaeb46",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-284a3e6eea",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code23_wellness",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-5b3239e261",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code24_sports",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-7d09ace3d3",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code10_language",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-b999d1b968",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code08_teamcollab",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-c27563df83",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code12_budgetsync",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-cb636c66eb",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code13_galactic",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-ce10d55597",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_code26_netguard",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3deaf34cf4",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_dependency__a3d6ab",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-2a25ab8769",
+      "benchmark": "osworld",
+      "control_prefix": "osw_mp3_2a25",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-166790a6f2",
+      "benchmark": "osworld",
+      "control_prefix": "osw_orchis_1667",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-c449a6c0e0",
+      "benchmark": "osworld",
+      "control_prefix": "osw_notes_c449",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-0ec654e205",
+      "benchmark": "osworld",
+      "control_prefix": "osw_writer_0ec",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-201b3549f3",
+      "benchmark": "osworld",
+      "control_prefix": "osw_instructor_201",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-22ed3b1d66",
+      "benchmark": "osworld",
+      "control_prefix": "osw_vlc_22",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-383afddcb0",
+      "benchmark": "multiagentbench",
+      "control_prefix": "res051_mamba",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-ae2fc903e5",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_ae2f",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-cb2a355435",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_late_constraint_cb2a",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-72d6a6fe27",
+      "benchmark": "osworld",
+      "control_prefix": "osw_ssh_72d6",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-a37e5099b4",
+      "benchmark": "osworld",
+      "control_prefix": "osw_scriptfu_a37e",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-3e78382c85",
+      "benchmark": "osworld",
+      "control_prefix": "osw_keybind_3e",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-3686cb057d",
+      "benchmark": "osworld",
+      "control_prefix": "osw_period_368",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-49a364ba43",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_bargaining021_late",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-late-test-evidence-5b3f5ffce5",
+      "benchmark": "osworld",
+      "control_prefix": "osw_tetris_5b3f",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-late-test-evidence-67c3504794",
+      "benchmark": "osworld",
+      "control_prefix": "osw_speed_67c3",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-state-reconciliation-8fec3dd813",
+      "benchmark": "osworld",
+      "control_prefix": "osw_workspace_8fec",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-state-reconciliation-b384f1d300",
+      "benchmark": "osworld",
+      "control_prefix": "osw_chapter_b384",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "development"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "benchmark": "osworld",
+      "control_prefix": "osw_multiext_8",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-c3093402e5",
+      "benchmark": "osworld",
+      "control_prefix": "osw_audio_6",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "benchmark": "multiagentbench",
+      "control_prefix": "mab_barwatch_4412",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-af63091471",
+      "benchmark": "osworld",
+      "control_prefix": "osw_font_15",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "osw-dependency-unblock-ba52abb8a2",
+      "benchmark": "osworld",
+      "control_prefix": "osw_extension_7",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "calibration"
+        }
+      ]
+    },
+    {
+      "case_id": "swe-late-test-evidence-d83b778f04",
+      "benchmark": "swe-bench",
+      "control_prefix": "swe_late_test_e_83362f",
+      "instances": [
+        {
+          "instance_id": "seed-1",
+          "path": ".",
+          "split": "test"
+        }
+      ]
+    }
+  ]
+}

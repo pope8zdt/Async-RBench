@@ -1,0 +1,30 @@
+{
+  "minimum_official_score": 1.0,
+  "required_semantic_checks": [
+    "official_metric_01",
+    "persisted_target_state",
+    "post_event_reverification"
+  ],
+  "checks": [
+    {
+      "id": "official_metric_01",
+      "kind": "official_osworld_metric",
+      "metric": "is_expected_active_tab",
+      "expected": {
+        "type": "rule",
+        "rules": {
+          "type": "url",
+          "url": "https://discussions.flightaware.com/t/the-banter-thread/4412"
+        }
+      }
+    },
+    {
+      "id": "persisted_target_state",
+      "kind": "checkpoint_state_digest"
+    },
+    {
+      "id": "post_event_reverification",
+      "kind": "event_to_evaluator_order"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_866543c501.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_866543c501.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__5be9a9.cf.01_classify_scope_delta_return_the_origina",
+          "swe_dependency__5be9a9.cf.02_revise_affected_return_a_pointer_t",
+          "swe_dependency__5be9a9.cf.03_preserve_unaffected_return_the_origina",
+          "swe_dependency__5be9a9.cf.04_verify_closure_update_every_repor"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_866543c501.event.receipt",
+          "swe_dependency_unblock_866543c501.event.probes",
+          "swe_dependency_unblock_866543c501.closure",
+          "swe_dependency_unblock_866543c501.source.pin",
+          "swe_dependency_unblock_866543c501.native.vuls_raspbian_filter"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Make Raspbian package removal return a pointer while preserving the original non-Raspbian result, filtering both binary and source package maps without mutating the input, and update Debian advisory callers accordingly.",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "cee3975ed83679f363f8e40135ecb7db0cca56a7dd1e04c03dfe0a20f398abd4",
+        "task_id": "instance_future-architect__vuls-b8db2e0b74f60cb7d45f710f255e061f054b6afc",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

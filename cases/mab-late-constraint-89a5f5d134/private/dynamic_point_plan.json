@@ -1,0 +1,204 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_stale",
+      "dimension": "event_intake",
+      "event_id": "evt.bar015_xbox.late_out_of_order_superseded_result",
+      "evidence_group": "bar015_xbox.classify_stale",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Validate delivered offer identity and compare its revision with the persisted agreement.",
+      "forbidden_behavior": "Do not treat arrival order as authority.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "mab_late_constraint.cf.01_classify_stale",
+      "independence_key": "mab_late_constraint.cf.01_classify_stale",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_89a5f5d134.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "mutation_id": "mab_late_constraint.mutation.01_classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_89a5f5d134.event.receipt"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_exclude_stale",
+      "dimension": "state_revision",
+      "event_id": "evt.bar015_xbox.late_out_of_order_superseded_result",
+      "evidence_group": "bar015_xbox.exclude_stale",
+      "evidence_spec": {
+        "primary_fact": "stale_result_decision",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reject the superseded offer and preserve the newer product-specific agreement.",
+      "forbidden_behavior": "Do not let a late older offer overwrite current terms.",
+      "gate": "reject_late_stale",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "mab_late_constraint.cf.02_exclude_stale",
+      "independence_key": "mab_late_constraint.cf.02_exclude_stale",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_89a5f5d134.source.pin"
+      ],
+      "mutation_family": "reject_late_stale",
+      "mutation_id": "mab_late_constraint.mutation.02_exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_89a5f5d134.event.chronology"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure",
+      "dimension": "closure",
+      "event_id": "evt.bar015_xbox.late_out_of_order_superseded_result",
+      "evidence_group": "bar015_xbox.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reverify price, product terms, chronology, and receipt-bound closure.",
+      "forbidden_behavior": "Do not close from stale price or omit product constraints.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "mab_late_constraint.cf.03_verify_closure",
+      "independence_key": "mab_late_constraint.cf.03_verify_closure",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_89a5f5d134.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "mutation_id": "mab_late_constraint.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_89a5f5d134.closure"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.source_native_resolution"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.bar015_xbox.late_out_of_order_superseded_result",
+      "event_theme": "late_or_out_of_order_superseded_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An older superseded offer arrives after current agreement persistence.",
+        "before": "Task-specific provisional state is persisted without evaluator truth.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

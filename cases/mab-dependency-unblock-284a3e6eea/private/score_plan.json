@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_holistic_dependency_contract_c",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_284a.holistic_dependency_contract_completed",
+      "evidence_group": "mab_code23_wellness.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_dietary_preference"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed dependency contract unblocks the required diet-to-exercise-to-mental-health chain while preserving nutrition, workout, mood, and activity history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_dietary_preference"
+        ]
+      },
+      "id": "mab_code23_wellness.cf.01_classify_authority_holistic_dependenc",
+      "independence_key": "mab_code23_wellness.cf.01_classify_authority_holistic_dependenc",
+      "measurement_type": "control",
+      "mutation_id": "mab_code23_wellness.mutation.01_classify_authority_holistic_dependenc",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_284a3e6eea.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_dietary_preference"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_holistic_dependency_contract_c",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_284a.holistic_dependency_contract_completed",
+      "evidence_group": "mab_code23_wellness.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_personalized_worko"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed dependency contract unblocks the required diet-to-exercise-to-mental-health chain while preserving nutrition, workout, mood, and activity history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_personalized_worko"
+        ]
+      },
+      "id": "mab_code23_wellness.cf.02_revise_affected_holistic_dependenc",
+      "independence_key": "mab_code23_wellness.cf.02_revise_affected_holistic_dependenc",
+      "measurement_type": "control",
+      "mutation_id": "mab_code23_wellness.mutation.02_revise_affected_holistic_dependenc",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_284a3e6eea.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_personalized_worko"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_holistic_dependency_contract_c",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_284a.holistic_dependency_contract_completed",
+      "evidence_group": "mab_code23_wellness.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_mood_tracking_medi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed dependency contract unblocks the required diet-to-exercise-to-mental-health chain while preserving nutrition, workout, mood, and activity history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_mood_tracking_medi"
+        ]
+      },
+      "id": "mab_code23_wellness.cf.03_verify_closure_holistic_dependenc",
+      "independence_key": "mab_code23_wellness.cf.03_verify_closure_holistic_dependenc",
+      "measurement_type": "control",
+      "mutation_id": "mab_code23_wellness.mutation.03_verify_closure_holistic_dependenc",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_284a3e6eea.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_mood_tracking_medi"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "family": "wait_for_authority",
+      "id": "mab_code23_wellness.mutation.01_classify_authority_holistic_dependenc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code23_wellness.cf.01_classify_authority_holistic_dependenc"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_284a3e6eea.source.pin"
+      ],
+      "targets": [
+        "mab_code23_wellness.cf.01_classify_authority_holistic_dependenc",
+        "mab_dependency_unblock_284a3e6eea.event.receipt",
+        "mab_dependency_unblock_284a3e6eea.event.authority_probe",
+        "mab_dependency_unblock_284a3e6eea.closure",
+        "mab_dependency_unblock_284a3e6eea.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "family": "resolve_authority",
+      "id": "mab_code23_wellness.mutation.02_revise_affected_holistic_dependenc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code23_wellness.cf.02_revise_affected_holistic_dependenc"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_284a3e6eea.source.pin"
+      ],
+      "targets": [
+        "mab_code23_wellness.cf.02_revise_affected_holistic_dependenc",
+        "mab_dependency_unblock_284a3e6eea.event.receipt",
+        "mab_dependency_unblock_284a3e6eea.event.authority_probe",
+        "mab_dependency_unblock_284a3e6eea.closure",
+        "mab_dependency_unblock_284a3e6eea.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "family": "rederive_from_authority",
+      "id": "mab_code23_wellness.mutation.03_verify_closure_holistic_dependenc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code23_wellness.cf.03_verify_closure_holistic_dependenc"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_284a3e6eea.source.pin"
+      ],
+      "targets": [
+        "mab_code23_wellness.cf.03_verify_closure_holistic_dependenc",
+        "mab_dependency_unblock_284a3e6eea.event.receipt",
+        "mab_dependency_unblock_284a3e6eea.event.authority_probe",
+        "mab_dependency_unblock_284a3e6eea.closure",
+        "mab_dependency_unblock_284a3e6eea.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific holistic_dependency_contract_completed receipt bound to coding:023.",
+      "id": "mab_dependency_unblock_284a3e6eea.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned WellnessJourney authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_284a3e6eea.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A delayed dependency contract unblocks the required diet-to-exercise-to-mental-health chain while preserving nutrition, workout, mood, and activity history.",
+      "id": "mab_dependency_unblock_284a3e6eea.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:023.",
+      "id": "mab_dependency_unblock_284a3e6eea.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes WellnessJourney and a holistic wellness closure.",
+      "id": "mab_dependency_unblock_284a3e6eea.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_wellness_output_schema_weekly_plan_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Diet must precede nutrition-aware exercise, which must precede integrated mental-health planning.",
+      "id": "mab_dependency_unblock_284a3e6eea.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_wellness_diet_exercise_mental_dependency_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Meal, nutrition, workout, video, mood, meditation, and stress-management history is preserved.",
+      "id": "mab_dependency_unblock_284a3e6eea.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_wellness_nutrition_workout_mood_and_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed dependency contract closes the ordered three-component wellness workflow.",
+      "id": "mab_dependency_unblock_284a3e6eea.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_wellness_dependency_event_and_final_reverification",
+      "relevance_tier": "base"
+    }
+  ]
+}

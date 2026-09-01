@@ -1,0 +1,75 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_8902c7f431.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_8902c7f431.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__3f6bf3.cf.01_classify_critical_path",
+          "swe_dependency__3f6bf3.cf.02_resource_triage",
+          "swe_dependency__3f6bf3.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_8902c7f431.event.receipt",
+          "swe_dependency_unblock_8902c7f431.event.probes",
+          "swe_dependency_unblock_8902c7f431.closure",
+          "swe_dependency_unblock_8902c7f431.source.pin",
+          "swe_dependency_unblock_8902c7f431.native.django_01_migrations_test_writer_operationwritertest",
+          "swe_dependency_unblock_8902c7f431.native.django_02_migrations_test_writer_writertests"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "makemigrations produces incorrect path for inner classes",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "e246e5952a2ef2474dbee61711a836ce0292e6dd563f266d5a3f091359baa916",
+        "task_id": "django__django-12125",
+        "task_path": "cases/swe-dependency-unblock-8902c7f431/private/source_task.yaml"
+      }
+    ]
+  }
+}

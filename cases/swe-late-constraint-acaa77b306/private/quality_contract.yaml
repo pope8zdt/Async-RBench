@@ -1,0 +1,75 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_constraint_acaa77b306.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_constraint_acaa77b306.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_constr_6fbe9a.cf.01_classify_authority_add_and_initialize",
+          "swe_late_constr_6fbe9a.cf.02_revise_affected_use_the_caller_buf",
+          "swe_late_constr_6fbe9a.cf.03_verify_closure_retain_safe_behavi"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_constraint_acaa77b306.event.receipt",
+          "swe_late_constraint_acaa77b306.event.probes",
+          "swe_late_constraint_acaa77b306.closure",
+          "swe_late_constraint_acaa77b306.source.pin",
+          "swe_late_constraint_acaa77b306.native.zstd_zstreamtest"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Add the experimental stable-output decompression parameter so callers with a sufficiently large, immutable output buffer can avoid the internal output allocation and copy. Fix single-pass handling for empty frames and preserve safe behavior for undersized or modified buffers. Validate the change with the native streaming and fuzz regressions.",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "cc045abc5de79ddd1255d8758318b7792ba419c8ae2afdb184abec41833f2ed5",
+        "task_id": "facebook__zstd-2094",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

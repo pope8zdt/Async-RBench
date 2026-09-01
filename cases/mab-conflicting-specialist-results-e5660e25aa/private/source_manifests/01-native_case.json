@@ -1,0 +1,109 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "mab-conflicting-specialist-results-e5660e25aa",
+  "benchmark": "MultiAgentBench",
+  "source_binding": {
+    "task_id": "database:006",
+    "scenario": "database",
+    "jsonl_path": "upstream/marble/multiagentbench/database/database_main.jsonl",
+    "line_number": 6,
+    "record_sha256": "f1d5bd3526fb238693c053ad3693c48b81c2cb28b3bd1a0723a64c24c2bd08c2",
+    "upstream_revision": "8d60fa17b5596b44458a52d4296061b9fc13d6f2"
+  },
+  "native_runtime": {
+    "adapter": "marble.engine.Engine",
+    "environment": {
+      "type": "",
+      "name": "",
+      "max_iterations": "",
+      "init_sql": "-- 1. Students table (stores student information)\nCREATE TABLE students (\n    student_id SERIAL PRIMARY KEY,  -- Unique student ID\n    first_name VARCHAR(100),\n    last_name VARCHAR(100),\n    email VARCHAR(255) UNIQUE NOT NULL,  -- Unique email\n    phone VARCHAR(20),\n    address VARCHAR(255),\n    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n-- 2. Courses table (stores course details)\nCREATE TABLE courses (\n    course_id SERIAL PRIMARY KEY,  -- Unique course ID\n    course_name VARCHAR(255) NOT NULL,\n    description TEXT,\n    credits INT NOT NULL,  -- Number of credits\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n-- 3. Enrollments table (stores students' enrollments in courses)\nCREATE TABLE enrollments (\n    enrollment_id SERIAL PRIMARY KEY,  -- Unique enrollment ID\n    student_id INT REFERENCES students(student_id),  -- Foreign key to students\n    course_id INT REFERENCES courses(course_id),  -- Foreign key to courses\n    enrollment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    grade VARCHAR(2)  -- Grade for the course (e.g., A, B, C)\n);\n\n-- 4. Payments table (stores payment details for course enrollments)\nCREATE TABLE payments (\n    payment_id SERIAL PRIMARY KEY,  -- Unique payment ID\n    student_id INT REFERENCES students(student_id),  -- Foreign key to students\n    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    amount DECIMAL(10, 2) NOT NULL,  -- Payment amount\n    payment_method VARCHAR(50),  -- Payment method (e.g., credit card, bank transfer)\n    status VARCHAR(50) DEFAULT 'completed'  -- Payment status (e.g., completed, pending)\n);\n\n-- Insert sample students\nINSERT INTO students (first_name, last_name, email, phone, address) \nVALUES \n('John', 'Doe', 'john.doe@example.com', '555-1234', '789 Student St, Cityville'),\n('Jane', 'Smith', 'jane.smith@example.com', '555-5678', '456 College Ave, Cityville');\n\n-- Insert sample courses\nINSERT INTO courses (course_name, description, credits) \nVALUES \n('Introduction to Computer Science', 'Basic concepts of computer science and programming.', 3),\n('Data Structures and Algorithms', 'Study of data structures and algorithms in computer science.', 4);\n\n-- Insert sample enrollments\nINSERT INTO enrollments (student_id, course_id, grade) \nVALUES \n(1, 1, 'A'),  -- John enrolled in Introduction to Computer Science with grade A\n(1, 2, 'B'),  -- John enrolled in Data Structures and Algorithms with grade B\n(2, 1, 'B');  -- Jane enrolled in Introduction to Computer Science with grade B\n\n-- Insert sample payments\nINSERT INTO payments (student_id, amount, payment_method, status) \nVALUES \n(1, 500.00, 'Credit Card', 'completed'),  -- Payment for John\n(2, 500.00, 'Bank Transfer', 'completed');  -- Payment for Jane\n\n-- Query to get student enrollments and grades\nSELECT s.first_name, s.last_name, c.course_name, e.grade\nFROM enrollments e\nJOIN students s ON e.student_id = s.student_id\nJOIN courses c ON e.course_id = c.course_id;\n\n-- Query to get payment details for a student\nSELECT p.payment_date, p.amount, p.payment_method, p.status\nFROM payments p\nJOIN students s ON p.student_id = s.student_id\nWHERE s.student_id = 1;  -- Payment details for student with ID 1 (John)\n",
+      "anomalies": [
+        {
+          "anomaly": "VACUUM",
+          "threads": 100,
+          "ncolumn": 20,
+          "nrow": 20000,
+          "colsize": 100
+        }
+      ]
+    },
+    "roles": [
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent1",
+        "profile": "agent1 will explore the possibility of INSERT_LARGE_DATA as a root cause. Recommended tables: `pg_stat_statements`. You can search for INSERTs."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent2",
+        "profile": "agent2 will explore the possibility of LOCK_CONTENTION as a root cause. Recommended tables: `pg_locks`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent3",
+        "profile": "agent3 will explore the possibility of VACUUM as a root cause. Recommended to search for inappropiate VACUUMs from `pg_stat_all_tables`: SELECT query, calls, total_plan_time, rows, mean_plan_time FROM pg_stat_statements WHERE query LIKE 'VACUUM%';"
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent4",
+        "profile": "agent4 will explore the possibility of REDUNDANT_INDEX as a root cause. Recommended tables: `pg_stat_user_indexes`, `pg_indexes`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent5",
+        "profile": "agent5 will explore the possibility of FETCH_LARGE_DATA as a root cause. Recommended to search for SELECTs from `pg_stat_statements`."
+      }
+    ],
+    "final_state": "MARBLE environment and tool transcript"
+  },
+  "event_protocol": {
+    "producer": "an actual MARBLE role executes with its declared profile and tools",
+    "payload": "the role's native message/tool result with provenance and logical clock",
+    "release_predicate": "coordinator committed at least one environment action after launching the role",
+    "rollback": "messages and tool calls remain in the native transcript; correction is additive and auditable"
+  },
+  "state_attestation": {
+    "baseline_probe": "serialized MARBLE environment state and transcript sequence zero",
+    "checkpoint_probe": "environment digest plus strictly increased native tool/action sequence",
+    "change_required": true,
+    "journal_owner": "MARBLE engine logger, not an agent workspace file"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "metrics": {
+      "accuracy": true,
+      "response_time": true
+    },
+    "agreement_or_environment_state": true
+  },
+  "quality_gates": {
+    "official_scenario_bound": true,
+    "native_roles_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

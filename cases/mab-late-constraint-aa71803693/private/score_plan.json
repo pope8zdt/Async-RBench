@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_stale_seller_supply_terms_arrived",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_constraint_aa71.seller_supply_terms_arrived",
+      "evidence_group": "mab_bargain05_elephant.classify_stale",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.preserve_the_buyer_s_price_a"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_stale: Late seller supply and long-term-contract terms supersede provisional price-only drafts while the Elephant centerpiece product identity, buyer quality goal, transcript, and rejected offers remain auditable.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_the_buyer_s_price_a"
+        ]
+      },
+      "id": "mab_bargain05_elephant.cf.01_classify_stale_seller_supply_term",
+      "independence_key": "mab_bargain05_elephant.cf.01_classify_stale_seller_supply_term",
+      "measurement_type": "control",
+      "mutation_id": "mab_bargain05_elephant.mutation.01_classify_stale_seller_supply_term",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_aa71803693.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_buyer_s_price_a"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "exclude_stale_seller_supply_terms_arrived",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_late_constraint_aa71.seller_supply_terms_arrived",
+      "evidence_group": "mab_bargain05_elephant.exclude_stale",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.preserve_the_seller_s_long_t"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "exclude_stale: Late seller supply and long-term-contract terms supersede provisional price-only drafts while the Elephant centerpiece product identity, buyer quality goal, transcript, and rejected offers remain auditable.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.preserve_the_seller_s_long_t"
+        ]
+      },
+      "id": "mab_bargain05_elephant.cf.02_exclude_stale_seller_supply_term",
+      "independence_key": "mab_bargain05_elephant.cf.02_exclude_stale_seller_supply_term",
+      "measurement_type": "control",
+      "mutation_id": "mab_bargain05_elephant.mutation.02_exclude_stale_seller_supply_term",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_aa71803693.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_the_seller_s_long_t"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_seller_supply_terms_arrived",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_constraint_aa71.seller_supply_terms_arrived",
+      "evidence_group": "mab_bargain05_elephant.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.record_offers_counters_infor"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: Late seller supply and long-term-contract terms supersede provisional price-only drafts while the Elephant centerpiece product identity, buyer quality goal, transcript, and rejected offers remain auditable.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.record_offers_counters_infor"
+        ]
+      },
+      "id": "mab_bargain05_elephant.cf.03_verify_closure_seller_supply_term",
+      "independence_key": "mab_bargain05_elephant.cf.03_verify_closure_seller_supply_term",
+      "measurement_type": "control",
+      "mutation_id": "mab_bargain05_elephant.mutation.03_verify_closure_seller_supply_term",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_aa71803693.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.record_offers_counters_infor"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "family": "wait_for_authority",
+      "id": "mab_bargain05_elephant.mutation.01_classify_stale_seller_supply_term",
+      "may_fail": [],
+      "must_fail": [
+        "mab_bargain05_elephant.cf.01_classify_stale_seller_supply_term"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_aa71803693.source.pin"
+      ],
+      "targets": [
+        "mab_bargain05_elephant.cf.01_classify_stale_seller_supply_term",
+        "mab_late_constraint_aa71803693.event.receipt",
+        "mab_late_constraint_aa71803693.event.authority_probe",
+        "mab_late_constraint_aa71803693.closure",
+        "mab_late_constraint_aa71803693.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "family": "resolve_authority",
+      "id": "mab_bargain05_elephant.mutation.02_exclude_stale_seller_supply_term",
+      "may_fail": [],
+      "must_fail": [
+        "mab_bargain05_elephant.cf.02_exclude_stale_seller_supply_term"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_aa71803693.source.pin"
+      ],
+      "targets": [
+        "mab_bargain05_elephant.cf.02_exclude_stale_seller_supply_term",
+        "mab_late_constraint_aa71803693.event.receipt",
+        "mab_late_constraint_aa71803693.event.authority_probe",
+        "mab_late_constraint_aa71803693.closure",
+        "mab_late_constraint_aa71803693.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "family": "rederive_from_authority",
+      "id": "mab_bargain05_elephant.mutation.03_verify_closure_seller_supply_term",
+      "may_fail": [],
+      "must_fail": [
+        "mab_bargain05_elephant.cf.03_verify_closure_seller_supply_term"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_aa71803693.source.pin"
+      ],
+      "targets": [
+        "mab_bargain05_elephant.cf.03_verify_closure_seller_supply_term",
+        "mab_late_constraint_aa71803693.event.receipt",
+        "mab_late_constraint_aa71803693.event.authority_probe",
+        "mab_late_constraint_aa71803693.closure",
+        "mab_late_constraint_aa71803693.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific seller_supply_terms_arrived receipt bound to bargaining:005.",
+      "id": "mab_late_constraint_aa71803693.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Jungle Baby Shower Theme Centerpiece bargaining task authority runs after three upstream results.",
+      "id": "mab_late_constraint_aa71803693.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Late seller supply and long-term-contract terms supersede provisional price-only drafts while the Elephant centerpiece product identity, buyer quality goal, transcript, and rejected offers remain auditable.",
+      "id": "mab_late_constraint_aa71803693.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench bargaining:005.",
+      "id": "mab_late_constraint_aa71803693.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The bargaining implementation and elephant_centerpiece_supply_agreement_closure expose the required product and negotiation-summary contract.",
+      "id": "mab_late_constraint_aa71803693.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_elephant_output_schema_product_and_summary",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Newest seller tiers govern unit price, minimum quantity, contract duration, and shipping; stale or incomplete offers cannot become agreements.",
+      "id": "mab_late_constraint_aa71803693.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_elephant_latest_supply_terms_replace_price_only_draft",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves the transcript, rejection reasons, buyer quality priority, and seller long-term-contract goal.",
+      "id": "mab_late_constraint_aa71803693.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_elephant_priorities_rejections_and_ledger_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The late seller matrix supersedes the provisional draft and the final agreement consumes the exact event receipt.",
+      "id": "mab_late_constraint_aa71803693.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_elephant_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

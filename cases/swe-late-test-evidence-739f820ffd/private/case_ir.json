@@ -1,0 +1,227 @@
+{
+  "case_id": "swe-late-test-evidence-739f820ffd",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_req_01_recognize_both_p_and_q_v",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_test_evidence_739f.delayed_authority",
+      "evidence_group": "bp_swe_739f.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.recognize_both_p_and_q_v"
+      },
+      "expected_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Classify the delayed P/Q VLA comparison result as authority for the descriptor-handling branch.",
+      "forbidden_behavior": "Do not use the provisional Q-only observation as the complete contract; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.recognize_both_p_and_q_v"
+        ]
+      },
+      "id": "bp_swe_739f.cf.01_classify_authority_ize_both_p_and_q_v",
+      "independence_key": "bp_swe_739f.cf.01_classify_authority_ize_both_p_and_q_v",
+      "must_still_pass": [
+        "swe_late_test_evidence_7.sem.21.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "mutation_id": "bp_swe_739f.mutation.01_classify_authority_ize_both_p_and_q_v",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_late_test_evidence_739f820ffd.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Classify the delayed P/Q VLA comparison result as authority for the descriptor-handling branch.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.recognize_both_p_and_q_v"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_req_02_preserve_element_wise_re",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_test_evidence_739f.delayed_authority",
+      "evidence_group": "bp_swe_739f.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.preserve_element_wise_re"
+      },
+      "expected_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Revise FITS table comparison to recognize both P and Q VLA descriptors while preserving element-wise changed-value reporting.",
+      "forbidden_behavior": "Do not use an overbroad equality shortcut that suppresses changed QD cells; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.preserve_element_wise_re"
+        ]
+      },
+      "id": "bp_swe_739f.cf.02_revise_affected_ve_element_wise_re",
+      "independence_key": "bp_swe_739f.cf.02_revise_affected_ve_element_wise_re",
+      "must_still_pass": [
+        "swe_late_test_evidence_7.sem.21.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "mutation_id": "bp_swe_739f.mutation.02_revise_affected_ve_element_wise_re",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_739f820ffd.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Revise FITS table comparison to recognize both P and Q VLA descriptors while preserving element-wise changed-value reporting.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_element_wise_re"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_req_03_add_p_q_self_comparison",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_test_evidence_739f.delayed_authority",
+      "evidence_group": "bp_swe_739f.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.add_p_q_self_comparison_"
+      },
+      "expected_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Re-run P/Q self-comparison, changed-value, and existing FITS diff regressions using the exact delayed result receipt.",
+      "forbidden_behavior": "Do not close from identical-table evidence alone; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.add_p_q_self_comparison_"
+        ]
+      },
+      "id": "bp_swe_739f.cf.03_verify_closure__q_self_comparison",
+      "independence_key": "bp_swe_739f.cf.03_verify_closure__q_self_comparison",
+      "must_still_pass": [
+        "swe_late_test_evidence_7.sem.21.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "bp_swe_739f.mutation.03_verify_closure__q_self_comparison",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_739f820ffd.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Re-run P/Q self-comparison, changed-value, and existing FITS diff regressions using the exact delayed result receipt.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.add_p_q_self_comparison_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.recognize_both_p_and_q_v"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.preserve_element_wise_re"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.add_p_q_self_comparison_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.recognize_both_p_and_q_v",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_element_wise_re",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.add_p_q_self_comparison_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.recognize_both_p_and_q_v",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_element_wise_re",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.add_p_q_self_comparison_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.recognize_both_p_and_q_v",
+      "req.02.preserve_element_wise_re",
+      "req.03.add_p_q_self_comparison_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.",
+    "before_state": "A provisional FITS VLA descriptor fix is checkpointed before authoritative P/Q self-comparison and changed-cell evidence arrives.",
+    "event_id": "evt.swe_late_test_evidence_739f.delayed_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Recognize both P and Q VLA descriptor forms in the VLA comparison branch.",
+      "id": "req.01.recognize_both_p_and_q_v",
+      "observable_probe": "swe_late_test_evidence_7.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for recognize_both_p_and_q_vla_descripto"
+    },
+    {
+      "description": "Preserve element-wise reporting for changed VLA data.",
+      "id": "req.02.preserve_element_wise_re",
+      "observable_probe": "swe_late_test_evidence_7.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for preserve_element_wise_reporting_for_"
+    },
+    {
+      "description": "Add P/Q self-comparison and changed-value regression tests.",
+      "id": "req.03.add_p_q_self_comparison_",
+      "observable_probe": "swe_late_test_evidence_7.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for add_p_q_self_comparison_and_changed_"
+    }
+  ]
+}

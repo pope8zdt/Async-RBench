@@ -1,0 +1,40 @@
+{
+  "benchmark": "MultiAgentBench",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "private_copy": "private/source_manifests/01-native_case.json",
+      "sha256": "c8638a82da0515e9a5974aaa1a547413dd909e10e96096193dc5a71c4fa5aacc",
+      "source": "artifacts/source-native-v4/cases/multiagentbench/mab-late-constraint-c4cd816269/native_case.json"
+    },
+    {
+      "private_copy": "private/source_manifests/02-participant_task.json",
+      "sha256": "8c4b443e91121211b7207e983effa968b5e53e0624a9cad5d832e96ae6bb1494",
+      "source": "artifacts/source-native-v4/cases/multiagentbench/mab-late-constraint-c4cd816269/participant_task.json"
+    },
+    {
+      "private_copy": "private/source_manifests/03-official_task.json",
+      "sha256": "18173d4f3c3ca4720c6aceb54960fec10b79fc416ba4559704a1520beea7fe9e",
+      "source": "artifacts/source-native-v4/cases/multiagentbench/mab-late-constraint-c4cd816269/official_task.json"
+    },
+    {
+      "private_copy": "private/source_manifests/04-native_config.yaml",
+      "sha256": "cd67ce3b3af78519fd3a52d6a89377729fd1a9bb0dcb994a121d29b6986abfdb",
+      "source": "artifacts/source-native-v4/cases/multiagentbench/mab-late-constraint-c4cd816269/native_config.yaml"
+    }
+  ],
+  "runtime_plan": {
+    "environment_strategy": "pinned MARBLE source and case-local evaluator replay",
+    "event_injection": "evaluator-only task-specific delivery",
+    "hidden_tests": "native evaluator, source semantics, chronology/authority, closure",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "marble.engine.Engine",
+      "evaluator": "Evaluator.evaluate_task_world",
+      "scenario": "bargaining"
+    },
+    "oracle": "consume private source-native event evidence"
+  },
+  "source_fidelity": [],
+  "source_task_id": "bargaining:019"
+}

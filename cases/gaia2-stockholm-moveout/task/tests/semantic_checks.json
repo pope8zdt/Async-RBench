@@ -1,0 +1,245 @@
+{
+  "version": "3",
+  "checks": [
+    {
+      "id": "sm.base.output_files_exist",
+      "pytest_node": "test_case_outcomes.py::test_output_files_exist",
+      "category": "base_task_completion",
+      "description": "All four deliverables exist under the output root",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sm.base.saved_list_well_formed",
+      "pytest_node": "test_case_outcomes.py::test_saved_list_well_formed",
+      "category": "base_task_completion",
+      "description": "saved_list_final.json is a well-formed saved list of listings",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sm.base.out_of_range_removed",
+      "pytest_node": "test_case_outcomes.py::test_out_of_range_stockholm_removed",
+      "category": "base_task_completion",
+      "description": "Out-of-range Stockholm saved listing is removed from the final list",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sm.base.in_range_unsaved_added",
+      "pytest_node": "test_case_outcomes.py::test_in_range_unsaved_stockholm_added",
+      "category": "base_task_completion",
+      "description": "Unsaved in-range Stockholm catalog listing is added to the final list",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sm.integrate.vasastan_added",
+      "pytest_node": "test_case_outcomes.py::test_vasastan_serenity_added",
+      "category": "late_listing_integration",
+      "description": "The first late in-range Stockholm listing (Vasastan Serenity) is integrated into the saved list",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.integrate.sodermalm_added",
+      "pytest_node": "test_case_outcomes.py::test_sodermalm_heaven_added",
+      "category": "late_listing_integration",
+      "description": "The second late in-range Stockholm listing (Södermalm Heaven) is integrated into the saved list",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.integrate.metadata_preserved",
+      "pytest_node": "test_case_outcomes.py::test_matching_additions_preserve_metadata",
+      "category": "late_listing_integration",
+      "description": "Integrated late listings keep their price and Stockholm city metadata",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.integrate.no_duplicates",
+      "pytest_node": "test_case_outcomes.py::test_no_duplicate_saved_ids",
+      "category": "late_listing_integration",
+      "description": "The final saved list has no duplicate listing ids",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.notify.exactly_two_messages",
+      "pytest_node": "test_case_outcomes.py::test_exactly_two_notifications",
+      "category": "selective_notification",
+      "description": "Exactly two Messages notifications are sent, one per matching late listing",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.notify.first_names_vasastan",
+      "pytest_node": "test_case_outcomes.py::test_first_notification_names_vasastan",
+      "category": "selective_notification",
+      "description": "The first notification names Vasastan Serenity at 1800 SEK",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.notify.second_names_sodermalm",
+      "pytest_node": "test_case_outcomes.py::test_second_notification_names_sodermalm",
+      "category": "selective_notification",
+      "description": "The second notification names Södermalm Heaven at 1600 SEK",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.notify.no_message_lofts",
+      "pytest_node": "test_case_outcomes.py::test_no_message_for_stockholm_lofts",
+      "category": "selective_notification",
+      "description": "No notification is sent for the over-budget Stockholm Lofts listing",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.notify.no_message_other_decoys",
+      "pytest_node": "test_case_outcomes.py::test_no_message_for_other_decoys",
+      "category": "selective_notification",
+      "description": "No notification is sent for the over-budget, under-budget or non-Stockholm decoys",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.notify.to_linnea",
+      "pytest_node": "test_case_outcomes.py::test_notifications_addressed_to_linnea",
+      "category": "selective_notification",
+      "description": "Every notification is addressed to the friend Linnea Svensson",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.eval.monitor_report_exists",
+      "pytest_node": "test_case_outcomes.py::test_event_monitor_report_exists",
+      "category": "event_evaluation",
+      "description": "The event-monitor report records the evaluator-scoped authority stream revision, observed events and window closure",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.eval.all_events_evaluated",
+      "pytest_node": "test_case_outcomes.py::test_all_six_events_evaluated",
+      "category": "event_evaluation",
+      "description": "All six late listing events are evaluated in feed order",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "supporting"
+    },
+    {
+      "id": "sm.eval.matching_events_acted",
+      "pytest_node": "test_case_outcomes.py::test_matching_events_acted",
+      "category": "event_evaluation",
+      "description": "The report marks every matching event as added and notified",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.eval.decoys_ignored",
+      "pytest_node": "test_case_outcomes.py::test_decoys_ignored",
+      "category": "event_evaluation",
+      "description": "The report marks every decoy event as ignored with a reason",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sm.closure.final_saved_closure",
+      "pytest_node": "test_case_outcomes.py::test_final_saved_list_closure",
+      "category": "consistency_closure",
+      "description": "Final saved list equals the corrected initial list plus every matching late addition",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.closure.notifications_match_additions",
+      "pytest_node": "test_case_outcomes.py::test_notifications_match_additions",
+      "category": "consistency_closure",
+      "description": "The notification record matches the matching late additions in feed order",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.closure.wait_for_window_closed",
+      "pytest_node": "test_case_outcomes.py::test_manifest_window_closed",
+      "category": "consistency_closure",
+      "description": "The manifest binds closure to the exact evaluator-scoped authority stream revision and all six evaluated events",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.closure.manifest_closure_verified",
+      "pytest_node": "test_case_outcomes.py::test_manifest_closure_verified",
+      "category": "consistency_closure",
+      "description": "The manifest declares the closure was verified and its final saved ids match the file",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.closure.report_matches_deliverables",
+      "pytest_node": "test_case_outcomes.py::test_report_matches_deliverables",
+      "category": "consistency_closure",
+      "description": "The event-monitor report's final saved list and notification record match the files",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sm.closure.manifest_initial_plan",
+      "pytest_node": "test_case_outcomes.py::test_manifest_initial_plan_consistent",
+      "category": "consistency_closure",
+      "description": "The manifest initial plan matches the corrected saved list re-derived from the apps",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    }
+  ]
+}

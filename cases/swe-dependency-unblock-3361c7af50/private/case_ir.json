@@ -1,0 +1,227 @@
+{
+  "case_id": "swe-dependency-unblock-3361c7af50",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_update_figure_serialization_",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A minimal reproduction confirms that pickle.dumps(fig) fails only after align_labels() populates the figure’s alignment state.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.update_figure_serializat"
+        ]
+      },
+      "id": "01_classify_critical_path_update_figure_seri",
+      "must_still_pass": [
+        "swe_dependency_unblock_3.sem.23.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3.sem.01.the_repaired_repository_pass",
+        "swe_dependency_unblock_3.sem.02.previously_passing_behavior_",
+        "swe_dependency_unblock_3.sem.03.the_final_patch_is_based_on_",
+        "swe_dependency_unblock_3.sem.04.update_figure_serialization_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_dependency_unblock_3.sem.01.the_repaired_repository_pass, swe_dependency_unblock_3.sem.02.previously_passing_behavior_, swe_dependency_unblock_3.sem.03.the_final_patch_is_based_on_, swe_dependency_unblock_3.sem.04.update_figure_serialization_",
+      "required_behavior": "For event 'A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.', perform classify_critical_path for 'Update Figure serialization to omit the alignment-group state containing weak references.' while retaining valid prior result 'A minimal reproduction confirms that pickle.dumps(fig) fails only after align_labels() populates the figure’s alignment state.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.update_figure_serializat"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_recreate_fresh_alignment_gro",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Figure serialization hooks and the align_labels call path have been located.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.update_figure_serializat"
+        ]
+      },
+      "id": "02_resource_triage_recreate_fresh_ali",
+      "must_still_pass": [
+        "swe_dependency_unblock_3.sem.23.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3.sem.01.the_repaired_repository_pass",
+        "swe_dependency_unblock_3.sem.02.previously_passing_behavior_",
+        "swe_dependency_unblock_3.sem.03.the_final_patch_is_based_on_",
+        "swe_dependency_unblock_3.sem.04.update_figure_serialization_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_dependency_unblock_3.sem.01.the_repaired_repository_pass, swe_dependency_unblock_3.sem.02.previously_passing_behavior_, swe_dependency_unblock_3.sem.03.the_final_patch_is_based_on_, swe_dependency_unblock_3.sem.04.update_figure_serialization_",
+      "required_behavior": "For event 'A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.', perform resource_triage for 'Recreate fresh alignment Groupers when the figure is restored.' while retaining valid prior result 'Figure serialization hooks and the align_labels call path have been located.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.update_figure_serializat"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_verify_pickle_round_tripping",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A minimal reproduction confirms that pickle.dumps(fig) fails only after align_labels() populates the figure’s alignment state.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.update_figure_serializat"
+        ]
+      },
+      "id": "03_verify_closure_verify_pickle_roun",
+      "must_still_pass": [
+        "swe_dependency_unblock_3.sem.23.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3.sem.01.the_repaired_repository_pass",
+        "swe_dependency_unblock_3.sem.02.previously_passing_behavior_",
+        "swe_dependency_unblock_3.sem.03.the_final_patch_is_based_on_",
+        "swe_dependency_unblock_3.sem.04.update_figure_serialization_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_dependency_unblock_3.sem.01.the_repaired_repository_pass, swe_dependency_unblock_3.sem.02.previously_passing_behavior_, swe_dependency_unblock_3.sem.03.the_final_patch_is_based_on_, swe_dependency_unblock_3.sem.04.update_figure_serialization_",
+      "required_behavior": "For event 'A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.', perform verify_closure for 'Verify pickle round-tripping after align_labels() and confirm the unpickled figure can perform alignment again.' while retaining valid prior result 'A minimal reproduction confirms that pickle.dumps(fig) fails only after align_labels() populates the figure’s alignment state.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.update_figure_serializat"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.update_figure_serializat"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.recreate_fresh_alignment"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_pickle_round_trip"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.run_the_targeted_figure_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.update_figure_serializat",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.recreate_fresh_alignment",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_pickle_round_trip",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.run_the_targeted_figure_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.update_figure_serializat",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.recreate_fresh_alignment",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_pickle_round_trip",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.run_the_targeted_figure_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.update_figure_serializat",
+      "req.02.recreate_fresh_alignment",
+      "req.03.verify_pickle_round_trip",
+      "req.04.run_the_targeted_figure_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.",
+    "before_state": "Deliver the Grouper diagnosis only after the reproduction and initial Figure serialization inspection are complete.",
+    "event_id": "evt.swe_dependency_unblock_3.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Update Figure serialization to omit the alignment-group state containing weak references.",
+      "id": "req.01.update_figure_serializat",
+      "observable_probe": "swe_dependency_unblock_3.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for update_figure_serialization_to_omit_"
+    },
+    {
+      "description": "Recreate fresh alignment Groupers when the figure is restored.",
+      "id": "req.02.recreate_fresh_alignment",
+      "observable_probe": "swe_dependency_unblock_3.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for recreate_fresh_alignment_groupers_wh"
+    },
+    {
+      "description": "Verify pickle round-tripping after align_labels() and confirm the unpickled figure can perform alignment again.",
+      "id": "req.03.verify_pickle_round_trip",
+      "observable_probe": "swe_dependency_unblock_3.sem.03.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for verify_pickle_round_tripping_after_a"
+    },
+    {
+      "description": "Run the targeted figure and serialization tests, including a control figure that was never aligned.",
+      "id": "req.04.run_the_targeted_figure_",
+      "observable_probe": "swe_dependency_unblock_3.sem.04.update_figure_serialization_",
+      "public_evidence": "source instruction and workstream result for run_the_targeted_figure_and_serializ"
+    }
+  ]
+}

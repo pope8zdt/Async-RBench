@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_enter_the_returned_pickup_an",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_5.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.enter_the_returned_picku"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The exact calendar dates corresponding to the task-relative next Monday pickup and Friday return in the benchmark environment’s locale and timezone.', perform classify_authority for 'Enter the returned pickup and return dates in the site’s date controls.' while retaining valid prior result 'Zurich is selected as the rental location.'.",
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Zurich is selected as the rental location.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enter_the_returned_picku"
+        ]
+      },
+      "id": "osw_dependency_unblock_5.cf.01_classify_authority_enter_the_returned",
+      "independence_key": "osw_dependency_unblock_5.cf.01_classify_authority_enter_the_returned",
+      "measurement_type": "control",
+      "mutation_id": "osw_dependency_unblock_5.mutation.01_classify_authority_enter_the_returned",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_5c3a1789cf.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.enter_the_returned_picku"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_apply_the_large_car_filter_a",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_5.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.enter_the_returned_picku"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The exact calendar dates corresponding to the task-relative next Monday pickup and Friday return in the benchmark environment’s locale and timezone.', perform revise_affected for 'Apply the large-car filter and sort results by price ascending.' while retaining valid prior result 'Large vehicle and ascending-price filter controls are identified.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Large vehicle and ascending-price filter controls are identified.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enter_the_returned_picku"
+        ]
+      },
+      "id": "osw_dependency_unblock_5.cf.02_revise_affected_apply_the_large_ca",
+      "independence_key": "osw_dependency_unblock_5.cf.02_revise_affected_apply_the_large_ca",
+      "measurement_type": "control",
+      "mutation_id": "osw_dependency_unblock_5.mutation.02_revise_affected_apply_the_large_ca",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_5c3a1789cf.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.enter_the_returned_picku"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_verify_the_visible_location_",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_5.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.enter_the_returned_picku"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The exact calendar dates corresponding to the task-relative next Monday pickup and Friday return in the benchmark environment’s locale and timezone.', perform verify_closure for 'Verify the visible location, date range, vehicle class, and sort state.' while retaining valid prior result 'Zurich is selected as the rental location.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Zurich is selected as the rental location.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enter_the_returned_picku"
+        ]
+      },
+      "id": "osw_dependency_unblock_5.cf.03_verify_closure_verify_the_visible",
+      "independence_key": "osw_dependency_unblock_5.cf.03_verify_closure_verify_the_visible",
+      "measurement_type": "control",
+      "mutation_id": "osw_dependency_unblock_5.mutation.03_verify_closure_verify_the_visible",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_5c3a1789cf.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.enter_the_returned_picku"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.osw_dependency_unblock_5.delayed_authoritative_re",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The exact calendar dates corresponding to the task-relative next Monday pickup and Friday return in the benchmark environment’s locale and timezone.",
+        "before": "Resolved dates arrive after stable non-date filters are prepared but before the search is submitted.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

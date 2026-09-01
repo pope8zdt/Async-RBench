@@ -1,0 +1,7 @@
+{
+  "format": "gaia2-stockholm-listing-feed",
+  "note": "Deterministic local re-implementation of the official scenario's environment event feed (see PROVENANCE.md). The environment reveals new listings over a simulated 4-minute window; advance --tick gradually to observe arrival order.",
+  "window_minutes": 4,
+  "total_events": 6,
+  "reader_usage": "python3 /app/task_file/scripts/read_events.py --tick N --since CURSOR"
+}

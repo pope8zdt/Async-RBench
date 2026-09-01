@@ -1,0 +1,89 @@
+instruction: |-
+  The repository at /app/repo is the exact git-leak-recovery challenge repository,
+  extended with the pinned Bottle vulnerability and main/dev release branches.
+  Recover the original secret into /app/secret.txt, then remove it from every
+  reachable and unreachable Git object without losing legitimate commits or files.
+  Fix Bottle's CRLF header injection vulnerability (CWE-93) on both main and dev
+  branches and write the original report format to /app/report.jsonl.
+  The JSONL report must contain a vulnerable item with exactly the public file
+  path "/app/bottle.py" and cwe_id containing "cwe-93", for example
+  {"file_path":"/app/bottle.py","cwe_id":["cwe-93"]}. /app/bottle.py is the
+  public symlink to the main working-tree Bottle file. Both branch versions must
+  reject newline, carriage-return and NUL header names/values with ValueError;
+  in particular the final bottle.py must include equivalent checks for
+  "\\n" in key, "\\r" in key and "\\0" in key.
+
+  Host the cleaned repository at git@localhost:/git/project using password
+  "password". Pushes to main and dev must deploy within three seconds to the exact
+  HTTPS endpoints required by git-multibranch (8443 root and /dev). Preserve the
+  nginx-request-logging obligations on HTTP 8080: detailed access/error logs,
+  10r/s rate limit, burst 10, and the exact custom 404/index content.
+  The Git remote must be exactly git@localhost:/git/project with password
+  "password", password SSH authentication enabled, and a synchronous
+  post-receive hook deploying main to https://localhost:8443/index.html and dev
+  to https://localhost:8443/dev/index.html within three seconds. These endpoints
+  must serve the branch contents "main branch content" and "dev branch content".
+
+  For the independent HTTP-8080 service, put the server block at
+  /etc/nginx/conf.d/benchmark-site.conf, remove
+  /etc/nginx/sites-enabled/default, serve /var/www/html, and define
+  both limit_req_zone and the custom log_format directly in
+  /etc/nginx/nginx.conf (not only in an included site file), with a 10MB zone at
+  10r/s plus limit_req burst=10. The log_format directive in nginx.conf must
+  contain $time_local, $request_method, $status and a double-quoted
+  $http_user_agent. Write /var/www/html/index.html with exactly
+  "Welcome to the benchmark webserver" and /var/www/html/404.html with exactly
+  "Page not found - Please check your URL". Configure error_page 404 /404.html.
+  The custom access log must be /var/log/nginx/benchmark-access.log and include
+  $time_local, $request_method, $status and a double-quoted $http_user_agent;
+  the error log must be /var/log/nginx/benchmark-error.log. Validate nginx -t,
+  start nginx, and ensure real requests to localhost:8080 create those logs.
+
+  Write /app/release-manifest.json with sanitized_head, security_revision,
+  deployed_main and deployed_dev commit IDs. sanitized_head is the clean
+  post-sanitization main commit and may be an ancestor of the later patched main;
+  security_revision must be the final patched main commit. Every ID must remain
+  reachable in the final cleaned repository, and deployed revisions must match
+  both the final local branches and /git/project.git.
+
+  INITIAL CONCURRENT WORKSTREAMS (BENCHMARK-STARTED)
+
+  The benchmark has already started three isolated workstreams for you. The
+  ASYNC_RBENCH_INITIAL_WAVE notice at the start of the episode lists their child ids,
+  workstream ids, task summaries and status. You are NOT required to create them
+  and will never be scored on having spawned the initial team; their
+  responsibilities are kept
+  separate: (1) inspect and sanitize reachable/unreachable Git history, recover
+  the secret, and report the observed post-sanitization object state; (2) build
+  and test the CWE-93 Bottle patch against the pre-rewrite refs; and (3) prepare
+  the independent Git/nginx deployment infrastructure. You own the orchestration
+  after the wave starts: wait, accept or reject deliveries, cancel work that is
+  no longer useful, and use spawn_subagent only to re-delegate a workstream whose
+  child must be rebuilt. The main agent remains responsible
+  for final integration, cross-ref patching, deployment and QA.
+
+  Results may complete in any order. Determine whether each result still
+  applies from its reported commit ids, tests and produced files; the prompt
+  does not identify a preferred completion. Preserve independent work and
+  revise only artifacts whose revision assumptions changed.
+
+  Require the history branch to report observed fields
+  secret_blob_present_after_sanitize, fsck_after_sanitize_empty, main_head and
+  dev_head. Require the patch branch to report its tested revision, CRLF test
+  result and patch/test status. The patch evidence must expose the exact fields
+  tested_main_head and tested_dev_head. These must be observations, not task goals.
+
+  A workstream may discover additional evaluator-provided inputs inside its
+  isolated workspace. Such a child must report the resulting exact main/dev
+  commit ids and any promotable bundle path. The main agent cannot read a
+  child's isolated inputs directly, so compare reported revisions before
+  integrating, update the official refs when appropriate, and verify the
+  security fix against the final refs rather than assuming an earlier test run
+  still applies.
+author_name: Async-RBench transformation
+difficulty: hard
+category: system-administration
+tags: [git, security, web, asynchronous-replanning]
+parser_name: pytest
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 600

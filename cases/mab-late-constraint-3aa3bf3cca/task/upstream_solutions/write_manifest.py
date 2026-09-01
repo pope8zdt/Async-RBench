@@ -1,0 +1,5 @@
+import hashlib,json,pathlib
+O=pathlib.Path('/app/output_data')
+r=json.loads((O/'event_receipt.json').read_text())
+m={'schema_version':'async-rbench-closure-v1','case_id':'mab-late-constraint-3aa3bf3cca','source_task_id':'bargaining:030','event_receipt_sha256':r['receipt_sha256'],'event_consumed':True,'final_revision_sha256':hashlib.sha256((O/'solution.py').read_bytes()).hexdigest(),'source_semantics_reverified':True,'closure_complete':True,'control_flow':{s:{'completed':True,'receipt_sha256':r['receipt_sha256']} for s in ['event_intake', 'state_revision', 'plan_revision', 'closure']}}
+(O/'decision_manifest.json').write_text(json.dumps(m,sort_keys=True)+'\n')

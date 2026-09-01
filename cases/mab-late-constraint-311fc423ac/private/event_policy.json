@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_the_returned_c",
+      "req.02.recompute_dashboard_and_",
+      "req.03.add_deterministic_tests_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A finance specialist supplies contribution, refund, milestone, and remaining-goal invariants after group and provisional dashboard work exists.",
+    "before_state": "Task-specific provisional work exists before accounting_invariants_delivered.",
+    "event_id": "evt.mab-late-constraint-311fc423ac.accounting_invariants_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-311fc423ac.accounting_invariants_delivered",
+  "forbidden_shortcut": "Do not ignore the event, retain a superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

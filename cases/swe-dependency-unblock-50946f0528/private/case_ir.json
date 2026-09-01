@@ -1,0 +1,212 @@
+{
+  "case_id": "swe-dependency-unblock-50946f0528",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority:req.01.default_element_id_to_no",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Default element_id to None on both exposed call paths.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.default_element_id_to_no"
+        ]
+      },
+      "id": "01_classify_authority_default_element_id_to_no",
+      "must_still_pass": [],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_50946f0528.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After receiving authoritative event 'An independent API-surface worker returns exact safe markup and confirms optional element_id behavior on both direct utility and template-filter entry points.', perform classify_authority for 'Default element_id to None on both exposed call paths.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.default_element_id_to_no"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.omit_the_id_attribute_en",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Omit the id attribute entirely when no ID is supplied.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.omit_the_id_attribute_en"
+        ]
+      },
+      "id": "02_revise_affected_omit_the_id_attribute_en",
+      "must_still_pass": [],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_50946f0528.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'An independent API-surface worker returns exact safe markup and confirms optional element_id behavior on both direct utility and template-filter entry points.', perform revise_affected for 'Omit the id attribute entirely when no ID is supplied.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.omit_the_id_attribute_en"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.03.preserve_id_escaping_and",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Preserve ID escaping and JSON escaping when an ID is supplied.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.preserve_id_escaping_and"
+        ]
+      },
+      "id": "03_verify_closure_preserve_id_escaping_and",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_50946f0528.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After receiving authoritative event 'An independent API-surface worker returns exact safe markup and confirms optional element_id behavior on both direct utility and template-filter entry points.', perform verify_closure for 'Preserve ID escaping and JSON escaping when an ID is supplied.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.preserve_id_escaping_and"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.default_element_id_to_no"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.omit_the_id_attribute_en"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.preserve_id_escaping_and"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.run_direct_utility_and_t"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.default_element_id_to_no",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.omit_the_id_attribute_en",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.preserve_id_escaping_and",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.run_direct_utility_and_t",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.default_element_id_to_no",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.omit_the_id_attribute_en",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.preserve_id_escaping_and",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.run_direct_utility_and_t",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.default_element_id_to_no",
+      "req.02.omit_the_id_attribute_en",
+      "req.03.preserve_id_escaping_and",
+      "req.04.run_direct_utility_and_t",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An independent API-surface worker returns exact safe markup and confirms optional element_id behavior on both direct utility and template-filter entry points.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+    "event_id": "evt.swe_dependency_unblock_50946f0528.json_script_api_authority_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Default element_id to None on both exposed call paths.",
+      "id": "req.01.default_element_id_to_no",
+      "observable_probe": "swe_dependency_unblock_5.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for default_element_id_to_none_on_both_e"
+    },
+    {
+      "description": "Omit the id attribute entirely when no ID is supplied.",
+      "id": "req.02.omit_the_id_attribute_en",
+      "observable_probe": "swe_dependency_unblock_5.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for omit_the_id_attribute_entirely_when_"
+    },
+    {
+      "description": "Preserve ID escaping and JSON escaping when an ID is supplied.",
+      "id": "req.03.preserve_id_escaping_and",
+      "observable_probe": "swe_dependency_unblock_5.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for preserve_id_escaping_and_json_escapi"
+    },
+    {
+      "description": "Run direct utility and template-filter tests for both signatures.",
+      "id": "req.04.run_direct_utility_and_t",
+      "observable_probe": "swe_dependency_unblock_5.sem.04.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for run_direct_utility_and_template_filt"
+    }
+  ]
+}

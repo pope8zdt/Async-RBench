@@ -1,0 +1,48 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-0ec654e205",
+  "source_task_id": "osworld:libreoffice_writer:88fe4b2d-3040-4c70-9a70-546a47764b48",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "first_paragraph_sentence_boundaries",
+  "upstream_dependency_graph": [
+    {
+      "id": "first_paragraph_isolation",
+      "app": "LibreOffice Writer",
+      "description": "Isolate the first paragraph without changing the remaining document."
+    },
+    {
+      "id": "sentence_boundary_analysis",
+      "app": "Document worker",
+      "description": "Resolve the seven sentence boundaries in the first paragraph.",
+      "depends_on": [
+        "first_paragraph_isolation"
+      ]
+    },
+    {
+      "id": "blank_line_plan",
+      "app": "Writer worker",
+      "description": "Map one empty paragraph between adjacent sentences and preserve the document tail.",
+      "depends_on": [
+        "sentence_boundary_analysis"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/Desktop/CCCH9003_Tutorial_guidelines.docx",
+    "source_paragraph_count": 28,
+    "first_paragraph_sha256": "edb90f5f2a4e687c21d41502463597f5c89cb8ed488e147c849b25cf2eeba420",
+    "sentence_count": 7,
+    "between_sentence_blank_count": 6,
+    "tail_paragraph_count": 27,
+    "tail_sha256": "e007fab6fb12af7236f1b86af30d9ca4a3d25b9df8a54f0dce817866d0b23393",
+    "tail_preserved": true,
+    "accepted_gold_sha256": [
+      "5d649645b9f3298dfdcce5b2943f4be7314bb23bcdf70e37288db86f81852674",
+      "7a335b4d24d47ebb37db765899a193987506a8de62fd86ce5c741a072e642a33",
+      "98fb56cedd2e1f1a3e795d9645dd2a5f2af40568c693855825b53d2d7f65f023",
+      "1b4b3e83d3bac2af3506b19e72f857c30dc21d0b6cac9efca2edfe2584e76cd9"
+    ]
+  },
+  "task_assertion": "The first paragraph is split into seven sentences with one empty paragraph between adjacent sentences, while the rest of the guideline is preserved.",
+  "finding": "The Writer analysis returns seven first-paragraph sentences and six required between-sentence empty paragraphs while preserving the remaining 27 source paragraphs."
+}

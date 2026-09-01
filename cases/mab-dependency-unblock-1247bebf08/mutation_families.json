@@ -1,0 +1,335 @@
+{
+  "families": [
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: The task-specific dependency_contract_completed receipt is authentic and bound to coding:016 and mab-dependency-unblock-1247bebf08.",
+      "id": "mab_code16_project.mut.01_receipt",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: The task-specific dependency_contract_completed receipt is authentic and bound to coding:016 and mab-dependency-unblock-1247bebf08.",
+      "id": "mab_code16_project.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: The evaluator-owned MultiAgent_Project_Manager authority executes only after three upstream results are persisted.",
+      "id": "mab_code16_project.mut.02_authority_probe",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.event.authority_probe"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_authority_probe_evidence",
+        "corrupt_authority_probe_value",
+        "replay_stale_authority_probe_state",
+        "satisfy_manifest_without_authority_probe_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: The evaluator-owned MultiAgent_Project_Manager authority executes only after three upstream results are persisted.",
+      "id": "mab_code16_project.mut.02_authority_probe_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.event.authority_probe"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_authority_probe_red",
+        "artifact_green_authority_probe_stale",
+        "receipt_valid_authority_probe_foreign",
+        "partial_closure_hides_authority_probe_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: The completed dependency result replaces shallow readiness while roles, history, notification settings, and completed work remain intact.",
+      "id": "mab_code16_project.mut.03_closure",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: The completed dependency result replaces shallow readiness while roles, history, notification settings, and completed work remain intact.",
+      "id": "mab_code16_project.mut.03_closure_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: The case remains pinned to official MultiAgentBench coding:016.",
+      "id": "mab_code16_project.mut.04_pin",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: The case remains pinned to official MultiAgentBench coding:016.",
+      "id": "mab_code16_project.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: solution.py and transitive_project_dependency_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_code16_project.mut.05_output_schema",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.output_schema"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_output_schema_evidence",
+        "corrupt_output_schema_value",
+        "replay_stale_output_schema_state",
+        "satisfy_manifest_without_output_schema_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: solution.py and transitive_project_dependency_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_code16_project.mut.05_output_schema_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.output_schema"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_output_schema_red",
+        "artifact_green_output_schema_stale",
+        "receipt_valid_output_schema_foreign",
+        "partial_closure_hides_output_schema_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: Project tasks reject self-dependencies and cycles, use all transitive prerequisites for readiness, and propagate completion into blocker dashboards and notifications.",
+      "id": "mab_code16_project.mut.06_task_behavior",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.task_behavior"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_task_behavior_evidence",
+        "corrupt_task_behavior_value",
+        "replay_stale_task_behavior_state",
+        "satisfy_manifest_without_task_behavior_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: Project tasks reject self-dependencies and cycles, use all transitive prerequisites for readiness, and propagate completion into blocker dashboards and notifications.",
+      "id": "mab_code16_project.mut.06_task_behavior_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.task_behavior"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_task_behavior_red",
+        "artifact_green_task_behavior_stale",
+        "receipt_valid_task_behavior_foreign",
+        "partial_closure_hides_task_behavior_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: Preserves task-native state: role_assignments, task_history, notification_preferences, completed_tasks.",
+      "id": "mab_code16_project.mut.07_preservation",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.preservation"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_preservation_evidence",
+        "corrupt_preservation_value",
+        "replay_stale_preservation_state",
+        "satisfy_manifest_without_preservation_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: Preserves task-native state: role_assignments, task_history, notification_preferences, completed_tasks.",
+      "id": "mab_code16_project.mut.07_preservation_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.preservation"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_preservation_red",
+        "artifact_green_preservation_stale",
+        "receipt_valid_preservation_foreign",
+        "partial_closure_hides_preservation_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: The completed dependency result replaces shallow readiness while roles, history, notification settings, and completed work remain intact.",
+      "id": "mab_code16_project.mut.08_event_closure",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.event_closure"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_event_closure_evidence",
+        "corrupt_event_closure_value",
+        "replay_stale_event_closure_state",
+        "satisfy_manifest_without_event_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: The completed dependency result replaces shallow readiness while roles, history, notification settings, and completed work remain intact.",
+      "id": "mab_code16_project.mut.08_event_closure_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_1247bebf08.source.event_closure"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_event_closure_red",
+        "artifact_green_event_closure_stale",
+        "receipt_valid_event_closure_foreign",
+        "partial_closure_hides_event_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: classify_completeness: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "id": "mab_code16_project.mut.09_01_classify_completeness",
+      "must_fail": [
+        "mab_code16_project.cf.01_classify_completeness"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: classify_completeness: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "id": "mab_code16_project.mut.09_01_classify_completeness_crosscheck",
+      "must_fail": [
+        "mab_code16_project.cf.01_classify_completeness"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_completeness_red",
+        "artifact_green_01_classify_completeness_stale",
+        "receipt_valid_01_classify_completeness_foreign",
+        "partial_closure_hides_01_classify_completeness_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: revise_affected: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "id": "mab_code16_project.mut.10_02_revise_affected",
+      "must_fail": [
+        "mab_code16_project.cf.02_revise_affected"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: preserve_unaffected: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "id": "mab_code16_project.mut.11_03_preserve_unaffected",
+      "must_fail": [
+        "mab_code16_project.cf.03_preserve_unaffected"
+      ],
+      "operation": "mutate_control_selective_replan",
+      "variants": [
+        "omit_selective_replan_decision",
+        "apply_selective_replan_to_wrong_scope",
+        "use_stale_evidence_for_selective_replan",
+        "declare_selective_replan_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Directly challenge: verify_closure: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "id": "mab_code16_project.mut.12_04_verify_closure",
+      "must_fail": [
+        "mab_code16_project.cf.04_verify_closure"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-1247bebf08",
+      "description": "Cross-check independent evidence for: verify_closure: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "id": "mab_code16_project.mut.12_04_verify_closure_crosscheck",
+      "must_fail": [
+        "mab_code16_project.cf.04_verify_closure"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_04_verify_closure_red",
+        "artifact_green_04_verify_closure_stale",
+        "receipt_valid_04_verify_closure_foreign",
+        "partial_closure_hides_04_verify_closure_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

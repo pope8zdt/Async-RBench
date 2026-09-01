@@ -1,0 +1,340 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_revise_the_splitter_to_satis",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_constraint_6294.task_scope_or_dependency",
+      "evidence_group": "swe_late_constrain.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.revise_the_splitter_to_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.', perform classify_scope_delta for 'Revise the splitter to satisfy every reported boundary case.' while retaining valid prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_the_splitter_to_s"
+        ]
+      },
+      "id": "swe_late_constr_0828f3.cf.01_classify_scope_delta_revise_the_splitte",
+      "independence_key": "swe_late_constr_0828f3.cf.01_classify_scope_delta_revise_the_splitte",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_0828f3.mutation.01_classify_scope_delta_revise_the_splitte",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_constraint_6294af1554.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.revise_the_splitter_to_s"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_compile_every_resulting_rege",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_constraint_6294.task_scope_or_dependency",
+      "evidence_group": "swe_late_constrain.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.revise_the_splitter_to_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.', perform revise_affected for 'Compile every resulting regex and assert the intended pattern count.' while retaining valid prior result 'Draft a comma-aware splitter implementation.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comma-aware splitter implementation.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_the_splitter_to_s"
+        ]
+      },
+      "id": "swe_late_constr_0828f3.cf.02_revise_affected_compile_every_resu",
+      "independence_key": "swe_late_constr_0828f3.cf.02_revise_affected_compile_every_resu",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_0828f3.mutation.02_revise_affected_compile_every_resu",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_constraint_6294af1554.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.revise_the_splitter_to_s"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_verify_ordinary_top_level_co",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_constraint_6294.task_scope_or_dependency",
+      "evidence_group": "swe_late_constrain.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.revise_the_splitter_to_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.', perform preserve_unaffected for 'Verify ordinary top-level comma-separated patterns and configuration loading remain compatible.' while retaining valid prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_the_splitter_to_s"
+        ]
+      },
+      "id": "swe_late_constr_0828f3.cf.03_preserve_unaffected_verify_ordinary_to",
+      "independence_key": "swe_late_constr_0828f3.cf.03_preserve_unaffected_verify_ordinary_to",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_0828f3.mutation.03_preserve_unaffected_verify_ordinary_to",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_constraint_6294af1554.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.revise_the_splitter_to_s"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_revise_the_splitter_to_satis",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_constraint_6294.task_scope_or_dependency",
+      "evidence_group": "swe_late_constrain.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.revise_the_splitter_to_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.', perform verify_closure for 'Revise the splitter to satisfy every reported boundary case.' while retaining valid prior result 'Draft a comma-aware splitter implementation.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comma-aware splitter implementation.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_the_splitter_to_s"
+        ]
+      },
+      "id": "swe_late_constr_0828f3.cf.04_verify_closure_revise_the_splitte",
+      "independence_key": "swe_late_constr_0828f3.cf.04_verify_closure_revise_the_splitte",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_0828f3.mutation.04_verify_closure_revise_the_splitte",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_6294af1554.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.revise_the_splitter_to_s"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "family": "wait_for_authority",
+      "id": "swe_late_constr_0828f3.mutation.01_classify_scope_delta_revise_the_splitte",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_0828f3.cf.01_classify_scope_delta_revise_the_splitte"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_6294af1554.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_0828f3.cf.01_classify_scope_delta_revise_the_splitte",
+        "swe_late_constraint_6294af1554.event.receipt",
+        "swe_late_constraint_6294af1554.event.probes",
+        "swe_late_constraint_6294af1554.closure",
+        "swe_late_constraint_6294af1554.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comma-aware splitter implementation.'.",
+      "family": "resolve_authority",
+      "id": "swe_late_constr_0828f3.mutation.02_revise_affected_compile_every_resu",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_0828f3.cf.02_revise_affected_compile_every_resu"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_6294af1554.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_0828f3.cf.02_revise_affected_compile_every_resu",
+        "swe_late_constraint_6294af1554.event.receipt",
+        "swe_late_constraint_6294af1554.event.probes",
+        "swe_late_constraint_6294af1554.closure",
+        "swe_late_constraint_6294af1554.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "family": "selective_replan",
+      "id": "swe_late_constr_0828f3.mutation.03_preserve_unaffected_verify_ordinary_to",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_0828f3.cf.03_preserve_unaffected_verify_ordinary_to"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_6294af1554.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_0828f3.cf.03_preserve_unaffected_verify_ordinary_to",
+        "swe_late_constraint_6294af1554.event.receipt",
+        "swe_late_constraint_6294af1554.event.probes",
+        "swe_late_constraint_6294af1554.closure",
+        "swe_late_constraint_6294af1554.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comma-aware splitter implementation.'.",
+      "family": "rederive_from_authority",
+      "id": "swe_late_constr_0828f3.mutation.04_verify_closure_revise_the_splitte",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_0828f3.cf.04_verify_closure_revise_the_splitte"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_6294af1554.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_0828f3.cf.04_verify_closure_revise_the_splitte",
+        "swe_late_constraint_6294af1554.event.receipt",
+        "swe_late_constraint_6294af1554.event.probes",
+        "swe_late_constraint_6294af1554.closure",
+        "swe_late_constraint_6294af1554.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_late_constraint_6294af1554.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_late_constraint_6294af1554.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_late_constraint_6294af1554.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_late_constraint_6294af1554.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "Declared native pytest failing surface remains green: tests/config/test_config.py (1 assertions)",
+      "id": "swe_late_constraint_6294af1554.native.pytest_01_tests_config_test_config_py",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_01_tests_config_test_config_py",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: tests/config/test_config.py (8 assertions)",
+      "id": "swe_late_constraint_6294af1554.native.pytest_02_tests_config_test_config_py",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_02_tests_config_test_config_py",
+      "relevance_tier": "base"
+    }
+  ]
+}

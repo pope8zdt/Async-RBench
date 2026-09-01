@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-ce3ff5b928",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_conflict_verify_duplicate_column_defi",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Catalog and table-size queries identify the relations dominating storage and write activity.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "01_classify_conflict_verify_duplicate_c",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "blind_first_result",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "required_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform classify_conflict for 'Verify duplicate column definitions and usage counters from the returned catalog rows.' while retaining valid prior result 'Catalog and table-size queries identify the relations dominating storage and write activity.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    },
+    {
+      "critical": false,
+      "decision_group": "arbitrate_conflict_add_redundant_index_to_the_s",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Non-index hypotheses have SQL findings recorded in a cause-by-cause evidence matrix.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "02_arbitrate_conflict_add_redundant_inde",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "blind_last_result",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "required_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform arbitrate_conflict for 'Add REDUNDANT_INDEX to the supported-cause matrix and invalidate conflicting eliminations.' while retaining valid prior result 'Non-index hypotheses have SQL findings recorded in a cause-by-cause evidence matrix.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_re_rank_all_supported_hypoth",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A provisional two-cause ranking is drafted without closing the diagnosis.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "03_verify_closure_re_rank_all_suppor",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "inconsistent_merge",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform verify_closure for 'Re-rank all supported hypotheses against the requirement to select exactly two causes.' while retaining valid prior result 'A provisional two-cause ranking is drafted without closing the diagnosis.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.verify_duplicate_column_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.add_redundant_index_to_t"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.re_rank_all_supported_hy"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.emit_only_the_final_two_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.verify_duplicate_column_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.add_redundant_index_to_t",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.re_rank_all_supported_hy",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.emit_only_the_final_two_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.verify_duplicate_column_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.add_redundant_index_to_t",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.re_rank_all_supported_hy",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.emit_only_the_final_two_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.verify_duplicate_column_",
+      "req.02.add_redundant_index_to_t",
+      "req.03.re_rank_all_supported_hy",
+      "req.04.emit_only_the_final_two_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.",
+    "before_state": "A decisive duplicate-index report arrives after the planner has provisionally ranked the other root causes.",
+    "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+    "primary_event_theme": "conflicting_valid_results",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Verify duplicate column definitions and usage counters from the returned catalog rows.",
+      "id": "req.01.verify_duplicate_column_",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for verify_duplicate_column_definitions_"
+    },
+    {
+      "description": "Add REDUNDANT_INDEX to the supported-cause matrix and invalidate conflicting eliminations.",
+      "id": "req.02.add_redundant_index_to_t",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for add_redundant_index_to_the_supported"
+    },
+    {
+      "description": "Re-rank all supported hypotheses against the requirement to select exactly two causes.",
+      "id": "req.03.re_rank_all_supported_hy",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for re_rank_all_supported_hypotheses_aga"
+    },
+    {
+      "description": "Emit only the final two allowed labels with their SQL evidence.",
+      "id": "req.04.emit_only_the_final_two_",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for emit_only_the_final_two_allowed_labe"
+    }
+  ]
+}

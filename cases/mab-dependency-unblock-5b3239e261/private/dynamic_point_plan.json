@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_video_metric_calibration_compl",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+      "evidence_group": "mab_code24_sports.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_authenticated_coac"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_authenticated_coac"
+        ]
+      },
+      "id": "mab_code24_sports.cf.01_classify_authority_video_metric_calib",
+      "independence_key": "mab_code24_sports.cf.01_classify_authority_video_metric_calib",
+      "measurement_type": "control",
+      "mutation_id": "mab_code24_sports.mutation.01_classify_authority_video_metric_calib",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_authenticated_coac"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_video_metric_calibration_compl",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+      "evidence_group": "mab_code24_sports.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_video_upload_movem"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_video_upload_movem"
+        ]
+      },
+      "id": "mab_code24_sports.cf.02_revise_affected_video_metric_calib",
+      "independence_key": "mab_code24_sports.cf.02_revise_affected_video_metric_calib",
+      "measurement_type": "control",
+      "mutation_id": "mab_code24_sports.mutation.02_revise_affected_video_metric_calib",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_video_upload_movem"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_video_metric_calibration_compl",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+      "evidence_group": "mab_code24_sports.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_current_historical"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_current_historical"
+        ]
+      },
+      "id": "mab_code24_sports.cf.03_verify_closure_video_metric_calib",
+      "independence_key": "mab_code24_sports.cf.03_verify_closure_video_metric_calib",
+      "measurement_type": "control",
+      "mutation_id": "mab_code24_sports.mutation.03_verify_closure_video_metric_calib",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_current_historical"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The returned calibration fixes metric semantics and limits while preserving dashboards and collaboration history.",
+        "before": "Videos and workspace activity exist, but units, metric ranges, and large-file limits are unresolved.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

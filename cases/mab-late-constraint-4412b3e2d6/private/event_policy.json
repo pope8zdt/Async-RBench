@@ -1,0 +1,31 @@
+{
+  "authority_rule": "The newest valid authority supersedes the earlier result for the affected closure only.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_the_90_day_battery_a",
+      "req.02.recalculate_price_and_qu",
+      "req.03.submit_the_revised_offer",
+      "req.04.finalize_with_explicit_b",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.",
+    "before_state": "Delay the battery-and-logistics counteroffer until the buyer has prepared its initial price anchor.",
+    "event_id": "evt.mab_late_constraint_4412.late_or_out_of_order_sup",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_constraint_4412.late_or_out_of_order_sup",
+  "forbidden_shortcut": "Do not retain or merge a displaced result merely because it arrived first.",
+  "required_decisions": [
+    "identify_supersession",
+    "reject_stale_result",
+    "selective_replan"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline assembly of native result and closure, without invoking oracle.sh or the canonical upstream script.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_late_test_evidence_67c3504794.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_late_test_evidence_67c3504794.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_late_test_evidence_67c3504794.osworld.metric_coverage"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_late_test_evidence_67c3504794.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_speed_67c3.cf.01_classify_authority_speedtest_measurement_result",
+          "osw_speed_67c3.cf.02_revise_affected_speedtest_measurement_result",
+          "osw_speed_67c3.cf.03_preserve_unaffected_speedtest_measurement_result",
+          "osw_speed_67c3.cf.04_verify_closure_speedtest_measurement_result"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_late_test_evidence_67c3504794.event.receipt",
+          "osw_late_test_evidence_67c3504794.event.probes",
+          "osw_late_test_evidence_67c3504794.closure",
+          "osw_late_test_evidence_67c3504794.source.pin",
+          "osw_late_test_evidence_67c3504794.osworld.identity",
+          "osw_late_test_evidence_67c3504794.osworld.official_score",
+          "osw_late_test_evidence_67c3504794.osworld.native_evidence",
+          "osw_late_test_evidence_67c3504794.osworld.task_assertion",
+          "osw_late_test_evidence_67c3504794.osworld.output_path",
+          "osw_late_test_evidence_67c3504794.osworld.metric_coverage",
+          "osw_late_test_evidence_67c3504794.osworld.line_format",
+          "osw_late_test_evidence_67c3504794.osworld.service_identity"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "917c90cd5f74e155552379442b8cc4a30b7ec27d08d4f51a62584169783400c4",
+        "task_id": "osworld:multi_apps:26660ad1-6ebb-4f59-8cba-a8432dfe8d38",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

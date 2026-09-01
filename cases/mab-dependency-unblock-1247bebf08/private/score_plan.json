@@ -1,0 +1,360 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_dependency_contract_completed",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-dependency-unblock-1247bebf08.dependency_contract_completed",
+      "evidence_group": "mab_dependency_unblo.cf.01_classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.reject_task_graphs_conta"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.reject_task_graphs_conta"
+        ]
+      },
+      "id": "mab_code16_project.cf.01_classify_completeness",
+      "independence_key": "mab_code16_project.cf.01_classify_completeness",
+      "measurement_type": "control",
+      "mutation_id": "mab_code16_project.mutation.01_classify_completeness",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1247bebf08.event.receipt"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.reject_task_graphs_conta"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_dependency_contract_completed",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-dependency-unblock-1247bebf08.dependency_contract_completed",
+      "evidence_group": "mab_dependency_unblo.cf.02_revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.reject_task_graphs_conta"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.reject_task_graphs_conta"
+        ]
+      },
+      "id": "mab_code16_project.cf.02_revise_affected",
+      "independence_key": "mab_code16_project.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "mab_code16_project.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1247bebf08.event.authority_probe"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.reject_task_graphs_conta"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_dependency_contract_completed",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab-dependency-unblock-1247bebf08.dependency_contract_completed",
+      "evidence_group": "mab_dependency_unblo.cf.03_preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.reject_task_graphs_conta"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.reject_task_graphs_conta"
+        ]
+      },
+      "id": "mab_code16_project.cf.03_preserve_unaffected",
+      "independence_key": "mab_code16_project.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "mab_code16_project.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1247bebf08.event.authority_probe"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.reject_task_graphs_conta"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_dependency_contract_completed",
+      "dimension": "closure",
+      "event_id": "evt.mab-dependency-unblock-1247bebf08.dependency_contract_completed",
+      "evidence_group": "mab_dependency_unblo.cf.04_verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.reject_task_graphs_conta"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.reject_task_graphs_conta"
+        ]
+      },
+      "id": "mab_code16_project.cf.04_verify_closure",
+      "independence_key": "mab_code16_project.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_code16_project.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1247bebf08.closure"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.reject_task_graphs_conta"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "family": "wait_for_authority",
+      "id": "mab_code16_project.mutation.01_classify_completeness",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code16_project.cf.01_classify_completeness"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ],
+      "targets": [
+        "mab_code16_project.cf.01_classify_completeness",
+        "mab_dependency_unblock_1247bebf08.event.receipt",
+        "mab_dependency_unblock_1247bebf08.event.authority_probe",
+        "mab_dependency_unblock_1247bebf08.closure",
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "family": "resolve_authority",
+      "id": "mab_code16_project.mutation.02_revise_affected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code16_project.cf.02_revise_affected"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ],
+      "targets": [
+        "mab_code16_project.cf.02_revise_affected",
+        "mab_dependency_unblock_1247bebf08.event.receipt",
+        "mab_dependency_unblock_1247bebf08.event.authority_probe",
+        "mab_dependency_unblock_1247bebf08.closure",
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "family": "selective_replan",
+      "id": "mab_code16_project.mutation.03_preserve_unaffected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code16_project.cf.03_preserve_unaffected"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ],
+      "targets": [
+        "mab_code16_project.cf.03_preserve_unaffected",
+        "mab_dependency_unblock_1247bebf08.event.receipt",
+        "mab_dependency_unblock_1247bebf08.event.authority_probe",
+        "mab_dependency_unblock_1247bebf08.closure",
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "family": "rederive_from_authority",
+      "id": "mab_code16_project.mutation.04_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code16_project.cf.04_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ],
+      "targets": [
+        "mab_code16_project.cf.04_verify_closure",
+        "mab_dependency_unblock_1247bebf08.event.receipt",
+        "mab_dependency_unblock_1247bebf08.event.authority_probe",
+        "mab_dependency_unblock_1247bebf08.closure",
+        "mab_dependency_unblock_1247bebf08.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific dependency_contract_completed receipt is authentic and bound to coding:016 and mab-dependency-unblock-1247bebf08.",
+      "id": "mab_dependency_unblock_1247bebf08.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned MultiAgent_Project_Manager authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_1247bebf08.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The completed dependency result replaces shallow readiness while roles, history, notification settings, and completed work remain intact.",
+      "id": "mab_dependency_unblock_1247bebf08.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:016.",
+      "id": "mab_dependency_unblock_1247bebf08.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and transitive_project_dependency_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_1247bebf08.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_manager_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Project tasks reject self-dependencies and cycles, use all transitive prerequisites for readiness, and propagate completion into blocker dashboards and notifications.",
+      "id": "mab_dependency_unblock_1247bebf08.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_manager_cycle_transitive_readiness_and_dashboard",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: role_assignments, task_history, notification_preferences, completed_tasks.",
+      "id": "mab_dependency_unblock_1247bebf08.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_manager_roles_notifications_and_audit_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The completed dependency result replaces shallow readiness while roles, history, notification settings, and completed work remain intact.",
+      "id": "mab_dependency_unblock_1247bebf08.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_manager_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

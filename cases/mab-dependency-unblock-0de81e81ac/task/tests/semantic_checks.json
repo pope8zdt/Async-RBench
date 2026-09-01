@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The routing_worker_recovered receipt is authentic and bound to coding:002 and mab-dependency-unblock-0de81e81ac.",
+      "id": "mab_dependency_unblock_0de81e81ac.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned FoodChain authority runs after the persisted baseline and records probes.",
+      "id": "mab_dependency_unblock_0de81e81ac.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered dynamic routing replaces static timing assumptions and preserves restaurant decisions, courier lifecycle, feedback, and notifications.",
+      "id": "mab_dependency_unblock_0de81e81ac.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to official MultiAgentBench coding:002.",
+      "id": "mab_dependency_unblock_0de81e81ac.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and the foodchain_dynamic_delivery_closure closure satisfy the task-specific output schema.",
+      "id": "mab_dependency_unblock_0de81e81ac.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_foodchain_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Restaurants can accept, reject, or modify orders; couriers advance delivery status; recovered traffic-aware routing changes route, priority, and ETA without breaking pickup/delivery workflows.",
+      "id": "mab_dependency_unblock_0de81e81ac.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_foodchain_traffic_replans_route_priority_eta_and_preserves_feedback",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: restaurant_decisions, pickup_flow, delivery_status, feedback, notifications.",
+      "id": "mab_dependency_unblock_0de81e81ac.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_foodchain_restaurant_modification_and_delivery_lifecycle",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered dynamic routing replaces static timing assumptions and preserves restaurant decisions, courier lifecycle, feedback, and notifications.",
+      "id": "mab_dependency_unblock_0de81e81ac.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_foodchain_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

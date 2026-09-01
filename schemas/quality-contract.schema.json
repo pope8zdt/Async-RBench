@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://async-rbench.local/schemas/quality-contract.schema.json",
+  "title": "Async-RBench transformed-case quality contract",
+  "type": "object",
+  "required": [
+    "schema_version", "source_contract", "requirements",
+    "equivalence_solutions", "negative_mutations"
+  ],
+  "properties": {
+    "schema_version": {"const": "1"},
+    "source_contract": {
+      "type": "object",
+      "required": ["instruction_preservation", "sources"],
+      "properties": {
+        "instruction_preservation": {
+          "enum": ["verbatim_append", "requirements_manifest"]
+        },
+        "sources": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["task_id", "task_path", "instruction_sha256"],
+            "properties": {
+              "requirement_mappings": {
+                "type": "array", "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["source_anchor", "requirement_ids"],
+                  "properties": {
+                    "source_anchor": {"type": "string", "minLength": 1},
+                    "requirement_ids": {
+                      "type": "array", "minItems": 1,
+                      "items": {"type": "string", "minLength": 1}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "manifest_review": {
+          "type": "object",
+          "required": ["reviewer_id", "reviewed_at", "decision"],
+          "properties": {
+            "reviewer_id": {"type": "string", "minLength": 1},
+            "reviewed_at": {"type": "string", "minLength": 1},
+            "decision": {"const": "approved"}
+          }
+        }
+      },
+      "allOf": [{
+        "if": {
+          "properties": {"instruction_preservation": {"const": "requirements_manifest"}}
+        },
+        "then": {
+          "required": ["manifest_review"],
+          "properties": {
+            "sources": {
+              "items": {"required": ["requirement_mappings"]}
+            }
+          }
+        }
+      }]
+    },
+    "requirements": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "public_evidence", "covers"],
+        "properties": {
+          "public_evidence": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "required": ["path", "contains"]
+            }
+          }
+        }
+      }
+    },
+    "equivalence_solutions": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "path", "distinguishes_from_oracle"]
+      }
+    },
+    "negative_mutations": {
+      "type": "array", "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "path", "must_fail"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

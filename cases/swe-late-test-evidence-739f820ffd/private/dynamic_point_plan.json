@@ -1,0 +1,195 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_req_01_recognize_both_p_and_q_v",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_test_evidence_739f.delayed_authority",
+      "evidence_group": "swe_late_test_evid.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.recognize_both_p_and_q_v"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Classify the delayed P/Q VLA comparison result as authority for the descriptor-handling branch.",
+      "forbidden_behavior": "Do not use the provisional Q-only observation as the complete contract; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.recognize_both_p_and_q_v"
+        ]
+      },
+      "id": "swe_late_test_e_438b1a.cf.01_classify_authority_recognize_both_p_a",
+      "independence_key": "swe_late_test_e_438b1a.cf.01_classify_authority_recognize_both_p_a",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_late_test_e_438b1a.mutation.01_classify_authority_recognize_both_p_a",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_late_test_evidence_739f820ffd.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Classify the delayed P/Q VLA comparison result as authority for the descriptor-handling branch.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.recognize_both_p_and_q_v"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_req_02_preserve_element_wise_re",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_test_evidence_739f.delayed_authority",
+      "evidence_group": "swe_late_test_evid.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.preserve_element_wise_re"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Revise FITS table comparison to recognize both P and Q VLA descriptors while preserving element-wise changed-value reporting.",
+      "forbidden_behavior": "Do not use an overbroad equality shortcut that suppresses changed QD cells; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.preserve_element_wise_re"
+        ]
+      },
+      "id": "swe_late_test_e_438b1a.cf.02_revise_affected_preserve_element_w",
+      "independence_key": "swe_late_test_e_438b1a.cf.02_revise_affected_preserve_element_w",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_late_test_e_438b1a.mutation.02_revise_affected_preserve_element_w",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_739f820ffd.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Revise FITS table comparison to recognize both P and Q VLA descriptors while preserving element-wise changed-value reporting.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_element_wise_re"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_req_03_add_p_q_self_comparison",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_test_evidence_739f.delayed_authority",
+      "evidence_group": "swe_late_test_evid.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.add_p_q_self_comparison_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Re-run P/Q self-comparison, changed-value, and existing FITS diff regressions using the exact delayed result receipt.",
+      "forbidden_behavior": "Do not close from identical-table evidence alone; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.add_p_q_self_comparison_"
+        ]
+      },
+      "id": "swe_late_test_e_438b1a.cf.03_verify_closure_add_p_q_self_compa",
+      "independence_key": "swe_late_test_e_438b1a.cf.03_verify_closure_add_p_q_self_compa",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_late_test_e_438b1a.mutation.03_verify_closure_add_p_q_self_compa",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_739f820ffd.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.', Re-run P/Q self-comparison, changed-value, and existing FITS diff regressions using the exact delayed result receipt.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.add_p_q_self_comparison_"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_03",
+      "event_id": "evt.swe_late_test_evidence_739f.delayed_authority",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The delayed authoritative pytest result confirms P and Q VLA self-comparisons are identical while a changed QD element still reports the correct row and element difference.",
+        "before": "A provisional FITS VLA descriptor fix is checkpointed before authoritative P/Q self-comparison and changed-cell evidence arrives.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-a9a5dd3ff0",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_authority",
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_a9a5dd3ff0.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: An authorized support desk confirms a $44.50 price, 24-month warranty, 30-day replacement window, and five-day delivery for the activity station.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "warranty_support_terms_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_a9a5dd3ff0.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: An authorized support desk confirms a $44.50 price, 24-month warranty, 30-day replacement window, and five-day delivery for the activity station.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "warranty_support_terms_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_a9a5dd3ff0.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: An authorized support desk confirms a $44.50 price, 24-month warranty, 30-day replacement window, and five-day delivery for the activity station.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "warranty_support_terms_delivered"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_a9a5dd3ff0.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: An authorized support desk confirms a $44.50 price, 24-month warranty, 30-day replacement window, and five-day delivery for the activity station.",
+      "stage_tag": "closure",
+      "task_requirement_id": "warranty_support_terms_delivered"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.01.capture_the_provisional_pric"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.02.validate_warranty_duration_a"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.03.revise_price_and_delivery_on"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.04.close_with_the_confirmed_sup"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.capture_the_provisional_pric",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.validate_warranty_duration_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_price_and_delivery_on",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_with_the_confirmed_sup",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.capture_the_provisional_pric",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.validate_warranty_duration_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_price_and_delivery_on",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_with_the_confirmed_sup",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.capture_the_provisional_pric",
+      "req.02.validate_warranty_duration_a",
+      "req.03.revise_price_and_delivery_on",
+      "req.04.close_with_the_confirmed_sup",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An authorized support desk confirms a $44.50 price, 24-month warranty, 30-day replacement window, and five-day delivery for the activity station.",
+    "before_state": "A provisional Infantino Super Soft 1st Building Blocks Activity Station bargain exists before warranty_support_terms_delivered.",
+    "event_id": "evt.mab-late-constraint-a9a5dd3ff0.warranty_support_terms_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Capture the provisional price while warranty evidence is pending.",
+      "id": "req.01.capture_the_provisional_pric",
+      "observable_probe": "mab_late_constraint_a9a5dd3ff0.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Validate warranty duration and replacement coverage from the support desk.",
+      "id": "req.02.validate_warranty_duration_a",
+      "observable_probe": "mab_late_constraint_a9a5dd3ff0.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Revise price and delivery only after the authority arrives.",
+      "id": "req.03.revise_price_and_delivery_on",
+      "observable_probe": "mab_late_constraint_a9a5dd3ff0.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close with the confirmed support package and preserved product facts.",
+      "id": "req.04.close_with_the_confirmed_sup",
+      "observable_probe": "mab_late_constraint_a9a5dd3ff0.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

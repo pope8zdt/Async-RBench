@@ -1,0 +1,33 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-725ceaa05e",
+  "source_task_id": "osworld:multi_apps:a503b07f-9119-456b-b75d-f5146737d24f",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "receipt_image_identity",
+  "upstream_dependency_graph": [
+    {
+      "id": "receipt_image_locator",
+      "app": "OS",
+      "description": "Locate and verify the receipt image under /home/user before GIMP/PDF export."
+    },
+    {
+      "id": "pdf_export_validation",
+      "app": "GIMP/PDF",
+      "description": "Validate one-page PDF export settings and source-image fidelity.",
+      "depends_on": [
+        "receipt_image_locator"
+      ]
+    }
+  ],
+  "state": {
+    "source_path": "/home/user/OIP.jpg",
+    "output_path": "/home/user/Desktop/receipt.pdf",
+    "pdf_pages": 1,
+    "source_image_sha256": "cd99e73cde26b1578108f9505825aa18f7dd888c01bd1687dd49a540a10b46d2",
+    "expected_pdf_sha256": "6d2524495695df066348adf65d5b61c72de7dde6edd07fe75c546d88022643ca",
+    "image_content_matches": true
+  },
+  "task_assertion": "Desktop/receipt.pdf is a one-page PDF whose rendered image matches the source receipt OIP.jpg.",
+  "finding": "The filesystem worker identifies /home/user/OIP.jpg by source evidence, enabling a one-page, image-faithful receipt.pdf export."
+}
+

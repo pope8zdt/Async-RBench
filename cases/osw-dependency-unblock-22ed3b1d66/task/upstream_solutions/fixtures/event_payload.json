@@ -1,0 +1,43 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-22ed3b1d66",
+  "source_task_id": "osworld:vlc:5ac2891a-eacd-4954-b339-98abba077adb",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "vlc_play_and_exit_setting",
+  "upstream_dependency_graph": [
+    {
+      "id": "config_path_resolution",
+      "app": "VLC/OS",
+      "description": "Resolve the active VLC configuration file path."
+    },
+    {
+      "id": "preference_key_resolution",
+      "app": "VLC",
+      "description": "Resolve the play-and-exit key and the value that prevents auto-close.",
+      "depends_on": [
+        "config_path_resolution"
+      ]
+    },
+    {
+      "id": "restart_persistence_check",
+      "app": "VLC",
+      "description": "Restart VLC and verify one effective play-and-exit=0 assignment persists.",
+      "depends_on": [
+        "preference_key_resolution"
+      ]
+    }
+  ],
+  "state": {
+    "config_path": "/home/user/.config/vlc/vlcrc",
+    "preference_key": "play-and-exit",
+    "initial_value": 1,
+    "final_value": 0,
+    "effective_assignment_count": 1,
+    "conflicting_enabled_assignment": false,
+    "vlc_restarted": true,
+    "config_persisted": true,
+    "playback_exit_disabled": true
+  },
+  "task_assertion": "The active VLC configuration contains one effective play-and-exit=0 setting and VLC no longer exits automatically at end of playback.",
+  "finding": "The VLC worker returns ~/.config/vlc/vlcrc, the `play-and-exit` key, required value 0 and restart-backed persistence evidence."
+}

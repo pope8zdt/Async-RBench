@@ -1,0 +1,211 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/app"
+    }
+  ],
+  "case_id": "mab-dependency-unblock-19d693bd13",
+  "format_version": 2,
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "resolve_requirement_01"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_01"
+      ],
+      "id": "resolve_requirement_02"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_02"
+      ],
+      "id": "resolve_requirement_03"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_03"
+      ],
+      "id": "resolve_requirement_04"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_04"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_tasks": [
+    {
+      "benchmark": "MultiAgentBench",
+      "id": "coding:018"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench: deterministic atomic ecosystem tick",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Replace stored health with the returned derived score.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Replace stored health with the returned derived score."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Apply population, resource, and environmental deltas atomically each tick.",
+      "id": "requirement_worker_02",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Apply population, resource, and environmental deltas atomically each tick."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Add mutations for increased pollution and reduced food capacity.",
+      "id": "requirement_worker_03",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_03.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Add mutations for increased pollution and reduced food capacity."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_04.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Verify repeated state-and-seed inputs produce identical tick results.",
+      "id": "requirement_worker_04",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_04.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Verify repeated state-and-seed inputs produce identical tick results."
+    }
+  ]
+}

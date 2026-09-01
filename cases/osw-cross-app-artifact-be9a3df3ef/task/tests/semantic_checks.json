@@ -1,0 +1,135 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed receipt.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 3 upstream tasks completed with observable probes.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies source semantics.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:47f7c0ce-a5fb-4100-a5e6-65cd0e7429e5 and compare_images.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private source fixture.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Slide 2 of Robotic_Workshop_Infographics.pptx uses the official landscape frame from 00:08.000 as its persistent background.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The frame comes from exactly 8.000 seconds.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.timestamp",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_timestamp",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The frame dimensions and digest match the official target.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.frame_identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_frame_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official presentation and second slide are targeted.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.presentation_target",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_presentation_target",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Only slide 2 receives the new background.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.selective_change",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_selective_change",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The background persists after save/reopen.",
+      "id": "osw_cross_app_artifact_be9a3df3ef.osworld.persistence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_persistence",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

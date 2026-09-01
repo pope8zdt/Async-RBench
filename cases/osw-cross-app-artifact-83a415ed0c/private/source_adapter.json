@@ -1,0 +1,44 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:98e8e339-5f91-4ed2-b2b2-12647cb134f4",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/98e8e339-5f91-4ed2-b2b2-12647cb134f4.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "vs_code snapshot",
+      "libreoffice_writer snapshot",
+      "private source assets",
+      "private native fixture",
+      "private delayed payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "vs_code",
+      "libreoffice_writer",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:98e8e339-5f91-4ed2-b2b2-12647cb134f4 in pinned vs_code; truth remains private.",
+    "event_injection": "Release delayed ordered_txt_manifest_and_content after a persisted cross-app checkpoint.",
+    "hidden_tests": "compare_docx_files, native digest, output_path, file_manifest, separator_free_content, font_size, gold_fidelity, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "vs_code",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private concat_docx_osworld.sh scores compare_docx_files.",
+    "requires_authored_private_oracle": false
+  }
+}
+

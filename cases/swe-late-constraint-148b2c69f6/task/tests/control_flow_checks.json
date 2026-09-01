@@ -1,0 +1,246 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_req_01_implement_the_signature",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_constraint_148b.copyx_scope_change",
+      "evidence_group": "swe_late_constrain.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_the_signature_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.', Classify the compatibility audit as a scope change covering omitted, None, and explicit fit(copy_X=...) calls.",
+      "forbidden_behavior": "Do not use the signature default change alone as complete; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_the_signature_"
+        ]
+      },
+      "id": "swe_late_constr_6d07d3.cf.01_classify_scope_delta_implement_the_sign",
+      "independence_key": "swe_late_constr_6d07d3.cf.01_classify_scope_delta_implement_the_sign",
+      "measurement_type": "control",
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "swe_late_constr_6d07d3.mutation.01_classify_scope_delta_implement_the_sign",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_constraint_148b2c69f6.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.', Classify the compatibility audit as a scope change covering omitted, None, and explicit fit(copy_X=...) calls.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_the_signature_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_req_02_assert_omitted_calls_use",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_constraint_148b.copyx_scope_change",
+      "evidence_group": "swe_late_constrain.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.assert_omitted_calls_use"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.', Revise LassoLarsIC.fit so omitted or None values defer to self.copy_X and explicit booleans override it in preprocessing.",
+      "forbidden_behavior": "Do not change unrelated model-selection validation; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.assert_omitted_calls_use"
+        ]
+      },
+      "id": "swe_late_constr_6d07d3.cf.02_revise_affected_assert_omitted_cal",
+      "independence_key": "swe_late_constr_6d07d3.cf.02_revise_affected_assert_omitted_cal",
+      "measurement_type": "control",
+      "mutation_family": "under_invalidate",
+      "mutation_id": "swe_late_constr_6d07d3.mutation.02_revise_affected_assert_omitted_cal",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_constraint_148b2c69f6.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.', Revise LassoLarsIC.fit so omitted or None values defer to self.copy_X and explicit booleans override it in preprocessing.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.assert_omitted_calls_use"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_req_03_run_estimator_api_and_mu",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_constraint_148b.copyx_scope_change",
+      "evidence_group": "swe_late_constrain.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.run_estimator_api_and_mu"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.', Preserve estimator API behavior and unaffected least-angle regressions while adding copied and in-place input coverage.",
+      "forbidden_behavior": "Do not over-invalidate unrelated least-angle behavior; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.run_estimator_api_and_mu"
+        ]
+      },
+      "id": "swe_late_constr_6d07d3.cf.03_preserve_unaffected_run_estimator_api_",
+      "independence_key": "swe_late_constr_6d07d3.cf.03_preserve_unaffected_run_estimator_api_",
+      "measurement_type": "control",
+      "mutation_family": "over_invalidate",
+      "mutation_id": "swe_late_constr_6d07d3.mutation.03_preserve_unaffected_run_estimator_api_",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_constraint_148b2c69f6.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.', Preserve estimator API behavior and unaffected least-angle regressions while adding copied and in-place input coverage.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.run_estimator_api_and_mu"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_req_02_assert_omitted_calls_use",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_constraint_148b.copyx_scope_change",
+      "evidence_group": "swe_late_constrain.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.02.assert_omitted_calls_use"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.', Run constructor-default and fit-override copy_X tests plus focused least-angle regressions using the exact scope-change receipt.",
+      "forbidden_behavior": "Do not close from the method signature without mutation-behavior tests; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.assert_omitted_calls_use"
+        ]
+      },
+      "id": "swe_late_constr_6d07d3.cf.04_verify_closure_assert_omitted_cal",
+      "independence_key": "swe_late_constr_6d07d3.cf.04_verify_closure_assert_omitted_cal",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_late_constr_6d07d3.mutation.04_verify_closure_assert_omitted_cal",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_148b2c69f6.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.', Run constructor-default and fit-override copy_X tests plus focused least-angle regressions using the exact scope-change receipt.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.02.assert_omitted_calls_use"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_03",
+      "event_id": "evt.swe_late_constraint_148b.copyx_scope_change",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The compatibility audit changes the required scope: omitted or None copy_X must defer to self.copy_X, explicit booleans must override it, and estimator behavior and copied/in-place input semantics must remain compatible.",
+        "before": "A provisional LassoLarsIC.fit signature change is checkpointed before the complete compatibility and override contract is known.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

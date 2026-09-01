@@ -1,0 +1,188 @@
+{
+  "version": "1",
+  "families": [
+    {
+      "id": "sc.mut.base_plan_corruption",
+      "case_id": "scheduler-selective-replan",
+      "operation": "patch_plan_artifacts",
+      "description": "Damage plan existence, JSONL schema, request coverage or shape fields",
+      "variants": [
+        "missing_bucket1",
+        "malformed_jsonl",
+        "duplicate_request",
+        "invalid_shape"
+      ],
+      "must_fail": [
+        "sc.base.plan_files_exist",
+        "sc.base.plan_jsonl_valid",
+        "sc.base.all_requests_covered_exactly",
+        "sc.base.shape_fields_valid"
+      ]
+    },
+    {
+      "id": "sc.mut.preservation_corruption",
+      "case_id": "scheduler-selective-replan",
+      "operation": "patch_preserved_bucket",
+      "description": "Alter or misreport the passing bucket that should remain unchanged",
+      "variants": [
+        "missing_snapshot",
+        "change_preserved_plan",
+        "wrong_preserved_name",
+        "invalid_preserved_shape"
+      ],
+      "must_fail": [
+        "sc.preserve.snapshot_exists",
+        "sc.preserve.final_matches_snapshot",
+        "sc.preserve.manifest_names_preserved",
+        "sc.preserve.preserved_bucket_valid"
+      ]
+    },
+    {
+      "id": "sc.mut.selective_replan_corruption",
+      "case_id": "scheduler-selective-replan",
+      "operation": "patch_replanned_bucket",
+      "description": "Keep the failed plan or replace it with an invalid or over-budget replan",
+      "variants": [
+        "reuse_failed_snapshot",
+        "drop_replanned_request",
+        "exceed_pad_ratio",
+        "exceed_cost",
+        "bucket2_authority_receipt_mismatch"
+      ],
+      "must_fail": [
+        "sc.replan.differs_from_snapshot",
+        "sc.replan.coverage",
+        "sc.replan.pad_threshold",
+        "sc.replan.cost_threshold"
+      ]
+    },
+    {
+      "id": "sc.mut.global_constraint_corruption",
+      "case_id": "scheduler-selective-replan",
+      "operation": "patch_combined_plan_constraints",
+      "description": "Break shared shape budget, thresholds, set accounting or global request uniqueness",
+      "variants": [
+        "nine_unique_shapes",
+        "bucket1_over_threshold",
+        "wrong_global_shape_set",
+        "cross_bucket_duplicate"
+      ],
+      "must_fail": [
+        "sc.global.max_shapes",
+        "sc.global.bucket1_thresholds",
+        "sc.global.bucket2_thresholds",
+        "sc.global.shape_set_matches",
+        "sc.global.unique_shape_count",
+        "sc.global.no_missing_duplicates"
+      ]
+    },
+    {
+      "id": "sc.mut.closure_corruption",
+      "case_id": "scheduler-selective-replan",
+      "operation": "patch_validation_closure",
+      "description": "Finalize without both validators or with inconsistent recomputation and hashes",
+      "variants": [
+        "one_validator_only",
+        "close_before_results",
+        "full_recompute_fails",
+        "wrong_plan_hashes"
+      ],
+      "must_fail": [
+        "sc.closure.both_validators_pass",
+        "sc.closure.wait_for_all_validators",
+        "sc.closure.closure_verified",
+        "sc.closure.full_recompute_passes",
+        "sc.closure.preservation_hashes",
+        "sc.closure.replan_hashes"
+      ]
+    },
+    {
+      "id": "sc.mut.control_wait_cancel",
+      "case_id": "scheduler-selective-replan",
+      "operation": "mutate_validator_wait_and_cancel_trace",
+      "description": "Remove all-validator waiting or cancel a passing workstream",
+      "variants": [
+        "wait_one_validator",
+        "wait_wrong_artifact",
+        "cancel_passing_bucket",
+        "omit_failed_cancel"
+      ],
+      "must_fail": [
+        "sc.cf.wait_all_validators",
+        "sc.cf.cancel_failing_only"
+      ]
+    },
+    {
+      "id": "sc.mut.control_stale_rederive",
+      "case_id": "scheduler-selective-replan",
+      "operation": "mutate_scheduler_stale_and_rederive_trace",
+      "description": "Accept late stale validation or skip combined-plan rederivation",
+      "variants": [
+        "accept_old_validator",
+        "reject_new_validator",
+        "omit_combined_rederive",
+        "rederive_failed_snapshot"
+      ],
+      "must_fail": [
+        "sc.cf.reject_late_stale",
+        "sc.cf.rederive_combined"
+      ]
+    },
+    {
+      "id": "sc.mut.critical_replan_crosscheck",
+      "case_id": "scheduler-selective-replan",
+      "operation": "cross_corrupt_selective_replan_evidence",
+      "description": "Break selective preservation, repaired coverage or global uniqueness across reports",
+      "variants": [
+        "rewrite_both_buckets",
+        "preserve_failed_bucket",
+        "replan_without_coverage",
+        "duplicate_across_buckets"
+      ],
+      "must_fail": [
+        "sc.preserve.snapshot_exists",
+        "sc.preserve.final_matches_snapshot",
+        "sc.replan.differs_from_snapshot",
+        "sc.replan.coverage",
+        "sc.global.max_shapes",
+        "sc.global.no_missing_duplicates"
+      ]
+    },
+    {
+      "id": "sc.mut.critical_closure_crosscheck",
+      "case_id": "scheduler-selective-replan",
+      "operation": "cross_corrupt_scheduler_closure",
+      "description": "Forge closure fields while validators, recomputation or hashes disagree",
+      "variants": [
+        "manifest_green_tests_red",
+        "tests_green_manifest_open",
+        "stale_preserved_hash",
+        "stale_replanned_hash"
+      ],
+      "must_fail": [
+        "sc.closure.both_validators_pass",
+        "sc.closure.wait_for_all_validators",
+        "sc.closure.closure_verified",
+        "sc.closure.full_recompute_passes",
+        "sc.closure.preservation_hashes",
+        "sc.closure.replan_hashes"
+      ]
+    },
+    {
+      "id": "sc.mut.critical_control_crosscheck",
+      "case_id": "scheduler-selective-replan",
+      "operation": "cross_corrupt_scheduler_control_evidence",
+      "description": "Forge stale rejection or rederivation without the associated control decision",
+      "variants": [
+        "declare_reject_only",
+        "declare_rederive_only",
+        "accept_then_finalize",
+        "rederive_wrong_authority"
+      ],
+      "must_fail": [
+        "sc.cf.reject_late_stale",
+        "sc.cf.rederive_combined"
+      ]
+    }
+  ]
+}

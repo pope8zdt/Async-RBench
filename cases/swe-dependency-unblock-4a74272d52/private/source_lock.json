@@ -1,0 +1,40 @@
+{
+  "instruction_chars": 7120,
+  "instruction_sha256": "4b990d5792ccf8ffb9e8178c86813bbee79c51ae623a044b850eadef1de8facd",
+  "native_oracle_anchors": [
+    "FAIL_TO_PASS:test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | when created for a Voice Broadcast Info without relations | should be in Started state",
+    "FAIL_TO_PASS:test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should send a stopped Voice Broadcast Info event",
+    "FAIL_TO_PASS:test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should be in state stopped",
+    "FAIL_TO_PASS:test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should emit a stopped state changed event",
+    "FAIL_TO_PASS:test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | when created for a Voice Broadcast Info with a Stopped relation | should be in Stopped state",
+    "FAIL_TO_PASS:test/voice-broadcast/utils/startNewVoiceBroadcastRecording-test.ts | startNewVoiceBroadcastRecording | should create a new Voice Broadcast",
+    "FAIL_TO_PASS:test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should return it as current",
+    "FAIL_TO_PASS:test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should return it by id",
+    "FAIL_TO_PASS:test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should emit a CurrentChanged event",
+    "FAIL_TO_PASS:test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | and setting the same again | should not emit a CurrentChanged event",
+    "FAIL_TO_PASS:test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when retrieving a known recording | should return the recording",
+    "FAIL_TO_PASS:test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when retrieving an unknown recording | should return the recording",
+    "FAIL_TO_PASS:test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | when there is a Started Voice Broadcast info event | should render a live voice broadcast",
+    "FAIL_TO_PASS:test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | and it is clicked | should render a non-live voice broadcast",
+    "FAIL_TO_PASS:test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | and it is clicked | should call stop on the recording",
+    "PASS_TO_PASS:test/utils/validate/numberInRange-test.ts | validateNumberInRange | returns false when value is a not a number",
+    "PASS_TO_PASS:test/utils/validate/numberInRange-test.ts | validateNumberInRange | returns false when value is undefined",
+    "PASS_TO_PASS:test/utils/validate/numberInRange-test.ts | validateNumberInRange | returns false when value is NaN",
+    "PASS_TO_PASS:test/utils/validate/numberInRange-test.ts | validateNumberInRange | returns true when value is equal to min",
+    "PASS_TO_PASS:test/utils/validate/numberInRange-test.ts | validateNumberInRange | returns true when value is equal to max",
+    "PASS_TO_PASS:test/utils/validate/numberInRange-test.ts | validateNumberInRange | returns true when value is an int in range",
+    "PASS_TO_PASS:test/utils/validate/numberInRange-test.ts | validateNumberInRange | returns true when value is a float in range",
+    "PASS_TO_PASS:test/modules/ModuleComponents-test.tsx | Module Components | should override the factory for a TextInputField"
+  ],
+  "production_case_path": ".",
+  "source_file_sha256": {
+    "private/source_manifests/01-native_case.json": "533e682f23d2efba82ea174b064c4efe1f6f4b0db64812b7e884915a5f1391a6",
+    "private/source_manifests/02-participant_task.json": "c555a4c583bcc87d3bbc79a232c2c651e9d4ca22f9a961ad93007e59a2b62ff9",
+    "private/source_manifests/03-evaluation_binding.json": "fda20379e70c188f7debf471a1ed2192211078fd0ddfee1b2b999cbb53d20e44"
+  },
+  "source_files": [
+    "private/source_manifests/01-native_case.json",
+    "private/source_manifests/02-participant_task.json",
+    "private/source_manifests/03-evaluation_binding.json"
+  ]
+}

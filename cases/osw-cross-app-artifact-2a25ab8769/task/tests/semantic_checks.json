@@ -1,0 +1,165 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_cross_app_artifact_2a25ab8769.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_cross_app_artifact_2a25ab8769.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_cross_app_artifact_2a25ab8769.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_cross_app_artifact_2a25ab8769.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:3f05f3b9-29ba-4b6b-95aa-2204697ffc06 and check_mp3_meta×5.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "All five audited MP3 files retain their audio identity and have exact artist and title tags matching the filename pairs checked by the official evaluators.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exactly five audited MP3 paths are represented.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.track_set",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_track_set",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Every official source MP3 starts with blank metadata.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.initial_blank_tags",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_initial_blank_tags",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Cheng Xiang / Missing You metadata is exact.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.cheng_track",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_cheng_track",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Han Baoyi / Tears of Dancing Girl metadata is exact.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.han_track",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_han_track",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Huang An / I Know Missing is Painful metadata is exact.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.huang_track",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_huang_track",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Chen Shaohua / Red Daughter metadata is exact.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.chen_track",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_chen_track",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Zhou Xuan / Nights in Shanghai metadata is exact.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.zhou_track",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_zhou_track",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The batch edit preserves the five audio identities.",
+      "id": "osw_cross_app_artifact_2a25ab8769.osworld.audio_preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_audio_preservation",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

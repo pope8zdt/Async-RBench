@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_integrate_per_line_coverage_",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.integrate_per_line_cover"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform classify_failure for 'Integrate per-line coverage statuses before building the combined report.' while retaining valid prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "mab_code14_macao.cf.01_classify_failure_integrate_per_line",
+      "independence_key": "mab_code14_macao.cf.01_classify_failure_integrate_per_line",
+      "measurement_type": "control",
+      "mutation_id": "mab_code14_macao.mutation.01_classify_failure_integrate_per_line",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_exclude_nonexecutable_lines_",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "failure_recovery",
+        "subject": "req.01.integrate_per_line_cover"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform recover_or_redelegate for 'Exclude nonexecutable lines from the percentage denominator.' while retaining valid prior result 'Integration and heatmap consumers are scaffolded against provisional coverage percentages.'.",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Integration and heatmap consumers are scaffolded against provisional coverage percentages.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "mab_code14_macao.cf.02_recover_or_redelegate_exclude_nonexecuta",
+      "independence_key": "mab_code14_macao.cf.02_recover_or_redelegate_exclude_nonexecuta",
+      "measurement_type": "control",
+      "mutation_id": "mab_code14_macao.mutation.02_recover_or_redelegate_exclude_nonexecuta",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_generate_heatmap_intensity_f",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.integrate_per_line_cover"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform verify_closure for 'Generate heatmap intensity from the returned statuses.' while retaining valid prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "mab_code14_macao.cf.03_verify_closure_generate_heatmap_i",
+      "independence_key": "mab_code14_macao.cf.03_verify_closure_generate_heatmap_i",
+      "measurement_type": "control",
+      "mutation_id": "mab_code14_macao.mutation.03_verify_closure_generate_heatmap_i",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "event_theme": "child_failure_or_implicit_error",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.",
+        "before": "The required coverage-module contract arrives after complexity, sizing, and integration consumers have been prepared.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

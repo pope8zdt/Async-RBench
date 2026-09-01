@@ -1,0 +1,93 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independently constructs the event receipt while satisfying the same source semantics.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_late_constraint_e4199e525d.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_late_constraint_e4199e525d.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-research-method",
+      "must_fail": [
+        "mab_late_constraint_e4199e525d.method.anchor"
+      ],
+      "path": "task/negative_mutations/wrong_research_method.sh"
+    },
+    {
+      "id": "malformed-fiveq",
+      "must_fail": [
+        "mab_late_constraint_e4199e525d.fiveq.exact"
+      ],
+      "path": "task/negative_mutations/malformed_fiveq.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "res064_pingpong.cf.01_classify_authority",
+          "res064_pingpong.cf.02_revise_from_authority",
+          "res064_pingpong.cf.03_selective_replan",
+          "res064_pingpong.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_constraint_e4199e525d.event.receipt",
+          "mab_late_constraint_e4199e525d.event.evidence",
+          "mab_late_constraint_e4199e525d.closure",
+          "mab_late_constraint_e4199e525d.source.pin",
+          "mab_late_constraint_e4199e525d.native.binding",
+          "mab_late_constraint_e4199e525d.fiveq.exact",
+          "mab_late_constraint_e4199e525d.problem.anchor",
+          "mab_late_constraint_e4199e525d.method.anchor",
+          "mab_late_constraint_e4199e525d.evaluation.plan",
+          "mab_late_constraint_e4199e525d.output.schema"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "competitive table tennis",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "25ee4d7dc32be39126a170551e6093b06a08ca034865ad4b3755b166798e6e7c",
+        "task_id": "research:064",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

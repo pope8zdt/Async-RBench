@@ -1,0 +1,302 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_fileshare_index_receipt",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_fileshare_eda6.delayed_authoritative_result",
+      "evidence_group": "fileshare_eda6.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.validate_the_blocking_an"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After the provisional File Sharing comparison exists, classify the delayed database:003 receipt as authority only after verifying that it identifies two indexes on the same column.",
+      "forbidden_behavior": "Do not finalize the File Sharing diagnosis before the database:003 receipt or infer redundancy from unused-index volume without the same-column pair.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "mab_conflict_db03.cf.01_classify_authority_fileshare_index_receipt",
+      "independence_key": "mab_conflict_db03.cf.01_classify_authority_fileshare_index_receipt",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db03.mutation.01_classify_authority_fileshare_index_receipt",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_from_authority_fileshare_index",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_fileshare_eda6.delayed_authoritative_result",
+      "evidence_group": "fileshare_eda6.revise_from_authority",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.validate_the_blocking_an"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Revise the affected File Sharing diagnosis to REDUNDANT_INDEX while preserving file-access, table-size, and query-latency observations for the other hypotheses.",
+      "forbidden_behavior": "Do not retain a displaced provisional VACUUM or LOCK_CONTENTION cause or erase valid file-access and table observations.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "mab_conflict_db03.cf.02_revise_from_authority_fileshare_index",
+      "independence_key": "mab_conflict_db03.cf.02_revise_from_authority_fileshare_index",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db03.mutation.02_revise_from_authority_fileshare_index",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_fileshare_index",
+      "dimension": "closure",
+      "event_id": "evt.mab_fileshare_eda6.delayed_authoritative_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.validate_the_blocking_an"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final File Sharing diagnosis from the authoritative same-column index evidence, remove stale vacuum or lock attribution, and verify the native answer contract.",
+      "forbidden_behavior": "Do not close without reverifying REDUNDANT_INDEX from the authoritative count of two same-column indexes.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "mab_conflict_db03.cf.03_verify_closure_fileshare_index",
+      "independence_key": "mab_conflict_db03.cf.03_verify_closure_fileshare_index",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db03.mutation.03_verify_closure_fileshare_index",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not finalize the File Sharing diagnosis before the database:003 receipt or infer redundancy from unused-index volume without the same-column pair.",
+      "family": "wait_for_authority",
+      "id": "mab_conflict_db03.mutation.01_classify_authority_fileshare_index_receipt",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db03.cf.01_classify_authority_fileshare_index_receipt"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_eda6fc53e2.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db03.cf.01_classify_authority_fileshare_index_receipt",
+        "mab_conflicting_specialist_results_eda6fc53e2.event.receipt",
+        "mab_conflicting_specialist_results_eda6fc53e2.event.probes",
+        "mab_conflicting_specialist_results_eda6fc53e2.closure",
+        "mab_conflicting_specialist_results_eda6fc53e2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not retain a displaced provisional VACUUM or LOCK_CONTENTION cause or erase valid file-access and table observations.",
+      "family": "resolve_authority",
+      "id": "mab_conflict_db03.mutation.02_revise_from_authority_fileshare_index",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db03.cf.02_revise_from_authority_fileshare_index"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_eda6fc53e2.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db03.cf.02_revise_from_authority_fileshare_index",
+        "mab_conflicting_specialist_results_eda6fc53e2.event.receipt",
+        "mab_conflicting_specialist_results_eda6fc53e2.event.probes",
+        "mab_conflicting_specialist_results_eda6fc53e2.closure",
+        "mab_conflicting_specialist_results_eda6fc53e2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close without reverifying REDUNDANT_INDEX from the authoritative count of two same-column indexes.",
+      "family": "rederive_from_authority",
+      "id": "mab_conflict_db03.mutation.03_verify_closure_fileshare_index",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db03.cf.03_verify_closure_fileshare_index"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_eda6fc53e2.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db03.cf.03_verify_closure_fileshare_index",
+        "mab_conflicting_specialist_results_eda6fc53e2.event.receipt",
+        "mab_conflicting_specialist_results_eda6fc53e2.event.probes",
+        "mab_conflicting_specialist_results_eda6fc53e2.closure",
+        "mab_conflicting_specialist_results_eda6fc53e2.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent receipt is authentic and case/source bound.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent database authority worker completed with a host checkpoint probe.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "The final closure consumes the exact authority receipt and re-verifies source semantics.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The submitted diagnosis remains bound to the selected native MAB source task.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The evaluator-owned MARBLE report is bound to this exact database task and passed its native evaluator.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evaluator_binding_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final selected cause exactly matches the task-specific native root cause.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.diagnosis.exact",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_selected_database_cause_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The competing provisional diagnosis is explicitly superseded rather than merged into the answer.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.conflict.reconciled",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_competing_diagnosis_is_reconciled",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The diagnosis cites the exact evaluator-owned native evidence and host checkpoint digests.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.authority.evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_authority_evidence_is_consumed",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The final database diagnosis obeys the case-specific output schema and preservation contract.",
+      "id": "mab_conflicting_specialist_results_eda6fc53e2.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_database_diagnosis_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independently constructs the event receipt while satisfying the same source semantics.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_late_constraint_db9b3a6953.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_late_constraint_db9b3a6953.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "accepted-stale-revision",
+      "must_fail": [
+        "mab_late_constraint_db9b3a6953.agreement.current"
+      ],
+      "path": "task/negative_mutations/accepted_stale_revision.sh"
+    },
+    {
+      "id": "wrong-product-terms",
+      "must_fail": [
+        "mab_late_constraint_db9b3a6953.product.terms"
+      ],
+      "path": "task/negative_mutations/wrong_product_terms.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "bar004_cart.cf.01_classify_stale",
+          "bar004_cart.cf.02_exclude_stale",
+          "bar004_cart.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_constraint_db9b3a6953.event.receipt",
+          "mab_late_constraint_db9b3a6953.event.chronology",
+          "mab_late_constraint_db9b3a6953.closure",
+          "mab_late_constraint_db9b3a6953.source.pin",
+          "mab_late_constraint_db9b3a6953.native.binding",
+          "mab_late_constraint_db9b3a6953.agreement.current",
+          "mab_late_constraint_db9b3a6953.price.bounds",
+          "mab_late_constraint_db9b3a6953.product.terms",
+          "mab_late_constraint_db9b3a6953.stale.excluded",
+          "mab_late_constraint_db9b3a6953.output.schema"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "3 Tier Utility Rolling Cart",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "255c2557258e5de65fc7b0f9a878f0c4b9bd5e6b0c03b1a1548cee389b923fb0",
+        "task_id": "bargaining:004",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "format_version": 2,
+  "case_id": "osw-dependency-unblock-22ed3b1d66",
+  "title": "Async-RBench OSWorld vlc: vlc_play_and_exit_setting",
+  "task_instruction_path": "task/task.yaml",
+  "source_tasks": [
+    {
+      "benchmark": "OSWorld",
+      "id": "osworld:vlc:5ac2891a-eacd-4954-b339-98abba077adb"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/app"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "inspect_source",
+      "depends_on": []
+    },
+    {
+      "id": "checkpoint_valid_work",
+      "depends_on": [
+        "inspect_source"
+      ]
+    },
+    {
+      "id": "consume_async_evidence",
+      "depends_on": [
+        "checkpoint_valid_work"
+      ]
+    },
+    {
+      "id": "reverify_and_close",
+      "depends_on": [
+        "consume_async_evidence"
+      ]
+    }
+  ],
+  "public_checks": [],
+  "workstreams": [
+    {
+      "id": "upstream_worker_01",
+      "priority": "normal",
+      "task": "Resolve the active VLC configuration file path.",
+      "expected_output": "Private source-native evidence for config_path_resolution.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_02",
+      "priority": "normal",
+      "task": "Resolve the play-and-exit key and the value that prevents auto-close.",
+      "expected_output": "Private source-native evidence for preference_key_resolution.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_03",
+      "priority": "high",
+      "task": "Restart VLC and verify one effective play-and-exit=0 assignment persists.",
+      "expected_output": "Private source-native evidence for restart_persistence_check.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    }
+  ]
+}

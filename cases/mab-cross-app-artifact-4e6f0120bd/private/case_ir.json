@@ -1,0 +1,248 @@
+{
+  "case_id": "mab-cross-app-artifact-4e6f0120bd",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_4e6f0120bd_classify_scope_delta_01",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.persist_stable_external_"
+        ]
+      },
+      "id": "01_classify_scope_delta_0120bd",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_4e6f0120bd.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "Classify the delivered calendar adapter contract as a dependency change scoped to deadline synchronization, not as a replacement for the task domain model. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.persist_stable_external_"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_4e6f0120bd_revise_affected_02",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.apply_canonical_timezone"
+        ]
+      },
+      "id": "02_revise_affected_0120bd",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Rebind calendar create, update, and cancellation to stable provider IDs and the delivered timezone, retry, and conflict semantics. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.apply_canonical_timezone"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_4e6f0120bd_preserve_unaffected_03",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_idempotent_upd"
+        ]
+      },
+      "id": "03_preserve_unaffected_0120bd",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "Preserve existing projects, assignments, statuses, dashboards, messaging, authentication, and authorization while revising only calendar integration artifacts. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.implement_idempotent_upd"
+    },
+    {
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_4e6f0120bd_verify_closure_04",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_fake_adapter_tests_f"
+        ]
+      },
+      "id": "04_verify_closure_0120bd",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_4e6f0120bd.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "Close only after fake-adapter checks prove moved deadlines, conflicts, retries, and deletion and the manifest consumes this exact calendar receipt. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_fake_adapter_tests_f"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.persist_stable_external_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.apply_canonical_timezone"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_idempotent_upd"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_fake_adapter_tests_f"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.persist_stable_external_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.apply_canonical_timezone",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_idempotent_upd",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_fake_adapter_tests_f",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.persist_stable_external_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.apply_canonical_timezone",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_idempotent_upd",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_fake_adapter_tests_f",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.persist_stable_external_",
+      "req.02.apply_canonical_timezone",
+      "req.03.implement_idempotent_upd",
+      "req.04.add_fake_adapter_tests_f",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The calendar integration worker delivers stable external event identifiers, timezone conversion, update and cancellation semantics, retry idempotency, and conflict policy.",
+    "before_state": "Projects, assignments, deadlines, dashboards, messaging, and a provisional calendar path are already functional before the external calendar contract is available.",
+    "event_id": "evt.mab_cross_app_artifact_4e6f0120bd.task_scope_or_dependency_change",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Bind each task deadline to a stable provider event identifier.",
+      "id": "req.01.persist_stable_external_",
+      "observable_probe": "mab_cross_app_artifact_4.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source-native Office Task Collaborator artifact and closure evidence for: Bind each task deadline to a stable provider event identifier."
+    },
+    {
+      "description": "Apply the delivered timezone and conflict rules to calendar create and update operations.",
+      "id": "req.02.apply_canonical_timezone",
+      "observable_probe": "mab_cross_app_artifact_4.sem.02.the_requested_program_passes",
+      "public_evidence": "source-native Office Task Collaborator artifact and closure evidence for: Apply the delivered timezone and conflict rules to calendar create and update operations."
+    },
+    {
+      "description": "Make calendar update and cancellation retries idempotent.",
+      "id": "req.03.implement_idempotent_upd",
+      "observable_probe": "mab_cross_app_artifact_4.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source-native Office Task Collaborator artifact and closure evidence for: Make calendar update and cancellation retries idempotent."
+    },
+    {
+      "description": "Verify moved deadlines, overlapping deadlines, retry, conflict, and deletion behavior through the fake calendar adapter.",
+      "id": "req.04.add_fake_adapter_tests_f",
+      "observable_probe": "mab_cross_app_artifact_4.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source-native Office Task Collaborator artifact and closure evidence for: Verify moved deadlines, overlapping deadlines, retry, conflict, and deletion behavior through the fake calendar adapter."
+    }
+  ]
+}

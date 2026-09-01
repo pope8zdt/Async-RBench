@@ -1,0 +1,31 @@
+{
+  "authority_rule": "A replayed completion is consumed exactly once and cannot duplicate side effects.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_task_creatio",
+      "req.02.implement_authorized_status",
+      "req.03.implement_completion_rate_ov",
+      "req.04.deduplicate_and_integrate_re",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The edge suite is registered once, invalid assignment/deadline/access behavior is rejected, and reports are reverified without duplicate effects.",
+    "before_state": "Core scheduling works, but task-specific edge tests arrive late and the same completion can be replayed.",
+    "event_id": "evt.mab_late_test_evidence_60ef.office_edge_tests_replayed",
+    "primary_event_theme": "duplicate_or_replayed_completion",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_test_evidence_60ef.office_edge_tests_replayed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close office_edge_test_evidence_replayed.",
+  "required_decisions": [
+    "classify_duplicate",
+    "preserve_idempotency",
+    "verify_closure"
+  ],
+  "theme": "duplicate_or_replayed_completion"
+}

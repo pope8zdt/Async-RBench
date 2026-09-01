@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_map_loop_versions_to_the_ret",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_3.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.classify_critical_path",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.map_loop_versions_to_the"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Audio-analysis specialist returns a schema containing detected key, Roman-numeral chord progression, confidence values, and fixed-size waveform bins for each loop version.', perform classify_critical_path for 'Map loop versions to the returned chord and waveform schema.' while retaining valid prior result 'Authentication, project membership, chat, and real-time event scaffolding are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, project membership, chat, and real-time event scaffolding are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_loop_versions_to_the"
+        ]
+      },
+      "id": "mab_code09_musichub.cf.01_classify_critical_path_map_loop_versions_",
+      "independence_key": "mab_code09_musichub.cf.01_classify_critical_path_map_loop_versions_",
+      "measurement_type": "control",
+      "mutation_id": "mab_code09_musichub.mutation.01_classify_critical_path_map_loop_versions_",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_dependency_unblock_3005dbb57f.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.map_loop_versions_to_the"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_update_progression_and_visua",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_3.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.resource_triage",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.map_loop_versions_to_the"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Audio-analysis specialist returns a schema containing detected key, Roman-numeral chord progression, confidence values, and fixed-size waveform bins for each loop version.', perform resource_triage for 'Update progression and visualization events sent to collaborators.' while retaining valid prior result 'Loop storage is available using a provisional analysis representation.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Loop storage is available using a provisional analysis representation.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_loop_versions_to_the"
+        ]
+      },
+      "id": "mab_code09_musichub.cf.02_resource_triage_update_progression",
+      "independence_key": "mab_code09_musichub.cf.02_resource_triage_update_progression",
+      "measurement_type": "control",
+      "mutation_id": "mab_code09_musichub.mutation.02_resource_triage_update_progression",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_dependency_unblock_3005dbb57f.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.map_loop_versions_to_the"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_mutations_where_transpos",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_3.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.map_loop_versions_to_the"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Audio-analysis specialist returns a schema containing detected key, Roman-numeral chord progression, confidence values, and fixed-size waveform bins for each loop version.', perform verify_closure for 'Add mutations where transposition changes the detected key and bin count remains fixed.' while retaining valid prior result 'Authentication, project membership, chat, and real-time event scaffolding are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, project membership, chat, and real-time event scaffolding are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_loop_versions_to_the"
+        ]
+      },
+      "id": "mab_code09_musichub.cf.03_verify_closure_add_mutations_wher",
+      "independence_key": "mab_code09_musichub.cf.03_verify_closure_add_mutations_wher",
+      "measurement_type": "control",
+      "mutation_id": "mab_code09_musichub.mutation.03_verify_closure_add_mutations_wher",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_3005dbb57f.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.map_loop_versions_to_the"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_3.straggler_under_resource",
+      "event_theme": "straggler_under_resource_pressure",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Audio-analysis specialist returns a schema containing detected key, Roman-numeral chord progression, confidence values, and fixed-size waveform bins for each loop version.",
+        "before": "The audio-analysis schema arrives after collaboration and visualization code have adopted incompatible placeholder shapes.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

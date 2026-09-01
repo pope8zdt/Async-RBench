@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Equivalent private source-native scoring path with independently assembled closure invocation.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_22ed3b1d66.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_22ed3b1d66.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_dependency_unblock_22ed3b1d66.osworld.playback_behavior"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_dependency_unblock_22ed3b1d66.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_vlc_22.cf.01_classify_authority_vlc_persistence_osworld",
+          "osw_vlc_22.cf.02_revise_affected_vlc_persistence_osworld",
+          "osw_vlc_22.cf.03_verify_closure_vlc_persistence_osworld"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_22ed3b1d66.event.receipt",
+          "osw_dependency_unblock_22ed3b1d66.event.probes",
+          "osw_dependency_unblock_22ed3b1d66.closure",
+          "osw_dependency_unblock_22ed3b1d66.source.pin",
+          "osw_dependency_unblock_22ed3b1d66.osworld.identity",
+          "osw_dependency_unblock_22ed3b1d66.osworld.official_score",
+          "osw_dependency_unblock_22ed3b1d66.osworld.native_evidence",
+          "osw_dependency_unblock_22ed3b1d66.osworld.task_assertion",
+          "osw_dependency_unblock_22ed3b1d66.osworld.config_path",
+          "osw_dependency_unblock_22ed3b1d66.osworld.preference_value",
+          "osw_dependency_unblock_22ed3b1d66.osworld.single_effective_assignment",
+          "osw_dependency_unblock_22ed3b1d66.osworld.restart_persistence",
+          "osw_dependency_unblock_22ed3b1d66.osworld.playback_behavior"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "e3163785c52a28291bba396a24cf2ba763269aa2b3e5627fa9e5818d318eb813",
+        "task_id": "osworld:vlc:5ac2891a-eacd-4954-b339-98abba077adb",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

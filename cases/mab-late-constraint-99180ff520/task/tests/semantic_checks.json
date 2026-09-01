@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt digest is authentic and bound to this exact case and bargaining source.",
+      "id": "mab_late_constraint_99180ff520.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent event worker observed both provisional and executable artifacts.",
+      "id": "mab_late_constraint_99180ff520.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact receipt and records the authoritative bargain: The current seller counter verifies a new PS4 game at $14.25 with three-day delivery and supersedes the unsupported $12 offer.",
+      "id": "mab_late_constraint_99180ff520.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The package remains pinned to bargaining:023 and its official record.",
+      "id": "mab_late_constraint_99180ff520.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private fixture binds the exact MultiAgentBench evaluator, source task, artifact schema, and dependency depth.",
+      "id": "mab_late_constraint_99180ff520.source.native_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding_and_schema",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Hasbro Family Fun Pack - PlayStation 4 Standard Edition executes an offer-authority-counter-finalize bargaining workflow.",
+      "id": "mab_late_constraint_99180ff520.source.core_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_core_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The injected authority payload exactly represents the source-specific terms: The current seller counter verifies a new PS4 game at $14.25 with three-day delivery and supersedes the unsupported $12 offer.",
+      "id": "mab_late_constraint_99180ff520.source.event_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Stale revisions and unauthorized authority payloads are rejected independently.",
+      "id": "mab_late_constraint_99180ff520.source.edge_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_edge_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Unaffected priorities remain exactly preserved: ps4_compatibility, original_price_reference, buyer_quality_priority.",
+      "id": "mab_late_constraint_99180ff520.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_closure_and_preservation",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Final selected terms and tool-action chronology match the task-specific authoritative bargain.",
+      "id": "mab_late_constraint_99180ff520.source.final_terms",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_final_terms_and_tool_sequence",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

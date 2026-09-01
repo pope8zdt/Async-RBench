@@ -1,0 +1,212 @@
+{
+  "case_id": "swe-dependency-unblock-00437a10dc",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority:req.01.move_or_retain_the_fix_a",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Move or retain the fix at the generic Pow-printer boundary justified by the report.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.move_or_retain_the_fix_a"
+        ]
+      },
+      "id": "01_classify_authority_move_or_retain_the_fix_a",
+      "must_still_pass": [],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_00437a10dc.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After receiving authoritative event 'An independent printer audit establishes the generic superscript-bearing-base contract and the exact secondquant regression surface.', perform classify_authority for 'Move or retain the fix at the generic Pow-printer boundary justified by the report.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.move_or_retain_the_fix_a"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.emit_grouped_output_such",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Emit grouped output such as {b^\\dagger_{0}}^{2}.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.emit_grouped_output_such"
+        ]
+      },
+      "id": "02_revise_affected_emit_grouped_output_such",
+      "must_still_pass": [],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_00437a10dc.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'An independent printer audit establishes the generic superscript-bearing-base contract and the exact secondquant regression surface.', perform revise_affected for 'Emit grouped output such as {b^\\dagger_{0}}^{2}.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.emit_grouped_output_such"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.03.verify_standalone_dagger",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Verify standalone dagger output remains unchanged.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_standalone_dagger"
+        ]
+      },
+      "id": "03_verify_closure_verify_standalone_dagger",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_00437a10dc.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After receiving authoritative event 'An independent printer audit establishes the generic superscript-bearing-base contract and the exact secondquant regression surface.', perform verify_closure for 'Verify standalone dagger output remains unchanged.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_standalone_dagger"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.move_or_retain_the_fix_a"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.emit_grouped_output_such"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_standalone_dagger"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.test_other_superscript_b"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.move_or_retain_the_fix_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.emit_grouped_output_such",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_standalone_dagger",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.test_other_superscript_b",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.move_or_retain_the_fix_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.emit_grouped_output_such",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_standalone_dagger",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.test_other_superscript_b",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.move_or_retain_the_fix_a",
+      "req.02.emit_grouped_output_such",
+      "req.03.verify_standalone_dagger",
+      "req.04.test_other_superscript_b",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An independent printer audit establishes the generic superscript-bearing-base contract and the exact secondquant regression surface.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+    "event_id": "evt.swe_dependency_unblock_00437a10dc.pow_printer_authority_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Move or retain the fix at the generic Pow-printer boundary justified by the report.",
+      "id": "req.01.move_or_retain_the_fix_a",
+      "observable_probe": "swe_dependency_unblock_0.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for move_or_retain_the_fix_at_the_generi"
+    },
+    {
+      "description": "Emit grouped output such as {b^\\dagger_{0}}^{2}.",
+      "id": "req.02.emit_grouped_output_such",
+      "observable_probe": "swe_dependency_unblock_0.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for emit_grouped_output_such_as_b_dagger"
+    },
+    {
+      "description": "Verify standalone dagger output remains unchanged.",
+      "id": "req.03.verify_standalone_dagger",
+      "observable_probe": "swe_dependency_unblock_0.sem.03.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for verify_standalone_dagger_output_rema"
+    },
+    {
+      "description": "Test other superscript-bearing bases and ordinary powers.",
+      "id": "req.04.test_other_superscript_b",
+      "observable_probe": "swe_dependency_unblock_0.sem.04.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for test_other_superscript_bearing_bases"
+    }
+  ]
+}

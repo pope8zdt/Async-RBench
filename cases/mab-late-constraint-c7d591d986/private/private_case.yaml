@@ -1,0 +1,199 @@
+{
+  "authoritative_result_kind": "result_02",
+  "capabilities": [
+    "late_revision_adoption",
+    "selective_invalidation",
+    "verification_reopen"
+  ],
+  "case_id": "mab-late-constraint-c7d591d986",
+  "classification": {
+    "async_scenario_class": "result_eventful",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "secondary_event_themes": []
+  },
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.bar007_charlie.late_out_of_order_superseded_result",
+      "event_theme": "late_or_out_of_order_superseded_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An older superseded offer arrives after current agreement persistence.",
+        "before": "Task-specific provisional state is persisted without evaluator truth.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "format_version": 2,
+  "hidden_checks": {
+    "closure_consumes_receipt": "python3 -c \"import json; r=json.load(open('/app/output_data/event_receipt.json')); m=json.load(open('/app/output_data/decision_manifest.json')); assert m['event_receipt_sha256']==r['receipt_sha256']\"",
+    "receipt_bound_to_case": "python3 -c \"import json; r=json.load(open('/app/output_data/event_receipt.json')); assert r['case_id']=='mab-late-constraint-c7d591d986'\""
+  },
+  "information_sufficiency": [
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_01"
+    },
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_02"
+    }
+  ],
+  "legacy_metadata": {
+    "asset_copies": [],
+    "implementation": "real-instance-derived"
+  },
+  "required_opportunities": [
+    "authority_delivery"
+  ],
+  "result_contract": {
+    "allowed_result_kinds": [
+      "result_01",
+      "result_02"
+    ],
+    "rule": "Source identity and revision or authority evidence determine use; arrival order alone does not."
+  },
+  "reverification_anchors": {
+    "closure_consumes_receipt": [
+      "result_02"
+    ],
+    "receipt_bound_to_case": [
+      "result_02"
+    ]
+  },
+  "scenarios": {
+    "async": {
+      "events": [
+        {
+          "at": 2,
+          "id": "evt.bar007_charlie.late_out_of_order_superseded_result.provisional",
+          "invalidates_artifacts": [],
+          "reopens_milestones": [],
+          "result": "result_01"
+        },
+        {
+          "after_results": [
+            "result_01"
+          ],
+          "id": "evt.bar007_charlie.late_out_of_order_superseded_result",
+          "invalidates_artifacts": [
+            "final_state"
+          ],
+          "reopens_milestones": [
+            "consume_async_evidence",
+            "reverify_and_close"
+          ],
+          "result": "result_02",
+          "trigger": "after_results_delivered"
+        }
+      ]
+    },
+    "linear": {
+      "events": []
+    }
+  },
+  "stale_predicate": {
+    "authoritative_fields": [
+      "accepted_current_revision"
+    ],
+    "superseded_fields": [
+      "delivered_offer.revision"
+    ],
+    "type": "revision_mismatch"
+  },
+  "stale_revalidation": {},
+  "superseded_result_kind": "result_01",
+  "workstream_bindings": {
+    "requirement_worker_01": {
+      "event_assets": [],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_01",
+      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p)); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']\"",
+      "validator_timeout_sec": 120
+    },
+    "requirement_worker_02": {
+      "event_assets": [
+        "task/upstream_solutions/event_worker.py"
+      ],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_02",
+      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p)); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']\"",
+      "validator_timeout_sec": 120
+    }
+  }
+}

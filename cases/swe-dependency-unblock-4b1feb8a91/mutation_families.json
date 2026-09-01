@@ -1,0 +1,260 @@
+{
+  "families": [
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency__7a0f94.mut.01_receipt",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Cross-check independent evidence for: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency__7a0f94.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency__7a0f94.mut.02_probes",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Cross-check independent evidence for: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency__7a0f94.mut.02_probes_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency__7a0f94.mut.03_closure",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Cross-check independent evidence for: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency__7a0f94.mut.03_closure_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: The task remains bound to its pinned source revision.",
+      "id": "swe_dependency__7a0f94.mut.04_pin",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Cross-check independent evidence for: The task remains bound to its pinned source revision.",
+      "id": "swe_dependency__7a0f94.mut.04_pin_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: The native units regression accepts acceleration*time plus velocity through dimension-system equivalence.",
+      "id": "swe_dependency__7a0f94.mut.05_units_equivalent_add",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.native.units_equivalent_add"
+      ],
+      "operation": "mutate_semantic_changed_behavior",
+      "variants": [
+        "omit_units_equivalent_add_evidence",
+        "corrupt_units_equivalent_add_value",
+        "replay_stale_units_equivalent_add_state",
+        "satisfy_manifest_without_units_equivalent_add_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Cross-check independent evidence for: The native units regression accepts acceleration*time plus velocity through dimension-system equivalence.",
+      "id": "swe_dependency__7a0f94.mut.05_units_equivalent_add_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.native.units_equivalent_add"
+      ],
+      "operation": "cross_corrupt_changed_behavior_evidence",
+      "variants": [
+        "manifest_green_units_equivalent_add_red",
+        "artifact_green_units_equivalent_add_stale",
+        "receipt_valid_units_equivalent_add_foreign",
+        "partial_closure_hides_units_equivalent_add_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: Native units checks preserve rejection of genuinely incompatible dimensions and ordinary addition behavior.",
+      "id": "swe_dependency__7a0f94.mut.06_units_incompatible_preserved",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.native.units_incompatible_preserved"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_units_incompatible_preserved_evidence",
+        "corrupt_units_incompatible_preserved_value",
+        "replay_stale_units_incompatible_preserved_state",
+        "satisfy_manifest_without_units_incompatible_preserved_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform classify_authority for 'Replace structural comparison with the identified equivalence predicate.' and preserve valid source behavior already established before delivery.",
+      "id": "swe_dependency__7a0f94.mut.07_01_classify_authority_replac",
+      "must_fail": [
+        "swe_dependency__7a0f94.cf.01_classify_authority_replace_structural_compa"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Cross-check independent evidence for: After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform classify_authority for 'Replace structural comparison with the identified equivalence predicate.' and preserve valid source behavior already established before delivery.",
+      "id": "swe_dependency__7a0f94.mut.07_01_classify_authority_replac_crosscheck",
+      "must_fail": [
+        "swe_dependency__7a0f94.cf.01_classify_authority_replace_structural_compa"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_authority_replac_red",
+        "artifact_green_01_classify_authority_replac_stale",
+        "receipt_valid_01_classify_authority_replac_foreign",
+        "partial_closure_hides_01_classify_authority_replac_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform revise_affected for 'Verify acceleration*time and velocity add successfully.' and preserve valid source behavior already established before delivery.",
+      "id": "swe_dependency__7a0f94.mut.08_02_revise_affected_verify_ac",
+      "must_fail": [
+        "swe_dependency__7a0f94.cf.02_revise_affected_verify_acceleration_time"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Cross-check independent evidence for: After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform revise_affected for 'Verify acceleration*time and velocity add successfully.' and preserve valid source behavior already established before delivery.",
+      "id": "swe_dependency__7a0f94.mut.08_02_revise_affected_verify_ac_crosscheck",
+      "must_fail": [
+        "swe_dependency__7a0f94.cf.02_revise_affected_verify_acceleration_time"
+      ],
+      "operation": "cross_corrupt_resolve_authority_evidence",
+      "variants": [
+        "manifest_green_02_revise_affected_verify_ac_red",
+        "artifact_green_02_revise_affected_verify_ac_stale",
+        "receipt_valid_02_revise_affected_verify_ac_foreign",
+        "partial_closure_hides_02_revise_affected_verify_ac_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Directly challenge: After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform verify_closure for 'Verify incompatible dimensions still raise ValueError.' and preserve valid source behavior already established before delivery.",
+      "id": "swe_dependency__7a0f94.mut.09_03_verify_closure_verify_inc",
+      "must_fail": [
+        "swe_dependency__7a0f94.cf.03_verify_closure_verify_incompatible_dime"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-4b1feb8a91",
+      "description": "Cross-check independent evidence for: After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform verify_closure for 'Verify incompatible dimensions still raise ValueError.' and preserve valid source behavior already established before delivery.",
+      "id": "swe_dependency__7a0f94.mut.09_03_verify_closure_verify_inc_crosscheck",
+      "must_fail": [
+        "swe_dependency__7a0f94.cf.03_verify_closure_verify_incompatible_dime"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_verify_inc_red",
+        "artifact_green_03_verify_closure_verify_inc_stale",
+        "receipt_valid_03_verify_closure_verify_inc_foreign",
+        "partial_closure_hides_03_verify_closure_verify_inc_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

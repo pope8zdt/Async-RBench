@@ -1,0 +1,156 @@
+format_version: 2
+case_id: data-recovery-service
+title: Recover exact WAL state and integrate it with a real merged-data gRPC service
+task_instruction_path: task/task.yaml
+source_tasks:
+- id: db-wal-recovery
+  upstream_path: upstream/terminal-bench/original-tasks-locked/db-wal-recovery
+  benchmark: terminal-bench
+- id: multi-source-data-merger
+  upstream_path: upstream/terminal-bench/original-tasks-locked/multi-source-data-merger
+  benchmark: terminal-bench
+- id: kv-store-grpc
+  upstream_path: upstream/terminal-bench/original-tasks-locked/kv-store-grpc
+  benchmark: terminal-bench
+milestones:
+- id: recover_database
+  depends_on: []
+- id: merge_sources
+  depends_on: []
+- id: build_grpc
+  depends_on: []
+- id: integrate_service_seed
+  depends_on:
+  - recover_database
+  - merge_sources
+  - build_grpc
+- id: final_qa
+  depends_on:
+  - integrate_service_seed
+artifacts:
+- id: recovered_rows
+  path: /app/recovered.json
+- id: merged_users
+  path: /app/merged_users.parquet
+- id: conflict_report
+  path: /app/conflicts.json
+- id: grpc_server
+  path: /app/server.py
+- id: service_seed
+  path: /app/service_seed.json
+- id: service_lineage
+  path: /app/service-lineage.json
+- id: pre_event_verification
+  path: runtime:qa
+workstreams:
+- id: checkpoint_recovery
+  task: On copies only, inspect /app/main.db without applying a WAL. Report the row
+    count, rows and database integrity actually observed; do not modify supplied inputs.
+  targets: []
+  expected_output: Checkpoint-only database observation.
+  priority: normal
+  required_evidence_fields:
+  - row_count
+  - rows
+  - database_integrity
+  evidence_schema:
+    row_count:
+      type: integer
+    rows:
+      type: array
+      min_items: 5
+    database_integrity:
+      type: string
+  allowed_files: []
+  required_files: []
+  public_result_contract: {}
+- id: wal_recovery
+  task: On copies, inspect the recovery inputs available in this isolated workspace,
+    apply the WAL when present, and write the resulting rows to /app/recovered.json
+    sorted by id. Report observed row count and WAL handling evidence.
+  targets:
+  - recovered_rows
+  expected_output: WAL-applied database observation and recovered.json.
+  priority: high
+  required_evidence_fields:
+  - final_row_count
+  - wal_file_initially_present
+  - wal_file_consumed_during_recovery
+  evidence_schema:
+    final_row_count:
+      type: integer
+    wal_file_initially_present:
+      type: boolean
+    wal_file_consumed_during_recovery:
+      type: boolean
+  allowed_files:
+  - /app/recovered.json
+  required_files:
+  - /app/recovered.json
+  public_result_contract: {}
+- id: merge_support
+  task: 'Implement the exact three-source merge contract: map /data/source_a/users.json,
+    /data/source_b/users.csv and /data/source_c/users.parquet to the canonical schema
+    (user_id int, name str, email str, created_date YYYY-MM-DD, status optional),
+    merge by user_id with priority source_a > source_b > source_c, and write /app/merged_users.parquet
+    with exact columns. In /app/conflicts.json, record one conflict for every differing
+    canonical field of every duplicated user. The top-level keys must be exactly total_conflicts
+    and conflicts, with total_conflicts equal to the list length. Every conflict entry
+    must have exactly user_id, field, values, and selected; values is an object containing
+    every present source_a/source_b/source_c value, and selected is the highest-priority
+    present value. The evaluator-provided participant_visible_result_contract repeats
+    this public artifact schema and applies equally to replacement children.'
+  targets:
+  - merged_users
+  - conflict_report
+  expected_output: /app/merged_users.parquet (one exact canonical row per unique user)
+    and /app/conflicts.json (complete per-field source conflicts with selected priority
+    values and an exact matching count).
+  priority: normal
+  required_evidence_fields:
+  - merged_users_count
+  - conflict_count
+  evidence_schema:
+    merged_users_count:
+      type: integer
+    conflict_count:
+      type: integer
+  allowed_files:
+  - /app/merged_users.parquet
+  - /app/conflicts.json
+  required_files:
+  - /app/merged_users.parquet
+  - /app/conflicts.json
+  public_result_contract:
+    merged_users_parquet:
+      path: /app/merged_users.parquet
+      columns_exactly:
+      - user_id
+      - name
+      - email
+      - created_date
+      - status
+      one_row_per_unique_user_id: true
+      field_priority:
+      - source_a
+      - source_b
+      - source_c
+    conflicts_json:
+      path: /app/conflicts.json
+      top_level_keys_exactly:
+      - total_conflicts
+      - conflicts
+      total_conflicts_equals_conflicts_length: true
+      one_entry_per_differing_canonical_field_for_each_duplicated_user: true
+      entry_keys_exactly:
+      - user_id
+      - field
+      - values
+      - selected
+      values_object_allowed_keys:
+      - source_a
+      - source_b
+      - source_c
+      values_object_includes_every_present_source: true
+      selected_is_highest_priority_present_value: true
+public_checks: []

@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_stale_add_the_90_day_battery_age_a",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_constraint_4412.late_or_out_of_order_sup",
+      "evidence_group": "mab_late_constrain.classify_stale",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.add_the_90_day_battery_a"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform classify_stale for 'Add the 90-day battery-age and one-year replacement terms to the offer.' while retaining valid prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "forbidden_behavior": "Do not handle classify_stale by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_the_90_day_battery_a"
+        ]
+      },
+      "id": "mab_barwatch_4412.cf.01_classify_stale_add_the_90_day_bat",
+      "independence_key": "mab_barwatch_4412.cf.01_classify_stale_add_the_90_day_bat",
+      "measurement_type": "control",
+      "mutation_id": "mab_barwatch_4412.mutation.01_classify_stale_add_the_90_day_bat",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_4412b3e2d6.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_the_90_day_battery_a"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "exclude_stale_recalculate_price_and_quanti",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_late_constraint_4412.late_or_out_of_order_sup",
+      "evidence_group": "mab_late_constrain.exclude_stale",
+      "evidence_spec": {
+        "primary_fact": "stale_result_decision",
+        "subject": "req.01.add_the_90_day_battery_a"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform exclude_stale for 'Recalculate price and quantity for consolidated shipping.' while retaining valid prior result 'Buyer specified a fresh-battery assurance requirement.'.",
+      "forbidden_behavior": "Do not handle exclude_stale by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer specified a fresh-battery assurance requirement.'.",
+      "gate": "reject_late_stale",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_the_90_day_battery_a"
+        ]
+      },
+      "id": "mab_barwatch_4412.cf.02_exclude_stale_recalculate_price_",
+      "independence_key": "mab_barwatch_4412.cf.02_exclude_stale_recalculate_price_",
+      "measurement_type": "control",
+      "mutation_id": "mab_barwatch_4412.mutation.02_exclude_stale_recalculate_price_",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_4412b3e2d6.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.add_the_90_day_battery_a"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_submit_the_revised_offer_thr",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_constraint_4412.late_or_out_of_order_sup",
+      "evidence_group": "mab_late_constrain.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.add_the_90_day_battery_a"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform verify_closure for 'Submit the revised offer through the bargaining tool.' while retaining valid prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_the_90_day_battery_a"
+        ]
+      },
+      "id": "mab_barwatch_4412.cf.03_verify_closure_submit_the_revised",
+      "independence_key": "mab_barwatch_4412.cf.03_verify_closure_submit_the_revised",
+      "measurement_type": "control",
+      "mutation_id": "mab_barwatch_4412.mutation.03_verify_closure_submit_the_revised",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_4412b3e2d6.closure.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.add_the_90_day_battery_a"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_late_constraint_4412.late_or_out_of_order_sup",
+      "event_theme": "late_or_out_of_order_superseded_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.",
+        "before": "Delay the battery-and-logistics counteroffer until the buyer has prepared its initial price anchor.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

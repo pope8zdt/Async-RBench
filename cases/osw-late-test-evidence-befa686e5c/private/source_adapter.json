@@ -1,0 +1,43 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:26150609-0da3-4a7d-8868-0faf9c5f01bb",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/26150609-0da3-4a7d-8868-0faf9c5f01bb.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "vs_code snapshot",
+      "private source assets",
+      "private native fixture",
+      "private event payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "vs_code",
+      "python",
+      "pygame",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:26150609-0da3-4a7d-8868-0faf9c5f01bb in pinned vs_code; evaluator truth remains private.",
+    "event_injection": "Release snake_collision_test only after 3 persisted upstream result(s).",
+    "hidden_tests": "check_python_file_by_test_suite, native digest, grid_size, initial_spawn, respawn, snake_reaches_food, official_test, fixed_file, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "vs_code",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private snake_collision_test_osworld.sh binds check_python_file_by_test_suite.",
+    "requires_authored_private_oracle": false
+  }
+}

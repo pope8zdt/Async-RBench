@@ -1,0 +1,75 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-3686cb057d",
+  "source_task_id": "osworld:libreoffice_calc:21ab7b40-77c2-4ae6-8321-e00d3a086c73",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "period_rate_formula_and_maximum",
+  "upstream_dependency_graph": [
+    {
+      "id": "formula_interpretation",
+      "app": "LibreOffice Calc",
+      "description": "Resolve Period Rate (%) as Annual Rate divided by Period per year."
+    },
+    {
+      "id": "row_computation",
+      "app": "Calc worker",
+      "description": "Compute and validate all 24 row values for C2:C25.",
+      "depends_on": [
+        "formula_interpretation"
+      ]
+    },
+    {
+      "id": "maximum_and_style_detection",
+      "app": "Calc worker",
+      "description": "Identify the unique maximum row and required green font style.",
+      "depends_on": [
+        "row_computation"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/PeriodRate.xlsx",
+    "header": "Period Rate (%)",
+    "row_count": 24,
+    "formula_pattern": "=A{row}/B{row}",
+    "formula_range": "C2:C25",
+    "rates": [
+      5.625,
+      1.296,
+      2.582666666667,
+      4.66,
+      3.097333333333,
+      2.27475,
+      3.5624,
+      7.362,
+      2.324,
+      1.69575,
+      2.8676,
+      1.9412,
+      6.783,
+      1.9412,
+      1.938,
+      1.110857142857,
+      3.022,
+      5.165333333333,
+      14.724,
+      1.827714285714,
+      1.864,
+      2.324,
+      5.239,
+      2.654857142857
+    ],
+    "result_type": "number",
+    "number_format": "0.00",
+    "maximum": 14.724,
+    "maximum_rows": [
+      20
+    ],
+    "highlight_cell": "C20",
+    "font_color": "#00ff00",
+    "conditional_formula": "$C2=MAX($C$2:$C$25)",
+    "gold_workbook_sha256": "599cbdc6fe16b64b9628022bf55f26a488d1912c4b036359f3564c6146e1407a"
+  },
+  "task_assertion": "PeriodRate.xlsx contains 24 numeric A/B period rates in column C and highlights the unique maximum C20 value 14.724 in green.",
+  "finding": "The Calc worker returns A/B as the period-rate formula for rows 2–25, all 24 numeric results, and the unique maximum 14.724 at C20 with green font."
+}

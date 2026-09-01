@@ -1,0 +1,252 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_sar_cpu_report",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_late_test_evidence_f5d523fc9a.delayed_authoritative_result",
+      "evidence_group": "osw_sar_f5d5.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "sar_cpu_report"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for sar_cpu_report; preserve confirmed terminal, sysstat, filesystem state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip classify_authority, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_sar_f5d5.cf.01_classify_authority_sar_cpu_report",
+      "independence_key": "osw_sar_f5d5.cf.01_classify_authority_sar_cpu_report",
+      "measurement_type": "control",
+      "mutation_id": "osw_sar_f5d5.mutation.01_classify_authority_sar_cpu_report",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_late_test_evidence_f5d523fc9a.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.report_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_sar_cpu_report",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_late_test_evidence_f5d523fc9a.delayed_authoritative_result",
+      "evidence_group": "osw_sar_f5d5.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "sar_cpu_report"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for sar_cpu_report; preserve confirmed terminal, sysstat, filesystem state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_sar_f5d5.cf.02_revise_affected_sar_cpu_report",
+      "independence_key": "osw_sar_f5d5.cf.02_revise_affected_sar_cpu_report",
+      "measurement_type": "control",
+      "mutation_id": "osw_sar_f5d5.mutation.02_revise_affected_sar_cpu_report",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_f5d523fc9a.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.sampling_contract"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_sar_cpu_report",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_late_test_evidence_f5d523fc9a.delayed_authoritative_result",
+      "evidence_group": "osw_sar_f5d5.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "sar_cpu_report"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for sar_cpu_report; preserve confirmed terminal, sysstat, filesystem state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_sar_f5d5.cf.03_preserve_unaffected_sar_cpu_report",
+      "independence_key": "osw_sar_f5d5.cf.03_preserve_unaffected_sar_cpu_report",
+      "measurement_type": "control",
+      "mutation_id": "osw_sar_f5d5.mutation.03_preserve_unaffected_sar_cpu_report",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_f5d523fc9a.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.required_labels"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_sar_cpu_report",
+      "dimension": "closure",
+      "event_id": "evt.osw_late_test_evidence_f5d523fc9a.delayed_authoritative_result",
+      "evidence_group": "osw_sar_f5d5.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "sar_cpu_report"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for sar_cpu_report; preserve confirmed terminal, sysstat, filesystem state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_sar_f5d5.cf.04_verify_closure_sar_cpu_report",
+      "independence_key": "osw_sar_f5d5.cf.04_verify_closure_sar_cpu_report",
+      "measurement_type": "control",
+      "mutation_id": "osw_sar_f5d5.mutation.04_verify_closure_sar_cpu_report",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_late_test_evidence_f5d523fc9a.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.line_count"
+    }
+  ],
+  "event_contracts": [
+    {
+      "after_state": "System_Resources_Report.txt contains 30 one-second CPU samples, all seven required labels, the official 31-line contract, and passes both OSWorld checks.",
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_03",
+      "before_state": "sysstat availability and a report target are established, but the 30 one-second samples and the two official file checks are not yet complete.",
+      "event_id": "evt.osw_late_test_evidence_f5d523fc9a.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "System_Resources_Report.txt contains 30 one-second CPU samples, all seven required labels, the official 31-line contract, and passes both OSWorld checks.",
+        "before": "sysstat availability and a report target are established, but the 30 one-second samples and the two official file checks are not yet complete.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

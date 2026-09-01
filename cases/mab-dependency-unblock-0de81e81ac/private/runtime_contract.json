@@ -1,0 +1,22 @@
+{
+  "assets": [
+    "MultiAgentBench official task/output contract",
+    "evaluator-owned canonical implementation",
+    "task-specific event authority",
+    "hidden semantic tests"
+  ],
+  "docker": [
+    "minimal Python participant image",
+    "participant-safe task_file payload",
+    "isolated private verifier clone"
+  ],
+  "environment_strategy": "reconstruct the official MultiAgentBench coding task without copying evaluator truth into the participant image",
+  "event_injection": "routing_worker_recovered is generated only from evaluator-mounted task/upstream_solutions",
+  "hidden_tests": "four independent FoodChain source-semantic nodes plus receipt and causal closure checks",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "MultiAgentBench official coding task",
+    "source_task_id": "coding:002"
+  },
+  "oracle": "evaluator-owned canonical solution, event authority, and receipt-bound closure"
+}

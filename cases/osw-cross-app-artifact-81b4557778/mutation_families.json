@@ -1,0 +1,275 @@
+{
+  "families": [
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "osw_multiext_8.mut.01_receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Cross-check independent evidence for: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "osw_multiext_8.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: The worker completed successfully and returned observable task-specific probes.",
+      "id": "osw_multiext_8.mut.02_probes",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Cross-check independent evidence for: The worker completed successfully and returned observable task-specific probes.",
+      "id": "osw_multiext_8.mut.02_probes_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "osw_multiext_8.mut.03_closure",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Cross-check independent evidence for: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "osw_multiext_8.mut.03_closure_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: The task remains bound to its pinned source revision.",
+      "id": "osw_multiext_8.mut.04_pin",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Cross-check independent evidence for: The task remains bound to its pinned source revision.",
+      "id": "osw_multiext_8.mut.04_pin_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: The unpacked extension artifact is present at the exact native Desktop path.",
+      "id": "osw_multiext_8.mut.05_extension_path",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.native.extension_path"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_extension_path_evidence",
+        "corrupt_extension_path_value",
+        "replay_stale_extension_path_state",
+        "satisfy_manifest_without_extension_path_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: Chrome recognizes the exact manifest identity and unpacked installation state.",
+      "id": "osw_multiext_8.mut.06_manifest_state",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.native.manifest_state"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_manifest_state_evidence",
+        "corrupt_manifest_state_value",
+        "replay_stale_manifest_state_state",
+        "satisfy_manifest_without_manifest_state_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: The installed extension target is persisted after the async handoff.",
+      "id": "osw_multiext_8.mut.07_persisted_target",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.native.persisted_target"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_persisted_target_evidence",
+        "corrupt_persisted_target_value",
+        "replay_stale_persisted_target_state",
+        "satisfy_manifest_without_persisted_target_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: The extension manifest version is preserved from the native task.",
+      "id": "osw_multiext_8.mut.08_manifest_version",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.native.manifest_version"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_manifest_version_evidence",
+        "corrupt_manifest_version_value",
+        "replay_stale_manifest_version_state",
+        "satisfy_manifest_without_manifest_version_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform classify_scope_delta for 'Unpack the artifact first if the returned package type requires it.' while retaining valid prior result 'Chrome's extensions management page is open.'.",
+      "id": "osw_multiext_8.mut.09_01_classify_scope_delta_unpa",
+      "must_fail": [
+        "osw_multiext_8.cf.01_classify_scope_delta_unpack_the_artifac"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Cross-check independent evidence for: For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform classify_scope_delta for 'Unpack the artifact first if the returned package type requires it.' while retaining valid prior result 'Chrome's extensions management page is open.'.",
+      "id": "osw_multiext_8.mut.09_01_classify_scope_delta_unpa_crosscheck",
+      "must_fail": [
+        "osw_multiext_8.cf.01_classify_scope_delta_unpack_the_artifac"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_scope_delta_unpa_red",
+        "artifact_green_01_classify_scope_delta_unpa_stale",
+        "receipt_valid_01_classify_scope_delta_unpa_foreign",
+        "partial_closure_hides_01_classify_scope_delta_unpa_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform revise_affected for 'Enable Developer mode.' while retaining valid prior result 'Developer mode controls are located or enabled.'.",
+      "id": "osw_multiext_8.mut.10_02_revise_affected_enable_de",
+      "must_fail": [
+        "osw_multiext_8.cf.02_revise_affected_enable_developer_m"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform preserve_unaffected for 'Choose Load unpacked and select the returned manifest root.' while retaining valid prior result 'Chrome's extensions management page is open.'.",
+      "id": "osw_multiext_8.mut.11_03_preserve_unaffected_choos",
+      "must_fail": [
+        "osw_multiext_8.cf.03_preserve_unaffected_choose_load_unpack"
+      ],
+      "operation": "mutate_control_selective_replan",
+      "variants": [
+        "omit_selective_replan_decision",
+        "apply_selective_replan_to_wrong_scope",
+        "use_stale_evidence_for_selective_replan",
+        "declare_selective_replan_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Directly challenge: For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform verify_closure for 'Verify the extension card appears without a manifest or load error.' while retaining valid prior result 'Developer mode controls are located or enabled.'.",
+      "id": "osw_multiext_8.mut.12_04_verify_closure_verify_the",
+      "must_fail": [
+        "osw_multiext_8.cf.04_verify_closure_verify_the_extensi"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-81b4557778",
+      "description": "Cross-check independent evidence for: For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform verify_closure for 'Verify the extension card appears without a manifest or load error.' while retaining valid prior result 'Developer mode controls are located or enabled.'.",
+      "id": "osw_multiext_8.mut.12_04_verify_closure_verify_the_crosscheck",
+      "must_fail": [
+        "osw_multiext_8.cf.04_verify_closure_verify_the_extensi"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_04_verify_closure_verify_the_red",
+        "artifact_green_04_verify_closure_verify_the_stale",
+        "receipt_valid_04_verify_closure_verify_the_foreign",
+        "partial_closure_hides_04_verify_closure_verify_the_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

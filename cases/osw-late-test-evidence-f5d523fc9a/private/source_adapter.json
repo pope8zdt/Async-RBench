@@ -1,0 +1,43 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:2373b66a-092d-44cb-bfd7-82e86e7a3b4d",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/2373b66a-092d-44cb-bfd7-82e86e7a3b4d.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "multiapps snapshot",
+      "private source assets",
+      "private native fixture",
+      "private event payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "terminal",
+      "sysstat",
+      "filesystem",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:2373b66a-092d-44cb-bfd7-82e86e7a3b4d in pinned multiapps; evaluator truth remains private.",
+    "event_injection": "Release sar_cpu_report only after 2 persisted upstream result(s).",
+    "hidden_tests": "file_contains+check_line_number, native digest, report_path, sampling_contract, required_labels, line_count, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "multiapps",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private sar_cpu_report_osworld.sh binds file_contains+check_line_number.",
+    "requires_authored_private_oracle": false
+  }
+}

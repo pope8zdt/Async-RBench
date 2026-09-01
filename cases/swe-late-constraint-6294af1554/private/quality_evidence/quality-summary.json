@@ -1,0 +1,40 @@
+{
+  "canonical_verifier_bundle_sha256": "e15f093d76d16f7f2e27c87bab0a515be042405ff2693dcd3dc4eb7baa596cb2",
+  "equivalence_solutions": [
+    {
+      "id": "alternative-source-native-closure",
+      "report": "artifacts\\runtime-swe-first5-quality\\swe-late-constraint-6294af1554\\reports\\equivalence-alternative-source-native-closure.json",
+      "success": true,
+      "verifier_bundle_sha256": "e15f093d76d16f7f2e27c87bab0a515be042405ff2693dcd3dc4eb7baa596cb2"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "killed": true,
+      "must_fail": [
+        "swe_late_constraint_6294af1554.event.receipt"
+      ],
+      "observed_failed": [
+        "swe_late_constraint_6294af1554.event.receipt"
+      ],
+      "report": "artifacts\\runtime-swe-first5-quality\\swe-late-constraint-6294af1554\\reports\\negative-wrong-event-receipt.json",
+      "verifier_bundle_sha256": "e15f093d76d16f7f2e27c87bab0a515be042405ff2693dcd3dc4eb7baa596cb2"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "killed": true,
+      "must_fail": [
+        "swe_late_constraint_6294af1554.closure"
+      ],
+      "observed_failed": [
+        "swe_late_constraint_6294af1554.closure"
+      ],
+      "report": "artifacts\\runtime-swe-first5-quality\\swe-late-constraint-6294af1554\\reports\\negative-broken-closure-lineage.json",
+      "verifier_bundle_sha256": "e15f093d76d16f7f2e27c87bab0a515be042405ff2693dcd3dc4eb7baa596cb2"
+    }
+  ],
+  "passed": true,
+  "same_verifier_bundle": true,
+  "schema_version": "1.0"
+}

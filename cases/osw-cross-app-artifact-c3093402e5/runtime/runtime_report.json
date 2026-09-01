@@ -1,0 +1,40 @@
+{
+  "adapter_executed": true,
+  "anomaly_probe_executed": true,
+  "case_id": "osw-cross-app-artifact-c3093402e5",
+  "checkpoint": {
+    "db_digest_after": "94b7977bd752622f37f05efc03a1fb0e5d4753874113671e04dc4e7ae9f172b5",
+    "db_digest_before": "818a66558c3ffaad231b6dba93c4aac7682c7bc2648e0f1f78b04bce3e0a9e2e",
+    "logical_clock": 2,
+    "state_changed": true
+  },
+  "environment_initialized": true,
+  "native_evaluator_executed": false,
+  "receipts": [
+    {
+      "evidence": {
+        "diagnosis": "LOCK_CONTENTION",
+        "probe": "role_profile"
+      },
+      "logical_clock": 1,
+      "receipt_id": "osw-cross-app-artifact-c3093402e5:1",
+      "released_at": 1,
+      "result_kind": "provisional_specialist_result",
+      "source_task_id": "osworld:multi_apps:778efd0a-153f-4842-9214-f05fc176b877"
+    },
+    {
+      "evidence": {
+        "diagnosis": "INSERT_LARGE_DATA",
+        "inserted_rows": 168,
+        "table": "load_probe"
+      },
+      "logical_clock": 3,
+      "receipt_id": "osw-cross-app-artifact-c3093402e5:3",
+      "released_at": 3,
+      "result_kind": "authoritative_environment_result",
+      "source_task_id": "osworld:multi_apps:778efd0a-153f-4842-9214-f05fc176b877"
+    }
+  ],
+  "runtime_evaluator": "source-bound sqlite adapter",
+  "source_native_marble_executed": false
+}

@@ -1,0 +1,212 @@
+{
+  "case_id": "swe-dependency-unblock-08463030bf",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority:req.01.add_an_await_expression_",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add an await-expression AST builder consistent with existing builders.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_an_await_expression_"
+        ]
+      },
+      "id": "01_classify_authority_add_an_await_expression_",
+      "must_still_pass": [],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_08463030bf.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After receiving authoritative event 'An isolated compiler worker returns the authoritative nested-await traversal and async-thunk output result without crossing nested function boundaries.', perform classify_authority for 'Add an await-expression AST builder consistent with existing builders.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_an_await_expression_"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.detect_await_expressions",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Detect await expressions recursively without crossing nested function scopes.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.detect_await_expressions"
+        ]
+      },
+      "id": "02_revise_affected_detect_await_expressions",
+      "must_still_pass": [],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_08463030bf.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'An isolated compiler worker returns the authoritative nested-await traversal and async-thunk output result without crossing nested function boundaries.', perform revise_affected for 'Detect await expressions recursively without crossing nested function scopes.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.detect_await_expressions"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.03.emit_async_thunks_only_w",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Emit async thunks only when their expression requires await.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.emit_async_thunks_only_w"
+        ]
+      },
+      "id": "03_verify_closure_emit_async_thunks_only_w",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_08463030bf.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After receiving authoritative event 'An isolated compiler worker returns the authoritative nested-await traversal and async-thunk output result without crossing nested function boundaries.', perform verify_closure for 'Emit async thunks only when their expression requires await.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.emit_async_thunks_only_w"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.add_an_await_expression_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.detect_await_expressions"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.emit_async_thunks_only_w"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.run_focused_compiler_out"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.add_an_await_expression_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.detect_await_expressions",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.emit_async_thunks_only_w",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.run_focused_compiler_out",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.add_an_await_expression_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.detect_await_expressions",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.emit_async_thunks_only_w",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.run_focused_compiler_out",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_an_await_expression_",
+      "req.02.detect_await_expressions",
+      "req.03.emit_async_thunks_only_w",
+      "req.04.run_focused_compiler_out",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An isolated compiler worker returns the authoritative nested-await traversal and async-thunk output result without crossing nested function boundaries.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+    "event_id": "evt.swe_dependency_unblock_08463030bf.nested_await_ast_authority_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Add an await-expression AST builder consistent with existing builders.",
+      "id": "req.01.add_an_await_expression_",
+      "observable_probe": "swe_dependency_unblock_0.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for add_an_await_expression_ast_builder_"
+    },
+    {
+      "description": "Detect await expressions recursively without crossing nested function scopes.",
+      "id": "req.02.detect_await_expressions",
+      "observable_probe": "swe_dependency_unblock_0.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for detect_await_expressions_recursively"
+    },
+    {
+      "description": "Emit async thunks only when their expression requires await.",
+      "id": "req.03.emit_async_thunks_only_w",
+      "observable_probe": "swe_dependency_unblock_0.sem.03.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for emit_async_thunks_only_when_their_ex"
+    },
+    {
+      "description": "Run focused compiler output tests for direct, nested, and nested-function await cases.",
+      "id": "req.04.run_focused_compiler_out",
+      "observable_probe": "swe_dependency_unblock_0.sem.04.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for run_focused_compiler_output_tests_fo"
+    }
+  ]
+}

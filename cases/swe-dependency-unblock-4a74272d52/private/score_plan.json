@@ -1,0 +1,268 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_req_01_move_every_reported_per",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_4a74.delayed_authority",
+      "evidence_group": "swe_dependency_unb.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.move_every_reported_per_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Treat the delayed lifecycle and ownership result as the authority for the provisional voice-broadcast design.",
+      "forbidden_behavior": "Do not use the provisional model shape alone as final; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.move_every_reported_per_"
+        ]
+      },
+      "id": "swe_dependency__618bee.cf.01_classify_authority_move_every_reporte",
+      "independence_key": "swe_dependency__618bee.cf.01_classify_authority_move_every_reporte",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__618bee.mutation.01_classify_authority_move_every_reporte",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4a74272d52.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Treat the delayed lifecycle and ownership result as the authority for the provisional voice-broadcast design.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.move_every_reported_per_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_req_02_implement_voicebroadcast",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_4a74.delayed_authority",
+      "evidence_group": "swe_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_voicebroadcast"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Revise VoiceBroadcastRecordingsStore ownership and current-recording transitions to match the authoritative lifecycle result while retaining the valid typed recording event surface.",
+      "forbidden_behavior": "Do not retain store wiring that conflicts with the returned lifecycle graph; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_voicebroadcast"
+        ]
+      },
+      "id": "swe_dependency__618bee.cf.02_revise_affected_implement_voicebro",
+      "independence_key": "swe_dependency__618bee.cf.02_revise_affected_implement_voicebro",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__618bee.mutation.02_revise_affected_implement_voicebro",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4a74272d52.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Revise VoiceBroadcastRecordingsStore ownership and current-recording transitions to match the authoritative lifecycle result while retaining the valid typed recording event surface.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_voicebroadcast"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "verify_closure_req_04_update_each_reported_con",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_4a74.delayed_authority",
+      "evidence_group": "swe_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.update_each_reported_con"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Re-run the voice-broadcast integration tests and verify public exports and consumers against the exact delayed result receipt.",
+      "forbidden_behavior": "Do not close from only the pre-event checkpoint; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.update_each_reported_con"
+        ]
+      },
+      "id": "swe_dependency__618bee.cf.03_verify_closure_update_each_report",
+      "independence_key": "swe_dependency__618bee.cf.03_verify_closure_update_each_report",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__618bee.mutation.03_verify_closure_update_each_report",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4a74272d52.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Re-run the voice-broadcast integration tests and verify public exports and consumers against the exact delayed result receipt.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.update_each_reported_con"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not use the provisional model shape alone as final; preserve valid source-native behavior and consume the event receipt.",
+      "family": "wait_for_authority",
+      "id": "swe_dependency__618bee.mutation.01_classify_authority_move_every_reporte",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__618bee.cf.01_classify_authority_move_every_reporte"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_4a74272d52.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__618bee.cf.01_classify_authority_move_every_reporte",
+        "swe_dependency_unblock_4a74272d52.event.receipt",
+        "swe_dependency_unblock_4a74272d52.event.probes",
+        "swe_dependency_unblock_4a74272d52.closure",
+        "swe_dependency_unblock_4a74272d52.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not retain store wiring that conflicts with the returned lifecycle graph; preserve valid source-native behavior and consume the event receipt.",
+      "family": "resolve_authority",
+      "id": "swe_dependency__618bee.mutation.02_revise_affected_implement_voicebro",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__618bee.cf.02_revise_affected_implement_voicebro"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_4a74272d52.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__618bee.cf.02_revise_affected_implement_voicebro",
+        "swe_dependency_unblock_4a74272d52.event.receipt",
+        "swe_dependency_unblock_4a74272d52.event.probes",
+        "swe_dependency_unblock_4a74272d52.closure",
+        "swe_dependency_unblock_4a74272d52.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close from only the pre-event checkpoint; preserve valid source-native behavior and consume the event receipt.",
+      "family": "rederive_from_authority",
+      "id": "swe_dependency__618bee.mutation.03_verify_closure_update_each_report",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__618bee.cf.03_verify_closure_update_each_report"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_4a74272d52.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__618bee.cf.03_verify_closure_update_each_report",
+        "swe_dependency_unblock_4a74272d52.event.receipt",
+        "swe_dependency_unblock_4a74272d52.event.probes",
+        "swe_dependency_unblock_4a74272d52.closure",
+        "swe_dependency_unblock_4a74272d52.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency_unblock_4a74272d52.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency_unblock_4a74272d52.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency_unblock_4a74272d52.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_dependency_unblock_4a74272d52.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "The native Element voice-broadcast Jest suites pass.",
+      "id": "swe_dependency_unblock_4a74272d52.native.element_voice_broadcast",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_element_voice_broadcast",
+      "relevance_tier": "base"
+    }
+  ]
+}

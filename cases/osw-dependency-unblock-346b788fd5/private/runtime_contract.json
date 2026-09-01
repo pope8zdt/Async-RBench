@@ -1,0 +1,28 @@
+{
+  "assets": [
+    "official task configuration",
+    "gimp snapshot",
+    "private source assets",
+    "private native fixture",
+    "private event payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "gimp",
+    "xcf_layer_editor",
+    "png_export",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:gimp:d16c99dc-2a1e-46f2-b350-d97c86c85c15 in pinned gimp; evaluator truth remains private.",
+  "event_injection": "Release dog_layer_resize only after 3 persisted upstream result(s).",
+  "hidden_tests": "check_image_size+check_structure_sim_resized, native digest, target_height, aspect_ratio, structure_similarity, background_preservation, output_path, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "gimp",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private dog_layer_resize_osworld.sh binds check_image_size+check_structure_sim_resized.",
+  "requires_authored_private_oracle": false
+}

@@ -1,0 +1,202 @@
+{
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "family": "wait_for_authority",
+      "id": "swe_late_constr_777efc.mutation.01_classify_critical_path",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_777efc.cf.01_classify_critical_path"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_7ce47cda27.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_777efc.cf.01_classify_critical_path",
+        "swe_late_constraint_7ce47cda27.event.receipt",
+        "swe_late_constraint_7ce47cda27.event.probes",
+        "swe_late_constraint_7ce47cda27.closure",
+        "swe_late_constraint_7ce47cda27.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Started changing Enum reconstruction away from translated values.'.",
+      "family": "resource_triage",
+      "id": "swe_late_constr_777efc.mutation.02_resource_triage",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_777efc.cf.02_resource_triage"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_7ce47cda27.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_777efc.cf.02_resource_triage",
+        "swe_late_constraint_7ce47cda27.event.receipt",
+        "swe_late_constraint_7ce47cda27.event.probes",
+        "swe_late_constraint_7ce47cda27.closure",
+        "swe_late_constraint_7ce47cda27.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "family": "rederive_from_authority",
+      "id": "swe_late_constr_777efc.mutation.03_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_constr_777efc.cf.03_verify_closure"
+      ],
+      "must_still_pass": [
+        "swe_late_constraint_7ce47cda27.source.pin"
+      ],
+      "targets": [
+        "swe_late_constr_777efc.cf.03_verify_closure",
+        "swe_late_constraint_7ce47cda27.event.receipt",
+        "swe_late_constraint_7ce47cda27.event.probes",
+        "swe_late_constraint_7ce47cda27.closure",
+        "swe_late_constraint_7ce47cda27.source.pin"
+      ]
+    }
+  ],
+  "points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_emit_member_name_subscript_s",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_constraint_7ce4.straggler_under_resource",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.emit_member_name_subscri"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A serialization specialist reports that stable migration code must use module.EnumClass['MEMBER_NAME'] with the enum class's qualified name and existing module import.', perform classify_critical_path for 'Emit member-name subscript syntax using the enum class qualified name.' while retaining valid prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_late_constr_777efc.cf.01_classify_critical_path",
+      "independence_key": "swe_late_constr_777efc.cf.01_classify_critical_path",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_777efc.mutation.01_classify_critical_path",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "swe_late_constraint_7ce47cda27.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_constr_777efc.cf.01_classify_critical_path]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.emit_member_name_subscri"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_retain_the_required_module_i",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_constraint_7ce4.straggler_under_resource",
+      "evidence_group": "plan_revision:2",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.emit_member_name_subscri"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A serialization specialist reports that stable migration code must use module.EnumClass['MEMBER_NAME'] with the enum class's qualified name and existing module import.', perform resource_triage for 'Retain the required module import.' while retaining valid prior result 'Started changing Enum reconstruction away from translated values.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Started changing Enum reconstruction away from translated values.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "cancel_workstreams": [
+          "requirement_worker_03"
+        ],
+        "preserve_workstreams": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "swe_late_constr_777efc.cf.02_resource_triage",
+      "independence_key": "swe_late_constr_777efc.cf.02_resource_triage",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_777efc.mutation.02_resource_triage",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "swe_late_constraint_7ce47cda27.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_constr_777efc.cf.02_resource_triage]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.emit_member_name_subscri"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_test_plain_translated_lazy_v",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_constraint_7ce4.straggler_under_resource",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.emit_member_name_subscri"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A serialization specialist reports that stable migration code must use module.EnumClass['MEMBER_NAME'] with the enum class's qualified name and existing module import.', perform verify_closure for 'Test plain, translated lazy-value, and nested enum members by evaluating serialized output.' while retaining valid prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_late_constr_777efc.cf.03_verify_closure",
+      "independence_key": "swe_late_constr_777efc.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_constr_777efc.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_7ce47cda27.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_constr_777efc.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.emit_member_name_subscri"
+    }
+  ]
+}

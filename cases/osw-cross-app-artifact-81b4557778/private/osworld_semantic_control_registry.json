@@ -1,0 +1,76 @@
+{
+  "controls": [
+    {
+      "id": "01_classify_scope_delta_unpack_the_artifac",
+      "stage": "event_intake",
+      "required_behavior": "classify_scope_delta",
+      "affected_nodes": [
+        "event_input",
+        "req.01.unpack_the_artifact_firs",
+        "req.02.enable_developer_mode",
+        "req.03.choose_load_unpacked_and",
+        "req.04.verify_the_extension_car",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions management page is open.'."
+    },
+    {
+      "id": "02_revise_affected_enable_developer_m",
+      "stage": "state_revision",
+      "required_behavior": "revise_affected",
+      "affected_nodes": [
+        "event_input",
+        "req.01.unpack_the_artifact_firs",
+        "req.02.enable_developer_mode",
+        "req.03.choose_load_unpacked_and",
+        "req.04.verify_the_extension_car",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Developer mode controls are located or enabled.'."
+    },
+    {
+      "id": "03_preserve_unaffected_choose_load_unpack",
+      "stage": "plan_revision",
+      "required_behavior": "preserve_unaffected",
+      "affected_nodes": [
+        "event_input",
+        "req.01.unpack_the_artifact_firs",
+        "req.02.enable_developer_mode",
+        "req.03.choose_load_unpacked_and",
+        "req.04.verify_the_extension_car",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions management page is open.'."
+    },
+    {
+      "id": "04_verify_closure_verify_the_extensi",
+      "stage": "closure",
+      "required_behavior": "verify_closure",
+      "affected_nodes": [
+        "event_input",
+        "req.01.unpack_the_artifact_firs",
+        "req.02.enable_developer_mode",
+        "req.03.choose_load_unpacked_and",
+        "req.04.verify_the_extension_car",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Developer mode controls are located or enabled.'."
+    }
+  ]
+}

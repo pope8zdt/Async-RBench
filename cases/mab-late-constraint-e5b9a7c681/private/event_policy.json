@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.keep_the_provisional_bearing",
+      "req.02.authenticate_grade_shielding",
+      "req.03.revise_price_delivery_and_wa",
+      "req.04.close_with_exact_bearing_spe",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A quality certificate confirms ABEC-5 grade, double shielding, a 10-pack, four-day delivery, 12-month warranty, and a $12.25 price.",
+    "before_state": "A provisional uxcell R6ZZ Double-Shielded ABEC-5 Bearings 10-Pack bargain exists before bearing_quality_delivery_certificate.",
+    "event_id": "evt.mab-late-constraint-e5b9a7c681.bearing_quality_delivery_certificate",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-e5b9a7c681.bearing_quality_delivery_certificate",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

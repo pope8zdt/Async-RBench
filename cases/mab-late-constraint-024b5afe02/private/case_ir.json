@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-024b5afe02",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_scope_delta",
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_024b5afe02.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: Product authority removes the irrelevant battery condition and adds cotton-blend material, assorted bear-cat-fox patterns, a 100-pair minimum, $7.49 price, and eight-day lead time.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "sock_assortment_scope_clarified"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_024b5afe02.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: Product authority removes the irrelevant battery condition and adds cotton-blend material, assorted bear-cat-fox patterns, a 100-pair minimum, $7.49 price, and eight-day lead time.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "sock_assortment_scope_clarified"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_024b5afe02.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: Product authority removes the irrelevant battery condition and adds cotton-blend material, assorted bear-cat-fox patterns, a 100-pair minimum, $7.49 price, and eight-day lead time.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "sock_assortment_scope_clarified"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_024b5afe02.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: Product authority removes the irrelevant battery condition and adds cotton-blend material, assorted bear-cat-fox patterns, a 100-pair minimum, $7.49 price, and eight-day lead time.",
+      "stage_tag": "closure",
+      "task_requirement_id": "sock_assortment_scope_clarified"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.persist_the_provisional_smal"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.classify_the_no_power_produc"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.add_assortment_minimum_batch"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.close_with_corrected_sock_sc"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.persist_the_provisional_smal",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.classify_the_no_power_produc",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.add_assortment_minimum_batch",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_with_corrected_sock_sc",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.persist_the_provisional_smal",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.classify_the_no_power_produc",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.add_assortment_minimum_batch",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_with_corrected_sock_sc",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.persist_the_provisional_smal",
+      "req.02.classify_the_no_power_produc",
+      "req.03.add_assortment_minimum_batch",
+      "req.04.close_with_corrected_sock_sc",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Product authority removes the irrelevant battery condition and adds cotton-blend material, assorted bear-cat-fox patterns, a 100-pair minimum, $7.49 price, and eight-day lead time.",
+    "before_state": "A provisional Girls Cotton Cartoon Animal Knee-High Socks bargain exists before sock_assortment_scope_clarified.",
+    "event_id": "evt.mab-late-constraint-024b5afe02.sock_assortment_scope_clarified",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Persist the provisional small order and misplaced battery criterion.",
+      "id": "req.01.persist_the_provisional_smal",
+      "observable_probe": "mab_late_constraint_024b5afe02.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Classify the no-power product clarification and material requirement.",
+      "id": "req.02.classify_the_no_power_produc",
+      "observable_probe": "mab_late_constraint_024b5afe02.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Add assortment, minimum batch, price, and lead-time dependencies.",
+      "id": "req.03.add_assortment_minimum_batch",
+      "observable_probe": "mab_late_constraint_024b5afe02.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close with corrected sock scope while preserving delivery and production priorities.",
+      "id": "req.04.close_with_corrected_sock_sc",
+      "observable_probe": "mab_late_constraint_024b5afe02.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

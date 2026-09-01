@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The gateway receipt is authentic and case-bound.",
+      "id": "osw_dependency_unblock_af63091471.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The authoritative receipt contains observable font probes.",
+      "id": "osw_dependency_unblock_af63091471.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact gateway receipt.",
+      "id": "osw_dependency_unblock_af63091471.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The source pin is preserved.",
+      "id": "osw_dependency_unblock_af63091471.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The task-specific Chrome font result exists.",
+      "id": "osw_dependency_unblock_af63091471.osworld.font_result",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_font_size_result_exists",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The result identifies the pinned Chrome source and official evaluator.",
+      "id": "osw_dependency_unblock_af63091471.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_font_size_result_matches_official_source",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official check_font_size result is one.",
+      "id": "osw_dependency_unblock_af63091471.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_font_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The persisted Chrome default font size is the largest setting.",
+      "id": "osw_dependency_unblock_af63091471.osworld.font_value",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_font_size_is_largest",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

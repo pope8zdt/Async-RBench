@@ -1,0 +1,257 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority",
+      "dimension": "event_intake",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "evidence_group": "res064_pingpong.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Validate source identity and table-tennis authority evidence before finalizing.",
+      "forbidden_behavior": "Do not finalize the provisional 5Q or accept an unbound result.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.01_classify_authority",
+      "independence_key": "res064_pingpong.cf.01_classify_authority",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "mutation_id": "res064_pingpong.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.receipt"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_from_authority",
+      "dimension": "state_revision",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "evidence_group": "res064_pingpong.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Revise skill selection and opponent adaptation from the authoritative method while preserving source framing.",
+      "forbidden_behavior": "Do not ignore the authority or replace it with generic robot learning.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.02_revise_from_authority",
+      "independence_key": "res064_pingpong.cf.02_revise_from_authority",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "resolve_authority",
+      "mutation_id": "res064_pingpong.mutation.02_revise_from_authority",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.evidence"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_selective_replan",
+      "dimension": "plan_revision",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "evidence_group": "res064_pingpong.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Update dependent trials, metrics, and expected results without erasing unaffected literature findings.",
+      "forbidden_behavior": "Do not leave evaluation disconnected from the revised method.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.03_selective_replan",
+      "independence_key": "res064_pingpong.cf.03_selective_replan",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "selective_replan",
+      "mutation_id": "res064_pingpong.mutation.03_selective_replan",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.event.evidence"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:revise_affected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure",
+      "dimension": "closure",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "evidence_group": "res064_pingpong.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final 5Q and closure from receipt, native binding, and preserved facts.",
+      "forbidden_behavior": "Do not close without exact 5Q, digests, and preservation checks.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res064_pingpong.cf.04_verify_closure",
+      "independence_key": "res064_pingpong.cf.04_verify_closure",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_e4199e525d.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "mutation_id": "res064_pingpong.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_e4199e525d.closure"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.source_native_resolution"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Delayed table-tennis research authority is delivered.",
+        "before": "Task-specific provisional state is persisted without evaluator truth.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

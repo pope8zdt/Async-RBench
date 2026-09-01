@@ -1,0 +1,223 @@
+{
+  "case_id": "swe-dependency-unblock-58ecc4be05",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta:req.01.implement_non_recursive_",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Implement non-recursive per-command sorting activation.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "01_classify_scope_delta_implement_non_recursive_per_",
+      "must_still_pass": [],
+      "mutation_family": "detect_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_58ecc4be05.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "After receiving authoritative event 'The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.', perform classify_scope_delta for 'Implement non-recursive per-command sorting activation.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_non_recursive_"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.mix_argument_and_subcomm",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Mix argument and subcommand display-order increments as specified.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "02_revise_affected_mix_argument_and_subcommand_",
+      "must_still_pass": [],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_58ecc4be05.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.', perform revise_affected for 'Mix argument and subcommand display-order increments as specified.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.mix_argument_and_subcomm"
+    },
+    {
+      "critical": true,
+      "decision_group": "preserve_unaffected:req.03.update_all_inventoried_c",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Update all inventoried consumers and remove obsolete AppSettings exposure.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected_update_all_inventoried_consu",
+      "must_still_pass": [],
+      "mutation_family": "overinvalidate_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_58ecc4be05.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "After receiving authoritative event 'The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.', perform preserve_unaffected for 'Update all inventoried consumers and remove obsolete AppSettings exposure.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.update_all_inventoried_c"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.04.run_nested_command_order",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Run nested-command ordering and API tests.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure_run_nested_command_ordering_",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_58ecc4be05.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "After receiving authoritative event 'The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.', perform verify_closure for 'Run nested-command ordering and API tests.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.run_nested_command_order"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_non_recursive_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.mix_argument_and_subcomm"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.update_all_inventoried_c"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.run_nested_command_order"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_non_recursive_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.mix_argument_and_subcomm",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.update_all_inventoried_c",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.run_nested_command_order",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_non_recursive_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.mix_argument_and_subcomm",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.update_all_inventoried_c",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.run_nested_command_order",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_non_recursive_",
+      "req.02.mix_argument_and_subcomm",
+      "req.03.update_all_inventoried_c",
+      "req.04.run_nested_command_order",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+    "event_id": "evt.swe_dependency_unblock_58ecc4be05.display_order_consumer_inventory",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement non-recursive per-command sorting activation.",
+      "id": "req.01.implement_non_recursive_",
+      "observable_probe": "swe_dependency_unblock_5.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for implement_non_recursive_per_command_"
+    },
+    {
+      "description": "Mix argument and subcommand display-order increments as specified.",
+      "id": "req.02.mix_argument_and_subcomm",
+      "observable_probe": "swe_dependency_unblock_5.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for mix_argument_and_subcommand_display_"
+    },
+    {
+      "description": "Update all inventoried consumers and remove obsolete AppSettings exposure.",
+      "id": "req.03.update_all_inventoried_c",
+      "observable_probe": "swe_dependency_unblock_5.sem.03.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for update_all_inventoried_consumers_and"
+    },
+    {
+      "description": "Run nested-command ordering and API tests.",
+      "id": "req.04.run_nested_command_order",
+      "observable_probe": "swe_dependency_unblock_5.sem.04.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for run_nested_command_ordering_and_api_"
+    }
+  ],
+  "upstream_task_depth": 4
+}

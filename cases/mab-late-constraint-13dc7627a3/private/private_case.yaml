@@ -1,0 +1,278 @@
+{
+  "artifact_observers": {},
+  "authoritative_result_kind": "result_04",
+  "capabilities": [
+    "late_revision_adoption",
+    "selective_invalidation",
+    "verification_reopen"
+  ],
+  "case_id": "mab-late-constraint-13dc7627a3",
+  "classification": {
+    "async_scenario_class": "live_eventful",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "secondary_event_themes": []
+  },
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_late_constraint_13dc.streaming_budget_scope_added",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The scope-expanded proposal measures accuracy together with streaming latency, memory, and history under controlled architecture ablations.",
+        "before": "The proposal compares TCNs and recurrent models offline but has no streaming latency, peak-memory, or effective-history constraint.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "format_version": 2,
+  "hidden_checks": {
+    "closure_consumes_receipt": "python3 -c \"import json; r=json.load(open('/app/output_data/event_receipt.json')); m=json.load(open('/app/output_data/decision_manifest.json')); assert m['event_receipt_sha256']==r['receipt_sha256']\"",
+    "receipt_bound_to_case": "python3 -c \"import json; r=json.load(open('/app/output_data/event_receipt.json')); assert r['case_id']=='mab-late-constraint-13dc7627a3'\""
+  },
+  "information_sufficiency": [
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_01"
+    },
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_02"
+    },
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_03"
+    },
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_04"
+    }
+  ],
+  "legacy_metadata": {
+    "asset_copies": [],
+    "implementation": "real-instance-derived",
+    "upstream_commit": null
+  },
+  "result_contract": {
+    "allowed_result_kinds": [
+      "result_01",
+      "result_02",
+      "result_03",
+      "result_04"
+    ],
+    "rule": "A late streaming latency and memory requirement expands the TCN-versus-RNN comparison without discarding sequence accuracy, receptive-field, or long-memory evaluation."
+  },
+  "reverification_anchors": {
+    "closure_consumes_receipt": [
+      "result_04"
+    ],
+    "receipt_bound_to_case": [
+      "result_04"
+    ]
+  },
+  "scenarios": {
+    "async": {
+      "events": [
+        {
+          "at": 1,
+          "id": "evt.mab_late_constraint_13dc.streaming_budget_scope_added.upstream_01",
+          "invalidates_artifacts": [],
+          "reopens_milestones": [],
+          "result": "result_01"
+        },
+        {
+          "at": 2,
+          "id": "evt.mab_late_constraint_13dc.streaming_budget_scope_added.upstream_02",
+          "invalidates_artifacts": [],
+          "reopens_milestones": [],
+          "result": "result_02"
+        },
+        {
+          "at": 3,
+          "id": "evt.mab_late_constraint_13dc.streaming_budget_scope_added.upstream_03",
+          "invalidates_artifacts": [],
+          "reopens_milestones": [],
+          "result": "result_03"
+        },
+        {
+          "after_results": [
+            "result_01",
+            "result_02",
+            "result_03"
+          ],
+          "id": "evt.mab_late_constraint_13dc.streaming_budget_scope_added",
+          "invalidates_artifacts": [
+            "final_state"
+          ],
+          "reopens_milestones": [
+            "consume_async_evidence",
+            "reverify_and_close"
+          ],
+          "result": "result_04",
+          "trigger": "after_results_delivered"
+        }
+      ]
+    },
+    "linear": {
+      "events": []
+    }
+  },
+  "stale_revalidation": {},
+  "workstream_bindings": {
+    "requirement_worker_01": {
+      "event_assets": [],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_01",
+      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p)); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']\"",
+      "validator_timeout_sec": 120
+    },
+    "requirement_worker_02": {
+      "event_assets": [],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_02",
+      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p)); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']\"",
+      "validator_timeout_sec": 120
+    },
+    "requirement_worker_03": {
+      "event_assets": [],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_03",
+      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p)); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']\"",
+      "validator_timeout_sec": 120
+    },
+    "requirement_worker_04": {
+      "event_assets": [
+        "task/upstream_solutions/event_worker.py"
+      ],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_04",
+      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p)); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']\"",
+      "validator_timeout_sec": 120
+    }
+  }
+}

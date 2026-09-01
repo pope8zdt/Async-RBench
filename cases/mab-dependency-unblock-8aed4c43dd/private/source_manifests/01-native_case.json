@@ -1,0 +1,109 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "mab-dependency-unblock-8aed4c43dd",
+  "benchmark": "MultiAgentBench",
+  "source_binding": {
+    "task_id": "database:013",
+    "scenario": "database",
+    "jsonl_path": "upstream/marble/multiagentbench/database/database_main.jsonl",
+    "line_number": 13,
+    "record_sha256": "b8dd1ac596b701068846f32dc93cbc4096fb85da72f11e8007cdfb95e7401700",
+    "upstream_revision": "8d60fa17b5596b44458a52d4296061b9fc13d6f2"
+  },
+  "native_runtime": {
+    "adapter": "marble.engine.Engine",
+    "environment": {
+      "type": "",
+      "name": "",
+      "max_iterations": "",
+      "init_sql": "-- 1. Users table (stores user information)\nCREATE TABLE users (\n    user_id SERIAL PRIMARY KEY,  -- Unique user ID\n    username VARCHAR(100) UNIQUE NOT NULL,  -- Unique username\n    email VARCHAR(255) UNIQUE NOT NULL,  -- Unique email\n    password_hash VARCHAR(255) NOT NULL,  -- Hashed password\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Account creation time\n);\n\n-- 2. Files table (stores file details)\nCREATE TABLE files (\n    file_id SERIAL PRIMARY KEY,  -- Unique file ID\n    user_id INT REFERENCES users(user_id),  -- Foreign key to users\n    file_name VARCHAR(255) NOT NULL,  -- File name\n    file_path TEXT NOT NULL,  -- Path to the file on the server\n    file_size BIGINT NOT NULL,  -- Size of the file in bytes\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Upload time\n    last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Last modification time\n);\n\n-- 3. Shared_Files table (stores files shared with other users)\nCREATE TABLE shared_files (\n    share_id SERIAL PRIMARY KEY,  -- Unique share ID\n    file_id INT REFERENCES files(file_id),  -- Foreign key to files\n    owner_id INT REFERENCES users(user_id),  -- Foreign key to owner (user who shared)\n    shared_with INT REFERENCES users(user_id),  -- Foreign key to the user the file is shared with\n    shared_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Time the file was shared\n    permissions VARCHAR(50) DEFAULT 'read'  -- Permissions (e.g., 'read', 'write')\n);\n\n-- 4. File_Access_Logs table (stores logs of file access)\nCREATE TABLE file_access_logs (\n    log_id SERIAL PRIMARY KEY,  -- Unique log ID\n    user_id INT REFERENCES users(user_id),  -- Foreign key to users\n    file_id INT REFERENCES files(file_id),  -- Foreign key to files\n    access_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Time the file was accessed\n    action VARCHAR(50) NOT NULL,  -- Action (e.g., 'viewed', 'downloaded')\n    ip_address VARCHAR(50)  -- IP address from which the file was accessed\n);\n\n-- Insert sample users\nINSERT INTO users (username, email, password_hash) \nVALUES \n('john_doe', 'john.doe@example.com', 'hashed_password_1'),\n('jane_smith', 'jane.smith@example.com', 'hashed_password_2');\n\n-- Insert sample files for John\nINSERT INTO files (user_id, file_name, file_path, file_size) \nVALUES \n(1, 'document1.pdf', '/files/john_doe/document1.pdf', 102400),\n(1, 'image1.jpg', '/files/john_doe/image1.jpg', 204800);\n\n-- Insert sample files for Jane\nINSERT INTO files (user_id, file_name, file_path, file_size) \nVALUES \n(2, 'presentation.pptx', '/files/jane_smith/presentation.pptx', 512000);\n\n-- Share files with other users\nINSERT INTO shared_files (file_id, owner_id, shared_with, permissions) \nVALUES \n(1, 1, 2, 'read'),  -- John shares document1.pdf with Jane\n(2, 1, 2, 'write');  -- John shares image1.jpg with Jane\n\n-- Insert file access logs\nINSERT INTO file_access_logs (user_id, file_id, action, ip_address) \nVALUES \n(2, 1, 'viewed', '192.168.1.1'),  -- Jane viewed document1.pdf\n(2, 2, 'downloaded', '192.168.1.2');  -- Jane downloaded image1.jpg\n\n-- Query to retrieve all shared files for a user\nSELECT sf.share_id, f.file_name, u.username AS shared_by, sf.permissions \nFROM shared_files sf\nJOIN files f ON sf.file_id = f.file_id\nJOIN users u ON sf.owner_id = u.user_id\nWHERE sf.shared_with = 2;  -- Files shared with Jane\n\n-- Query to retrieve all file access logs for a user\nSELECT u.username, f.file_name, fal.action, fal.access_time, fal.ip_address\nFROM file_access_logs fal\nJOIN users u ON fal.user_id = u.user_id\nJOIN files f ON fal.file_id = f.file_id\nWHERE u.user_id = 2;  -- Access logs for Jane\n\n-- Query to list all files uploaded by a user\nSELECT f.file_name, f.file_size, f.created_at\nFROM files f\nWHERE f.user_id = 1;  -- Files uploaded by John\n\n-- Query to count how many times a file was accessed\nSELECT f.file_name, COUNT(fal.log_id) AS access_count\nFROM file_access_logs fal\nJOIN files f ON fal.file_id = f.file_id\nGROUP BY f.file_name;\n\n-- Query to get all users who have shared files with a specific user\nSELECT u.username, COUNT(sf.share_id) AS shared_files_count\nFROM shared_files sf\nJOIN users u ON sf.owner_id = u.user_id\nWHERE sf.shared_with = 2  -- Files shared with Jane\nGROUP BY u.username;\n",
+      "anomalies": [
+        {
+          "anomaly": "LOCK_CONTENTION",
+          "threads": 100,
+          "ncolumn": 20,
+          "nrow": 20000,
+          "colsize": 100
+        }
+      ]
+    },
+    "roles": [
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent1",
+        "profile": "agent1 will explore the possibility of INSERT_LARGE_DATA as a root cause. Recommended tables: `pg_stat_statements`. You can search for INSERTs."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent2",
+        "profile": "agent2 will explore the possibility of LOCK_CONTENTION as a root cause. Recommended tables: `pg_locks`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent3",
+        "profile": "agent3 will explore the possibility of VACUUM as a root cause. Recommended to search for inappropiate VACUUMs from `pg_stat_all_tables`: SELECT query, calls, total_plan_time, rows, mean_plan_time FROM pg_stat_statements WHERE query LIKE 'VACUUM%';"
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent4",
+        "profile": "agent4 will explore the possibility of REDUNDANT_INDEX as a root cause. Recommended tables: `pg_stat_user_indexes`, `pg_indexes`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent5",
+        "profile": "agent5 will explore the possibility of FETCH_LARGE_DATA as a root cause. Recommended to search for SELECTs from `pg_stat_statements`."
+      }
+    ],
+    "final_state": "MARBLE environment and tool transcript"
+  },
+  "event_protocol": {
+    "producer": "an actual MARBLE role executes with its declared profile and tools",
+    "payload": "the role's native message/tool result with provenance and logical clock",
+    "release_predicate": "coordinator committed at least one environment action after launching the role",
+    "rollback": "messages and tool calls remain in the native transcript; correction is additive and auditable"
+  },
+  "state_attestation": {
+    "baseline_probe": "serialized MARBLE environment state and transcript sequence zero",
+    "checkpoint_probe": "environment digest plus strictly increased native tool/action sequence",
+    "change_required": true,
+    "journal_owner": "MARBLE engine logger, not an agent workspace file"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "metrics": {
+      "accuracy": true,
+      "response_time": true
+    },
+    "agreement_or_environment_state": true
+  },
+  "quality_gates": {
+    "official_scenario_bound": true,
+    "native_roles_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "base_commit": "56ed9981da3a28205efa03a0e4f162359bab1dfe",
+  "instance_id": "clap-rs__clap-3179",
+  "problem_statement": "revert(help): Partial revert of 3c049b4\n\nThe extra whitespace was targeted at machine processing for a subset of\r\nusers for a subset of runs of CLIs.  On the other hand, there is a lot\r\nof concern over the extra verbose output.\r\n\r\nA user can set the help template for man, if desired.  They can even do\r\nsomething (env? feature flag?) to make it only run when doing man\r\ngeneration.  We also have #3174 in the works.\r\n\r\nSo let's focus on the end-user reading `--help`.  People wanting to use\r\n`help2man` have workarounds to do what they need.\r\n\r\nFixes #3096",
+  "repo": "clap-rs/clap",
+  "version": "multi-swe-bench"
+}

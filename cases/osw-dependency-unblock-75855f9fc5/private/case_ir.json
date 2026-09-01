@@ -1,0 +1,187 @@
+{
+  "case_id": "osw-dependency-unblock-75855f9fc5",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "bookmark_profile_authority",
+      "forbidden_behavior": "Do not infer persistence from a transient menu, toast, or completion order.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.ensure_favorites_folder"
+        ]
+      },
+      "id": "01_accept_bookmark_authority",
+      "must_still_pass": [
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_75855f9fc5.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "Accept only the delayed case-bound Chrome bookmark profile receipt as authority for the folder's persisted parent and name.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.02.ensure_favorites_folder"
+    },
+    {
+      "critical": false,
+      "decision_group": "bookmark_state_revision",
+      "forbidden_behavior": "Do not blindly replay folder creation, place Favorites under another folder, or alter unrelated bookmarks.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.ensure_favorites_folder"
+        ]
+      },
+      "id": "02_create_only_if_absent",
+      "must_still_pass": [
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_75855f9fc5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Use delayed profile state to create Favorites only when absent, preserving existing bookmarks and avoiding a duplicate folder.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.ensure_favorites_folder"
+    },
+    {
+      "critical": true,
+      "decision_group": "bookmark_closure_reverification",
+      "forbidden_behavior": "Do not close on a transient UI state or skip duplicate and parent verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_single_folder"
+        ]
+      },
+      "id": "03_reverify_bookmark_bar",
+      "must_still_pass": [
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_75855f9fc5.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Reload profile state and close only when one Favorites folder is directly under the bookmarks bar and the exact receipt is consumed.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_single_folder"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.ensure_favorites_folder"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.ensure_favorites_folder",
+        "target": "req.03.verify_single_folder"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_single_folder",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.open_bookmark_manager",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.open_bookmark_manager",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.ensure_favorites_folder",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_single_folder",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.02.ensure_favorites_folder",
+      "req.03.verify_single_folder",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A delayed Chrome profile probe reports whether Favorites exists directly under the bookmarks bar.",
+    "before_state": "Chrome's bookmarks UI is open and a folder action may be checkpointed, but persisted profile state has not yet been observed.",
+    "event_id": "evt.osw_bookmarks_75855f9fc5.delayed_profile_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "req.01.open_bookmark_manager",
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Open Chrome's bookmarks bar or bookmark manager while preserving the current profile.",
+      "id": "req.01.open_bookmark_manager",
+      "observable_probe": "osw_dependency_unblock_75855f9fc5.source.pin",
+      "public_evidence": "The active Chrome profile and bookmarks-bar context."
+    },
+    {
+      "description": "Create Favorites directly on the bookmarks bar only if it is absent.",
+      "id": "req.02.ensure_favorites_folder",
+      "observable_probe": "osw_dependency_unblock_75855f9fc5.event.probes",
+      "public_evidence": "The delayed profile receipt and resulting bookmarks-bar folder state."
+    },
+    {
+      "description": "Reload Chrome profile state and verify one Favorites folder remains directly under the bookmarks bar.",
+      "id": "req.03.verify_single_folder",
+      "observable_probe": "osw_dependency_unblock_75855f9fc5.closure",
+      "public_evidence": "A post-event bookmark profile observation and closure manifest."
+    }
+  ]
+}

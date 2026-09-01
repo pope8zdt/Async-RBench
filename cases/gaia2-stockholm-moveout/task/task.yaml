@@ -1,0 +1,84 @@
+instruction: |-
+  A friend is moving to Stockholm and has been curating a saved apartment list
+  inside the RentAFlat app you manage (the simulated app state under
+  /app/task_file/app). RentAFlat lets a user save listings and define a saved
+  search: a city plus a monthly rent range (min_rent_sek .. max_rent_sek). The
+  friend's saved list must always hold every unsaved listing that falls inside
+  the saved search and must drop any saved listing that falls outside it.
+  Listings outside the saved-search city are always left untouched. In
+  addition, when a new listing that falls inside the saved search appears, the
+  friend must receive a Messages notification naming the listing so she can act
+  before it is gone. New listings outside the saved search are never notified.
+
+  THE SIMULATED APPS (READ-ONLY INPUTS)
+
+  - /app/task_file/app/raf_saved_list.json — the RentAFlat saved-list app:
+    {owner, search_preferences: {city, min_rent_sek, max_rent_sek},
+    saved: [{id, name, city, price_sek}, ...]}.
+  - /app/task_file/app/raf_catalog.json — the RentAFlat catalog app: the full
+    market inventory of available listings with the same listing shape.
+  - /app/task_file/app/contacts.json — the Contacts app: records with id, name,
+    relation and budget_sek. The friend who is moving to Stockholm is the only
+    contact.
+
+  THE DETERMINISTIC LISTING FEED
+
+  New listings arrive through the deterministic event feed under
+  /app/task_file/event_feed. feed.jsonl holds the pre-registered event timeline
+  (one event per new listing, delivered in ascending seq order); feed_meta.json
+  records window_minutes (the feed's monitoring window) and total_events. Read
+  it with /app/task_file/scripts/read_events.py: call it with an increasing
+  --tick N [--since CURSOR] to reveal every event with CURSOR < seq <= N, and
+  print the feed metadata to stderr. The event stream is the single source of
+  truth for new listings: keep observing the window, evaluate each newly
+  revealed listing, and react to it before the window closes. An event's
+  simulated arrival time is its "at" field.
+
+  ACTIONS
+
+  - Correct the saved list against the saved search: keep saved listings that
+    are not in the saved-search city untouched; drop saved listings that fall
+    outside the saved-search rent range; add unsaved catalog listings that fall
+    inside it.
+  - For each newly revealed feed listing: if it is in the saved-search city and
+    inside the saved-search rent range, add it to the saved list and send the
+    friend a Messages notification with /app/task_file/scripts/send_message.py
+    (--recipient <friend name> --listing-id <id> --apartment <name> --price
+    <price_sek> --at <arrival time>), which appends to the notifications log.
+    Otherwise ignore it: it must not be added to the saved list, must not be
+    notified, and must not be reported as a match.
+  - Keep evaluating every newly revealed event until the feed's window closes,
+    then write the final state and the decision manifest.
+
+  DELIVERABLES
+
+  Produce under /app/output_data:
+  - planned_ops.json: {"initial_plan": {"corrected_saved_ids": [...],
+    "removed_ids": [...], "added_ids": [...]}, "planned_saved_ids": [...]}.
+  - saved_list_final.json: the final saved list (owner, search_preferences,
+    saved entries) after every matching late addition.
+  - notifications.jsonl: the Messages log, one JSONL row per notification:
+    {seq, recipient, listing_id, apartment, price_sek, at}.
+  - event_monitor_report.json: {"feed": ..., "window_minutes": ...,
+    "stream_revision": "<sha256 of the delivered feed>",
+    "observed_events": [{seq, listing_id, at, matched, disposition, reason},
+    ...], "window_closed": true, "final_saved_ids": [...],
+    "notifications_sent": [...]}.
+  - decision_manifest.json: a machine-readable summary generated after the
+    other outputs are ready, including the stream revision copied from the
+    monitor report. Run
+    /app/task_file/scripts/write_manifest.py to build it from those outputs.
+
+  The benchmark has already started isolated readers, a planner and a feed
+  monitor. Their observations may arrive in any order. Determine applicability
+  from the reported file/stream revisions and observed listings; the prompt
+  does not identify a preferred completion. Preserve unaffected saved-list
+  decisions, incorporate newly observed matching listings, and repeat only the
+  dependent final-state and notification checks.
+author_name: Async-RBench transformation
+difficulty: hard
+category: personal-assistant
+tags: [gaia2, saved-list, notifications, asynchronous-replanning]
+parser_name: pytest
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 600

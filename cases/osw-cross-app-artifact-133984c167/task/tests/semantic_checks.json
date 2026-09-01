@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed receipt.",
+      "id": "osw_cross_app_artifact_133984c167.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Independent worker completed with probes.",
+      "id": "osw_cross_app_artifact_133984c167.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes receipt and reverifies semantics.",
+      "id": "osw_cross_app_artifact_133984c167.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_133984c167.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:df67aebb-fb3a-44fd-b75b-51b6012df509 and compare_text_file.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Evidence digest matches private fixture.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "references.bib contains the six published DBLP records from the thesis DOCX, with no arXiv entries and a blank line between entries.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "references.bib is saved to the source-native result path.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_bibtex_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "All six required published DBLP citation keys are present.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.bibtex_coverage",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_six_dblp_records",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "No arXiv entry survives when a published record exists.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.published_preference",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_published_records_not_arxiv",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Entries are UTF-8 and separated by blank lines.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.bibtex_format",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_bibtex_format",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

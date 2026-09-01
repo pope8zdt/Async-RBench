@@ -1,0 +1,302 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_conflict_confirm_that_the_returned_co",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.classify_conflict",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.confirm_that_the_returne"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The query-statistics specialist reports repeated full-table scans with hundreds of millions of tuples returned or processed.', perform classify_conflict for 'Confirm that the returned counters are attributable to the anomalous table and interval.' while retaining valid prior result 'Tuple distribution reveals two million rows but only 20,000 distinct ids.'.",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Tuple distribution reveals two million rows but only 20,000 distinct ids.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.confirm_that_the_returne"
+        ]
+      },
+      "id": "mab_conflict_db09.cf.01_classify_conflict_confirm_that_the_r",
+      "independence_key": "mab_conflict_db09.cf.01_classify_conflict_confirm_that_the_r",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db09.mutation.01_classify_conflict_confirm_that_the_r",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.confirm_that_the_returne"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "arbitrate_conflict_add_fetch_large_data_to_the_",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.arbitrate_conflict",
+      "evidence_spec": {
+        "primary_fact": "conflict_resolution",
+        "subject": "req.01.confirm_that_the_returne"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The query-statistics specialist reports repeated full-table scans with hundreds of millions of tuples returned or processed.', perform arbitrate_conflict for 'Add FETCH_LARGE_DATA to the supported set.' while retaining valid prior result 'Physical-density checks show a live-tuple-dominated table rather than vacuum bloat.'.",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Physical-density checks show a live-tuple-dominated table rather than vacuum bloat.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.confirm_that_the_returne"
+        ]
+      },
+      "id": "mab_conflict_db09.cf.02_arbitrate_conflict_add_fetch_large_da",
+      "independence_key": "mab_conflict_db09.cf.02_arbitrate_conflict_add_fetch_large_da",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db09.mutation.02_arbitrate_conflict_add_fetch_large_da",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.confirm_that_the_returne"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_retain_the_independent_bulk_",
+      "dimension": "closure",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.confirm_that_the_returne"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The query-statistics specialist reports repeated full-table scans with hundreds of millions of tuples returned or processed.', perform verify_closure for 'Retain the independent bulk-load fingerprint and remove the displaced cause.' while retaining valid prior result 'Alternative index and lock hypotheses have recorded verdicts.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Alternative index and lock hypotheses have recorded verdicts.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.confirm_that_the_returne"
+        ]
+      },
+      "id": "mab_conflict_db09.cf.03_verify_closure_retain_the_indepen",
+      "independence_key": "mab_conflict_db09.cf.03_verify_closure_retain_the_indepen",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db09.mutation.03_verify_closure_retain_the_indepen",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.confirm_that_the_returne"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Tuple distribution reveals two million rows but only 20,000 distinct ids.'.",
+      "family": "wait_for_authority",
+      "id": "mab_conflict_db09.mutation.01_classify_conflict_confirm_that_the_r",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db09.cf.01_classify_conflict_confirm_that_the_r"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db09.cf.01_classify_conflict_confirm_that_the_r",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.receipt",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.probes",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.closure",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Physical-density checks show a live-tuple-dominated table rather than vacuum bloat.'.",
+      "family": "arbitrate_conflict",
+      "id": "mab_conflict_db09.mutation.02_arbitrate_conflict_add_fetch_large_da",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db09.cf.02_arbitrate_conflict_add_fetch_large_da"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db09.cf.02_arbitrate_conflict_add_fetch_large_da",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.receipt",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.probes",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.closure",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Alternative index and lock hypotheses have recorded verdicts.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_conflict_db09.mutation.03_verify_closure_retain_the_indepen",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db09.cf.03_verify_closure_retain_the_indepen"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db09.cf.03_verify_closure_retain_the_indepen",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.receipt",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.probes",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.closure",
+        "mab_conflicting_specialist_results_8f1d6fd6fd.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent receipt is authentic and case/source bound.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent database authority worker completed with a host checkpoint probe.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "The final closure consumes the exact authority receipt and re-verifies source semantics.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The submitted diagnosis remains bound to the selected native MAB source task.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The evaluator-owned MARBLE report is bound to this exact database task and passed its native evaluator.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evaluator_binding_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final selected cause exactly matches the task-specific native root cause.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.diagnosis.exact",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_selected_database_cause_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The competing provisional diagnosis is explicitly superseded rather than merged into the answer.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.conflict.reconciled",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_competing_diagnosis_is_reconciled",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The diagnosis cites the exact evaluator-owned native evidence and host checkpoint digests.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.authority.evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_authority_evidence_is_consumed",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The final database diagnosis obeys the case-specific output schema and preservation contract.",
+      "id": "mab_conflicting_specialist_results_8f1d6fd6fd.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_database_diagnosis_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ]
+}

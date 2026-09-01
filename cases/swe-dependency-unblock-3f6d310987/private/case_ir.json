@@ -1,0 +1,218 @@
+{
+  "case_id": "swe-dependency-unblock-3f6d310987",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_use_the_dimension_system_s_e",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_the_dimension_system"
+        ]
+      },
+      "id": "01_classify_completeness_use_the_dimension_",
+      "must_still_pass": [
+        "swe_dependency_unblock_3.sem.28.the_final_artifact_records_a"
+      ],
+      "mutation_family": "treat_partial_as_final",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3f6d310987.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "For event 'A units specialist reports the Function dimension contract: which functions require dimensionless-equivalent arguments, which results are dimensionless, and which special functions retain dimension-dependent behavior.', perform classify_completeness for 'Use the dimension system's equivalence check for required dimensionless arguments.' while retaining valid prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.use_the_dimension_system"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_limit_dimensionless_result_h",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate Function handling in _collect_factor_and_dimension and draft dimensionless-argument handling.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_the_dimension_system"
+        ]
+      },
+      "id": "02_revise_affected_limit_dimensionles",
+      "must_still_pass": [
+        "swe_dependency_unblock_3.sem.28.the_final_artifact_records_a"
+      ],
+      "mutation_family": "drop_confirmed_partial",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3f6d310987.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A units specialist reports the Function dimension contract: which functions require dimensionless-equivalent arguments, which results are dimensionless, and which special functions retain dimension-dependent behavior.', perform revise_affected for 'Limit dimensionless-result handling to the function classes covered by the contract.' while retaining valid prior result 'Locate Function handling in _collect_factor_and_dimension and draft dimensionless-argument handling.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.use_the_dimension_system"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_verify_the_reported_exp_expr",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_the_dimension_system"
+        ]
+      },
+      "id": "03_verify_closure_verify_the_reporte",
+      "must_still_pass": [
+        "swe_dependency_unblock_3.sem.28.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3f6d310987.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'A units specialist reports the Function dimension contract: which functions require dimensionless-equivalent arguments, which results are dimensionless, and which special functions retain dimension-dependent behavior.', perform verify_closure for 'Verify the reported exp expression combines with 100 without error.' while retaining valid prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.use_the_dimension_system"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.use_the_dimension_system"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.limit_dimensionless_resu"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_the_reported_exp_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.test_incompatible_argume"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.use_the_dimension_system",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.limit_dimensionless_resu",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_the_reported_exp_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.test_incompatible_argume",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.use_the_dimension_system",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.limit_dimensionless_resu",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_the_reported_exp_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.test_incompatible_argume",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.use_the_dimension_system",
+      "req.02.limit_dimensionless_resu",
+      "req.03.verify_the_reported_exp_",
+      "req.04.test_incompatible_argume",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A units specialist reports the Function dimension contract: which functions require dimensionless-equivalent arguments, which results are dimensionless, and which special functions retain dimension-dependent behavior.",
+    "before_state": "Deliver the full Function contract after the exp-only path has been modified.",
+    "event_id": "evt.swe_dependency_unblock_3.partial_then_complete_re",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Use the dimension system's equivalence check for required dimensionless arguments.",
+      "id": "req.01.use_the_dimension_system",
+      "observable_probe": "swe_dependency_unblock_3.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for use_the_dimension_system_s_equivalen"
+    },
+    {
+      "description": "Limit dimensionless-result handling to the function classes covered by the contract.",
+      "id": "req.02.limit_dimensionless_resu",
+      "observable_probe": "swe_dependency_unblock_3.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for limit_dimensionless_result_handling_"
+    },
+    {
+      "description": "Verify the reported exp expression combines with 100 without error.",
+      "id": "req.03.verify_the_reported_exp_",
+      "observable_probe": "swe_dependency_unblock_3.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for verify_the_reported_exp_expression_c"
+    },
+    {
+      "description": "Test incompatible arguments and special function cases.",
+      "id": "req.04.test_incompatible_argume",
+      "observable_probe": "swe_dependency_unblock_3.sem.04.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for test_incompatible_arguments_and_spec"
+    }
+  ]
+}

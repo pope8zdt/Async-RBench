@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Provisional work cannot close until the delayed authority is consumed and reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_real_time_packet_i",
+      "req.02.implement_severity_alerts_da",
+      "req.03.preserve_traffic_records_use",
+      "req.04.integrate_the_delayed_signat",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The signature bundle closes threat decisions and edge cases while preserving complete audit and compliance history.",
+    "before_state": "Traffic, alerts, and logs exist, but authoritative signatures and encrypted-traffic handling are unavailable.",
+    "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close detection_signature_bundle_completed.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

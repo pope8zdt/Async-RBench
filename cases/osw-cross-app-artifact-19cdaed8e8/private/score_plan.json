@@ -1,0 +1,328 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_aws_invoice_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+      "evidence_group": "osw_invoice_19.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "invoice_field_extraction"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "osw_invoice_19.cf.01_classify_authority_aws_invoice_os",
+      "independence_key": "osw_invoice_19.cf.01_classify_authority_aws_invoice_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_invoice_19.mutation.01_classify_authority_aws_invoice_os",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.locate_the_december_aws_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_aws_invoice_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+      "evidence_group": "osw_invoice_19.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "invoice_field_extraction"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "osw_invoice_19.cf.02_revise_affected_aws_invoice_os",
+      "independence_key": "osw_invoice_19.cf.02_revise_affected_aws_invoice_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_invoice_19.mutation.02_revise_affected_aws_invoice_os",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_the_exact_invoi"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_aws_invoice_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+      "evidence_group": "osw_invoice_19.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "invoice_field_extraction"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "osw_invoice_19.cf.03_verify_closure_aws_invoice_os",
+      "independence_key": "osw_invoice_19.cf.03_verify_closure_aws_invoice_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_invoice_19.mutation.03_verify_closure_aws_invoice_os",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.append_the_aws_2023_12_a"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "family": "wait_for_authority",
+      "id": "osw_invoice_19.mutation.01_classify_authority_aws_invoice_os",
+      "may_fail": [],
+      "must_fail": [
+        "osw_invoice_19.cf.01_classify_authority_aws_invoice_os"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ],
+      "targets": [
+        "osw_invoice_19.cf.01_classify_authority_aws_invoice_os",
+        "osw_cross_app_artifact_19cdaed8e8.event.receipt",
+        "osw_cross_app_artifact_19cdaed8e8.event.probes",
+        "osw_cross_app_artifact_19cdaed8e8.closure",
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "family": "resolve_authority",
+      "id": "osw_invoice_19.mutation.02_revise_affected_aws_invoice_os",
+      "may_fail": [],
+      "must_fail": [
+        "osw_invoice_19.cf.02_revise_affected_aws_invoice_os"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ],
+      "targets": [
+        "osw_invoice_19.cf.02_revise_affected_aws_invoice_os",
+        "osw_cross_app_artifact_19cdaed8e8.event.receipt",
+        "osw_cross_app_artifact_19cdaed8e8.event.probes",
+        "osw_cross_app_artifact_19cdaed8e8.closure",
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "family": "rederive_from_authority",
+      "id": "osw_invoice_19.mutation.03_verify_closure_aws_invoice_os",
+      "may_fail": [],
+      "must_fail": [
+        "osw_invoice_19.cf.03_verify_closure_aws_invoice_os"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ],
+      "targets": [
+        "osw_invoice_19.cf.03_verify_closure_aws_invoice_os",
+        "osw_cross_app_artifact_19cdaed8e8.event.receipt",
+        "osw_cross_app_artifact_19cdaed8e8.event.probes",
+        "osw_cross_app_artifact_19cdaed8e8.closure",
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed receipt.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Independent worker completed with probes.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes receipt and reverifies semantics.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:415ef462-bed3-493a-ac36-ca8c6d23bf1b and compare_table + check_list.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Evidence digest matches private fixture.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The December AWS invoice is saved as aws-invoice-2312.pdf and the tally ends with AWS, 2023.12, 10.02.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The invoice PDF and tally workbook use the required source-native paths.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.output_paths",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_invoice_output_paths",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The copied December invoice preserves the official PDF evidence and billing period.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.invoice_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_invoice_pdf_evidence",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The appended tally row is AWS, 2023.12, 10.02.",
+      "id": "osw_cross_app_artifact_19cdaed8e8.osworld.tally_row",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_tally_row",
+      "relevance_tier": "base"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-late-constraint-637224fe05';SOURCE_ID='bargaining:043';EVENT='bead_capacity_scope_added';THEME='task_scope_or_dependency_change';AUTHORITY={'pack_count': 100, 'diameter_inches': 0.75, 'finish': 'unfinished_natural_wood', 'minimum_packs': 80, 'unit_price': 7.35, 'lead_time_days': 7}
+def digest(path):return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+def main():
+ p=argparse.ArgumentParser();p.add_argument('--output',default='/app/output_data/event_receipt.json');a=p.parse_args();s=time.time();probes={x:digest(x) for x in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']};d={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':THEME,'meaning':'Production adds an 80-pack minimum for 100-piece, 3/4-inch unfinished natural wood bead packs at $7.35 with a seven-day lead time.','authority':AUTHORITY,'worker_started_at':s,'worker_finished_at':time.time(),'worker_exit_code':0,'probes':probes};d['receipt_sha256']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest();pathlib.Path(a.output).write_text(json.dumps(d,sort_keys=True)+'\n')
+if __name__=='__main__':main()

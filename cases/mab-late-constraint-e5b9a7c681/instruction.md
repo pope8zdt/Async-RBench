@@ -1,0 +1,8 @@
+
+            In this negotiation scenario, buyers are seeking scalability and premium features in the uxcell R6ZZ Deep Groove Ball Bearing 3/8"x7/8"x9/32" Double Shielded ABEC-5 Bearings 10-Pack. With a price of 13.49 USD and a rating of 4.2/5 stars, buyers are looking to secure a deal that meets their demands. On the other hand, sellers are focused on justifying the premium pricing for this high-quality product. Balancing these priorities and navigating the challenges of price negotiations will be key in reaching a mutually beneficial agreement. Let the negotiation begin!
+            The agents are encouraged to actively use the tools provided, such as offering a price, rejecting and countering offers, providing information, or ending the negotiation, to achieve their respective goals.
+            The simulation should focus on effective tool usage to simulate a realistic bargaining process.
+            
+
+ASYNC-RBENCH EXTENSION
+During the task, the harness may deliver independently produced evidence. Treat a delivered receipt as new evidence rather than as an answer. Reassess only the work actually affected by that evidence, preserve still-valid work, and verify the final task outcome. Runtime event details are intentionally not disclosed in advance.

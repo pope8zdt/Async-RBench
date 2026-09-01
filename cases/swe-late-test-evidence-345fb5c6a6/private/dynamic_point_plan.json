@@ -1,0 +1,238 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_restore_expected_variable_fi",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_test_evidence_3.task_scope_or_dependency",
+      "evidence_group": "swe_late_test_evid.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.restore_expected_variabl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.', perform classify_scope_delta for 'Restore expected variable-field autolinking.' while retaining valid prior result 'Located variable field cross-reference construction and Python-domain object resolution.'.",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located variable field cross-reference construction and Python-domain object resolution.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.restore_expected_variabl"
+        ]
+      },
+      "id": "swe_late_test_e_2c3331.cf.01_classify_scope_delta_restore_expected_v",
+      "independence_key": "swe_late_test_e_2c3331.cf.01_classify_scope_delta_restore_expected_v",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_2c3331.mutation.01_classify_scope_delta_restore_expected_v",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_test_evidence_345fb5c6a6.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.restore_expected_variabl"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_use_the_attribute_role_for_i",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_test_evidence_3.task_scope_or_dependency",
+      "evidence_group": "swe_late_test_evid.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.restore_expected_variabl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.', perform revise_affected for 'Use the attribute role for instance and class variable fields where appropriate.' while retaining valid prior result 'Prepared an initial change to the variable field role.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Prepared an initial change to the variable field role.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.restore_expected_variabl"
+        ]
+      },
+      "id": "swe_late_test_e_2c3331.cf.02_revise_affected_use_the_attribute_",
+      "independence_key": "swe_late_test_e_2c3331.cf.02_revise_affected_use_the_attribute_",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_2c3331.mutation.02_revise_affected_use_the_attribute_",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_345fb5c6a6.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.restore_expected_variabl"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_constrain_reference_specific",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_test_evidence_3.task_scope_or_dependency",
+      "evidence_group": "swe_late_test_evid.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.restore_expected_variabl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.', perform preserve_unaffected for 'Constrain reference-specific attribute lookup to the active class or module before broader matching.' while retaining valid prior result 'Located variable field cross-reference construction and Python-domain object resolution.'.",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located variable field cross-reference construction and Python-domain object resolution.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.restore_expected_variabl"
+        ]
+      },
+      "id": "swe_late_test_e_2c3331.cf.03_preserve_unaffected_constrain_referenc",
+      "independence_key": "swe_late_test_e_2c3331.cf.03_preserve_unaffected_constrain_referenc",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_2c3331.mutation.03_preserve_unaffected_constrain_referenc",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_345fb5c6a6.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.restore_expected_variabl"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_same_name_variables_acro",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_test_evidence_3.task_scope_or_dependency",
+      "evidence_group": "swe_late_test_evid.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.restore_expected_variabl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.', perform verify_closure for 'Add same-name variables across classes and packages plus existing successful-xref control cases.' while retaining valid prior result 'Prepared an initial change to the variable field role.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Prepared an initial change to the variable field role.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.restore_expected_variabl"
+        ]
+      },
+      "id": "swe_late_test_e_2c3331.cf.04_verify_closure_add_same_name_vari",
+      "independence_key": "swe_late_test_e_2c3331.cf.04_verify_closure_add_same_name_vari",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_2c3331.mutation.04_verify_closure_add_same_name_vari",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_345fb5c6a6.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.restore_expected_variabl"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.swe_late_test_evidence_3.task_scope_or_dependency",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "A regression run reports that disabling variable-name links globally breaks existing expected xrefs, while failures are limited to ambiguous same-name attributes outside the current class or module context.",
+        "before": "The regression classification arrives after the broad no-link patch has been implemented.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

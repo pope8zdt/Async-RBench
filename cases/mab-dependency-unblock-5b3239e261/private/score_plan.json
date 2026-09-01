@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_video_metric_calibration_compl",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+      "evidence_group": "mab_code24_sports.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_authenticated_coac"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_authenticated_coac"
+        ]
+      },
+      "id": "mab_code24_sports.cf.01_classify_authority_video_metric_calib",
+      "independence_key": "mab_code24_sports.cf.01_classify_authority_video_metric_calib",
+      "measurement_type": "control",
+      "mutation_id": "mab_code24_sports.mutation.01_classify_authority_video_metric_calib",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_authenticated_coac"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_video_metric_calibration_compl",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+      "evidence_group": "mab_code24_sports.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_video_upload_movem"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_video_upload_movem"
+        ]
+      },
+      "id": "mab_code24_sports.cf.02_revise_affected_video_metric_calib",
+      "independence_key": "mab_code24_sports.cf.02_revise_affected_video_metric_calib",
+      "measurement_type": "control",
+      "mutation_id": "mab_code24_sports.mutation.02_revise_affected_video_metric_calib",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_video_upload_movem"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_video_metric_calibration_compl",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_5b32.video_metric_calibration_completed",
+      "evidence_group": "mab_code24_sports.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_current_historical"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_current_historical"
+        ]
+      },
+      "id": "mab_code24_sports.cf.03_verify_closure_video_metric_calib",
+      "independence_key": "mab_code24_sports.cf.03_verify_closure_video_metric_calib",
+      "measurement_type": "control",
+      "mutation_id": "mab_code24_sports.mutation.03_verify_closure_video_metric_calib",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5b3239e261.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_current_historical"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "family": "wait_for_authority",
+      "id": "mab_code24_sports.mutation.01_classify_authority_video_metric_calib",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code24_sports.cf.01_classify_authority_video_metric_calib"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_5b3239e261.source.pin"
+      ],
+      "targets": [
+        "mab_code24_sports.cf.01_classify_authority_video_metric_calib",
+        "mab_dependency_unblock_5b3239e261.event.receipt",
+        "mab_dependency_unblock_5b3239e261.event.authority_probe",
+        "mab_dependency_unblock_5b3239e261.closure",
+        "mab_dependency_unblock_5b3239e261.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "family": "resolve_authority",
+      "id": "mab_code24_sports.mutation.02_revise_affected_video_metric_calib",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code24_sports.cf.02_revise_affected_video_metric_calib"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_5b3239e261.source.pin"
+      ],
+      "targets": [
+        "mab_code24_sports.cf.02_revise_affected_video_metric_calib",
+        "mab_dependency_unblock_5b3239e261.event.receipt",
+        "mab_dependency_unblock_5b3239e261.event.authority_probe",
+        "mab_dependency_unblock_5b3239e261.closure",
+        "mab_dependency_unblock_5b3239e261.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close video_metric_calibration_completed.",
+      "family": "rederive_from_authority",
+      "id": "mab_code24_sports.mutation.03_verify_closure_video_metric_calib",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code24_sports.cf.03_verify_closure_video_metric_calib"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_5b3239e261.source.pin"
+      ],
+      "targets": [
+        "mab_code24_sports.cf.03_verify_closure_video_metric_calib",
+        "mab_dependency_unblock_5b3239e261.event.receipt",
+        "mab_dependency_unblock_5b3239e261.event.authority_probe",
+        "mab_dependency_unblock_5b3239e261.closure",
+        "mab_dependency_unblock_5b3239e261.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific video_metric_calibration_completed receipt bound to coding:024.",
+      "id": "mab_dependency_unblock_5b3239e261.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned SportsTeamSyncer authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_5b3239e261.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "id": "mab_dependency_unblock_5b3239e261.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:024.",
+      "id": "mab_dependency_unblock_5b3239e261.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes SportsTeamSyncer, dashboards, and a video-calibration closure.",
+      "id": "mab_dependency_unblock_5b3239e261.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_output_schema_roles_dashboard_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Role access, video limits, speed/accuracy/agility calculations, and metric history follow the calibration contract.",
+      "id": "mab_dependency_unblock_5b3239e261.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_video_access_calibrated_metrics_and_large_file_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Team posts, shared media, training plans, uploaded videos, and historical metrics remain intact.",
+      "id": "mab_dependency_unblock_5b3239e261.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_workspace_media_training_and_metric_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed calibration is consumed before final video-analysis and edge-case verification.",
+      "id": "mab_dependency_unblock_5b3239e261.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_calibration_event_and_final_reverification",
+      "relevance_tier": "base"
+    }
+  ]
+}

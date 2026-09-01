@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-8f1d6fd6fd",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_conflict_confirm_that_the_returned_co",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Tuple distribution reveals two million rows but only 20,000 distinct ids.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.confirm_that_the_returne"
+        ]
+      },
+      "id": "01_classify_conflict_confirm_that_the_r",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "blind_first_result",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "required_behavior": "For event 'The query-statistics specialist reports repeated full-table scans with hundreds of millions of tuples returned or processed.', perform classify_conflict for 'Confirm that the returned counters are attributable to the anomalous table and interval.' while retaining valid prior result 'Tuple distribution reveals two million rows but only 20,000 distinct ids.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.confirm_that_the_returne"
+    },
+    {
+      "critical": false,
+      "decision_group": "arbitrate_conflict_add_fetch_large_data_to_the_",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Physical-density checks show a live-tuple-dominated table rather than vacuum bloat.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.confirm_that_the_returne"
+        ]
+      },
+      "id": "02_arbitrate_conflict_add_fetch_large_da",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "blind_last_result",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "required_behavior": "For event 'The query-statistics specialist reports repeated full-table scans with hundreds of millions of tuples returned or processed.', perform arbitrate_conflict for 'Add FETCH_LARGE_DATA to the supported set.' while retaining valid prior result 'Physical-density checks show a live-tuple-dominated table rather than vacuum bloat.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.confirm_that_the_returne"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_retain_the_independent_bulk_",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Alternative index and lock hypotheses have recorded verdicts.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.confirm_that_the_returne"
+        ]
+      },
+      "id": "03_verify_closure_retain_the_indepen",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "inconsistent_merge",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f1d6fd6fd.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'The query-statistics specialist reports repeated full-table scans with hundreds of millions of tuples returned or processed.', perform verify_closure for 'Retain the independent bulk-load fingerprint and remove the displaced cause.' while retaining valid prior result 'Alternative index and lock hypotheses have recorded verdicts.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.confirm_that_the_returne"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.confirm_that_the_returne"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.add_fetch_large_data_to_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.retain_the_independent_b"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.return_exactly_two_allow"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.confirm_that_the_returne",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.add_fetch_large_data_to_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.retain_the_independent_b",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.return_exactly_two_allow",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.confirm_that_the_returne",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.add_fetch_large_data_to_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.retain_the_independent_b",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.return_exactly_two_allow",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.confirm_that_the_returne",
+      "req.02.add_fetch_large_data_to_",
+      "req.03.retain_the_independent_b",
+      "req.04.return_exactly_two_allow",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The query-statistics specialist reports repeated full-table scans with hundreds of millions of tuples returned or processed.",
+    "before_state": "High-volume read statistics arrive after the bulk-load fingerprint has already driven preliminary synthesis.",
+    "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+    "primary_event_theme": "conflicting_valid_results",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Confirm that the returned counters are attributable to the anomalous table and interval.",
+      "id": "req.01.confirm_that_the_returne",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for confirm_that_the_returned_counters_a"
+    },
+    {
+      "description": "Add FETCH_LARGE_DATA to the supported set.",
+      "id": "req.02.add_fetch_large_data_to_",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for add_fetch_large_data_to_the_supporte"
+    },
+    {
+      "description": "Retain the independent bulk-load fingerprint and remove the displaced cause.",
+      "id": "req.03.retain_the_independent_b",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for retain_the_independent_bulk_load_fin"
+    },
+    {
+      "description": "Return exactly two allowed labels.",
+      "id": "req.04.return_exactly_two_allow",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for return_exactly_two_allowed_labels"
+    }
+  ]
+}

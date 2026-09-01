@@ -1,0 +1,16 @@
+{
+  "author_name": "Async-RBench transformation",
+  "category": "multiagentbench",
+  "difficulty": "hard",
+  "instruction": "Software Development Task:\n\nPlease write a software application called TeamSync that facilitates coordinated team management and real-time communication for sports teams. TeamSync is a comprehensive platform that enables coaches to manage team schedules, track player performance, and communicate with team members in real-time, ensuring all team activities and communications are synchronized and efficient.\n1. Implementation requirements:\n   - 1. **User Management Module**: Implement a user management system where coaches can create and manage player profiles. This module must be completed first to ensure that all subsequent functionalities can utilize the user data.\n   - 2. **Scheduling and Communication Module**: Develop a scheduling system that allows coaches to create and manage team schedules, including practice sessions, matches, and other events. This module should also include a real-time communication feature for announcements and updates. The scheduling and communication functionalities depend on the user management module being fully operational.\n   - 3. **Performance Tracking Module**: Integrate a performance tracking system that allows coaches to monitor player statistics and performance metrics. This module should support manual input and integration with wearable devices. The performance tracking module can only be implemented after the user management module is complete, as it relies on player profiles and data.\n\n\n2. Project structure:\n   - solution.py (main implementation)\n\n3. Development process:\n   - Developer: Create the code.\n   - Developer: Revise the code.\n   - Developer: Optimize the code.\n\nIf there are multiple files, please put them all in solution.py, but remember to add the file name in the following format:\n```python\n# file_name_1.py\n# your code here\n\n# file_name_2.py\n# your code here\n\n# file_name_3.py\n# your code here\n```\n\nPlease work together to complete this task following software engineering best practices.\n\nThe final deliverable should include:\nsolution.py\n\nASYNC-RBENCH EXTENSION\nPersist provisional schedules, communication adapters, and performance records while the player-profile API is incomplete. The harness then delivers the complete stable-ID profile contract. Migrate attendees, enforce availability and permissions, preserve performance/history records, and close against the exact authority receipt.",
+  "max_agent_timeout_sec": 1800,
+  "max_test_timeout_sec": 1200,
+  "parser_name": "pytest",
+  "tags": [
+    "multiagentbench",
+    "coding",
+    "teamsync",
+    "partial_then_complete_result",
+    "upstream-depth-4"
+  ]
+}

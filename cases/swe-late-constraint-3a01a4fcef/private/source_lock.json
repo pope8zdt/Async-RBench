@@ -1,0 +1,26 @@
+{
+  "instruction_chars": 195,
+  "instruction_sha256": "f77d8eab7dd608172aa78b3b50dfa7e0e9b3a6a1c52d14a1cb02417eb5a0ab00",
+  "native_oracle_anchors": [
+    "FAIL_TO_PASS:tests/test_blueprints.py::test_empty_name_not_allowed",
+    "PASS_TO_PASS:tests/test_blueprints.py::test_blueprint_specific_error_handling",
+    "PASS_TO_PASS:tests/test_blueprints.py::test_blueprint_specific_user_error_handling",
+    "PASS_TO_PASS:tests/test_blueprints.py::test_blueprint_app_error_handling",
+    "PASS_TO_PASS:tests/test_blueprints.py::test_blueprint_prefix_slash[-/-/]",
+    "PASS_TO_PASS:tests/test_blueprints.py::test_blueprint_prefix_slash[/--/]",
+    "PASS_TO_PASS:tests/test_blueprints.py::test_blueprint_prefix_slash[/-/-/]",
+    "PASS_TO_PASS:tests/test_blueprints.py::test_blueprint_prefix_slash[/foo--/foo]",
+    "PASS_TO_PASS:tests/test_blueprints.py::test_blueprint_prefix_slash[/foo/--/foo/]"
+  ],
+  "production_case_path": ".",
+  "source_file_sha256": {
+    "private/source_manifests/01-native_case.json": "a9ab3756140ef555c33bff1d0b4a49d57f31d162034066d4f6ca21a2cd136d17",
+    "private/source_manifests/02-participant_task.json": "bd64c5ad6972646c4aae69c1fe518fe3b2d7b69c1a9dc2a360fbbdd5cf74384b",
+    "private/source_manifests/03-evaluation_binding.json": "208773d256c6ec6ed3af7caf74ceb124fa895189459f6342c998d0fc36035819"
+  },
+  "source_files": [
+    "private/source_manifests/01-native_case.json",
+    "private/source_manifests/02-participant_task.json",
+    "private/source_manifests/03-evaluation_binding.json"
+  ]
+}

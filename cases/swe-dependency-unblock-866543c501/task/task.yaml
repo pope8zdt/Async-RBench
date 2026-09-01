@@ -1,0 +1,29 @@
+instruction: |-
+  Make Raspbian package removal return a pointer while preserving the original non-Raspbian result, filtering both binary and source package maps without mutating the input, and update Debian advisory callers accordingly.
+  
+  ASYNC-RBENCH EXTENSION
+  
+  The source task above remains the final-state contract. The benchmark starts
+  4 independent workstreams whose evidence may arrive after you
+  have begun the implementation. Their public scopes are:
+  - Workstream 1: Return the original ScanResult pointer unchanged for non-Raspbian families.
+  - Workstream 2: Return a pointer to the filtered result for Raspbian without mutating excluded-package inputs unexpectedly.
+  - Workstream 3: Update every reported caller to the pointer-returning signature.
+  - Workstream 4: Add tests for pointer identity, Raspbian filtering, non-Raspbian preservation, and a mutation restoring the value return.
+  
+  Before closing the task, persist a provisional checkpoint at
+  `/app/output_data/provisional_checkpoint.json` and a record of source facts
+  that remain valid at `/app/output_data/preserved_source_facts.json`. Consume
+  the delivered receipt for `instance_future-architect__vuls-b8db2e0b74f60cb7d45f710f255e061f054b6afc`, revise only state affected by that
+  evidence, rerun the source-native checks, and write
+  `/app/output_data/decision_manifest.json` with the provided manifest script.
+  The final state must satisfy the original task even when completion order
+  differs; a response without the receipt-bound closure artifacts is incomplete.
+  
+author_name: Async-RBench transformation
+"difficulty": "hard"
+category: swe_bench
+tags: [swe_bench, task_scope_or_dependency_change]
+parser_name: pytest
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 1200

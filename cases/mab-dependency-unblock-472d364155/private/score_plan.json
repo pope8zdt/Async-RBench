@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_occlusion_coverage_benchmark_c",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_472d.avatar_coverage_benchmark_completed",
+      "evidence_group": "mab_research25_exavatar.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.preserve_the_monocular_expre"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed benchmark protocol replaces a generic avatar evaluation plan with expression, hand, body, occlusion, and novel-pose coverage while retaining the monocular-video, SMPL-X, and 3D Gaussian premises.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close occlusion_coverage_benchmark_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_the_monocular_expre"
+        ]
+      },
+      "id": "mab_research25_exavatar.cf.01_classify_authority_occlusion_coverage",
+      "independence_key": "mab_research25_exavatar.cf.01_classify_authority_occlusion_coverage",
+      "measurement_type": "control",
+      "mutation_id": "mab_research25_exavatar.mutation.01_classify_authority_occlusion_coverage",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_472d364155.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_monocular_expre"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_occlusion_coverage_benchmark_c",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_472d.avatar_coverage_benchmark_completed",
+      "evidence_group": "mab_research25_exavatar.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.formulate_exactly_one_questi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed benchmark protocol replaces a generic avatar evaluation plan with expression, hand, body, occlusion, and novel-pose coverage while retaining the monocular-video, SMPL-X, and 3D Gaussian premises.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close occlusion_coverage_benchmark_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.formulate_exactly_one_questi"
+        ]
+      },
+      "id": "mab_research25_exavatar.cf.02_revise_affected_occlusion_coverage",
+      "independence_key": "mab_research25_exavatar.cf.02_revise_affected_occlusion_coverage",
+      "measurement_type": "control",
+      "mutation_id": "mab_research25_exavatar.mutation.02_revise_affected_occlusion_coverage",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_472d364155.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.formulate_exactly_one_questi"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_occlusion_coverage_benchmark_c",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_472d.avatar_coverage_benchmark_completed",
+      "evidence_group": "mab_research25_exavatar.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.specify_capture_data_express"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed benchmark protocol replaces a generic avatar evaluation plan with expression, hand, body, occlusion, and novel-pose coverage while retaining the monocular-video, SMPL-X, and 3D Gaussian premises.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close occlusion_coverage_benchmark_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_capture_data_express"
+        ]
+      },
+      "id": "mab_research25_exavatar.cf.03_verify_closure_occlusion_coverage",
+      "independence_key": "mab_research25_exavatar.cf.03_verify_closure_occlusion_coverage",
+      "measurement_type": "control",
+      "mutation_id": "mab_research25_exavatar.mutation.03_verify_closure_occlusion_coverage",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_472d364155.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.specify_capture_data_express"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close occlusion_coverage_benchmark_completed.",
+      "family": "wait_for_authority",
+      "id": "mab_research25_exavatar.mutation.01_classify_authority_occlusion_coverage",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research25_exavatar.cf.01_classify_authority_occlusion_coverage"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_472d364155.source.pin"
+      ],
+      "targets": [
+        "mab_research25_exavatar.cf.01_classify_authority_occlusion_coverage",
+        "mab_dependency_unblock_472d364155.event.receipt",
+        "mab_dependency_unblock_472d364155.event.authority_probe",
+        "mab_dependency_unblock_472d364155.closure",
+        "mab_dependency_unblock_472d364155.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close occlusion_coverage_benchmark_completed.",
+      "family": "resolve_authority",
+      "id": "mab_research25_exavatar.mutation.02_revise_affected_occlusion_coverage",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research25_exavatar.cf.02_revise_affected_occlusion_coverage"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_472d364155.source.pin"
+      ],
+      "targets": [
+        "mab_research25_exavatar.cf.02_revise_affected_occlusion_coverage",
+        "mab_dependency_unblock_472d364155.event.receipt",
+        "mab_dependency_unblock_472d364155.event.authority_probe",
+        "mab_dependency_unblock_472d364155.closure",
+        "mab_dependency_unblock_472d364155.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close occlusion_coverage_benchmark_completed.",
+      "family": "rederive_from_authority",
+      "id": "mab_research25_exavatar.mutation.03_verify_closure_occlusion_coverage",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research25_exavatar.cf.03_verify_closure_occlusion_coverage"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_472d364155.source.pin"
+      ],
+      "targets": [
+        "mab_research25_exavatar.cf.03_verify_closure_occlusion_coverage",
+        "mab_dependency_unblock_472d364155.event.receipt",
+        "mab_dependency_unblock_472d364155.event.authority_probe",
+        "mab_dependency_unblock_472d364155.closure",
+        "mab_dependency_unblock_472d364155.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific occlusion_coverage_benchmark_completed receipt bound to research:025.",
+      "id": "mab_dependency_unblock_472d364155.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned expressive monocular whole-body avatar research task authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_472d364155.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A delayed benchmark protocol replaces a generic avatar evaluation plan with expression, hand, body, occlusion, and novel-pose coverage while retaining the monocular-video, SMPL-X, and 3D Gaussian premises.",
+      "id": "mab_dependency_unblock_472d364155.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench research:025.",
+      "id": "mab_dependency_unblock_472d364155.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The result has exactly five questions and a monocular_exavatar_research_closure.",
+      "id": "mab_dependency_unblock_472d364155.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_exact_five_question_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The method binds monocular capture, SMPL-X, 3D Gaussian rendering, uncertainty-aware occlusion completion, task-specific data, metrics, and ablations.",
+      "id": "mab_dependency_unblock_472d364155.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_task_specific_method_data_metrics_and_ablations",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves monocular capture, expressive face/hand/body drivability, hybrid representation, and novel-pose motivation.",
+      "id": "mab_dependency_unblock_472d364155.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_source_premises_and_structure_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed coverage benchmark revises the method and evaluation without erasing the source premises.",
+      "id": "mab_dependency_unblock_472d364155.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

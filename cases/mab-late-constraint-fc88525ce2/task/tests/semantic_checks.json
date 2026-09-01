@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt is authentic and bound to the exact case and source.",
+      "id": "mab_late_constraint_fc88525ce2.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Independent event worker observes provisional and solution artifacts.",
+      "id": "mab_late_constraint_fc88525ce2.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "id": "mab_late_constraint_fc88525ce2.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains bound to bargaining:022.",
+      "id": "mab_late_constraint_fc88525ce2.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private evaluator binding names the exact official source task and output schema.",
+      "id": "mab_late_constraint_fc88525ce2.source.native_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding_and_schema",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "BTS RM Idol Doll implements its source-specific central workflow.",
+      "id": "mab_late_constraint_fc88525ce2.source.core_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_core_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "id": "mab_late_constraint_fc88525ce2.source.event_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Task-specific stale, duplicate, unauthorized, or invalid input is rejected.",
+      "id": "mab_late_constraint_fc88525ce2.source.edge_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_edge_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Unaffected task-native state is preserved through event adoption.",
+      "id": "mab_late_constraint_fc88525ce2.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_closure_and_preservation",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

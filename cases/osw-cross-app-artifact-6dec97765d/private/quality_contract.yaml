@@ -1,0 +1,95 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline native-result and closure assembly without invoking oracle.sh or the canonical source-native solution.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.project_path"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_6dec97765d.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_vscode_6dec.cf.01_classify_completeness_terminal_vscode_project",
+          "osw_vscode_6dec.cf.02_revise_affected_terminal_vscode_project",
+          "osw_vscode_6dec.cf.03_preserve_unaffected_terminal_vscode_project",
+          "osw_vscode_6dec.cf.04_verify_closure_terminal_vscode_project"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_6dec97765d.event.receipt",
+          "osw_cross_app_artifact_6dec97765d.event.probes",
+          "osw_cross_app_artifact_6dec97765d.closure",
+          "osw_cross_app_artifact_6dec97765d.source.pin",
+          "osw_cross_app_artifact_6dec97765d.osworld.identity",
+          "osw_cross_app_artifact_6dec97765d.osworld.official_score",
+          "osw_cross_app_artifact_6dec97765d.osworld.native_evidence",
+          "osw_cross_app_artifact_6dec97765d.osworld.task_assertion",
+          "osw_cross_app_artifact_6dec97765d.osworld.project_path",
+          "osw_cross_app_artifact_6dec97765d.osworld.project_assets",
+          "osw_cross_app_artifact_6dec97765d.osworld.terminal_history",
+          "osw_cross_app_artifact_6dec97765d.osworld.open_project_probe",
+          "osw_cross_app_artifact_6dec97765d.osworld.vscode_state",
+          "osw_cross_app_artifact_6dec97765d.osworld.official_checks"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "5f4184b5f9f7222e675785c70a44a4a57fabd780323dae67c037e8c691574a92",
+        "task_id": "osworld:multi_apps:510f64c8-9bcc-4be1-8d30-638705850618",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

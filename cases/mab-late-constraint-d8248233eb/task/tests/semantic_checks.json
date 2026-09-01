@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt digest is authentic and bound to this exact case and bargaining source.",
+      "id": "mab_late_constraint_d8248233eb.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent worker observed both provisional and executable artifacts.",
+      "id": "mab_late_constraint_d8248233eb.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact receipt and records: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "id": "mab_late_constraint_d8248233eb.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The package remains pinned to bargaining:040 and its official record.",
+      "id": "mab_late_constraint_d8248233eb.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private fixture binds the exact evaluator, source task, artifact schema, and dependency depth.",
+      "id": "mab_late_constraint_d8248233eb.source.native_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding_and_schema",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Two-Piece Keychain Set executes its offer-authority-counter-finalize workflow.",
+      "id": "mab_late_constraint_d8248233eb.source.core_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_core_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The authority payload exactly represents: The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+      "id": "mab_late_constraint_d8248233eb.source.event_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Stale revisions and unauthorized authority payloads are rejected independently.",
+      "id": "mab_late_constraint_d8248233eb.source.edge_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_edge_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Unaffected source priorities remain preserved: two_piece_keychain_identity, buyer_after_sales_priority, seller_long_term_contract_goal.",
+      "id": "mab_late_constraint_d8248233eb.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_closure_and_preservation",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Final selected terms and bargaining-tool chronology match this task-specific authority.",
+      "id": "mab_late_constraint_d8248233eb.source.final_terms",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_final_terms_and_tool_sequence",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

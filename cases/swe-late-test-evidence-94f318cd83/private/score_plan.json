@@ -1,0 +1,330 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_18cd83",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_test_evidence_94f318cd83.gzip_response_authoritative_result",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Decode gzip responses when decompression is enabled.",
+      "forbidden_behavior": "Do not skip classify_authority or claim closure from stale/unexecuted evidence.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_late_test_e_fc3041.cf.01_classify_authority",
+      "independence_key": "swe_late_test_e_fc3041.cf.01_classify_authority",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_fc3041.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_late_test_evidence_94f318cd83.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_test_e_fc3041.cf.01_classify_authority]",
+      "relevance_tier": "critical",
+      "required_behavior": "Decode gzip responses when decompression is enabled.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected_18cd83",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_test_evidence_94f318cd83.gzip_response_authoritative_result",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Preserve compressed bytes when decompression is disabled.",
+      "forbidden_behavior": "Do not skip revise_affected or claim closure from stale/unexecuted evidence.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_late_test_e_fc3041.cf.02_revise_affected",
+      "independence_key": "swe_late_test_e_fc3041.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_fc3041.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_94f318cd83.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_test_e_fc3041.cf.02_revise_affected]",
+      "relevance_tier": "critical",
+      "required_behavior": "Preserve compressed bytes when decompression is disabled.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_18cd83",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_test_evidence_94f318cd83.gzip_response_authoritative_result",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Keep fetch_url error behavior intact.",
+      "forbidden_behavior": "Do not skip preserve_unaffected or claim closure from stale/unexecuted evidence.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_late_test_e_fc3041.cf.03_preserve_unaffected",
+      "independence_key": "swe_late_test_e_fc3041.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_fc3041.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_94f318cd83.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_test_e_fc3041.cf.03_preserve_unaffected]",
+      "relevance_tier": "direct",
+      "required_behavior": "Keep fetch_url error behavior intact.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_18cd83",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_test_evidence_94f318cd83.gzip_response_authoritative_result",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reverify URL headers and response handling.",
+      "forbidden_behavior": "Do not skip verify_closure or claim closure from stale/unexecuted evidence.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_late_test_e_fc3041.cf.04_verify_closure",
+      "independence_key": "swe_late_test_e_fc3041.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_fc3041.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_94f318cd83.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_test_e_fc3041.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "required_behavior": "Reverify URL headers and response handling.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority or claim closure from stale/unexecuted evidence.",
+      "family": "wait_for_authority",
+      "id": "swe_late_test_e_fc3041.mutation.01_classify_authority",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_test_e_fc3041.cf.01_classify_authority"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_94f318cd83.source.pin"
+      ],
+      "targets": [
+        "swe_late_test_e_fc3041.cf.01_classify_authority",
+        "swe_late_test_evidence_94f318cd83.event.receipt",
+        "swe_late_test_evidence_94f318cd83.event.probes",
+        "swe_late_test_evidence_94f318cd83.closure",
+        "swe_late_test_evidence_94f318cd83.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected or claim closure from stale/unexecuted evidence.",
+      "family": "resolve_authority",
+      "id": "swe_late_test_e_fc3041.mutation.02_revise_affected",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_test_e_fc3041.cf.02_revise_affected"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_94f318cd83.source.pin"
+      ],
+      "targets": [
+        "swe_late_test_e_fc3041.cf.02_revise_affected",
+        "swe_late_test_evidence_94f318cd83.event.receipt",
+        "swe_late_test_evidence_94f318cd83.event.probes",
+        "swe_late_test_evidence_94f318cd83.closure",
+        "swe_late_test_evidence_94f318cd83.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip preserve_unaffected or claim closure from stale/unexecuted evidence.",
+      "family": "selective_replan",
+      "id": "swe_late_test_e_fc3041.mutation.03_preserve_unaffected",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_test_e_fc3041.cf.03_preserve_unaffected"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_94f318cd83.source.pin"
+      ],
+      "targets": [
+        "swe_late_test_e_fc3041.cf.03_preserve_unaffected",
+        "swe_late_test_evidence_94f318cd83.event.receipt",
+        "swe_late_test_evidence_94f318cd83.event.probes",
+        "swe_late_test_evidence_94f318cd83.closure",
+        "swe_late_test_evidence_94f318cd83.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure or claim closure from stale/unexecuted evidence.",
+      "family": "rederive_from_authority",
+      "id": "swe_late_test_e_fc3041.mutation.04_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_test_e_fc3041.cf.04_verify_closure"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_94f318cd83.source.pin"
+      ],
+      "targets": [
+        "swe_late_test_e_fc3041.cf.04_verify_closure",
+        "swe_late_test_evidence_94f318cd83.event.receipt",
+        "swe_late_test_evidence_94f318cd83.event.probes",
+        "swe_late_test_evidence_94f318cd83.closure",
+        "swe_late_test_evidence_94f318cd83.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_late_test_evidence_94f318cd83.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_late_test_evidence_94f318cd83.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_late_test_evidence_94f318cd83.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_late_test_evidence_94f318cd83.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "Source-native changed behavior executes and passes: test/units/module_utils/urls/test_gzip.py::test_Request_open_gzip, test/units/module_utils/urls/test_gzip.py::test_Request_open_decompress_false",
+      "id": "swe_late_test_evidence_94f318cd83.native.gzip_changed",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_gzip_changed",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Source-native preserved behavior executes and passes: test/units/module_utils/urls/test_fetch_url.py::test_fetch_url_no_urlparse, test/units/module_utils/urls/test_fetch_url.py::test_fetch_url_connectionerror",
+      "id": "swe_late_test_evidence_94f318cd83.native.fetch_url_preserved",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_fetch_url_preserved",
+      "relevance_tier": "base"
+    }
+  ]
+}

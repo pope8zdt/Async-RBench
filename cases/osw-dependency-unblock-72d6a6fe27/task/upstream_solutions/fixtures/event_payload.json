@@ -1,0 +1,44 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-72d6a6fe27",
+  "source_task_id": "osworld:os:5812b315-e7bd-4265-b51f-863c02174c28",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "ssh_account_authority",
+  "upstream_dependency_graph": [
+    {
+      "id": "account_specification",
+      "app": "Ubuntu account worker",
+      "description": "Bind the requested charles identity, password contract, and /home/test1 scope."
+    },
+    {
+      "id": "password_and_passwd_probe",
+      "app": "Shell authentication worker",
+      "description": "Execute the official password and passwd-home probes.",
+      "depends_on": [
+        "account_specification"
+      ]
+    },
+    {
+      "id": "filesystem_permission_probe",
+      "app": "Filesystem state worker",
+      "description": "Verify /home/test1 and its group-write mode before closure.",
+      "depends_on": [
+        "password_and_passwd_probe"
+      ]
+    }
+  ],
+  "state": {
+    "username": "charles",
+    "password_verified": true,
+    "home_directory": "/home/test1",
+    "access_scope": [
+      "/home/test1"
+    ],
+    "home_group_writable": true,
+    "official_success_text": "Password, home directory, and write permission check passed",
+    "check_script_sha256": "fc645b23f28b3d30fd7bd0df67a8afd7b340b3a8a2d3813955dd154e91f0a97c"
+  },
+  "task_assertion": "The charles account authenticates with the requested password, uses /home/test1 as its home, and /home/test1 is group-writable as required by the official command-line evaluator.",
+  "finding": "The delayed account probe confirms charles authenticates, is bound to /home/test1, and the home directory has the exact group-write condition checked by the official evaluator."
+}
+

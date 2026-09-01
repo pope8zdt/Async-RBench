@@ -1,0 +1,177 @@
+{
+  "case_id": "swe-dependency-unblock-82115ba350",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority:req.01.return_a_kronecker_delta",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Return a Kronecker delta for symbolic identity entries.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "01_classify_authority_return_a_kronecker_delta_for",
+      "must_still_pass": [],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_82115ba350.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After receiving authoritative event 'The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.', perform classify_authority for 'Return a Kronecker delta for symbolic identity entries.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.return_a_kronecker_delta"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.preserve_direct_numeric_",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Preserve direct numeric diagonal and off-diagonal simplification.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "02_revise_affected_preserve_direct_numeric_diag",
+      "must_still_pass": [],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_82115ba350.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.', perform revise_affected for 'Preserve direct numeric diagonal and off-diagonal simplification.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_direct_numeric_"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.03.assert_the_double_sum_ov",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Assert the double sum over an `n × n` identity matrix is `n`.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_verify_closure_assert_the_double_sum_over_a",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_82115ba350.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After receiving authoritative event 'The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.', perform verify_closure for 'Assert the double sum over an `n × n` identity matrix is `n`.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.assert_the_double_sum_ov"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.return_a_kronecker_delta"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.preserve_direct_numeric_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.assert_the_double_sum_ov"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.return_a_kronecker_delta",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_direct_numeric_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.assert_the_double_sum_ov",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.return_a_kronecker_delta",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_direct_numeric_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.assert_the_double_sum_ov",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.return_a_kronecker_delta",
+      "req.02.preserve_direct_numeric_",
+      "req.03.assert_the_double_sum_ov",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+    "event_id": "evt.swe_dependency_unblock_82115ba350.symbolic_identity_entry_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Return a Kronecker delta for symbolic identity entries.",
+      "id": "req.01.return_a_kronecker_delta",
+      "observable_probe": "swe_dependency_unblock_8.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for return_a_kronecker_delta_for_symboli"
+    },
+    {
+      "description": "Preserve direct numeric diagonal and off-diagonal simplification.",
+      "id": "req.02.preserve_direct_numeric_",
+      "observable_probe": "swe_dependency_unblock_8.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for preserve_direct_numeric_diagonal_and"
+    },
+    {
+      "description": "Assert the double sum over an `n × n` identity matrix is `n`.",
+      "id": "req.03.assert_the_double_sum_ov",
+      "observable_probe": "swe_dependency_unblock_8.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for assert_the_double_sum_over_an_n_n_id"
+    }
+  ],
+  "upstream_task_depth": 3
+}

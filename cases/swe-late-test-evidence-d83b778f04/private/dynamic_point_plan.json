@@ -1,0 +1,228 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_778f04",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_test_evidence_d83b778f04.help_author_about_layout_result",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Render author and about sections with the reverted newline contract.",
+      "forbidden_behavior": "Do not skip classify_authority or claim closure from stale/unexecuted evidence.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_late_test_e_83362f.cf.01_classify_authority",
+      "independence_key": "swe_late_test_e_83362f.cf.01_classify_authority",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_83362f.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_late_test_evidence_d83b778f04.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_test_e_83362f.cf.01_classify_authority]",
+      "relevance_tier": "critical",
+      "required_behavior": "Render author and about sections with the reverted newline contract.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected_778f04",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_test_evidence_d83b778f04.help_author_about_layout_result",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Apply the layout consistently to short and long help.",
+      "forbidden_behavior": "Do not skip revise_affected or claim closure from stale/unexecuted evidence.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_late_test_e_83362f.cf.02_revise_affected",
+      "independence_key": "swe_late_test_e_83362f.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_83362f.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_d83b778f04.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_test_e_83362f.cf.02_revise_affected]",
+      "relevance_tier": "critical",
+      "required_behavior": "Apply the layout consistently to short and long help.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_778f04",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_test_evidence_d83b778f04.help_author_about_layout_result",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Preserve unrelated parser and display-width behavior.",
+      "forbidden_behavior": "Do not skip preserve_unaffected or claim closure from stale/unexecuted evidence.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_late_test_e_83362f.cf.03_preserve_unaffected",
+      "independence_key": "swe_late_test_e_83362f.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_83362f.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_d83b778f04.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_test_e_83362f.cf.03_preserve_unaffected]",
+      "relevance_tier": "direct",
+      "required_behavior": "Preserve unrelated parser and display-width behavior.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_778f04",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_test_evidence_d83b778f04.help_author_about_layout_result",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reverify the focused short-help and long-help author/about newline regression matrix.",
+      "forbidden_behavior": "Do not claim closure before both short-help and long-help author/about layout regressions have been reverified.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_late_test_e_83362f.cf.04_verify_closure",
+      "independence_key": "swe_late_test_e_83362f.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "swe_late_test_e_83362f.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_d83b778f04.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_late_test_e_83362f.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "required_behavior": "Reverify the focused short-help and long-help author/about newline regression matrix.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.swe_late_test_evidence_d83b778f04.help_author_about_layout_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An isolated Clap worker reports the authoritative author/about newline policy for short and long help while unrelated parser behavior remains green.",
+        "before": "A source patch and preserved behavior checkpoint exist, but the isolated authoritative regression result has not arrived.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

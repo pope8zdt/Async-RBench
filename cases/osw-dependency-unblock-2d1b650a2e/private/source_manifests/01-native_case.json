@@ -1,0 +1,11 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "osw-dependency-unblock-2d1b650a2e",
+  "benchmark": "OSWorld",
+  "source_binding": {"task_id": "030eeff7-b492-4218-b312-701ec99ee0cc", "domain": "chrome", "config_path": "upstream/osworld/evaluation_examples/examples/chrome/030eeff7-b492-4218-b312-701ec99ee0cc.json"},
+  "native_runtime": {"adapter": "osworld.DesktopEnv", "snapshot": "chrome", "provider": "vmware_or_docker", "final_state": "persisted VM state"},
+  "event_protocol": {"producer": "read-only Chrome profile probe on a snapshot clone", "payload": "case-bound enable_do_not_track preference evidence", "release_predicate": "privacy-settings checkpoint persisted", "rollback": "revise only the affected preference"},
+  "state_attestation": {"baseline_probe": "Chrome reset snapshot and profile digest", "checkpoint_probe": "profile digest after an actual settings action", "change_required": true, "journal_owner": "host harness"},
+  "native_evaluator": {"conj": "and", "func": "exact_match", "result": {"type": "chrome_preferences", "preference": "enable_do_not_track"}, "expected": {"type": "rule", "rules": {"expected": "true"}}},
+  "quality_gates": {"official_config_bound": true, "native_evaluator_bound": true, "answer_catalogue_removed": true, "runtime_executed": false}
+}

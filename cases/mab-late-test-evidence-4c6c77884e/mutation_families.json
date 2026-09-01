@@ -1,0 +1,320 @@
+{
+  "families": [
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: Authentic task-specific challenge_test_evidence_replayed receipt bound to coding:091.",
+      "id": "mab_code91_familyquest.mut.01_receipt",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: Authentic task-specific challenge_test_evidence_replayed receipt bound to coding:091.",
+      "id": "mab_code91_familyquest.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: Evaluator-owned FamilyCodeQuest authority runs after three upstream results.",
+      "id": "mab_code91_familyquest.mut.02_authority_probe",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.event.authority_probe"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_authority_probe_evidence",
+        "corrupt_authority_probe_value",
+        "replay_stale_authority_probe_state",
+        "satisfy_manifest_without_authority_probe_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: Evaluator-owned FamilyCodeQuest authority runs after three upstream results.",
+      "id": "mab_code91_familyquest.mut.02_authority_probe_crosscheck",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.event.authority_probe"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_authority_probe_red",
+        "artifact_green_authority_probe_stale",
+        "receipt_valid_authority_probe_foreign",
+        "partial_closure_hides_authority_probe_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "id": "mab_code91_familyquest.mut.03_closure",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "id": "mab_code91_familyquest.mut.03_closure_crosscheck",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: Pinned official MultiAgentBench coding:091.",
+      "id": "mab_code91_familyquest.mut.04_pin",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: Pinned official MultiAgentBench coding:091.",
+      "id": "mab_code91_familyquest.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: solution.py exposes FamilyCodeQuest and the four-upstream family_code_quest_test_closure.",
+      "id": "mab_code91_familyquest.mut.05_output_schema",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.output_schema"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_output_schema_evidence",
+        "corrupt_output_schema_value",
+        "replay_stale_output_schema_state",
+        "satisfy_manifest_without_output_schema_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: solution.py exposes FamilyCodeQuest and the four-upstream family_code_quest_test_closure.",
+      "id": "mab_code91_familyquest.mut.05_output_schema_crosscheck",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.output_schema"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_output_schema_red",
+        "artifact_green_output_schema_stale",
+        "receipt_valid_output_schema_foreign",
+        "partial_closure_hides_output_schema_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: Sorting challenges handle empty, duplicate, and negative inputs, and replayed evidence is idempotently consumed once.",
+      "id": "mab_code91_familyquest.mut.06_task_behavior",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.task_behavior"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_task_behavior_evidence",
+        "corrupt_task_behavior_value",
+        "replay_stale_task_behavior_state",
+        "satisfy_manifest_without_task_behavior_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: Sorting challenges handle empty, duplicate, and negative inputs, and replayed evidence is idempotently consumed once.",
+      "id": "mab_code91_familyquest.mut.06_task_behavior_crosscheck",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.task_behavior"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_task_behavior_red",
+        "artifact_green_task_behavior_stale",
+        "receipt_valid_task_behavior_foreign",
+        "partial_closure_hides_task_behavior_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: Preserves shared sessions, collaborative edits, saved progress, and hint history across test-evidence integration.",
+      "id": "mab_code91_familyquest.mut.07_preservation",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.preservation"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_preservation_evidence",
+        "corrupt_preservation_value",
+        "replay_stale_preservation_state",
+        "satisfy_manifest_without_preservation_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: Preserves shared sessions, collaborative edits, saved progress, and hint history across test-evidence integration.",
+      "id": "mab_code91_familyquest.mut.07_preservation_crosscheck",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.preservation"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_preservation_red",
+        "artifact_green_preservation_stale",
+        "receipt_valid_preservation_foreign",
+        "partial_closure_hides_preservation_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: The test-specialist receipt, evidence identity, registered cases, and final closure are bound without duplicate application.",
+      "id": "mab_code91_familyquest.mut.08_event_closure",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.event_closure"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_event_closure_evidence",
+        "corrupt_event_closure_value",
+        "replay_stale_event_closure_state",
+        "satisfy_manifest_without_event_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: The test-specialist receipt, evidence identity, registered cases, and final closure are bound without duplicate application.",
+      "id": "mab_code91_familyquest.mut.08_event_closure_crosscheck",
+      "must_fail": [
+        "mab_late_test_evidence_4c6c77884e.source.event_closure"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_event_closure_red",
+        "artifact_green_event_closure_stale",
+        "receipt_valid_event_closure_foreign",
+        "partial_closure_hides_event_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: classify_duplicate: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "id": "mab_code91_familyquest.mut.09_01_classify_duplicate_challe",
+      "must_fail": [
+        "mab_code91_familyquest.cf.01_classify_duplicate_challenge_test_evi"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: classify_duplicate: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "id": "mab_code91_familyquest.mut.09_01_classify_duplicate_challe_crosscheck",
+      "must_fail": [
+        "mab_code91_familyquest.cf.01_classify_duplicate_challenge_test_evi"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_duplicate_challe_red",
+        "artifact_green_01_classify_duplicate_challe_stale",
+        "receipt_valid_01_classify_duplicate_challe_foreign",
+        "partial_closure_hides_01_classify_duplicate_challe_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: preserve_idempotency: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "id": "mab_code91_familyquest.mut.10_02_preserve_idempotency_chal",
+      "must_fail": [
+        "mab_code91_familyquest.cf.02_preserve_idempotency_challenge_test_evi"
+      ],
+      "operation": "mutate_control_deduplicate_completion",
+      "variants": [
+        "omit_deduplicate_completion_decision",
+        "apply_deduplicate_completion_to_wrong_scope",
+        "use_stale_evidence_for_deduplicate_completion",
+        "declare_deduplicate_completion_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Directly challenge: verify_closure: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "id": "mab_code91_familyquest.mut.11_03_verify_closure_challenge_",
+      "must_fail": [
+        "mab_code91_familyquest.cf.03_verify_closure_challenge_test_evi"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-test-evidence-4c6c77884e",
+      "description": "Cross-check independent evidence for: verify_closure: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "id": "mab_code91_familyquest.mut.11_03_verify_closure_challenge__crosscheck",
+      "must_fail": [
+        "mab_code91_familyquest.cf.03_verify_closure_challenge_test_evi"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_challenge__red",
+        "artifact_green_03_verify_closure_challenge__stale",
+        "receipt_valid_03_verify_closure_challenge__foreign",
+        "partial_closure_hides_03_verify_closure_challenge__failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

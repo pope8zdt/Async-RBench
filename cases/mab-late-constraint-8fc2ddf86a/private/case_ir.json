@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-8fc2ddf86a",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_scope_delta",
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_8fc2ddf86a.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "sterling_product_scope_clarified"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_8fc2ddf86a.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "sterling_product_scope_clarified"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_8fc2ddf86a.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "sterling_product_scope_clarified"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_8fc2ddf86a.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "sterling_product_scope_clarified"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.capture_the_provisional_offe"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.replace_battery_condition_wi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.revise_pair_count_price_and_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.close_with_corrected_jewelry"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.capture_the_provisional_offe",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.replace_battery_condition_wi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_pair_count_price_and_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_with_corrected_jewelry",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.capture_the_provisional_offe",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.replace_battery_condition_wi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_pair_count_price_and_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_with_corrected_jewelry",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.capture_the_provisional_offe",
+      "req.02.replace_battery_condition_wi",
+      "req.03.revise_pair_count_price_and_",
+      "req.04.close_with_corrected_jewelry",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+    "before_state": "A provisional 925 Sterling Silver Butterfly Dangle Chain Earrings bargain exists before sterling_product_scope_clarified.",
+    "event_id": "evt.mab-late-constraint-8fc2ddf86a.sterling_product_scope_clarified",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Capture the provisional offer and irrelevant battery assumption.",
+      "id": "req.01.capture_the_provisional_offe",
+      "observable_probe": "mab_late_constraint_8fc2ddf86a.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Replace battery condition with the 925-silver material certificate.",
+      "id": "req.02.replace_battery_condition_wi",
+      "observable_probe": "mab_late_constraint_8fc2ddf86a.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Revise pair count, price, and delivery only.",
+      "id": "req.03.revise_pair_count_price_and_",
+      "observable_probe": "mab_late_constraint_8fc2ddf86a.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close with corrected jewelry scope and preserved price-quality history.",
+      "id": "req.04.close_with_corrected_jewelry",
+      "observable_probe": "mab_late_constraint_8fc2ddf86a.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "anomaly": "INSERT_LARGE_DATA",
+  "canonical": {
+    "canonical_oracle": true,
+    "checkpoint_changed": true,
+    "control_checks_passed": true,
+    "control_ids": [
+      "01_classify_scope_delta_verify_planet_wav_",
+      "02_revise_affected_configure_planet_w",
+      "03_preserve_unaffected_enable_continuatio",
+      "04_verify_closure_save_the_presentat"
+    ],
+    "episode": "canonical",
+    "equivalent_solution": false,
+    "event_receipt": {
+      "producer": "evaluator_owned_read_only_snapshot_worker",
+      "raw_evidence": {
+        "target_url": "pptaudio:canonical"
+      },
+      "release_after_digest": "0224438c05ef8e68b80d70073faa209a3bb8ef4653b7c2ba6c456d4df2f2a773"
+    },
+    "expected_pass": true,
+    "hidden_checks_passed": true,
+    "model_episode_executed": false,
+    "negative_counterexample": false,
+    "observed_expected_outcome": true,
+    "official_evaluator_executed": true,
+    "official_score": 1.0,
+    "real_vm_executed": true,
+    "semantic_check_ids": [
+      "official_metric_01",
+      "persisted_target_state",
+      "post_event_reverification"
+    ],
+    "url": "pptaudio:canonical"
+  },
+  "case_id": "osw-cross-app-artifact-c3093402e5",
+  "counterexamples": [
+    {
+      "canonical_oracle": false,
+      "checkpoint_changed": true,
+      "control_checks_passed": false,
+      "control_ids": [],
+      "episode": "negative_wrong_topic",
+      "equivalent_solution": false,
+      "event_receipt": {
+        "producer": "evaluator_owned_read_only_snapshot_worker",
+        "raw_evidence": {
+          "target_url": "shell:cp /home/user/Desktop/Minimalist_Business_Slides.pptx /tmp/no-audio-slides.pptx"
+        },
+        "release_after_digest": "2df8458459ddd38e4296386c38ca0526f26603482009f2c505adc6461c8ce617"
+      },
+      "expected_pass": false,
+      "hidden_checks_passed": false,
+      "model_episode_executed": false,
+      "negative_counterexample": true,
+      "observed_expected_outcome": true,
+      "official_evaluator_executed": true,
+      "official_score": 0.0,
+      "real_vm_executed": true,
+      "semantic_check_ids": [],
+      "url": "shell:cp /home/user/Desktop/Minimalist_Business_Slides.pptx /tmp/no-audio-slides.pptx"
+    },
+    {
+      "canonical_oracle": false,
+      "checkpoint_changed": true,
+      "control_checks_passed": false,
+      "control_ids": [],
+      "episode": "negative_wrong_site",
+      "equivalent_solution": false,
+      "event_receipt": {
+        "producer": "evaluator_owned_read_only_snapshot_worker",
+        "raw_evidence": {
+          "target_url": "writer:wget -q 'https://huggingface.co/datasets/xlangai/ubuntu_osworld_file_cache/resolve/main/multi_apps/778efd0a-153f-4842-9214-f05fc176b877/Minimalist_Business_Slides.pptx' -O /home/user/Desktop/Minimalist_Business_Slides.pptx; nohup libreoffice --impress /home/user/Desktop/Minimalist_Business_Slides.pptx >/tmp/impress-no-audio.log 2>&1 &"
+        },
+        "release_after_digest": "d14d91083decf8634367e562c0f4e2c735bad8d372b3639f8d71013a1c65fe21"
+      },
+      "expected_pass": false,
+      "hidden_checks_passed": false,
+      "model_episode_executed": false,
+      "negative_counterexample": true,
+      "observed_expected_outcome": true,
+      "official_evaluator_executed": true,
+      "official_score": 0.0,
+      "real_vm_executed": true,
+      "semantic_check_ids": [],
+      "url": "writer:wget -q 'https://huggingface.co/datasets/xlangai/ubuntu_osworld_file_cache/resolve/main/multi_apps/778efd0a-153f-4842-9214-f05fc176b877/Minimalist_Business_Slides.pptx' -O /home/user/Desktop/Minimalist_Business_Slides.pptx; nohup libreoffice --impress /home/user/Desktop/Minimalist_Business_Slides.pptx >/tmp/impress-no-audio.log 2>&1 &"
+    }
+  ],
+  "episode_owner": "evaluator",
+  "equivalent": {
+    "canonical_oracle": false,
+    "checkpoint_changed": true,
+    "control_checks_passed": true,
+    "control_ids": [
+      "01_classify_scope_delta_verify_planet_wav_",
+      "02_revise_affected_configure_planet_w",
+      "03_preserve_unaffected_enable_continuatio",
+      "04_verify_closure_save_the_presentat"
+    ],
+    "episode": "equivalent",
+    "equivalent_solution": true,
+    "event_receipt": {
+      "producer": "evaluator_owned_read_only_snapshot_worker",
+      "raw_evidence": {
+        "target_url": "pptaudio:equivalent"
+      },
+      "release_after_digest": "911a65845834f7f0475b2f525d27da1d90dcc70f099ccdc610327487cac5e20f"
+    },
+    "expected_pass": true,
+    "hidden_checks_passed": true,
+    "model_episode_executed": false,
+    "negative_counterexample": false,
+    "observed_expected_outcome": true,
+    "official_evaluator_executed": true,
+    "official_score": 1.0,
+    "real_vm_executed": true,
+    "semantic_check_ids": [
+      "official_metric_01",
+      "persisted_target_state",
+      "post_event_reverification"
+    ],
+    "url": "pptaudio:equivalent"
+  },
+  "evidence_sha256": "0224438c05ef8e68b80d70073faa209a3bb8ef4653b7c2ba6c456d4df2f2a773",
+  "host_checkpoint": {
+    "checkpoint_sha256": "0224438c05ef8e68b80d70073faa209a3bb8ef4653b7c2ba6c456d4df2f2a773",
+    "owner": "host_runtime"
+  },
+  "model_episode_executed": false,
+  "native_evaluator_verified": true,
+  "passed": true,
+  "schema_version": "async-rbench-osworld-canonical-family-v1",
+  "source_native_marble_verified": true
+}

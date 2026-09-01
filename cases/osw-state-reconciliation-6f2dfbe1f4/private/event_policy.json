@@ -1,0 +1,33 @@
+{
+  "theme": "partial_then_complete_result",
+  "event_id": "evt.osw_state_reconciliation_6f2dfbe1f4.partial_then_complete_result",
+  "authority_rule": "green_background_result is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_state_reconciliation_6f2dfbe1f4.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "before_state": "The 800×800 XCF contains a white background and an object layer; the fill and object-preservation checks are still independent partial results.",
+    "after_state": "Only the background is green, the object layer is unchanged, green_background_with_object.png is exported, and check_green_background passes.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.canvas",
+      "req.02.green_rgb",
+      "req.03.object_preserved",
+      "req.04.background_only",
+      "req.05.green_evaluator",
+      "final_state"
+    ]
+  }
+}

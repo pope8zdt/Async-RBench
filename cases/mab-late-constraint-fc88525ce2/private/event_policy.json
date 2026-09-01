@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.choose_a_quantity_compat",
+      "req.02.counter_or_accept_the_90",
+      "req.03.revise_the_quantity_pric",
+      "req.04.submit_the_offer_and_rec",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+    "before_state": "Task-specific provisional work exists before production_scope_constraint_added.",
+    "event_id": "evt.mab-late-constraint-fc88525ce2.production_scope_constraint_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-fc88525ce2.production_scope_constraint_added",
+  "forbidden_shortcut": "Do not ignore the event, retain a superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

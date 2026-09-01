@@ -1,0 +1,197 @@
+{
+  "case_id": "osw-dependency-unblock-5c3a1789cf",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_enter_the_returned_pickup_an",
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Zurich is selected as the rental location.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enter_the_returned_picku"
+        ]
+      },
+      "id": "01_classify_authority_enter_the_returned",
+      "must_still_pass": [
+        "osw_dependency_unblock_5.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_5c3a1789cf.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "For event 'The exact calendar dates corresponding to the task-relative next Monday pickup and Friday return in the benchmark environment’s locale and timezone.', perform classify_authority for 'Enter the returned pickup and return dates in the site’s date controls.' while retaining valid prior result 'Zurich is selected as the rental location.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.enter_the_returned_picku"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_apply_the_large_car_filter_a",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Large vehicle and ascending-price filter controls are identified.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enter_the_returned_picku"
+        ]
+      },
+      "id": "02_revise_affected_apply_the_large_ca",
+      "must_still_pass": [
+        "osw_dependency_unblock_5.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_5c3a1789cf.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'The exact calendar dates corresponding to the task-relative next Monday pickup and Friday return in the benchmark environment’s locale and timezone.', perform revise_affected for 'Apply the large-car filter and sort results by price ascending.' while retaining valid prior result 'Large vehicle and ascending-price filter controls are identified.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.enter_the_returned_picku"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_verify_the_visible_location_",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Zurich is selected as the rental location.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enter_the_returned_picku"
+        ]
+      },
+      "id": "03_verify_closure_verify_the_visible",
+      "must_still_pass": [
+        "osw_dependency_unblock_5.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_5c3a1789cf.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'The exact calendar dates corresponding to the task-relative next Monday pickup and Friday return in the benchmark environment’s locale and timezone.', perform verify_closure for 'Verify the visible location, date range, vehicle class, and sort state.' while retaining valid prior result 'Zurich is selected as the rental location.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.enter_the_returned_picku"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.enter_the_returned_picku"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.apply_the_large_car_filt"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_the_visible_locat"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.enter_the_returned_picku",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.apply_the_large_car_filt",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_the_visible_locat",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.enter_the_returned_picku",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.apply_the_large_car_filt",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_the_visible_locat",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.enter_the_returned_picku",
+      "req.02.apply_the_large_car_filt",
+      "req.03.verify_the_visible_locat",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The exact calendar dates corresponding to the task-relative next Monday pickup and Friday return in the benchmark environment’s locale and timezone.",
+    "before_state": "Resolved dates arrive after stable non-date filters are prepared but before the search is submitted.",
+    "event_id": "evt.osw_dependency_unblock_5.delayed_authoritative_re",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Enter the returned pickup and return dates in the site’s date controls.",
+      "id": "req.01.enter_the_returned_picku",
+      "observable_probe": "osw_dependency_unblock_5.sem.01.the_persisted_desktop_artifa",
+      "public_evidence": "source instruction and workstream result for enter_the_returned_pickup_and_return"
+    },
+    {
+      "description": "Apply the large-car filter and sort results by price ascending.",
+      "id": "req.02.apply_the_large_car_filt",
+      "observable_probe": "osw_dependency_unblock_5.sem.02.the_required_result_artifact",
+      "public_evidence": "source instruction and workstream result for apply_the_large_car_filter_and_sort_"
+    },
+    {
+      "description": "Verify the visible location, date range, vehicle class, and sort state.",
+      "id": "req.03.verify_the_visible_locat",
+      "observable_probe": "osw_dependency_unblock_5.sem.03.enter_the_returned_pickup_an",
+      "public_evidence": "source instruction and workstream result for verify_the_visible_location_date_ran"
+    }
+  ]
+}

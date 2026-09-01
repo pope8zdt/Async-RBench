@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-late-test-evidence-4c6c77884e",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_duplicate_challenge_test_evidence_replay",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close challenge_test_evidence_replayed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_family_sessi"
+        ]
+      },
+      "id": "01_classify_duplicate_challenge_test_evide",
+      "must_still_pass": [
+        "mab_late_test_evidence_4c6c77884e.source.preservation"
+      ],
+      "mutation_family": "classify_duplicate",
+      "obligation": "classify_duplicate",
+      "outcome_anchors": [
+        "mab_late_test_evidence_4c6c77884e.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_duplicate:1",
+      "required_behavior": "classify_duplicate: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_family_sessi"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_idempotency_challenge_test_evidence_replay",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close challenge_test_evidence_replayed.",
+      "gate": "deduplicate_completion",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_deterministic_begi"
+        ]
+      },
+      "id": "02_preserve_idempotency_challenge_test_evide",
+      "must_still_pass": [
+        "mab_late_test_evidence_4c6c77884e.source.preservation"
+      ],
+      "mutation_family": "preserve_idempotency",
+      "obligation": "preserve_idempotency",
+      "outcome_anchors": [
+        "mab_late_test_evidence_4c6c77884e.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:preserve_idempotency:2",
+      "required_behavior": "preserve_idempotency: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_deterministic_begi"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_challenge_test_evidence_replay",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close challenge_test_evidence_replayed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.persist_progress_hints_and_r"
+        ]
+      },
+      "id": "03_verify_closure_challenge_test_evide",
+      "must_still_pass": [
+        "mab_late_test_evidence_4c6c77884e.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_test_evidence_4c6c77884e.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.persist_progress_hints_and_r"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_users_family_sessi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_deterministic_begi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.persist_progress_hints_and_r"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.deduplicate_and_integrate_re"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_users_family_sessi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_deterministic_begi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.persist_progress_hints_and_r",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.deduplicate_and_integrate_re",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_users_family_sessi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_deterministic_begi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.persist_progress_hints_and_r",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.deduplicate_and_integrate_re",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_family_sessi",
+      "req.02.implement_deterministic_begi",
+      "req.03.persist_progress_hints_and_r",
+      "req.04.deduplicate_and_integrate_re",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The authoritative sorting boundary suite is registered exactly once and affected challenge behavior is reverified without duplicating side effects.",
+    "before_state": "Collaboration and challenge execution exist, but boundary-test evidence has not yet been incorporated and may be delivered more than once.",
+    "event_id": "evt.mab_late_test_evidence_4.challenge_test_evidence_replayed",
+    "primary_event_theme": "duplicate_or_replayed_completion",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement users, family sessions, and real-time collaborative edits.",
+      "id": "req.01.implement_users_family_sessi",
+      "observable_probe": "mab_late_test_evidence_4c6c77884e.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement deterministic beginner-to-advanced challenge execution and feedback.",
+      "id": "req.02.implement_deterministic_begi",
+      "observable_probe": "mab_late_test_evidence_4c6c77884e.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Persist progress, hints, and resumable challenge state.",
+      "id": "req.03.persist_progress_hints_and_r",
+      "observable_probe": "mab_late_test_evidence_4c6c77884e.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Deduplicate and integrate returned task-specific test evidence, then reverify affected challenges.",
+      "id": "req.04.deduplicate_and_integrate_re",
+      "observable_probe": "mab_late_test_evidence_4c6c77884e.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

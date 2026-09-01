@@ -1,0 +1,133 @@
+{
+  "anomaly": "chrome_default_font_size",
+  "canonical": {
+    "canonical_oracle": true,
+    "checkpoint_changed": true,
+    "control_checks_passed": true,
+    "control_ids": [
+      "01_classify_authority_enable_developer_m",
+      "02_revise_affected_use_load_unpacked_",
+      "03_verify_closure_resolve_any_report"
+    ],
+    "episode": "canonical",
+    "equivalent_solution": false,
+    "event_receipt": {
+      "producer": "evaluator_owned_read_only_snapshot_worker",
+      "raw_evidence": {
+        "target_url": "fontpref:canonical"
+      },
+      "release_after_digest": "08512accdcbecb693410a1ea4b22ff35d70925668e039bc9d5b9f1326d2947f5"
+    },
+    "expected_pass": true,
+    "hidden_checks_passed": true,
+    "model_episode_executed": false,
+    "negative_counterexample": false,
+    "observed_expected_outcome": true,
+    "official_evaluator_executed": true,
+    "official_score": 1.0,
+    "real_vm_executed": true,
+    "semantic_check_ids": [
+      "official_metric_01",
+      "persisted_target_state",
+      "post_event_reverification"
+    ],
+    "url": "fontpref:canonical"
+  },
+  "case_id": "osw-dependency-unblock-af63091471",
+  "counterexamples": [
+    {
+      "canonical_oracle": false,
+      "checkpoint_changed": true,
+      "control_checks_passed": false,
+      "control_ids": [],
+      "episode": "negative_wrong_topic",
+      "equivalent_solution": false,
+      "event_receipt": {
+        "producer": "evaluator_owned_read_only_snapshot_worker",
+        "raw_evidence": {
+          "target_url": "fontpref:default"
+        },
+        "release_after_digest": "3be31b080e5abcd6f3a7b13bd6e05555cf0cc4a2cd416fae40c26dd5a209b425"
+      },
+      "expected_pass": false,
+      "hidden_checks_passed": false,
+      "model_episode_executed": false,
+      "negative_counterexample": true,
+      "observed_expected_outcome": true,
+      "official_evaluator_executed": true,
+      "official_score": 0.0,
+      "real_vm_executed": true,
+      "semantic_check_ids": [],
+      "url": "fontpref:default"
+    },
+    {
+      "canonical_oracle": false,
+      "checkpoint_changed": true,
+      "control_checks_passed": false,
+      "control_ids": [],
+      "episode": "negative_wrong_site",
+      "equivalent_solution": false,
+      "event_receipt": {
+        "producer": "evaluator_owned_read_only_snapshot_worker",
+        "raw_evidence": {
+          "target_url": "fontpref:unrelated"
+        },
+        "release_after_digest": "d4a205a5e0e4f8577b02ac7d9589bb39b2b55658b32e8a8300d7a12399e54e5b"
+      },
+      "expected_pass": false,
+      "hidden_checks_passed": false,
+      "model_episode_executed": false,
+      "negative_counterexample": true,
+      "observed_expected_outcome": true,
+      "official_evaluator_executed": true,
+      "official_score": 0.0,
+      "real_vm_executed": true,
+      "semantic_check_ids": [],
+      "url": "fontpref:unrelated"
+    }
+  ],
+  "episode_owner": "evaluator",
+  "equivalent": {
+    "canonical_oracle": false,
+    "checkpoint_changed": true,
+    "control_checks_passed": true,
+    "control_ids": [
+      "01_classify_authority_enable_developer_m",
+      "02_revise_affected_use_load_unpacked_",
+      "03_verify_closure_resolve_any_report"
+    ],
+    "episode": "equivalent",
+    "equivalent_solution": true,
+    "event_receipt": {
+      "producer": "evaluator_owned_read_only_snapshot_worker",
+      "raw_evidence": {
+        "target_url": "fontpref:equivalent"
+      },
+      "release_after_digest": "8543106b58d84cf99a2fbf1708b74f3bfc5a4b87ce160b97dcd64e9448e40e7c"
+    },
+    "expected_pass": true,
+    "hidden_checks_passed": true,
+    "model_episode_executed": false,
+    "negative_counterexample": false,
+    "observed_expected_outcome": true,
+    "official_evaluator_executed": true,
+    "official_score": 1.0,
+    "real_vm_executed": true,
+    "semantic_check_ids": [
+      "official_metric_01",
+      "persisted_target_state",
+      "post_event_reverification"
+    ],
+    "url": "fontpref:equivalent"
+  },
+  "evidence_sha256": "08512accdcbecb693410a1ea4b22ff35d70925668e039bc9d5b9f1326d2947f5",
+  "host_checkpoint": {
+    "checkpoint_sha256": "08512accdcbecb693410a1ea4b22ff35d70925668e039bc9d5b9f1326d2947f5",
+    "owner": "host_runtime"
+  },
+  "model_episode_executed": false,
+  "native_evaluator_verified": true,
+  "passed": true,
+  "schema_version": "async-rbench-osworld-canonical-family-v1",
+  "source_native_osworld_verified": true
+}

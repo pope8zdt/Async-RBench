@@ -1,0 +1,259 @@
+{
+  "async_depth": 2,
+  "case_id": "osw-cross-app-artifact-133984c167",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_dblp_bibtex_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "docx_title_extraction",
+          "dblp_record_resolution"
+        ]
+      },
+      "id": "01_classify_authority_dblp_bibtex_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_133984c167.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed dblp_published_records; preserve unaffected chrome/libreoffice_writer state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.extract_all_six_paper_ti"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_dblp_bibtex_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "docx_title_extraction",
+          "dblp_record_resolution"
+        ]
+      },
+      "id": "02_revise_affected_dblp_bibtex_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_133984c167.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed dblp_published_records; preserve unaffected chrome/libreoffice_writer state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.resolve_each_title_to_th"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_dblp_bibtex_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "docx_title_extraction",
+          "dblp_record_resolution"
+        ]
+      },
+      "id": "03_verify_closure_dblp_bibtex_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_133984c167.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed dblp_published_records; preserve unaffected chrome/libreoffice_writer state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.write_six_bibtex_entries"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "depends_on",
+        "source": "upstream.docx_title_extraction",
+        "target": "upstream.dblp_record_resolution"
+      },
+      {
+        "relation": "produces",
+        "source": "upstream.dblp_record_resolution",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.extract_all_six_paper_ti"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.extract_all_six_paper_ti",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.resolve_each_title_to_th"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.resolve_each_title_to_th",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.write_six_bibtex_entries"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.write_six_bibtex_entries",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.04.save_utf_8_references_bi"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.save_utf_8_references_bi",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "LibreOffice Writer",
+        "description": "Extract the six referenced paper titles from references.docx.",
+        "id": "upstream.docx_title_extraction",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "Chrome/DBLP",
+        "description": "Resolve each extracted title to its published DBLP BibTeX record.",
+        "id": "upstream.dblp_record_resolution",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.extract_all_six_paper_ti",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.resolve_each_title_to_th",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.write_six_bibtex_entries",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.save_utf_8_references_bi",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.extract_all_six_paper_ti",
+      "req.02.resolve_each_title_to_th",
+      "req.03.write_six_bibtex_entries",
+      "req.04.save_utf_8_references_bi",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The DBLP worker returns six published-record BibTeX identities, replacing any provisional arXiv guesses before references.bib is written.",
+    "before_state": "The thesis DOCX can be inspected locally, but authoritative publication records and citation keys are still unresolved.",
+    "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Extract all six paper titles from the opened DOCX.",
+      "id": "req.01.extract_all_six_paper_ti",
+      "observable_probe": "osw_cross_app_artifact_133984c167.osworld.identity",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Resolve each title to the published DBLP record instead of an arXiv version.",
+      "id": "req.02.resolve_each_title_to_th",
+      "observable_probe": "osw_cross_app_artifact_133984c167.osworld.official_score",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Write six BibTeX entries separated by blank lines.",
+      "id": "req.03.write_six_bibtex_entries",
+      "observable_probe": "osw_cross_app_artifact_133984c167.osworld.native_evidence",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Save UTF-8 references.bib at the official result path.",
+      "id": "req.04.save_utf_8_references_bi",
+      "observable_probe": "osw_cross_app_artifact_133984c167.osworld.task_assertion",
+      "public_evidence": "source instruction and delayed receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "LibreOffice Writer",
+      "description": "Extract the six referenced paper titles from references.docx.",
+      "id": "docx_title_extraction"
+    },
+    {
+      "app": "Chrome/DBLP",
+      "depends_on": [
+        "docx_title_extraction"
+      ],
+      "description": "Resolve each extracted title to its published DBLP BibTeX record.",
+      "id": "dblp_record_resolution"
+    }
+  ]
+}

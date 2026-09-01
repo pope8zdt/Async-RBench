@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific optimizer_constraints_completed receipt bound to coding:003.",
+      "id": "mab_dependency_unblock_fe0736601e.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned CollaborativeSchedulePlanner authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_fe0736601e.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A completed availability, dependency, and preference contract replaces provisional priority-only scheduling while preserving tasks, feedback, notifications, and report history.",
+      "id": "mab_dependency_unblock_fe0736601e.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:003.",
+      "id": "mab_dependency_unblock_fe0736601e.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes CollaborativeSchedulePlanner and the team_schedule_optimizer_closure.",
+      "id": "mab_dependency_unblock_fe0736601e.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schedule_output_schema_tasks_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Scheduling is deterministic, dependency ordered, availability bound, non-overlapping, priority aware, and responsive to feedback.",
+      "id": "mab_dependency_unblock_fe0736601e.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schedule_dependencies_availability_non_overlap_priority_and_feedback",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves user tasks, team feedback, change notifications, and generated report history.",
+      "id": "mab_dependency_unblock_fe0736601e.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schedule_edits_feedback_notifications_and_reports_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The complete optimizer replaces provisional slots and revalidates Gantt and usage reports.",
+      "id": "mab_dependency_unblock_fe0736601e.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schedule_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

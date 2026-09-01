@@ -1,0 +1,121 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "swe-dependency-unblock-8902c7f431",
+  "benchmark": "SWE-bench",
+  "source_binding": {
+    "instance_id": "django__django-12125",
+    "repo": "django/django",
+    "base_commit": "89d41cba392b759732ba9f1db4ff29ed47da6a56",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "split": "test",
+    "variant": "swe_bench",
+    "problem_statement_sha256": "d466ceb9860bfb421821c9bab47b1fa2c11295523365b174ea0b2a5a3b125a65",
+    "harness_revision": "7a21e05772954cc81471ae19d56f436cecf43c54"
+  },
+  "native_runtime": {
+    "adapter": "swebench.harness.run_evaluation",
+    "isolation": "official Docker instance image",
+    "final_state": "git working tree patch"
+  },
+  "event_protocol": {
+    "producer": "independent reproduction/test worker in a clean clone of the same base commit",
+    "payload": "raw command, exit status, and bounded stdout/stderr from selected reproduction tests",
+    "release_predicate": "main working tree has a non-empty persisted diff while worker is running",
+    "rollback": "post-result patch history remains; the agent must amend/revert real files"
+  },
+  "state_attestation": {
+    "baseline_probe": "git HEAD plus clean index/worktree digest",
+    "checkpoint_probe": "git diff --binary plus untracked-file content digest",
+    "change_required": true,
+    "journal_owner": "host harness outside /testbed"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "entrypoint": "swebench.harness.run_evaluation",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "instance_id": "django__django-12125",
+    "FAIL_TO_PASS": [
+      "test_serialize_nested_class (migrations.test_writer.WriterTests)",
+      "test_serialize_numbers (migrations.test_writer.WriterTests)"
+    ],
+    "PASS_TO_PASS": [
+      "test_args_kwargs_signature (migrations.test_writer.OperationWriterTests)",
+      "test_args_signature (migrations.test_writer.OperationWriterTests)",
+      "test_empty_signature (migrations.test_writer.OperationWriterTests)",
+      "test_expand_args_signature (migrations.test_writer.OperationWriterTests)",
+      "test_kwargs_signature (migrations.test_writer.OperationWriterTests)",
+      "test_multiline_args_signature (migrations.test_writer.OperationWriterTests)",
+      "test_nested_args_signature (migrations.test_writer.OperationWriterTests)",
+      "test_nested_operation_expand_args_signature (migrations.test_writer.OperationWriterTests)",
+      "test_custom_operation (migrations.test_writer.WriterTests)",
+      "test_deconstruct_class_arguments (migrations.test_writer.WriterTests)",
+      "test_migration_file_header_comments (migrations.test_writer.WriterTests)",
+      "test_migration_path (migrations.test_writer.WriterTests)",
+      "test_models_import_omitted (migrations.test_writer.WriterTests)",
+      "test_register_non_serializer (migrations.test_writer.WriterTests)",
+      "test_register_serializer (migrations.test_writer.WriterTests)",
+      "test_serialize_builtin_types (migrations.test_writer.WriterTests)",
+      "test_serialize_builtins (migrations.test_writer.WriterTests)",
+      "test_serialize_choices (migrations.test_writer.WriterTests)",
+      "test_serialize_class_based_validators (migrations.test_writer.WriterTests)",
+      "test_serialize_collections (migrations.test_writer.WriterTests)",
+      "test_serialize_compiled_regex (migrations.test_writer.WriterTests)",
+      "test_serialize_constants (migrations.test_writer.WriterTests)",
+      "test_serialize_datetime (migrations.test_writer.WriterTests)",
+      "test_serialize_empty_nonempty_tuple (migrations.test_writer.WriterTests)",
+      "test_serialize_enums (migrations.test_writer.WriterTests)",
+      "test_serialize_fields (migrations.test_writer.WriterTests)",
+      "test_serialize_frozensets (migrations.test_writer.WriterTests)",
+      "test_serialize_functions (migrations.test_writer.WriterTests)",
+      "test_serialize_functools_partial (migrations.test_writer.WriterTests)",
+      "test_serialize_functools_partialmethod (migrations.test_writer.WriterTests)",
+      "test_serialize_iterators (migrations.test_writer.WriterTests)",
+      "test_serialize_lazy_objects (migrations.test_writer.WriterTests)",
+      "A reference in a local scope can't be serialized.",
+      "test_serialize_managers (migrations.test_writer.WriterTests)",
+      "test_serialize_multiline_strings (migrations.test_writer.WriterTests)",
+      "test_serialize_range (migrations.test_writer.WriterTests)",
+      "test_serialize_set (migrations.test_writer.WriterTests)",
+      "test_serialize_settings (migrations.test_writer.WriterTests)",
+      "test_serialize_strings (migrations.test_writer.WriterTests)",
+      "test_serialize_timedelta (migrations.test_writer.WriterTests)",
+      "test_serialize_type_none (migrations.test_writer.WriterTests)",
+      "An unbound method used within a class body can be serialized.",
+      "test_serialize_uuid (migrations.test_writer.WriterTests)",
+      "test_simple_migration (migrations.test_writer.WriterTests)",
+      "test_sorted_imports (migrations.test_writer.WriterTests)"
+    ],
+    "docker_image": null,
+    "selected_test_files": null
+  },
+  "quality_gates": {
+    "official_instance_bound": true,
+    "native_tests_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

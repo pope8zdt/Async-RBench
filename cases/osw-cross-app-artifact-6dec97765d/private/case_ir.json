@@ -1,0 +1,286 @@
+{
+  "case_id": "osw-cross-app-artifact-6dec97765d",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_completeness_terminal_vscode_project",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_vscode_6dec.cf.01_classify_completeness_terminal_vscode_project",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_6dec97765d.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.project_path"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_terminal_vscode_project",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_vscode_6dec.cf.02_revise_affected_terminal_vscode_project",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_6dec97765d.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.project_assets"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_terminal_vscode_project",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_vscode_6dec.cf.03_preserve_unaffected_terminal_vscode_project",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_6dec97765d.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.terminal_history"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_terminal_vscode_project",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_vscode_6dec.cf.04_verify_closure_terminal_vscode_project",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_6dec97765d.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.open_project_probe"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.project_path"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.project_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.project_assets"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.project_assets",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.terminal_history"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.terminal_history",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.open_project_probe"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.open_project_probe",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.vscode_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.vscode_state",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.06.official_checks"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.06.official_checks",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.project_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.project_assets",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.terminal_history",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.open_project_probe",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.vscode_state",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.06.official_checks",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.project_path",
+      "req.02.project_assets",
+      "req.03.terminal_history",
+      "req.04.open_project_probe",
+      "req.05.vscode_state",
+      "req.06.official_checks",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A terminal-issued code command opens /home/user/Desktop/project, shell history confirms terminal use, and the VS Code OpenProject probe returns project.",
+    "before_state": "The project assets and evaluator extension are installed, but terminal command lineage and VS Code's opened-folder probe remain independent partial evidence.",
+    "event_id": "evt.osw_cross_app_artifact_6dec97765d.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The exact Desktop project folder is targeted.",
+      "id": "req.01.project_path",
+      "observable_probe": "osw_cross_app_artifact_6dec97765d.osworld.project_path",
+      "public_evidence": "source instruction and native evaluator for project_path"
+    },
+    {
+      "description": "The three expected project assets remain present.",
+      "id": "req.02.project_assets",
+      "observable_probe": "osw_cross_app_artifact_6dec97765d.osworld.project_assets",
+      "public_evidence": "source instruction and native evaluator for project_assets"
+    },
+    {
+      "description": "Shell history proves the code command came from the terminal.",
+      "id": "req.03.terminal_history",
+      "observable_probe": "osw_cross_app_artifact_6dec97765d.osworld.terminal_history",
+      "public_evidence": "source instruction and native evaluator for terminal_history"
+    },
+    {
+      "description": "The VS Code evaluator extension reports project.",
+      "id": "req.04.open_project_probe",
+      "observable_probe": "osw_cross_app_artifact_6dec97765d.osworld.open_project_probe",
+      "public_evidence": "source instruction and native evaluator for open_project_probe"
+    },
+    {
+      "description": "VS Code is active on the project folder.",
+      "id": "req.05.vscode_state",
+      "observable_probe": "osw_cross_app_artifact_6dec97765d.osworld.vscode_state",
+      "public_evidence": "source instruction and native evaluator for vscode_state"
+    },
+    {
+      "description": "Both official evaluator branches pass.",
+      "id": "req.06.official_checks",
+      "observable_probe": "osw_cross_app_artifact_6dec97765d.osworld.official_checks",
+      "public_evidence": "source instruction and native evaluator for official_checks"
+    }
+  ]
+}

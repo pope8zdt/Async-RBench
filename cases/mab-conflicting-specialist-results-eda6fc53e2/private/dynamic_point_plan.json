@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_fileshare_index_receipt",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_fileshare_eda6.delayed_authoritative_result",
+      "evidence_group": "fileshare_eda6.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.validate_the_blocking_an"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After the provisional File Sharing comparison exists, classify the delayed database:003 receipt as authority only after verifying that it identifies two indexes on the same column.",
+      "forbidden_behavior": "Do not finalize the File Sharing diagnosis before the database:003 receipt or infer redundancy from unused-index volume without the same-column pair.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "mab_conflict_db03.cf.01_classify_authority_fileshare_index_receipt",
+      "independence_key": "mab_conflict_db03.cf.01_classify_authority_fileshare_index_receipt",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db03.mutation.01_classify_authority_fileshare_index_receipt",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_from_authority_fileshare_index",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_fileshare_eda6.delayed_authoritative_result",
+      "evidence_group": "fileshare_eda6.revise_from_authority",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.validate_the_blocking_an"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Revise the affected File Sharing diagnosis to REDUNDANT_INDEX while preserving file-access, table-size, and query-latency observations for the other hypotheses.",
+      "forbidden_behavior": "Do not retain a displaced provisional VACUUM or LOCK_CONTENTION cause or erase valid file-access and table observations.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "mab_conflict_db03.cf.02_revise_from_authority_fileshare_index",
+      "independence_key": "mab_conflict_db03.cf.02_revise_from_authority_fileshare_index",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db03.mutation.02_revise_from_authority_fileshare_index",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_fileshare_index",
+      "dimension": "closure",
+      "event_id": "evt.mab_fileshare_eda6.delayed_authoritative_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.validate_the_blocking_an"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final File Sharing diagnosis from the authoritative same-column index evidence, remove stale vacuum or lock attribution, and verify the native answer contract.",
+      "forbidden_behavior": "Do not close without reverifying REDUNDANT_INDEX from the authoritative count of two same-column indexes.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "mab_conflict_db03.cf.03_verify_closure_fileshare_index",
+      "independence_key": "mab_conflict_db03.cf.03_verify_closure_fileshare_index",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db03.mutation.03_verify_closure_fileshare_index",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_fileshare_eda6.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The delayed database:003 file-sharing checkpoint finds two indexes on the same column and authoritatively confirms REDUNDANT_INDEX.",
+        "before": "The File Sharing hypothesis matrix and table/index usage observations are persisted provisionally.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

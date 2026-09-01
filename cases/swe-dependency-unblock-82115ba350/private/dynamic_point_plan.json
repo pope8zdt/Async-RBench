@@ -1,0 +1,180 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority:req.01.return_a_kronecker_delta",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_82115ba350.symbolic_identity_entry_authority",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.return_a_kronecker_delta"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.', perform classify_authority for 'Return a Kronecker delta for symbolic identity entries.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Return a Kronecker delta for symbolic identity entries.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_dependency__c77f74.cf.01_classify_authority",
+      "independence_key": "swe_dependency__c77f74.cf.01_classify_authority",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__c77f74.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_82115ba350.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__c77f74.cf.01_classify_authority]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.return_a_kronecker_delta"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected:req.02.preserve_direct_numeric_",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_82115ba350.symbolic_identity_entry_authority",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.preserve_direct_numeric_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.', perform revise_affected for 'Preserve direct numeric diagonal and off-diagonal simplification.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Preserve direct numeric diagonal and off-diagonal simplification.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_dependency__c77f74.cf.02_revise_affected",
+      "independence_key": "swe_dependency__c77f74.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__c77f74.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_82115ba350.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__c77f74.cf.02_revise_affected]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_direct_numeric_"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure:req.03.assert_the_double_sum_ov",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_82115ba350.symbolic_identity_entry_authority",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.assert_the_double_sum_ov"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.', perform verify_closure for 'Assert the double sum over an `n × n` identity matrix is `n`.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Assert the double sum over an `n × n` identity matrix is `n`.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_dependency__c77f74.cf.03_verify_closure",
+      "independence_key": "swe_dependency__c77f74.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__c77f74.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_82115ba350.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__c77f74.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.assert_the_double_sum_ov"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.swe_dependency_unblock_82115ba350.symbolic_identity_entry_authority",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.",
+        "before": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

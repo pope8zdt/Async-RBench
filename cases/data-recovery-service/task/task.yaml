@@ -1,0 +1,120 @@
+instruction: |-
+  Complete one integrated data-recovery service from the supplied original
+  Terminal-Bench assets. All paths, schemas, interfaces, and formats below are
+  part of the public task contract.
+
+  INITIAL CONCURRENT WORKSTREAMS (BENCHMARK-STARTED)
+
+  The benchmark has already started three isolated workstreams for you. The
+  ASYNC_RBENCH_INITIAL_WAVE notice at the start of the episode lists their child ids,
+  workstream ids, task summaries and status. You are NOT required to create them
+  and will never be scored on having spawned the initial team:
+
+  1. A checkpoint-only recovery branch. On copies, it inspects main.db without
+     applying the WAL and reports the rows it actually observes.
+  2. A WAL-applied recovery branch. On copies, it decrypts/fixes and applies
+     the WAL available in its workspace, then reports the rows it actually
+     observes and a promotable recovered output.
+  3. An independent three-source merge branch implementing the exact merge
+     contract below.
+
+  These are three distinct completions owned by this main agent, not separate
+  evaluated systems. You own the orchestration after the wave starts: wait for
+  their results, accept or reject deliveries, cancel work that is no longer
+  useful, and use spawn_subagent only to re-delegate a workstream whose child
+  must be rebuilt. Keep useful main-agent work moving while results are
+  unresolved. Results become usable only after gateway delivery. Results may
+  complete in any order. Determine their applicability from their observed
+  contents, revisions and produced files; the prompt does not identify in
+  advance which completion should control a downstream decision. Preserve work
+  that remains valid and revise only artifacts whose assumptions changed.
+
+  WAL RECOVERY CONTRACT
+
+  - Fix/decrypt /app/main.db-wal so it can be applied to /app/main.db. Work on
+    copies whenever opening the database could alter the WAL.
+  - Extract all database state including WAL changes.
+  - Write every row observed after applying the WAL to
+    /app/recovered.json, sorted by id.
+  - The JSON format is:
+    [{"id": 1, "name": "item1", "value": 123}, ...]
+    with integer id/value fields and the actual recovered names and values.
+
+  THREE-SOURCE MERGE CONTRACT
+
+  Inputs:
+  - /data/source_a/users.json (highest priority)
+  - /data/source_b/users.csv
+  - /data/source_c/users.parquet (lowest priority)
+
+  Map semantically equivalent input fields to this exact canonical schema:
+  - user_id, id, userId -> user_id (integer)
+  - full_name, name, userName -> name (string)
+  - email, email_address -> email (string)
+  - registration_date, created_at, joined -> created_date (YYYY-MM-DD string)
+  - retain status as the optional canonical status string when present
+
+  Merge by user_id using source_a > source_b > source_c for every conflicting
+  field. Write /app/merged_users.parquet with one row per unique user and exact
+  columns user_id, name, email, created_date, status.
+
+  Write /app/conflicts.json as exactly this object shape:
+  {
+    "total_conflicts": <number>,
+    "conflicts": [
+      {
+        "user_id": <integer>,
+        "field": <canonical field name>,
+        "values": {
+          "source_a": <value if present>,
+          "source_b": <value if present>,
+          "source_c": <value if present>
+        },
+        "selected": <highest-priority value>
+      }
+    ]
+  }
+  Every differing field for a duplicated user is one conflict, and
+  total_conflicts must equal the list length.
+
+  KVSTORE GRPC CONTRACT
+
+  - Install grpcio==1.73.0 and grpcio-tools==1.73.0 system-wide if needed.
+  - Create /app/kv-store.proto with package/service KVStore and these exact RPCs:
+    * GetVal(GetValRequest{string key}) -> GetValResponse{int32 val}
+    * SetVal(SetValRequest{string key, int32 value}) -> SetValResponse{int32 val}
+  - Generate /app/kv_store_pb2.py and /app/kv_store_pb2_grpc.py from that proto.
+  - Create /app/server.py containing a class named Server that implements the
+    generated KVStore servicer API using a Python dictionary.
+  - The server must listen on port 5328 and /app/server.py must be independently
+    restartable from the submitted filesystem; also keep it running at completion.
+  - SetVal stores the request value and returns it in response.val. GetVal returns
+    the stored integer in response.val.
+
+  INTEGRATION AND LINEAGE CONTRACT
+
+  Write /app/service_seed.json as one exact JSON object containing no extra keys:
+  - item:<name> -> every integer value in the final recovered.json
+  - user:<user_id> -> 1 when merged status is "active", otherwise 0
+
+  /app/server.py must load that seed on startup so the restarted service exposes
+  the integrated state through the generated gRPC API.
+
+  Write /app/service-lineage.json with exactly these keys and no alternatives:
+  {
+    "recovered_sha256": <SHA-256 of /app/recovered.json>,
+    "merged_sha256": <SHA-256 of /app/merged_users.parquet>,
+    "seed_sha256": <SHA-256 of /app/service_seed.json>,
+    "recovered_row_count": <observed final row count>
+  }
+
+  Re-run the declared WAL-row-count, service-seed, and gRPC-state checks after
+  integrating the final recovery state. Final artifact lineage must name only
+  delivered results explicitly accepted for use.
+author_name: Async-RBench transformation
+difficulty: hard
+category: data-engineering
+tags: [sqlite, parquet, grpc, asynchronous-replanning]
+parser_name: pytest
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 600

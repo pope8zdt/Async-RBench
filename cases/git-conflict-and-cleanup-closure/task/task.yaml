@@ -1,0 +1,62 @@
+instruction: |-
+  A secret was accidentally committed to the git repository at /app/repo and
+  then removed by rewriting history. Your job is to (1) recover the secret and
+  write it to /app/secret.txt, (2) remove it from the repository completely so
+  it cannot be found anywhere in the repo, and (3) leave unrelated files,
+  commit messages and history untouched. The secret format is secret[...] and
+  there is only one string in the repository with that format.
+
+  The public scanners in /app/task_file/scripts run three independent, narrow
+  scans of the repository, each writing a report under
+  /app/output_data/scan_reports/:
+  - scan_refs.py (ref_history.json): searches history reachable from any ref
+    (commit messages and content diffs).
+  - scan_packs.py (pack.json): searches blobs reachable from any ref plus the
+    working tree.
+  - scan_objects.py (object_db.json): searches the raw object database,
+    including objects that are no longer reachable from any ref.
+  Each report has the fields scan_kind, found, scan_revision and scanner-specific
+  observations. The scanners cover different repository visibility boundaries;
+  inspect their reports before deciding what evidence to use.
+
+  /app/task_file/scripts/recover_secret.py --report <positive-report.json>
+  writes /app/secret.txt from the selected positive scan report and records
+  recovery_report.json.
+  /app/task_file/scripts/record_cleanup.py records each cleanup attempt you
+  perform (attempt number and the git command(s) you ran) under
+  /app/output_data/cleanup_reports/.
+  /app/task_file/scripts/verify_closure.py checks the whole repository for the
+  secret — reachable history, unreachable objects, the full object database and
+  the working tree — writes closure_report.json and stamps the most recent
+  cleanup report with the result.
+  /app/task_file/scripts/write_manifest.py assembles decision_manifest.json
+  from the reports on disk.
+
+  DELIVERABLES
+
+  Produce:
+  - /app/secret.txt: the recovered secret (contract location).
+  - /app/output_data/scan_reports/ref_history.json, pack.json, object_db.json:
+    the three scan reports, including any provenance token emitted by a scanner.
+  - /app/output_data/recovery_report.json: which scan and object the recovery
+    was based on, and the secret's sha256.
+  - /app/output_data/cleanup_reports/N.json: one report per cleanup attempt
+    (attempt, command, verified once the closure verifier runs).
+  - /app/output_data/closure_report.json: the repo-wide closure verdict.
+  - /app/output_data/decision_manifest.json: a machine-readable summary built
+    from the scan, recovery, cleanup and closure reports by
+    /app/task_file/scripts/write_manifest.py.
+
+  The benchmark has already started the independent scan workstreams. Reports
+  may arrive in any order and cover different repository visibility boundaries.
+  Decide which evidence is sufficient from each report's observed scope and
+  contents; the prompt does not identify a preferred report. If a scan or
+  cleanup attempt proves insufficient, re-delegate or repeat only the affected
+  work and finish with repository-wide closure verification.
+author_name: Async-RBench transformation
+difficulty: hard
+category: security
+tags: [git, leak-recovery, asynchronous-replanning]
+parser_name: pytest
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 600

@@ -1,0 +1,395 @@
+{
+  "families": [
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_late_constr_be439e.mut.01_receipt",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Cross-check independent evidence for: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_late_constr_be439e.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_late_constr_be439e.mut.02_probes",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Cross-check independent evidence for: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_late_constr_be439e.mut.02_probes_crosscheck",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_late_constr_be439e.mut.03_closure",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Cross-check independent evidence for: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_late_constr_be439e.mut.03_closure_crosscheck",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: The task remains bound to its pinned source revision.",
+      "id": "swe_late_constr_be439e.mut.04_pin",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Cross-check independent evidence for: The task remains bound to its pinned source revision.",
+      "id": "swe_late_constr_be439e.mut.04_pin_crosscheck",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_Point2D (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.05_pytest_01_test_point2d",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_01_test_point2d"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_01_test_point2d_evidence",
+        "corrupt_pytest_01_test_point2d_value",
+        "replay_stale_pytest_01_test_point2d_state",
+        "satisfy_manifest_without_pytest_01_test_point2d_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test__normalize_dimension (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.06_pytest_02_test_normalize_dim",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_02_test_normalize_dimension"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_02_test_normalize_dim_evidence",
+        "corrupt_pytest_02_test_normalize_dim_value",
+        "replay_stale_pytest_02_test_normalize_dim_state",
+        "satisfy_manifest_without_pytest_02_test_normalize_dim_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_arguments (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.07_pytest_03_test_arguments",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_03_test_arguments"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_03_test_arguments_evidence",
+        "corrupt_pytest_03_test_arguments_value",
+        "replay_stale_pytest_03_test_arguments_state",
+        "satisfy_manifest_without_pytest_03_test_arguments_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_concyclic_doctest_bug (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.08_pytest_04_test_concyclic_doc",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_04_test_concyclic_doctest_bug"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_04_test_concyclic_doc_evidence",
+        "corrupt_pytest_04_test_concyclic_doc_value",
+        "replay_stale_pytest_04_test_concyclic_doc_state",
+        "satisfy_manifest_without_pytest_04_test_concyclic_doc_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_dot (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.09_pytest_05_test_dot",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_05_test_dot"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_05_test_dot_evidence",
+        "corrupt_pytest_05_test_dot_value",
+        "replay_stale_pytest_05_test_dot_state",
+        "satisfy_manifest_without_pytest_05_test_dot_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_issue_11617 (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.10_pytest_06_test_issue_11617",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_06_test_issue_11617"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_06_test_issue_11617_evidence",
+        "corrupt_pytest_06_test_issue_11617_value",
+        "replay_stale_pytest_06_test_issue_11617_state",
+        "satisfy_manifest_without_pytest_06_test_issue_11617_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest failing surface remains green: test_issue_22684 (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.11_pytest_07_test_issue_22684",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_07_test_issue_22684"
+      ],
+      "operation": "mutate_semantic_changed_behavior",
+      "variants": [
+        "omit_pytest_07_test_issue_22684_evidence",
+        "corrupt_pytest_07_test_issue_22684_value",
+        "replay_stale_pytest_07_test_issue_22684_state",
+        "satisfy_manifest_without_pytest_07_test_issue_22684_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Cross-check independent evidence for: Declared native pytest failing surface remains green: test_issue_22684 (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.11_pytest_07_test_issue_22684_crosscheck",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_07_test_issue_22684"
+      ],
+      "operation": "cross_corrupt_changed_behavior_evidence",
+      "variants": [
+        "manifest_green_pytest_07_test_issue_22684_red",
+        "artifact_green_pytest_07_test_issue_22684_stale",
+        "receipt_valid_pytest_07_test_issue_22684_foreign",
+        "partial_closure_hides_pytest_07_test_issue_22684_failure"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_issue_9214 (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.12_pytest_08_test_issue_9214",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_08_test_issue_9214"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_08_test_issue_9214_evidence",
+        "corrupt_pytest_08_test_issue_9214_value",
+        "replay_stale_pytest_08_test_issue_9214_state",
+        "satisfy_manifest_without_pytest_08_test_issue_9214_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_point (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.13_pytest_09_test_point",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_09_test_point"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_09_test_point_evidence",
+        "corrupt_pytest_09_test_point_value",
+        "replay_stale_pytest_09_test_point_state",
+        "satisfy_manifest_without_pytest_09_test_point_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_point3D (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.14_pytest_10_test_point3d",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_10_test_point3d"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_10_test_point3d_evidence",
+        "corrupt_pytest_10_test_point3d_value",
+        "replay_stale_pytest_10_test_point3d_state",
+        "satisfy_manifest_without_pytest_10_test_point3d_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_transform (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.15_pytest_11_test_transform",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_11_test_transform"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_11_test_transform_evidence",
+        "corrupt_pytest_11_test_transform_value",
+        "replay_stale_pytest_11_test_transform_state",
+        "satisfy_manifest_without_pytest_11_test_transform_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: Declared native pytest passing surface remains green: test_unit (1 assertions)",
+      "id": "swe_late_constr_be439e.mut.16_pytest_12_test_unit",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.native.pytest_12_test_unit"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_12_test_unit_evidence",
+        "corrupt_pytest_12_test_unit_value",
+        "replay_stale_pytest_12_test_unit_state",
+        "satisfy_manifest_without_pytest_12_test_unit_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: For event 'An independent predicate evaluation reports that im(a).equals(0) accepts unevaluated real integer coordinates, rejects proven nonzero imaginary coordinates, and leaves indeterminate symbolic coordinates on the intended path.', perform classify_completeness for 'Use the predicate behavior reported for numeric-coordinate validation.' while retaining valid prior result 'Reproduce the Point2D failure under evaluate(False).'.",
+      "id": "swe_late_constr_be439e.mut.17_01_classify_completeness_use",
+      "must_fail": [
+        "swe_late_constr_be439e.cf.01_classify_completeness_use_the_predicate_"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Cross-check independent evidence for: For event 'An independent predicate evaluation reports that im(a).equals(0) accepts unevaluated real integer coordinates, rejects proven nonzero imaginary coordinates, and leaves indeterminate symbolic coordinates on the intended path.', perform classify_completeness for 'Use the predicate behavior reported for numeric-coordinate validation.' while retaining valid prior result 'Reproduce the Point2D failure under evaluate(False).'.",
+      "id": "swe_late_constr_be439e.mut.17_01_classify_completeness_use_crosscheck",
+      "must_fail": [
+        "swe_late_constr_be439e.cf.01_classify_completeness_use_the_predicate_"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_completeness_use_red",
+        "artifact_green_01_classify_completeness_use_stale",
+        "receipt_valid_01_classify_completeness_use_foreign",
+        "partial_closure_hides_01_classify_completeness_use_failure"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: For event 'An independent predicate evaluation reports that im(a).equals(0) accepts unevaluated real integer coordinates, rejects proven nonzero imaginary coordinates, and leaves indeterminate symbolic coordinates on the intended path.', perform revise_affected for 'Verify both evaluate(False) entry forms construct Point2D successfully.' while retaining valid prior result 'Locate the imaginary-coordinate truthiness check and draft a non-truthiness predicate.'.",
+      "id": "swe_late_constr_be439e.mut.18_02_revise_affected_verify_bo",
+      "must_fail": [
+        "swe_late_constr_be439e.cf.02_revise_affected_verify_both_evalua"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Directly challenge: For event 'An independent predicate evaluation reports that im(a).equals(0) accepts unevaluated real integer coordinates, rejects proven nonzero imaginary coordinates, and leaves indeterminate symbolic coordinates on the intended path.', perform verify_closure for 'Confirm genuinely imaginary numeric coordinates still raise.' while retaining valid prior result 'Reproduce the Point2D failure under evaluate(False).'.",
+      "id": "swe_late_constr_be439e.mut.19_03_verify_closure_confirm_ge",
+      "must_fail": [
+        "swe_late_constr_be439e.cf.03_verify_closure_confirm_genuinely_"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-late-constraint-17e23e3eb3",
+      "description": "Cross-check independent evidence for: For event 'An independent predicate evaluation reports that im(a).equals(0) accepts unevaluated real integer coordinates, rejects proven nonzero imaginary coordinates, and leaves indeterminate symbolic coordinates on the intended path.', perform verify_closure for 'Confirm genuinely imaginary numeric coordinates still raise.' while retaining valid prior result 'Reproduce the Point2D failure under evaluate(False).'.",
+      "id": "swe_late_constr_be439e.mut.19_03_verify_closure_confirm_ge_crosscheck",
+      "must_fail": [
+        "swe_late_constr_be439e.cf.03_verify_closure_confirm_genuinely_"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_confirm_ge_red",
+        "artifact_green_03_verify_closure_confirm_ge_stale",
+        "receipt_valid_03_verify_closure_confirm_ge_foreign",
+        "partial_closure_hides_03_verify_closure_confirm_ge_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

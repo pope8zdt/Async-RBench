@@ -1,0 +1,60 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-110bdf766b",
+  "source_task_id": "osworld:multi_apps:8e116af7-7db7-4e35-a68b-b0939c066c78",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "normalized_receipt_records",
+  "upstream_dependency_graph": [
+    {
+      "id": "receipt_inventory",
+      "app": "OS/Image/PDF",
+      "description": "Inventory the five receipt artifacts and bind one record to each source file."
+    },
+    {
+      "id": "receipt_normalization",
+      "app": "OCR artifact worker",
+      "description": "Normalize date, merchant, description, amount and source identity for each inventoried receipt.",
+      "depends_on": [
+        "receipt_inventory"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/oai/share/my_bookkeeping.xlsx",
+    "sheet": "Sheet1",
+    "preserved_range": "A1:E8",
+    "preserved_rows": true,
+    "source_files": [
+      "receipt_0.jpeg",
+      "receipt_1.jpg",
+      "receipt_2.jpg",
+      "receipt_3.pdf",
+      "receipt_4.jpg"
+    ],
+    "new_row_count": 5,
+    "types": [
+      "Expense",
+      "Expense",
+      "Expense",
+      "Expense",
+      "Expense"
+    ],
+    "amounts": [
+      -186.93,
+      -3670,
+      -5.7,
+      -154.06,
+      -8.1
+    ],
+    "running_balances": [
+      603.07,
+      -3066.93,
+      -3072.63,
+      -3226.69,
+      -3234.79
+    ]
+  },
+  "task_assertion": "The saved bookkeeping workbook preserves rows 1-8 and appends the five official expense transactions with correct running balances.",
+  "finding": "The receipt worker returns five source-bound normalized expense records; only the appended transaction rows and dependent running balances must be completed."
+}
+

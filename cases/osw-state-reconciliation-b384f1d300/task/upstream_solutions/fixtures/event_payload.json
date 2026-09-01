@@ -1,0 +1,53 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-state-reconciliation-b384f1d300",
+  "source_task_id": "osworld:multi_apps:788b3701-3ec9-4b67-b679-418bfa726c22",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "next_chapter_repository_result",
+  "upstream_dependency_graph": [
+    {
+      "id": "local_chapter_inventory",
+      "app": "Nautilus archive worker",
+      "description": "Inventory the seven chapters in old-chapters.tar.xz."
+    },
+    {
+      "id": "repository_sequence_probe",
+      "app": "Chrome GitHub worker",
+      "description": "Compare the local inventory with the repository chapter sequence.",
+      "depends_on": [
+        "local_chapter_inventory"
+      ]
+    },
+    {
+      "id": "chapter_download_and_diff",
+      "app": "Filesystem evaluator",
+      "description": "Save Early Buildings.tex and verify exact text against the official gold file.",
+      "depends_on": [
+        "repository_sequence_probe"
+      ]
+    }
+  ],
+  "state": {
+    "repository_url": "https://github.com/liangjs333/4th-year-in-tsinghua-eng",
+    "collection_path": "/home/user/Documents/Novels/4th Year in Tsinghua",
+    "archive_sha256": "ee25951bc798d678253ec3cb7afd87114a6a7e6535499156a23a58ca9a838382",
+    "existing_chapters": [
+      "Classroom Building 2.tex",
+      "Gong Office.tex",
+      "main.tex",
+      "Moonlight over Lotus Pond.tex",
+      "Prelude.tex",
+      "The Phantom of the West Lake.tex",
+      "Zero-Zero Pavilion.tex"
+    ],
+    "next_chapter": "Early Buildings.tex",
+    "output_path": "/home/user/Documents/Novels/4th Year in Tsinghua/Early Buildings.tex",
+    "content_sha256": "648849de03984bfaeaac2be87fdbbba9ff66cfdd430165edf5655ebef1d8ac5d",
+    "content_bytes": 5045,
+    "content_lines": 76,
+    "first_line": "\\chapter{Early Buildings}"
+  },
+  "task_assertion": "Early Buildings.tex is the next chapter absent from the seven-file archive and its saved content exactly matches the official 5045-byte gold text.",
+  "finding": "The delayed repository inventory identifies Early Buildings.tex as the next missing chapter and supplies the exact 5,045-byte text accepted by diff_text_file."
+}
+

@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific video_metric_calibration_completed receipt bound to coding:024.",
+      "id": "mab_dependency_unblock_5b3239e261.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned SportsTeamSyncer authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_5b3239e261.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A delayed video-metric calibration unblocks speed, accuracy, agility, large-file, and role semantics while preserving team discussions, shared media, training plans, and metric history.",
+      "id": "mab_dependency_unblock_5b3239e261.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:024.",
+      "id": "mab_dependency_unblock_5b3239e261.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes SportsTeamSyncer, dashboards, and a video-calibration closure.",
+      "id": "mab_dependency_unblock_5b3239e261.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_output_schema_roles_dashboard_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Role access, video limits, speed/accuracy/agility calculations, and metric history follow the calibration contract.",
+      "id": "mab_dependency_unblock_5b3239e261.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_video_access_calibrated_metrics_and_large_file_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Team posts, shared media, training plans, uploaded videos, and historical metrics remain intact.",
+      "id": "mab_dependency_unblock_5b3239e261.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_workspace_media_training_and_metric_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed calibration is consumed before final video-analysis and edge-case verification.",
+      "id": "mab_dependency_unblock_5b3239e261.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_calibration_event_and_final_reverification",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

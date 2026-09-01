@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific shared_budget_policy_completed receipt bound to coding:012.",
+      "id": "mab_dependency_unblock_c27563df83.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned BudgetSync authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_c27563df83.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A complete shared-budget policy replaces provisional arithmetic-only handling with integer-money, role, notification, goal, and adaptation semantics.",
+      "id": "mab_dependency_unblock_c27563df83.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:012.",
+      "id": "mab_dependency_unblock_c27563df83.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes BudgetSync and the shared-budget policy closure.",
+      "id": "mab_dependency_unblock_c27563df83.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_budget_output_schema_shared_budget_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Integer-cent transactions, owner/edit/view authorization, dashboards, goals, and threshold notifications are enforced.",
+      "id": "mab_dependency_unblock_c27563df83.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_budget_permissions_integer_money_dashboard_and_notifications",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Profiles, permissions, transactions, notifications, visualization preferences, and feedback are preserved.",
+      "id": "mab_dependency_unblock_c27563df83.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_budget_visualization_suggestions_feedback_and_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The complete policy replaces provisional behavior and revalidates all affected financial outputs.",
+      "id": "mab_dependency_unblock_c27563df83.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_budget_complete_policy_event_and_final_reverification",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

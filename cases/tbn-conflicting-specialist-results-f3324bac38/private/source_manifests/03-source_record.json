@@ -1,0 +1,45 @@
+{
+  "prior_work": [
+    {
+      "id": "step:19",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>"
+    }
+  ],
+  "independent_event": {
+    "id": "evidence:12",
+    "kind": "observation",
+    "app": null,
+    "function": null,
+    "description": "conflicting_results"
+  },
+  "affected_work": [
+    {
+      "id": "required-response:evidence:12",
+      "kind": "required_response",
+      "app": null,
+      "function": null,
+      "description": "The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis."
+    }
+  ],
+  "superseded_work": [
+    {
+      "id": "provisional:required-response:evidence:12",
+      "description": "Provisional pre-authority variant of: The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.",
+      "migration_derived": true
+    }
+  ],
+  "event_sequence": [
+    {
+      "id": "evidence:12",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "conflicting_results",
+      "producer": "independent_environment_or_trace_producer",
+      "authority": "authoritative"
+    }
+  ]
+}

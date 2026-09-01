@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_9923123786.delayed_authoritative_result",
+  "authority_rule": "Delayed answer_key_and_student_score_matrix is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_schema",
+      "req.02.answer_key",
+      "req.03.score_matrix",
+      "req.04.totals",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The grading worker joins the D,A,C,D,B,C,C,D,D,D key with all student answers and returns the complete 10x10 correctness matrix and totals.",
+    "before_state": "The grades workbook and exam documents are open, but authoritative key extraction and remaining-student comparison are pending.",
+    "event_id": "evt.osw_cross_app_artifact_9923123786.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

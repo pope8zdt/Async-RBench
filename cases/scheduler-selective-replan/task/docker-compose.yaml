@@ -1,0 +1,5 @@
+services:
+  client:
+    build: .
+    image: async_rbench-scheduler-selective-replan:locked
+    command: ["bash", "-lc", "sleep infinity"]

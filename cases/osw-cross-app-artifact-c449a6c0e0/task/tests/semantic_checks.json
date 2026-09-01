@@ -1,0 +1,135 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed authoritative receipt.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All three task-specific upstream workers completed with observable probes.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies source semantics.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:51f5801c-18b3-4f25-b0c3-02f85507a078 and compare_docx_files.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private source fixture.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "notes.docx contains only the eight non-empty presenter notes in source slide order, with no page numbers or added formatting.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "notes.docx is saved on Desktop.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "All nine slides are inspected and only the eight non-empty note slides are selected.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.slide_coverage",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_slide_coverage",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The exact eight note strings and digest preserve slide order.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.note_order",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_note_order",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "No page numbers or formatting are added.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.plain_text",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_plain_text_only",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The output is bound to the official gold DOCX.",
+      "id": "osw_cross_app_artifact_c449a6c0e0.osworld.gold_fidelity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_gold_fidelity",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

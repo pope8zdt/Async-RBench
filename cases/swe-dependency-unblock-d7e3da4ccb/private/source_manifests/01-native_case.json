@@ -1,0 +1,83 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "swe-dependency-unblock-d7e3da4ccb",
+  "benchmark": "SWE-bench",
+  "source_binding": {
+    "instance_id": "sphinx-doc__sphinx-11510",
+    "repo": "sphinx-doc/sphinx",
+    "base_commit": "6cb783c0024a873722952a67ebb9f41771c8eb6d",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "split": "test",
+    "variant": "swe_bench",
+    "problem_statement_sha256": "e7ae2e2a1619fdc7fa58451dae12c5dd8b268002fdb30b4b3f457a6a9ef26762",
+    "harness_revision": "7a21e05772954cc81471ae19d56f436cecf43c54"
+  },
+  "native_runtime": {
+    "adapter": "swebench.harness.run_evaluation",
+    "isolation": "official Docker instance image",
+    "final_state": "git working tree patch"
+  },
+  "event_protocol": {
+    "producer": "independent reproduction/test worker in a clean clone of the same base commit",
+    "payload": "raw command, exit status, and bounded stdout/stderr from selected reproduction tests",
+    "release_predicate": "main working tree has a non-empty persisted diff while worker is running",
+    "rollback": "post-result patch history remains; the agent must amend/revert real files"
+  },
+  "state_attestation": {
+    "baseline_probe": "git HEAD plus clean index/worktree digest",
+    "checkpoint_probe": "git diff --binary plus untracked-file content digest",
+    "change_required": true,
+    "journal_owner": "host harness outside /testbed"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "entrypoint": "swebench.harness.run_evaluation",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "instance_id": "sphinx-doc__sphinx-11510",
+    "FAIL_TO_PASS": [
+      "tests/test_directive_other.py::test_include_source_read_event",
+      "tests/test_directive_other.py::test_include_source_read_event_nested_includes"
+    ],
+    "PASS_TO_PASS": [
+      "tests/test_directive_other.py::test_toctree",
+      "tests/test_directive_other.py::test_relative_toctree",
+      "tests/test_directive_other.py::test_toctree_urls_and_titles",
+      "tests/test_directive_other.py::test_toctree_glob",
+      "tests/test_directive_other.py::test_toctree_glob_and_url",
+      "tests/test_directive_other.py::test_reversed_toctree",
+      "tests/test_directive_other.py::test_toctree_twice"
+    ],
+    "docker_image": null,
+    "selected_test_files": null
+  },
+  "quality_gates": {
+    "official_instance_bound": true,
+    "native_tests_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

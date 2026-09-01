@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "status": "pre_calibration_locked",
+  "target_instance_count": 201,
+  "allowed_instance_count_range": [
+    201,
+    201
+  ],
+  "counting_unit": "registered_instance",
+  "splits": {
+    "calibration": 82,
+    "development": 30,
+    "test": 89
+  },
+  "split_rules": {
+    "calibration": "May be used for verifier and protocol calibration; never enters headline results.",
+    "development": "May be used while changing prompts, adapters, and implementation; never enters headline results.",
+    "test": "Held out from prompt, adapter, threshold, and verifier development; used for headline results only after the evaluation contract is frozen."
+  },
+  "primary_event_theme_targets": {
+    "child_failure_or_implicit_error": 6,
+    "conflicting_valid_results": 6,
+    "delayed_authoritative_result": 90,
+    "duplicate_or_replayed_completion": 4,
+    "late_or_out_of_order_superseded_result": 22,
+    "partial_then_complete_result": 24,
+    "straggler_under_resource_pressure": 10,
+    "task_scope_or_dependency_change": 39
+  },
+  "async_scenario_class_targets": {
+    "live_eventful": 39,
+    "resource_eventful": 16,
+    "result_eventful": 146
+  },
+  "difficulty_targets": {
+    "easy": 0,
+    "hard": 97,
+    "medium": 104
+  },
+  "difficulty_rubric": {
+    "formula": "workstreams + milestones + dependency_edges + artifacts + 2*async_events + invalidated_artifact_refs + reopened_milestone_refs + ceil(instruction_chars/4000)",
+    "easy_max": 14,
+    "medium_max": 27
+  },
+  "case_id_policy": {
+    "maximum_single_case_fraction": 0.2,
+    "maximum_near_duplicate_fraction": 0.05,
+    "near_duplicate_rule": "Same source task set, event schedule, affected artifacts, and hidden-check semantics is one near-duplicate group."
+  },
+  "acceptance": {
+    "requires_human_review": true,
+    "requires_public_private_contract_validation": true,
+    "requires_source_instruction_fidelity": true,
+    "requires_scored_claim_public_traceability": true,
+    "requires_oracle_pass": true,
+    "requires_hidden_verifier_pass": true,
+    "minimum_equivalence_solutions": 1,
+    "minimum_executed_negative_mutations": 2,
+    "requires_identical_verifier_bundle_across_quality_variants": true,
+    "requires_nonfilesystem_artifact_observers": true,
+    "requires_mutation_design_coverage": true,
+    "requires_provenance_validation": true,
+    "requires_dynamic_decision_contract": true,
+    "required_dynamic_control_dimensions": [
+      "event_intake",
+      "state_revision",
+      "plan_revision",
+      "closure"
+    ],
+    "minimum_critical_dynamic_points": 1,
+    "score_policy_version": "dtbench-v9-causal-groups-2",
+    "primary_metric": "dynamic_control_score",
+    "dynamic_component_mass": 0.8,
+    "semantic_component_mass": 0.2,
+    "dynamic_success_threshold": 0.75
+  },
+  "split_freeze": {
+    "frozen_at": "2026-09-01",
+    "family_count": 200,
+    "instance_count": 201,
+    "rule": "Registered cases with any recorded episode/pair evidence under artifacts/ are pinned to calibration and excluded from the held-out test split; 30 untouched cases are the deterministic (sha256-ranked) development buffer; remaining untouched cases form the held-out test split.",
+    "leakage_evidence_sources": [
+      "tmp/debug_touched_cases.json"
+    ]
+  }
+}

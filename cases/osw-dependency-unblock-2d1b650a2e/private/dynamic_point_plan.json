@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "dnt_profile_authority",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dnt_2d1b650a2e.delayed_profile_authority",
+      "evidence_group": "osw_dnt_13:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.02.enable_do_not_track"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Accept the delayed case-bound Chrome profile receipt as authority for enable_do_not_track=true.",
+      "forbidden_behavior": "Do not treat a visual toggle click or completion order as persisted profile authority.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.enable_do_not_track"
+        ]
+      },
+      "id": "osw_dnt_13.cf.01_accept_profile_authority",
+      "independence_key": "osw_dnt_13.cf.01_accept_profile_authority",
+      "measurement_type": "control",
+      "mutation_id": "osw_dnt_13.mutation.01_accept_profile_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.event.receipt"
+      ],
+      "precondition": "The delayed profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.02.enable_do_not_track"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "dnt_state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dnt_2d1b650a2e.delayed_profile_authority",
+      "evidence_group": "osw_dnt_13:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.enable_do_not_track"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reconcile only the Do Not Track preference to the receipt-authorized true value.",
+      "forbidden_behavior": "Do not retain an unverified toggle state or reset unrelated privacy preferences.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.enable_do_not_track"
+        ]
+      },
+      "id": "osw_dnt_13.cf.02_reconcile_dnt_preference",
+      "independence_key": "osw_dnt_13.cf.02_reconcile_dnt_preference",
+      "measurement_type": "control",
+      "mutation_id": "osw_dnt_13.mutation.02_reconcile_dnt_preference",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.event.probes"
+      ],
+      "precondition": "The delayed profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.enable_do_not_track"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "dnt_closure_reverification",
+      "dimension": "closure",
+      "event_id": "evt.osw_dnt_2d1b650a2e.delayed_profile_authority",
+      "evidence_group": "osw_dnt_13:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.verify_persisted_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Re-read the final Chrome profile and close only when enable_do_not_track remains true.",
+      "forbidden_behavior": "Do not close on the click alone or omit post-event persisted-state verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_persisted_state"
+        ]
+      },
+      "id": "osw_dnt_13.cf.03_reverify_persisted_dnt",
+      "independence_key": "osw_dnt_13.cf.03_reverify_persisted_dnt",
+      "measurement_type": "control",
+      "mutation_id": "osw_dnt_13.mutation.03_reverify_persisted_dnt",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.closure"
+      ],
+      "precondition": "The delayed profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_persisted_state"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.osw_dnt_2d1b650a2e.delayed_profile_authority",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "A delayed Chrome profile probe reports enable_do_not_track=true and supplies the authoritative state needed for closure.",
+        "before": "Chrome privacy settings are open and the Do Not Track control has been reached, but persisted profile authority has not arrived.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

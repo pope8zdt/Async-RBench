@@ -1,0 +1,75 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "osw-dependency-unblock-0008d814cb",
+  "benchmark": "OSWorld",
+  "source_binding": {
+    "task_id": "a96b564e-dbe9-42c3-9ccf-b4498073438a",
+    "domain": "chrome",
+    "config_path": "upstream/osworld/evaluation_examples/examples/chrome/a96b564e-dbe9-42c3-9ccf-b4498073438a.json",
+    "config_sha256": "6d11ab7f4d09325b1ded6914ea0bb7431ef810f072120d79144eb0cc8e8d768c",
+    "upstream_revision": "fc31a9049664292fcb35d6e501ee1dc839f2cf6d"
+  },
+  "native_runtime": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "chrome",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "event_protocol": {
+    "producer": "read-only worker on a snapshot clone executes the delegable extraction/reproduction subtask",
+    "payload": "raw extracted artifact, observation, or verifier output; never expected actions",
+    "release_predicate": "official setup completed and main VM state differs from reset snapshot",
+    "rollback": "main agent must repair the already-mutated VM state after delivery"
+  },
+  "state_attestation": {
+    "baseline_probe": "OSWorld reset snapshot id plus native evaluator target-state digest",
+    "checkpoint_probe": "harness-owned VM observation/artifact digest after an actual pyautogui action",
+    "change_required": true,
+    "journal_owner": "host harness outside the model-visible VM"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "func": "is_expected_active_tab",
+    "result": {
+      "type": "active_tab_info",
+      "goto_prefix": "https://"
+    },
+    "expected": {
+      "type": "rule",
+      "rules": {
+        "type": "url",
+        "url": "https://discussions.flightaware.com/t/the-banter-thread/4412"
+      }
+    }
+  },
+  "quality_gates": {
+    "official_config_bound": true,
+    "native_evaluator_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

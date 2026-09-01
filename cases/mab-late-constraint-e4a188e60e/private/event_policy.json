@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_provisional_buyer",
+      "req.02.authenticate_the_seal_and_ba",
+      "req.03.revise_price_replacement_sup",
+      "req.04.close_with_one_verified_qual",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A sealed-batch report confirms $18.88 pricing, traceability, a 30-day replacement window, three-day support response, and consolidated logistics.",
+    "before_state": "A provisional JAFRA Tender Moments Fresh Baby Cologne bargain exists before sealed_batch_support_terms_delivered.",
+    "event_id": "evt.mab-late-constraint-e4a188e60e.sealed_batch_support_terms_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-e4a188e60e.sealed_batch_support_terms_delivered",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

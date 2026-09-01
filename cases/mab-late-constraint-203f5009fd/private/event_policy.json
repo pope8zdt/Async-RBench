@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Resource evidence determines critical-path triage without sacrificing required preserved work.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.align_backend_routes_and",
+      "req.02.enforce_department_and_r",
+      "req.03.update_frontend_visibili",
+      "req.04.add_mutation_tests_for_f",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.",
+    "before_state": "The RBAC/API matrix arrives after core operations and permissive provisional frontend/backend integration exist.",
+    "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+  "forbidden_shortcut": "Do not wait indefinitely or cancel work outside the affected resource closure.",
+  "required_decisions": [
+    "classify_critical_path",
+    "triage_resource_budget",
+    "reverify_required_outcomes"
+  ],
+  "theme": "straggler_under_resource_pressure"
+}

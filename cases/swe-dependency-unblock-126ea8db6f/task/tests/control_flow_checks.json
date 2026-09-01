@@ -1,0 +1,242 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta:req.01.register_the_timeout_opt",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_126ea8db6f.cli_option_flow_scope_delta",
+      "evidence_group": "swe_dependency__4ef2cb:classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.register_the_timeout_opt"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.', perform classify_scope_delta for 'Register the timeout option in the shared run-task option helper used by both CLIs.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Register the timeout option in the shared run-task option helper used by both CLIs.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.register_the_timeout_opt"
+        ]
+      },
+      "id": "swe_dependency__4ef2cb.cf.01_classify_scope_delta_register_the_timeout_opt",
+      "independence_key": "swe_dependency__4ef2cb.cf.01_classify_scope_delta_register_the_timeout_opt",
+      "measurement_type": "control",
+      "mutation_family": "under_invalidate",
+      "mutation_id": "swe_dependency__4ef2cb.mutation.01_classify_scope_delta_register_the_timeout_opt",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_126ea8db6f.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.register_the_timeout_opt"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected:req.02.copy_the_parsed_timeout_",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_126ea8db6f.cli_option_flow_scope_delta",
+      "evidence_group": "swe_dependency__4ef2cb:revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.copy_the_parsed_timeout_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.', perform revise_affected for 'Copy the parsed timeout into ad-hoc and console task dictionaries.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Copy the parsed timeout into ad-hoc and console task dictionaries.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.copy_the_parsed_timeout_"
+        ]
+      },
+      "id": "swe_dependency__4ef2cb.cf.02_revise_affected_copy_the_parsed_timeout_",
+      "independence_key": "swe_dependency__4ef2cb.cf.02_revise_affected_copy_the_parsed_timeout_",
+      "measurement_type": "control",
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "swe_dependency__4ef2cb.mutation.02_revise_affected_copy_the_parsed_timeout_",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_126ea8db6f.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.copy_the_parsed_timeout_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected:req.03.register_and_propagate_c",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_dependency_unblock_126ea8db6f.cli_option_flow_scope_delta",
+      "evidence_group": "swe_dependency__4ef2cb:preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.register_and_propagate_c"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.', perform preserve_unaffected for 'Register and propagate console extra-vars into variable loading.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Register and propagate console extra-vars into variable loading.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.register_and_propagate_c"
+        ]
+      },
+      "id": "swe_dependency__4ef2cb.cf.03_preserve_unaffected_register_and_propagate_c",
+      "independence_key": "swe_dependency__4ef2cb.cf.03_preserve_unaffected_register_and_propagate_c",
+      "measurement_type": "control",
+      "mutation_family": "over_invalidate",
+      "mutation_id": "swe_dependency__4ef2cb.mutation.03_preserve_unaffected_register_and_propagate_c",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_126ea8db6f.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.register_and_propagate_c"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure:req.04.add_timeout_to_task_incl",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_126ea8db6f.cli_option_flow_scope_delta",
+      "evidence_group": "swe_dependency__4ef2cb:verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.add_timeout_to_task_incl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.', perform verify_closure for 'Add timeout to task_include's valid keyword set.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add timeout to task_include's valid keyword set.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_timeout_to_task_incl"
+        ]
+      },
+      "id": "swe_dependency__4ef2cb.cf.04_verify_closure_add_timeout_to_task_incl",
+      "independence_key": "swe_dependency__4ef2cb.cf.04_verify_closure_add_timeout_to_task_incl",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__4ef2cb.mutation.04_verify_closure_add_timeout_to_task_incl",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_126ea8db6f.closure"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_timeout_to_task_incl"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.swe_dependency_unblock_126ea8db6f.cli_option_flow_scope_delta",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "A CLI option-flow audit expands the affected closure from one task dictionary to shared option registration, console variable loading, and task_include validation.",
+        "before": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

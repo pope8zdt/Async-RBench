@@ -1,0 +1,91 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_1a3f65b5b8.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_1a3f65b5b8.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_dependency_unblock_1a3f65b5b8.osworld.state"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_dependency_unblock_1a3f65b5b8.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_steam_12.cf.01_classify_authority_open_each_returned",
+          "osw_steam_12.cf.02_revise_affected_handle_any_interme",
+          "osw_steam_12.cf.03_verify_closure_verify_cart_member"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_1a3f65b5b8.event.receipt",
+          "osw_dependency_unblock_1a3f65b5b8.event.probes",
+          "osw_dependency_unblock_1a3f65b5b8.closure",
+          "osw_dependency_unblock_1a3f65b5b8.source.pin",
+          "osw_dependency_unblock_1a3f65b5b8.osworld.identity",
+          "osw_dependency_unblock_1a3f65b5b8.osworld.official_score",
+          "osw_dependency_unblock_1a3f65b5b8.osworld.native_evidence",
+          "osw_dependency_unblock_1a3f65b5b8.osworld.task_assertion",
+          "osw_dependency_unblock_1a3f65b5b8.osworld.state"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Dota 2 Official Soundtrack",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "f9c1cbf5237bcbce494b77434388298c27000598a896fb668dfe412403851b7f",
+        "task_id": "osworld:chrome:121ba48f-9e17-48ce-9bc6-a4fb17a7ebba",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

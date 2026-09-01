@@ -1,0 +1,29 @@
+{
+  "assets": [
+    "official task configuration",
+    "thunderbird snapshot",
+    "libreoffice_calc snapshot",
+    "private source assets",
+    "private native fixture",
+    "private delayed payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "thunderbird",
+    "libreoffice_calc",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:multi_apps:d9b7c649-c975-4f53-88f5-940b29c47247 in pinned thunderbird; truth is private.",
+  "event_injection": "Release delayed authoritative Daily-mail extraction after upstream checkpoint.",
+  "hidden_tests": "compare_table, native digest, output_path_headers, row_count_order, mail_rows, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "thunderbird",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private daily_mail_report_osworld.sh scores compare_table.",
+  "requires_authored_private_oracle": false
+}
+

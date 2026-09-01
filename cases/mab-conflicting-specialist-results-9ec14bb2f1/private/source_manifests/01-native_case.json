@@ -1,0 +1,109 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "mab-conflicting-specialist-results-9ec14bb2f1",
+  "benchmark": "MultiAgentBench",
+  "source_binding": {
+    "task_id": "database:005",
+    "scenario": "database",
+    "jsonl_path": "upstream/marble/multiagentbench/database/database_main.jsonl",
+    "line_number": 5,
+    "record_sha256": "67b9b70681bc524350d0fbe8f5b947c48c6bafd925aa34f92e2c0c889ac51661",
+    "upstream_revision": "8d60fa17b5596b44458a52d4296061b9fc13d6f2"
+  },
+  "native_runtime": {
+    "adapter": "marble.engine.Engine",
+    "environment": {
+      "type": "",
+      "name": "",
+      "max_iterations": "",
+      "init_sql": "-- 1. Customers table (stores customer info)\nCREATE TABLE customers (\n    customer_id SERIAL PRIMARY KEY,  -- Unique customer ID\n    first_name VARCHAR(100),\n    last_name VARCHAR(100),\n    email VARCHAR(255) UNIQUE NOT NULL,  -- Unique email\n    phone VARCHAR(20),\n    address VARCHAR(255),\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n-- 2. Products table (stores product details)\nCREATE TABLE products (\n    product_id SERIAL PRIMARY KEY,  -- Unique product ID\n    product_name VARCHAR(255) NOT NULL,\n    description TEXT,\n    price DECIMAL(10, 2) NOT NULL,  -- Product price\n    stock_quantity INT NOT NULL,    -- Available stock\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n-- 3. Orders table (stores orders placed by customers)\nCREATE TABLE orders (\n    order_id SERIAL PRIMARY KEY,  -- Unique order ID\n    customer_id INT REFERENCES customers(customer_id),  -- Foreign key to customers\n    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    status VARCHAR(50) DEFAULT 'pending'  -- Order status (e.g., pending, completed)\n);\n\n-- 4. Order_Items table (stores products in each order)\nCREATE TABLE order_items (\n    order_item_id SERIAL PRIMARY KEY,  -- Unique order item ID\n    order_id INT REFERENCES orders(order_id) ON DELETE CASCADE,  -- Foreign key to orders\n    product_id INT REFERENCES products(product_id),  -- Foreign key to products\n    quantity INT NOT NULL,  -- Quantity of the product in the order\n    price DECIMAL(10, 2) NOT NULL  -- Price of the product at the time of the order\n);\n\n-- 5. Payments table (stores payments for orders)\nCREATE TABLE payments (\n    payment_id SERIAL PRIMARY KEY,  -- Unique payment ID\n    order_id INT REFERENCES orders(order_id) ON DELETE CASCADE,  -- Foreign key to orders\n    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    amount DECIMAL(10, 2) NOT NULL,  -- Payment amount\n    payment_method VARCHAR(50),  -- Payment method (e.g., credit card, PayPal)\n    status VARCHAR(50) DEFAULT 'completed'  -- Payment status (e.g., completed, failed)\n);\n\n-- Insert customers\nINSERT INTO customers (first_name, last_name, email, phone, address) \nVALUES \n('Alice', 'Smith', 'alice.smith@example.com', '123-456-7890', '123 Main St, Springfield'),\n('Bob', 'Johnson', 'bob.johnson@example.com', '234-567-8901', '456 Oak St, Springfield');\n\n-- Insert products\nINSERT INTO products (product_name, description, price, stock_quantity) \nVALUES \n('Laptop', 'High-performance laptop', 999.99, 10),\n('Smartphone', 'Latest model smartphone', 799.99, 15),\n('Headphones', 'Noise-cancelling headphones', 199.99, 25);\n\n-- Insert an order for Alice\nINSERT INTO orders (customer_id, order_date, status) \nVALUES \n(1, '2024-12-13 10:00:00', 'pending');\n\n-- Insert order items for Alice's order\nINSERT INTO order_items (order_id, product_id, quantity, price) \nVALUES \n(1, 1, 1, 999.99),  -- 1 Laptop\n(1, 3, 2, 199.99);  -- 2 Headphones\n\n-- Insert a payment for Alice's order\nINSERT INTO payments (order_id, amount, payment_method, status) \nVALUES \n(1, 1399.97, 'Credit Card', 'completed');\n\n-- Insert an order for Bob\nINSERT INTO orders (customer_id, order_date, status) \nVALUES \n(2, '2024-12-13 12:00:00', 'pending');\n\n-- Insert order items for Bob's order\nINSERT INTO order_items (order_id, product_id, quantity, price) \nVALUES \n(2, 2, 1, 799.99);  -- 1 Smartphone\n\n-- Insert a payment for Bob's order\nINSERT INTO payments (order_id, amount, payment_method, status) \nVALUES \n(2, 799.99, 'PayPal', 'completed');\n\nSELECT oi.order_item_id, p.product_name, oi.quantity, oi.price\nFROM order_items oi\nJOIN products p ON oi.product_id = p.product_id\nWHERE oi.order_id = 1;  -- Get items for Alice's order (order_id = 1)\n\nSELECT p.payment_id, p.payment_date, p.amount, p.payment_method, p.status\nFROM payments p\nWHERE p.order_id = 1;  -- Get payment details for Alice's order (order_id = 1)\n",
+      "anomalies": [
+        {
+          "anomaly": "LOCK_CONTENTION",
+          "threads": 100,
+          "ncolumn": 20,
+          "nrow": 20000,
+          "colsize": 100
+        }
+      ]
+    },
+    "roles": [
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent1",
+        "profile": "agent1 will explore the possibility of INSERT_LARGE_DATA as a root cause. Recommended tables: `pg_stat_statements`. You can search for INSERTs."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent2",
+        "profile": "agent2 will explore the possibility of LOCK_CONTENTION as a root cause. Recommended tables: `pg_locks`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent3",
+        "profile": "agent3 will explore the possibility of VACUUM as a root cause. Recommended to search for inappropiate VACUUMs from `pg_stat_all_tables`: SELECT query, calls, total_plan_time, rows, mean_plan_time FROM pg_stat_statements WHERE query LIKE 'VACUUM%';"
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent4",
+        "profile": "agent4 will explore the possibility of REDUNDANT_INDEX as a root cause. Recommended tables: `pg_stat_user_indexes`, `pg_indexes`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent5",
+        "profile": "agent5 will explore the possibility of FETCH_LARGE_DATA as a root cause. Recommended to search for SELECTs from `pg_stat_statements`."
+      }
+    ],
+    "final_state": "MARBLE environment and tool transcript"
+  },
+  "event_protocol": {
+    "producer": "an actual MARBLE role executes with its declared profile and tools",
+    "payload": "the role's native message/tool result with provenance and logical clock",
+    "release_predicate": "coordinator committed at least one environment action after launching the role",
+    "rollback": "messages and tool calls remain in the native transcript; correction is additive and auditable"
+  },
+  "state_attestation": {
+    "baseline_probe": "serialized MARBLE environment state and transcript sequence zero",
+    "checkpoint_probe": "environment digest plus strictly increased native tool/action sequence",
+    "change_required": true,
+    "journal_owner": "MARBLE engine logger, not an agent workspace file"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "metrics": {
+      "accuracy": true,
+      "response_time": true
+    },
+    "agreement_or_environment_state": true
+  },
+  "quality_gates": {
+    "official_scenario_bound": true,
+    "native_roles_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

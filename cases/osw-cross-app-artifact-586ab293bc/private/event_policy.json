@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_586ab.delayed_authoritative_result",
+  "authority_rule": "Delayed latest_five_daily_messages is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_586ab.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The Thunderbird profile and empty report target are available, but the authoritative Daily-folder query, ordering and normalized message fields are still pending.",
+    "after_state": "The mail worker returns the latest five Daily messages in chronological order with normalized sender, CC and attachment fields; the Calc report can now be finalized.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.select_the_latest_five_m",
+      "req.02.order_the_selected_messa",
+      "req.03.extract_exactly_the_five",
+      "req.04.save_report_xlsx_on_the_",
+      "final_state"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

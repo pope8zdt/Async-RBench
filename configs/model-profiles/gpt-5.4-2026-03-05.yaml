@@ -1,0 +1,30 @@
+# Reproducible GPT-5.4 development profile for paired candidate-case runs.
+# Credentials are read only from OPENAI_API_KEY.
+backend: openai_compatible
+api_url: https://api.openai.com/v1/chat/completions
+api_key_env: OPENAI_API_KEY
+api_key_required: true
+main_model: gpt-5.4-2026-03-05
+child_model: gpt-5.4-2026-03-05
+
+temperature: null
+max_output_tokens: 16384
+max_tokens_parameter: max_completion_tokens
+send_seed: false
+request_body_extra:
+  reasoning_effort: high
+
+max_main_turns: 100
+max_child_turns: 40
+max_concurrent_children: 3
+max_total_child_spawns: 5
+max_api_concurrency: 4
+main_terminal_timeout_sec: 180
+child_terminal_timeout_sec: 180
+child_timeout_sec: 1200
+start_barrier_timeout_sec: 120
+live_cancellation_grace_sec: 60
+workspace_mode: container_clone
+keep_child_workspaces: false
+max_tool_output_chars: 20000
+request_timeout_sec: 600

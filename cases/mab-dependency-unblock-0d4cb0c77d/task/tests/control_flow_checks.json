@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_apply_returned_assignments_a",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_0.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.apply_returned_assignmen"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Scheduling specialist returns deterministic assignments and time slots derived from availability, task duration, dependencies, and project priority, with explicit unassigned reasons.', perform classify_completeness for 'Apply returned assignments and slots as one synchronized schedule revision.' while retaining valid prior result 'Users, projects, tasks, meetings, communication, and file sharing are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Users, projects, tasks, meetings, communication, and file sharing are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_returned_assignmen"
+        ]
+      },
+      "id": "mab_code21_teamsync.cf.01_classify_completeness_apply_returned_ass",
+      "independence_key": "mab_code21_teamsync.cf.01_classify_completeness_apply_returned_ass",
+      "measurement_type": "control",
+      "mutation_id": "mab_code21_teamsync.mutation.01_classify_completeness_apply_returned_ass",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0d4cb0c77d.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.apply_returned_assignmen"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_emit_reassignment_and_time_c",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_0.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.apply_returned_assignmen"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Scheduling specialist returns deterministic assignments and time slots derived from availability, task duration, dependencies, and project priority, with explicit unassigned reasons.', perform revise_affected for 'Emit reassignment and time-change notifications to affected members.' while retaining valid prior result 'Notifications and reports consume provisional task assignments.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Notifications and reports consume provisional task assignments.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_returned_assignmen"
+        ]
+      },
+      "id": "mab_code21_teamsync.cf.02_revise_affected_emit_reassignment_",
+      "independence_key": "mab_code21_teamsync.cf.02_revise_affected_emit_reassignment_",
+      "measurement_type": "control",
+      "mutation_id": "mab_code21_teamsync.mutation.02_revise_affected_emit_reassignment_",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0d4cb0c77d.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.apply_returned_assignmen"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_update_productivity_reports_",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_0.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.apply_returned_assignmen"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Scheduling specialist returns deterministic assignments and time slots derived from availability, task duration, dependencies, and project priority, with explicit unassigned reasons.', perform verify_closure for 'Update productivity reports from the committed schedule.' while retaining valid prior result 'Users, projects, tasks, meetings, communication, and file sharing are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Users, projects, tasks, meetings, communication, and file sharing are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_returned_assignmen"
+        ]
+      },
+      "id": "mab_code21_teamsync.cf.03_verify_closure_update_productivit",
+      "independence_key": "mab_code21_teamsync.cf.03_verify_closure_update_productivit",
+      "measurement_type": "control",
+      "mutation_id": "mab_code21_teamsync.mutation.03_verify_closure_update_productivit",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0d4cb0c77d.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.apply_returned_assignmen"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_dependency_unblock_0.partial_then_complete_re",
+      "event_theme": "partial_then_complete_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Scheduling specialist returns deterministic assignments and time slots derived from availability, task duration, dependencies, and project priority, with explicit unassigned reasons.",
+        "before": "Adaptive assignment results arrive after synchronization and notification code has recorded the old schedule.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

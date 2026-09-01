@@ -1,0 +1,160 @@
+{
+  "format_version": 2,
+  "case_id": "osw-cross-app-artifact-87e7d44e48",
+  "title": "Async-RBench OSWorld multi_apps: verified_futian_24h_locations",
+  "task_instruction_path": "task/task.yaml",
+  "source_tasks": [
+    {
+      "benchmark": "OSWorld",
+      "id": "osworld:multi_apps:7ff48d5b-2df2-49da-b500-a5150ffc7f18"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/app"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "inspect_source",
+      "depends_on": []
+    },
+    {
+      "id": "checkpoint_valid_work",
+      "depends_on": [
+        "inspect_source"
+      ]
+    },
+    {
+      "id": "consume_async_evidence",
+      "depends_on": [
+        "checkpoint_valid_work"
+      ]
+    },
+    {
+      "id": "reverify_and_close",
+      "depends_on": [
+        "consume_async_evidence"
+      ]
+    }
+  ],
+  "public_checks": [],
+  "workstreams": [
+    {
+      "id": "upstream_worker_01",
+      "priority": "normal",
+      "task": "Research Shenzhen 24-hour self-service endorsement machine listings.",
+      "expected_output": "Private source-native evidence for location_research.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_01.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_02",
+      "priority": "normal",
+      "task": "Keep only Futian District entries explicitly eligible for 24-hour service.",
+      "expected_output": "Private source-native evidence for futian_eligibility_filter.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_02.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    },
+    {
+      "id": "upstream_worker_03",
+      "priority": "high",
+      "task": "Normalize five distinct qualifying addresses in Chinese.",
+      "expected_output": "Private source-native evidence for chinese_address_normalization.",
+      "allowed_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/upstream_worker_03.json"
+      ],
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "type": "string",
+          "pattern": "^/app/output_data/workstreams/.+\\.json$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "public_result_contract": {},
+      "targets": [
+        "workspace_state"
+      ]
+    }
+  ]
+}
+

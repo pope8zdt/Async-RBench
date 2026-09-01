@@ -1,0 +1,94 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "swe-dependency-unblock-f27fc59f3c",
+  "benchmark": "SWE-bench",
+  "source_binding": {
+    "instance_id": "pylint-dev__pylint-4604",
+    "repo": "pylint-dev/pylint",
+    "base_commit": "1e55ae64624d28c5fe8b63ad7979880ee2e6ef3f",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "split": "test",
+    "variant": "swe_bench",
+    "problem_statement_sha256": "0072c898db86e2500d95b0b95f0929f23f8a733dc9b0eb4a0d170189049a8dbb",
+    "harness_revision": "7a21e05772954cc81471ae19d56f436cecf43c54"
+  },
+  "native_runtime": {
+    "adapter": "swebench.harness.run_evaluation",
+    "isolation": "official Docker instance image",
+    "final_state": "git working tree patch"
+  },
+  "event_protocol": {
+    "producer": "independent reproduction/test worker in a clean clone of the same base commit",
+    "payload": "raw command, exit status, and bounded stdout/stderr from selected reproduction tests",
+    "release_predicate": "main working tree has a non-empty persisted diff while worker is running",
+    "rollback": "post-result patch history remains; the agent must amend/revert real files"
+  },
+  "state_attestation": {
+    "baseline_probe": "git HEAD plus clean index/worktree digest",
+    "checkpoint_probe": "git diff --binary plus untracked-file content digest",
+    "change_required": true,
+    "journal_owner": "host harness outside /testbed"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "entrypoint": "swebench.harness.run_evaluation",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "instance_id": "pylint-dev__pylint-4604",
+    "FAIL_TO_PASS": [
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_bitbucket_issue_78",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_no_name_in_module_skipped",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_all_elements_without_parent",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_redefined_builtin_ignored",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_redefined_builtin_custom_modules",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_redefined_builtin_modname_not_ignored",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_redefined_builtin_in_function",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_unassigned_global",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_listcomp_in_decorator",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_listcomp_in_ancestors",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_return_type_annotation",
+      "tests/checkers/unittest_variables.py::TestVariablesChecker::test_attribute_in_type_comment",
+      "tests/checkers/unittest_variables.py::TestVariablesCheckerWithTearDown::test_custom_callback_string",
+      "tests/checkers/unittest_variables.py::TestVariablesCheckerWithTearDown::test_redefined_builtin_modname_not_ignored",
+      "tests/checkers/unittest_variables.py::TestVariablesCheckerWithTearDown::test_redefined_builtin_in_function",
+      "tests/checkers/unittest_variables.py::TestVariablesCheckerWithTearDown::test_import_as_underscore",
+      "tests/checkers/unittest_variables.py::TestVariablesCheckerWithTearDown::test_lambda_in_classdef",
+      "tests/checkers/unittest_variables.py::TestVariablesCheckerWithTearDown::test_nested_lambda",
+      "tests/checkers/unittest_variables.py::TestVariablesCheckerWithTearDown::test_ignored_argument_names_no_message",
+      "tests/checkers/unittest_variables.py::TestVariablesCheckerWithTearDown::test_ignored_argument_names_starred_args",
+      "tests/checkers/unittest_variables.py::TestMissingSubmodule::test_package_all"
+    ],
+    "PASS_TO_PASS": [],
+    "docker_image": null,
+    "selected_test_files": null
+  },
+  "quality_gates": {
+    "official_instance_bound": true,
+    "native_tests_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

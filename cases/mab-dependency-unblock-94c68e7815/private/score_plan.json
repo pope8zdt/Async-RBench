@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_replace_the_provisional_scor",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.replace_the_provisional_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Balance specialist returns a deterministic result with difficulty score, fairness band, and ranked adjustments to enemy count, enemy type, rewards, and objectives.', perform classify_failure for 'Replace the provisional score with the returned balance result.' while retaining valid prior result 'Authentication, collaborative quest editing, version history, and quest persistence are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, collaborative quest editing, version history, and quest persistence are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_the_provisional_"
+        ]
+      },
+      "id": "mab_code20_quest.cf.01_classify_failure_replace_the_provis",
+      "independence_key": "mab_code20_quest.cf.01_classify_failure_replace_the_provis",
+      "measurement_type": "control",
+      "mutation_id": "mab_code20_quest.mutation.01_classify_failure_replace_the_provis",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_94c68e7815.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_the_provisional_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_expose_ranked_parameter_adju",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "failure_recovery",
+        "subject": "req.01.replace_the_provisional_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Balance specialist returns a deterministic result with difficulty score, fairness band, and ranked adjustments to enemy count, enemy type, rewards, and objectives.', perform recover_or_redelegate for 'Expose ranked parameter adjustments against the current quest version.' while retaining valid prior result 'Feedback UI consumes a provisional difficulty number.'.",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Feedback UI consumes a provisional difficulty number.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_the_provisional_"
+        ]
+      },
+      "id": "mab_code20_quest.cf.02_recover_or_redelegate_expose_ranked_para",
+      "independence_key": "mab_code20_quest.cf.02_recover_or_redelegate_expose_ranked_para",
+      "measurement_type": "control",
+      "mutation_id": "mab_code20_quest.mutation.02_recover_or_redelegate_expose_ranked_para",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_94c68e7815.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.replace_the_provisional_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_apply_accepted_adjustments_a",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.replace_the_provisional_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Balance specialist returns a deterministic result with difficulty score, fairness band, and ranked adjustments to enemy count, enemy type, rewards, and objectives.', perform verify_closure for 'Apply accepted adjustments as versioned collaborative edits.' while retaining valid prior result 'Authentication, collaborative quest editing, version history, and quest persistence are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, collaborative quest editing, version history, and quest persistence are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_the_provisional_"
+        ]
+      },
+      "id": "mab_code20_quest.cf.03_verify_closure_apply_accepted_adj",
+      "independence_key": "mab_code20_quest.cf.03_verify_closure_apply_accepted_adj",
+      "measurement_type": "control",
+      "mutation_id": "mab_code20_quest.mutation.03_verify_closure_apply_accepted_adj",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_94c68e7815.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.replace_the_provisional_"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, collaborative quest editing, version history, and quest persistence are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code20_quest.mutation.01_classify_failure_replace_the_provis",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code20_quest.cf.01_classify_failure_replace_the_provis"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_94c68e7815.source.pin"
+      ],
+      "targets": [
+        "mab_code20_quest.cf.01_classify_failure_replace_the_provis",
+        "mab_dependency_unblock_94c68e7815.event.receipt",
+        "mab_dependency_unblock_94c68e7815.event.authority_probe",
+        "mab_dependency_unblock_94c68e7815.closure",
+        "mab_dependency_unblock_94c68e7815.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Feedback UI consumes a provisional difficulty number.'.",
+      "family": "recover_failed_work",
+      "id": "mab_code20_quest.mutation.02_recover_or_redelegate_expose_ranked_para",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code20_quest.cf.02_recover_or_redelegate_expose_ranked_para"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_94c68e7815.source.pin"
+      ],
+      "targets": [
+        "mab_code20_quest.cf.02_recover_or_redelegate_expose_ranked_para",
+        "mab_dependency_unblock_94c68e7815.event.receipt",
+        "mab_dependency_unblock_94c68e7815.event.authority_probe",
+        "mab_dependency_unblock_94c68e7815.closure",
+        "mab_dependency_unblock_94c68e7815.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, collaborative quest editing, version history, and quest persistence are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code20_quest.mutation.03_verify_closure_apply_accepted_adj",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code20_quest.cf.03_verify_closure_apply_accepted_adj"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_94c68e7815.source.pin"
+      ],
+      "targets": [
+        "mab_code20_quest.cf.03_verify_closure_apply_accepted_adj",
+        "mab_dependency_unblock_94c68e7815.event.receipt",
+        "mab_dependency_unblock_94c68e7815.event.authority_probe",
+        "mab_dependency_unblock_94c68e7815.closure",
+        "mab_dependency_unblock_94c68e7815.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific balance_worker_recovered receipt bound to coding:020.",
+      "id": "mab_dependency_unblock_94c68e7815.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Multi-Agent_Quest_Creator authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_94c68e7815.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered structured balance replaces scalar placeholders while quest history, revert points, simulations, and community ratings remain intact.",
+      "id": "mab_dependency_unblock_94c68e7815.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:020.",
+      "id": "mab_dependency_unblock_94c68e7815.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and versioned_quest_balance_closure obey the task-specific four-upstream schema.",
+      "id": "mab_dependency_unblock_94c68e7815.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_quest_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A deterministic version-bound balance result reports difficulty, fairness, and ranked enemy/reward/objective adjustments; accepted adjustments create collaborative quest versions.",
+      "id": "mab_dependency_unblock_94c68e7815.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_quest_structured_balance_enemy_strength_rewards_and_versioned_adjustments",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves quest_history, revert_points, simulation_results, community_ratings.",
+      "id": "mab_dependency_unblock_94c68e7815.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_quest_history_revert_simulations_and_ratings_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered structured balance replaces scalar placeholders while quest history, revert points, simulations, and community ratings remain intact.",
+      "id": "mab_dependency_unblock_94c68e7815.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_quest_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

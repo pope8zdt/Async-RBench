@@ -1,0 +1,245 @@
+{
+  "families": [
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency__cf8907.mut.01_receipt",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency__cf8907.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency__cf8907.mut.02_probes",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency__cf8907.mut.02_probes_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency__cf8907.mut.03_closure",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency__cf8907.mut.03_closure_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: The task remains bound to its pinned source revision.",
+      "id": "swe_dependency__cf8907.mut.04_pin",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The task remains bound to its pinned source revision.",
+      "id": "swe_dependency__cf8907.mut.04_pin_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: Declared native pytest failing surface remains green: lib/matplotlib/tests/test_pickle.py (1 assertions)",
+      "id": "swe_dependency__cf8907.mut.05_pytest_01_lib_matplotlib_tes",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.native.pytest_01_lib_matplotlib_tests_test_pickle_py"
+      ],
+      "operation": "mutate_semantic_changed_behavior",
+      "variants": [
+        "omit_pytest_01_lib_matplotlib_tes_evidence",
+        "corrupt_pytest_01_lib_matplotlib_tes_value",
+        "replay_stale_pytest_01_lib_matplotlib_tes_state",
+        "satisfy_manifest_without_pytest_01_lib_matplotlib_tes_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: Declared native pytest failing surface remains green: lib/matplotlib/tests/test_pickle.py (1 assertions)",
+      "id": "swe_dependency__cf8907.mut.05_pytest_01_lib_matplotlib_tes_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.native.pytest_01_lib_matplotlib_tests_test_pickle_py"
+      ],
+      "operation": "cross_corrupt_changed_behavior_evidence",
+      "variants": [
+        "manifest_green_pytest_01_lib_matplotlib_tes_red",
+        "artifact_green_pytest_01_lib_matplotlib_tes_stale",
+        "receipt_valid_pytest_01_lib_matplotlib_tes_foreign",
+        "partial_closure_hides_pytest_01_lib_matplotlib_tes_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: Declared native pytest passing surface remains green: lib/matplotlib/tests/test_pickle.py (181 assertions)",
+      "id": "swe_dependency__cf8907.mut.06_pytest_02_lib_matplotlib_tes",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.native.pytest_02_lib_matplotlib_tests_test_pickle_py"
+      ],
+      "operation": "mutate_semantic_preserved_behavior",
+      "variants": [
+        "omit_pytest_02_lib_matplotlib_tes_evidence",
+        "corrupt_pytest_02_lib_matplotlib_tes_value",
+        "replay_stale_pytest_02_lib_matplotlib_tes_state",
+        "satisfy_manifest_without_pytest_02_lib_matplotlib_tes_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: For event 'A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.', perform classify_critical_path for 'Update Figure serialization to omit the alignment-group state containing weak references.' while retaining valid prior result 'A minimal reproduction confirms that pickle.dumps(fig) fails only after align_labels() populates the figure’s alignment state.'.",
+      "id": "swe_dependency__cf8907.mut.07_01_classify_critical_path",
+      "must_fail": [
+        "swe_dependency__cf8907.cf.01_classify_critical_path"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: For event 'A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.', perform classify_critical_path for 'Update Figure serialization to omit the alignment-group state containing weak references.' while retaining valid prior result 'A minimal reproduction confirms that pickle.dumps(fig) fails only after align_labels() populates the figure’s alignment state.'.",
+      "id": "swe_dependency__cf8907.mut.07_01_classify_critical_path_crosscheck",
+      "must_fail": [
+        "swe_dependency__cf8907.cf.01_classify_critical_path"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_critical_path_red",
+        "artifact_green_01_classify_critical_path_stale",
+        "receipt_valid_01_classify_critical_path_foreign",
+        "partial_closure_hides_01_classify_critical_path_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: For event 'A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.', perform resource_triage for 'Recreate fresh alignment Groupers when the figure is restored.' while retaining valid prior result 'Figure serialization hooks and the align_labels call path have been located.'.",
+      "id": "swe_dependency__cf8907.mut.08_02_resource_triage",
+      "must_fail": [
+        "swe_dependency__cf8907.cf.02_resource_triage"
+      ],
+      "operation": "mutate_control_resource_triage",
+      "variants": [
+        "omit_resource_triage_decision",
+        "apply_resource_triage_to_wrong_scope",
+        "use_stale_evidence_for_resource_triage",
+        "declare_resource_triage_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Directly challenge the independently scored requirement: For event 'A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.', perform verify_closure for 'Verify pickle round-tripping after align_labels() and confirm the unpickled figure can perform alignment again.' while retaining valid prior result 'A minimal reproduction confirms that pickle.dumps(fig) fails only after align_labels() populates the figure’s alignment state.'.",
+      "id": "swe_dependency__cf8907.mut.09_03_verify_closure",
+      "must_fail": [
+        "swe_dependency__cf8907.cf.03_verify_closure"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-3361c7af50",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: For event 'A repository-analysis specialist reports that Figure._align_label_groups contains cbook.Grouper weak references and identifies that this field must be excluded from serialized state and reconstructed after unpickling.', perform verify_closure for 'Verify pickle round-tripping after align_labels() and confirm the unpickled figure can perform alignment again.' while retaining valid prior result 'A minimal reproduction confirms that pickle.dumps(fig) fails only after align_labels() populates the figure’s alignment state.'.",
+      "id": "swe_dependency__cf8907.mut.09_03_verify_closure_crosscheck",
+      "must_fail": [
+        "swe_dependency__cf8907.cf.03_verify_closure"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_red",
+        "artifact_green_03_verify_closure_stale",
+        "receipt_valid_03_verify_closure_foreign",
+        "partial_closure_hides_03_verify_closure_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

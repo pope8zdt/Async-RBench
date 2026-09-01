@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_83a415ed0c.delayed_authoritative_result",
+  "authority_rule": "Delayed ordered_txt_manifest_and_content is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.file_manifest",
+      "req.03.separator_free_content",
+      "req.04.font_size",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The project worker returns exactly 1.txt through 5.txt in order and their separator-free 2249-character concatenation.",
+    "before_state": "Writer setup may be prepared, but the complete ordered project text manifest and authoritative concatenation are still pending.",
+    "event_id": "evt.osw_cross_app_artifact_83a415ed0c.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

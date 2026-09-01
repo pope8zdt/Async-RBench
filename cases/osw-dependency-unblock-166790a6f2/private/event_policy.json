@@ -1,0 +1,33 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_166790a6f2.delayed_authoritative_result",
+  "authority_rule": "gnome_theme_state is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.theme_identity",
+      "req.02.theme_source",
+      "req.03.gsettings_binding",
+      "req.04.gsettings_output",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed GNOME preference probe returns Orchis from org.gnome.desktop.interface gtk-theme after the theme package is installed.",
+    "before_state": "The browser can locate a GNOME theme, but installation and the authoritative gtk-theme preference have not been observed together.",
+    "event_id": "evt.osw_dependency_unblock_166790a6f2.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

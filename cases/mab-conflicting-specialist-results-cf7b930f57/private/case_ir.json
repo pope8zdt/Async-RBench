@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-cf7b930f57",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_conflict_correlate_returned_lock_time",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Workload statistics establish 51,324 insert transactions and 5,132,400 inserted rows during the observed interval.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.correlate_returned_lock_"
+        ]
+      },
+      "id": "01_classify_conflict_correlate_returned",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "blind_first_result",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_cf7b930f57.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "required_behavior": "For event 'The lock specialist returns SQL evidence of blocked sessions and sustained lock waits during the high-rate table1 workload.', perform classify_conflict for 'Correlate returned lock timestamps with the bulk-insert interval.' while retaining valid prior result 'Workload statistics establish 51,324 insert transactions and 5,132,400 inserted rows during the observed interval.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.correlate_returned_lock_"
+    },
+    {
+      "critical": false,
+      "decision_group": "arbitrate_conflict_replace_any_unsupported_prov",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Catalog checks eliminate unsupported index and vacuum hypotheses.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.correlate_returned_lock_"
+        ]
+      },
+      "id": "02_arbitrate_conflict_replace_any_unsupp",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "blind_last_result",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_cf7b930f57.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "required_behavior": "For event 'The lock specialist returns SQL evidence of blocked sessions and sustained lock waits during the high-rate table1 workload.', perform arbitrate_conflict for 'Replace any unsupported provisional second cause with the lock-supported hypothesis.' while retaining valid prior result 'Catalog checks eliminate unsupported index and vacuum hypotheses.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.correlate_returned_lock_"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_retain_the_independently_est",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A provisional report names bulk insertion but leaves the second cause unresolved.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.correlate_returned_lock_"
+        ]
+      },
+      "id": "03_verify_closure_retain_the_indepen",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "inconsistent_merge",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_cf7b930f57.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'The lock specialist returns SQL evidence of blocked sessions and sustained lock waits during the high-rate table1 workload.', perform verify_closure for 'Retain the independently established bulk-insert evidence.' while retaining valid prior result 'A provisional report names bulk insertion but leaves the second cause unresolved.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.correlate_returned_lock_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.correlate_returned_lock_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.replace_any_unsupported_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.retain_the_independently"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.return_exactly_two_permi"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.correlate_returned_lock_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.replace_any_unsupported_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.retain_the_independently",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.return_exactly_two_permi",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.correlate_returned_lock_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.replace_any_unsupported_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.retain_the_independently",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.return_exactly_two_permi",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.correlate_returned_lock_",
+      "req.02.replace_any_unsupported_",
+      "req.03.retain_the_independently",
+      "req.04.return_exactly_two_permi",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The lock specialist returns SQL evidence of blocked sessions and sustained lock waits during the high-rate table1 workload.",
+    "before_state": "The lock report arrives after the bulk-load diagnosis and alternative-cause eliminations are complete.",
+    "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+    "primary_event_theme": "conflicting_valid_results",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Correlate returned lock timestamps with the bulk-insert interval.",
+      "id": "req.01.correlate_returned_lock_",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for correlate_returned_lock_timestamps_w"
+    },
+    {
+      "description": "Replace any unsupported provisional second cause with the lock-supported hypothesis.",
+      "id": "req.02.replace_any_unsupported_",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for replace_any_unsupported_provisional_"
+    },
+    {
+      "description": "Retain the independently established bulk-insert evidence.",
+      "id": "req.03.retain_the_independently",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for retain_the_independently_established"
+    },
+    {
+      "description": "Return exactly two permitted root-cause labels.",
+      "id": "req.04.return_exactly_two_permi",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for return_exactly_two_permitted_root_ca"
+    }
+  ]
+}

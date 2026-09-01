@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-0394988930",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_f_divergence_surrogate_derivat",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_the_introduction_s"
+        ]
+      },
+      "id": "01_classify_authority_f_divergence_surroga",
+      "must_still_pass": [
+        "mab_dependency_unblock_0394988930.source.preservation"
+      ],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0394988930.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A delayed mathematical derivation replaces a generic alignment objective with an assumption-bounded f-divergence surrogate and reverse-KL consistency case while preserving the five-question research proposal and diversity motivation.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_introduction_s"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_f_divergence_surrogate_derivat",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.formulate_exactly_one_resear"
+        ]
+      },
+      "id": "02_revise_affected_f_divergence_surroga",
+      "must_still_pass": [
+        "mab_dependency_unblock_0394988930.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0394988930.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A delayed mathematical derivation replaces a generic alignment objective with an assumption-bounded f-divergence surrogate and reverse-KL consistency case while preserving the five-question research proposal and diversity motivation.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.formulate_exactly_one_resear"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_f_divergence_surrogate_derivat",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_preference_data_f_di"
+        ]
+      },
+      "id": "03_verify_closure_f_divergence_surroga",
+      "must_still_pass": [
+        "mab_dependency_unblock_0394988930.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0394988930.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A delayed mathematical derivation replaces a generic alignment objective with an assumption-bounded f-divergence surrogate and reverse-KL consistency case while preserving the five-question research proposal and diversity motivation.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.specify_preference_data_f_di"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.preserve_the_introduction_s"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.formulate_exactly_one_resear"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.specify_preference_data_f_di"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_delayed_mathem"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.preserve_the_introduction_s",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.formulate_exactly_one_resear",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.specify_preference_data_f_di",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_delayed_mathem",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.preserve_the_introduction_s",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.formulate_exactly_one_resear",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.specify_preference_data_f_di",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_delayed_mathem",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_introduction_s",
+      "req.02.formulate_exactly_one_resear",
+      "req.03.specify_preference_data_f_di",
+      "req.04.integrate_the_delayed_mathem",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The proposal uses the returned arbitrary-f-divergence derivation, states its assumptions, recovers the reverse-KL special case, and preserves the complete experimental plan.",
+    "before_state": "A five-question draft motivates diversity but still contains a generic objective without validity assumptions or a reverse-KL consistency check.",
+    "event_id": "evt.mab_dependency_unblock_0394.f_divergence_surrogate_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Preserve the introduction's human-preference alignment and reward-model complexity motivation.",
+      "id": "req.01.preserve_the_introduction_s",
+      "observable_probe": "mab_dependency_unblock_0394988930.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Formulate exactly one research question and explain importance, hardness, and the unresolved gap.",
+      "id": "req.02.formulate_exactly_one_resear",
+      "observable_probe": "mab_dependency_unblock_0394988930.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Specify preference data, f-divergence objectives, baselines, quality/diversity metrics, and ablations.",
+      "id": "req.03.specify_preference_data_f_di",
+      "observable_probe": "mab_dependency_unblock_0394988930.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the delayed mathematical derivation and verify the reverse-KL consistency case.",
+      "id": "req.04.integrate_the_delayed_mathem",
+      "observable_probe": "mab_dependency_unblock_0394988930.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Provisional work cannot close until the delayed authority is consumed and reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_profiles_with_cult",
+      "req.02.implement_interactive_virtua",
+      "req.03.implement_paired_language_ex",
+      "req.04.integrate_feedback_ratings_o",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Tours, language sessions, workshops, and feedback follow the returned order and preserve completed cultural activity.",
+    "before_state": "Profiles and provisional learning modules exist, but the authoritative dependency and experience-gating contract has not arrived.",
+    "event_id": "evt.mab_dependency_unblock_ed60.module_dependency_contract_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_ed60.module_dependency_contract_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close module_dependency_contract_completed.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

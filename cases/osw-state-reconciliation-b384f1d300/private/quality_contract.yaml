@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline assembly of native result and closure, without invoking oracle.sh or the canonical upstream script.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_state_reconciliation_b384f1d300.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_state_reconciliation_b384f1d300.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_state_reconciliation_b384f1d300.osworld.next_chapter"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_state_reconciliation_b384f1d300.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_chapter_b384.cf.01_classify_authority_next_chapter_repository_result",
+          "osw_chapter_b384.cf.02_revise_affected_next_chapter_repository_result",
+          "osw_chapter_b384.cf.03_preserve_unaffected_next_chapter_repository_result",
+          "osw_chapter_b384.cf.04_verify_closure_next_chapter_repository_result"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_state_reconciliation_b384f1d300.event.receipt",
+          "osw_state_reconciliation_b384f1d300.event.probes",
+          "osw_state_reconciliation_b384f1d300.closure",
+          "osw_state_reconciliation_b384f1d300.source.pin",
+          "osw_state_reconciliation_b384f1d300.osworld.identity",
+          "osw_state_reconciliation_b384f1d300.osworld.official_score",
+          "osw_state_reconciliation_b384f1d300.osworld.native_evidence",
+          "osw_state_reconciliation_b384f1d300.osworld.task_assertion",
+          "osw_state_reconciliation_b384f1d300.osworld.archive_inventory",
+          "osw_state_reconciliation_b384f1d300.osworld.next_chapter",
+          "osw_state_reconciliation_b384f1d300.osworld.output_path",
+          "osw_state_reconciliation_b384f1d300.osworld.gold_content"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "50f8faa2b5e964ec0dcacb751d4d523bb1831d0087cd0b09e7c30f88891492da",
+        "task_id": "osworld:multi_apps:788b3701-3ec9-4b67-b679-418bfa726c22",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

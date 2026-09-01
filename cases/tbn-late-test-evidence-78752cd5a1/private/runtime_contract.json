@@ -1,0 +1,22 @@
+{
+  "assets": [
+    "upstream task assets",
+    "event assets",
+    "authority receipts",
+    "canonical/equivalent solutions"
+  ],
+  "docker": [
+    "locked upstream Dockerfile",
+    "pinned dependencies",
+    "participant service",
+    "private verifier clone"
+  ],
+  "environment_strategy": "copy the locked Terminal-Bench task image/assets and extend it with evaluator-owned event staging",
+  "event_injection": "task-specific event plan for fix-code-vulnerability bound to persisted filesystem/service state",
+  "hidden_tests": "upstream semantics plus task-specific preservation, stale exclusion, runtime behavior, lineage and closure assertions",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "terminal-bench locked task bundle"
+  },
+  "oracle": "compose the upstream canonical solutions and rederive final state after the injected event"
+}

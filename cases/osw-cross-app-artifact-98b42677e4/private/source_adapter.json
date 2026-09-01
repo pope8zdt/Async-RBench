@@ -1,0 +1,44 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:c2751594-0cd5-4088-be1b-b5f2f9ec97c4",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/c2751594-0cd5-4088-be1b-b5f2f9ec97c4.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "thunderbird snapshot",
+      "os snapshot",
+      "private source assets",
+      "private native fixture",
+      "private delayed payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "thunderbird",
+      "os",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:c2751594-0cd5-4088-be1b-b5f2f9ec97c4 in pinned thunderbird; truth remains private.",
+    "event_injection": "Release delayed latest_notes_first_embedded_image after a persisted cross-app checkpoint.",
+    "hidden_tests": "compare_images, native digest, mail_identity, attachment_identity, first_image, wallpaper_state, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "thunderbird",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private mail_wallpaper_osworld.sh scores compare_images.",
+    "requires_authored_private_oracle": false
+  }
+}
+

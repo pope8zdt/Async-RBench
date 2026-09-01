@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific performance_metric_contract_completed receipt bound to coding:008.",
+      "id": "mab_dependency_unblock_b999d1b968.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Team_Collaboration_Manager authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_b999d1b968.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "id": "mab_dependency_unblock_b999d1b968.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:008.",
+      "id": "mab_dependency_unblock_b999d1b968.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes TeamCollaborationManager and the team collaboration closure.",
+      "id": "mab_dependency_unblock_b999d1b968.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_team_output_schema_projects_tasks_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Projects enforce dates and membership; tasks enforce unique assignment and ordered status; dashboards compute authoritative completion metrics.",
+      "id": "mab_dependency_unblock_b999d1b968.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_team_task_transitions_concurrent_assignment_and_metrics",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Messages, attachments, feedback, task status, and report evidence remain available after the event.",
+      "id": "mab_dependency_unblock_b999d1b968.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_team_messages_attachments_feedback_and_reports_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed metric contract is consumed before performance dashboards and reports are finalized.",
+      "id": "mab_dependency_unblock_b999d1b968.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_team_event_metric_contract_and_final_reverification",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

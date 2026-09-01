@@ -1,0 +1,26 @@
+{
+  "assets": [
+    "pinned official OSWorld task configuration",
+    "Chrome snapshot/profile state",
+    "private native-evaluator fixture",
+    "private delayed event payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "Chrome",
+    "pyautogui bridge",
+    "host-owned evaluator and event sidecar"
+  ],
+  "environment_strategy": "Run osworld:chrome:1704f00f-79e6-43a7-961b-cedd3724d5fd in its pinned OSWorld Chrome environment; evaluator truth and event payload are injected only into Oracle/private-verifier paths.",
+  "event_injection": "Release a case-bound delayed authoritative observation after a persisted browser-state checkpoint; no answer payload is present in participant-visible task_file.",
+  "hidden_tests": "Official check_direct_json_object score, native evidence digest, Zürich large-car rental interval state invariant, receipt lineage, selective revision, and closure reverification.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "chrome",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private zurich_rental_osworld.sh materializes evaluator-owned evidence and a source-native result scored by check_direct_json_object.",
+  "requires_authored_private_oracle": false
+}

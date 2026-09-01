@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_common_threat_rulebook_complet",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_cb63.common_threat_rulebook_completed",
+      "evidence_group": "mab_code13_galactic.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_agents_turn_order"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness: A complete common-threat and scoring rulebook replaces provisional event handling while preserving empire state, turn order, alliances, negotiations, and prior interactions.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_agents_turn_order"
+        ]
+      },
+      "id": "mab_code13_galactic.cf.01_classify_completeness_common_threat_rule",
+      "independence_key": "mab_code13_galactic.cf.01_classify_completeness_common_threat_rule",
+      "measurement_type": "control",
+      "mutation_id": "mab_code13_galactic.mutation.01_classify_completeness_common_threat_rule",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_cb636c66eb.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_agents_turn_order"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_common_threat_rulebook_complet",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_cb63.common_threat_rulebook_completed",
+      "evidence_group": "mab_code13_galactic.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_adaptive_difficult"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A complete common-threat and scoring rulebook replaces provisional event handling while preserving empire state, turn order, alliances, negotiations, and prior interactions.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_adaptive_difficult"
+        ]
+      },
+      "id": "mab_code13_galactic.cf.02_revise_affected_common_threat_rule",
+      "independence_key": "mab_code13_galactic.cf.02_revise_affected_common_threat_rule",
+      "measurement_type": "control",
+      "mutation_id": "mab_code13_galactic.mutation.02_revise_affected_common_threat_rule",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_cb636c66eb.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_adaptive_difficult"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_common_threat_rulebook_complet",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_cb63.common_threat_rulebook_completed",
+      "evidence_group": "mab_code13_galactic.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_communication_alli"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A complete common-threat and scoring rulebook replaces provisional event handling while preserving empire state, turn order, alliances, negotiations, and prior interactions.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_communication_alli"
+        ]
+      },
+      "id": "mab_code13_galactic.cf.03_verify_closure_common_threat_rule",
+      "independence_key": "mab_code13_galactic.cf.03_verify_closure_common_threat_rule",
+      "measurement_type": "control",
+      "mutation_id": "mab_code13_galactic.mutation.03_verify_closure_common_threat_rule",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_cb636c66eb.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_communication_alli"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "family": "wait_for_authority",
+      "id": "mab_code13_galactic.mutation.01_classify_completeness_common_threat_rule",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code13_galactic.cf.01_classify_completeness_common_threat_rule"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_cb636c66eb.source.pin"
+      ],
+      "targets": [
+        "mab_code13_galactic.cf.01_classify_completeness_common_threat_rule",
+        "mab_dependency_unblock_cb636c66eb.event.receipt",
+        "mab_dependency_unblock_cb636c66eb.event.authority_probe",
+        "mab_dependency_unblock_cb636c66eb.closure",
+        "mab_dependency_unblock_cb636c66eb.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "family": "resolve_authority",
+      "id": "mab_code13_galactic.mutation.02_revise_affected_common_threat_rule",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code13_galactic.cf.02_revise_affected_common_threat_rule"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_cb636c66eb.source.pin"
+      ],
+      "targets": [
+        "mab_code13_galactic.cf.02_revise_affected_common_threat_rule",
+        "mab_dependency_unblock_cb636c66eb.event.receipt",
+        "mab_dependency_unblock_cb636c66eb.event.authority_probe",
+        "mab_dependency_unblock_cb636c66eb.closure",
+        "mab_dependency_unblock_cb636c66eb.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "family": "rederive_from_authority",
+      "id": "mab_code13_galactic.mutation.03_verify_closure_common_threat_rule",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code13_galactic.cf.03_verify_closure_common_threat_rule"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_cb636c66eb.source.pin"
+      ],
+      "targets": [
+        "mab_code13_galactic.cf.03_verify_closure_common_threat_rule",
+        "mab_dependency_unblock_cb636c66eb.event.receipt",
+        "mab_dependency_unblock_cb636c66eb.event.authority_probe",
+        "mab_dependency_unblock_cb636c66eb.closure",
+        "mab_dependency_unblock_cb636c66eb.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific common_threat_rulebook_completed receipt bound to coding:013.",
+      "id": "mab_dependency_unblock_cb636c66eb.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Galactic Dominion authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_cb636c66eb.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A complete common-threat and scoring rulebook replaces provisional event handling while preserving empire state, turn order, alliances, negotiations, and prior interactions.",
+      "id": "mab_dependency_unblock_cb636c66eb.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:013.",
+      "id": "mab_dependency_unblock_cb636c66eb.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes GalacticDominion and its rulebook closure.",
+      "id": "mab_dependency_unblock_cb636c66eb.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_galactic_output_schema_agents_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Turn order, resources, research, fleets, weighted scoring, adaptive difficulty, and alliance-gated common threats follow the game contract.",
+      "id": "mab_dependency_unblock_cb636c66eb.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_galactic_turn_resources_research_scoring_and_difficulty",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Empire state, alliance terms, communications, and dynamic-event history remain intact.",
+      "id": "mab_dependency_unblock_cb636c66eb.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_galactic_alliance_communication_and_common_threat_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The complete common-threat rulebook replaces provisional handling and revalidates scoring and difficulty.",
+      "id": "mab_dependency_unblock_cb636c66eb.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_galactic_event_rulebook_and_final_reverification",
+      "relevance_tier": "base"
+    }
+  ]
+}

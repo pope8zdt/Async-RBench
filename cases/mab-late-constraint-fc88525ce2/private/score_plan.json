@@ -1,0 +1,362 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "event_intake",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-late-constraint-fc88525ce2.production_scope_constraint_added",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "production_scope_constraint_added"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_scope_delta: The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_fc.cf.01_classify_scope_delta",
+      "independence_key": "mab_late_constraint_fc.cf.01_classify_scope_delta",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_fc.mutation.01_classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_fc88525ce2.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_fc.cf.01_classify_scope_delta]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "production_scope_constraint_added"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-late-constraint-fc88525ce2.production_scope_constraint_added",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "production_scope_constraint_added"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_fc.cf.02_revise_affected",
+      "independence_key": "mab_late_constraint_fc.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_fc.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_fc88525ce2.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_fc.cf.02_revise_affected]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "production_scope_constraint_added"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "plan_revision",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab-late-constraint-fc88525ce2.production_scope_constraint_added",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "production_scope_constraint_added"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_fc.cf.03_preserve_unaffected",
+      "independence_key": "mab_late_constraint_fc.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_fc.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_fc88525ce2.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_fc.cf.03_preserve_unaffected]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "production_scope_constraint_added"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "closure",
+      "dimension": "closure",
+      "event_id": "evt.mab-late-constraint-fc88525ce2.production_scope_constraint_added",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "production_scope_constraint_added"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_fc.cf.04_verify_closure",
+      "independence_key": "mab_late_constraint_fc.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_fc.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_fc88525ce2.closure"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_fc.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "production_scope_constraint_added"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "family": "wait_for_authority",
+      "id": "mab_late_constraint_fc.mutation.01_classify_scope_delta",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_fc.cf.01_classify_scope_delta"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_fc88525ce2.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_fc.cf.01_classify_scope_delta",
+        "mab_late_constraint_fc88525ce2.event.receipt",
+        "mab_late_constraint_fc88525ce2.event.probes",
+        "mab_late_constraint_fc88525ce2.closure",
+        "mab_late_constraint_fc88525ce2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "family": "resolve_authority",
+      "id": "mab_late_constraint_fc.mutation.02_revise_affected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_fc.cf.02_revise_affected"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_fc88525ce2.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_fc.cf.02_revise_affected",
+        "mab_late_constraint_fc88525ce2.event.receipt",
+        "mab_late_constraint_fc88525ce2.event.probes",
+        "mab_late_constraint_fc88525ce2.closure",
+        "mab_late_constraint_fc88525ce2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "family": "selective_replan",
+      "id": "mab_late_constraint_fc.mutation.03_preserve_unaffected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_fc.cf.03_preserve_unaffected"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_fc88525ce2.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_fc.cf.03_preserve_unaffected",
+        "mab_late_constraint_fc88525ce2.event.receipt",
+        "mab_late_constraint_fc88525ce2.event.probes",
+        "mab_late_constraint_fc88525ce2.closure",
+        "mab_late_constraint_fc88525ce2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "family": "rederive_from_authority",
+      "id": "mab_late_constraint_fc.mutation.04_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_fc.cf.04_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_fc88525ce2.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_fc.cf.04_verify_closure",
+        "mab_late_constraint_fc88525ce2.event.receipt",
+        "mab_late_constraint_fc88525ce2.event.probes",
+        "mab_late_constraint_fc88525ce2.closure",
+        "mab_late_constraint_fc88525ce2.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt is authentic and bound to the exact case and source.",
+      "id": "mab_late_constraint_fc88525ce2.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Independent event worker observes provisional and solution artifacts.",
+      "id": "mab_late_constraint_fc88525ce2.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "id": "mab_late_constraint_fc88525ce2.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains bound to bargaining:022.",
+      "id": "mab_late_constraint_fc88525ce2.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private evaluator binding names the exact official source task and output schema.",
+      "id": "mab_late_constraint_fc88525ce2.source.native_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding_and_schema",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "BTS RM Idol Doll implements its source-specific central workflow.",
+      "id": "mab_late_constraint_fc88525ce2.source.core_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_core_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "id": "mab_late_constraint_fc88525ce2.source.event_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Task-specific stale, duplicate, unauthorized, or invalid input is rejected.",
+      "id": "mab_late_constraint_fc88525ce2.source.edge_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_edge_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Unaffected task-native state is preserved through event adoption.",
+      "id": "mab_late_constraint_fc88525ce2.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_closure_and_preservation",
+      "relevance_tier": "base"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "benchmark": "OSWorld",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "private_copy": "private/source_manifests/01-native_case.json",
+      "source": "upstream/osworld/evaluation_examples/examples/chrome/9f3f70fc-5afc-4958-a7b7-3bb4fcb01805.json"
+    },
+    {
+      "private_copy": "private/official_task.json",
+      "source": "pinned official OSWorld task configuration"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task config",
+      "Chrome snapshot",
+      "native evaluator target",
+      "host-owned event receipt"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "Chrome",
+      "pyautogui bridge",
+      "state observer sidecar"
+    ],
+    "environment_strategy": "run the pinned OSWorld Chrome task in its source-native desktop environment",
+    "event_injection": "delayed NBA Store catalog filter receipt",
+    "hidden_tests": "official check_url_and_content_include evaluator plus receipt binding, selective revision, preservation, and post-event reverification",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "chrome",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "replay the official task and score with check_url_and_content_include",
+    "requires_authored_private_oracle": false
+  },
+  "source_task_id": "osworld:chrome:9f3f70fc-5afc-4958-a7b7-3bb4fcb01805"
+}

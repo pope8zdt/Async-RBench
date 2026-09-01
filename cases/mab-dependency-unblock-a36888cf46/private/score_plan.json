@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_integrate_fixed_timestep_tra",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_a.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.integrate_fixed_timestep"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Physics specialist returns a fixed-timestep drift transition and scoring contract based on handling parameters, speed, angle, surface grip, collision state, and combo duration.', perform classify_completeness for 'Integrate fixed-timestep transitions into race updates.' while retaining valid prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_fixed_timestep"
+        ]
+      },
+      "id": "mab_code22_drift.cf.01_classify_completeness_integrate_fixed_ti",
+      "independence_key": "mab_code22_drift.cf.01_classify_completeness_integrate_fixed_ti",
+      "measurement_type": "control",
+      "mutation_id": "mab_code22_drift.mutation.01_classify_completeness_integrate_fixed_ti",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_a36888cf46.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.integrate_fixed_timestep"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_calculate_drift_scores_and_c",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_a.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.integrate_fixed_timestep"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Physics specialist returns a fixed-timestep drift transition and scoring contract based on handling parameters, speed, angle, surface grip, collision state, and combo duration.', perform revise_affected for 'Calculate drift scores and combo resets from the returned events.' while retaining valid prior result 'Race updates use provisional drift scores and generic driving actions.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Race updates use provisional drift scores and generic driving actions.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_fixed_timestep"
+        ]
+      },
+      "id": "mab_code22_drift.cf.02_revise_affected_calculate_drift_sc",
+      "independence_key": "mab_code22_drift.cf.02_revise_affected_calculate_drift_sc",
+      "measurement_type": "control",
+      "mutation_id": "mab_code22_drift.mutation.02_revise_affected_calculate_drift_sc",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_a36888cf46.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.integrate_fixed_timestep"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_feed_grip_and_opponent_event",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_a.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.integrate_fixed_timestep"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Physics specialist returns a fixed-timestep drift transition and scoring contract based on handling parameters, speed, angle, surface grip, collision state, and combo duration.', perform verify_closure for 'Feed grip and opponent events into adaptive strategy selection.' while retaining valid prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_fixed_timestep"
+        ]
+      },
+      "id": "mab_code22_drift.cf.03_verify_closure_feed_grip_and_oppo",
+      "independence_key": "mab_code22_drift.cf.03_verify_closure_feed_grip_and_oppo",
+      "measurement_type": "control",
+      "mutation_id": "mab_code22_drift.mutation.03_verify_closure_feed_grip_and_oppo",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_a36888cf46.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.integrate_fixed_timestep"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code22_drift.mutation.01_classify_completeness_integrate_fixed_ti",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code22_drift.cf.01_classify_completeness_integrate_fixed_ti"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_a36888cf46.source.pin"
+      ],
+      "targets": [
+        "mab_code22_drift.cf.01_classify_completeness_integrate_fixed_ti",
+        "mab_dependency_unblock_a36888cf46.event.receipt",
+        "mab_dependency_unblock_a36888cf46.event.authority_probe",
+        "mab_dependency_unblock_a36888cf46.closure",
+        "mab_dependency_unblock_a36888cf46.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Race updates use provisional drift scores and generic driving actions.'.",
+      "family": "resolve_authority",
+      "id": "mab_code22_drift.mutation.02_revise_affected_calculate_drift_sc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code22_drift.cf.02_revise_affected_calculate_drift_sc"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_a36888cf46.source.pin"
+      ],
+      "targets": [
+        "mab_code22_drift.cf.02_revise_affected_calculate_drift_sc",
+        "mab_dependency_unblock_a36888cf46.event.receipt",
+        "mab_dependency_unblock_a36888cf46.event.authority_probe",
+        "mab_dependency_unblock_a36888cf46.closure",
+        "mab_dependency_unblock_a36888cf46.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code22_drift.mutation.03_verify_closure_feed_grip_and_oppo",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code22_drift.cf.03_verify_closure_feed_grip_and_oppo"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_a36888cf46.source.pin"
+      ],
+      "targets": [
+        "mab_code22_drift.cf.03_verify_closure_feed_grip_and_oppo",
+        "mab_dependency_unblock_a36888cf46.event.receipt",
+        "mab_dependency_unblock_a36888cf46.event.authority_probe",
+        "mab_dependency_unblock_a36888cf46.closure",
+        "mab_dependency_unblock_a36888cf46.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific drift_physics_contract_completed receipt bound to coding:022.",
+      "id": "mab_dependency_unblock_a36888cf46.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Multi-Agent Drift Championship authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_a36888cf46.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The completed fixed-timestep physics contract replaces provisional transitions while agent customization, tracks, replay history, and feedback remain intact.",
+      "id": "mab_dependency_unblock_a36888cf46.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:022.",
+      "id": "mab_dependency_unblock_a36888cf46.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and fixed_timestep_drift_closure expose the task-specific four-upstream racing contract.",
+      "id": "mab_dependency_unblock_a36888cf46.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_drift_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Fixed-timestep transitions bind handling, speed, angle, grip, collisions, and combo duration to deterministic drift scores; strategy reacts to grip and opponent performance.",
+      "id": "mab_dependency_unblock_a36888cf46.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_drift_fixed_timestep_grip_collision_scoring_and_strategy",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves agent_customizations, track_layouts, race_replays, performance_feedback.",
+      "id": "mab_dependency_unblock_a36888cf46.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_drift_agent_track_replay_and_feedback_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Completed drift physics revises transitions and scoring without erasing agent, track, replay, or feedback state.",
+      "id": "mab_dependency_unblock_a36888cf46.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_drift_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

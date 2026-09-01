@@ -1,0 +1,5 @@
+services:
+  client:
+    build: .
+    image: async_rbench-swe-bench-selective-patch:locked
+    command: ["bash", "-lc", "sleep infinity"]

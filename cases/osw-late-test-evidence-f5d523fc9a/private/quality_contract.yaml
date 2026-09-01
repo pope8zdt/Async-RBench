@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline native-result and closure assembly without invoking oracle.sh or the canonical source-native solution.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_late_test_evidence_f5d523fc9a.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_late_test_evidence_f5d523fc9a.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_late_test_evidence_f5d523fc9a.osworld.sampling_contract"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_late_test_evidence_f5d523fc9a.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_sar_f5d5.cf.01_classify_authority_sar_cpu_report",
+          "osw_sar_f5d5.cf.02_revise_affected_sar_cpu_report",
+          "osw_sar_f5d5.cf.03_preserve_unaffected_sar_cpu_report",
+          "osw_sar_f5d5.cf.04_verify_closure_sar_cpu_report"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_late_test_evidence_f5d523fc9a.event.receipt",
+          "osw_late_test_evidence_f5d523fc9a.event.probes",
+          "osw_late_test_evidence_f5d523fc9a.closure",
+          "osw_late_test_evidence_f5d523fc9a.source.pin",
+          "osw_late_test_evidence_f5d523fc9a.osworld.identity",
+          "osw_late_test_evidence_f5d523fc9a.osworld.official_score",
+          "osw_late_test_evidence_f5d523fc9a.osworld.native_evidence",
+          "osw_late_test_evidence_f5d523fc9a.osworld.task_assertion",
+          "osw_late_test_evidence_f5d523fc9a.osworld.report_path",
+          "osw_late_test_evidence_f5d523fc9a.osworld.sampling_contract",
+          "osw_late_test_evidence_f5d523fc9a.osworld.required_labels",
+          "osw_late_test_evidence_f5d523fc9a.osworld.line_count"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "daa1afd7d7fefc800ef8f7c5655b4d128cead4be26a80097b54a865fa6598b57",
+        "task_id": "osworld:multi_apps:2373b66a-092d-44cb-bfd7-82e86e7a3b4d",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

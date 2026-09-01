@@ -1,0 +1,28 @@
+{
+  "schema_version": "async-rbench-participant-task-v1",
+  "case_id": "osw-cross-app-artifact-be9a3df3ef",
+  "source_task_id": "osworld:multi_apps:47f7c0ce-a5fb-4100-a5e6-65cd0e7429e5",
+  "benchmark": "OSWorld",
+  "domain": "multi_apps",
+  "snapshot": "vlc",
+  "applications": [
+    "libreoffice_impress",
+    "vlc"
+  ],
+  "instruction": "The landscape at 00:08 in this video is so beautiful. Please extract this frame and set it as the background of the second page of the opened slides.",
+  "async_extension": {
+    "theme": "delayed_authoritative_result",
+    "evidence_kind": "validated_video_frame_at_8s",
+    "delivery": "after a persisted cross-app checkpoint",
+    "required_behavior": [
+      "classify the late authority",
+      "revise only affected work",
+      "reverify source-native closure"
+    ]
+  },
+  "privacy": {
+    "evaluator_truth_visible": false,
+    "event_payload_predeclared": false
+  }
+}
+

@@ -1,0 +1,290 @@
+{
+  "families": [
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "tbn_partial_fai_e5a821.mut.01_receipt",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "tbn_partial_fai_e5a821.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: The worker completed successfully and returned observable task-specific probes.",
+      "id": "tbn_partial_fai_e5a821.mut.02_probes",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The worker completed successfully and returned observable task-specific probes.",
+      "id": "tbn_partial_fai_e5a821.mut.02_probes_crosscheck",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "tbn_partial_fai_e5a821.mut.03_closure",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "tbn_partial_fai_e5a821.mut.03_closure_crosscheck",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: The task remains bound to its pinned source revision.",
+      "id": "tbn_partial_fai_e5a821.mut.04_pin",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The task remains bound to its pinned source revision.",
+      "id": "tbn_partial_fai_e5a821.mut.04_pin_crosscheck",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_flag_file_exists_and_correct passes.",
+      "id": "tbn_partial_fai_e5a821.mut.05_test_flag_file_exists_and_co",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.upstream.test_flag_file_exists_and_correct"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_flag_file_exists_and_co_evidence",
+        "corrupt_test_flag_file_exists_and_co_value",
+        "replay_stale_test_flag_file_exists_and_co_state",
+        "satisfy_manifest_without_test_flag_file_exists_and_co_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_no_secrets_in_commits passes.",
+      "id": "tbn_partial_fai_e5a821.mut.06_test_no_secrets_in_commits",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.upstream.test_no_secrets_in_commits"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_no_secrets_in_commits_evidence",
+        "corrupt_test_no_secrets_in_commits_value",
+        "replay_stale_test_no_secrets_in_commits_state",
+        "satisfy_manifest_without_test_no_secrets_in_commits_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_good_commits_preserved passes.",
+      "id": "tbn_partial_fai_e5a821.mut.07_test_good_commits_preserved",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.upstream.test_good_commits_preserved"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_good_commits_preserved_evidence",
+        "corrupt_test_good_commits_preserved_value",
+        "replay_stale_test_good_commits_preserved_state",
+        "satisfy_manifest_without_test_good_commits_preserved_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_no_secrets_in_unreachable_objects passes.",
+      "id": "tbn_partial_fai_e5a821.mut.08_test_no_secrets_in_unreachab",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.upstream.test_no_secrets_in_unreachable_objects"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_no_secrets_in_unreachab_evidence",
+        "corrupt_test_no_secrets_in_unreachab_value",
+        "replay_stale_test_no_secrets_in_unreachab_state",
+        "satisfy_manifest_without_test_no_secrets_in_unreachab_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_repository_contents_checksum passes.",
+      "id": "tbn_partial_fai_e5a821.mut.09_test_repository_contents_che",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.upstream.test_repository_contents_checksum"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_repository_contents_che_evidence",
+        "corrupt_test_repository_contents_che_value",
+        "replay_stale_test_repository_contents_che_state",
+        "satisfy_manifest_without_test_repository_contents_che_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform classify_scope_delta for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "id": "tbn_partial_fai_e5a821.mut.10_01_classify_scope_delta",
+      "must_fail": [
+        "tbn_partial_fai_e5a821.cf.01_classify_scope_delta"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform classify_scope_delta for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "id": "tbn_partial_fai_e5a821.mut.10_01_classify_scope_delta_crosscheck",
+      "must_fail": [
+        "tbn_partial_fai_e5a821.cf.01_classify_scope_delta"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_scope_delta_red",
+        "artifact_green_01_classify_scope_delta_stale",
+        "receipt_valid_01_classify_scope_delta_foreign",
+        "partial_closure_hides_01_classify_scope_delta_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform revise_affected for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "id": "tbn_partial_fai_e5a821.mut.11_02_revise_affected",
+      "must_fail": [
+        "tbn_partial_fai_e5a821.cf.02_revise_affected"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform preserve_unaffected for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "id": "tbn_partial_fai_e5a821.mut.12_03_preserve_unaffected",
+      "must_fail": [
+        "tbn_partial_fai_e5a821.cf.03_preserve_unaffected"
+      ],
+      "operation": "mutate_control_selective_replan",
+      "variants": [
+        "omit_selective_replan_decision",
+        "apply_selective_replan_to_wrong_scope",
+        "use_stale_evidence_for_selective_replan",
+        "declare_selective_replan_without_observation"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Directly challenge the independently scored requirement: For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform verify_closure for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "id": "tbn_partial_fai_e5a821.mut.13_04_verify_closure",
+      "must_fail": [
+        "tbn_partial_fai_e5a821.cf.04_verify_closure"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform verify_closure for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "id": "tbn_partial_fai_e5a821.mut.13_04_verify_closure_crosscheck",
+      "must_fail": [
+        "tbn_partial_fai_e5a821.cf.04_verify_closure"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_04_verify_closure_red",
+        "artifact_green_04_verify_closure_stale",
+        "receipt_valid_04_verify_closure_foreign",
+        "partial_closure_hides_04_verify_closure_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

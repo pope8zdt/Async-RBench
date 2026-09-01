@@ -1,0 +1,286 @@
+{
+  "case_id": "osw-late-test-evidence-befa686e5c",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_snake_collision_test",
+      "forbidden_behavior": "Do not skip classify_authority, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_snake_befa.cf.01_classify_authority_snake_collision_test",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_late_test_evidence_befa686e5c.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for snake_collision_test; preserve confirmed vs_code, python, pygame state and revise only affected closure.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.grid_size"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_snake_collision_test",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_snake_befa.cf.02_revise_affected_snake_collision_test",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_befa686e5c.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for snake_collision_test; preserve confirmed vs_code, python, pygame state and revise only affected closure.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.initial_spawn"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_snake_collision_test",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_snake_befa.cf.03_preserve_unaffected_snake_collision_test",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_befa686e5c.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for snake_collision_test; preserve confirmed vs_code, python, pygame state and revise only affected closure.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.respawn"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_snake_collision_test",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_snake_befa.cf.04_verify_closure_snake_collision_test",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_late_test_evidence_befa686e5c.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for snake_collision_test; preserve confirmed vs_code, python, pygame state and revise only affected closure.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.snake_reaches_food"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.grid_size"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.grid_size",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.initial_spawn"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.initial_spawn",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.respawn"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.respawn",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.snake_reaches_food"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.snake_reaches_food",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.official_test"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.official_test",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.06.fixed_file"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.06.fixed_file",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.grid_size",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.initial_spawn",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.respawn",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.snake_reaches_food",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.official_test",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.06.fixed_file",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.grid_size",
+      "req.02.initial_spawn",
+      "req.03.respawn",
+      "req.04.snake_reaches_food",
+      "req.05.official_test",
+      "req.06.fixed_file",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Food respawns on the 10-pixel grid within 600×400 bounds, the snake can reach food, and the official OSWorld Python test suite passes.",
+    "before_state": "The Snake project runs, but Food initially spawns off the 10-pixel movement grid and the independent official test has not yet authorized closure.",
+    "event_id": "evt.osw_late_test_evidence_befa686e5c.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The fix honors the 10-pixel Snake movement grid.",
+      "id": "req.01.grid_size",
+      "observable_probe": "osw_late_test_evidence_befa686e5c.osworld.grid_size",
+      "public_evidence": "source instruction and native evaluator for grid_size"
+    },
+    {
+      "description": "Food initialization is grid aligned.",
+      "id": "req.02.initial_spawn",
+      "observable_probe": "osw_late_test_evidence_befa686e5c.osworld.initial_spawn",
+      "public_evidence": "source instruction and native evaluator for initial_spawn"
+    },
+    {
+      "description": "Food respawn remains grid aligned and in bounds.",
+      "id": "req.03.respawn",
+      "observable_probe": "osw_late_test_evidence_befa686e5c.osworld.respawn",
+      "public_evidence": "source instruction and native evaluator for respawn"
+    },
+    {
+      "description": "The Snake can reach the Food position.",
+      "id": "req.04.snake_reaches_food",
+      "observable_probe": "osw_late_test_evidence_befa686e5c.osworld.snake_reaches_food",
+      "public_evidence": "source instruction and native evaluator for snake_reaches_food"
+    },
+    {
+      "description": "The bound official Python test suite passes.",
+      "id": "req.05.official_test",
+      "observable_probe": "osw_late_test_evidence_befa686e5c.osworld.official_test",
+      "public_evidence": "source instruction and native evaluator for official_test"
+    },
+    {
+      "description": "The repair is localized to food.py semantics.",
+      "id": "req.06.fixed_file",
+      "observable_probe": "osw_late_test_evidence_befa686e5c.osworld.fixed_file",
+      "public_evidence": "source instruction and native evaluator for fixed_file"
+    }
+  ]
+}

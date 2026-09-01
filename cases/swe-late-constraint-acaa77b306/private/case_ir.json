@@ -1,0 +1,248 @@
+{
+  "case_id": "swe-late-constraint-acaa77b306",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_req_01_add_and_initialize_the_s",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_constraint_acaa.delayed_authority",
+      "evidence_group": "bp_swe_acaa.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.add_and_initialize_the_s"
+      },
+      "expected_behavior": "After event 'The delayed authoritative native result establishes stable-buffer identity checks, direct output for known-size non-skippable frames including empty frames, safe undersized and modified-buffer errors, and unchanged buffered, streaming, and fuzz behavior.', Treat the delayed state-transition matrix as authority for the experimental stable-output decompression contract.",
+      "forbidden_behavior": "Do not interpret an absent child failure as the governing mechanism; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_and_initialize_the_s"
+        ]
+      },
+      "id": "bp_swe_acaa.cf.01_classify_authority_add_and_initialize",
+      "independence_key": "bp_swe_acaa.cf.01_classify_authority_add_and_initialize",
+      "must_still_pass": [
+        "swe_late_constraint_acaa.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "mutation_id": "bp_swe_acaa.mutation.01_classify_authority_add_and_initialize",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_late_constraint_acaa77b306.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After event 'The delayed authoritative native result establishes stable-buffer identity checks, direct output for known-size non-skippable frames including empty frames, safe undersized and modified-buffer errors, and unchanged buffered, streaming, and fuzz behavior.', Treat the delayed state-transition matrix as authority for the experimental stable-output decompression contract.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_and_initialize_the_s"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_req_02_use_the_caller_buffer_on",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_constraint_acaa.delayed_authority",
+      "evidence_group": "bp_swe_acaa.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.use_the_caller_buffer_on"
+      },
+      "expected_behavior": "After event 'The delayed authoritative native result establishes stable-buffer identity checks, direct output for known-size non-skippable frames including empty frames, safe undersized and modified-buffer errors, and unchanged buffered, streaming, and fuzz behavior.', Revise output-buffer validation and direct decompression transitions for nonempty and empty frames while retaining safe fallback and explicit buffer errors.",
+      "forbidden_behavior": "Do not enable direct output without identity, size, or frame-state checks; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.use_the_caller_buffer_on"
+        ]
+      },
+      "id": "bp_swe_acaa.cf.02_revise_affected_use_the_caller_buf",
+      "independence_key": "bp_swe_acaa.cf.02_revise_affected_use_the_caller_buf",
+      "must_still_pass": [
+        "swe_late_constraint_acaa.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "mutation_id": "bp_swe_acaa.mutation.02_revise_affected_use_the_caller_buf",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_constraint_acaa77b306.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After event 'The delayed authoritative native result establishes stable-buffer identity checks, direct output for known-size non-skippable frames including empty frames, safe undersized and modified-buffer errors, and unchanged buffered, streaming, and fuzz behavior.', Revise output-buffer validation and direct decompression transitions for nonempty and empty frames while retaining safe fallback and explicit buffer errors.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.use_the_caller_buffer_on"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_req_04_retain_safe_behavior_for",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_constraint_acaa.delayed_authority",
+      "evidence_group": "bp_swe_acaa.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.retain_safe_behavior_for"
+      },
+      "expected_behavior": "After event 'The delayed authoritative native result establishes stable-buffer identity checks, direct output for known-size non-skippable frames including empty frames, safe undersized and modified-buffer errors, and unchanged buffered, streaming, and fuzz behavior.', Run native zstreamtest and bounded fuzz regressions covering stable, buffered, empty, undersized, and modified-buffer paths using the exact receipt.",
+      "forbidden_behavior": "Do not close after parameter plumbing without native state-machine regression evidence; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.retain_safe_behavior_for"
+        ]
+      },
+      "id": "bp_swe_acaa.cf.03_verify_closure_retain_safe_behavi",
+      "independence_key": "bp_swe_acaa.cf.03_verify_closure_retain_safe_behavi",
+      "must_still_pass": [
+        "swe_late_constraint_acaa.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "bp_swe_acaa.mutation.03_verify_closure_retain_safe_behavi",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_acaa77b306.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After event 'The delayed authoritative native result establishes stable-buffer identity checks, direct output for known-size non-skippable frames including empty frames, safe undersized and modified-buffer errors, and unchanged buffered, streaming, and fuzz behavior.', Run native zstreamtest and bounded fuzz regressions covering stable, buffered, empty, undersized, and modified-buffer paths using the exact receipt.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.retain_safe_behavior_for"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.add_and_initialize_the_s"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.use_the_caller_buffer_on"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.make_empty_frames_eligib"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.retain_safe_behavior_for"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.add_and_initialize_the_s",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.use_the_caller_buffer_on",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.make_empty_frames_eligib",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.retain_safe_behavior_for",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.add_and_initialize_the_s",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.use_the_caller_buffer_on",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.make_empty_frames_eligib",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.retain_safe_behavior_for",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_and_initialize_the_s",
+      "req.02.use_the_caller_buffer_on",
+      "req.03.make_empty_frames_eligib",
+      "req.04.retain_safe_behavior_for",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed authoritative native result establishes stable-buffer identity checks, direct output for known-size non-skippable frames including empty frames, safe undersized and modified-buffer errors, and unchanged buffered, streaming, and fuzz behavior.",
+    "before_state": "The experimental parameter and provisional direct-output plumbing are checkpointed before the decompression state-machine matrix is available.",
+    "event_id": "evt.swe_late_constraint_acaa.delayed_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Add and initialize the stable-output decompression parameter.",
+      "id": "req.01.add_and_initialize_the_s",
+      "observable_probe": "swe_late_constraint_acaa.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for add_and_initialize_the_stable_output"
+    },
+    {
+      "description": "Use the caller buffer only when the full frame fits and invariants hold.",
+      "id": "req.02.use_the_caller_buffer_on",
+      "observable_probe": "swe_late_constraint_acaa.sem.02.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for use_the_caller_buffer_only_when_the_"
+    },
+    {
+      "description": "Make empty frames eligible without the four-byte allocation.",
+      "id": "req.03.make_empty_frames_eligib",
+      "observable_probe": "swe_late_constraint_acaa.sem.03.add_and_initialize_the_stabl",
+      "public_evidence": "source instruction and workstream result for make_empty_frames_eligible_without_t"
+    },
+    {
+      "description": "Retain safe behavior for undersized or unstable buffers.",
+      "id": "req.04.retain_safe_behavior_for",
+      "observable_probe": "swe_late_constraint_acaa.sem.04.use_the_caller_buffer_only_w",
+      "public_evidence": "source instruction and workstream result for retain_safe_behavior_for_undersized_"
+    }
+  ]
+}

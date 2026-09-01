@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "A separately frozen task-specific implementation creates equivalent behavior and closure without invoking the oracle entrypoint.",
+      "id": "independent-task-native-equivalence",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-wellness_journey-schema",
+      "must_fail": [
+        "mab_dependency_unblock_284a3e6eea.source.output_schema"
+      ],
+      "path": "task/negative_mutations/wrong_output_schema.sh"
+    },
+    {
+      "id": "disable-wellness_journey-authority-behavior",
+      "must_fail": [
+        "mab_dependency_unblock_284a3e6eea.source.task_behavior"
+      ],
+      "path": "task/negative_mutations/disable_task_behavior.sh"
+    },
+    {
+      "id": "drop-wellness_journey-preservation",
+      "must_fail": [
+        "mab_dependency_unblock_284a3e6eea.source.preservation"
+      ],
+      "path": "task/negative_mutations/drop_task_preservation.sh"
+    },
+    {
+      "id": "wrong-holistic_dependency_contract_completed-contract",
+      "must_fail": [
+        "mab_dependency_unblock_284a3e6eea.source.event_closure"
+      ],
+      "path": "task/negative_mutations/wrong_event_contract.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_code23_wellness.cf.01_classify_authority_holistic_dependenc",
+          "mab_code23_wellness.cf.02_revise_affected_holistic_dependenc",
+          "mab_code23_wellness.cf.03_verify_closure_holistic_dependenc"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_dependency_unblock_284a3e6eea.event.receipt",
+          "mab_dependency_unblock_284a3e6eea.event.authority_probe",
+          "mab_dependency_unblock_284a3e6eea.closure",
+          "mab_dependency_unblock_284a3e6eea.source.pin",
+          "mab_dependency_unblock_284a3e6eea.source.output_schema",
+          "mab_dependency_unblock_284a3e6eea.source.task_behavior",
+          "mab_dependency_unblock_284a3e6eea.source.preservation",
+          "mab_dependency_unblock_284a3e6eea.source.event_closure"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "The harness then",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "ca3d060cff0221de69bc6e02425584dea1ce11376ac86b237e8646bd6c1cf133",
+        "task_id": "coding:023",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_align_backend_routes_and_val",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+      "evidence_group": "mab_late_constrain.classify_critical_path",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.align_backend_routes_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform classify_critical_path for 'Align backend routes and validation with the returned endpoint matrix.' while retaining valid prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "mab_code40_teamsyncpro.cf.01_classify_critical_path_align_backend_rout",
+      "independence_key": "mab_code40_teamsyncpro.cf.01_classify_critical_path_align_backend_rout",
+      "measurement_type": "control",
+      "mutation_id": "mab_code40_teamsyncpro.mutation.01_classify_critical_path_align_backend_rout",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_enforce_department_and_role_",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+      "evidence_group": "mab_late_constrain.resource_triage",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.align_backend_routes_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform resource_triage for 'Enforce department and role permissions in every handler.' while retaining valid prior result 'Frontend task views and backend handlers exist behind provisional authorization checks.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Frontend task views and backend handlers exist behind provisional authorization checks.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "mab_code40_teamsyncpro.cf.02_resource_triage_enforce_department",
+      "independence_key": "mab_code40_teamsyncpro.cf.02_resource_triage_enforce_department",
+      "measurement_type": "control",
+      "mutation_id": "mab_code40_teamsyncpro.mutation.02_resource_triage_enforce_department",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_update_frontend_visibility_a",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+      "evidence_group": "mab_late_constrain.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.align_backend_routes_and"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An RBAC/API specialist returns an endpoint matrix specifying methods, paths, request and response fields, and department-role permissions for task, resource, communication, and performance operations.', perform verify_closure for 'Update frontend visibility and requests to match the same contract.' while retaining valid prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.align_backend_routes_and"
+        ]
+      },
+      "id": "mab_code40_teamsyncpro.cf.03_verify_closure_update_frontend_vi",
+      "independence_key": "mab_code40_teamsyncpro.cf.03_verify_closure_update_frontend_vi",
+      "measurement_type": "control",
+      "mutation_id": "mab_code40_teamsyncpro.mutation.03_verify_closure_update_frontend_vi",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_203f5009fd.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.align_backend_routes_and"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code40_teamsyncpro.mutation.01_classify_critical_path_align_backend_rout",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code40_teamsyncpro.cf.01_classify_critical_path_align_backend_rout"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_203f5009fd.source.pin"
+      ],
+      "targets": [
+        "mab_code40_teamsyncpro.cf.01_classify_critical_path_align_backend_rout",
+        "mab_late_constraint_203f5009fd.event.receipt",
+        "mab_late_constraint_203f5009fd.event.authority_probe",
+        "mab_late_constraint_203f5009fd.closure",
+        "mab_late_constraint_203f5009fd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Frontend task views and backend handlers exist behind provisional authorization checks.'.",
+      "family": "resource_triage",
+      "id": "mab_code40_teamsyncpro.mutation.02_resource_triage_enforce_department",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code40_teamsyncpro.cf.02_resource_triage_enforce_department"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_203f5009fd.source.pin"
+      ],
+      "targets": [
+        "mab_code40_teamsyncpro.cf.02_resource_triage_enforce_department",
+        "mab_late_constraint_203f5009fd.event.receipt",
+        "mab_late_constraint_203f5009fd.event.authority_probe",
+        "mab_late_constraint_203f5009fd.closure",
+        "mab_late_constraint_203f5009fd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Task, resource, status, and performance domain operations are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code40_teamsyncpro.mutation.03_verify_closure_update_frontend_vi",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code40_teamsyncpro.cf.03_verify_closure_update_frontend_vi"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_203f5009fd.source.pin"
+      ],
+      "targets": [
+        "mab_code40_teamsyncpro.cf.03_verify_closure_update_frontend_vi",
+        "mab_late_constraint_203f5009fd.event.receipt",
+        "mab_late_constraint_203f5009fd.event.authority_probe",
+        "mab_late_constraint_203f5009fd.closure",
+        "mab_late_constraint_203f5009fd.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific rbac_endpoint_matrix_straggler_completed receipt bound to coding:040.",
+      "id": "mab_late_constraint_203f5009fd.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned TeamSyncPro authority runs after three upstream results.",
+      "id": "mab_late_constraint_203f5009fd.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The delayed RBAC endpoint matrix closes backend and frontend authorization while task history, allocations, communication, and report snapshots remain intact.",
+      "id": "mab_late_constraint_203f5009fd.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:040.",
+      "id": "mab_late_constraint_203f5009fd.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and department_rbac_api_closure expose the task-specific four-upstream project-management contract.",
+      "id": "mab_late_constraint_203f5009fd.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsyncpro_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Every task, resource, communication, and performance operation binds method, path, fields, department, and role; cross-department and altered-field requests are rejected and frontend visibility uses the same matrix.",
+      "id": "mab_late_constraint_203f5009fd.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsyncpro_department_role_endpoint_fields_and_frontend_visibility",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task_history, resource_allocations, communication_logs, report_snapshots.",
+      "id": "mab_late_constraint_203f5009fd.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsyncpro_tasks_allocations_messages_reports_and_audit_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed RBAC/API matrix revises backend and frontend authorization without erasing valid project state.",
+      "id": "mab_late_constraint_203f5009fd.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsyncpro_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

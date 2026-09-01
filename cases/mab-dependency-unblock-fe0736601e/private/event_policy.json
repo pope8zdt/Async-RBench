@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Partial evidence remains provisional until the complete result revises affected state and closure is reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_tasks_durati",
+      "req.02.implement_collaborative_edit",
+      "req.03.implement_feedback_driven_pr",
+      "req.04.integrate_the_completed_opti",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The complete optimizer contract produces a dependency-valid, availability-bound schedule and preserves collaboration evidence.",
+    "before_state": "A provisional schedule uses task priority but does not yet enforce shared availability, dependencies, and non-overlap together.",
+    "event_id": "evt.mab_dependency_unblock_fe07.optimizer_constraints_completed",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_fe07.optimizer_constraints_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close optimizer_constraints_completed.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "partial_then_complete_result"
+}

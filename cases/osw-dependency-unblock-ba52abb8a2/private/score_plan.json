@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_enable_developer_mode_if_it_",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_b.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.enable_developer_mode_if"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An archive worker returns the concrete extracted extension directory on the Desktop and confirms that its root contains a valid manifest.json.', perform classify_authority for 'Enable Developer mode if it is not already enabled.' while retaining valid prior result 'Chrome's extensions page is open.'.",
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions page is open.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enable_developer_mode_if"
+        ]
+      },
+      "id": "osw_extension_7.cf.01_classify_authority_enable_developer_m",
+      "independence_key": "osw_extension_7.cf.01_classify_authority_enable_developer_m",
+      "measurement_type": "control",
+      "mutation_id": "osw_extension_7.mutation.01_classify_authority_enable_developer_m",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_ba52abb8a2.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.enable_developer_mode_if"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_use_load_unpacked_with_the_r",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_b.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.enable_developer_mode_if"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An archive worker returns the concrete extracted extension directory on the Desktop and confirms that its root contains a valid manifest.json.', perform revise_affected for 'Use Load unpacked with the returned manifest-root directory.' while retaining valid prior result 'Developer mode is enabled or ready to enable.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Developer mode is enabled or ready to enable.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enable_developer_mode_if"
+        ]
+      },
+      "id": "osw_extension_7.cf.02_revise_affected_use_load_unpacked_",
+      "independence_key": "osw_extension_7.cf.02_revise_affected_use_load_unpacked_",
+      "measurement_type": "control",
+      "mutation_id": "osw_extension_7.mutation.02_revise_affected_use_load_unpacked_",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_ba52abb8a2.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.enable_developer_mode_if"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_resolve_any_reported_manifes",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_b.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.enable_developer_mode_if"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An archive worker returns the concrete extracted extension directory on the Desktop and confirms that its root contains a valid manifest.json.', perform verify_closure for 'Resolve any reported manifest error without selecting a parent archive directory.' while retaining valid prior result 'Chrome's extensions page is open.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions page is open.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.enable_developer_mode_if"
+        ]
+      },
+      "id": "osw_extension_7.cf.03_verify_closure_resolve_any_report",
+      "independence_key": "osw_extension_7.cf.03_verify_closure_resolve_any_report",
+      "measurement_type": "control",
+      "mutation_id": "osw_extension_7.mutation.03_verify_closure_resolve_any_report",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_ba52abb8a2.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.enable_developer_mode_if"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions page is open.'.",
+      "family": "wait_for_authority",
+      "id": "osw_extension_7.mutation.01_classify_authority_enable_developer_m",
+      "may_fail": [],
+      "must_fail": [
+        "osw_extension_7.cf.01_classify_authority_enable_developer_m"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_ba52abb8a2.source.pin"
+      ],
+      "targets": [
+        "osw_extension_7.cf.01_classify_authority_enable_developer_m",
+        "osw_dependency_unblock_ba52abb8a2.event.receipt",
+        "osw_dependency_unblock_ba52abb8a2.event.probes",
+        "osw_dependency_unblock_ba52abb8a2.closure",
+        "osw_dependency_unblock_ba52abb8a2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Developer mode is enabled or ready to enable.'.",
+      "family": "resolve_authority",
+      "id": "osw_extension_7.mutation.02_revise_affected_use_load_unpacked_",
+      "may_fail": [],
+      "must_fail": [
+        "osw_extension_7.cf.02_revise_affected_use_load_unpacked_"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_ba52abb8a2.source.pin"
+      ],
+      "targets": [
+        "osw_extension_7.cf.02_revise_affected_use_load_unpacked_",
+        "osw_dependency_unblock_ba52abb8a2.event.receipt",
+        "osw_dependency_unblock_ba52abb8a2.event.probes",
+        "osw_dependency_unblock_ba52abb8a2.closure",
+        "osw_dependency_unblock_ba52abb8a2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions page is open.'.",
+      "family": "rederive_from_authority",
+      "id": "osw_extension_7.mutation.03_verify_closure_resolve_any_report",
+      "may_fail": [],
+      "must_fail": [
+        "osw_extension_7.cf.03_verify_closure_resolve_any_report"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_ba52abb8a2.source.pin"
+      ],
+      "targets": [
+        "osw_extension_7.cf.03_verify_closure_resolve_any_report",
+        "osw_dependency_unblock_ba52abb8a2.event.receipt",
+        "osw_dependency_unblock_ba52abb8a2.event.probes",
+        "osw_dependency_unblock_ba52abb8a2.closure",
+        "osw_dependency_unblock_ba52abb8a2.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "osw_dependency_unblock_ba52abb8a2.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "osw_dependency_unblock_ba52abb8a2.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "osw_dependency_unblock_ba52abb8a2.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "osw_dependency_unblock_ba52abb8a2.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The unpacked extension result artifact exists.",
+      "id": "osw_dependency_unblock_ba52abb8a2.osworld.extension_result",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_extension_result_exists",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The extension result is bound to the pinned OSWorld source and evaluator.",
+      "id": "osw_dependency_unblock_ba52abb8a2.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_extension_result_matches_official_source",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The native OSWorld evaluator score is one.",
+      "id": "osw_dependency_unblock_ba52abb8a2.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_extension_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The extracted directory is the manifest root and is loaded as an extension.",
+      "id": "osw_dependency_unblock_ba52abb8a2.osworld.extension_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_extension_path_is_manifest_root",
+      "relevance_tier": "base"
+    }
+  ]
+}

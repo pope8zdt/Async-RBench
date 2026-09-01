@@ -1,0 +1,47 @@
+{
+  "schema_version": "async-rbench-osworld-event-v1",
+  "case_id": "osw-state-reconciliation-6f2dfbe1f4",
+  "source_task_id": "osworld:gimp:734d6579-c07d-47a8-9ae2-13339795476b",
+  "task_assertion": "The exported green_background_with_object.png changes only the background to RGB green while preserving the object layer and passes check_green_background.",
+  "state": {
+    "output_path": "/home/user/Desktop/green_background_with_object.png",
+    "canvas_width": 800,
+    "canvas_height": 800,
+    "background_rgb": [
+      0,
+      255,
+      0
+    ],
+    "background_only_changed": true,
+    "object_layer_unchanged": true,
+    "green_background_check_passed": true
+  },
+  "upstream_dependency_graph": [
+    {
+      "id": "upstream_worker_01",
+      "depends_on": [],
+      "description": "Inspect the 800×800 XCF layer inventory and pin the object layer."
+    },
+    {
+      "id": "upstream_worker_02",
+      "depends_on": [
+        "upstream_worker_01"
+      ],
+      "description": "Prepare an exact green background fill without touching the foreground mask."
+    },
+    {
+      "id": "upstream_worker_03",
+      "depends_on": [
+        "upstream_worker_02"
+      ],
+      "description": "Apply the fill, preserve the object layer, and export green_background_with_object.png."
+    },
+    {
+      "id": "upstream_worker_04",
+      "depends_on": [
+        "upstream_worker_03"
+      ],
+      "description": "Run check_green_background and release the complete native result."
+    }
+  ]
+}

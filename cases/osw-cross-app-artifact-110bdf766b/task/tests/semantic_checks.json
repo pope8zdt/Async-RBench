@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed receipt.",
+      "id": "osw_cross_app_artifact_110bdf766b.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Independent worker completed with probes.",
+      "id": "osw_cross_app_artifact_110bdf766b.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes receipt and reverifies semantics.",
+      "id": "osw_cross_app_artifact_110bdf766b.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_110bdf766b.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:8e116af7-7db7-4e35-a68b-b0939c066c78 and compare_table.",
+      "id": "osw_cross_app_artifact_110bdf766b.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_110bdf766b.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Evidence digest matches private fixture.",
+      "id": "osw_cross_app_artifact_110bdf766b.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The saved bookkeeping workbook preserves rows 1-8 and appends the five official expense transactions with correct running balances.",
+      "id": "osw_cross_app_artifact_110bdf766b.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The workbook is saved to the source-native result path.",
+      "id": "osw_cross_app_artifact_110bdf766b.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_bookkeeping_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Rows A1:E8 from the original bookkeeping workbook are preserved.",
+      "id": "osw_cross_app_artifact_110bdf766b.osworld.preserved_rows",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_existing_bookkeeping_rows_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exactly five official Expense amounts are appended.",
+      "id": "osw_cross_app_artifact_110bdf766b.osworld.expense_rows",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_five_expense_rows",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The appended rows carry the official running balances.",
+      "id": "osw_cross_app_artifact_110bdf766b.osworld.running_balances",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_running_balances",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

@@ -1,0 +1,302 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "bookmark_profile_authority",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_bookmarks_75855f9fc5.delayed_profile_authority",
+      "evidence_group": "osw_bookmarks_14:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.02.ensure_favorites_folder"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Accept the delayed case-bound bookmark profile receipt as authority for folder name and parent.",
+      "forbidden_behavior": "Do not infer persistence from a transient menu, toast, or completion order.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.ensure_favorites_folder"
+        ]
+      },
+      "id": "osw_bookmarks_14.cf.01_accept_bookmark_authority",
+      "independence_key": "osw_bookmarks_14.cf.01_accept_bookmark_authority",
+      "measurement_type": "control",
+      "mutation_id": "osw_bookmarks_14.mutation.01_accept_bookmark_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_75855f9fc5.event.receipt"
+      ],
+      "precondition": "The delayed bookmark profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.02.ensure_favorites_folder"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "bookmark_state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_bookmarks_75855f9fc5.delayed_profile_authority",
+      "evidence_group": "osw_bookmarks_14:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.ensure_favorites_folder"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Create Favorites only when absent and preserve all unrelated bookmarks.",
+      "forbidden_behavior": "Do not replay creation, place Favorites under another folder, or alter unrelated bookmarks.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.ensure_favorites_folder"
+        ]
+      },
+      "id": "osw_bookmarks_14.cf.02_create_only_if_absent",
+      "independence_key": "osw_bookmarks_14.cf.02_create_only_if_absent",
+      "measurement_type": "control",
+      "mutation_id": "osw_bookmarks_14.mutation.02_create_only_if_absent",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_75855f9fc5.event.probes"
+      ],
+      "precondition": "The delayed bookmark profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.ensure_favorites_folder"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "bookmark_closure_reverification",
+      "dimension": "closure",
+      "event_id": "evt.osw_bookmarks_75855f9fc5.delayed_profile_authority",
+      "evidence_group": "osw_bookmarks_14:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.verify_single_folder"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reload profile state and close only when one Favorites folder is directly under the bookmarks bar.",
+      "forbidden_behavior": "Do not close on transient UI state or skip duplicate and parent verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_single_folder"
+        ]
+      },
+      "id": "osw_bookmarks_14.cf.03_reverify_bookmark_bar",
+      "independence_key": "osw_bookmarks_14.cf.03_reverify_bookmark_bar",
+      "measurement_type": "control",
+      "mutation_id": "osw_bookmarks_14.mutation.03_reverify_bookmark_bar",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_75855f9fc5.closure"
+      ],
+      "precondition": "The delayed bookmark profile authority opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_single_folder"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not infer persistence from a transient menu, toast, or completion order.",
+      "family": "wait_for_authority",
+      "id": "osw_bookmarks_14.mutation.01_accept_bookmark_authority",
+      "may_fail": [],
+      "must_fail": [
+        "osw_bookmarks_14.cf.01_accept_bookmark_authority"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ],
+      "targets": [
+        "osw_bookmarks_14.cf.01_accept_bookmark_authority",
+        "osw_dependency_unblock_75855f9fc5.event.receipt",
+        "osw_dependency_unblock_75855f9fc5.event.probes",
+        "osw_dependency_unblock_75855f9fc5.closure",
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not replay creation, place Favorites under another folder, or alter unrelated bookmarks.",
+      "family": "resolve_authority",
+      "id": "osw_bookmarks_14.mutation.02_create_only_if_absent",
+      "may_fail": [],
+      "must_fail": [
+        "osw_bookmarks_14.cf.02_create_only_if_absent"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ],
+      "targets": [
+        "osw_bookmarks_14.cf.02_create_only_if_absent",
+        "osw_dependency_unblock_75855f9fc5.event.receipt",
+        "osw_dependency_unblock_75855f9fc5.event.probes",
+        "osw_dependency_unblock_75855f9fc5.closure",
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close on transient UI state or skip duplicate and parent verification.",
+      "family": "rederive_from_authority",
+      "id": "osw_bookmarks_14.mutation.03_reverify_bookmark_bar",
+      "may_fail": [],
+      "must_fail": [
+        "osw_bookmarks_14.cf.03_reverify_bookmark_bar"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ],
+      "targets": [
+        "osw_bookmarks_14.cf.03_reverify_bookmark_bar",
+        "osw_dependency_unblock_75855f9fc5.event.receipt",
+        "osw_dependency_unblock_75855f9fc5.event.probes",
+        "osw_dependency_unblock_75855f9fc5.closure",
+        "osw_dependency_unblock_75855f9fc5.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The event receipt is authentic and bound to the real OSWorld task.",
+      "id": "osw_dependency_unblock_75855f9fc5.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The delayed OSWorld evidence producer completed with observable probes.",
+      "id": "osw_dependency_unblock_75855f9fc5.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and records source-semantic reverification.",
+      "id": "osw_dependency_unblock_75855f9fc5.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains bound to its pinned OSWorld source task.",
+      "id": "osw_dependency_unblock_75855f9fc5.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native result is bound to osworld:chrome:2ad9387a-65d8-4e33-ad5b-7580065a27ca and is_expected_bookmarks.",
+      "id": "osw_dependency_unblock_75855f9fc5.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official OSWorld evaluator score is exactly 1.",
+      "id": "osw_dependency_unblock_75855f9fc5.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native evidence digest matches the evaluator-owned fixture.",
+      "id": "osw_dependency_unblock_75855f9fc5.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Exactly one persisted Favorites folder exists directly under Chrome bookmarks bar.",
+      "id": "osw_dependency_unblock_75855f9fc5.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final Chrome Favorites bookmark folder state satisfies its task-specific OSWorld invariant.",
+      "id": "osw_dependency_unblock_75855f9fc5.osworld.state",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_favorites_unique_and_persisted",
+      "relevance_tier": "base"
+    }
+  ]
+}

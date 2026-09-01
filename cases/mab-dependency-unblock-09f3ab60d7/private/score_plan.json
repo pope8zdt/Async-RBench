@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_integrate_per_line_coverage_",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.integrate_per_line_cover"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform classify_failure for 'Integrate per-line coverage statuses before building the combined report.' while retaining valid prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "mab_code14_macao.cf.01_classify_failure_integrate_per_line",
+      "independence_key": "mab_code14_macao.cf.01_classify_failure_integrate_per_line",
+      "measurement_type": "control",
+      "mutation_id": "mab_code14_macao.mutation.01_classify_failure_integrate_per_line",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_exclude_nonexecutable_lines_",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "failure_recovery",
+        "subject": "req.01.integrate_per_line_cover"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform recover_or_redelegate for 'Exclude nonexecutable lines from the percentage denominator.' while retaining valid prior result 'Integration and heatmap consumers are scaffolded against provisional coverage percentages.'.",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Integration and heatmap consumers are scaffolded against provisional coverage percentages.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "mab_code14_macao.cf.02_recover_or_redelegate_exclude_nonexecuta",
+      "independence_key": "mab_code14_macao.cf.02_recover_or_redelegate_exclude_nonexecuta",
+      "measurement_type": "control",
+      "mutation_id": "mab_code14_macao.mutation.02_recover_or_redelegate_exclude_nonexecuta",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_generate_heatmap_intensity_f",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.integrate_per_line_cover"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Coverage specialist returns `analyze(source, tests)` with executable-line statuses, an exact covered-line percentage, and per-line heatmap intensities.', perform verify_closure for 'Generate heatmap intensity from the returned statuses.' while retaining valid prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_per_line_cover"
+        ]
+      },
+      "id": "mab_code14_macao.cf.03_verify_closure_generate_heatmap_i",
+      "independence_key": "mab_code14_macao.cf.03_verify_closure_generate_heatmap_i",
+      "measurement_type": "control",
+      "mutation_id": "mab_code14_macao.mutation.03_verify_closure_generate_heatmap_i",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_09f3ab60d7.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.integrate_per_line_cover"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code14_macao.mutation.01_classify_failure_integrate_per_line",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code14_macao.cf.01_classify_failure_integrate_per_line"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_09f3ab60d7.source.pin"
+      ],
+      "targets": [
+        "mab_code14_macao.cf.01_classify_failure_integrate_per_line",
+        "mab_dependency_unblock_09f3ab60d7.event.receipt",
+        "mab_dependency_unblock_09f3ab60d7.event.authority_probe",
+        "mab_dependency_unblock_09f3ab60d7.closure",
+        "mab_dependency_unblock_09f3ab60d7.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Integration and heatmap consumers are scaffolded against provisional coverage percentages.'.",
+      "family": "recover_failed_work",
+      "id": "mab_code14_macao.mutation.02_recover_or_redelegate_exclude_nonexecuta",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code14_macao.cf.02_recover_or_redelegate_exclude_nonexecuta"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_09f3ab60d7.source.pin"
+      ],
+      "targets": [
+        "mab_code14_macao.cf.02_recover_or_redelegate_exclude_nonexecuta",
+        "mab_dependency_unblock_09f3ab60d7.event.receipt",
+        "mab_dependency_unblock_09f3ab60d7.event.authority_probe",
+        "mab_dependency_unblock_09f3ab60d7.closure",
+        "mab_dependency_unblock_09f3ab60d7.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Complexity metrics and project-size estimation are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code14_macao.mutation.03_verify_closure_generate_heatmap_i",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code14_macao.cf.03_verify_closure_generate_heatmap_i"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_09f3ab60d7.source.pin"
+      ],
+      "targets": [
+        "mab_code14_macao.cf.03_verify_closure_generate_heatmap_i",
+        "mab_dependency_unblock_09f3ab60d7.event.receipt",
+        "mab_dependency_unblock_09f3ab60d7.event.authority_probe",
+        "mab_dependency_unblock_09f3ab60d7.closure",
+        "mab_dependency_unblock_09f3ab60d7.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The coverage_worker_recovered receipt is authentic and bound to coding:014 and mab-dependency-unblock-09f3ab60d7.",
+      "id": "mab_dependency_unblock_09f3ab60d7.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned MACAO authority runs after the persisted baseline and records probes.",
+      "id": "mab_dependency_unblock_09f3ab60d7.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered coverage evidence completes the MACAO report while prior complexity, sizing, and collaboration state remain unchanged.",
+      "id": "mab_dependency_unblock_09f3ab60d7.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to official MultiAgentBench coding:014.",
+      "id": "mab_dependency_unblock_09f3ab60d7.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and the macao_integrated_analysis_closure closure satisfy the task-specific output schema.",
+      "id": "mab_dependency_unblock_09f3ab60d7.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_macao_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Coverage excludes blank and comment-only lines, reports exact per-line statuses and heatmap intensities, and integrates with complexity and size only after recovery.",
+      "id": "mab_dependency_unblock_09f3ab60d7.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_macao_coverage_excludes_nonexecutable_and_builds_heatmap",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: complexity_metrics, size_estimate, collaboration_permissions.",
+      "id": "mab_dependency_unblock_09f3ab60d7.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_macao_recovery_integrates_coverage_complexity_and_size",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered coverage evidence completes the MACAO report while prior complexity, sizing, and collaboration state remain unchanged.",
+      "id": "mab_dependency_unblock_09f3ab60d7.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_macao_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

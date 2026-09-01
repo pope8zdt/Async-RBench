@@ -1,0 +1,303 @@
+{
+  "async_depth": 4,
+  "case_id": "osw-cross-app-artifact-95969c461f",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_gemini_docx_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "01_classify_authority_gemini_docx_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_95969c461f.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_95969c461f.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed gemini_responses_and_iliad_ranges; preserve unaffected libreoffice_writer state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_gemini_docx_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "02_revise_affected_gemini_docx_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_95969c461f.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_95969c461f.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed gemini_responses_and_iliad_ranges; preserve unaffected libreoffice_writer state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.response_coverage"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_gemini_docx_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "03_verify_closure_gemini_docx_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_95969c461f.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_95969c461f.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed gemini_responses_and_iliad_ranges; preserve unaffected libreoffice_writer state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.paragraph_order"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "depends_on",
+        "source": "upstream.json_schema_traversal",
+        "target": "upstream.gemini_value_filter"
+      },
+      {
+        "relation": "depends_on",
+        "source": "upstream.gemini_value_filter",
+        "target": "upstream.iliad_range_detection"
+      },
+      {
+        "relation": "depends_on",
+        "source": "upstream.iliad_range_detection",
+        "target": "upstream.paragraph_plan"
+      },
+      {
+        "relation": "produces",
+        "source": "upstream.paragraph_plan",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.output_path"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.output_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.response_coverage"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.response_coverage",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.paragraph_order"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.paragraph_order",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.04.iliad_highlights"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.iliad_highlights",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "JSON/Writer",
+        "description": "Traverse the nested JSON response structure.",
+        "id": "upstream.json_schema_traversal",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "JSON worker",
+        "description": "Select all six Gemini string values in source order.",
+        "id": "upstream.gemini_value_filter",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "Text worker",
+        "description": "Locate all 33 case-sensitive Iliad occurrences in the selected values.",
+        "id": "upstream.iliad_range_detection",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "LibreOffice Writer",
+        "description": "Map one response per paragraph and preserve all highlight ranges.",
+        "id": "upstream.paragraph_plan",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.response_coverage",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.paragraph_order",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.iliad_highlights",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.response_coverage",
+      "req.03.paragraph_order",
+      "req.04.iliad_highlights",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The JSON worker returns six Gemini values in source order and all 33 Iliad occurrences with exact highlight ranges.",
+    "before_state": "The JSON file and Writer are open, but recursive Gemini selection and every Iliad match range have not yet been returned.",
+    "event_id": "evt.osw_cross_app_artifact_95969c461f.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Copy all six Gemini response values in source order.",
+      "id": "req.01.output_path",
+      "observable_probe": "osw_cross_app_artifact_95969c461f.osworld.output_path",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Place each response in its own non-empty paragraph separated by a blank paragraph/newline.",
+      "id": "req.02.response_coverage",
+      "observable_probe": "osw_cross_app_artifact_95969c461f.osworld.response_coverage",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Highlight all and only the 33 Iliad occurrences.",
+      "id": "req.03.paragraph_order",
+      "observable_probe": "osw_cross_app_artifact_95969c461f.osworld.paragraph_order",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Save /home/user/Desktop/gemini_results.docx.",
+      "id": "req.04.iliad_highlights",
+      "observable_probe": "osw_cross_app_artifact_95969c461f.osworld.iliad_highlights",
+      "public_evidence": "source instruction and delayed authority receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "JSON/Writer",
+      "description": "Traverse the nested JSON response structure.",
+      "id": "json_schema_traversal"
+    },
+    {
+      "app": "JSON worker",
+      "depends_on": [
+        "json_schema_traversal"
+      ],
+      "description": "Select all six Gemini string values in source order.",
+      "id": "gemini_value_filter"
+    },
+    {
+      "app": "Text worker",
+      "depends_on": [
+        "gemini_value_filter"
+      ],
+      "description": "Locate all 33 case-sensitive Iliad occurrences in the selected values.",
+      "id": "iliad_range_detection"
+    },
+    {
+      "app": "LibreOffice Writer",
+      "depends_on": [
+        "iliad_range_detection"
+      ],
+      "description": "Map one response per paragraph and preserve all highlight ranges.",
+      "id": "paragraph_plan"
+    }
+  ]
+}

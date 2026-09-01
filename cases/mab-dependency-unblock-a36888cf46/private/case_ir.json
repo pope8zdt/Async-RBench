@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-a36888cf46",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_integrate_fixed_timestep_tra",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_fixed_timestep"
+        ]
+      },
+      "id": "01_classify_completeness_integrate_fixed_ti",
+      "must_still_pass": [
+        "mab_dependency_unblock_a.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "treat_partial_as_final",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_a36888cf46.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "For event 'Physics specialist returns a fixed-timestep drift transition and scoring contract based on handling parameters, speed, angle, surface grip, collision state, and combo duration.', perform classify_completeness for 'Integrate fixed-timestep transitions into race updates.' while retaining valid prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.integrate_fixed_timestep"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_calculate_drift_scores_and_c",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Race updates use provisional drift scores and generic driving actions.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_fixed_timestep"
+        ]
+      },
+      "id": "02_revise_affected_calculate_drift_sc",
+      "must_still_pass": [
+        "mab_dependency_unblock_a.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "drop_confirmed_partial",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_a36888cf46.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'Physics specialist returns a fixed-timestep drift transition and scoring contract based on handling parameters, speed, angle, surface grip, collision state, and combo duration.', perform revise_affected for 'Calculate drift scores and combo resets from the returned events.' while retaining valid prior result 'Race updates use provisional drift scores and generic driving actions.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.integrate_fixed_timestep"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_feed_grip_and_opponent_event",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_fixed_timestep"
+        ]
+      },
+      "id": "03_verify_closure_feed_grip_and_oppo",
+      "must_still_pass": [
+        "mab_dependency_unblock_a.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_a36888cf46.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'Physics specialist returns a fixed-timestep drift transition and scoring contract based on handling parameters, speed, angle, surface grip, collision state, and combo duration.', perform verify_closure for 'Feed grip and opponent events into adaptive strategy selection.' while retaining valid prior result 'Track layouts, obstacles, agent customization, and race orchestration are implemented.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.integrate_fixed_timestep"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.integrate_fixed_timestep"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.calculate_drift_scores_a"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.feed_grip_and_opponent_e"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_mutations_for_reduce"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.integrate_fixed_timestep",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.calculate_drift_scores_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.feed_grip_and_opponent_e",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_mutations_for_reduce",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.integrate_fixed_timestep",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.calculate_drift_scores_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.feed_grip_and_opponent_e",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_mutations_for_reduce",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.integrate_fixed_timestep",
+      "req.02.calculate_drift_scores_a",
+      "req.03.feed_grip_and_opponent_e",
+      "req.04.add_mutations_for_reduce",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Physics specialist returns a fixed-timestep drift transition and scoring contract based on handling parameters, speed, angle, surface grip, collision state, and combo duration.",
+    "before_state": "Deterministic drift physics and scoring arrive after the race engine and strategies have adopted simplified placeholders.",
+    "event_id": "evt.mab_dependency_unblock_a.partial_then_complete_re",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Integrate fixed-timestep transitions into race updates.",
+      "id": "req.01.integrate_fixed_timestep",
+      "observable_probe": "mab_dependency_unblock_a.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for integrate_fixed_timestep_transitions"
+    },
+    {
+      "description": "Calculate drift scores and combo resets from the returned events.",
+      "id": "req.02.calculate_drift_scores_a",
+      "observable_probe": "mab_dependency_unblock_a.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for calculate_drift_scores_and_combo_res"
+    },
+    {
+      "description": "Feed grip and opponent events into adaptive strategy selection.",
+      "id": "req.03.feed_grip_and_opponent_e",
+      "observable_probe": "mab_dependency_unblock_a.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for feed_grip_and_opponent_events_into_a"
+    },
+    {
+      "description": "Add mutations for reduced grip, collision, and changed handling coefficients.",
+      "id": "req.04.add_mutations_for_reduce",
+      "observable_probe": "mab_dependency_unblock_a.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_mutations_for_reduced_grip_colli"
+    }
+  ]
+}

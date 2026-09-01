@@ -1,0 +1,6 @@
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-late-test-evidence-11ad0b6722';SOURCE_ID='bargaining:010';EVENT='quality_evidence_and_contract_tier_delivered';THEME='delayed_authoritative_result';AUTHORITY={'quality_checks': ['write_on', 'transparency'], 'sample_rolls': 20, 'unit_price': 14.75, 'term_months': 12, 'quarterly_rolls': 100}
+def dg(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+def main():
+ a=argparse.ArgumentParser();a.add_argument('--output',default='/app/output_data/event_receipt.json');x=a.parse_args();st=time.time();probes={p:dg(p) for p in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']};d={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':THEME,'meaning':'Independent write-on and transparency evidence requires a 20-roll acceptance sample before a $14.75 twelve-month quarterly commitment can become valid.','authority':AUTHORITY,'worker_started_at':st,'worker_finished_at':time.time(),'worker_exit_code':0,'probes':probes};d['receipt_sha256']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest();pathlib.Path(x.output).write_text(json.dumps(d,sort_keys=True)+'\n')
+if __name__=='__main__':main()

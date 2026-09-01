@@ -1,0 +1,100 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "swe-late-test-evidence-b844373562",
+  "benchmark": "SWE-bench",
+  "source_binding": {
+    "instance_id": "pytest-dev__pytest-7205",
+    "repo": "pytest-dev/pytest",
+    "base_commit": "5e7f1ab4bf58e473e5d7f878eb2b499d7deabd29",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "split": "test",
+    "variant": "swe_bench",
+    "problem_statement_sha256": "088371cacf194b0c57058002e7701c7ce885d7c4548fa25d6757305fc33d7ed1",
+    "harness_revision": "7a21e05772954cc81471ae19d56f436cecf43c54"
+  },
+  "native_runtime": {
+    "adapter": "swebench.harness.run_evaluation",
+    "isolation": "official Docker instance image",
+    "final_state": "git working tree patch"
+  },
+  "event_protocol": {
+    "producer": "independent reproduction/test worker in a clean clone of the same base commit",
+    "payload": "raw command, exit status, and bounded stdout/stderr from selected reproduction tests",
+    "release_predicate": "main working tree has a non-empty persisted diff while worker is running",
+    "rollback": "post-result patch history remains; the agent must amend/revert real files"
+  },
+  "state_attestation": {
+    "baseline_probe": "git HEAD plus clean index/worktree digest",
+    "checkpoint_probe": "git diff --binary plus untracked-file content digest",
+    "change_required": true,
+    "journal_owner": "host harness outside /testbed"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "entrypoint": "swebench.harness.run_evaluation",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "instance_id": "pytest-dev__pytest-7205",
+    "FAIL_TO_PASS": [
+      "testing/test_setuponly.py::test_show_fixtures_with_parameters[--setup-only]",
+      "testing/test_setuponly.py::test_show_fixtures_with_parameter_ids[--setup-only]",
+      "testing/test_setuponly.py::test_show_fixtures_with_parameter_ids_function[--setup-only]",
+      "testing/test_setuponly.py::test_show_fixtures_with_parameters[--setup-plan]",
+      "testing/test_setuponly.py::test_show_fixtures_with_parameter_ids[--setup-plan]",
+      "testing/test_setuponly.py::test_show_fixtures_with_parameter_ids_function[--setup-plan]",
+      "testing/test_setuponly.py::test_show_fixtures_with_parameters[--setup-show]",
+      "testing/test_setuponly.py::test_show_fixtures_with_parameter_ids[--setup-show]",
+      "testing/test_setuponly.py::test_show_fixtures_with_parameter_ids_function[--setup-show]",
+      "testing/test_setuponly.py::test_show_fixture_action_with_bytes"
+    ],
+    "PASS_TO_PASS": [
+      "testing/test_setuponly.py::test_show_only_active_fixtures[--setup-only]",
+      "testing/test_setuponly.py::test_show_different_scopes[--setup-only]",
+      "testing/test_setuponly.py::test_show_nested_fixtures[--setup-only]",
+      "testing/test_setuponly.py::test_show_fixtures_with_autouse[--setup-only]",
+      "testing/test_setuponly.py::test_show_only_active_fixtures[--setup-plan]",
+      "testing/test_setuponly.py::test_show_different_scopes[--setup-plan]",
+      "testing/test_setuponly.py::test_show_nested_fixtures[--setup-plan]",
+      "testing/test_setuponly.py::test_show_fixtures_with_autouse[--setup-plan]",
+      "testing/test_setuponly.py::test_show_only_active_fixtures[--setup-show]",
+      "testing/test_setuponly.py::test_show_different_scopes[--setup-show]",
+      "testing/test_setuponly.py::test_show_nested_fixtures[--setup-show]",
+      "testing/test_setuponly.py::test_show_fixtures_with_autouse[--setup-show]",
+      "testing/test_setuponly.py::test_dynamic_fixture_request",
+      "testing/test_setuponly.py::test_capturing",
+      "testing/test_setuponly.py::test_show_fixtures_and_execute_test",
+      "testing/test_setuponly.py::test_setup_show_with_KeyboardInterrupt_in_test"
+    ],
+    "docker_image": null,
+    "selected_test_files": null
+  },
+  "quality_gates": {
+    "official_instance_bound": true,
+    "native_tests_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

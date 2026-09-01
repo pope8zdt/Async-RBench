@@ -1,0 +1,32 @@
+{
+  "authority_rule": "The live scope delta changes only its dependency closure and preserves unaffected commitments.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_maze_layout_obstac",
+      "req.02.implement_distinct_cooperati",
+      "req.03.implement_path_validation_pr",
+      "req.04.integrate_the_new_role_versi",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "All affected moves enforce the returned role, expected-version, and occupied-destination protocol while prior maze and collaboration state is preserved.",
+    "before_state": "Players and blocks can move using provisional rules without authoritative role permissions or optimistic version checks.",
+    "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close versioned_maze_transition_dependency_added.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

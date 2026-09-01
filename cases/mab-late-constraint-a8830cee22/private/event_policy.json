@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_buyer_offer_witho",
+      "req.02.validate_warranty_and_suppor",
+      "req.03.integrate_the_long_term_cont",
+      "req.04.close_only_after_support_and",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The service authority confirms $11.50 per basket, an 18-month warranty, two-business-day support, and a 24-month purchasing commitment.",
+    "before_state": "A provisional Rubbermaid Deskside Wastebasket and Recycling Side Saddle Basket bargain exists before after_sales_contract_confirmed.",
+    "event_id": "evt.mab-late-constraint-a8830cee22.after_sales_contract_confirmed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-a8830cee22.after_sales_contract_confirmed",
+  "forbidden_shortcut": "Do not ignore the event, retain superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

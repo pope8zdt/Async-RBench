@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Partial evidence remains provisional until the complete result revises affected state and closure is reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_profiles_mul",
+      "req.02.implement_categorized_income",
+      "req.03.implement_dashboards_goals_a",
+      "req.04.replace_provisional_policy_w",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The complete policy enforces exact money, access roles, alerts, goals, and suggestions without losing prior transactions.",
+    "before_state": "Profiles, budgets, and transactions exist under a provisional policy without authoritative money-unit and role semantics.",
+    "event_id": "evt.mab_dependency_unblock_c275.shared_budget_policy_completed",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_c275.shared_budget_policy_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close shared_budget_policy_completed.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "partial_then_complete_result"
+}

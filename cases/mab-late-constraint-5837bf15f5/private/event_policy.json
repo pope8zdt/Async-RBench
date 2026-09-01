@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.persist_the_provisional_offe",
+      "req.02.classify_the_no_power_clarif",
+      "req.03.add_batch_price_seam_test_an",
+      "req.04.close_with_corrected_plush_s",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Product authority removes the irrelevant battery condition and adds child-safe plush material, a passed seam test, $13.99 price, 60-unit minimum, and 30-day replacement.",
+    "before_state": "A provisional Ladybug Stuffed Animal Plush bargain exists before plush_safety_scope_clarified.",
+    "event_id": "evt.mab-late-constraint-5837bf15f5.plush_safety_scope_clarified",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-5837bf15f5.plush_safety_scope_clarified",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

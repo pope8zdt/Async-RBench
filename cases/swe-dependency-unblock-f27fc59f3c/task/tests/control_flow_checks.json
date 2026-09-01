@@ -1,0 +1,195 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_req_01_update_type_comment_trav",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_f27f.delayed_authority",
+      "evidence_group": "swe_dependency_unb.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.update_type_comment_trav"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Classify the delayed parser and variables-checker result as authoritative for type-comment import consumption.",
+      "forbidden_behavior": "Do not use the provisional traversal assumption as final; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.update_type_comment_trav"
+        ]
+      },
+      "id": "swe_dependency__715eb7.cf.01_classify_authority_update_type_commen",
+      "independence_key": "swe_dependency__715eb7.cf.01_classify_authority_update_type_commen",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__715eb7.mutation.01_classify_authority_update_type_commen",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_f27fc59f3c.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Classify the delayed parser and variables-checker result as authoritative for type-comment import consumption.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.update_type_comment_trav"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_req_02_verify_both_module_and_d",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_f27f.delayed_authority",
+      "evidence_group": "swe_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.verify_both_module_and_d"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Revise imported-name consumption for both qualified abc.ABC and direct ABC type comments according to the authoritative result.",
+      "forbidden_behavior": "Do not handle only one annotation form or introduce undefined-variable diagnostics; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.verify_both_module_and_d"
+        ]
+      },
+      "id": "swe_dependency__715eb7.cf.02_revise_affected_verify_both_module",
+      "independence_key": "swe_dependency__715eb7.cf.02_revise_affected_verify_both_module",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__715eb7.mutation.02_revise_affected_verify_both_module",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_f27fc59f3c.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Revise imported-name consumption for both qualified abc.ABC and direct ABC type comments according to the authoritative result.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.verify_both_module_and_d"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_req_03_add_negative_coverage_sh",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_f27f.delayed_authority",
+      "evidence_group": "swe_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.add_negative_coverage_sh"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Re-run focused VariablesChecker tests and verify false-positive suppression plus preservation of real unused-import reports using the exact receipt.",
+      "forbidden_behavior": "Do not close without focused negative and regression coverage; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.add_negative_coverage_sh"
+        ]
+      },
+      "id": "swe_dependency__715eb7.cf.03_verify_closure_add_negative_cover",
+      "independence_key": "swe_dependency__715eb7.cf.03_verify_closure_add_negative_cover",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__715eb7.mutation.03_verify_closure_add_negative_cover",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_f27fc59f3c.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Re-run focused VariablesChecker tests and verify false-positive suppression plus preservation of real unused-import reports using the exact receipt.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.add_negative_coverage_sh"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_03",
+      "event_id": "evt.swe_dependency_unblock_f27f.delayed_authority",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.",
+        "before": "A provisional type-comment traversal change is checkpointed before parser and imported-name consumption evidence is available.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p /app/output_data
+printf '%s\n' '{"accepted_revision":2,"agreement_reached":true,"buyer_ceiling_usd":11.0,"native_evidence_sha256":"aa80cc353bca6a8aeba33935ab585e7da8eb2c0da1e349f643626fd212eb092c","preserved_priorities":["seller production-demand balance","seller logistics-cost reduction","buyer scalability and premium-feature priority","source-stated battery condition explicitly dispositioned"],"price_usd":10.8,"product":"2023 D-Pad Conductive Film Replacement Kit for Xbox One","seller_floor_usd":10.791,"source_task_id":"bargaining:015","terms":{"battery_condition":"not_applicable_verified","bundled_logistics":true,"compatibility":"Xbox One verified","conductive_film_inspection":"passed","rating_evidence":4.4}}' > /app/output_data/agreement.json
+printf '%s\n' '{"accepted_revision":2,"chronology_verified":true,"current_offer":{"accepted_revision":2,"agreement_reached":true,"buyer_ceiling_usd":11.0,"native_evidence_sha256":"aa80cc353bca6a8aeba33935ab585e7da8eb2c0da1e349f643626fd212eb092c","preserved_priorities":["seller production-demand balance","seller logistics-cost reduction","buyer scalability and premium-feature priority","source-stated battery condition explicitly dispositioned"],"price_usd":10.8,"product":"2023 D-Pad Conductive Film Replacement Kit for Xbox One","seller_floor_usd":10.791,"source_task_id":"bargaining:015","terms":{"battery_condition":"not_applicable_verified","bundled_logistics":true,"compatibility":"Xbox One verified","conductive_film_inspection":"passed","rating_evidence":4.4}},"product":"2023 D-Pad Conductive Film Replacement Kit for Xbox One","source_task_id":"bargaining:015","superseded_revisions":[{"bundled_logistics":false,"compatibility":"unverified","price":11.99,"revision":1,"status":"superseded"}]}' > /app/output_data/negotiation_ledger.json
+python3 - <<'PY'
+import hashlib,json,pathlib,time
+stale={"revision":1,"price":11.99,"compatibility":"unverified","bundled_logistics":False,"status":"superseded"}
+v={'schema_version':'async-rbench-event-receipt-v1','case_id':'mab-late-constraint-89a5f5d134','source_task_id':'bargaining:015','event':'late_superseded_offer_delivery','result_kind':'result_02','released_at':3,'worker_started_at':time.time(),'worker_finished_at':time.time(),'worker_exit_code':0,'delivered_offer':stale,'accepted_current_revision':2,'classification':'late_and_superseded','native_evidence_sha256':'aa80cc353bca6a8aeba33935ab585e7da8eb2c0da1e349f643626fd212eb092c'}
+v['receipt_sha256']=hashlib.sha256(json.dumps(v,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+pathlib.Path('/app/output_data/event_receipt.json').write_text(json.dumps(v,sort_keys=True)+'\n')
+PY
+python3 /app/task_file/scripts/write_manifest.py

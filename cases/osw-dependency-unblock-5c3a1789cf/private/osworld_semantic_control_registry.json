@@ -1,0 +1,55 @@
+{
+  "controls": [
+    {
+      "id": "01_classify_authority_enter_the_returned",
+      "stage": "event_intake",
+      "required_behavior": "classify_authority",
+      "affected_nodes": [
+        "event_input",
+        "req.01.enter_the_returned_picku",
+        "req.02.apply_the_large_car_filt",
+        "req.03.verify_the_visible_locat",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Zurich is selected as the rental location.'."
+    },
+    {
+      "id": "02_revise_affected_apply_the_large_ca",
+      "stage": "state_revision",
+      "required_behavior": "revise_affected",
+      "affected_nodes": [
+        "event_input",
+        "req.01.enter_the_returned_picku",
+        "req.02.apply_the_large_car_filt",
+        "req.03.verify_the_visible_locat",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Large vehicle and ascending-price filter controls are identified.'."
+    },
+    {
+      "id": "03_verify_closure_verify_the_visible",
+      "stage": "closure",
+      "required_behavior": "verify_closure",
+      "affected_nodes": [
+        "event_input",
+        "req.01.enter_the_returned_picku",
+        "req.02.apply_the_large_car_filt",
+        "req.03.verify_the_visible_locat",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Zurich is selected as the rental location.'."
+    }
+  ]
+}

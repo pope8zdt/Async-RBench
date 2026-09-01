@@ -1,0 +1,31 @@
+{
+  "authority_rule": "A replayed completion is consumed exactly once and cannot duplicate side effects.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_unique_users_and_g",
+      "req.02.implement_sharing_authorizat",
+      "req.03.implement_submissions_and_in",
+      "req.04.consume_the_replayed_edge_te",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The evidence is consumed once, private access and review rules are reverified, and no duplicate learning side effects are created.",
+    "before_state": "Collaborative exercises and reviews exist, but the edge-test completion may be delivered more than once.",
+    "event_id": "evt.mab_late_test_evidence_7d09.language_edge_test_evidence_replayed",
+    "primary_event_theme": "duplicate_or_replayed_completion",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_test_evidence_7d09.language_edge_test_evidence_replayed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+  "required_decisions": [
+    "classify_duplicate",
+    "preserve_idempotency",
+    "verify_closure"
+  ],
+  "theme": "duplicate_or_replayed_completion"
+}

@@ -1,0 +1,230 @@
+{
+  "families": [
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Directly challenge: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency__715eb7.mut.01_receipt",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Cross-check independent evidence for: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency__715eb7.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Directly challenge: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency__715eb7.mut.02_probes",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Cross-check independent evidence for: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency__715eb7.mut.02_probes_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Directly challenge: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency__715eb7.mut.03_closure",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Cross-check independent evidence for: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency__715eb7.mut.03_closure_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Directly challenge: The task remains bound to its pinned source revision.",
+      "id": "swe_dependency__715eb7.mut.04_pin",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Cross-check independent evidence for: The task remains bound to its pinned source revision.",
+      "id": "swe_dependency__715eb7.mut.04_pin_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Directly challenge: Declared native pytest failing surface remains green: tests/checkers/unittest_variables.py (21 assertions)",
+      "id": "swe_dependency__715eb7.mut.05_pytest_01_tests_checkers_uni",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.native.pytest_01_tests_checkers_unittest_variables_py"
+      ],
+      "operation": "mutate_semantic_changed_behavior",
+      "variants": [
+        "omit_pytest_01_tests_checkers_uni_evidence",
+        "corrupt_pytest_01_tests_checkers_uni_value",
+        "replay_stale_pytest_01_tests_checkers_uni_state",
+        "satisfy_manifest_without_pytest_01_tests_checkers_uni_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Cross-check independent evidence for: Declared native pytest failing surface remains green: tests/checkers/unittest_variables.py (21 assertions)",
+      "id": "swe_dependency__715eb7.mut.05_pytest_01_tests_checkers_uni_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.native.pytest_01_tests_checkers_unittest_variables_py"
+      ],
+      "operation": "cross_corrupt_changed_behavior_evidence",
+      "variants": [
+        "manifest_green_pytest_01_tests_checkers_uni_red",
+        "artifact_green_pytest_01_tests_checkers_uni_stale",
+        "receipt_valid_pytest_01_tests_checkers_uni_foreign",
+        "partial_closure_hides_pytest_01_tests_checkers_uni_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Directly challenge: After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Classify the delayed parser and variables-checker result as authoritative for type-comment import consumption.",
+      "id": "swe_dependency__715eb7.mut.06_01_classify_authority_update",
+      "must_fail": [
+        "swe_dependency__715eb7.cf.01_classify_authority_update_type_commen"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Cross-check independent evidence for: After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Classify the delayed parser and variables-checker result as authoritative for type-comment import consumption.",
+      "id": "swe_dependency__715eb7.mut.06_01_classify_authority_update_crosscheck",
+      "must_fail": [
+        "swe_dependency__715eb7.cf.01_classify_authority_update_type_commen"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_authority_update_red",
+        "artifact_green_01_classify_authority_update_stale",
+        "receipt_valid_01_classify_authority_update_foreign",
+        "partial_closure_hides_01_classify_authority_update_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Directly challenge: After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Revise imported-name consumption for both qualified abc.ABC and direct ABC type comments according to the authoritative result.",
+      "id": "swe_dependency__715eb7.mut.07_02_revise_affected_verify_bo",
+      "must_fail": [
+        "swe_dependency__715eb7.cf.02_revise_affected_verify_both_module"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Directly challenge: After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Re-run focused VariablesChecker tests and verify false-positive suppression plus preservation of real unused-import reports using the exact receipt.",
+      "id": "swe_dependency__715eb7.mut.08_03_verify_closure_add_negati",
+      "must_fail": [
+        "swe_dependency__715eb7.cf.03_verify_closure_add_negative_cover"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-f27fc59f3c",
+      "description": "Cross-check independent evidence for: After event 'The delayed authoritative pytest result identifies the astroid forms and confirms that abc.ABC and ABC consume the correct imports without hiding genuinely unused imports.', Re-run focused VariablesChecker tests and verify false-positive suppression plus preservation of real unused-import reports using the exact receipt.",
+      "id": "swe_dependency__715eb7.mut.08_03_verify_closure_add_negati_crosscheck",
+      "must_fail": [
+        "swe_dependency__715eb7.cf.03_verify_closure_add_negative_cover"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_add_negati_red",
+        "artifact_green_03_verify_closure_add_negati_stale",
+        "receipt_valid_03_verify_closure_add_negati_foreign",
+        "partial_closure_hides_03_verify_closure_add_negati_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

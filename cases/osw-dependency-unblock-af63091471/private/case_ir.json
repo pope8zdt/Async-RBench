@@ -1,0 +1,197 @@
+{
+  "case_id": "osw-dependency-unblock-af63091471",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_open_each_returned_dlc_item_",
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The correct Dota 2 store page is open.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_each_returned_dlc_i"
+        ]
+      },
+      "id": "01_classify_authority_open_each_returned",
+      "must_still_pass": [
+        "osw_dependency_unblock_1.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af63091471.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "For event 'A complete inventory of Dota 2 DLC that is currently purchasable, including each exact item name and store link or app identifier.', perform classify_authority for 'Open each returned DLC item and add it to the cart exactly once.' while retaining valid prior result 'The correct Dota 2 store page is open.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.open_each_returned_dlc_i"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_handle_any_intermediate_cont",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The cart flow is available for subsequent additions.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_each_returned_dlc_i"
+        ]
+      },
+      "id": "02_revise_affected_handle_any_interme",
+      "must_still_pass": [
+        "osw_dependency_unblock_1.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af63091471.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A complete inventory of Dota 2 DLC that is currently purchasable, including each exact item name and store link or app identifier.', perform revise_affected for 'Handle any intermediate continue-shopping navigation without removing prior items.' while retaining valid prior result 'The cart flow is available for subsequent additions.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.open_each_returned_dlc_i"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_verify_cart_membership_and_c",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The correct Dota 2 store page is open.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_each_returned_dlc_i"
+        ]
+      },
+      "id": "03_verify_closure_verify_cart_member",
+      "must_still_pass": [
+        "osw_dependency_unblock_1.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af63091471.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'A complete inventory of Dota 2 DLC that is currently purchasable, including each exact item name and store link or app identifier.', perform verify_closure for 'Verify cart membership and count against the returned inventory.' while retaining valid prior result 'The correct Dota 2 store page is open.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.open_each_returned_dlc_i"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.open_each_returned_dlc_i"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.handle_any_intermediate_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_cart_membership_a"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.open_each_returned_dlc_i",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.handle_any_intermediate_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_cart_membership_a",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.open_each_returned_dlc_i",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.handle_any_intermediate_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_cart_membership_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.open_each_returned_dlc_i",
+      "req.02.handle_any_intermediate_",
+      "req.03.verify_cart_membership_a",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A complete inventory of Dota 2 DLC that is currently purchasable, including each exact item name and store link or app identifier.",
+    "before_state": "The authoritative DLC inventory arrives after the base-game page is found but while the focal agent is stalled on a missing base-game cart button.",
+    "event_id": "evt.osw_dependency_unblock_1.delayed_authoritative_re",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Open each returned DLC item and add it to the cart exactly once.",
+      "id": "req.01.open_each_returned_dlc_i",
+      "observable_probe": "osw_dependency_unblock_1.sem.01.the_persisted_desktop_artifa",
+      "public_evidence": "source instruction and workstream result for open_each_returned_dlc_item_and_add_"
+    },
+    {
+      "description": "Handle any intermediate continue-shopping navigation without removing prior items.",
+      "id": "req.02.handle_any_intermediate_",
+      "observable_probe": "osw_dependency_unblock_1.sem.02.the_required_result_artifact",
+      "public_evidence": "source instruction and workstream result for handle_any_intermediate_continue_sho"
+    },
+    {
+      "description": "Verify cart membership and count against the returned inventory.",
+      "id": "req.03.verify_cart_membership_a",
+      "observable_probe": "osw_dependency_unblock_1.sem.03.open_each_returned_dlc_item_",
+      "public_evidence": "source instruction and workstream result for verify_cart_membership_and_count_aga"
+    }
+  ]
+}

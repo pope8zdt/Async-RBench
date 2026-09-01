@@ -1,0 +1,74 @@
+{
+  "config": [
+    {
+      "parameters": {
+        "command": [
+          "google-chrome",
+          "--remote-debugging-port=1337"
+        ]
+      },
+      "type": "launch"
+    },
+    {
+      "parameters": {
+        "command": [
+          "socat",
+          "tcp-listen:9222,fork",
+          "tcp:localhost:1337"
+        ]
+      },
+      "type": "launch"
+    }
+  ],
+  "evaluator": {
+    "expected": {
+      "rules": {
+        "max": 99999,
+        "min": 16,
+        "type": "range"
+      },
+      "type": "rule"
+    },
+    "func": "check_font_size",
+    "postconfig": [
+      {
+        "parameters": {
+          "command": [
+            "pkill",
+            "chrome"
+          ]
+        },
+        "type": "launch"
+      },
+      {
+        "parameters": {
+          "command": [
+            "google-chrome",
+            "--remote-debugging-port=1337"
+          ]
+        },
+        "type": "launch"
+      },
+      {
+        "parameters": {
+          "seconds": 3
+        },
+        "type": "sleep"
+      }
+    ],
+    "result": {
+      "type": "chrome_font_size"
+    }
+  },
+  "fixed_ip": false,
+  "id": "af630914-714e-4a24-a7bb-f9af687d3b91",
+  "instruction": "My grandmother has been using the Chrome lately and told me that the font size is way too small for her poor eyesight. Could you set the default font size to the largest for her?",
+  "possibility_of_env_change": "low",
+  "proxy": false,
+  "related_apps": [
+    "chrome"
+  ],
+  "snapshot": "chrome",
+  "source": "https://www.howtogeek.com/680260/how-to-change-chromes-default-text-size/",
+  "trajectory": "trajectories/"
+}

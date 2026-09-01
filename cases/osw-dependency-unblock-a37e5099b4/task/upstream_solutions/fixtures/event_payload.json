@@ -1,0 +1,59 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-a37e5099b4",
+  "source_task_id": "osworld:multi_apps:42f4d1c7-4521-4161-b646-0a8934e36081",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "script_fu_resize_result",
+  "upstream_dependency_graph": [
+    {
+      "id": "source_image_audit",
+      "app": "Desktop asset worker",
+      "description": "Verify character.png is the audited 1280×1280 source asset."
+    },
+    {
+      "id": "lisp_extension_probe",
+      "app": "VS Code extension worker",
+      "description": "Confirm code --list-extensions returns an identifier containing lisp.",
+      "depends_on": [
+        "source_image_audit"
+      ]
+    },
+    {
+      "id": "script_fu_execution",
+      "app": "GIMP Script-Fu worker",
+      "description": "Run the resize workflow against character.png.",
+      "depends_on": [
+        "source_image_audit",
+        "lisp_extension_probe"
+      ]
+    },
+    {
+      "id": "resized_image_probe",
+      "app": "OSWorld image evaluator",
+      "description": "Validate resized.png at exactly 128×128.",
+      "depends_on": [
+        "script_fu_execution"
+      ]
+    }
+  ],
+  "state": {
+    "source_path": "/home/user/Desktop/character.png",
+    "source_sha256": "d02270af65b8fddd0891dadc299548ffde1a3067ea1f0f0c7b7c61f542a70de3",
+    "source_dimensions": [
+      1280,
+      1280
+    ],
+    "source_encoding": "JPEG payload with .png task filename",
+    "extension_match": "lisp",
+    "extension_installed": true,
+    "output_path": "/home/user/Desktop/resized.png",
+    "output_dimensions": [
+      128,
+      128
+    ],
+    "output_image_valid": true
+  },
+  "task_assertion": "A VS Code extension identifier containing lisp is installed and /home/user/Desktop/resized.png has official width and height 128×128.",
+  "finding": "The completed result combines a Lisp-capable VS Code extension with a GIMP-produced /home/user/Desktop/resized.png whose official dimensions are exactly 128×128."
+}
+

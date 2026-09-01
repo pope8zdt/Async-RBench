@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-late-constraint-c88a633e8f",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_stale_seller_warranty_logistics_matr",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_warranty_logistics_matrix_arrived.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_the_buyer_s_compreh"
+        ]
+      },
+      "id": "01_classify_stale_seller_warranty_logi",
+      "must_still_pass": [
+        "mab_late_constraint_c88a633e8f.source.preservation"
+      ],
+      "mutation_family": "classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_c88a633e8f.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "classify_stale: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_buyer_s_compreh"
+    },
+    {
+      "critical": false,
+      "decision_group": "exclude_stale_seller_warranty_logistics_matr",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_warranty_logistics_matrix_arrived.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.preserve_seller_logistics_co"
+        ]
+      },
+      "id": "02_exclude_stale_seller_warranty_logi",
+      "must_still_pass": [
+        "mab_late_constraint_c88a633e8f.source.preservation"
+      ],
+      "mutation_family": "exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_c88a633e8f.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "exclude_stale: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_seller_logistics_co"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_seller_warranty_logistics_matr",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_warranty_logistics_matrix_arrived.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.record_every_offer_counter_r"
+        ]
+      },
+      "id": "03_verify_closure_seller_warranty_logi",
+      "must_still_pass": [
+        "mab_late_constraint_c88a633e8f.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_c88a633e8f.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.record_every_offer_counter_r"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.preserve_the_buyer_s_compreh"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.preserve_seller_logistics_co"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.record_every_offer_counter_r"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.apply_only_the_newest_warran"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.preserve_the_buyer_s_compreh",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_seller_logistics_co",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.record_every_offer_counter_r",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.apply_only_the_newest_warran",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.preserve_the_buyer_s_compreh",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_seller_logistics_co",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.record_every_offer_counter_r",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.apply_only_the_newest_warran",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_buyer_s_compreh",
+      "req.02.preserve_seller_logistics_co",
+      "req.03.record_every_offer_counter_r",
+      "req.04.apply_only_the_newest_warran",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The newest seller matrix supersedes earlier drafts and closes a complete warranty-and-logistics agreement while retaining the ledger.",
+    "before_state": "A provisional bag price has been discussed without authoritative warranty, support, return, and shipping terms.",
+    "event_id": "evt.mab_late_constraint_c88a.seller_warranty_logistics_matrix_arrived",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Preserve the buyer's comprehensive warranty and after-sales-support objective.",
+      "id": "req.01.preserve_the_buyer_s_compreh",
+      "observable_probe": "mab_late_constraint_c88a633e8f.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Preserve seller logistics-cost and operational-efficiency constraints.",
+      "id": "req.02.preserve_seller_logistics_co",
+      "observable_probe": "mab_late_constraint_c88a633e8f.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Record every offer, counter, rejection, information action, and progress state.",
+      "id": "req.03.record_every_offer_counter_r",
+      "observable_probe": "mab_late_constraint_c88a633e8f.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Apply only the newest warranty/logistics matrix and finalize complete explicit terms.",
+      "id": "req.04.apply_only_the_newest_warran",
+      "observable_probe": "mab_late_constraint_c88a633e8f.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

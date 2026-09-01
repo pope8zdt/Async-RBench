@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_duplicate_office_edge_test_evidence_repl",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_test_evidence_60ef.office_edge_tests_replayed",
+      "evidence_group": "mab_code05_officesched.classify_duplicate",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_users_task_creatio"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_duplicate: Returned authorization, deadline, assignment, notification, and reporting edge tests are applied exactly once when completion is replayed, while tasks, comments, and audit history remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close office_edge_test_evidence_replayed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_task_creatio"
+        ]
+      },
+      "id": "mab_code05_officesched.cf.01_classify_duplicate_office_edge_test_e",
+      "independence_key": "mab_code05_officesched.cf.01_classify_duplicate_office_edge_test_e",
+      "measurement_type": "control",
+      "mutation_id": "mab_code05_officesched.mutation.01_classify_duplicate_office_edge_test_e",
+      "obligation": "classify_duplicate",
+      "outcome_anchors": [
+        "mab_late_test_evidence_60efb2bdee.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_duplicate:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_task_creatio"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_idempotency_office_edge_test_evidence_repl",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_late_test_evidence_60ef.office_edge_tests_replayed",
+      "evidence_group": "mab_code05_officesched.preserve_idempotency",
+      "evidence_spec": {
+        "primary_fact": "idempotency_decision",
+        "subject": "req.02.implement_authorized_status"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_idempotency: Returned authorization, deadline, assignment, notification, and reporting edge tests are applied exactly once when completion is replayed, while tasks, comments, and audit history remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close office_edge_test_evidence_replayed.",
+      "gate": "deduplicate_completion",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_authorized_status"
+        ]
+      },
+      "id": "mab_code05_officesched.cf.02_preserve_idempotency_office_edge_test_e",
+      "independence_key": "mab_code05_officesched.cf.02_preserve_idempotency_office_edge_test_e",
+      "measurement_type": "control",
+      "mutation_id": "mab_code05_officesched.mutation.02_preserve_idempotency_office_edge_test_e",
+      "obligation": "preserve_idempotency",
+      "outcome_anchors": [
+        "mab_late_test_evidence_60efb2bdee.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:preserve_idempotency:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_authorized_status"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_office_edge_test_evidence_repl",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_test_evidence_60ef.office_edge_tests_replayed",
+      "evidence_group": "mab_code05_officesched.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_completion_rate_ov"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: Returned authorization, deadline, assignment, notification, and reporting edge tests are applied exactly once when completion is replayed, while tasks, comments, and audit history remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close office_edge_test_evidence_replayed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_completion_rate_ov"
+        ]
+      },
+      "id": "mab_code05_officesched.cf.03_verify_closure_office_edge_test_e",
+      "independence_key": "mab_code05_officesched.cf.03_verify_closure_office_edge_test_e",
+      "measurement_type": "control",
+      "mutation_id": "mab_code05_officesched.mutation.03_verify_closure_office_edge_test_e",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_test_evidence_60efb2bdee.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_completion_rate_ov"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_late_test_evidence_60ef.office_edge_tests_replayed",
+      "event_theme": "duplicate_or_replayed_completion",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The edge suite is registered once, invalid assignment/deadline/access behavior is rejected, and reports are reverified without duplicate effects.",
+        "before": "Core scheduling works, but task-specific edge tests arrive late and the same completion can be replayed.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

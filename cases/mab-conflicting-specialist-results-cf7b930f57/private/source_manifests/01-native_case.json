@@ -1,0 +1,109 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "mab-conflicting-specialist-results-cf7b930f57",
+  "benchmark": "MultiAgentBench",
+  "source_binding": {
+    "task_id": "database:004",
+    "scenario": "database",
+    "jsonl_path": "upstream/marble/multiagentbench/database/database_main.jsonl",
+    "line_number": 4,
+    "record_sha256": "a3c1fc5d89a087af44bd8427f9818e56fc170f7e772156eae691d66b75467da3",
+    "upstream_revision": "8d60fa17b5596b44458a52d4296061b9fc13d6f2"
+  },
+  "native_runtime": {
+    "adapter": "marble.engine.Engine",
+    "environment": {
+      "type": "",
+      "name": "",
+      "max_iterations": "",
+      "init_sql": "-- 1. Devices table (stores information about IoT devices)\nCREATE TABLE devices (\n    device_id SERIAL PRIMARY KEY,  -- Unique device ID\n    device_name VARCHAR(255) NOT NULL,  -- Device name\n    device_type VARCHAR(100) NOT NULL,  -- Device type (e.g., sensor, actuator)\n    manufacturer VARCHAR(255),  -- Manufacturer of the device\n    model_number VARCHAR(100),  -- Model number of the device\n    status VARCHAR(50) DEFAULT 'active',  -- Device status (e.g., active, inactive)\n    last_communication TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Last communication time\n);\n\n-- 2. Users table (stores users of the IoT system)\nCREATE TABLE users (\n    user_id SERIAL PRIMARY KEY,  -- Unique user ID\n    first_name VARCHAR(100),  -- User's first name\n    last_name VARCHAR(100),   -- User's last name\n    email VARCHAR(255) UNIQUE NOT NULL,  -- User email\n    password VARCHAR(255) NOT NULL,  -- User password\n    role VARCHAR(50) DEFAULT 'user',  -- Role of the user (e.g., admin, user)\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Account creation time\n);\n\n-- 3. Device_Data table (stores data collected by IoT devices)\nCREATE TABLE device_data (\n    data_id SERIAL PRIMARY KEY,  -- Unique data ID\n    device_id INT REFERENCES devices(device_id),  -- Foreign key to devices\n    data_value VARCHAR(255) NOT NULL,  -- Value of the data (e.g., temperature, humidity)\n    data_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Time of data collection\n    data_type VARCHAR(50)  -- Type of data (e.g., sensor reading, status update)\n);\n\n-- 4. Device_Logs table (stores logs for IoT devices)\nCREATE TABLE device_logs (\n    log_id SERIAL PRIMARY KEY,  -- Unique log ID\n    device_id INT REFERENCES devices(device_id),  -- Foreign key to devices\n    log_message TEXT,  -- Log message\n    log_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Time of log entry\n);\n\n-- 5. Device_Configuration table (stores configuration settings for IoT devices)\nCREATE TABLE device_configuration (\n    config_id SERIAL PRIMARY KEY,  -- Unique configuration ID\n    device_id INT REFERENCES devices(device_id),  -- Foreign key to devices\n    config_key VARCHAR(255) NOT NULL,  -- Configuration key (e.g., IP address, threshold)\n    config_value VARCHAR(255) NOT NULL,  -- Configuration value\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Time of configuration update\n);\n\n-- 6. Alerts table (stores alerts triggered by IoT devices)\nCREATE TABLE alerts (\n    alert_id SERIAL PRIMARY KEY,  -- Unique alert ID\n    device_id INT REFERENCES devices(device_id),  -- Foreign key to devices\n    alert_message TEXT,  -- Description of the alert\n    alert_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Time of alert\n    alert_status VARCHAR(50) DEFAULT 'unresolved'  -- Alert status (e.g., resolved, unresolved)\n);\n\n-- 7. Device_Status table (stores the current status of IoT devices)\nCREATE TABLE device_status (\n    status_id SERIAL PRIMARY KEY,  -- Unique status ID\n    device_id INT REFERENCES devices(device_id),  -- Foreign key to devices\n    status_value VARCHAR(50) NOT NULL,  -- Current status (e.g., online, offline)\n    status_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Time of status update\n);\n\n-- 8. Device_Commands table (stores commands sent to IoT devices)\nCREATE TABLE device_commands (\n    command_id SERIAL PRIMARY KEY,  -- Unique command ID\n    device_id INT REFERENCES devices(device_id),  -- Foreign key to devices\n    command VARCHAR(255) NOT NULL,  -- Command sent to the device\n    command_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Time of command sent\n    command_status VARCHAR(50) DEFAULT 'pending'  -- Command status (e.g., pending, executed)\n);\n\n-- Insert some sample devices\nINSERT INTO devices (device_name, device_type, manufacturer, model_number) \nVALUES \n('Temperature Sensor', 'sensor', 'IoT Corp', 'TS-1001'),\n('Smart Light', 'actuator', 'SmartHome Inc.', 'SL-2020');\n\n-- Insert some users\nINSERT INTO users (first_name, last_name, email, password, role) \nVALUES \n('John', 'Doe', 'john.doe@example.com', 'securepassword', 'admin'),\n('Jane', 'Smith', 'jane.smith@example.com', 'password123', 'user');\n\n-- Insert device data\nINSERT INTO device_data (device_id, data_value, data_type) \nVALUES \n(1, '23.5', 'temperature'),\n(2, 'ON', 'status');\n\n-- Insert device logs\nINSERT INTO device_logs (device_id, log_message) \nVALUES \n(1, 'Temperature sensor initialized successfully'),\n(2, 'Smart light turned on remotely');\n\n-- Insert device configuration\nINSERT INTO device_configuration (device_id, config_key, config_value) \nVALUES \n(1, 'IP Address', '192.168.1.10'),\n(2, 'IP Address', '192.168.1.20');\n\n-- Insert alerts\nINSERT INTO alerts (device_id, alert_message) \nVALUES \n(1, 'Temperature exceeded threshold!'),\n(2, 'Smart light malfunction detected');\n\n-- Insert device status\nINSERT INTO device_status (device_id, status_value) \nVALUES \n(1, 'online'),\n(2, 'offline');\n\n-- Insert device commands\nINSERT INTO device_commands (device_id, command) \nVALUES \n(1, 'Reset sensor'),\n(2, 'Turn off light');\n",
+      "anomalies": [
+        {
+          "anomaly": "INSERT_LARGE_DATA",
+          "threads": 100,
+          "ncolumn": 20,
+          "nrow": 20000,
+          "colsize": 100
+        }
+      ]
+    },
+    "roles": [
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent1",
+        "profile": "agent1 will explore the possibility of INSERT_LARGE_DATA as a root cause. Recommended tables: `pg_stat_statements`. You can search for INSERTs."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent2",
+        "profile": "agent2 will explore the possibility of LOCK_CONTENTION as a root cause. Recommended tables: `pg_locks`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent3",
+        "profile": "agent3 will explore the possibility of VACUUM as a root cause. Recommended to search for inappropiate VACUUMs from `pg_stat_all_tables`: SELECT query, calls, total_plan_time, rows, mean_plan_time FROM pg_stat_statements WHERE query LIKE 'VACUUM%';"
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent4",
+        "profile": "agent4 will explore the possibility of REDUNDANT_INDEX as a root cause. Recommended tables: `pg_stat_user_indexes`, `pg_indexes`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent5",
+        "profile": "agent5 will explore the possibility of FETCH_LARGE_DATA as a root cause. Recommended to search for SELECTs from `pg_stat_statements`."
+      }
+    ],
+    "final_state": "MARBLE environment and tool transcript"
+  },
+  "event_protocol": {
+    "producer": "an actual MARBLE role executes with its declared profile and tools",
+    "payload": "the role's native message/tool result with provenance and logical clock",
+    "release_predicate": "coordinator committed at least one environment action after launching the role",
+    "rollback": "messages and tool calls remain in the native transcript; correction is additive and auditable"
+  },
+  "state_attestation": {
+    "baseline_probe": "serialized MARBLE environment state and transcript sequence zero",
+    "checkpoint_probe": "environment digest plus strictly increased native tool/action sequence",
+    "change_required": true,
+    "journal_owner": "MARBLE engine logger, not an agent workspace file"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "metrics": {
+      "accuracy": true,
+      "response_time": true
+    },
+    "agreement_or_environment_state": true
+  },
+  "quality_gates": {
+    "official_scenario_bound": true,
+    "native_roles_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

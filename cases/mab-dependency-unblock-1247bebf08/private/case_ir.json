@@ -1,0 +1,240 @@
+{
+  "case_id": "mab-dependency-unblock-1247bebf08",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_dependency_contract_completed",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.reject_task_graphs_conta"
+        ]
+      },
+      "id": "01_classify_completeness",
+      "must_still_pass": [],
+      "mutation_family": "classify_completeness",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1247bebf08.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.reject_task_graphs_conta"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_dependency_contract_completed",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.reject_task_graphs_conta"
+        ]
+      },
+      "id": "02_revise_affected",
+      "must_still_pass": [],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1247bebf08.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.reject_task_graphs_conta"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_dependency_contract_completed",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.reject_task_graphs_conta"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "must_still_pass": [],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1247bebf08.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.reject_task_graphs_conta"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_dependency_contract_completed",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close dependency_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.reject_task_graphs_conta"
+        ]
+      },
+      "id": "04_verify_closure",
+      "must_still_pass": [],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_1247bebf08.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.reject_task_graphs_conta"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.reject_task_graphs_conta"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.use_transitive_readiness"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.propagate_completion_cha"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_mutations_for_a_cycl"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.reject_task_graphs_conta",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.use_transitive_readiness",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.propagate_completion_cha",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_mutations_for_a_cycl",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.reject_task_graphs_conta",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.use_transitive_readiness",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.propagate_completion_cha",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_mutations_for_a_cycl",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.reject_task_graphs_conta",
+      "req.02.use_transitive_readiness",
+      "req.03.propagate_completion_cha",
+      "req.04.add_mutations_for_a_cycl",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The final dependency result replaces shallow readiness with cycle-safe transitive readiness while preserving roles, history, notifications, and completed work.",
+    "before_state": "A provisional MultiAgent_Project_Manager result exists before dependency_contract_completed.",
+    "event_id": "evt.mab-dependency-unblock-1247bebf08.dependency_contract_completed",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Reject task graphs containing self-dependencies or cycles.",
+      "id": "req.01.reject_task_graphs_conta",
+      "observable_probe": "mab_dependency_unblock_1.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for reject_task_graphs_containing_self_d"
+    },
+    {
+      "description": "Use transitive readiness before allowing a task to start.",
+      "id": "req.02.use_transitive_readiness",
+      "observable_probe": "mab_dependency_unblock_1.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for use_transitive_readiness_before_allo"
+    },
+    {
+      "description": "Propagate completion changes to dependent-task and project dashboard states.",
+      "id": "req.03.propagate_completion_cha",
+      "observable_probe": "mab_dependency_unblock_1.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for propagate_completion_changes_to_depe"
+    },
+    {
+      "description": "Add mutations for a cycle and an incomplete transitive prerequisite.",
+      "id": "req.04.add_mutations_for_a_cycl",
+      "observable_probe": "mab_dependency_unblock_1.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_mutations_for_a_cycle_and_an_inc"
+    }
+  ]
+}

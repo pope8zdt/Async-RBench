@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Delayed research receipt is authentic and case/source bound.",
+      "id": "mab_late_constraint_e4199e525d.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt carries the table-tennis-specific authoritative method and evaluation plan.",
+      "id": "mab_late_constraint_e4199e525d.event.evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_authority_is_table_tennis_specific",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and re-verifies the revised proposal.",
+      "id": "mab_late_constraint_e4199e525d.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_closure_consumes_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Proposal stays pinned to research:064.",
+      "id": "mab_late_constraint_e4199e525d.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_source_pin",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Private report binds Evaluator.evaluate_task_research.",
+      "id": "mab_late_constraint_e4199e525d.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exactly five required questions are emitted and Q1 is one question.",
+      "id": "mab_late_constraint_e4199e525d.fiveq.exact",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_exact_fiveq",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Problem targets unseen-human competitive table tennis.",
+      "id": "mab_late_constraint_e4199e525d.problem.anchor",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_problem_anchor",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Method couples calibrated skill descriptors, online opponent adaptation, and fallback.",
+      "id": "mab_late_constraint_e4199e525d.method.anchor",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_method_anchor",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Evaluation uses source-specific trials and independent metrics.",
+      "id": "mab_late_constraint_e4199e525d.evaluation.plan",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_evaluation_plan",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Closure preserves unaffected source facts and evidence digests.",
+      "id": "mab_late_constraint_e4199e525d.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

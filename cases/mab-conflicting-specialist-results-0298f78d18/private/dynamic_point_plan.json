@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_finance_checkpoint",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_finance_0298.delayed_authoritative_result",
+      "evidence_group": "finance_0298.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.validate_the_returned_pl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After the provisional Finance comparison exists, accept the delayed database:008 receipt as authority only after verifying its case/source binding and its 5,000-row, 1,556,480-byte insertion evidence.",
+      "forbidden_behavior": "Do not finalize from the provisional Finance comparison or consume a receipt lacking the database:008 binding and insertion metrics.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_returned_pl"
+        ]
+      },
+      "id": "mab_conflicting_sp.cf.01_classify_authority_finance_checkpoint",
+      "independence_key": "mab_conflicting_sp.cf.01_classify_authority_finance_checkpoint",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflicting_sp.mutation.01_classify_authority_finance_checkpoint",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0298f78d18.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.validate_the_returned_pl"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_from_authority_finance_insert",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_finance_0298.delayed_authoritative_result",
+      "evidence_group": "finance_0298.revise_from_authority",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.validate_the_returned_pl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Use the authoritative insertion checkpoint to revise the affected Finance diagnosis to INSERT_LARGE_DATA, while preserving completed lock, vacuum, redundant-index, and fetch eliminations.",
+      "forbidden_behavior": "Do not retain a displaced provisional root cause or erase the completed alternative-cause checks when adopting INSERT_LARGE_DATA.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_returned_pl"
+        ]
+      },
+      "id": "mab_conflicting_sp.cf.02_revise_from_authority_finance_insert",
+      "independence_key": "mab_conflicting_sp.cf.02_revise_from_authority_finance_insert",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflicting_sp.mutation.02_revise_from_authority_finance_insert",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0298f78d18.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.validate_the_returned_pl"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_finance_diagnosis",
+      "dimension": "closure",
+      "event_id": "evt.mab_finance_0298.delayed_authoritative_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.validate_the_returned_pl"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final Finance diagnosis from the delayed receipt and the preserved five-hypothesis matrix, verify INSERT_LARGE_DATA, and ensure the native answer shape remains satisfied.",
+      "forbidden_behavior": "Do not declare closure without rechecking the authoritative INSERT_LARGE_DATA conclusion against the preserved Finance evidence matrix.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_returned_pl"
+        ]
+      },
+      "id": "mab_conflicting_sp.cf.03_verify_closure_finance_diagnosis",
+      "independence_key": "mab_conflicting_sp.cf.03_verify_closure_finance_diagnosis",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflicting_sp.mutation.03_verify_closure_finance_diagnosis",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0298f78d18.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.validate_the_returned_pl"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_finance_0298.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The delayed database:008 checkpoint reports 5,000 inserted rows and 1,556,480 bytes and authoritatively confirms INSERT_LARGE_DATA.",
+        "before": "The Finance five-hypothesis comparison and completed alternative-cause eliminations are persisted provisionally.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

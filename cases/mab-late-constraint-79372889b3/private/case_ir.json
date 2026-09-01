@@ -1,0 +1,248 @@
+{
+  "case_id": "mab-late-constraint-79372889b3",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_codebook_efficiency_scope_adde",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_lookup_free_quantiz"
+        ]
+      },
+      "id": "01_classify_scope_delta_codebook_efficiency",
+      "must_still_pass": [
+        "mab_late_constraint_79372889b3.source.preservation"
+      ],
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_79372889b3.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_lookup_free_quantiz"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_codebook_efficiency_scope_adde",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.preserve_asymmetric_token_fa"
+        ]
+      },
+      "id": "02_revise_affected_codebook_efficiency",
+      "must_still_pass": [
+        "mab_late_constraint_79372889b3.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_79372889b3.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_asymmetric_token_fa"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_codebook_efficiency_scope_adde",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_imagenet_data_rfid_f"
+        ]
+      },
+      "id": "03_preserve_unaffected_codebook_efficiency",
+      "must_still_pass": [
+        "mab_late_constraint_79372889b3.source.preservation"
+      ],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_79372889b3.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.specify_imagenet_data_rfid_f"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_codebook_efficiency_scope_adde",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.integrate_the_late_throughpu"
+        ]
+      },
+      "id": "04_verify_closure_codebook_efficiency",
+      "must_still_pass": [
+        "mab_late_constraint_79372889b3.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_79372889b3.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.integrate_the_late_throughpu"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.preserve_lookup_free_quantiz"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.preserve_asymmetric_token_fa"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.specify_imagenet_data_rfid_f"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_late_throughpu"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.preserve_lookup_free_quantiz",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_asymmetric_token_fa",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.specify_imagenet_data_rfid_f",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_late_throughpu",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.preserve_lookup_free_quantiz",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_asymmetric_token_fa",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.specify_imagenet_data_rfid_f",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_late_throughpu",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_lookup_free_quantiz",
+      "req.02.preserve_asymmetric_token_fa",
+      "req.03.specify_imagenet_data_rfid_f",
+      "req.04.integrate_the_late_throughpu",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The scope-expanded proposal jointly evaluates rFID, generation FID, utilization, throughput, memory, and scaling.",
+    "before_state": "The proposal covers reconstruction and generation quality but omits codebook-efficiency, throughput, and peak-memory constraints.",
+    "event_id": "evt.mab_late_constraint_7937.codebook_efficiency_scope_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Preserve lookup-free quantization, reconstruction quality, and open tokenizer replication goals.",
+      "id": "req.01.preserve_lookup_free_quantiz",
+      "observable_probe": "mab_late_constraint_79372889b3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Preserve asymmetric token factorization and next-sub-token autoregressive generation.",
+      "id": "req.02.preserve_asymmetric_token_fa",
+      "observable_probe": "mab_late_constraint_79372889b3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Specify ImageNet data, rFID, FID, codebook utilization, scaling, and ablation protocols.",
+      "id": "req.03.specify_imagenet_data_rfid_f",
+      "observable_probe": "mab_late_constraint_79372889b3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the late throughput and peak-memory scope without dropping reconstruction or generation evaluation.",
+      "id": "req.04.integrate_the_late_throughpu",
+      "observable_probe": "mab_late_constraint_79372889b3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

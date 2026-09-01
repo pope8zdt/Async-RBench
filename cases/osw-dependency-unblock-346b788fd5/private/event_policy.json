@@ -1,0 +1,33 @@
+{
+  "theme": "partial_then_complete_result",
+  "event_id": "evt.osw_dependency_unblock_346b788fd5.partial_then_complete_result",
+  "authority_rule": "dog_layer_resize is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_dependency_unblock_346b788fd5.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "before_state": "The 1578×948 two-layer XCF is open; the dog layer target is known but the proportional resize and exported evidence are not yet complete.",
+    "after_state": "The dog layer is proportionally resized to a 512-pixel non-transparent height, the background remains intact, and resized.png passes both official OSWorld evaluators.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.target_height",
+      "req.02.aspect_ratio",
+      "req.03.structure_similarity",
+      "req.04.background_preservation",
+      "req.05.output_path",
+      "final_state"
+    ]
+  }
+}

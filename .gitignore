@@ -1,0 +1,55 @@
+# Generated benchmark outputs and local workspaces
+/.generated/
+/.method-smoke/
+/.reference-scaffold-smoke/
+/artifacts/
+/experiment/
+/outputs/
+/tmp/
+/.tmp-*/
+
+# Case-production work is not part of the registered benchmark release
+/candidate_cases/
+/candidate_instances/
+/paper/
+/实验设计结果示例.html
+/cases/**/review_evidence/
+
+# Upstream repositories and large source caches are optional provenance/native
+# inputs. The registered case bundles under cases/ are self-contained.
+/upstream/*
+!/upstream/README.md
+
+# Python environments, packages, and caches
+/.venv*/
+/*.egg-info/
+**/__pycache__/
+/.pytest_cache/
+*.pyc
+/dist/
+/build/
+
+# Local editor/agent/browser state
+/.codex-*/
+/.codex-work/
+/.claude/
+/.codex/
+/.cursor/
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+
+# Local model configuration and credentials
+/configs/local/
+apikey.txt
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Logs are generated evidence and belong under an ignored artifacts directory
+*.log

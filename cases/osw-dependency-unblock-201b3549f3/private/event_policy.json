@@ -1,0 +1,30 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_201b3549f3.delayed_authoritative_result",
+  "authority_rule": "Delayed instructor_dependency_install_plan is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_dependency_unblock_201b3549f3.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The repository destination and terminal can be prepared, but a source-bound dependency lock and verified import result are pending.",
+    "after_state": "The environment worker returns the pinned instructor-embedding repository identity, dependency ranges and a successful `from InstructorEmbedding import INSTRUCTOR` smoke result.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.project_identity",
+      "req.02.distribution_identity",
+      "req.03.dependency_lock",
+      "final_state"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "authority_rule": "Validate case/source identity and revision or authority evidence; arrival order alone is insufficient.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.source_native_resolution",
+      "req.02.preserve_unaffected",
+      "req.03.receipt_bound_closure",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An older superseded offer arrives after current agreement persistence.",
+    "before_state": "Task-specific provisional state is persisted without evaluator truth.",
+    "event_id": "evt.bar009_outfit.late_out_of_order_superseded_result",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.bar009_outfit.late_out_of_order_superseded_result",
+  "forbidden_shortcut": "Do not ignore the event, expose truth, or erase unaffected source findings.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

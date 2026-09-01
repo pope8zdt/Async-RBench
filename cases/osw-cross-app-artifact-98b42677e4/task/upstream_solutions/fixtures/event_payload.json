@@ -1,0 +1,60 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-98b42677e4",
+  "source_task_id": "osworld:multi_apps:c2751594-0cd5-4088-be1b-b5f2f9ec97c4",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "latest_notes_first_embedded_image",
+  "upstream_dependency_graph": [
+    {
+      "id": "latest_notes_message",
+      "app": "Thunderbird",
+      "description": "Identify the most recent message in the Notes folder."
+    },
+    {
+      "id": "docx_attachment_decode",
+      "app": "Thunderbird/OS",
+      "description": "Decode lecture-notes.docx from the selected message.",
+      "depends_on": [
+        "latest_notes_message"
+      ]
+    },
+    {
+      "id": "first_embedded_image",
+      "app": "DOCX image worker",
+      "description": "Extract the first embedded image rather than later images.",
+      "depends_on": [
+        "docx_attachment_decode"
+      ]
+    },
+    {
+      "id": "wallpaper_image_validation",
+      "app": "OS",
+      "description": "Validate the extracted image before desktop wallpaper selection.",
+      "depends_on": [
+        "first_embedded_image"
+      ]
+    }
+  ],
+  "state": {
+    "notes_subject": "Lecture Document",
+    "notes_date": "Tue, 30 Jan 2024 02:38:44 -0800",
+    "attachment_name": "lecture-notes.docx",
+    "attachment_sha256": "4c9a185bc89de330d1a736efe83315e2d2ab3305277c6126ee57056decdd41b4",
+    "embedded_image_index": 1,
+    "embedded_image_path": "word/media/image1.png",
+    "embedded_image_size": [
+      860,
+      732
+    ],
+    "embedded_image_sha256": "4f584d4b99a2ae0498dd4fb8827bf3acbb53847918912881ce12b04dca91aaa9",
+    "wallpaper_gold_size": [
+      1496,
+      626
+    ],
+    "wallpaper_gold_sha256": "1b19ee9db539d8eeabe3deab4e7579aeba472afad1dbd9538fd110830ab9ca0c",
+    "wallpaper_active": true
+  },
+  "task_assertion": "The active desktop wallpaper matches the first embedded image in lecture-notes.docx from the newest Notes email.",
+  "finding": "The mail worker identifies the newest Notes message Lecture Document, decodes lecture-notes.docx, and returns its first embedded image."
+}
+

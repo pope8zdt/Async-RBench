@@ -1,0 +1,22 @@
+Fix codegen failures on incompatible FFI declarations
+
+This change fixes a bug where the same FFI function was being declared with incompatible signatures in different packages without being validated, causing various crashes from both ponyc and LLVM.
+
+Closes #1552.
+
+ASYNC-RBENCH EXTENSION
+
+The source task above remains the final-state contract. The benchmark starts
+2 independent workstreams whose evidence may arrive after you
+have begun the implementation. Their public scopes are:
+- Workstream 1: Add or invoke a program-wide FFI signature consistency check before LLVM declaration reuse. Review together: Compare return, parameter, and variadic components and emit a source diagnostic on mismatch.
+- Workstream 2: Retain successful reuse for identical declarations across packages. Review together: Add multi-package compiler tests for identical and independently varied incompatible signatures.
+
+Before closing the task, persist a provisional checkpoint at
+`/app/output_data/provisional_checkpoint.json` and a record of source facts
+that remain valid at `/app/output_data/preserved_source_facts.json`. Consume
+the delivered receipt for `ponylang__ponyc-2205`, revise only state affected by that
+evidence, rerun the source-native checks, and write
+`/app/output_data/decision_manifest.json` with the provided manifest script.
+The final state must satisfy the original task even when completion order
+differs; a response without the receipt-bound closure artifacts is incomplete.

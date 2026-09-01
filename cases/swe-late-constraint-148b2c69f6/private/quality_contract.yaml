@@ -1,0 +1,76 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_constraint_148b2c69f6.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_constraint_148b2c69f6.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_constr_6d07d3.cf.01_classify_scope_delta_implement_the_sign",
+          "swe_late_constr_6d07d3.cf.02_revise_affected_assert_omitted_cal",
+          "swe_late_constr_6d07d3.cf.03_preserve_unaffected_run_estimator_api_",
+          "swe_late_constr_6d07d3.cf.04_verify_closure_assert_omitted_cal"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_constraint_148b2c69f6.event.receipt",
+          "swe_late_constraint_148b2c69f6.event.probes",
+          "swe_late_constraint_148b2c69f6.closure",
+          "swe_late_constraint_148b2c69f6.source.pin",
+          "swe_late_constraint_148b2c69f6.native.pytest_01_sklearn_linear_model_tests_test_least_angl",
+          "swe_late_constraint_148b2c69f6.native.pytest_02_sklearn_linear_model_tests_test_least_angl"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "LassoLarsIC: unintuitive copy_X behaviour",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "7f4dafbe3faa3546320fa805283b6d26d587593dfedf1be2783eae60f5d81419",
+        "task_id": "scikit-learn__scikit-learn-12973",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

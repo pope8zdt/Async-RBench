@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_migrate_attendee_references_",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_7.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.migrate_attendee_referen"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A specialist returns the player-profile API, including identifiers, availability intervals, roles, permissions, and deletion behavior.', perform classify_completeness for 'Migrate attendee references to stable player identifiers.' while retaining valid prior result 'Coach and player profile storage is implemented.'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Coach and player profile storage is implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.migrate_attendee_referen"
+        ]
+      },
+      "id": "mab_code52_teamsync.cf.01_classify_completeness_migrate_attendee_r",
+      "independence_key": "mab_code52_teamsync.cf.01_classify_completeness_migrate_attendee_r",
+      "measurement_type": "control",
+      "mutation_id": "mab_code52_teamsync.mutation.01_classify_completeness_migrate_attendee_r",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_7e90efa752.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.migrate_attendee_referen"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_enforce_profile_availability",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_7.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.migrate_attendee_referen"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A specialist returns the player-profile API, including identifiers, availability intervals, roles, permissions, and deletion behavior.', perform revise_affected for 'Enforce profile availability when scheduling events.' while retaining valid prior result 'Scheduling and announcement services use a provisional player interface.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Scheduling and announcement services use a provisional player interface.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.migrate_attendee_referen"
+        ]
+      },
+      "id": "mab_code52_teamsync.cf.02_revise_affected_enforce_profile_av",
+      "independence_key": "mab_code52_teamsync.cf.02_revise_affected_enforce_profile_av",
+      "measurement_type": "control",
+      "mutation_id": "mab_code52_teamsync.mutation.02_revise_affected_enforce_profile_av",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_7e90efa752.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.migrate_attendee_referen"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_apply_coach_and_player_permi",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_7.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.migrate_attendee_referen"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A specialist returns the player-profile API, including identifiers, availability intervals, roles, permissions, and deletion behavior.', perform verify_closure for 'Apply coach and player permissions to announcements.' while retaining valid prior result 'Coach and player profile storage is implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Coach and player profile storage is implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.migrate_attendee_referen"
+        ]
+      },
+      "id": "mab_code52_teamsync.cf.03_verify_closure_apply_coach_and_pl",
+      "independence_key": "mab_code52_teamsync.cf.03_verify_closure_apply_coach_and_pl",
+      "measurement_type": "control",
+      "mutation_id": "mab_code52_teamsync.mutation.03_verify_closure_apply_coach_and_pl",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_7e90efa752.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.migrate_attendee_referen"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Coach and player profile storage is implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code52_teamsync.mutation.01_classify_completeness_migrate_attendee_r",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code52_teamsync.cf.01_classify_completeness_migrate_attendee_r"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_7e90efa752.source.pin"
+      ],
+      "targets": [
+        "mab_code52_teamsync.cf.01_classify_completeness_migrate_attendee_r",
+        "mab_dependency_unblock_7e90efa752.event.receipt",
+        "mab_dependency_unblock_7e90efa752.event.authority_probe",
+        "mab_dependency_unblock_7e90efa752.closure",
+        "mab_dependency_unblock_7e90efa752.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Scheduling and announcement services use a provisional player interface.'.",
+      "family": "resolve_authority",
+      "id": "mab_code52_teamsync.mutation.02_revise_affected_enforce_profile_av",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code52_teamsync.cf.02_revise_affected_enforce_profile_av"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_7e90efa752.source.pin"
+      ],
+      "targets": [
+        "mab_code52_teamsync.cf.02_revise_affected_enforce_profile_av",
+        "mab_dependency_unblock_7e90efa752.event.receipt",
+        "mab_dependency_unblock_7e90efa752.event.authority_probe",
+        "mab_dependency_unblock_7e90efa752.closure",
+        "mab_dependency_unblock_7e90efa752.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Coach and player profile storage is implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code52_teamsync.mutation.03_verify_closure_apply_coach_and_pl",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code52_teamsync.cf.03_verify_closure_apply_coach_and_pl"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_7e90efa752.source.pin"
+      ],
+      "targets": [
+        "mab_code52_teamsync.cf.03_verify_closure_apply_coach_and_pl",
+        "mab_dependency_unblock_7e90efa752.event.receipt",
+        "mab_dependency_unblock_7e90efa752.event.authority_probe",
+        "mab_dependency_unblock_7e90efa752.closure",
+        "mab_dependency_unblock_7e90efa752.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific player_profile_contract_completed receipt bound to coding:052.",
+      "id": "mab_dependency_unblock_7e90efa752.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned TeamSync authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_7e90efa752.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The completed profile contract revises scheduling and authorization while performance, completed events, communication history, and notification preferences remain intact.",
+      "id": "mab_dependency_unblock_7e90efa752.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:052.",
+      "id": "mab_dependency_unblock_7e90efa752.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and sports_profile_schedule_closure obey the task-specific four-upstream schema.",
+      "id": "mab_dependency_unblock_7e90efa752.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsync_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Stable player IDs drive event attendance; availability prevents schedule conflicts; coaches and players receive different announcement permissions; profile deletion removes future attendance.",
+      "id": "mab_dependency_unblock_7e90efa752.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsync_stable_ids_availability_conflicts_permissions_and_deletion",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves performance_history, completed_events, communication_history, notification_preferences.",
+      "id": "mab_dependency_unblock_7e90efa752.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsync_performance_completed_events_and_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The completed profile contract revises scheduling and authorization while performance, completed events, communication history, and notification preferences remain intact.",
+      "id": "mab_dependency_unblock_7e90efa752.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsync_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

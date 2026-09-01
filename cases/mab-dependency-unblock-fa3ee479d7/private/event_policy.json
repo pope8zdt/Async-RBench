@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Provisional work cannot close until the delayed authority is consumed and reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_profiles_and_valid",
+      "req.02.implement_leader_managed_gro",
+      "req.03.implement_comments_helpfulne",
+      "req.04.integrate_the_delayed_media",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The returned contract governs media and group changes while preserving valid posts, feedback, messaging, and search results.",
+    "before_state": "Profiles, posts, and provisional groups exist without authoritative media-type, membership, and leader-only mutation rules.",
+    "event_id": "evt.mab_dependency_unblock_fa3e.group_integrity_contract_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_fa3e.group_integrity_contract_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

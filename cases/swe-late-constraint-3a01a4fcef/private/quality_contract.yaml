@@ -1,0 +1,76 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_constraint_3a01a4fcef.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_constraint_3a01a4fcef.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_constr_5168ff.cf.01_classify_authority_place_the_falsey_n",
+          "swe_late_constr_5168ff.cf.02_revise_affected_use_the_repository",
+          "swe_late_constr_5168ff.cf.03_verify_closure_run_blueprint_cons"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_constraint_3a01a4fcef.event.receipt",
+          "swe_late_constraint_3a01a4fcef.event.probes",
+          "swe_late_constraint_3a01a4fcef.closure",
+          "swe_late_constraint_3a01a4fcef.source.pin",
+          "swe_late_constraint_3a01a4fcef.native.pytest_01_tests_test_blueprints_py",
+          "swe_late_constraint_3a01a4fcef.native.pytest_02_tests_test_blueprints_py"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Require a non-empty name for Blueprints",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "269ff543ad4c5fca9c2401b75509d525f01d64961d2093674d04f226f53a550f",
+        "task_id": "pallets__flask-5014",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "async-rbench-osworld-event-v1",
+  "case_id": "osw-cross-app-artifact-6dec97765d",
+  "source_task_id": "osworld:multi_apps:510f64c8-9bcc-4be1-8d30-638705850618",
+  "task_assertion": "VS Code is launched from the terminal with /home/user/Desktop/project, shell history contains the code command, and the OpenProject evaluator reports project.",
+  "state": {
+    "project_path": "/home/user/Desktop/project",
+    "project_basename": "project",
+    "shell_history_contains_code": true,
+    "terminal_origin": true,
+    "open_project_probe": "project",
+    "vscode_active": true,
+    "project_files": [
+      "main.py",
+      "README.md",
+      ".vscode/settings.json"
+    ],
+    "official_terminal_check_passed": true,
+    "official_config_check_passed": true
+  },
+  "upstream_dependency_graph": [
+    {
+      "id": "upstream_worker_01",
+      "depends_on": [],
+      "description": "Verify the project assets and .vscode settings under /home/user/Desktop/project."
+    },
+    {
+      "id": "upstream_worker_02",
+      "depends_on": [
+        "upstream_worker_01"
+      ],
+      "description": "Issue the VS Code folder-open command from the terminal and preserve shell-history evidence."
+    },
+    {
+      "id": "upstream_worker_03",
+      "depends_on": [
+        "upstream_worker_02"
+      ],
+      "description": "Use the evaluator extension to capture the active opened folder name."
+    },
+    {
+      "id": "upstream_worker_04",
+      "depends_on": [
+        "upstream_worker_03"
+      ],
+      "description": "Join terminal-origin and OpenProject results and run both official evaluators."
+    }
+  ]
+}

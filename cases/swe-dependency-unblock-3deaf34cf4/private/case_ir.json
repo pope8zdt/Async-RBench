@@ -1,0 +1,206 @@
+{
+  "case_id": "swe-dependency-unblock-3deaf34cf4",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_f34cf4",
+      "forbidden_behavior": "Do not skip classify_authority or claim closure from stale/unexecuted evidence.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "decision.01",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3deaf34cf4.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "Parse valid multiline and OpenBSD kern sysctl records.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected_f34cf4",
+      "forbidden_behavior": "Do not skip revise_affected or claim closure from stale/unexecuted evidence.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "decision.02",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3deaf34cf4.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Reject malformed records without manufacturing facts.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_f34cf4",
+      "forbidden_behavior": "Do not skip preserve_unaffected or claim closure from stale/unexecuted evidence.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "decision.03",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3deaf34cf4.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "Propagate command failures without losing valid platform behavior.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_f34cf4",
+      "forbidden_behavior": "Do not skip verify_closure or claim closure from stale/unexecuted evidence.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "decision.04",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3deaf34cf4.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "Reverify the focused sysctl regression matrix.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An isolated Ansible worker returns authoritative FreeBSD/OpenBSD sysctl parsing results for multiline, malformed and command-error inputs.",
+    "before_state": "A source patch and preserved behavior checkpoint exist, but the isolated authoritative regression result has not arrived.",
+    "event_id": "evt.swe_dependency_unblock_3deaf34cf4.sysctl_parser_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Parse valid multiline and OpenBSD kern sysctl records.",
+      "id": "req.01",
+      "observable_probe": "native_group_01",
+      "public_evidence": "source-native regression"
+    },
+    {
+      "description": "Reject malformed records without manufacturing facts.",
+      "id": "req.02",
+      "observable_probe": "native_group_02",
+      "public_evidence": "source-native regression"
+    },
+    {
+      "description": "Propagate command failures without losing valid platform behavior.",
+      "id": "req.03",
+      "observable_probe": "native_group_02",
+      "public_evidence": "source-native regression"
+    },
+    {
+      "description": "Reverify the focused sysctl regression matrix.",
+      "id": "req.04",
+      "observable_probe": "native_group_02",
+      "public_evidence": "source-native regression"
+    }
+  ]
+}

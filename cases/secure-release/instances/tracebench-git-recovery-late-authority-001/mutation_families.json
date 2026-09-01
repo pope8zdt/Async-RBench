@@ -1,0 +1,274 @@
+{
+  "families": [
+    {
+      "id": "sr.secret_recovery_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_recovered_secret",
+      "description": "Damage or omit the separately recovered secret",
+      "variants": [
+        "missing_file",
+        "empty_file",
+        "wrong_secret",
+        "secret_in_repo_worktree"
+      ],
+      "must_fail": [
+        "sr.authority.secret_recovered",
+        "sr.authority.no_secret_objects"
+      ]
+    },
+    {
+      "id": "sr.git_object_leak@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "inject_secret_git_object",
+      "description": "Retain the secret in reachable or unreachable Git storage",
+      "variants": [
+        "reachable_blob",
+        "dangling_blob",
+        "reflog_commit",
+        "packed_object"
+      ],
+      "must_fail": [
+        "sr.authority.no_secret_objects",
+        "sr.authority.final_main_baseline",
+        "sr.authority.final_dev_baseline"
+      ]
+    },
+    {
+      "id": "sr.main_authority_baseline_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "reset_or_replace_main_authority",
+      "description": "Make final main omit or precede the authoritative baseline",
+      "variants": [
+        "reset_pre_bundle",
+        "drop_baseline_commit",
+        "wrong_index",
+        "unrelated_history"
+      ],
+      "must_fail": [
+        "sr.authority.final_main_baseline",
+        "sr.stale.pre_rewrite_main_patch_rejected",
+        "sr.stale.old_deployment_rejected",
+        "sr.stale.old_manifest_rejected",
+        "sr.patch.main_header_controls",
+        "sr.remote.final_refs",
+        "sr.cf.wait_sanitize_then_patch"
+      ]
+    },
+    {
+      "id": "sr.dev_authority_baseline_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "reset_or_replace_dev_authority",
+      "description": "Make final dev omit or precede the authoritative baseline",
+      "variants": [
+        "reset_pre_bundle",
+        "drop_baseline_commit",
+        "wrong_index",
+        "unrelated_history"
+      ],
+      "must_fail": [
+        "sr.authority.final_dev_baseline",
+        "sr.stale.pre_rewrite_dev_patch_rejected",
+        "sr.stale.old_deployment_rejected",
+        "sr.stale.old_manifest_rejected",
+        "sr.patch.dev_header_controls",
+        "sr.remote.final_refs"
+      ]
+    },
+    {
+      "id": "sr.main_patch_stale_or_partial@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_main_security_fix",
+      "description": "Use a stale or incomplete main security patch",
+      "variants": [
+        "newline_only",
+        "newline_cr_only",
+        "key_only",
+        "pre_rewrite_patch"
+      ],
+      "must_fail": [
+        "sr.stale.pre_rewrite_main_patch_rejected",
+        "sr.patch.main_header_controls",
+        "sr.patch.valid_header_regression",
+        "sr.lineage.security_revision_final",
+        "sr.cf.cancel_pre_rewrite_child"
+      ]
+    },
+    {
+      "id": "sr.dev_patch_stale_or_partial@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_dev_security_fix",
+      "description": "Use a stale or incomplete dev security patch",
+      "variants": [
+        "newline_only",
+        "newline_cr_only",
+        "value_only",
+        "pre_rewrite_patch"
+      ],
+      "must_fail": [
+        "sr.stale.pre_rewrite_dev_patch_rejected",
+        "sr.patch.dev_header_controls",
+        "sr.patch.valid_header_regression",
+        "sr.lineage.deployed_ref_consistency"
+      ]
+    },
+    {
+      "id": "sr.deployment_ref_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "reset_bare_deployment_ref",
+      "description": "Make bare deployment retain stale or cross-wired refs",
+      "variants": [
+        "old_main",
+        "old_dev",
+        "swap_refs",
+        "missing_ref"
+      ],
+      "must_fail": [
+        "sr.stale.old_deployment_rejected",
+        "sr.stale.old_manifest_rejected",
+        "sr.remote.final_refs",
+        "sr.runtime.https_main",
+        "sr.runtime.https_dev",
+        "sr.lineage.deployed_ref_consistency",
+        "sr.cf.reject_pre_rewrite_deployment",
+        "sr.cf.redeploy_from_clean_baseline"
+      ]
+    },
+    {
+      "id": "sr.manifest_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_release_manifest",
+      "description": "Corrupt final revision relations or manifest schema",
+      "variants": [
+        "old_security_revision",
+        "old_deployed_ref",
+        "unreachable_sanitized_head",
+        "extra_key"
+      ],
+      "must_fail": [
+        "sr.stale.old_manifest_rejected",
+        "sr.lineage.manifest_schema",
+        "sr.lineage.sanitized_head_reachable",
+        "sr.lineage.security_revision_final",
+        "sr.lineage.deployed_ref_consistency",
+        "sr.cf.reject_pre_rewrite_deployment",
+        "sr.cf.redeploy_from_clean_baseline"
+      ]
+    },
+    {
+      "id": "sr.report_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_security_report",
+      "description": "Damage required public path or CWE evidence",
+      "variants": [
+        "missing_report",
+        "wrong_path",
+        "wrong_cwe",
+        "invalid_jsonl"
+      ],
+      "must_fail": [
+        "sr.report.cwe93_exact"
+      ]
+    },
+    {
+      "id": "sr.https_content_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_https_deployment_content",
+      "description": "Serve stale missing or cross-wired branch content",
+      "variants": [
+        "stale_main",
+        "stale_dev",
+        "swap_roots",
+        "https_down"
+      ],
+      "must_fail": [
+        "sr.remote.final_refs",
+        "sr.runtime.https_main",
+        "sr.runtime.https_dev",
+        "sr.lineage.deployed_ref_consistency"
+      ]
+    },
+    {
+      "id": "sr.push_hook_missing_or_wrong@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_post_receive_hook",
+      "description": "Break real push-triggered deployment behavior",
+      "variants": [
+        "missing_hook",
+        "non_executable",
+        "main_only",
+        "wrong_worktree"
+      ],
+      "must_fail": [
+        "sr.runtime.push_deploy_main",
+        "sr.runtime.push_deploy_dev"
+      ]
+    },
+    {
+      "id": "sr.push_hook_slow_or_stale@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "delay_or_stale_post_receive_hook",
+      "description": "Keep endpoints but violate synchronous final-ref deployment",
+      "variants": [
+        "sleep_over_three",
+        "copy_old_main",
+        "copy_old_dev",
+        "async_background"
+      ],
+      "must_fail": [
+        "sr.runtime.push_deploy_main",
+        "sr.runtime.push_deploy_dev"
+      ]
+    },
+    {
+      "id": "sr.nginx_content_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_independent_http_content",
+      "description": "Damage independent index or custom 404 behavior",
+      "variants": [
+        "wrong_index",
+        "wrong_404",
+        "default_site_enabled",
+        "missing_error_page"
+      ],
+      "must_fail": [
+        "sr.support.nginx_content_404",
+        "sr.support.nginx_rate_limit"
+      ]
+    },
+    {
+      "id": "sr.nginx_observability_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_independent_nginx_logging",
+      "description": "Damage logs format paths or rate-limit configuration",
+      "variants": [
+        "wrong_access_path",
+        "missing_user_agent",
+        "wrong_rate",
+        "wrong_burst"
+      ],
+      "must_fail": [
+        "sr.support.nginx_logs",
+        "sr.support.nginx_rate_limit"
+      ]
+    },
+    {
+      "id": "sr.lineage_ref_corruption@tracebench-git-recovery-late-authority-001",
+      "case_id": "secure-release",
+      "operation": "patch_git_lineage_relations",
+      "description": "Break sanitized security or deployed revision relationships",
+      "variants": [
+        "sanitized_not_ancestor",
+        "security_not_main",
+        "main_not_bare",
+        "dev_not_bare"
+      ],
+      "must_fail": [
+        "sr.stale.old_manifest_rejected",
+        "sr.remote.final_refs",
+        "sr.lineage.sanitized_head_reachable",
+        "sr.lineage.security_revision_final",
+        "sr.lineage.deployed_ref_consistency"
+      ]
+    }
+  ]
+}

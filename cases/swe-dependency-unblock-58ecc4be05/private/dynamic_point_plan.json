@@ -1,0 +1,228 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta:req.01.implement_non_recursive_",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_58ecc4be05.display_order_consumer_inventory",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_non_recursive_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.', perform classify_scope_delta for 'Implement non-recursive per-command sorting activation.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Implement non-recursive per-command sorting activation.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_dependency__75a1a9.cf.01_classify_scope_delta",
+      "independence_key": "swe_dependency__75a1a9.cf.01_classify_scope_delta",
+      "measurement_type": "control",
+      "mutation_family": "detect_scope_delta",
+      "mutation_id": "swe_dependency__75a1a9.mutation.01_classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_58ecc4be05.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__75a1a9.cf.01_classify_scope_delta]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_non_recursive_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected:req.02.mix_argument_and_subcomm",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_58ecc4be05.display_order_consumer_inventory",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.mix_argument_and_subcomm"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.', perform revise_affected for 'Mix argument and subcommand display-order increments as specified.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Mix argument and subcommand display-order increments as specified.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_dependency__75a1a9.cf.02_revise_affected",
+      "independence_key": "swe_dependency__75a1a9.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__75a1a9.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_58ecc4be05.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__75a1a9.cf.02_revise_affected]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.mix_argument_and_subcomm"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "preserve_unaffected:req.03.update_all_inventoried_c",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_dependency_unblock_58ecc4be05.display_order_consumer_inventory",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.update_all_inventoried_c"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.', perform preserve_unaffected for 'Update all inventoried consumers and remove obsolete AppSettings exposure.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Update all inventoried consumers and remove obsolete AppSettings exposure.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_dependency__75a1a9.cf.03_preserve_unaffected",
+      "independence_key": "swe_dependency__75a1a9.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_family": "overinvalidate_unaffected",
+      "mutation_id": "swe_dependency__75a1a9.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_58ecc4be05.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__75a1a9.cf.03_preserve_unaffected]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.update_all_inventoried_c"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure:req.04.run_nested_command_order",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_58ecc4be05.display_order_consumer_inventory",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.run_nested_command_order"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.', perform verify_closure for 'Run nested-command ordering and API tests.' and preserve valid source behavior established before delivery.",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Run nested-command ordering and API tests.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_dependency__75a1a9.cf.04_verify_closure",
+      "independence_key": "swe_dependency__75a1a9.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__75a1a9.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_58ecc4be05.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__75a1a9.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.run_nested_command_order"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.swe_dependency_unblock_58ecc4be05.display_order_consumer_inventory",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.",
+        "before": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

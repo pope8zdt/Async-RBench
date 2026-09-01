@@ -1,0 +1,140 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "swe-dependency-unblock-866543c501",
+  "benchmark": "SWE-bench",
+  "source_binding": {
+    "instance_id": "instance_future-architect__vuls-b8db2e0b74f60cb7d45f710f255e061f054b6afc",
+    "repo": "future-architect/vuls",
+    "base_commit": "43b46cb324f64076e4d9e807c0b60c4b9ce11a82",
+    "dataset": "ScaleAI/SWE-bench_Pro",
+    "split": "test",
+    "variant": "swe_bench_pro",
+    "problem_statement_sha256": "6e428806e261b33b2e1b5782306cda74a54444d0aaa767f66919e19c6a36ceb8",
+    "harness_revision": "ca10a60a5fcae51e6948ffe1485d4153d421e6c5"
+  },
+  "native_runtime": {
+    "adapter": "swe_bench_pro_eval.py",
+    "isolation": "official Docker instance image",
+    "final_state": "git working tree patch"
+  },
+  "event_protocol": {
+    "producer": "independent reproduction/test worker in a clean clone of the same base commit",
+    "payload": "raw command, exit status, and bounded stdout/stderr from selected reproduction tests",
+    "release_predicate": "main working tree has a non-empty persisted diff while worker is running",
+    "rollback": "post-result patch history remains; the agent must amend/revert real files"
+  },
+  "state_attestation": {
+    "baseline_probe": "git HEAD plus clean index/worktree digest",
+    "checkpoint_probe": "git diff --binary plus untracked-file content digest",
+    "change_required": true,
+    "journal_owner": "host harness outside /testbed"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "entrypoint": "swe_bench_pro_eval.py",
+    "dataset": "ScaleAI/SWE-bench_Pro",
+    "instance_id": "instance_future-architect__vuls-b8db2e0b74f60cb7d45f710f255e061f054b6afc",
+    "FAIL_TO_PASS": [
+      "TestRemoveRaspbianPackFromResult"
+    ],
+    "PASS_TO_PASS": [],
+    "docker_image": "future-architect.vuls-future-architect__vuls-b8db2e0b74f60cb7d45f710f255e061f054b6afc",
+    "selected_test_files": [
+      "TestDistroAdvisories_AppendIfMissing/append",
+      "TestMaxCvssScores",
+      "TestPackage_FormatVersionFromTo/nfy2",
+      "TestDistroAdvisories_AppendIfMissing/duplicate_no_append",
+      "TestVulnInfos_FilterUnfixed/filter_ok",
+      "Test_NewPortStat/empty",
+      "TestMergeNewVersion",
+      "TestScanResult_Sort/sort",
+      "Test_IsRaspbianPackage/nameList",
+      "TestTitles",
+      "TestToSortedSlice",
+      "TestVulnInfos_FilterUnfixed",
+      "TestVulnInfos_FilterIgnorePkgs/filter_pkgs_3",
+      "TestVulnInfos_FilterIgnorePkgs/filter_pkgs_1",
+      "TestExcept",
+      "TestAddBinaryName",
+      "TestSummaries",
+      "TestVulnInfos_FilterByCvssOver",
+      "TestCvss3Scores",
+      "TestSortByConfident",
+      "TestLibraryScanners_Find/multi_file",
+      "TestFormatMaxCvssScore",
+      "TestVulnInfos_FilterIgnorePkgs",
+      "TestIsDisplayUpdatableNum",
+      "TestPackage_FormatVersionFromTo/nfy3",
+      "TestScanResult_Sort/already_asc",
+      "TestPackage_FormatVersionFromTo",
+      "TestVulnInfos_FilterIgnoreCves",
+      "TestLibraryScanners_Find",
+      "TestVulnInfos_FilterIgnorePkgs/filter_pkgs_2",
+      "TestMerge",
+      "TestVulnInfos_FilterIgnoreCves/filter_ignored",
+      "TestVulnInfo_AttackVector/3.0:N",
+      "TestVulnInfo_AttackVector/2.0:A",
+      "TestAppendIfMissing",
+      "Test_NewPortStat/ipv6_loopback",
+      "TestPackage_FormatVersionFromTo/fixed",
+      "TestScanResult_Sort",
+      "TestVulnInfos_FilterByCvssOver/over_high",
+      "Test_NewPortStat/normal",
+      "TestMaxCvss3Scores",
+      "Test_IsRaspbianPackage/nameRegExp",
+      "TestStorePackageStatuses",
+      "TestMaxCvss2Scores",
+      "TestFindByBinName",
+      "TestRemoveRaspbianPackFromResult",
+      "TestVulnInfo_AttackVector/3.1:N",
+      "TestSourceLinks",
+      "TestSortPackageStatues",
+      "Test_NewPortStat",
+      "TestPackage_FormatVersionFromTo/nfy",
+      "TestVulnInfo_AttackVector/2.0:N",
+      "Test_IsRaspbianPackage/verRegExp",
+      "TestDistroAdvisories_AppendIfMissing",
+      "Test_NewPortStat/asterisk",
+      "Test_IsRaspbianPackage/debianPackage",
+      "TestCountGroupBySeverity",
+      "TestCvss2Scores",
+      "TestVulnInfo_AttackVector",
+      "TestVulnInfo_AttackVector/2.0:L",
+      "TestVulnInfos_FilterByCvssOver/over_7.0",
+      "TestPackage_FormatVersionFromTo/nfy#01",
+      "Test_IsRaspbianPackage",
+      "TestLibraryScanners_Find/miss",
+      "TestLibraryScanners_Find/single_file"
+    ]
+  },
+  "quality_gates": {
+    "official_instance_bound": true,
+    "native_tests_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

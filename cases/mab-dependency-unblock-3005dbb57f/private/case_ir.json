@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-3005dbb57f",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_map_loop_versions_to_the_ret",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, project membership, chat, and real-time event scaffolding are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_loop_versions_to_the"
+        ]
+      },
+      "id": "01_classify_critical_path_map_loop_versions_",
+      "must_still_pass": [
+        "mab_dependency_unblock_3.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_dependency_unblock_3005dbb57f.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "required_behavior": "For event 'Audio-analysis specialist returns a schema containing detected key, Roman-numeral chord progression, confidence values, and fixed-size waveform bins for each loop version.', perform classify_critical_path for 'Map loop versions to the returned chord and waveform schema.' while retaining valid prior result 'Authentication, project membership, chat, and real-time event scaffolding are implemented.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.map_loop_versions_to_the"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_update_progression_and_visua",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Loop storage is available using a provisional analysis representation.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_loop_versions_to_the"
+        ]
+      },
+      "id": "02_resource_triage_update_progression",
+      "must_still_pass": [
+        "mab_dependency_unblock_3.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_dependency_unblock_3005dbb57f.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "required_behavior": "For event 'Audio-analysis specialist returns a schema containing detected key, Roman-numeral chord progression, confidence values, and fixed-size waveform bins for each loop version.', perform resource_triage for 'Update progression and visualization events sent to collaborators.' while retaining valid prior result 'Loop storage is available using a provisional analysis representation.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.map_loop_versions_to_the"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_add_mutations_where_transpos",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, project membership, chat, and real-time event scaffolding are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_loop_versions_to_the"
+        ]
+      },
+      "id": "03_verify_closure_add_mutations_wher",
+      "must_still_pass": [
+        "mab_dependency_unblock_3.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_3005dbb57f.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'Audio-analysis specialist returns a schema containing detected key, Roman-numeral chord progression, confidence values, and fixed-size waveform bins for each loop version.', perform verify_closure for 'Add mutations where transposition changes the detected key and bin count remains fixed.' while retaining valid prior result 'Authentication, project membership, chat, and real-time event scaffolding are implemented.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.map_loop_versions_to_the"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.map_loop_versions_to_the"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.update_progression_and_v"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.add_mutations_where_tran"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.verify_chat_and_concurre"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.map_loop_versions_to_the",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.update_progression_and_v",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.add_mutations_where_tran",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.verify_chat_and_concurre",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.map_loop_versions_to_the",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.update_progression_and_v",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.add_mutations_where_tran",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.verify_chat_and_concurre",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.map_loop_versions_to_the",
+      "req.02.update_progression_and_v",
+      "req.03.add_mutations_where_tran",
+      "req.04.verify_chat_and_concurre",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Audio-analysis specialist returns a schema containing detected key, Roman-numeral chord progression, confidence values, and fixed-size waveform bins for each loop version.",
+    "before_state": "The audio-analysis schema arrives after collaboration and visualization code have adopted incompatible placeholder shapes.",
+    "event_id": "evt.mab_dependency_unblock_3.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Map loop versions to the returned chord and waveform schema.",
+      "id": "req.01.map_loop_versions_to_the",
+      "observable_probe": "mab_dependency_unblock_3.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for map_loop_versions_to_the_returned_ch"
+    },
+    {
+      "description": "Update progression and visualization events sent to collaborators.",
+      "id": "req.02.update_progression_and_v",
+      "observable_probe": "mab_dependency_unblock_3.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for update_progression_and_visualization"
+    },
+    {
+      "description": "Add mutations where transposition changes the detected key and bin count remains fixed.",
+      "id": "req.03.add_mutations_where_tran",
+      "observable_probe": "mab_dependency_unblock_3.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_mutations_where_transposition_ch"
+    },
+    {
+      "description": "Verify chat and concurrent loop edits preserve version isolation.",
+      "id": "req.04.verify_chat_and_concurre",
+      "observable_probe": "mab_dependency_unblock_3.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for verify_chat_and_concurrent_loop_edit"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "osw-cross-app-artifact-c3093402e5",
+  "benchmark": "OSWorld",
+  "source_binding": {
+    "task_id": "778efd0a-153f-4842-9214-f05fc176b877",
+    "domain": "multi_apps",
+    "config_path": "upstream/osworld/evaluation_examples/examples/multi_apps/778efd0a-153f-4842-9214-f05fc176b877.json",
+    "config_sha256": "1596a61d3d73552bb0256cfd98406dae4a65b40e7c1a136309cbe98f3e034ea0",
+    "upstream_revision": "fc31a9049664292fcb35d6e501ee1dc839f2cf6d"
+  },
+  "native_runtime": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "vlc",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "event_protocol": {
+    "producer": "read-only worker on a snapshot clone executes the delegable extraction/reproduction subtask",
+    "payload": "raw extracted artifact, observation, or verifier output; never expected actions",
+    "release_predicate": "official setup completed and main VM state differs from reset snapshot",
+    "rollback": "main agent must repair the already-mutated VM state after delivery"
+  },
+  "state_attestation": {
+    "baseline_probe": "OSWorld reset snapshot id plus native evaluator target-state digest",
+    "checkpoint_probe": "harness-owned VM observation/artifact digest after an actual pyautogui action",
+    "change_required": true,
+    "journal_owner": "host harness outside the model-visible VM"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "postconfig": [
+      {
+        "type": "activate_window",
+        "parameters": {
+          "window_name": "Minimalist_Business_Slides.pptx - LibreOffice Impress",
+          "strict": true
+        }
+      },
+      {
+        "type": "sleep",
+        "parameters": {
+          "seconds": 0.5
+        }
+      },
+      {
+        "type": "execute",
+        "parameters": {
+          "command": [
+            "python",
+            "-c",
+            "import pyautogui; import time; pyautogui.hotkey('ctrl', 's'); time.sleep(0.5);"
+          ]
+        }
+      },
+      {
+        "type": "sleep",
+        "parameters": {
+          "seconds": 0.5
+        }
+      }
+    ],
+    "func": "compare_audios",
+    "result": {
+      "type": "audio_in_slide",
+      "ppt_file_path": "/home/user/Desktop/Minimalist_Business_Slides.pptx",
+      "slide_index": 0,
+      "dest": "planet.wav"
+    },
+    "expected": {
+      "type": "cloud_file",
+      "path": "https://huggingface.co/datasets/xlangai/ubuntu_osworld_file_cache/resolve/main/multi_apps/778efd0a-153f-4842-9214-f05fc176b877/planet.wav",
+      "dest": "gold_planet.wav"
+    }
+  },
+  "quality_gates": {
+    "official_config_bound": true,
+    "native_evaluator_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

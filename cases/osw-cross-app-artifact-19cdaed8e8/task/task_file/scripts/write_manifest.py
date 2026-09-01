@@ -1,0 +1,3 @@
+import hashlib,json,pathlib
+CASE_ID="osw-cross-app-artifact-19cdaed8e8";SOURCE_ID="osworld:multi_apps:415ef462-bed3-493a-ac36-ca8c6d23bf1b";o=pathlib.Path("/app/output_data");r=json.loads((o/"event_receipt.json").read_text());m={"schema_version":"async-rbench-closure-v1","case_id":CASE_ID,"source_task_id":SOURCE_ID,"event_receipt_sha256":r["receipt_sha256"],"event_consumed":True,"native_evidence_consumed":True,"final_revision_sha256":hashlib.sha256((o/"osworld_native_result.json").read_bytes()).hexdigest(),"source_semantics_reverified":True,"closure_complete":True};(o/"decision_manifest.json").write_text(json.dumps(m,indent=2,sort_keys=True)+"\n")
+

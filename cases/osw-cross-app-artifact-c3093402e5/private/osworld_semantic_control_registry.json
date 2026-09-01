@@ -1,0 +1,76 @@
+{
+  "controls": [
+    {
+      "id": "01_classify_scope_delta_verify_planet_wav_",
+      "stage": "event_intake",
+      "required_behavior": "classify_scope_delta",
+      "affected_nodes": [
+        "event_input",
+        "req.01.verify_planet_wav_decode",
+        "req.02.configure_planet_wav_as_",
+        "req.03.enable_continuation_or_l",
+        "req.04.save_the_presentation",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The target slideshow is open in Impress.'."
+    },
+    {
+      "id": "02_revise_affected_configure_planet_w",
+      "stage": "state_revision",
+      "required_behavior": "revise_affected",
+      "affected_nodes": [
+        "event_input",
+        "req.01.verify_planet_wav_decode",
+        "req.02.configure_planet_wav_as_",
+        "req.03.enable_continuation_or_l",
+        "req.04.save_the_presentation",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The slideshow sound or transition controls are prepared.'."
+    },
+    {
+      "id": "03_preserve_unaffected_enable_continuatio",
+      "stage": "plan_revision",
+      "required_behavior": "preserve_unaffected",
+      "affected_nodes": [
+        "event_input",
+        "req.01.verify_planet_wav_decode",
+        "req.02.configure_planet_wav_as_",
+        "req.03.enable_continuation_or_l",
+        "req.04.save_the_presentation",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The expected planet.wav destination is identified.'."
+    },
+    {
+      "id": "04_verify_closure_save_the_presentat",
+      "stage": "closure",
+      "required_behavior": "verify_closure",
+      "affected_nodes": [
+        "event_input",
+        "req.01.verify_planet_wav_decode",
+        "req.02.configure_planet_wav_as_",
+        "req.03.enable_continuation_or_l",
+        "req.04.save_the_presentation",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The target slideshow is open in Impress.'."
+    }
+  ]
+}

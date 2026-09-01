@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.capture_the_provisional_offe",
+      "req.02.replace_battery_condition_wi",
+      "req.03.revise_pair_count_price_and_",
+      "req.04.close_with_corrected_jewelry",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Product authority clarifies that the earrings have no battery and confirms one 925-sterling-silver pair at $12.59 with five-day delivery.",
+    "before_state": "A provisional 925 Sterling Silver Butterfly Dangle Chain Earrings bargain exists before sterling_product_scope_clarified.",
+    "event_id": "evt.mab-late-constraint-8fc2ddf86a.sterling_product_scope_clarified",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-8fc2ddf86a.sterling_product_scope_clarified",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

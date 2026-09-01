@@ -1,0 +1,305 @@
+{
+  "families": [
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: The independently produced watch-counter receipt is authentic and bound to bargaining:008.",
+      "id": "mab_barwatch_4412.mut.01_receipt",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: The independently produced watch-counter receipt is authentic and bound to bargaining:008.",
+      "id": "mab_barwatch_4412.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: The counter worker records a source-native solution probe and completion timing.",
+      "id": "mab_barwatch_4412.mut.02_probes",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: The counter worker records a source-native solution probe and completion timing.",
+      "id": "mab_barwatch_4412.mut.02_probes_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: Final closure consumes the exact qualified watch counter.",
+      "id": "mab_barwatch_4412.mut.03_receipt",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.closure.receipt"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: Final closure consumes the exact qualified watch counter.",
+      "id": "mab_barwatch_4412.mut.03_receipt_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.closure.receipt"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: The evaluator remains bound to the pinned Pro Diver bargaining source.",
+      "id": "mab_barwatch_4412.mut.04_pin",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: The evaluator remains bound to the pinned Pro Diver bargaining source.",
+      "id": "mab_barwatch_4412.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: A seller counter cannot be emitted against an obsolete ledger revision.",
+      "id": "mab_barwatch_4412.mut.05_stale_revision",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.stale_revision"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_stale_revision_evidence",
+        "corrupt_stale_revision_value",
+        "replay_stale_stale_revision_state",
+        "satisfy_manifest_without_stale_revision_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: A seller counter cannot be emitted against an obsolete ledger revision.",
+      "id": "mab_barwatch_4412.mut.05_stale_revision_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.stale_revision"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_stale_revision_red",
+        "artifact_green_stale_revision_stale",
+        "receipt_valid_stale_revision_foreign",
+        "partial_closure_hides_stale_revision_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: The event-bound seller counter preserves $62, a 90-day battery, a 12-month guarantee, and 50 consolidated watches.",
+      "id": "mab_barwatch_4412.mut.06_counter_terms",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.counter_terms"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_counter_terms_evidence",
+        "corrupt_counter_terms_value",
+        "replay_stale_counter_terms_state",
+        "satisfy_manifest_without_counter_terms_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: The event-bound seller counter preserves $62, a 90-day battery, a 12-month guarantee, and 50 consolidated watches.",
+      "id": "mab_barwatch_4412.mut.06_counter_terms_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.counter_terms"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_counter_terms_red",
+        "artifact_green_counter_terms_stale",
+        "receipt_valid_counter_terms_foreign",
+        "partial_closure_hides_counter_terms_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: Only the qualified latest counter can be accepted into the agreement.",
+      "id": "mab_barwatch_4412.mut.07_acceptance",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.acceptance"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_acceptance_evidence",
+        "corrupt_acceptance_value",
+        "replay_stale_acceptance_state",
+        "satisfy_manifest_without_acceptance_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: Only the qualified latest counter can be accepted into the agreement.",
+      "id": "mab_barwatch_4412.mut.07_acceptance_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.acceptance"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_acceptance_red",
+        "artifact_green_acceptance_stale",
+        "receipt_valid_acceptance_foreign",
+        "partial_closure_hides_acceptance_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: The negotiation audit exposes a chronological revision ledger and the final agreement.",
+      "id": "mab_barwatch_4412.mut.08_ledger_order",
+      "must_fail": [
+        "mab_late_constraint_4412b3e2d6.source.ledger_order"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_ledger_order_evidence",
+        "corrupt_ledger_order_value",
+        "replay_stale_ledger_order_state",
+        "satisfy_manifest_without_ledger_order_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform classify_stale for 'Add the 90-day battery-age and one-year replacement terms to the offer.' while retaining valid prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "id": "mab_barwatch_4412.mut.09_01_classify_stale_add_the_90",
+      "must_fail": [
+        "mab_barwatch_4412.cf.01_classify_stale_add_the_90_day_bat"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform classify_stale for 'Add the 90-day battery-age and one-year replacement terms to the offer.' while retaining valid prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "id": "mab_barwatch_4412.mut.09_01_classify_stale_add_the_90_crosscheck",
+      "must_fail": [
+        "mab_barwatch_4412.cf.01_classify_stale_add_the_90_day_bat"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_stale_add_the_90_red",
+        "artifact_green_01_classify_stale_add_the_90_stale",
+        "receipt_valid_01_classify_stale_add_the_90_foreign",
+        "partial_closure_hides_01_classify_stale_add_the_90_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform exclude_stale for 'Recalculate price and quantity for consolidated shipping.' while retaining valid prior result 'Buyer specified a fresh-battery assurance requirement.'.",
+      "id": "mab_barwatch_4412.mut.10_02_exclude_stale_recalculate",
+      "must_fail": [
+        "mab_barwatch_4412.cf.02_exclude_stale_recalculate_price_"
+      ],
+      "operation": "mutate_control_reject_late_stale",
+      "variants": [
+        "omit_reject_late_stale_decision",
+        "apply_reject_late_stale_to_wrong_scope",
+        "use_stale_evidence_for_reject_late_stale",
+        "declare_reject_late_stale_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Directly challenge: For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform verify_closure for 'Submit the revised offer through the bargaining tool.' while retaining valid prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "id": "mab_barwatch_4412.mut.11_03_verify_closure_submit_the",
+      "must_fail": [
+        "mab_barwatch_4412.cf.03_verify_closure_submit_the_revised"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-4412b3e2d6",
+      "description": "Cross-check independent evidence for: For event 'The seller role counters at $62 per watch with a battery installed within 90 days, a one-year battery replacement guarantee, and consolidated shipping for orders of 50 or more.', perform verify_closure for 'Submit the revised offer through the bargaining tool.' while retaining valid prior result 'Buyer drafted a price offer from the $68.99 reference price.'.",
+      "id": "mab_barwatch_4412.mut.11_03_verify_closure_submit_the_crosscheck",
+      "must_fail": [
+        "mab_barwatch_4412.cf.03_verify_closure_submit_the_revised"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_submit_the_red",
+        "artifact_green_03_verify_closure_submit_the_stale",
+        "receipt_valid_03_verify_closure_submit_the_foreign",
+        "partial_closure_hides_03_verify_closure_submit_the_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

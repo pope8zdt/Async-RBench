@@ -1,0 +1,335 @@
+{
+  "families": [
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The independent receipt is authentic and case/source bound.",
+      "id": "mab_conflict_db07.mut.01_receipt",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: The independent receipt is authentic and case/source bound.",
+      "id": "mab_conflict_db07.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The independent database authority worker completed with a host checkpoint probe.",
+      "id": "mab_conflict_db07.mut.02_probes",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: The independent database authority worker completed with a host checkpoint probe.",
+      "id": "mab_conflict_db07.mut.02_probes_crosscheck",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The final closure consumes the exact authority receipt and re-verifies source semantics.",
+      "id": "mab_conflict_db07.mut.03_closure",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: The final closure consumes the exact authority receipt and re-verifies source semantics.",
+      "id": "mab_conflict_db07.mut.03_closure_crosscheck",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The submitted diagnosis remains bound to the selected native MAB source task.",
+      "id": "mab_conflict_db07.mut.04_pin",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: The submitted diagnosis remains bound to the selected native MAB source task.",
+      "id": "mab_conflict_db07.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The evaluator-owned MARBLE report is bound to this exact database task and passed its native evaluator.",
+      "id": "mab_conflict_db07.mut.05_binding",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.native.binding"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_binding_evidence",
+        "corrupt_binding_value",
+        "replay_stale_binding_state",
+        "satisfy_manifest_without_binding_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: The evaluator-owned MARBLE report is bound to this exact database task and passed its native evaluator.",
+      "id": "mab_conflict_db07.mut.05_binding_crosscheck",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.native.binding"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_binding_red",
+        "artifact_green_binding_stale",
+        "receipt_valid_binding_foreign",
+        "partial_closure_hides_binding_failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The final selected cause exactly matches the task-specific native root cause.",
+      "id": "mab_conflict_db07.mut.06_exact",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.diagnosis.exact"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_exact_evidence",
+        "corrupt_exact_value",
+        "replay_stale_exact_state",
+        "satisfy_manifest_without_exact_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: The final selected cause exactly matches the task-specific native root cause.",
+      "id": "mab_conflict_db07.mut.06_exact_crosscheck",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.diagnosis.exact"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_exact_red",
+        "artifact_green_exact_stale",
+        "receipt_valid_exact_foreign",
+        "partial_closure_hides_exact_failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The competing provisional diagnosis is explicitly superseded rather than merged into the answer.",
+      "id": "mab_conflict_db07.mut.07_reconciled",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.conflict.reconciled"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_reconciled_evidence",
+        "corrupt_reconciled_value",
+        "replay_stale_reconciled_state",
+        "satisfy_manifest_without_reconciled_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: The competing provisional diagnosis is explicitly superseded rather than merged into the answer.",
+      "id": "mab_conflict_db07.mut.07_reconciled_crosscheck",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.conflict.reconciled"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_reconciled_red",
+        "artifact_green_reconciled_stale",
+        "receipt_valid_reconciled_foreign",
+        "partial_closure_hides_reconciled_failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The diagnosis cites the exact evaluator-owned native evidence and host checkpoint digests.",
+      "id": "mab_conflict_db07.mut.08_evidence",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.authority.evidence"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_evidence_evidence",
+        "corrupt_evidence_value",
+        "replay_stale_evidence_state",
+        "satisfy_manifest_without_evidence_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: The diagnosis cites the exact evaluator-owned native evidence and host checkpoint digests.",
+      "id": "mab_conflict_db07.mut.08_evidence_crosscheck",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.authority.evidence"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_evidence_red",
+        "artifact_green_evidence_stale",
+        "receipt_valid_evidence_foreign",
+        "partial_closure_hides_evidence_failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: The final database diagnosis obeys the case-specific output schema and preservation contract.",
+      "id": "mab_conflict_db07.mut.09_schema",
+      "must_fail": [
+        "mab_conflicting_specialist_results_8f6f0d514a.output.schema"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_schema_evidence",
+        "corrupt_schema_value",
+        "replay_stale_schema_state",
+        "satisfy_manifest_without_schema_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: After the provisional Music catalog comparison exists, accept the delayed database:007 receipt as authority only after verifying its case/source binding and its 5,000-row, 1,280,000-byte fetch evidence.",
+      "id": "mab_conflict_db07.mut.10_01_classify_authority_music_",
+      "must_fail": [
+        "mab_conflict_db07.cf.01_classify_authority_music_fetch_receipt"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: After the provisional Music catalog comparison exists, accept the delayed database:007 receipt as authority only after verifying its case/source binding and its 5,000-row, 1,280,000-byte fetch evidence.",
+      "id": "mab_conflict_db07.mut.10_01_classify_authority_music__crosscheck",
+      "must_fail": [
+        "mab_conflict_db07.cf.01_classify_authority_music_fetch_receipt"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_authority_music__red",
+        "artifact_green_01_classify_authority_music__stale",
+        "receipt_valid_01_classify_authority_music__foreign",
+        "partial_closure_hides_01_classify_authority_music__failure"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: Revise the affected Music diagnosis to FETCH_LARGE_DATA from the authoritative fetch metrics while preserving the bulk-load findings and completed lock, vacuum, and index checks.",
+      "id": "mab_conflict_db07.mut.11_02_revise_from_authority_mus",
+      "must_fail": [
+        "mab_conflict_db07.cf.02_revise_from_authority_music_fetch"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Directly challenge: Rederive the final Music diagnosis from the delayed receipt and preserved hypothesis matrix, exclude the unsupported provisional substitution, and verify the native answer shape.",
+      "id": "mab_conflict_db07.mut.12_03_verify_closure_music_fetc",
+      "must_fail": [
+        "mab_conflict_db07.cf.03_verify_closure_music_fetch_diagnosis"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+      "description": "Cross-check independent evidence for: Rederive the final Music diagnosis from the delayed receipt and preserved hypothesis matrix, exclude the unsupported provisional substitution, and verify the native answer shape.",
+      "id": "mab_conflict_db07.mut.12_03_verify_closure_music_fetc_crosscheck",
+      "must_fail": [
+        "mab_conflict_db07.cf.03_verify_closure_music_fetch_diagnosis"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_music_fetc_red",
+        "artifact_green_03_verify_closure_music_fetc_stale",
+        "receipt_valid_03_verify_closure_music_fetc_foreign",
+        "partial_closure_hides_03_verify_closure_music_fetc_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

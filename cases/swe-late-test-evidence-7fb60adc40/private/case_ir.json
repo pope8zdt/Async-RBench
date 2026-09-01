@@ -1,0 +1,227 @@
+{
+  "case_id": "swe-late-test-evidence-7fb60adc40",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_use_identity_based_sentinel_",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `num_mock_patch_args` and reproduce ndarray-valued `patch(new=...)` collection.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_identity_based_senti"
+        ]
+      },
+      "id": "01_classify_scope_delta_use_identity_based",
+      "must_still_pass": [
+        "swe_late_test_evidence_7.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_test_evidence_7fb60adc40.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "For event 'An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.', perform classify_scope_delta for 'Use identity-based sentinel detection compatible with the reported implementations.' while retaining valid prior result 'Locate `num_mock_patch_args` and reproduce ndarray-valued `patch(new=...)` collection.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.use_identity_based_senti"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_assert_collection_succeeds_a",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comparison-safe sentinel check.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_identity_based_senti"
+        ]
+      },
+      "id": "02_revise_affected_assert_collection_",
+      "must_still_pass": [
+        "swe_late_test_evidence_7.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_7fb60adc40.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.', perform revise_affected for 'Assert collection succeeds and patched-argument counting is correct for ndarray `new`.' while retaining valid prior result 'Draft a comparison-safe sentinel check.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.use_identity_based_senti"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_verify_default_patches_still",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `num_mock_patch_args` and reproduce ndarray-valued `patch(new=...)` collection.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_identity_based_senti"
+        ]
+      },
+      "id": "03_preserve_unaffected_verify_default_pat",
+      "must_still_pass": [
+        "swe_late_test_evidence_7.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_7fb60adc40.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "For event 'An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.', perform preserve_unaffected for 'Verify default patches still inject arguments and run compatibility tests.' while retaining valid prior result 'Locate `num_mock_patch_args` and reproduce ndarray-valued `patch(new=...)` collection.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.use_identity_based_senti"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_use_identity_based_sentinel_",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comparison-safe sentinel check.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_identity_based_senti"
+        ]
+      },
+      "id": "04_verify_closure_use_identity_based",
+      "must_still_pass": [
+        "swe_late_test_evidence_7.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_7fb60adc40.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "For event 'An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.', perform verify_closure for 'Use identity-based sentinel detection compatible with the reported implementations.' while retaining valid prior result 'Draft a comparison-safe sentinel check.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.use_identity_based_senti"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.use_identity_based_senti"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.assert_collection_succee"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_default_patches_s"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.use_identity_based_senti",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.assert_collection_succee",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_default_patches_s",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.use_identity_based_senti",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.assert_collection_succee",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_default_patches_s",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.use_identity_based_senti",
+      "req.02.assert_collection_succee",
+      "req.03.verify_default_patches_s",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An independent reproduction identifies the exact ndarray comparison and reports `DEFAULT` sentinel identities across supported mock implementations.",
+    "before_state": "Return the sentinel matrix after a generic comparison replacement has been proposed.",
+    "event_id": "evt.swe_late_test_evidence_7.task_scope_or_dependency",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Use identity-based sentinel detection compatible with the reported implementations.",
+      "id": "req.01.use_identity_based_senti",
+      "observable_probe": "swe_late_test_evidence_7.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for use_identity_based_sentinel_detectio"
+    },
+    {
+      "description": "Assert collection succeeds and patched-argument counting is correct for ndarray `new`.",
+      "id": "req.02.assert_collection_succee",
+      "observable_probe": "swe_late_test_evidence_7.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for assert_collection_succeeds_and_patch"
+    },
+    {
+      "description": "Verify default patches still inject arguments and run compatibility tests.",
+      "id": "req.03.verify_default_patches_s",
+      "observable_probe": "swe_late_test_evidence_7.sem.03.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for verify_default_patches_still_inject_"
+    }
+  ]
+}

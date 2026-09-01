@@ -1,0 +1,265 @@
+{
+  "case_id": "osw-state-reconciliation-6f2dfbe1f4",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_completeness_green_background_result",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_green_6f2d.cf.01_classify_completeness_green_background_result",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_state_reconciliation_6f2dfbe1f4.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness for green_background_result; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.canvas"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_green_background_result",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_green_6f2d.cf.02_revise_affected_green_background_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_6f2dfbe1f4.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for green_background_result; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.green_rgb"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_green_background_result",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_green_6f2d.cf.03_preserve_unaffected_green_background_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_6f2dfbe1f4.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for green_background_result; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.object_preserved"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_green_background_result",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_green_6f2d.cf.04_verify_closure_green_background_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_state_reconciliation_6f2dfbe1f4.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for green_background_result; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.background_only"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.canvas"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.canvas",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.green_rgb"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.green_rgb",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.object_preserved"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.object_preserved",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.background_only"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.background_only",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.green_evaluator"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.green_evaluator",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.canvas",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.green_rgb",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.object_preserved",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.background_only",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.green_evaluator",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.canvas",
+      "req.02.green_rgb",
+      "req.03.object_preserved",
+      "req.04.background_only",
+      "req.05.green_evaluator",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Only the background is green, the object layer is unchanged, green_background_with_object.png is exported, and check_green_background passes.",
+    "before_state": "The 800×800 XCF contains a white background and an object layer; the fill and object-preservation checks are still independent partial results.",
+    "event_id": "evt.osw_state_reconciliation_6f2dfbe1f4.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The output retains the 800×800 source canvas.",
+      "id": "req.01.canvas",
+      "observable_probe": "osw_state_reconciliation_6f2dfbe1f4.osworld.canvas",
+      "public_evidence": "source instruction and native evaluator for canvas"
+    },
+    {
+      "description": "The target background is exact RGB green.",
+      "id": "req.02.green_rgb",
+      "observable_probe": "osw_state_reconciliation_6f2dfbe1f4.osworld.green_rgb",
+      "public_evidence": "source instruction and native evaluator for green_rgb"
+    },
+    {
+      "description": "The object layer is unchanged.",
+      "id": "req.03.object_preserved",
+      "observable_probe": "osw_state_reconciliation_6f2dfbe1f4.osworld.object_preserved",
+      "public_evidence": "source instruction and native evaluator for object_preserved"
+    },
+    {
+      "description": "Only the background is modified.",
+      "id": "req.04.background_only",
+      "observable_probe": "osw_state_reconciliation_6f2dfbe1f4.osworld.background_only",
+      "public_evidence": "source instruction and native evaluator for background_only"
+    },
+    {
+      "description": "The official green-background check passes.",
+      "id": "req.05.green_evaluator",
+      "observable_probe": "osw_state_reconciliation_6f2dfbe1f4.osworld.green_evaluator",
+      "public_evidence": "source instruction and native evaluator for green_evaluator"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "families": [
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "tbn_late_test_e_63515a.mut.01_receipt",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "tbn_late_test_e_63515a.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: The worker completed successfully and returned observable task-specific probes.",
+      "id": "tbn_late_test_e_63515a.mut.02_probes",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The worker completed successfully and returned observable task-specific probes.",
+      "id": "tbn_late_test_e_63515a.mut.02_probes_crosscheck",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "tbn_late_test_e_63515a.mut.03_closure",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "tbn_late_test_e_63515a.mut.03_closure_crosscheck",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: The task remains bound to its pinned source revision.",
+      "id": "tbn_late_test_e_63515a.mut.04_pin",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: The task remains bound to its pinned source revision.",
+      "id": "tbn_late_test_e_63515a.mut.04_pin_crosscheck",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_nginx_installed passes.",
+      "id": "tbn_late_test_e_63515a.mut.05_test_nginx_installed",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_installed"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_nginx_installed_evidence",
+        "corrupt_test_nginx_installed_value",
+        "replay_stale_test_nginx_installed_state",
+        "satisfy_manifest_without_test_nginx_installed_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_nginx_running passes.",
+      "id": "tbn_late_test_e_63515a.mut.06_test_nginx_running",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_running"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_nginx_running_evidence",
+        "corrupt_test_nginx_running_value",
+        "replay_stale_test_nginx_running_state",
+        "satisfy_manifest_without_test_nginx_running_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_index_page_content passes.",
+      "id": "tbn_late_test_e_63515a.mut.07_test_index_page_content",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.upstream.test_index_page_content"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_index_page_content_evidence",
+        "corrupt_test_index_page_content_value",
+        "replay_stale_test_index_page_content_state",
+        "satisfy_manifest_without_test_index_page_content_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_custom_404_page passes.",
+      "id": "tbn_late_test_e_63515a.mut.08_test_custom_404_page",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.upstream.test_custom_404_page"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_custom_404_page_evidence",
+        "corrupt_test_custom_404_page_value",
+        "replay_stale_test_custom_404_page_state",
+        "satisfy_manifest_without_test_custom_404_page_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_nginx_config_syntax passes.",
+      "id": "tbn_late_test_e_63515a.mut.09_test_nginx_config_syntax",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_config_syntax"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_nginx_config_syntax_evidence",
+        "corrupt_test_nginx_config_syntax_value",
+        "replay_stale_test_nginx_config_syntax_state",
+        "satisfy_manifest_without_test_nginx_config_syntax_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_nginx_config_settings passes.",
+      "id": "tbn_late_test_e_63515a.mut.10_test_nginx_config_settings",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_config_settings"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_nginx_config_settings_evidence",
+        "corrupt_test_nginx_config_settings_value",
+        "replay_stale_test_nginx_config_settings_state",
+        "satisfy_manifest_without_test_nginx_config_settings_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_log_file_creation passes.",
+      "id": "tbn_late_test_e_63515a.mut.11_test_log_file_creation",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.upstream.test_log_file_creation"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_log_file_creation_evidence",
+        "corrupt_test_log_file_creation_value",
+        "replay_stale_test_log_file_creation_state",
+        "satisfy_manifest_without_test_log_file_creation_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: Locked upstream semantic assertion test_log_file_format passes.",
+      "id": "tbn_late_test_e_63515a.mut.12_test_log_file_format",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.upstream.test_log_file_format"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_test_log_file_format_evidence",
+        "corrupt_test_log_file_format_value",
+        "replay_stale_test_log_file_format_state",
+        "satisfy_manifest_without_test_log_file_format_behavior"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: For event 'late_authoritative_result', perform classify_scope_delta for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "id": "tbn_late_test_e_63515a.mut.13_01_classify_scope_delta",
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.01_classify_scope_delta"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: For event 'late_authoritative_result', perform classify_scope_delta for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "id": "tbn_late_test_e_63515a.mut.13_01_classify_scope_delta_crosscheck",
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.01_classify_scope_delta"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_scope_delta_red",
+        "artifact_green_01_classify_scope_delta_stale",
+        "receipt_valid_01_classify_scope_delta_foreign",
+        "partial_closure_hides_01_classify_scope_delta_failure"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: For event 'late_authoritative_result', perform revise_affected for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "id": "tbn_late_test_e_63515a.mut.14_02_revise_affected",
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.02_revise_affected"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: For event 'late_authoritative_result', perform preserve_unaffected for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "id": "tbn_late_test_e_63515a.mut.15_03_preserve_unaffected",
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.03_preserve_unaffected"
+      ],
+      "operation": "mutate_control_selective_replan",
+      "variants": [
+        "omit_selective_replan_decision",
+        "apply_selective_replan_to_wrong_scope",
+        "use_stale_evidence_for_selective_replan",
+        "declare_selective_replan_without_observation"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Directly challenge the independently scored requirement: For event 'late_authoritative_result', perform verify_closure for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "id": "tbn_late_test_e_63515a.mut.16_04_verify_closure",
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.04_verify_closure"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "tbn-late-test-evidence-30aa2ad8de",
+      "description": "Create a cross-artifact contradiction for the critical requirement while leaving a superficial success signal: For event 'late_authoritative_result', perform verify_closure for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "id": "tbn_late_test_e_63515a.mut.16_04_verify_closure_crosscheck",
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.04_verify_closure"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_04_verify_closure_red",
+        "artifact_green_04_verify_closure_stale",
+        "receipt_valid_04_verify_closure_foreign",
+        "partial_closure_hides_04_verify_closure_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

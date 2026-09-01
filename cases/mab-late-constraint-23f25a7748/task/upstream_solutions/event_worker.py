@@ -1,0 +1,10 @@
+from __future__ import annotations
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-late-constraint-23f25a7748'; SOURCE_ID='bargaining:020'; EVENT='seller_warranty_tiers_arrived'; EVENT_THEME='late_or_out_of_order_superseded_result'; MEANING='The late seller warranty authority supersedes an earlier buyer draft while transcript, rejected offers, buyer priorities, and the seller margin floor remain auditable.'; AUTHORITY={'contract': 'merv13_warranty_tiers_v2', 'product': '16x25x1 MERV 13 Air Filters', 'tiers': [{'price': 45.0, 'warranty_days': 90, 'replacement': 'defect_only', 'support': 'standard'}, {'price': 48.0, 'warranty_days': 365, 'replacement': 'one_year_replacement', 'support': 'dedicated'}], 'seller_margin_floor': 43.34}
+def digest(path):
+ p=pathlib.Path(path); return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
+def main():
+ parser=argparse.ArgumentParser(); parser.add_argument('--workspace',default='/app'); parser.add_argument('--output',default='/app/output_data/event_receipt.json'); args=parser.parse_args(); started=time.time(); probes={p:digest(p) for p in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']}
+ payload={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':EVENT_THEME,'meaning':MEANING,'authority':AUTHORITY,'worker_started_at':started,'worker_finished_at':time.time(),'worker_exit_code':0,'worker_output':'task-specific evaluator authority completed','workspace_revision_before':probes['/app/output_data/provisional_checkpoint.json'],'workspace_revision_after':probes['/app/output_data/solution.py'],'probes':probes}
+ payload['receipt_sha256']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); out=pathlib.Path(args.output); out.parent.mkdir(parents=True,exist_ok=True); out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n'); return 0
+if __name__=='__main__': raise SystemExit(main())

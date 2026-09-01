@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-32f347d363",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_scope_delta",
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_32f347d363.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: Product authority removes the irrelevant battery condition and confirms a two-pack of adjustable bell collars, a 120-pack minimum, $7.95 price, and ten-day lead time.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "collar_feature_scope_clarified"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_32f347d363.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: Product authority removes the irrelevant battery condition and confirms a two-pack of adjustable bell collars, a 120-pack minimum, $7.95 price, and ten-day lead time.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "collar_feature_scope_clarified"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_32f347d363.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: Product authority removes the irrelevant battery condition and confirms a two-pack of adjustable bell collars, a 120-pack minimum, $7.95 price, and ten-day lead time.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "collar_feature_scope_clarified"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_32f347d363.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: Product authority removes the irrelevant battery condition and confirms a two-pack of adjustable bell collars, a 120-pack minimum, $7.95 price, and ten-day lead time.",
+      "stage_tag": "closure",
+      "task_requirement_id": "collar_feature_scope_clarified"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.record_the_provisional_order"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.classify_the_two_pack_adjust"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.add_minimum_batch_price_and_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.close_with_corrected_collar_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.record_the_provisional_order",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.classify_the_two_pack_adjust",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.add_minimum_batch_price_and_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_with_corrected_collar_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.record_the_provisional_order",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.classify_the_two_pack_adjust",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.add_minimum_batch_price_and_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_with_corrected_collar_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_provisional_order",
+      "req.02.classify_the_two_pack_adjust",
+      "req.03.add_minimum_batch_price_and_",
+      "req.04.close_with_corrected_collar_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Product authority removes the irrelevant battery condition and confirms a two-pack of adjustable bell collars, a 120-pack minimum, $7.95 price, and ten-day lead time.",
+    "before_state": "A provisional Two-Pack Halloween Cat Bowtie Collars with Bells bargain exists before collar_feature_scope_clarified.",
+    "event_id": "evt.mab-late-constraint-32f347d363.collar_feature_scope_clarified",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Record the provisional order and misplaced battery assumption.",
+      "id": "req.01.record_the_provisional_order",
+      "observable_probe": "mab_late_constraint_32f347d363.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Classify the two-pack, adjustable, bell-included product scope.",
+      "id": "req.02.classify_the_two_pack_adjust",
+      "observable_probe": "mab_late_constraint_32f347d363.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Add minimum batch, price, and lead-time dependencies.",
+      "id": "req.03.add_minimum_batch_price_and_",
+      "observable_probe": "mab_late_constraint_32f347d363.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close with corrected collar features and preserved scalability rationale.",
+      "id": "req.04.close_with_corrected_collar_",
+      "observable_probe": "mab_late_constraint_32f347d363.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

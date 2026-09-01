@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-7557a58e80",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_authority",
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_7557a58e80.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: Collectibles control confirms a sealed Factory Fresh 1/5 Lucid Air at $5.25, three-day delivery, 30-day replacement, and a 12-month supply commitment.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "collectible_condition_delivery_confirmed"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_7557a58e80.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: Collectibles control confirms a sealed Factory Fresh 1/5 Lucid Air at $5.25, three-day delivery, 30-day replacement, and a 12-month supply commitment.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "collectible_condition_delivery_confirmed"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_7557a58e80.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: Collectibles control confirms a sealed Factory Fresh 1/5 Lucid Air at $5.25, three-day delivery, 30-day replacement, and a 12-month supply commitment.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "collectible_condition_delivery_confirmed"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_7557a58e80.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: Collectibles control confirms a sealed Factory Fresh 1/5 Lucid Air at $5.25, three-day delivery, 30-day replacement, and a 12-month supply commitment.",
+      "stage_tag": "closure",
+      "task_requirement_id": "collectible_condition_delivery_confirmed"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.01.record_the_provisional_price"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.02.authenticate_the_factory_fre"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.03.revise_price_delivery_replac"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.04.close_with_the_verified_coll"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.record_the_provisional_price",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.authenticate_the_factory_fre",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_price_delivery_replac",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_with_the_verified_coll",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.record_the_provisional_price",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.authenticate_the_factory_fre",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_price_delivery_replac",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_with_the_verified_coll",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_provisional_price",
+      "req.02.authenticate_the_factory_fre",
+      "req.03.revise_price_delivery_replac",
+      "req.04.close_with_the_verified_coll",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Collectibles control confirms a sealed Factory Fresh 1/5 Lucid Air at $5.25, three-day delivery, 30-day replacement, and a 12-month supply commitment.",
+    "before_state": "A provisional Hot Wheels Lucid Air Factory Fresh Collectible bargain exists before collectible_condition_delivery_confirmed.",
+    "event_id": "evt.mab-late-constraint-7557a58e80.collectible_condition_delivery_confirmed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Record the provisional price while card condition is pending.",
+      "id": "req.01.record_the_provisional_price",
+      "observable_probe": "mab_late_constraint_7557a58e80.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Authenticate the Factory Fresh series and sealed card.",
+      "id": "req.02.authenticate_the_factory_fre",
+      "observable_probe": "mab_late_constraint_7557a58e80.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Revise price, delivery, replacement, and contract terms.",
+      "id": "req.03.revise_price_delivery_replac",
+      "observable_probe": "mab_late_constraint_7557a58e80.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close with the verified collectible package and preserved item identity.",
+      "id": "req.04.close_with_the_verified_coll",
+      "observable_probe": "mab_late_constraint_7557a58e80.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

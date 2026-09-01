@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_state_reconciliation_8fec3dd813.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_state_reconciliation_8fec3dd813.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_state_reconciliation_8fec3dd813.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_state_reconciliation_8fec3dd813.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:48c46dc7-fe04-4505-ade7-723cba1aa6f6 and check_list+is_expected_tabs.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The OSWorld project is open in Nautilus and GNOME Terminal at the required directory while Chrome has https://github.com and https://docs.python.org/3/ open.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The audited project archive and member set are preserved.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.project_archive",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_archive",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Nautilus is open on OSWorld.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.nautilus_window",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_nautilus_window",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "GNOME Terminal is rooted at the exact OSWorld project directory.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.terminal_window",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_terminal_window",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Chrome has exactly the required GitHub and Python documentation URLs.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.chrome_tabs",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_chrome_tabs",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

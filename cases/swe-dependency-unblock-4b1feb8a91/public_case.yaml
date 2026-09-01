@@ -1,0 +1,133 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/testbed"
+    }
+  ],
+  "case_id": "swe-dependency-unblock-4b1feb8a91",
+  "format_version": 2,
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "resolve_requirement_01"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_01"
+      ],
+      "id": "resolve_requirement_02"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_02"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_tasks": [
+    {
+      "benchmark": "swe-bench",
+      "id": "sympy__sympy-24213",
+      "source_sha256": "070dcd3e530c91549a7b8c94bfe90f67457151c961adca4a021803152592b469",
+      "upstream_path": "private/source_task.yaml"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench source-native rebuild: sympy__sympy-24213",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 1: Replace structural comparison with the identified equivalence predicate. Review together: Verify acceleration*time and velocity add successfully.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Perform a bounded, read-only review of this source-task requirement: Replace structural comparison with the identified equivalence predicate. Review together: Verify acceleration*time and velocity add successfully. Do not implement the main task, run a full repository build, or broaden the investigation beyond this requirement. Inspect the current shared workspace state, compute revision_sha256 as the SHA-256 of `git diff --binary HEAD`, and write exactly one JSON object to /app/output_data/workstreams/requirement_worker_01.json with string fields `finding` and `revision_sha256`. Then complete with payload.evidence containing `report_path`, the same `revision_sha256`, and the same concise `finding`, and payload.files equal to [`/app/output_data/workstreams/requirement_worker_01.json`]."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 2: Verify incompatible dimensions still raise ValueError. Review together: Run the supplied multi-quantity cases and units tests.",
+      "id": "requirement_worker_02",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Perform a bounded, read-only review of this source-task requirement: Verify incompatible dimensions still raise ValueError. Review together: Run the supplied multi-quantity cases and units tests. Do not implement the main task, run a full repository build, or broaden the investigation beyond this requirement. Inspect the current shared workspace state, compute revision_sha256 as the SHA-256 of `git diff --binary HEAD`, and write exactly one JSON object to /app/output_data/workstreams/requirement_worker_02.json with string fields `finding` and `revision_sha256`. Then complete with payload.evidence containing `report_path`, the same `revision_sha256`, and the same concise `finding`, and payload.files equal to [`/app/output_data/workstreams/requirement_worker_02.json`]."
+    }
+  ]
+}

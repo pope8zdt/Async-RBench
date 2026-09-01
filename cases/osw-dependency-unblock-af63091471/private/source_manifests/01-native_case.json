@@ -1,0 +1,101 @@
+{
+  "benchmark": "OSWorld",
+  "case_id": "osw-dependency-unblock-af63091471",
+  "event_protocol": {
+    "payload": "raw extracted artifact, observation, or verifier output; never expected actions",
+    "producer": "read-only worker on a snapshot clone executes the delegable extraction/reproduction subtask",
+    "release_predicate": "official setup completed and main VM state differs from reset snapshot",
+    "rollback": "main agent must repair the already-mutated VM state after delivery"
+  },
+  "modes": {
+    "async": {
+      "checkpoint_is_stateful": true,
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "prompt_privacy": {
+      "candidate_action_catalogue_exposed": false,
+      "closure_hash_exposed": false,
+      "expected_action_ids_exposed": false,
+      "stale_action_ids_exposed": false
+    },
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "expected": {
+      "rules": {
+        "max": 99999,
+        "min": 16,
+        "type": "range"
+      },
+      "type": "rule"
+    },
+    "func": "check_font_size",
+    "postconfig": [
+      {
+        "parameters": {
+          "command": [
+            "pkill",
+            "chrome"
+          ]
+        },
+        "type": "launch"
+      },
+      {
+        "parameters": {
+          "command": [
+            "google-chrome",
+            "--remote-debugging-port=1337"
+          ]
+        },
+        "type": "launch"
+      },
+      {
+        "parameters": {
+          "seconds": 3
+        },
+        "type": "sleep"
+      }
+    ],
+    "result": {
+      "type": "chrome_font_size"
+    }
+  },
+  "native_runtime": {
+    "adapter": "osworld.DesktopEnv",
+    "final_state": "persisted VM state",
+    "provider": "vmware_or_docker",
+    "snapshot": "chrome"
+  },
+  "quality_gates": {
+    "answer_catalogue_removed": true,
+    "native_evaluator_bound": true,
+    "official_config_bound": true,
+    "runtime_executed": false
+  },
+  "schema_version": "async-rbench-source-native-case-v4",
+  "source_binding": {
+    "config_path": "upstream/osworld/evaluation_examples/examples/chrome/af630914-714e-4a24-a7bb-f9af687d3b91.json",
+    "config_sha256": "d00f04f4c908baf738bf8c337fdb692b1dc6b6dbd1cbe7bd2402b6ec4c2ccaf6",
+    "domain": "chrome",
+    "task_id": "af630914-714e-4a24-a7bb-f9af687d3b91",
+    "upstream_revision": "fc31a9049664292fcb35d6e501ee1dc839f2cf6d"
+  },
+  "state_attestation": {
+    "baseline_probe": "OSWorld reset snapshot id plus native evaluator target-state digest",
+    "change_required": true,
+    "checkpoint_probe": "harness-owned VM observation/artifact digest after an actual pyautogui action",
+    "journal_owner": "host harness outside the model-visible VM"
+  }
+}

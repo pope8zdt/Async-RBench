@@ -1,0 +1,93 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline assembly of native result and closure, without invoking oracle.sh or the canonical upstream script.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_state_reconciliation_8fec3dd813.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_state_reconciliation_8fec3dd813.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_state_reconciliation_8fec3dd813.osworld.chrome_tabs"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_state_reconciliation_8fec3dd813.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_workspace_8fec.cf.01_classify_completeness_workspace_window_and_tab_state",
+          "osw_workspace_8fec.cf.02_revise_affected_workspace_window_and_tab_state",
+          "osw_workspace_8fec.cf.03_preserve_unaffected_workspace_window_and_tab_state",
+          "osw_workspace_8fec.cf.04_verify_closure_workspace_window_and_tab_state"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_state_reconciliation_8fec3dd813.event.receipt",
+          "osw_state_reconciliation_8fec3dd813.event.probes",
+          "osw_state_reconciliation_8fec3dd813.closure",
+          "osw_state_reconciliation_8fec3dd813.source.pin",
+          "osw_state_reconciliation_8fec3dd813.osworld.identity",
+          "osw_state_reconciliation_8fec3dd813.osworld.official_score",
+          "osw_state_reconciliation_8fec3dd813.osworld.native_evidence",
+          "osw_state_reconciliation_8fec3dd813.osworld.task_assertion",
+          "osw_state_reconciliation_8fec3dd813.osworld.project_archive",
+          "osw_state_reconciliation_8fec3dd813.osworld.nautilus_window",
+          "osw_state_reconciliation_8fec3dd813.osworld.terminal_window",
+          "osw_state_reconciliation_8fec3dd813.osworld.chrome_tabs"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "646ad92ac384adc32a2d4fe8a3dd2aa145f04b4d425d40d2f641959162c172f3",
+        "task_id": "osworld:multi_apps:48c46dc7-fe04-4505-ade7-723cba1aa6f6",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

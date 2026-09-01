@@ -1,0 +1,76 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_constraint_20b0004f10.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_constraint_20b0004f10.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_constr_d9e9aa.cf.01_classify_scope_delta_expose_the_require",
+          "swe_late_constr_d9e9aa.cf.02_revise_affected_expose_the_require",
+          "swe_late_constr_d9e9aa.cf.03_preserve_unaffected_assert_exact_defau",
+          "swe_late_constr_d9e9aa.cf.04_verify_closure_run_model_selectio"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_constraint_20b0004f10.event.receipt",
+          "swe_late_constraint_20b0004f10.event.probes",
+          "swe_late_constraint_20b0004f10.closure",
+          "swe_late_constraint_20b0004f10.source.pin",
+          "swe_late_constraint_20b0004f10.native.pytest_01_sklearn_model_selection_tests_test_split_p",
+          "swe_late_constraint_20b0004f10.native.pytest_02_sklearn_model_selection_tests_test_split_p"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "RepeatedKFold and RepeatedStratifiedKFold do not show correct __repr__ string",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "475b91aa61a3e6395ba6fc6d4e161fd25be0ce36f6958b85d375313782dd9ed9",
+        "task_id": "scikit-learn__scikit-learn-14983",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

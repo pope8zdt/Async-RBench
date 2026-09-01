@@ -1,0 +1,422 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_completeness_dog_layer_resize",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_346b788fd5.partial_then_complete_result",
+      "evidence_group": "osw_dog_346b.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "dog_layer_resize"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness for dog_layer_resize; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_dog_346b.cf.01_classify_completeness_dog_layer_resize",
+      "independence_key": "osw_dog_346b.cf.01_classify_completeness_dog_layer_resize",
+      "measurement_type": "control",
+      "mutation_id": "osw_dog_346b.mutation.01_classify_completeness_dog_layer_resize",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_dependency_unblock_346b788fd5.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.target_height"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_dog_layer_resize",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_346b788fd5.partial_then_complete_result",
+      "evidence_group": "osw_dog_346b.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "dog_layer_resize"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for dog_layer_resize; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_dog_346b.cf.02_revise_affected_dog_layer_resize",
+      "independence_key": "osw_dog_346b.cf.02_revise_affected_dog_layer_resize",
+      "measurement_type": "control",
+      "mutation_id": "osw_dog_346b.mutation.02_revise_affected_dog_layer_resize",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_346b788fd5.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.aspect_ratio"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_dog_layer_resize",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_dependency_unblock_346b788fd5.partial_then_complete_result",
+      "evidence_group": "osw_dog_346b.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "dog_layer_resize"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for dog_layer_resize; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_dog_346b.cf.03_preserve_unaffected_dog_layer_resize",
+      "independence_key": "osw_dog_346b.cf.03_preserve_unaffected_dog_layer_resize",
+      "measurement_type": "control",
+      "mutation_id": "osw_dog_346b.mutation.03_preserve_unaffected_dog_layer_resize",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_346b788fd5.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.structure_similarity"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_dog_layer_resize",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_346b788fd5.partial_then_complete_result",
+      "evidence_group": "osw_dog_346b.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "dog_layer_resize"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for dog_layer_resize; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_dog_346b.cf.04_verify_closure_dog_layer_resize",
+      "independence_key": "osw_dog_346b.cf.04_verify_closure_dog_layer_resize",
+      "measurement_type": "control",
+      "mutation_id": "osw_dog_346b.mutation.04_verify_closure_dog_layer_resize",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_346b788fd5.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.background_preservation"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "wait_for_authority",
+      "id": "osw_dog_346b.mutation.01_classify_completeness_dog_layer_resize",
+      "may_fail": [],
+      "must_fail": [
+        "osw_dog_346b.cf.01_classify_completeness_dog_layer_resize"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_346b788fd5.source.pin"
+      ],
+      "targets": [
+        "osw_dog_346b.cf.01_classify_completeness_dog_layer_resize",
+        "osw_dependency_unblock_346b788fd5.event.receipt",
+        "osw_dependency_unblock_346b788fd5.event.probes",
+        "osw_dependency_unblock_346b788fd5.closure",
+        "osw_dependency_unblock_346b788fd5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "resolve_authority",
+      "id": "osw_dog_346b.mutation.02_revise_affected_dog_layer_resize",
+      "may_fail": [],
+      "must_fail": [
+        "osw_dog_346b.cf.02_revise_affected_dog_layer_resize"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_346b788fd5.source.pin"
+      ],
+      "targets": [
+        "osw_dog_346b.cf.02_revise_affected_dog_layer_resize",
+        "osw_dependency_unblock_346b788fd5.event.receipt",
+        "osw_dependency_unblock_346b788fd5.event.probes",
+        "osw_dependency_unblock_346b788fd5.closure",
+        "osw_dependency_unblock_346b788fd5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "selective_replan",
+      "id": "osw_dog_346b.mutation.03_preserve_unaffected_dog_layer_resize",
+      "may_fail": [],
+      "must_fail": [
+        "osw_dog_346b.cf.03_preserve_unaffected_dog_layer_resize"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_346b788fd5.source.pin"
+      ],
+      "targets": [
+        "osw_dog_346b.cf.03_preserve_unaffected_dog_layer_resize",
+        "osw_dependency_unblock_346b788fd5.event.receipt",
+        "osw_dependency_unblock_346b788fd5.event.probes",
+        "osw_dependency_unblock_346b788fd5.closure",
+        "osw_dependency_unblock_346b788fd5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "rederive_from_authority",
+      "id": "osw_dog_346b.mutation.04_verify_closure_dog_layer_resize",
+      "may_fail": [],
+      "must_fail": [
+        "osw_dog_346b.cf.04_verify_closure_dog_layer_resize"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_346b788fd5.source.pin"
+      ],
+      "targets": [
+        "osw_dog_346b.cf.04_verify_closure_dog_layer_resize",
+        "osw_dependency_unblock_346b788fd5.event.receipt",
+        "osw_dependency_unblock_346b788fd5.event.probes",
+        "osw_dependency_unblock_346b788fd5.closure",
+        "osw_dependency_unblock_346b788fd5.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_dependency_unblock_346b788fd5.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_dependency_unblock_346b788fd5.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_dependency_unblock_346b788fd5.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_dependency_unblock_346b788fd5.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:gimp:d16c99dc-2a1e-46f2-b350-d97c86c85c15 and check_image_size+check_structure_sim_resized.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The exported resized.png has a 512-pixel dog-layer height with preserved aspect ratio and background structure, and passes both bound OSWorld evaluators.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The non-transparent dog layer is exactly 512 pixels high.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.target_height",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_target_height",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The dog layer keeps its original aspect ratio.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.aspect_ratio",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_aspect_ratio",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The exported image passes the official structure-similarity evaluator.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.structure_similarity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_structure_similarity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The unrelated background layer remains preserved.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.background_preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_background_preservation",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The required resized.png path is exact.",
+      "id": "osw_dependency_unblock_346b788fd5.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_output_path",
+      "relevance_tier": "base"
+    }
+  ]
+}

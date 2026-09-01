@@ -1,0 +1,24 @@
+# Authoritative OSWorld Windows host runtime for CPython 3.12.
+#
+# The upstream requirements remain the source of truth. The exact pins below
+# select the tested solution for constraints whose historical versions do not
+# provide CPython 3.13 wheels. Regenerate the lock with:
+#
+#   uv pip compile configs/osworld-native-requirements.in `
+#     --python 3.12 --python-platform windows --torch-backend cpu `
+#     --no-annotate --no-header -o configs/osworld-native-requirements.lock
+#
+# The bootstrap separately machine-checks every active requirement from both
+# upstream/osworld/requirements.txt and setup.py against the installed venv.
+
+-r ../upstream/osworld/requirements.txt
+
+gymnasium==0.28.1
+matplotlib==3.7.5
+numpy==1.26.4
+opencv-python-headless==4.8.1.78
+pandas==2.2.3
+Pillow==11.0.0
+psutil==5.9.8
+torch==2.5.1+cpu
+torchvision==0.20.1+cpu

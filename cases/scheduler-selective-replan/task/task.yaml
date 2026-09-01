@@ -1,0 +1,50 @@
+instruction: |-
+  You are operating an LLM inference batching scheduler. Two request buckets
+  under /app/task_file/input_data/requests_bucket_1.jsonl and
+  /app/task_file/input_data/requests_bucket_2.jsonl must each be covered by a
+  batching plan. A batching plan assigns every request to exactly one batch and
+  gives that batch a shape (seq_align, heads_align, hidden_align) whose
+  seq_align is a multiple of 64 and at least the request's aligned prompt
+  length, with heads_align=32 and hidden_align=4096. The combined scheduler is
+  budgeted by a shared shape ceiling: at most eight distinct
+  (seq_align, heads_align, hidden_align) triples may be used across both
+  buckets combined.
+
+  The shared public validator and cost model live in
+  /app/task_file/scripts/validate_plan.py and /app/task_file/scripts/cost_model.py.
+  Run validate_plan.py against a plan to get an objective per-bucket report of
+  coverage, cost, padding, latency and sequential time, and per-bucket
+  pass/fail against the shared thresholds. It is the same validator the final
+  combined plan will be measured against. Never guess whether a plan is good:
+  validate it.
+
+  DELIVERABLES
+
+  Produce under /app/task_file/output_data:
+  - plan_b1.jsonl and plan_b2.jsonl: the final plans, one JSONL row per request
+    with request_id, batch_id and shape.
+  - global_shape_plan.json: {"global_shape_set": [[seq,heads,hidden], ...],
+    "combined_unique_shapes": N}, the committed shared shape set.
+  - first_pass/plan_b1.jsonl and first_pass/plan_b2.jsonl: verbatim snapshots
+    of the two plans at the time each bucket's validator first reported, so the
+    final state is auditable against what was initially accepted.
+  - validator_reports/bucket1.json and validator_reports/bucket2.json: the
+    validator's per-bucket report objects, including any provenance token
+    emitted by the validator.
+  - decision_manifest.json: a machine-readable summary of the produced plans,
+    snapshots and validator reports. Run
+    /app/task_file/scripts/write_manifest.py after those artifacts are ready.
+
+  The benchmark has already started isolated per-bucket planning and validation
+  workstreams. Results may arrive in any order. Determine whether a report still
+  applies by comparing its plan revision, objective metrics and shared shape
+  set; the prompt does not identify a preferred report. When evidence changes a
+  prior allocation, preserve the unaffected bucket and revise the dependent
+  global plan, validation and manifest before final verification.
+author_name: Async-RBench transformation
+difficulty: hard
+category: ml-systems
+tags: [batching, scheduler, asynchronous-replanning]
+parser_name: pytest
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 600

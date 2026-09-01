@@ -1,0 +1,43 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:f8369178-fafe-40c2-adc4-b9b08a125456",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/f8369178-fafe-40c2-adc4-b9b08a125456.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "chrome snapshot",
+      "private source assets",
+      "private native fixture",
+      "private event payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "chrome",
+      "gnome settings",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:f8369178-fafe-40c2-adc4-b9b08a125456 in pinned chrome; evaluator truth remains private.",
+    "event_injection": "Release gnome_theme_state only after 2 persisted upstream result(s).",
+    "hidden_tests": "check_list, native digest, theme_identity, theme_source, gsettings_binding, gsettings_output, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "chrome",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private orchis_theme_osworld.sh scores check_list.",
+    "requires_authored_private_oracle": false
+  }
+}
+

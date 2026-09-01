@@ -1,0 +1,168 @@
+{
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "requirements_manifest",
+    "manifest_review": {
+      "decision": "approved",
+      "reviewer_id": "case-audit",
+      "reviewed_at": "2026-09-01"
+    },
+    "sources": [
+      {
+        "task_id": "git-leak-recovery",
+        "task_path": "private/source_task_git-leak-recovery.yaml",
+        "instruction_sha256": "116609811f402c269380824689117dbba2e7672cb69e1d916b32cbd2ddccfdd1",
+        "requirement_mappings": [
+          {
+            "source_anchor": "A secret was accidentally committed",
+            "requirement_ids": [
+              "secure_release_native_async_closure"
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "fix-code-vulnerability",
+        "task_path": "private/source_task_fix-code-vulnerability.yaml",
+        "instruction_sha256": "b1e643d56e8da9c2475623654018e5e514a6125bd0b6cd06d758e1a2000cedf8",
+        "requirement_mappings": [
+          {
+            "source_anchor": "You need to identify and fix the vulnerability",
+            "requirement_ids": [
+              "secure_release_native_async_closure"
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "git-multibranch",
+        "task_path": "private/source_task_git-multibranch.yaml",
+        "instruction_sha256": "a477cfc46d0cb754d39afcc2f0fe22c5c8af92738d97faed5a86f9ef42850fde",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Set up a Git server",
+            "requirement_ids": [
+              "secure_release_native_async_closure"
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "nginx-request-logging",
+        "task_path": "private/source_task_nginx-request-logging.yaml",
+        "instruction_sha256": "7d61aaa7fb2c50ec88ab970ea8b77f311e3df4189694770d9ba363e603a55602",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Set up an Nginx web server",
+            "requirement_ids": [
+              "secure_release_native_async_closure"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "equivalence_solutions": [
+    {
+      "id": "four-source-release-integration",
+      "path": "task/equivalence_solutions/alternative_solution.sh",
+      "distinguishes_from_oracle": "Integrates the four retained source-native workstreams in a distinct order; acceptance remains based on evaluator-owned release, lineage and runtime checks."
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "remove-security-report",
+      "path": "task/negative_mutations/remove_security_report.sh",
+      "must_fail": [
+        "sr.report.cwe93_exact"
+      ]
+    },
+    {
+      "id": "break-deployment-lineage",
+      "path": "task/negative_mutations/break_deployment_lineage.sh",
+      "must_fail": [
+        "sr.lineage.deployed_ref_consistency"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "secure_release_native_async_closure",
+      "covers": {
+        "semantic_checks": [
+          "sr.authority.secret_recovered",
+          "sr.authority.no_secret_objects",
+          "sr.authority.final_main_baseline",
+          "sr.authority.final_dev_baseline",
+          "sr.stale.pre_rewrite_main_patch_rejected",
+          "sr.stale.pre_rewrite_dev_patch_rejected",
+          "sr.stale.old_deployment_rejected",
+          "sr.stale.old_manifest_rejected",
+          "sr.patch.main_header_controls",
+          "sr.patch.dev_header_controls",
+          "sr.patch.valid_header_regression",
+          "sr.report.cwe93_exact",
+          "sr.remote.final_refs",
+          "sr.runtime.https_main",
+          "sr.runtime.https_dev",
+          "sr.runtime.push_deploy_main",
+          "sr.runtime.push_deploy_dev",
+          "sr.lineage.manifest_schema",
+          "sr.lineage.sanitized_head_reachable",
+          "sr.lineage.security_revision_final",
+          "sr.lineage.deployed_ref_consistency",
+          "sr.support.nginx_content_404",
+          "sr.support.nginx_logs",
+          "sr.support.nginx_rate_limit"
+        ],
+        "dynamic_control_checks": [
+          "sr.cf.wait_sanitize_then_patch",
+          "sr.cf.reject_pre_rewrite_deployment",
+          "sr.cf.cancel_pre_rewrite_child",
+          "sr.cf.redeploy_from_clean_baseline"
+        ],
+        "hidden_checks": [
+          "history_clean",
+          "security_patch_all_refs",
+          "deployment_lineage",
+          "nginx_runtime"
+        ],
+        "workstream_validators": [
+          "sanitize_history",
+          "release_infrastructure",
+          "security_patch"
+        ]
+      },
+      "public_evidence": [
+        {
+          "path": "task/task.yaml",
+          "contains": "git-leak-recovery challenge repository"
+        },
+        {
+          "path": "task/task.yaml",
+          "contains": "CWE-93"
+        }
+      ]
+    }
+  ],
+  "information_sufficiency": [
+    {
+      "workstream_id": "sanitize_history",
+      "requirement_ids": [
+        "secure_release_native_async_closure"
+      ]
+    },
+    {
+      "workstream_id": "release_infrastructure",
+      "requirement_ids": [
+        "secure_release_native_async_closure"
+      ]
+    },
+    {
+      "workstream_id": "security_patch",
+      "requirement_ids": [
+        "secure_release_native_async_closure"
+      ]
+    }
+  ]
+}

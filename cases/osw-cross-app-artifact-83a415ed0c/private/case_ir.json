@@ -1,0 +1,281 @@
+{
+  "async_depth": 3,
+  "case_id": "osw-cross-app-artifact-83a415ed0c",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_concat_docx_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "01_classify_authority_concat_docx_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_83a415ed0c.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_83a415ed0c.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed ordered_txt_manifest_and_content; preserve unaffected vs_code/libreoffice_writer state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_concat_docx_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "02_revise_affected_concat_docx_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_83a415ed0c.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_83a415ed0c.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed ordered_txt_manifest_and_content; preserve unaffected vs_code/libreoffice_writer state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.file_manifest"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_concat_docx_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "03_verify_closure_concat_docx_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_83a415ed0c.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_83a415ed0c.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed ordered_txt_manifest_and_content; preserve unaffected vs_code/libreoffice_writer state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.separator_free_content"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "depends_on",
+        "source": "upstream.txt_file_inventory",
+        "target": "upstream.ordered_text_extraction"
+      },
+      {
+        "relation": "depends_on",
+        "source": "upstream.ordered_text_extraction",
+        "target": "upstream.concatenation_validation"
+      },
+      {
+        "relation": "produces",
+        "source": "upstream.concatenation_validation",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.output_path"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.output_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.file_manifest"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.file_manifest",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.separator_free_content"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.separator_free_content",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.04.font_size"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.font_size",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "VS Code",
+        "description": "Enumerate all project .txt files while excluding metadata and scripts.",
+        "id": "upstream.txt_file_inventory",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "VS Code",
+        "description": "Read 1.txt through 5.txt in manifest order.",
+        "id": "upstream.ordered_text_extraction",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "Document worker",
+        "description": "Join extracted texts with no inserted separator and verify the content digest.",
+        "id": "upstream.concatenation_validation",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.file_manifest",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.separator_free_content",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.font_size",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.file_manifest",
+      "req.03.separator_free_content",
+      "req.04.font_size",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The project worker returns exactly 1.txt through 5.txt in order and their separator-free 2249-character concatenation.",
+    "before_state": "Writer setup may be prepared, but the complete ordered project text manifest and authoritative concatenation are still pending.",
+    "event_id": "evt.osw_cross_app_artifact_83a415ed0c.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Use every and only the five project TXT files in manifest order.",
+      "id": "req.01.output_path",
+      "observable_probe": "osw_cross_app_artifact_83a415ed0c.osworld.output_path",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Insert their complete contents without adding a separator.",
+      "id": "req.02.file_manifest",
+      "observable_probe": "osw_cross_app_artifact_83a415ed0c.osworld.file_manifest",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Set the complete Writer document to 10-point font.",
+      "id": "req.03.separator_free_content",
+      "observable_probe": "osw_cross_app_artifact_83a415ed0c.osworld.separator_free_content",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Save and re-open /home/user/Desktop/concat.docx.",
+      "id": "req.04.font_size",
+      "observable_probe": "osw_cross_app_artifact_83a415ed0c.osworld.font_size",
+      "public_evidence": "source instruction and delayed authority receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "VS Code",
+      "description": "Enumerate all project .txt files while excluding metadata and scripts.",
+      "id": "txt_file_inventory"
+    },
+    {
+      "app": "VS Code",
+      "depends_on": [
+        "txt_file_inventory"
+      ],
+      "description": "Read 1.txt through 5.txt in manifest order.",
+      "id": "ordered_text_extraction"
+    },
+    {
+      "app": "Document worker",
+      "depends_on": [
+        "ordered_text_extraction"
+      ],
+      "description": "Join extracted texts with no inserted separator and verify the content digest.",
+      "id": "concatenation_validation"
+    }
+  ]
+}

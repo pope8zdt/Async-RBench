@@ -1,0 +1,236 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-9923123786",
+  "source_task_id": "osworld:multi_apps:aceb0368-56b8-4073-b70e-3dc9aee184e0",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "answer_key_and_student_score_matrix",
+  "upstream_dependency_graph": [
+    {
+      "id": "reference_key_extraction",
+      "app": "LibreOffice Writer",
+      "description": "Extract the ten official answer choices from ReferenceAnswers.docx."
+    },
+    {
+      "id": "student_answer_extraction",
+      "app": "OS/Writer",
+      "description": "Extract student IDs, names and answers from ten answer sheets."
+    },
+    {
+      "id": "grading_matrix_join",
+      "app": "Calc worker",
+      "description": "Compare each answer to the key and compute per-question correctness and totals.",
+      "depends_on": [
+        "reference_key_extraction",
+        "student_answer_extraction"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/exam/grades.xlsx",
+    "headers": [
+      "Student ID",
+      "Student Name",
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5",
+      "Q6",
+      "Q7",
+      "Q8",
+      "Q9",
+      "Q10",
+      "Total Grade"
+    ],
+    "answer_key": [
+      "D",
+      "A",
+      "C",
+      "D",
+      "B",
+      "C",
+      "C",
+      "D",
+      "D",
+      "D"
+    ],
+    "student_count": 10,
+    "remaining_students_scored": 9,
+    "rows": [
+      [
+        "20230901000",
+        "Linda Garcia",
+        [
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        70
+      ],
+      [
+        "20230901001",
+        "Richard Smith",
+        [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        70
+      ],
+      [
+        "20230901002",
+        "Jennifer Rodriguez",
+        [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        70
+      ],
+      [
+        "20230901003",
+        "Michael Gonzalez",
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        80
+      ],
+      [
+        "20230901004",
+        "Mary Williams",
+        [
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0
+        ],
+        80
+      ],
+      [
+        "20230901005",
+        "Joseph Thomas",
+        [
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        60
+      ],
+      [
+        "20230901006",
+        "James Martinez",
+        [
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        60
+      ],
+      [
+        "20230901007",
+        "Barbara Wilson",
+        [
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        90
+      ],
+      [
+        "20230901008",
+        "Karen Davis",
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        50
+      ],
+      [
+        "20230901009",
+        "David Brown",
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        100
+      ]
+    ],
+    "gold_workbook_sha256": "7e6b3a6dae808cef87b2847933db04eb2138d82cf1d7b354ff1bbc88bb86f842"
+  },
+  "task_assertion": "grades.xlsx preserves the schema and records the official per-question correctness matrix and totals for all ten students.",
+  "finding": "The grading worker joins the D,A,C,D,B,C,C,D,D,D key with all student answers and returns the complete 10x10 correctness matrix and totals."
+}
+

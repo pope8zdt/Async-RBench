@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific authentication_straggler_completed receipt bound to coding:041.",
+      "id": "mab_dependency_unblock_8d29bb0513.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Travel_Collaborator authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_8d29bb0513.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Authentication closes the mocked-identity gap while itinerary comments, chat, reviews, and accepted collaborative changes remain intact.",
+      "id": "mab_dependency_unblock_8d29bb0513.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:041.",
+      "id": "mab_dependency_unblock_8d29bb0513.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and authorized_travel_collaboration_closure obey the task-specific four-upstream schema.",
+      "id": "mab_dependency_unblock_8d29bb0513.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_travel_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Protected itinerary/profile operations require unexpired sessions; invitations map to owner/contributor/viewer permissions; privacy filtering blocks forged and unauthorized modifications.",
+      "id": "mab_dependency_unblock_8d29bb0513.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_travel_sessions_roles_privacy_and_forged_actors",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves itinerary_comments, chat_history, reviews, accepted_changes.",
+      "id": "mab_dependency_unblock_8d29bb0513.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_travel_comments_chat_reviews_and_changes_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Authentication closes the mocked-identity gap while itinerary comments, chat, reviews, and accepted collaborative changes remain intact.",
+      "id": "mab_dependency_unblock_8d29bb0513.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_travel_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

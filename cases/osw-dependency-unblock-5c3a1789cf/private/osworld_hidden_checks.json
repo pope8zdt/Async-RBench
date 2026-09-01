@@ -1,0 +1,73 @@
+{
+  "minimum_official_score": 1.0,
+  "required_semantic_checks": [
+    "official_metric_01",
+    "official_metric_02",
+    "persisted_target_state",
+    "post_event_reverification"
+  ],
+  "checks": [
+    {
+      "id": "official_metric_01",
+      "kind": "official_osworld_metric",
+      "metric": "check_direct_json_object",
+      "expected": {
+        "type": "rule_relativeTime",
+        "rules": {
+          "relativeTime": {
+            "from": "next Monday split",
+            "to": "next Friday split"
+          },
+          "timezone": "Europe/Zurich",
+          "expected": {
+            "locationName": "Zürich",
+            "dropLocationName": "Zürich",
+            "filterCriteria_carCategory": "large",
+            "filterCriteria_sortBy": "PRICE",
+            "puDay": "{DayD}",
+            "puMonth": "{MonthD}",
+            "puYear": "{Year}",
+            "doDay": "{DayD}",
+            "doMonth": "{MonthD}",
+            "doYear": "{Year}"
+          }
+        }
+      }
+    },
+    {
+      "id": "official_metric_02",
+      "kind": "official_osworld_metric",
+      "metric": "check_direct_json_object",
+      "expected": {
+        "type": "rule_relativeTime",
+        "rules": {
+          "relativeTime": {
+            "from": "week after next Monday split",
+            "to": "week after next Friday split"
+          },
+          "timezone": "Europe/Zurich",
+          "expected": {
+            "locationName": "Zürich",
+            "dropLocationName": "Zürich",
+            "filterCriteria_carCategory": "large",
+            "filterCriteria_sortBy": "PRICE",
+            "puDay": "{DayD}",
+            "puMonth": "{MonthD}",
+            "puYear": "{Year}",
+            "doDay": "{DayD}",
+            "doMonth": "{MonthD}",
+            "doYear": "{Year}"
+          }
+        }
+      }
+    },
+    {
+      "id": "persisted_target_state",
+      "kind": "checkpoint_state_digest"
+    },
+    {
+      "id": "post_event_reverification",
+      "kind": "event_to_evaluator_order"
+    }
+  ]
+}

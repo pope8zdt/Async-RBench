@@ -1,0 +1,348 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_instructor_env_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_201b3549f3.delayed_authoritative_result",
+      "evidence_group": "osw_instructor_201.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "instructor_dependency_install_plan"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed instructor_dependency_install_plan; preserve unaffected os/chrome/vscode state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_instructor_201.cf.01_classify_authority_instructor_env_osworld",
+      "independence_key": "osw_instructor_201.cf.01_classify_authority_instructor_env_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_instructor_201.mutation.01_classify_authority_instructor_env_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_201b3549f3.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.project_identity"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_instructor_env_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_201b3549f3.delayed_authoritative_result",
+      "evidence_group": "osw_instructor_201.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "instructor_dependency_install_plan"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed instructor_dependency_install_plan; preserve unaffected os/chrome/vscode state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_instructor_201.cf.02_revise_affected_instructor_env_osworld",
+      "independence_key": "osw_instructor_201.cf.02_revise_affected_instructor_env_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_instructor_201.mutation.02_revise_affected_instructor_env_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_201b3549f3.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.distribution_identity"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure_instructor_env_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_201b3549f3.delayed_authoritative_result",
+      "evidence_group": "osw_instructor_201.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "instructor_dependency_install_plan"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed instructor_dependency_install_plan; preserve unaffected os/chrome/vscode state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_instructor_201.cf.03_verify_closure_instructor_env_osworld",
+      "independence_key": "osw_instructor_201.cf.03_verify_closure_instructor_env_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_instructor_201.mutation.03_verify_closure_instructor_env_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_201b3549f3.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.dependency_lock"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "family": "wait_for_authority",
+      "id": "osw_instructor_201.mutation.01_classify_authority_instructor_env_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_instructor_201.cf.01_classify_authority_instructor_env_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_201b3549f3.source.pin"
+      ],
+      "targets": [
+        "osw_instructor_201.cf.01_classify_authority_instructor_env_osworld",
+        "osw_dependency_unblock_201b3549f3.event.receipt",
+        "osw_dependency_unblock_201b3549f3.event.probes",
+        "osw_dependency_unblock_201b3549f3.closure",
+        "osw_dependency_unblock_201b3549f3.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "family": "resolve_authority",
+      "id": "osw_instructor_201.mutation.02_revise_affected_instructor_env_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_instructor_201.cf.02_revise_affected_instructor_env_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_201b3549f3.source.pin"
+      ],
+      "targets": [
+        "osw_instructor_201.cf.02_revise_affected_instructor_env_osworld",
+        "osw_dependency_unblock_201b3549f3.event.receipt",
+        "osw_dependency_unblock_201b3549f3.event.probes",
+        "osw_dependency_unblock_201b3549f3.closure",
+        "osw_dependency_unblock_201b3549f3.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "family": "rederive_from_authority",
+      "id": "osw_instructor_201.mutation.03_verify_closure_instructor_env_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_instructor_201.cf.03_verify_closure_instructor_env_osworld"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_201b3549f3.source.pin"
+      ],
+      "targets": [
+        "osw_instructor_201.cf.03_verify_closure_instructor_env_osworld",
+        "osw_dependency_unblock_201b3549f3.event.receipt",
+        "osw_dependency_unblock_201b3549f3.event.probes",
+        "osw_dependency_unblock_201b3549f3.closure",
+        "osw_dependency_unblock_201b3549f3.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed authoritative receipt.",
+      "id": "osw_dependency_unblock_201b3549f3.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All three task-specific upstream workers completed with observable probes.",
+      "id": "osw_dependency_unblock_201b3549f3.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies source semantics.",
+      "id": "osw_dependency_unblock_201b3549f3.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_dependency_unblock_201b3549f3.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:69acbb55-d945-4927-a87b-8480e1a5bb7e and check_include_exclude.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private source fixture.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The /home/user instructor-embedding environment imports INSTRUCTOR successfully and remains bound to the official repository and dependency lock.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The project directory, repository URL and pinned revision are exact.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.project_identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The installed distribution name and version are source-bound.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.distribution_identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_distribution_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The declared dependency range set is complete.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.dependency_lock",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dependency_lock",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official import statement is exact.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.import_command",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_import_command",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The import exits zero and excludes Error output.",
+      "id": "osw_dependency_unblock_201b3549f3.osworld.import_smoke",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_import_smoke",
+      "relevance_tier": "base"
+    }
+  ]
+}

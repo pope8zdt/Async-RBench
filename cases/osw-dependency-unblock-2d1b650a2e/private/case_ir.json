@@ -1,0 +1,187 @@
+{
+  "case_id": "osw-dependency-unblock-2d1b650a2e",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "dnt_profile_authority",
+      "forbidden_behavior": "Do not treat a visible toggle click or completion order as proof that the profile preference persisted.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.enable_do_not_track"
+        ]
+      },
+      "id": "01_accept_profile_authority",
+      "must_still_pass": [
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "Accept only the delayed case-bound Chrome profile receipt as authority for enable_do_not_track=true.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.02.enable_do_not_track"
+    },
+    {
+      "critical": false,
+      "decision_group": "dnt_state_revision",
+      "forbidden_behavior": "Do not retain an unverified visual toggle state or reset unrelated privacy preferences.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.enable_do_not_track"
+        ]
+      },
+      "id": "02_reconcile_dnt_preference",
+      "must_still_pass": [
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "If delayed profile evidence does not show true, revise only Do Not Track while preserving unrelated Chrome privacy state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.enable_do_not_track"
+    },
+    {
+      "critical": true,
+      "decision_group": "dnt_closure_reverification",
+      "forbidden_behavior": "Do not close on the click alone or omit the post-event persisted-state check.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_persisted_state"
+        ]
+      },
+      "id": "03_reverify_persisted_dnt",
+      "must_still_pass": [
+        "osw_dependency_unblock_2d1b650a2e.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_2d1b650a2e.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Re-read the final Chrome profile state and close only when enable_do_not_track remains true after receipt consumption.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_persisted_state"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.enable_do_not_track"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.enable_do_not_track",
+        "target": "req.03.verify_persisted_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_persisted_state",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.open_privacy_settings",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.open_privacy_settings",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.enable_do_not_track",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_persisted_state",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.02.enable_do_not_track",
+      "req.03.verify_persisted_state",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A delayed Chrome profile probe reports enable_do_not_track=true and supplies the authoritative state needed for closure.",
+    "before_state": "Chrome privacy settings are open and the Do Not Track control has been reached, but persisted profile authority has not arrived.",
+    "event_id": "evt.osw_dnt_2d1b650a2e.delayed_profile_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "req.01.open_privacy_settings",
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Open Chrome privacy settings and locate the Do Not Track control.",
+      "id": "req.01.open_privacy_settings",
+      "observable_probe": "osw_dependency_unblock_2d1b650a2e.source.pin",
+      "public_evidence": "Chrome Settings navigation and the visible Do Not Track control."
+    },
+    {
+      "description": "Enable the Do Not Track preference without altering unrelated privacy settings.",
+      "id": "req.02.enable_do_not_track",
+      "observable_probe": "osw_dependency_unblock_2d1b650a2e.event.probes",
+      "public_evidence": "The toggle state and the persisted Chrome profile preference."
+    },
+    {
+      "description": "Reopen or refresh the setting and verify enable_do_not_track remains true.",
+      "id": "req.03.verify_persisted_state",
+      "observable_probe": "osw_dependency_unblock_2d1b650a2e.closure",
+      "public_evidence": "A post-event profile read and final settings state."
+    }
+  ]
+}

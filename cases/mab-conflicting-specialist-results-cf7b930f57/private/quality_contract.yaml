@@ -1,0 +1,91 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_conflicting_specialist_results_cf7b930f57.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_conflicting_specialist_results_cf7b930f57.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-database-diagnosis",
+      "must_fail": [
+        "mab_conflicting_specialist_results_cf7b930f57.diagnosis.exact"
+      ],
+      "path": "task/negative_mutations/wrong_database_diagnosis.sh"
+    },
+    {
+      "id": "ignored-database-authority",
+      "must_fail": [
+        "mab_conflicting_specialist_results_cf7b930f57.authority.evidence"
+      ],
+      "path": "task/negative_mutations/ignored_database_authority.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_conflict_db04.cf.01_classify_conflict_correlate_returned",
+          "mab_conflict_db04.cf.02_arbitrate_conflict_replace_any_unsupp",
+          "mab_conflict_db04.cf.03_verify_closure_retain_the_indepen"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_conflicting_specialist_results_cf7b930f57.event.receipt",
+          "mab_conflicting_specialist_results_cf7b930f57.event.probes",
+          "mab_conflicting_specialist_results_cf7b930f57.closure",
+          "mab_conflicting_specialist_results_cf7b930f57.source.pin",
+          "mab_conflicting_specialist_results_cf7b930f57.native.binding",
+          "mab_conflicting_specialist_results_cf7b930f57.diagnosis.exact",
+          "mab_conflicting_specialist_results_cf7b930f57.conflict.reconciled",
+          "mab_conflicting_specialist_results_cf7b930f57.authority.evidence",
+          "mab_conflicting_specialist_results_cf7b930f57.output.schema"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "This database is used for an IoT",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "d58b50265d3d76a3c9074fd436df51ac4417fcfa45ce2a0aaf745659578b8ae4",
+        "task_id": "database:004",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

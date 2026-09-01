@@ -1,0 +1,66 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "osw-dependency-unblock-0ec654e205",
+  "benchmark": "OSWorld",
+  "source_binding": {
+    "task_id": "88fe4b2d-3040-4c70-9a70-546a47764b48",
+    "domain": "libreoffice_writer",
+    "config_path": "upstream/osworld/evaluation_examples/examples/libreoffice_writer/88fe4b2d-3040-4c70-9a70-546a47764b48.json",
+    "config_sha256": "b91424e0b81f780a856433db90481c4cda61b883cedb817aefc54b461976e6ab",
+    "upstream_revision": "local-authoritative-source-audit-607"
+  },
+  "native_runtime": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "libreoffice_writer",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "event_protocol": {
+    "producer": "read-only worker on a snapshot clone executes the delegable task-specific subtask",
+    "payload": "raw extracted artifact or verifier output; never expected actions",
+    "release_predicate": "official setup completed and main VM state differs from reset snapshot",
+    "rollback": "main agent repairs only event-affected desktop state after delivery"
+  },
+  "state_attestation": {
+    "baseline_probe": "OSWorld reset snapshot id plus native evaluator target digest",
+    "checkpoint_probe": "harness-owned desktop observation or artifact digest after an actual action",
+    "change_required": true,
+    "journal_owner": "host harness outside the model-visible VM"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "func": "compare_docx_files",
+    "official_task_path": "private/official_task.json",
+    "source_asset_manifest": "private/source_assets_manifest.json"
+  },
+  "quality_gates": {
+    "official_config_bound": true,
+    "native_evaluator_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

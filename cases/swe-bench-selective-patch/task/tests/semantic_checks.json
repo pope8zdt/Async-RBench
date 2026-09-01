@@ -1,0 +1,245 @@
+{
+ "version": "3",
+ "checks": [
+  {
+   "id": "sp2.base.package_importable",
+   "pytest_node": "test_case_outcomes.py::test_package_importable",
+   "category": "base_task_completion",
+   "description": "The trimmed sklearn package imports and its three public surfaces are callable",
+   "critical": false,
+   "measurement_type": "semantic",
+   "capability_target": "base_task_completion",
+   "relevance_tier": "base"
+  },
+  {
+   "id": "sp2.base.fix_applied",
+   "pytest_node": "test_case_outcomes.py::test_fix_applied",
+   "category": "base_task_completion",
+   "description": "The fix target differs from its base revision and its recorded final revision carries the evaluator-scoped applied-fix authority receipt",
+   "critical": false,
+   "measurement_type": "semantic",
+   "capability_target": "async_result_integration",
+   "relevance_tier": "direct"
+  },
+  {
+   "id": "sp2.base.reports_exist",
+   "pytest_node": "test_case_outcomes.py::test_reports_exist",
+   "category": "base_task_completion",
+   "description": "Every required artifact exists: the three module-group reports, integration, regression, applied-fix and manifest",
+   "critical": false,
+   "measurement_type": "semantic",
+   "capability_target": "base_task_completion",
+   "relevance_tier": "base"
+  },
+  {
+   "id": "sp2.base.manifest_valid",
+   "pytest_node": "test_case_outcomes.py::test_manifest_valid",
+   "category": "base_task_completion",
+   "description": "Decision manifest exists and carries every required process field",
+   "critical": false,
+   "measurement_type": "semantic",
+   "capability_target": "base_task_completion",
+   "relevance_tier": "base"
+  },
+  {
+   "id": "sp2.integ.a_group_passes",
+   "pytest_node": "test_case_outcomes.py::test_a_group_passes",
+   "category": "async_result_integration",
+   "description": "Module group A (sklearn.metrics) passes in its final run",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_result_integration",
+   "relevance_tier": "supporting"
+  },
+  {
+   "id": "sp2.integ.c_group_passes",
+   "pytest_node": "test_case_outcomes.py::test_c_group_passes",
+   "category": "async_result_integration",
+   "description": "Module group C (sklearn.utils.multiclass) passes in its final run",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_result_integration",
+   "relevance_tier": "supporting"
+  },
+  {
+   "id": "sp2.integ.a_run_revision_consistent",
+   "pytest_node": "test_case_outcomes.py::test_a_run_revision_consistent",
+   "category": "async_result_integration",
+   "description": "Group A's final report was produced against the final fix revision",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_result_integration",
+   "relevance_tier": "supporting"
+  },
+  {
+   "id": "sp2.integ.c_run_revision_consistent",
+   "pytest_node": "test_case_outcomes.py::test_c_run_revision_consistent",
+   "category": "async_result_integration",
+   "description": "Group C's final report was produced against the final fix revision",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_result_integration",
+   "relevance_tier": "supporting"
+  },
+  {
+   "id": "sp2.integ.a_branch_preserved",
+   "pytest_node": "test_case_outcomes.py::test_a_branch_preserved",
+   "category": "async_result_integration",
+   "description": "The metrics module stayed byte-identical to its base revision (the fix did not leak outside the fix target)",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_result_integration",
+   "relevance_tier": "supporting"
+  },
+  {
+   "id": "sp2.integ.c_branch_preserved",
+   "pytest_node": "test_case_outcomes.py::test_c_branch_preserved",
+   "category": "async_result_integration",
+   "description": "The preprocessing module stayed byte-identical to its base revision",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_result_integration",
+   "relevance_tier": "supporting"
+  },
+  {
+   "id": "sp2.repair.b_first_failure_recorded",
+   "pytest_node": "test_case_outcomes.py::test_b_first_failure_recorded",
+   "category": "async_dynamic_replanning",
+   "description": "Group B's first run failed and that failure was archived, not hidden",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_dynamic_replanning",
+   "relevance_tier": "direct"
+  },
+  {
+   "id": "sp2.repair.b_repair_applied",
+   "pytest_node": "test_case_outcomes.py::test_b_repair_applied",
+   "category": "async_dynamic_replanning",
+   "description": "The manifest records that the preprocessing path failed first and was repaired to pass",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_dynamic_replanning",
+   "relevance_tier": "direct"
+  },
+  {
+   "id": "sp2.repair.b_group_passes_final",
+   "pytest_node": "test_case_outcomes.py::test_b_group_passes_final",
+   "category": "async_dynamic_replanning",
+   "description": "Group B passes in its final run after the repair",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_dynamic_replanning",
+   "relevance_tier": "direct"
+  },
+  {
+   "id": "sp2.repair.repair_selective_single_file",
+   "pytest_node": "test_case_outcomes.py::test_repair_selective_single_file",
+   "category": "async_dynamic_replanning",
+   "description": "Both the initial and final fix change exactly the single fix target file",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_dynamic_replanning",
+   "relevance_tier": "direct"
+  },
+  {
+   "id": "sp2.repair.passing_branches_preserved_recorded",
+   "pytest_node": "test_case_outcomes.py::test_passing_branches_preserved_recorded",
+   "category": "async_dynamic_replanning",
+   "description": "The groups that passed first (A and C) are recorded as preserved through the repair",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_dynamic_replanning",
+   "relevance_tier": "direct"
+  },
+  {
+   "id": "sp2.repair.b_run_revision_final",
+   "pytest_node": "test_case_outcomes.py::test_b_run_revision_final",
+   "category": "async_dynamic_replanning",
+   "description": "Group B's final passing run and the manifest's repair revision both reference the final fix revision",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_dynamic_replanning",
+   "relevance_tier": "direct"
+  },
+  {
+   "id": "sp2.closure.all_groups_pass_final",
+   "pytest_node": "test_case_outcomes.py::test_all_groups_pass_final",
+   "category": "async_consistency_closure",
+   "description": "All three module groups pass in their final runs",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_consistency_closure",
+   "relevance_tier": "critical"
+  },
+  {
+   "id": "sp2.closure.regression_passes",
+   "pytest_node": "test_case_outcomes.py::test_regression_passes",
+   "category": "source_native_regression",
+   "description": "The SWE-bench source-native full regression suite passes and the manifest agrees",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_consistency_closure",
+   "relevance_tier": "critical"
+  },
+  {
+   "id": "sp2.closure.regression_covers_all_groups",
+   "pytest_node": "test_case_outcomes.py::test_regression_covers_all_groups",
+   "category": "async_consistency_closure",
+   "description": "The regression report covers every module-group file plus the smoke test, all passing",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_consistency_closure",
+   "relevance_tier": "critical"
+  },
+  {
+   "id": "sp2.closure.manifest_matches_reports",
+   "pytest_node": "test_case_outcomes.py::test_manifest_matches_reports",
+   "category": "async_consistency_closure",
+   "description": "The manifest's per-group verdicts agree with the actual on-disk reports",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_consistency_closure",
+   "relevance_tier": "critical"
+  },
+  {
+   "id": "sp2.closure.waited_for_all_groups",
+   "pytest_node": "test_case_outcomes.py::test_waited_for_all_groups",
+   "category": "async_consistency_closure",
+   "description": "Completion was withheld until every group passed and the regression was green",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_consistency_closure",
+   "relevance_tier": "critical"
+  },
+  {
+   "id": "sp2.closure.regression_revision_final",
+   "pytest_node": "test_case_outcomes.py::test_regression_revision_final",
+   "category": "async_consistency_closure",
+   "description": "The regression was run against the final fix revision, not a superseded one",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_consistency_closure",
+   "relevance_tier": "critical"
+  },
+  {
+   "id": "sp2.closure.no_gold_patch_material",
+   "pytest_node": "test_case_outcomes.py::test_no_gold_patch_material",
+   "category": "async_consistency_closure",
+   "description": "The participant tree ships no reference solution, oracle, test runner or patch/diff artifacts",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_consistency_closure",
+   "relevance_tier": "critical"
+  },
+  {
+   "id": "sp2.closure.manifest_case_id",
+   "pytest_node": "test_case_outcomes.py::test_manifest_case_id",
+   "category": "async_consistency_closure",
+   "description": "The manifest names the case and the authoritative/superseded result kinds",
+   "critical": true,
+   "measurement_type": "semantic",
+   "capability_target": "async_consistency_closure",
+   "relevance_tier": "critical"
+  }
+ ]
+}

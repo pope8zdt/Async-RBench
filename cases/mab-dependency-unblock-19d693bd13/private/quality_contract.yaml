@@ -1,0 +1,93 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "A separately frozen implementation emits the same task semantics and authority-bound closure without invoking the oracle entrypoint.",
+      "id": "independent-task-native-equivalence",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-authority-receipt",
+      "must_fail": [
+        "mab_dependency_unblock_19d693bd13.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_authority_receipt.sh"
+    },
+    {
+      "id": "broken-task-closure",
+      "must_fail": [
+        "mab_dependency_unblock_19d693bd13.closure"
+      ],
+      "path": "task/negative_mutations/broken_task_closure.sh"
+    },
+    {
+      "id": "wrong-task-behavior",
+      "must_fail": [
+        "mab_dependency_unblock_19d693bd13.source.task_behavior"
+      ],
+      "path": "task/negative_mutations/wrong_task_behavior.sh"
+    },
+    {
+      "id": "broken-task-preservation",
+      "must_fail": [
+        "mab_dependency_unblock_19d693bd13.source.preservation"
+      ],
+      "path": "task/negative_mutations/broken_task_preservation.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_code18_ecosphere.cf.01_classify_scope_delta",
+          "mab_code18_ecosphere.cf.02_revise_affected",
+          "mab_code18_ecosphere.cf.03_preserve_unaffected",
+          "mab_code18_ecosphere.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_dependency_unblock_19d693bd13.event.receipt",
+          "mab_dependency_unblock_19d693bd13.event.authority_probe",
+          "mab_dependency_unblock_19d693bd13.closure",
+          "mab_dependency_unblock_19d693bd13.source.pin",
+          "mab_dependency_unblock_19d693bd13.source.output_schema",
+          "mab_dependency_unblock_19d693bd13.source.task_behavior",
+          "mab_dependency_unblock_19d693bd13.source.preservation",
+          "mab_dependency_unblock_19d693bd13.source.event_closure"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "The harness then",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "90cf41c44f25f2efbaa5988be72fe0dcf835787b12feede90fd76e0324c01f6c",
+        "task_id": "coding:018",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

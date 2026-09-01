@@ -1,0 +1,240 @@
+{
+  "case_id": "mab-dependency-unblock-2cf6576816",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_failure_delivery_agent_declined_suborder",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.partition_cart_items_int"
+        ]
+      },
+      "id": "01_classify_failure",
+      "must_still_pass": [],
+      "mutation_family": "classify_failure",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_2cf6576816.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "required_behavior": "classify_failure: One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.partition_cart_items_int"
+    },
+    {
+      "critical": false,
+      "decision_group": "recover_or_redelegate_delivery_agent_declined_suborder",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.partition_cart_items_int"
+        ]
+      },
+      "id": "02_recover_or_redelegate",
+      "must_still_pass": [],
+      "mutation_family": "recover_or_redelegate",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_2cf6576816.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:recover_or_redelegate:2",
+      "required_behavior": "recover_or_redelegate: One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.partition_cart_items_int"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_delivery_agent_declined_suborder",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.partition_cart_items_int"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "must_still_pass": [],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_2cf6576816.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.partition_cart_items_int"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_delivery_agent_declined_suborder",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.partition_cart_items_int"
+        ]
+      },
+      "id": "04_verify_closure",
+      "must_still_pass": [],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_2cf6576816.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.partition_cart_items_int"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.partition_cart_items_int"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_aggregate_stat"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.create_and_assign_delive"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_fixtures_for_partial"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.partition_cart_items_int",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_aggregate_stat",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.create_and_assign_delive",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_fixtures_for_partial",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.partition_cart_items_int",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_aggregate_stat",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.create_and_assign_delive",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_fixtures_for_partial",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.partition_cart_items_int",
+      "req.02.implement_aggregate_stat",
+      "req.03.create_and_assign_delive",
+      "req.04.add_fixtures_for_partial",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+    "before_state": "A provisional MultiServe result exists before delivery_agent_declined_suborder.",
+    "event_id": "evt.mab-dependency-unblock-2cf6576816.delivery_agent_declined_suborder",
+    "primary_event_theme": "child_failure_or_implicit_error",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Partition cart items into restaurant-specific suborders.",
+      "id": "req.01.partition_cart_items_int",
+      "observable_probe": "mab_dependency_unblock_2.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for partition_cart_items_into_restaurant"
+    },
+    {
+      "description": "Implement aggregate status from suborder transitions.",
+      "id": "req.02.implement_aggregate_stat",
+      "observable_probe": "mab_dependency_unblock_2.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for implement_aggregate_status_from_subo"
+    },
+    {
+      "description": "Create and assign delivery tasks using the returned grouping rules.",
+      "id": "req.03.create_and_assign_delive",
+      "observable_probe": "mab_dependency_unblock_2.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for create_and_assign_delivery_tasks_usi"
+    },
+    {
+      "description": "Add fixtures for partial readiness, restaurant failure, reassignment, and completed delivery.",
+      "id": "req.04.add_fixtures_for_partial",
+      "observable_probe": "mab_dependency_unblock_2.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_fixtures_for_partial_readiness_r"
+    }
+  ]
+}

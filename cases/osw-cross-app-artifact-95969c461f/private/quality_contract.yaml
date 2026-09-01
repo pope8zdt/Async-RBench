@@ -1,0 +1,93 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Equivalent private source-native scoring path.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_95969c461f.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_95969c461f.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_cross_app_artifact_95969c461f.osworld.paragraph_order"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_95969c461f.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_gemini_959.cf.01_classify_authority_gemini_docx_osworld",
+          "osw_gemini_959.cf.02_revise_affected_gemini_docx_osworld",
+          "osw_gemini_959.cf.03_verify_closure_gemini_docx_osworld"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_95969c461f.event.receipt",
+          "osw_cross_app_artifact_95969c461f.event.probes",
+          "osw_cross_app_artifact_95969c461f.closure",
+          "osw_cross_app_artifact_95969c461f.source.pin",
+          "osw_cross_app_artifact_95969c461f.osworld.identity",
+          "osw_cross_app_artifact_95969c461f.osworld.official_score",
+          "osw_cross_app_artifact_95969c461f.osworld.native_evidence",
+          "osw_cross_app_artifact_95969c461f.osworld.task_assertion",
+          "osw_cross_app_artifact_95969c461f.osworld.output_path",
+          "osw_cross_app_artifact_95969c461f.osworld.response_coverage",
+          "osw_cross_app_artifact_95969c461f.osworld.paragraph_order",
+          "osw_cross_app_artifact_95969c461f.osworld.iliad_highlights",
+          "osw_cross_app_artifact_95969c461f.osworld.gold_fidelity"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "a23099f03f8f4e97562d53c26e5d3d565919cbe77f70d383f0d74c3c409f1695",
+        "task_id": "osworld:multi_apps:5bc63fb9-276a-4439-a7c1-9dc76401737f",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

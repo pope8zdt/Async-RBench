@@ -1,0 +1,342 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_use_the_dimension_system_s_e",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_3.partial_then_complete_re",
+      "evidence_group": "swe_dependency_unb.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.use_the_dimension_system"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A units specialist reports the Function dimension contract: which functions require dimensionless-equivalent arguments, which results are dimensionless, and which special functions retain dimension-dependent behavior.', perform classify_completeness for 'Use the dimension system's equivalence check for required dimensionless arguments.' while retaining valid prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_the_dimension_system"
+        ]
+      },
+      "id": "swe_dependency__a10662.cf.01_classify_completeness_use_the_dimension_",
+      "independence_key": "swe_dependency__a10662.cf.01_classify_completeness_use_the_dimension_",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__a10662.mutation.01_classify_completeness_use_the_dimension_",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3f6d310987.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.use_the_dimension_system"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_limit_dimensionless_result_h",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_3.partial_then_complete_re",
+      "evidence_group": "swe_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.use_the_dimension_system"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A units specialist reports the Function dimension contract: which functions require dimensionless-equivalent arguments, which results are dimensionless, and which special functions retain dimension-dependent behavior.', perform revise_affected for 'Limit dimensionless-result handling to the function classes covered by the contract.' while retaining valid prior result 'Locate Function handling in _collect_factor_and_dimension and draft dimensionless-argument handling.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate Function handling in _collect_factor_and_dimension and draft dimensionless-argument handling.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_the_dimension_system"
+        ]
+      },
+      "id": "swe_dependency__a10662.cf.02_revise_affected_limit_dimensionles",
+      "independence_key": "swe_dependency__a10662.cf.02_revise_affected_limit_dimensionles",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__a10662.mutation.02_revise_affected_limit_dimensionles",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3f6d310987.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.use_the_dimension_system"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_verify_the_reported_exp_expr",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_3.partial_then_complete_re",
+      "evidence_group": "swe_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.use_the_dimension_system"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A units specialist reports the Function dimension contract: which functions require dimensionless-equivalent arguments, which results are dimensionless, and which special functions retain dimension-dependent behavior.', perform verify_closure for 'Verify the reported exp expression combines with 100 without error.' while retaining valid prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.use_the_dimension_system"
+        ]
+      },
+      "id": "swe_dependency__a10662.cf.03_verify_closure_verify_the_reporte",
+      "independence_key": "swe_dependency__a10662.cf.03_verify_closure_verify_the_reporte",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__a10662.mutation.03_verify_closure_verify_the_reporte",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3f6d310987.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.use_the_dimension_system"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "family": "wait_for_authority",
+      "id": "swe_dependency__a10662.mutation.01_classify_completeness_use_the_dimension_",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__a10662.cf.01_classify_completeness_use_the_dimension_"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_3f6d310987.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__a10662.cf.01_classify_completeness_use_the_dimension_",
+        "swe_dependency_unblock_3f6d310987.event.receipt",
+        "swe_dependency_unblock_3f6d310987.event.probes",
+        "swe_dependency_unblock_3f6d310987.closure",
+        "swe_dependency_unblock_3f6d310987.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate Function handling in _collect_factor_and_dimension and draft dimensionless-argument handling.'.",
+      "family": "resolve_authority",
+      "id": "swe_dependency__a10662.mutation.02_revise_affected_limit_dimensionles",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__a10662.cf.02_revise_affected_limit_dimensionles"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_3f6d310987.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__a10662.cf.02_revise_affected_limit_dimensionles",
+        "swe_dependency_unblock_3f6d310987.event.receipt",
+        "swe_dependency_unblock_3f6d310987.event.probes",
+        "swe_dependency_unblock_3f6d310987.closure",
+        "swe_dependency_unblock_3f6d310987.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduce the failure for exp(second/(ohm*farad)) inside an addition.'.",
+      "family": "rederive_from_authority",
+      "id": "swe_dependency__a10662.mutation.03_verify_closure_verify_the_reporte",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__a10662.cf.03_verify_closure_verify_the_reporte"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_3f6d310987.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__a10662.cf.03_verify_closure_verify_the_reporte",
+        "swe_dependency_unblock_3f6d310987.event.receipt",
+        "swe_dependency_unblock_3f6d310987.event.probes",
+        "swe_dependency_unblock_3f6d310987.closure",
+        "swe_dependency_unblock_3f6d310987.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency_unblock_3f6d310987.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency_unblock_3f6d310987.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency_unblock_3f6d310987.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_dependency_unblock_3f6d310987.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: test_Quantity_definition (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_01_test_quantity_definition",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_01_test_quantity_definition",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: test_Quantity_eq (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_02_test_quantity_eq",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_02_test_quantity_eq",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: test_abbrev (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_03_test_abbrev",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_03_test_abbrev",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: test_add_sub (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_04_test_add_sub",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_04_test_add_sub",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: test_convert_to (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_05_test_convert_to",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_05_test_convert_to",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: test_eq (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_06_test_eq",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_06_test_eq",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "Declared native pytest failing surface remains green: test_issue_24062 (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_07_test_issue_24062",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_07_test_issue_24062",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: test_print (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_08_test_print",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_08_test_print",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: test_str_repr (1 assertions)",
+      "id": "swe_dependency_unblock_3f6d310987.native.pytest_09_test_str_repr",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_09_test_str_repr",
+      "relevance_tier": "base"
+    }
+  ]
+}

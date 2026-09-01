@@ -1,0 +1,34 @@
+from __future__ import annotations
+import argparse, hashlib, json, os, pathlib, subprocess, time
+
+CASE_ID = 'swe-late-constraint-7ce47cda27'
+SOURCE_ID = 'django__django-11815'
+EVENT = 'late_validator_serialization_regression'
+MEANING = 'A late migration regression result constrains how class-based validators and enums are serialized by the provisional patch.'
+PROBE_PATHS = ['/testbed/.git/HEAD', '/testbed/django/db/migrations/serializer.py']
+COMMAND = ['/opt/miniconda3/envs/testbed/bin/python', 'tests/runtests.py', '--verbosity', '0', 'migrations.test_writer.OperationWriterTests', 'migrations.test_writer.WriterTests']
+
+def digest_path(path):
+    p = pathlib.Path(path)
+    if not p.exists(): return None
+    if p.is_file(): return hashlib.sha256(p.read_bytes()).hexdigest()
+    h = hashlib.sha256()
+    for child in sorted(x for x in p.rglob('*') if x.is_file() and '.git' not in x.parts):
+        h.update(str(child.relative_to(p)).encode()); h.update(b'\0'); h.update(child.read_bytes())
+    return h.hexdigest()
+
+def main():
+    ap=argparse.ArgumentParser(); ap.add_argument('--workspace', default='/testbed'); ap.add_argument('--output', default='/app/output_data/event_receipt.json'); args=ap.parse_args()
+    workspace=pathlib.Path(args.workspace)
+    before=digest_path(workspace)
+    started=time.time(); exit_code=0; output=''
+    if COMMAND:
+        proc=subprocess.run(COMMAND, cwd=workspace, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        exit_code=proc.returncode; output=proc.stdout[-12000:]
+    probes={path: digest_path(path) for path in PROBE_PATHS}
+    after=digest_path(workspace)
+    payload={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'meaning':MEANING,'worker_started_at':started,'worker_finished_at':time.time(),'worker_exit_code':exit_code,'worker_output':output,'workspace_revision_before':before,'workspace_revision_after':after,'probes':probes}
+    canonical=json.dumps(payload,sort_keys=True,separators=(',',':')).encode(); payload['receipt_sha256']=hashlib.sha256(canonical).hexdigest()
+    out=pathlib.Path(args.output); out.parent.mkdir(parents=True,exist_ok=True); out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+    print(json.dumps(payload,sort_keys=True)); return exit_code
+if __name__=='__main__': raise SystemExit(main())

@@ -1,0 +1,41 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:vlc:5ac2891a-eacd-4954-b339-98abba077adb",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/vlc/5ac2891a-eacd-4954-b339-98abba077adb.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "vlc snapshot",
+      "private source assets",
+      "private native fixture",
+      "private delayed payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "vlc",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:vlc:5ac2891a-eacd-4954-b339-98abba077adb in pinned base_setup; truth remains private.",
+    "event_injection": "Release delayed vlc_play_and_exit_setting after a persisted task-specific checkpoint.",
+    "hidden_tests": "check_play_and_exit, native digest, config_path, preference_value, single_effective_assignment, restart_persistence, playback_behavior, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "base_setup",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private vlc_persistence_osworld.sh scores check_play_and_exit.",
+    "requires_authored_private_oracle": false
+  }
+}

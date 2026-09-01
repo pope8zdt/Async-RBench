@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-0298f78d18",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_finance_checkpoint",
+      "forbidden_behavior": "Do not finalize the Finance diagnosis before the database:008 receipt or accept a receipt without both insertion row-count and byte metrics.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_returned_pl"
+        ]
+      },
+      "id": "01_classify_authority_finance_checkpoint",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0298f78d18.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After the provisional Finance comparison exists, accept the delayed database:008 receipt as authority only after verifying its case/source binding and its 5,000-row, 1,556,480-byte insertion evidence.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.validate_the_returned_pl"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_from_authority_finance_insert",
+      "forbidden_behavior": "Do not retain a displaced provisional cause or erase completed lock, vacuum, redundant-index, and fetch checks.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_returned_pl"
+        ]
+      },
+      "id": "02_revise_from_authority_finance_insert",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0298f78d18.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Use the authoritative insertion checkpoint to revise the affected Finance diagnosis to INSERT_LARGE_DATA, while preserving completed lock, vacuum, redundant-index, and fetch eliminations.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.validate_the_returned_pl"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_finance_diagnosis",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Lock, vacuum, and redundant-index checks have completed.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_returned_pl"
+        ]
+      },
+      "id": "03_verify_closure_finance_diagnosis",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0298f78d18.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Rederive the final Finance diagnosis from the delayed receipt and the preserved five-hypothesis matrix, verify INSERT_LARGE_DATA, and ensure the native answer shape remains satisfied.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.validate_the_returned_pl"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.validate_the_returned_pl"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.update_the_matrix_to_sup"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.remove_only_the_displace"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.produce_the_exact_two_ca"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.validate_the_returned_pl",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.update_the_matrix_to_sup",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.remove_only_the_displace",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.produce_the_exact_two_ca",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.validate_the_returned_pl",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.update_the_matrix_to_sup",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.remove_only_the_displace",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.produce_the_exact_two_ca",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.validate_the_returned_pl",
+      "req.02.update_the_matrix_to_sup",
+      "req.03.remove_only_the_displace",
+      "req.04.produce_the_exact_two_ca",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:008 checkpoint reports 5,000 inserted rows and 1,556,480 bytes and authoritatively confirms INSERT_LARGE_DATA.",
+    "before_state": "The Finance five-hypothesis comparison and completed alternative-cause eliminations are persisted provisionally.",
+    "event_id": "evt.mab_finance_0298.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Validate that the delayed database:008 receipt is case-bound and records 5,000 inserted rows totaling 1,556,480 bytes.",
+      "id": "req.01.validate_the_returned_pl",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for validate_the_returned_plans_and_stat"
+    },
+    {
+      "description": "Revise the affected Finance diagnosis to INSERT_LARGE_DATA from the authoritative insertion checkpoint.",
+      "id": "req.02.update_the_matrix_to_sup",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for update_the_matrix_to_support_fetch_l"
+    },
+    {
+      "description": "Preserve the completed LOCK_CONTENTION, VACUUM, REDUNDANT_INDEX, and FETCH_LARGE_DATA elimination evidence.",
+      "id": "req.03.remove_only_the_displace",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for remove_only_the_displaced_provisiona"
+    },
+    {
+      "description": "Rederive and verify the receipt-bound final answer under the native output contract.",
+      "id": "req.04.produce_the_exact_two_ca",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for produce_the_exact_two_cause_answer"
+    }
+  ]
+}

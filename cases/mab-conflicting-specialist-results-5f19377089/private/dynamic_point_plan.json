@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_conflict_validate_relation_and_worklo",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.classify_conflict",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.validate_relation_and_wo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.', perform classify_conflict for 'Validate relation and workload-window attribution for the returned scan counters.' while retaining valid prior result 'Table sizing and timestamps establish a dense two-million-row bulk load.'.",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Table sizing and timestamps establish a dense two-million-row bulk load.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_relation_and_wo"
+        ]
+      },
+      "id": "mab_conflict_db11.cf.01_classify_conflict_validate_relation_",
+      "independence_key": "mab_conflict_db11.cf.01_classify_conflict_validate_relation_",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db11.mutation.01_classify_conflict_validate_relation_",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_5f19377089.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.validate_relation_and_wo"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "arbitrate_conflict_record_fetch_large_data_as_s",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.arbitrate_conflict",
+      "evidence_spec": {
+        "primary_fact": "conflict_resolution",
+        "subject": "req.01.validate_relation_and_wo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.', perform arbitrate_conflict for 'Record FETCH_LARGE_DATA as supported.' while retaining valid prior result 'Catalog checks eliminate duplicate-index and vacuum explanations.'.",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Catalog checks eliminate duplicate-index and vacuum explanations.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_relation_and_wo"
+        ]
+      },
+      "id": "mab_conflict_db11.cf.02_arbitrate_conflict_record_fetch_large",
+      "independence_key": "mab_conflict_db11.cf.02_arbitrate_conflict_record_fetch_large",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db11.mutation.02_arbitrate_conflict_record_fetch_large",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_5f19377089.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.validate_relation_and_wo"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_remove_the_conflicting_preli",
+      "dimension": "closure",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.validate_relation_and_wo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.', perform verify_closure for 'Remove the conflicting preliminary label while preserving the insert findings.' while retaining valid prior result 'A preliminary report leaves read volume unresolved.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A preliminary report leaves read volume unresolved.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_relation_and_wo"
+        ]
+      },
+      "id": "mab_conflict_db11.cf.03_verify_closure_remove_the_conflic",
+      "independence_key": "mab_conflict_db11.cf.03_verify_closure_remove_the_conflic",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db11.mutation.03_verify_closure_remove_the_conflic",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_5f19377089.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.validate_relation_and_wo"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "event_theme": "conflicting_valid_results",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.",
+        "before": "Read-path measurements arrive only after physical-load analysis and draft synthesis.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

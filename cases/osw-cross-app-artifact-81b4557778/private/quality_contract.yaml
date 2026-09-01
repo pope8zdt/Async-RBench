@@ -1,0 +1,84 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-extension-installation",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.native.manifest_state"
+      ],
+      "path": "task/negative_mutations/wrong_extension_installation.sh"
+    },
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_81b4557778.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_multiext_8.cf.01_classify_scope_delta_unpack_the_artifac",
+          "osw_multiext_8.cf.02_revise_affected_enable_developer_m",
+          "osw_multiext_8.cf.03_preserve_unaffected_choose_load_unpack",
+          "osw_multiext_8.cf.04_verify_closure_verify_the_extensi"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_81b4557778.event.receipt",
+          "osw_cross_app_artifact_81b4557778.event.probes",
+          "osw_cross_app_artifact_81b4557778.closure",
+          "osw_cross_app_artifact_81b4557778.source.pin",
+          "osw_cross_app_artifact_81b4557778.native.extension_path",
+          "osw_cross_app_artifact_81b4557778.native.manifest_state",
+          "osw_cross_app_artifact_81b4557778.native.persisted_target",
+          "osw_cross_app_artifact_81b4557778.native.manifest_version"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "unpacked Chrome extension",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "3b4b93b72059511359136a96278f95b9c9abbeaa536d0ae43b5846c75306cc5a",
+        "task_id": "osworld:multi_apps:a74b607e-6bb5-4ea8-8a7c-5d97c7bbcd2a",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

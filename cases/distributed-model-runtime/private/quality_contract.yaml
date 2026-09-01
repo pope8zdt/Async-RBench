@@ -1,0 +1,171 @@
+{
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "requirements_manifest",
+    "manifest_review": {
+      "decision": "approved",
+      "reviewer_id": "formal-case-audit",
+      "reviewed_at": "2026-09-01"
+    },
+    "sources": [
+      {
+        "task_id": "pytorch-model-recovery",
+        "task_path": "private/source_model.yaml",
+        "instruction_sha256": "4771a2ddc6cf1dc1dc4876acc6dcd0c6fa516cf41b586f2b5504d5c6b9375a0f",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Reconstruct the model from /app/weights.pt",
+            "requirement_ids": [
+              "distributed-model-runtime.complete_task_and_async_closure"
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "torch-tensor-parallelism",
+        "task_path": "private/source_tensor.yaml",
+        "instruction_sha256": "de35ff239923e1140ddc9961874c915d1be6348c90d2f3a53953cb6453cc2947",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Implement ColumnParallelLinear and RowParallelLinear",
+            "requirement_ids": [
+              "distributed-model-runtime.complete_task_and_async_closure"
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "torch-pipeline-parallelism",
+        "task_path": "private/source_pipeline.yaml",
+        "instruction_sha256": "0d4c2b5e01f57dc351b3a0784409adbd46052a45f12fb0f905f7fef8d2596bc3",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Implement train_step_pipeline_afab for a LLaMA model",
+            "requirement_ids": [
+              "distributed-model-runtime.complete_task_and_async_closure"
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "llm-inference-batching-scheduler",
+        "task_path": "private/source_scheduler.yaml",
+        "instruction_sha256": "4addfce1140d70cc0e4d8bd1e1a3970493a40266c22a9122e733a4cff2eda032",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Produce shape-aware batching plans for both request buckets",
+            "requirement_ids": [
+              "distributed-model-runtime.complete_task_and_async_closure"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "id": "distributed-model-runtime.complete_task_and_async_closure",
+      "public_evidence": [
+        {
+          "path": "task/task.yaml",
+          "contains": "INITIAL CONCURRENT WORKSTREAMS"
+        },
+        {
+          "path": "task/task.yaml",
+          "contains": "INITIAL CONCURRENT WORKSTREAMS"
+        }
+      ],
+      "covers": {
+        "semantic_checks": [
+          "dm.authority.profile_exact",
+          "dm.authority.backend_feasible",
+          "dm.authority.version_world_size",
+          "dm.authority.implementation_matches_backend",
+          "dm.stale.tensor_candidate_rejected",
+          "dm.stale.provisional_profile_rejected",
+          "dm.stale.provisional_implementation_rejected",
+          "dm.stale.provisional_lineage_rejected",
+          "dm.plans.bucket1_complete_unique",
+          "dm.plans.bucket2_complete_unique",
+          "dm.plans.final_shape_contract",
+          "dm.plans.global_shape_budget",
+          "dm.plans.cost_thresholds",
+          "dm.runtime.model_hidden_inference",
+          "dm.runtime.pipeline_world_size_one",
+          "dm.runtime.pipeline_world_size_two",
+          "dm.runtime.selected_backend_smoke",
+          "dm.lineage.deployment_schema",
+          "dm.lineage.model_implementation_hashes",
+          "dm.lineage.plan_hashes",
+          "dm.lineage.batch_lineage_exact",
+          "dm.support.model_quality_improved",
+          "dm.support.tensor_parallel_minimal_numerics",
+          "dm.support.required_artifacts_usable"
+        ],
+        "dynamic_control_checks": [
+          "dm.cf.wait_profile_before_backend",
+          "dm.cf.reject_provisional_tp",
+          "dm.cf.cancel_tp_child",
+          "dm.cf.regenerate_batches_from_v2"
+        ],
+        "hidden_checks": [
+          "model_integrity",
+          "backend_feasibility",
+          "batch_plan",
+          "deployment_lineage"
+        ],
+        "workstream_validators": [
+          "implement_tp",
+          "select_backend",
+          "recover_model"
+        ]
+      }
+    }
+  ],
+  "equivalence_solutions": [
+    {
+      "id": "independent-task-native-equivalence",
+      "path": "task/equivalence_solutions/alternative_solution.sh",
+      "distinguishes_from_oracle": "A separately executable task-native implementation reconstructs required artifacts and authority-bound closure without invoking oracle.py or oracle.sh."
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-authoritative-profile",
+      "path": "task/negative_mutations/wrong_authority_profile.sh",
+      "must_fail": [
+        "dm.authority.backend_feasible",
+        "dm.stale.provisional_profile_rejected"
+      ],
+      "must_still_pass": [
+        "dm.support.required_artifacts_usable"
+      ]
+    },
+    {
+      "id": "wrong-plan-rebuild",
+      "path": "task/negative_mutations/wrong_plan_lineage.sh",
+      "must_fail": [
+        "dm.plans.final_shape_contract"
+      ],
+      "must_still_pass": [
+        "dm.authority.profile_exact"
+      ]
+    },
+    {
+      "id": "broken-deployment-closure",
+      "path": "task/negative_mutations/broken_closure.sh",
+      "must_fail": [
+        "dm.lineage.batch_lineage_exact",
+        "dm.stale.provisional_lineage_rejected"
+      ],
+      "must_still_pass": [
+        "dm.plans.bucket1_complete_unique"
+      ]
+    }
+  ],
+  "information_sufficiency": [
+    {"workstream_id": "implement_tp", "requirement_ids": ["distributed-model-runtime.complete_task_and_async_closure"]},
+    {"workstream_id": "select_backend", "requirement_ids": ["distributed-model-runtime.complete_task_and_async_closure"]},
+    {"workstream_id": "recover_model", "requirement_ids": ["distributed-model-runtime.complete_task_and_async_closure"]}
+  ]
+}

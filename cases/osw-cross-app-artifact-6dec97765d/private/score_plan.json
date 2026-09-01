@@ -1,0 +1,432 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_completeness_terminal_vscode_project",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_6dec97765d.partial_then_complete_result",
+      "evidence_group": "osw_vscode_6dec.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "terminal_vscode_project"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_vscode_6dec.cf.01_classify_completeness_terminal_vscode_project",
+      "independence_key": "osw_vscode_6dec.cf.01_classify_completeness_terminal_vscode_project",
+      "measurement_type": "control",
+      "mutation_id": "osw_vscode_6dec.mutation.01_classify_completeness_terminal_vscode_project",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_6dec97765d.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.project_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_terminal_vscode_project",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_6dec97765d.partial_then_complete_result",
+      "evidence_group": "osw_vscode_6dec.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "terminal_vscode_project"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_vscode_6dec.cf.02_revise_affected_terminal_vscode_project",
+      "independence_key": "osw_vscode_6dec.cf.02_revise_affected_terminal_vscode_project",
+      "measurement_type": "control",
+      "mutation_id": "osw_vscode_6dec.mutation.02_revise_affected_terminal_vscode_project",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_6dec97765d.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.project_assets"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_terminal_vscode_project",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_cross_app_artifact_6dec97765d.partial_then_complete_result",
+      "evidence_group": "osw_vscode_6dec.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "terminal_vscode_project"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_vscode_6dec.cf.03_preserve_unaffected_terminal_vscode_project",
+      "independence_key": "osw_vscode_6dec.cf.03_preserve_unaffected_terminal_vscode_project",
+      "measurement_type": "control",
+      "mutation_id": "osw_vscode_6dec.mutation.03_preserve_unaffected_terminal_vscode_project",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_6dec97765d.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.terminal_history"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_terminal_vscode_project",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_6dec97765d.partial_then_complete_result",
+      "evidence_group": "osw_vscode_6dec.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "terminal_vscode_project"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for terminal_vscode_project; preserve confirmed terminal, vscode, vscode_extension state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_vscode_6dec.cf.04_verify_closure_terminal_vscode_project",
+      "independence_key": "osw_vscode_6dec.cf.04_verify_closure_terminal_vscode_project",
+      "measurement_type": "control",
+      "mutation_id": "osw_vscode_6dec.mutation.04_verify_closure_terminal_vscode_project",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_6dec97765d.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.open_project_probe"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "wait_for_authority",
+      "id": "osw_vscode_6dec.mutation.01_classify_completeness_terminal_vscode_project",
+      "may_fail": [],
+      "must_fail": [
+        "osw_vscode_6dec.cf.01_classify_completeness_terminal_vscode_project"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ],
+      "targets": [
+        "osw_vscode_6dec.cf.01_classify_completeness_terminal_vscode_project",
+        "osw_cross_app_artifact_6dec97765d.event.receipt",
+        "osw_cross_app_artifact_6dec97765d.event.probes",
+        "osw_cross_app_artifact_6dec97765d.closure",
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "resolve_authority",
+      "id": "osw_vscode_6dec.mutation.02_revise_affected_terminal_vscode_project",
+      "may_fail": [],
+      "must_fail": [
+        "osw_vscode_6dec.cf.02_revise_affected_terminal_vscode_project"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ],
+      "targets": [
+        "osw_vscode_6dec.cf.02_revise_affected_terminal_vscode_project",
+        "osw_cross_app_artifact_6dec97765d.event.receipt",
+        "osw_cross_app_artifact_6dec97765d.event.probes",
+        "osw_cross_app_artifact_6dec97765d.closure",
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "selective_replan",
+      "id": "osw_vscode_6dec.mutation.03_preserve_unaffected_terminal_vscode_project",
+      "may_fail": [],
+      "must_fail": [
+        "osw_vscode_6dec.cf.03_preserve_unaffected_terminal_vscode_project"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ],
+      "targets": [
+        "osw_vscode_6dec.cf.03_preserve_unaffected_terminal_vscode_project",
+        "osw_cross_app_artifact_6dec97765d.event.receipt",
+        "osw_cross_app_artifact_6dec97765d.event.probes",
+        "osw_cross_app_artifact_6dec97765d.closure",
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "rederive_from_authority",
+      "id": "osw_vscode_6dec.mutation.04_verify_closure_terminal_vscode_project",
+      "may_fail": [],
+      "must_fail": [
+        "osw_vscode_6dec.cf.04_verify_closure_terminal_vscode_project"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ],
+      "targets": [
+        "osw_vscode_6dec.cf.04_verify_closure_terminal_vscode_project",
+        "osw_cross_app_artifact_6dec97765d.event.receipt",
+        "osw_cross_app_artifact_6dec97765d.event.probes",
+        "osw_cross_app_artifact_6dec97765d.closure",
+        "osw_cross_app_artifact_6dec97765d.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_cross_app_artifact_6dec97765d.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_cross_app_artifact_6dec97765d.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_cross_app_artifact_6dec97765d.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_cross_app_artifact_6dec97765d.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:510f64c8-9bcc-4be1-8d30-638705850618 and check_include_exclude+compare_config.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "VS Code is launched from the terminal with /home/user/Desktop/project, shell history contains the code command, and the OpenProject evaluator reports project.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The exact Desktop project folder is targeted.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.project_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The three expected project assets remain present.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.project_assets",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_assets",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Shell history proves the code command came from the terminal.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.terminal_history",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_terminal_history",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The VS Code evaluator extension reports project.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.open_project_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_open_project_probe",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "VS Code is active on the project folder.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.vscode_state",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_vscode_state",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Both official evaluator branches pass.",
+      "id": "osw_cross_app_artifact_6dec97765d.osworld.official_checks",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_checks",
+      "relevance_tier": "base"
+    }
+  ]
+}

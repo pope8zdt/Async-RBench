@@ -1,0 +1,113 @@
+{
+  "policy_version": "codex-authoritative-screen-v1",
+  "screener": "current_codex_session",
+  "decision_rule": "Promote only when the source task admits an independent result producer, affected work can proceed before arrival, arrival order can change the plan, and a deterministic executable consequence can expose stale integration. Rule keyword hits are evidence locators only.",
+  "families": [
+    {
+      "id": "service_late_verification",
+      "candidate_event": "late_authoritative_result",
+      "independent_producer": "A background health checker or end-to-end client independently probes the deployed service, VM, protocol, or daemon.",
+      "affected_work": "The main agent continues configuration, deployment, or completion preparation while the probe runs.",
+      "arrival_order_effect": "A late negative probe must reopen configuration or deployment; accepting completion first leaves a stale service state.",
+      "executable_consequence": "The port, protocol, content, login, or daemon probe fails and the completion gate rejects the run.",
+      "tasks": [
+        "build-initramfs-qemu", "build-linux-kernel-qemu", "build-tcc-qemu",
+        "configure-git-webserver", "fibonacci-server", "git-multibranch",
+        "hdfs-deployment", "home-server-https", "jupyter-notebook-server",
+        "mailman", "mlflow-register", "nginx-request-logging", "protocol-analysis-rs",
+        "pypi-server", "qemu-alpine-ssh", "qemu-startup", "solana-data"
+      ]
+    },
+    {
+      "id": "multi_source_reconciliation",
+      "candidate_event": "downstream_invalidation",
+      "independent_producer": "Independent workers parse a data source, document shard, log partition, or benchmark repetition and return typed results with provenance.",
+      "affected_work": "The main branch begins merging, reporting, or selecting an implementation from the results already available.",
+      "arrival_order_effect": "A late source or measurement can change conflicts, totals, chosen values, or the preferred implementation and invalidate downstream output.",
+      "executable_consequence": "Schema, count, checksum, conflict report, or repeated performance assertions expose an output built from an incomplete result set.",
+      "tasks": [
+        "financial-document-processor", "flood-monitoring-basic", "html-finance-verify",
+        "multi-source-data-merger", "predicate-pushdown-bench", "recover-accuracy-log",
+        "reshard-c4-data"
+      ]
+    },
+    {
+      "id": "forensic_authoritative_evidence",
+      "candidate_event": "conflicting_results",
+      "independent_producer": "An independent forensic or recovery worker inspects hidden history, damaged artifacts, or candidate reconstructions and returns authoritative evidence.",
+      "affected_work": "The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.",
+      "arrival_order_effect": "Late recovered evidence can contradict the earlier hypothesis and require rebuilding or undoing cleanup.",
+      "executable_consequence": "Recovered row counts, object hashes, secret scans, or reconstruction tests reject guessed or prematurely cleaned output.",
+      "tasks": [
+        "catch-me-if-you-can", "db-wal-recovery", "fix-git", "git-leak-recovery",
+        "pytorch-model-recovery", "recover-obfuscated-files", "sanitize-git-repo",
+        "sqlite-db-truncate", "tree-directory-parser"
+      ]
+    },
+    {
+      "id": "adversarial_validation",
+      "candidate_event": "reverification",
+      "independent_producer": "A separate adversarial validator, exploit runner, or browser scanner tests bypasses independently of the patch author.",
+      "affected_work": "The main branch implements and prepares to accept a security or sanitization fix.",
+      "arrival_order_effect": "A late bypass result invalidates the apparent fix and requires a different implementation or broader cleanup.",
+      "executable_consequence": "A concrete exploit, payload, secret scan, or browser execution remains successful and fails the security gate.",
+      "tasks": [
+        "break-filter-js-from-html", "filter-js-from-html", "fix-code-vulnerability",
+        "intrusion-detection", "security-celery-redis-rce", "spring-messaging-vul",
+        "sql-injection-attack", "vul-flask", "vul-flink", "vulnerable-secret"
+      ]
+    },
+    {
+      "id": "pipeline_or_parallel_stage",
+      "candidate_event": "downstream_invalidation",
+      "independent_producer": "A pipeline stage, parallel shard, distributed-rank verifier, or independent DAG checker returns an artifact or validation result.",
+      "affected_work": "Downstream assembly, optimization, or reporting proceeds using provisional upstream output.",
+      "arrival_order_effect": "A late stage failure or changed shard result invalidates downstream artifacts and forces selective recomputation.",
+      "executable_consequence": "Stage manifests, rank agreement, deterministic hashes, or end-to-end pipeline tests reject stale downstream output.",
+      "tasks": [
+        "llm-inference-batching-scheduler", "parallel-particle-simulator",
+        "parallelize-compute-squares", "parallelize-graph", "stable-parallel-kmeans",
+        "tmux-advanced-workflow", "torch-pipeline-parallelism"
+      ]
+    },
+    {
+      "id": "independent_constraint_providers",
+      "candidate_event": "late_authoritative_result",
+      "independent_producer": "Separate participants or constraint providers independently return availability, preference, or feasibility information.",
+      "affected_work": "The main branch begins selecting and arranging a schedule or reservation from partial constraints.",
+      "arrival_order_effect": "A late participant constraint can invalidate the chosen option and force reselection.",
+      "executable_consequence": "A deterministic constraint checker rejects a reservation or schedule that omitted the late result.",
+      "tasks": ["constraints-scheduling", "find-restaurant", "schedule-vacation"]
+    },
+    {
+      "id": "code_async_or_concurrency_semantics",
+      "candidate_event": "conflicting_results",
+      "independent_producer": "A focused reproducer or regression-test worker exercises async, batching, serving, worker-I/O, or agent behavior independently of the implementation branch.",
+      "affected_work": "The main branch edits the implementation while the independent reproducer or compatibility matrix is still running.",
+      "arrival_order_effect": "A late concurrency or compatibility result can refute the patch design and require changes before integration.",
+      "executable_consequence": "The targeted regression, concurrency, serving, or compatibility test fails on the integrated patch.",
+      "tasks": [
+        "swe-bench-fsspec", "sveltejs__svelte-9962", "simdjson__simdjson-2016",
+        "serverless__serverless-2576", "Significant-Gravitas__AutoGPT-4652",
+        "instance_ansible__ansible-8127abbc298cabf04aaa89a478fc5e5e3432a6fc-v30a923fb5c164d6cd18280c02422f75e611e8fb2",
+        "instance_ansible__ansible-622a493ae03bd5e5cf517d336fc426e9d12208c7-v906c969b551b346ef54a2c0b41e04f632b7b73c2",
+        "instance_flipt-io__flipt-756f00f79ba8abf9fe53f3c6c818123b42eb7355",
+        "huggingface__transformers-19590"
+      ]
+    }
+  ],
+  "watchlist_tasks": [
+    "analyze-access-logs", "audio-synth-stft-peaks", "bn-fit-modify",
+    "cobol-modernization", "count-call-stack", "log-summary", "log-summary-date-ranges",
+    "pandas-etl", "pcap-to-netflow", "predict-customer-churn", "processing-pipeline",
+    "video-processing", "wasm-pipeline", "attention-mil", "caffe-cifar-10",
+    "cartpole-rl-training", "chem-rf", "classifier-debug", "hf-model-inference",
+    "mteb-eval", "spinning-up-rl",
+    "train-fasttext", "word2vec-from-scratch", "leelachess0-pytorch-conversion",
+    "neuron-to-jaxley-conversion", "gpt2-codegolf", "parallelize-graph",
+    "huggingface__transformers-13865", "huggingface__transformers-22920",
+    "keras-team__keras-18871", "keras-team__keras-19201",
+    "instance_ansible__ansible-4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6-v1055803c3a812189a1133297f7f5468579283f86",
+    "instance_ansible__ansible-d58e69c82d7edd0583dd8e78d76b075c33c3151e-v173091e2e36d38c978002990795f66cfc0af30ad"
+  ]
+}

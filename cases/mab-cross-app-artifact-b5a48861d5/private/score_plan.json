@@ -1,0 +1,380 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_b5a48861d5_classify_scope_delta_01",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_cross_app_artifact_b5a48861d5.task_scope_or_dependency_change",
+      "evidence_group": "mab_cross_app_artifact_b.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.bind_each_review_and_ann"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Classify the Git adapter receipt as a dependency change affecting repository-bound reviews and history, while leaving collaboration features in scope and intact. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.bind_each_review_and_ann"
+        ]
+      },
+      "id": "mab_code63_cross.cf.01_classify_scope_delta_8861d5",
+      "independence_key": "mab_code63_cross.cf.01_classify_scope_delta_8861d5",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_cross_app_artifact_b.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "mab_code63_cross.mutation.01_classify_scope_delta_8861d5",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_b5a48861d5.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "required_behavior": "Classify the Git adapter receipt as a dependency change affecting repository-bound reviews and history, while leaving collaboration features in scope and intact. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.bind_each_review_and_ann"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_b5a48861d5_revise_affected_02",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_cross_app_artifact_b5a48861d5.task_scope_or_dependency_change",
+      "evidence_group": "mab_cross_app_artifact_b.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_pull_diff_push"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rebind review snapshots to commits and apply the delivered pull, diff, push, history, non-fast-forward, retry, and idempotency contract. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_pull_diff_push"
+        ]
+      },
+      "id": "mab_code63_cross.cf.02_revise_affected_8861d5",
+      "independence_key": "mab_code63_cross.cf.02_revise_affected_8861d5",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_cross_app_artifact_b.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "mutation_id": "mab_code63_cross.mutation.02_revise_affected_8861d5",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_b5a48861d5.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "Rebind review snapshots to commits and apply the delivered pull, diff, push, history, non-fast-forward, retry, and idempotency contract. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_pull_diff_push"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_b5a48861d5_preserve_unaffected_03",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_cross_app_artifact_b5a48861d5.task_scope_or_dependency_change",
+      "evidence_group": "mab_cross_app_artifact_b.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.handle_non_fast_forward_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Preserve snippets, annotations, chat, issue transitions, review comments, authentication, and role permissions while revising repository integration. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.handle_non_fast_forward_"
+        ]
+      },
+      "id": "mab_code63_cross.cf.03_preserve_unaffected_8861d5",
+      "independence_key": "mab_code63_cross.cf.03_preserve_unaffected_8861d5",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_cross_app_artifact_b.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "mutation_id": "mab_code63_cross.mutation.03_preserve_unaffected_8861d5",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_b5a48861d5.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "required_behavior": "Preserve snippets, annotations, chat, issue transitions, review comments, authentication, and role permissions while revising repository integration. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.handle_non_fast_forward_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_b5a48861d5_verify_closure_04",
+      "dimension": "closure",
+      "event_id": "evt.mab_cross_app_artifact_b5a48861d5.task_scope_or_dependency_change",
+      "evidence_group": "mab_cross_app_artifact_b.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.add_fake_repository_test"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Close only after fake-repository checks cover branch movement, conflict, history reconstruction, retry, and duplicate-push exclusion and bind the exact Git receipt. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_fake_repository_test"
+        ]
+      },
+      "id": "mab_code63_cross.cf.04_verify_closure_8861d5",
+      "independence_key": "mab_code63_cross.cf.04_verify_closure_8861d5",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_cross_app_artifact_b.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "mab_code63_cross.mutation.04_verify_closure_8861d5",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_b5a48861d5.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "required_behavior": "Close only after fake-repository checks cover branch movement, conflict, history reconstruction, retry, and duplicate-push exclusion and bind the exact Git receipt. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_fake_repository_test"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "family": "wait_for_authority",
+      "id": "mab_code63_cross.mutation.01_classify_scope_delta_8861d5",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code63_cross.cf.01_classify_scope_delta_8861d5"
+      ],
+      "must_still_pass": [
+        "mab_cross_app_artifact_b5a48861d5.source.pin"
+      ],
+      "targets": [
+        "mab_code63_cross.cf.01_classify_scope_delta_8861d5",
+        "mab_cross_app_artifact_b5a48861d5.event.receipt",
+        "mab_cross_app_artifact_b5a48861d5.event.authority_probe",
+        "mab_cross_app_artifact_b5a48861d5.closure",
+        "mab_cross_app_artifact_b5a48861d5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "family": "resolve_authority",
+      "id": "mab_code63_cross.mutation.02_revise_affected_8861d5",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code63_cross.cf.02_revise_affected_8861d5"
+      ],
+      "must_still_pass": [
+        "mab_cross_app_artifact_b5a48861d5.source.pin"
+      ],
+      "targets": [
+        "mab_code63_cross.cf.02_revise_affected_8861d5",
+        "mab_cross_app_artifact_b5a48861d5.event.receipt",
+        "mab_cross_app_artifact_b5a48861d5.event.authority_probe",
+        "mab_cross_app_artifact_b5a48861d5.closure",
+        "mab_cross_app_artifact_b5a48861d5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "family": "selective_replan",
+      "id": "mab_code63_cross.mutation.03_preserve_unaffected_8861d5",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code63_cross.cf.03_preserve_unaffected_8861d5"
+      ],
+      "must_still_pass": [
+        "mab_cross_app_artifact_b5a48861d5.source.pin"
+      ],
+      "targets": [
+        "mab_code63_cross.cf.03_preserve_unaffected_8861d5",
+        "mab_cross_app_artifact_b5a48861d5.event.receipt",
+        "mab_cross_app_artifact_b5a48861d5.event.authority_probe",
+        "mab_cross_app_artifact_b5a48861d5.closure",
+        "mab_cross_app_artifact_b5a48861d5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "family": "rederive_from_authority",
+      "id": "mab_code63_cross.mutation.04_verify_closure_8861d5",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code63_cross.cf.04_verify_closure_8861d5"
+      ],
+      "must_still_pass": [
+        "mab_cross_app_artifact_b5a48861d5.source.pin"
+      ],
+      "targets": [
+        "mab_code63_cross.cf.04_verify_closure_8861d5",
+        "mab_cross_app_artifact_b5a48861d5.event.receipt",
+        "mab_cross_app_artifact_b5a48861d5.event.authority_probe",
+        "mab_cross_app_artifact_b5a48861d5.closure",
+        "mab_cross_app_artifact_b5a48861d5.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The git_adapter_contract_delivered receipt is authentic and bound to coding:063 and mab-cross-app-artifact-b5a48861d5.",
+      "id": "mab_cross_app_artifact_b5a48861d5.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned CodeSquad event worker completes and records observable post-baseline probes.",
+      "id": "mab_cross_app_artifact_b5a48861d5.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The Git adapter receipt is consumed without losing accepted review, chat, annotation, or access-control state.",
+      "id": "mab_cross_app_artifact_b5a48861d5.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to the official MultiAgentBench source task coding:063.",
+      "id": "mab_cross_app_artifact_b5a48861d5.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The submitted deliverable follows the official coding:063 solution.py output contract and emits the git_review_history_contract evaluator closure schema.",
+      "id": "mab_cross_app_artifact_b5a48861d5.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_codesquad_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Commit-bound reviews, annotations, chat, adaptive issue transitions, and non-fast-forward rejection satisfy the CodeSquad contract.",
+      "id": "mab_cross_app_artifact_b5a48861d5.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_codesquad_review_git_and_conflict_functionality",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Valid prior CodeSquad work is preserved: snippets, annotations, chat, issue_transitions, authentication, role_permissions.",
+      "id": "mab_cross_app_artifact_b5a48861d5.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_codesquad_preserves_auth_chat_transitions_and_dashboard",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The Git adapter receipt is consumed without losing accepted review, chat, annotation, or access-control state.",
+      "id": "mab_cross_app_artifact_b5a48861d5.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_codesquad_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

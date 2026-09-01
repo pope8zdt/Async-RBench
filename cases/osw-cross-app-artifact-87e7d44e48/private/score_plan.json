@@ -1,0 +1,338 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_futian_locations_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_87e7d44e48.delayed_authoritative_result",
+      "evidence_group": "osw_futian_87.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "verified_futian_24h_locations"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed verified_futian_24h_locations; preserve unaffected chrome/os/writer state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_futian_87.cf.01_classify_authority_futian_locations_osworld",
+      "independence_key": "osw_futian_87.cf.01_classify_authority_futian_locations_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_futian_87.mutation.01_classify_authority_futian_locations_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_87e7d44e48.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_futian_locations_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_87e7d44e48.delayed_authoritative_result",
+      "evidence_group": "osw_futian_87.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "verified_futian_24h_locations"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed verified_futian_24h_locations; preserve unaffected chrome/os/writer state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_futian_87.cf.02_revise_affected_futian_locations_osworld",
+      "independence_key": "osw_futian_87.cf.02_revise_affected_futian_locations_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_futian_87.mutation.02_revise_affected_futian_locations_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_87e7d44e48.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.location_count"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_futian_locations_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_87e7d44e48.delayed_authoritative_result",
+      "evidence_group": "osw_futian_87.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "verified_futian_24h_locations"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed verified_futian_24h_locations; preserve unaffected chrome/os/writer state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_futian_87.cf.03_verify_closure_futian_locations_osworld",
+      "independence_key": "osw_futian_87.cf.03_verify_closure_futian_locations_osworld",
+      "measurement_type": "control",
+      "mutation_id": "osw_futian_87.mutation.03_verify_closure_futian_locations_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_87e7d44e48.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.eligibility"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "family": "wait_for_authority",
+      "id": "osw_futian_87.mutation.01_classify_authority_futian_locations_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_futian_87.cf.01_classify_authority_futian_locations_osworld"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ],
+      "targets": [
+        "osw_futian_87.cf.01_classify_authority_futian_locations_osworld",
+        "osw_cross_app_artifact_87e7d44e48.event.receipt",
+        "osw_cross_app_artifact_87e7d44e48.event.probes",
+        "osw_cross_app_artifact_87e7d44e48.closure",
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "family": "resolve_authority",
+      "id": "osw_futian_87.mutation.02_revise_affected_futian_locations_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_futian_87.cf.02_revise_affected_futian_locations_osworld"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ],
+      "targets": [
+        "osw_futian_87.cf.02_revise_affected_futian_locations_osworld",
+        "osw_cross_app_artifact_87e7d44e48.event.receipt",
+        "osw_cross_app_artifact_87e7d44e48.event.probes",
+        "osw_cross_app_artifact_87e7d44e48.closure",
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "family": "rederive_from_authority",
+      "id": "osw_futian_87.mutation.03_verify_closure_futian_locations_osworld",
+      "may_fail": [],
+      "must_fail": [
+        "osw_futian_87.cf.03_verify_closure_futian_locations_osworld"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ],
+      "targets": [
+        "osw_futian_87.cf.03_verify_closure_futian_locations_osworld",
+        "osw_cross_app_artifact_87e7d44e48.event.receipt",
+        "osw_cross_app_artifact_87e7d44e48.event.probes",
+        "osw_cross_app_artifact_87e7d44e48.closure",
+        "osw_cross_app_artifact_87e7d44e48.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed receipt.",
+      "id": "osw_cross_app_artifact_87e7d44e48.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 3 upstream tasks completed with observable probes.",
+      "id": "osw_cross_app_artifact_87e7d44e48.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies source semantics.",
+      "id": "osw_cross_app_artifact_87e7d44e48.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_87e7d44e48.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:7ff48d5b-2df2-49da-b500-a5150ffc7f18 and fuzzy_place_math.",
+      "id": "osw_cross_app_artifact_87e7d44e48.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_87e7d44e48.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private source fixture.",
+      "id": "osw_cross_app_artifact_87e7d44e48.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "AllLocations.docx contains exactly five distinct Chinese Futian addresses accepted by the official fuzzy_place_math rule.",
+      "id": "osw_cross_app_artifact_87e7d44e48.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The already-open AllLocations.docx is saved in place.",
+      "id": "osw_cross_app_artifact_87e7d44e48.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exactly five distinct addresses are recorded.",
+      "id": "osw_cross_app_artifact_87e7d44e48.osworld.location_count",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_location_count",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Every entry is a rule-listed 24-hour Futian location.",
+      "id": "osw_cross_app_artifact_87e7d44e48.osworld.eligibility",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_location_eligibility",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "All five exact addresses are written in Chinese.",
+      "id": "osw_cross_app_artifact_87e7d44e48.osworld.chinese_addresses",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_chinese_addresses",
+      "relevance_tier": "base"
+    }
+  ]
+}

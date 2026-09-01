@@ -1,0 +1,74 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_test_evidence_b844373562.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_test_evidence_b844373562.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_test_e_49a9b6.cf.01_classify_authority_format_bytes_like_",
+          "swe_late_test_e_49a9b6.cf.02_revise_affected_format_bytes_like_",
+          "swe_late_test_e_49a9b6.cf.03_verify_closure_verify_displayed_v"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_test_evidence_b844373562.event.receipt",
+          "swe_late_test_evidence_b844373562.event.probes",
+          "swe_late_test_evidence_b844373562.closure",
+          "swe_late_test_evidence_b844373562.source.pin",
+          "swe_late_test_evidence_b844373562.native.pytest_01_testing_test_setuponly_py"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "BytesWarning when using --setup-show with bytes parameter",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "57e9b2ead87478e90fc5b0dcba04ac562ef4301a242f30c34bd31e15e4d7c42b",
+        "task_id": "pytest-dev__pytest-7205",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

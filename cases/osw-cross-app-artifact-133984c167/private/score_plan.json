@@ -1,0 +1,335 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_dblp_bibtex_osworld",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
+      "evidence_group": "osw_bibtex_133.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "dblp_record_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for delayed dblp_published_records; preserve unaffected chrome/libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "docx_title_extraction",
+          "dblp_record_resolution"
+        ]
+      },
+      "id": "osw_bibtex_133.cf.01_classify_authority_dblp_bibtex_os",
+      "independence_key": "osw_bibtex_133.cf.01_classify_authority_dblp_bibtex_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_bibtex_133.mutation.01_classify_authority_dblp_bibtex_os",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_133984c167.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.extract_all_six_paper_ti"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_dblp_bibtex_osworld",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
+      "evidence_group": "osw_bibtex_133.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "dblp_record_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for delayed dblp_published_records; preserve unaffected chrome/libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "docx_title_extraction",
+          "dblp_record_resolution"
+        ]
+      },
+      "id": "osw_bibtex_133.cf.02_revise_affected_dblp_bibtex_os",
+      "independence_key": "osw_bibtex_133.cf.02_revise_affected_dblp_bibtex_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_bibtex_133.mutation.02_revise_affected_dblp_bibtex_os",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_133984c167.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.resolve_each_title_to_th"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_dblp_bibtex_osworld",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
+      "evidence_group": "osw_bibtex_133.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "dblp_record_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for delayed dblp_published_records; preserve unaffected chrome/libreoffice_writer state.",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "docx_title_extraction",
+          "dblp_record_resolution"
+        ]
+      },
+      "id": "osw_bibtex_133.cf.03_verify_closure_dblp_bibtex_os",
+      "independence_key": "osw_bibtex_133.cf.03_verify_closure_dblp_bibtex_os",
+      "measurement_type": "control",
+      "mutation_id": "osw_bibtex_133.mutation.03_verify_closure_dblp_bibtex_os",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_133984c167.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.write_six_bibtex_entries"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "family": "wait_for_authority",
+      "id": "osw_bibtex_133.mutation.01_classify_authority_dblp_bibtex_os",
+      "may_fail": [],
+      "must_fail": [
+        "osw_bibtex_133.cf.01_classify_authority_dblp_bibtex_os"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ],
+      "targets": [
+        "osw_bibtex_133.cf.01_classify_authority_dblp_bibtex_os",
+        "osw_cross_app_artifact_133984c167.event.receipt",
+        "osw_cross_app_artifact_133984c167.event.probes",
+        "osw_cross_app_artifact_133984c167.closure",
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "family": "resolve_authority",
+      "id": "osw_bibtex_133.mutation.02_revise_affected_dblp_bibtex_os",
+      "may_fail": [],
+      "must_fail": [
+        "osw_bibtex_133.cf.02_revise_affected_dblp_bibtex_os"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ],
+      "targets": [
+        "osw_bibtex_133.cf.02_revise_affected_dblp_bibtex_os",
+        "osw_cross_app_artifact_133984c167.event.receipt",
+        "osw_cross_app_artifact_133984c167.event.probes",
+        "osw_cross_app_artifact_133984c167.closure",
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "family": "rederive_from_authority",
+      "id": "osw_bibtex_133.mutation.03_verify_closure_dblp_bibtex_os",
+      "may_fail": [],
+      "must_fail": [
+        "osw_bibtex_133.cf.03_verify_closure_dblp_bibtex_os"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ],
+      "targets": [
+        "osw_bibtex_133.cf.03_verify_closure_dblp_bibtex_os",
+        "osw_cross_app_artifact_133984c167.event.receipt",
+        "osw_cross_app_artifact_133984c167.event.probes",
+        "osw_cross_app_artifact_133984c167.closure",
+        "osw_cross_app_artifact_133984c167.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound delayed receipt.",
+      "id": "osw_cross_app_artifact_133984c167.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Independent worker completed with probes.",
+      "id": "osw_cross_app_artifact_133984c167.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes receipt and reverifies semantics.",
+      "id": "osw_cross_app_artifact_133984c167.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved.",
+      "id": "osw_cross_app_artifact_133984c167.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:df67aebb-fb3a-44fd-b75b-51b6012df509 and compare_text_file.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Evidence digest matches private fixture.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "references.bib contains the six published DBLP records from the thesis DOCX, with no arXiv entries and a blank line between entries.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "references.bib is saved to the source-native result path.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_bibtex_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "All six required published DBLP citation keys are present.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.bibtex_coverage",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_six_dblp_records",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "No arXiv entry survives when a published record exists.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.published_preference",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_published_records_not_arxiv",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Entries are UTF-8 and separated by blank lines.",
+      "id": "osw_cross_app_artifact_133984c167.osworld.bibtex_format",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_bibtex_format",
+      "relevance_tier": "base"
+    }
+  ]
+}

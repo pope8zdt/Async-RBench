@@ -1,0 +1,143 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "swe-late-test-evidence-cb3e057923",
+  "benchmark": "SWE-bench",
+  "source_binding": {
+    "instance_id": "matplotlib__matplotlib-22719",
+    "repo": "matplotlib/matplotlib",
+    "base_commit": "a2a1b0a11b993fe5f8fab64b6161e99243a6393c",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "split": "test",
+    "variant": "swe_bench",
+    "problem_statement_sha256": "2ffeda0f37f0b31f33acc4091c401b2ecdf32fe61756e07d1248ab2095cb77e0",
+    "harness_revision": "7a21e05772954cc81471ae19d56f436cecf43c54"
+  },
+  "native_runtime": {
+    "adapter": "swebench.harness.run_evaluation",
+    "isolation": "official Docker instance image",
+    "final_state": "git working tree patch"
+  },
+  "event_protocol": {
+    "producer": "independent reproduction/test worker in a clean clone of the same base commit",
+    "payload": "raw command, exit status, and bounded stdout/stderr from selected reproduction tests",
+    "release_predicate": "main working tree has a non-empty persisted diff while worker is running",
+    "rollback": "post-result patch history remains; the agent must amend/revert real files"
+  },
+  "state_attestation": {
+    "baseline_probe": "git HEAD plus clean index/worktree digest",
+    "checkpoint_probe": "git diff --binary plus untracked-file content digest",
+    "change_required": true,
+    "journal_owner": "host harness outside /testbed"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "entrypoint": "swebench.harness.run_evaluation",
+    "dataset": "SWE-bench/SWE-bench_Verified",
+    "instance_id": "matplotlib__matplotlib-22719",
+    "FAIL_TO_PASS": [
+      "lib/matplotlib/tests/test_category.py::test_no_deprecation_on_empty_data"
+    ],
+    "PASS_TO_PASS": [
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_unit[single]",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_unit[unicode]",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_unit[mixed]",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_update",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_non_string_fails[single]",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_non_string_fails[unicode]",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_non_string_fails[mixed]",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_non_string_update_fails[single]",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_non_string_update_fails[unicode]",
+      "lib/matplotlib/tests/test_category.py::TestUnitData::test_non_string_update_fails[mixed]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert[unicode]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert[ascii]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert[single]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert[integer",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert[single",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert_one_string[ascii]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert_one_string[unicode]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert_one_number",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert_float_array",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert_fail[mixed]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_convert_fail[string",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_axisinfo",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryConverter::test_default_units",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryLocator::test_StrCategoryLocator",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryLocator::test_StrCategoryLocatorPlot[scatter]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryLocator::test_StrCategoryLocatorPlot[plot]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryLocator::test_StrCategoryLocatorPlot[bar]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryFormatter::test_StrCategoryFormatter[ascii]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryFormatter::test_StrCategoryFormatter[unicode]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryFormatter::test_StrCategoryFormatterPlot[scatter-ascii]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryFormatter::test_StrCategoryFormatterPlot[scatter-unicode]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryFormatter::test_StrCategoryFormatterPlot[plot-ascii]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryFormatter::test_StrCategoryFormatterPlot[plot-unicode]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryFormatter::test_StrCategoryFormatterPlot[bar-ascii]",
+      "lib/matplotlib/tests/test_category.py::TestStrCategoryFormatter::test_StrCategoryFormatterPlot[bar-unicode]",
+      "lib/matplotlib/tests/test_category.py::TestPlotBytes::test_plot_bytes[string",
+      "lib/matplotlib/tests/test_category.py::TestPlotBytes::test_plot_bytes[bytes",
+      "lib/matplotlib/tests/test_category.py::TestPlotNumlike::test_plot_numlike[string",
+      "lib/matplotlib/tests/test_category.py::TestPlotNumlike::test_plot_numlike[bytes",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_unicode[scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_unicode[plot]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_unicode[bar]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_xaxis[scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_xaxis[plot]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_xaxis[bar]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_yaxis[scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_yaxis[plot]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_yaxis[bar]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_xyaxis[scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_xyaxis[plot]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_plot_xyaxis[bar]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_update_plot[scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_update_plot[plot]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_update_plot[bar]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_exception[mixed-scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_exception[mixed-bar]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_exception[number",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_exception[string",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_exception[missing-scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_exception[missing-bar]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_update_exception[mixed-scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_update_exception[mixed-bar]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_update_exception[number",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_update_exception[string",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_update_exception[missing-scatter]",
+      "lib/matplotlib/tests/test_category.py::TestPlotTypes::test_mixed_type_update_exception[missing-bar]",
+      "lib/matplotlib/tests/test_category.py::test_overriding_units_in_plot[png]",
+      "lib/matplotlib/tests/test_category.py::test_hist"
+    ],
+    "docker_image": null,
+    "selected_test_files": null
+  },
+  "quality_gates": {
+    "official_instance_bound": true,
+    "native_tests_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Async-RBench reviewed candidate instance",
+  "type": "object",
+  "required": [
+    "schema_version", "case_id", "instance_id", "stage",
+    "review_evidence", "design_binding", "human_approval",
+    "dataset_binding", "difficulty_profile", "execution_evidence"
+  ],
+  "properties": {
+    "schema_version": {"const": "2"},
+    "case_id": {"type": "string", "minLength": 1},
+    "instance_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+    },
+    "stage": {"const": "approved_for_promotion"},
+    "review_evidence": {
+      "type": "object",
+      "required": ["trajectory_reviews", "decision_reviews"],
+      "properties": {
+        "trajectory_reviews": {"type": "string", "minLength": 1},
+        "decision_reviews": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "design_binding": {
+      "type": "object",
+      "required": [
+        "accepted_decision_ids", "primary_event_theme",
+        "async_scenario_class", "capabilities"
+      ],
+      "properties": {
+        "accepted_decision_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "primary_event_theme": {"type": "string", "minLength": 1},
+        "async_scenario_class": {
+          "enum": ["result_eventful", "live_eventful", "resource_eventful"]
+        },
+        "capabilities": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "human_approval": {
+      "type": "object",
+      "required": ["status", "reviewer", "reviewed_at"],
+      "properties": {
+        "status": {"const": "approved"},
+        "reviewer": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    },
+    "dataset_binding": {
+      "type": "object",
+      "required": ["split"],
+      "properties": {
+        "split": {"enum": ["calibration", "development", "test"]}
+      },
+      "additionalProperties": false
+    },
+    "difficulty_profile": {
+      "type": "object",
+      "required": ["rubric_version", "score", "label", "components"],
+      "properties": {
+        "rubric_version": {"const": "1.0"},
+        "score": {"type": "integer", "minimum": 0},
+        "label": {"enum": ["easy", "medium", "hard"]},
+        "components": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "execution_evidence": {"const": "review_evidence/release_evidence.json"}
+  },
+  "additionalProperties": true
+}

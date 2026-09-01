@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+  "authority_rule": "Delayed aws_december_invoice_record is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The Bills folder, receipts directory and tally layout are inspectable, but the authoritative December invoice message and fields have not yet been joined.",
+    "after_state": "The mail worker returns the exact December AWS attachment and normalized billing fields, enabling a correctly named PDF copy and one matching tally row.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.locate_the_december_aws_",
+      "req.02.preserve_the_exact_invoi",
+      "req.03.append_the_aws_2023_12_a",
+      "req.04.keep_all_earlier_receipt",
+      "final_state"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

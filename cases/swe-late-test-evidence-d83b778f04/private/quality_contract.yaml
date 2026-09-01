@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "revert-source-fix",
+      "must_fail": [
+        "swe_late_test_evidence_d83b778f04.native.help_layout_changed"
+      ],
+      "path": "task/negative_mutations/revert_source_fix.sh"
+    },
+    {
+      "id": "break-task-behavior",
+      "must_fail": [
+        "swe_late_test_evidence_d83b778f04.native.help_layout_changed"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_d83b778f04.native.help_layout_preserved"
+      ],
+      "path": "task/negative_mutations/break_task_behavior.sh"
+    },
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_test_evidence_d83b778f04.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_test_evidence_d83b778f04.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_test_e_83362f.cf.01_classify_authority",
+          "swe_late_test_e_83362f.cf.02_revise_affected",
+          "swe_late_test_e_83362f.cf.03_preserve_unaffected",
+          "swe_late_test_e_83362f.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_test_evidence_d83b778f04.event.receipt",
+          "swe_late_test_evidence_d83b778f04.event.probes",
+          "swe_late_test_evidence_d83b778f04.closure",
+          "swe_late_test_evidence_d83b778f04.source.pin",
+          "swe_late_test_evidence_d83b778f04.native.help_layout_changed",
+          "swe_late_test_evidence_d83b778f04.native.help_layout_preserved"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "revert(help): Partial revert of 3c049b4",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "f8a90eb5460af209eca10fdfc1d855c96899209e94a5cb80d8aa1beeb7299156",
+        "task_id": "clap-rs__clap-3179",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

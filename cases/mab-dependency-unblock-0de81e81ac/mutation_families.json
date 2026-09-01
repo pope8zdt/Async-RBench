@@ -1,0 +1,320 @@
+{
+  "families": [
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: The routing_worker_recovered receipt is authentic and bound to coding:002 and mab-dependency-unblock-0de81e81ac.",
+      "id": "mab_code02_foodchain.mut.01_receipt",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: The routing_worker_recovered receipt is authentic and bound to coding:002 and mab-dependency-unblock-0de81e81ac.",
+      "id": "mab_code02_foodchain.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: The evaluator-owned FoodChain authority runs after the persisted baseline and records probes.",
+      "id": "mab_code02_foodchain.mut.02_authority_probe",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.event.authority_probe"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_authority_probe_evidence",
+        "corrupt_authority_probe_value",
+        "replay_stale_authority_probe_state",
+        "satisfy_manifest_without_authority_probe_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: The evaluator-owned FoodChain authority runs after the persisted baseline and records probes.",
+      "id": "mab_code02_foodchain.mut.02_authority_probe_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.event.authority_probe"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_authority_probe_red",
+        "artifact_green_authority_probe_stale",
+        "receipt_valid_authority_probe_foreign",
+        "partial_closure_hides_authority_probe_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: Recovered dynamic routing replaces static timing assumptions and preserves restaurant decisions, courier lifecycle, feedback, and notifications.",
+      "id": "mab_code02_foodchain.mut.03_closure",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: Recovered dynamic routing replaces static timing assumptions and preserves restaurant decisions, courier lifecycle, feedback, and notifications.",
+      "id": "mab_code02_foodchain.mut.03_closure_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: The task remains bound to official MultiAgentBench coding:002.",
+      "id": "mab_code02_foodchain.mut.04_pin",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: The task remains bound to official MultiAgentBench coding:002.",
+      "id": "mab_code02_foodchain.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: solution.py and the foodchain_dynamic_delivery_closure closure satisfy the task-specific output schema.",
+      "id": "mab_code02_foodchain.mut.05_output_schema",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.output_schema"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_output_schema_evidence",
+        "corrupt_output_schema_value",
+        "replay_stale_output_schema_state",
+        "satisfy_manifest_without_output_schema_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: solution.py and the foodchain_dynamic_delivery_closure closure satisfy the task-specific output schema.",
+      "id": "mab_code02_foodchain.mut.05_output_schema_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.output_schema"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_output_schema_red",
+        "artifact_green_output_schema_stale",
+        "receipt_valid_output_schema_foreign",
+        "partial_closure_hides_output_schema_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: Restaurants can accept, reject, or modify orders; couriers advance delivery status; recovered traffic-aware routing changes route, priority, and ETA without breaking pickup/delivery workflows.",
+      "id": "mab_code02_foodchain.mut.06_task_behavior",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.task_behavior"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_task_behavior_evidence",
+        "corrupt_task_behavior_value",
+        "replay_stale_task_behavior_state",
+        "satisfy_manifest_without_task_behavior_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: Restaurants can accept, reject, or modify orders; couriers advance delivery status; recovered traffic-aware routing changes route, priority, and ETA without breaking pickup/delivery workflows.",
+      "id": "mab_code02_foodchain.mut.06_task_behavior_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.task_behavior"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_task_behavior_red",
+        "artifact_green_task_behavior_stale",
+        "receipt_valid_task_behavior_foreign",
+        "partial_closure_hides_task_behavior_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: Preserves task-native state: restaurant_decisions, pickup_flow, delivery_status, feedback, notifications.",
+      "id": "mab_code02_foodchain.mut.07_preservation",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.preservation"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_preservation_evidence",
+        "corrupt_preservation_value",
+        "replay_stale_preservation_state",
+        "satisfy_manifest_without_preservation_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: Preserves task-native state: restaurant_decisions, pickup_flow, delivery_status, feedback, notifications.",
+      "id": "mab_code02_foodchain.mut.07_preservation_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.preservation"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_preservation_red",
+        "artifact_green_preservation_stale",
+        "receipt_valid_preservation_foreign",
+        "partial_closure_hides_preservation_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: Recovered dynamic routing replaces static timing assumptions and preserves restaurant decisions, courier lifecycle, feedback, and notifications.",
+      "id": "mab_code02_foodchain.mut.08_event_closure",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.event_closure"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_event_closure_evidence",
+        "corrupt_event_closure_value",
+        "replay_stale_event_closure_state",
+        "satisfy_manifest_without_event_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: Recovered dynamic routing replaces static timing assumptions and preserves restaurant decisions, courier lifecycle, feedback, and notifications.",
+      "id": "mab_code02_foodchain.mut.08_event_closure_crosscheck",
+      "must_fail": [
+        "mab_dependency_unblock_0de81e81ac.source.event_closure"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_event_closure_red",
+        "artifact_green_event_closure_stale",
+        "receipt_valid_event_closure_foreign",
+        "partial_closure_hides_event_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: For event 'Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.', perform classify_failure for 'Integrate the returned route and ETA fields into order and courier services.' while retaining valid prior result 'Restaurant browsing, menus, and order-state transitions are implemented.'.",
+      "id": "mab_code02_foodchain.mut.09_01_classify_failure_integrat",
+      "must_fail": [
+        "mab_code02_foodchain.cf.01_classify_failure_integrate_the_retu"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: For event 'Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.', perform classify_failure for 'Integrate the returned route and ETA fields into order and courier services.' while retaining valid prior result 'Restaurant browsing, menus, and order-state transitions are implemented.'.",
+      "id": "mab_code02_foodchain.mut.09_01_classify_failure_integrat_crosscheck",
+      "must_fail": [
+        "mab_code02_foodchain.cf.01_classify_failure_integrate_the_retu"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_failure_integrat_red",
+        "artifact_green_01_classify_failure_integrat_stale",
+        "receipt_valid_01_classify_failure_integrat_foreign",
+        "partial_closure_hides_01_classify_failure_integrat_failure"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: For event 'Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.', perform recover_or_redelegate for 'Replace static priority with the returned reprioritization result.' while retaining valid prior result 'Courier location and delivery-status storage are available.'.",
+      "id": "mab_code02_foodchain.mut.10_02_recover_or_redelegate_rep",
+      "must_fail": [
+        "mab_code02_foodchain.cf.02_recover_or_redelegate_replace_static_pri"
+      ],
+      "operation": "mutate_control_recover_failed_work",
+      "variants": [
+        "omit_recover_failed_work_decision",
+        "apply_recover_failed_work_to_wrong_scope",
+        "use_stale_evidence_for_recover_failed_work",
+        "declare_recover_failed_work_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Directly challenge: For event 'Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.', perform verify_closure for 'Add a mutation test where increased traffic changes route or ETA.' while retaining valid prior result 'Restaurant browsing, menus, and order-state transitions are implemented.'.",
+      "id": "mab_code02_foodchain.mut.11_03_verify_closure_add_a_muta",
+      "must_fail": [
+        "mab_code02_foodchain.cf.03_verify_closure_add_a_mutation_tes"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-dependency-unblock-0de81e81ac",
+      "description": "Cross-check independent evidence for: For event 'Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.', perform verify_closure for 'Add a mutation test where increased traffic changes route or ETA.' while retaining valid prior result 'Restaurant browsing, menus, and order-state transitions are implemented.'.",
+      "id": "mab_code02_foodchain.mut.11_03_verify_closure_add_a_muta_crosscheck",
+      "must_fail": [
+        "mab_code02_foodchain.cf.03_verify_closure_add_a_mutation_tes"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_add_a_muta_red",
+        "artifact_green_03_verify_closure_add_a_muta_stale",
+        "receipt_valid_03_verify_closure_add_a_muta_foreign",
+        "partial_closure_hides_03_verify_closure_add_a_muta_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

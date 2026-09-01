@@ -1,0 +1,179 @@
+{
+  "case_id": "mab-late-constraint-1e1fa7c00b",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_stale",
+      "mutation_family": "classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_1e1fa7c00b.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "classify_stale: The current freight-backed counter offers the heavy-duty rustic turtle doorstop at $25.49 with seven-day delivery and supersedes the unverified $22 quote.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "freight_finish_counter_supersedes_quote"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_exclude_stale",
+      "mutation_family": "exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_1e1fa7c00b.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "exclude_stale: The current freight-backed counter offers the heavy-duty rustic turtle doorstop at $25.49 with seven-day delivery and supersedes the unverified $22 quote.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "freight_finish_counter_supersedes_quote"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_1e1fa7c00b.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: The current freight-backed counter offers the heavy-duty rustic turtle doorstop at $25.49 with seven-day delivery and supersedes the unverified $22 quote.",
+      "stage_tag": "closure",
+      "task_requirement_id": "freight_finish_counter_supersedes_quote"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.identify_the_old_quote_as_la"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.replace_only_price_and_deliv"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.close_through_a_chronologica"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.identify_the_old_quote_as_la",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.replace_only_price_and_deliv",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.close_through_a_chronologica",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.identify_the_old_quote_as_la",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.replace_only_price_and_deliv",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.close_through_a_chronologica",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.identify_the_old_quote_as_la",
+      "req.02.replace_only_price_and_deliv",
+      "req.03.close_through_a_chronologica",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The current freight-backed counter offers the heavy-duty rustic turtle doorstop at $25.49 with seven-day delivery and supersedes the unverified $22 quote.",
+    "before_state": "A provisional Vintage Cast Iron Turtle Door Stopper bargain exists before freight_finish_counter_supersedes_quote.",
+    "event_id": "evt.mab-late-constraint-1e1fa7c00b.freight_finish_counter_supersedes_quote",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Identify the old quote as lacking freight authority.",
+      "id": "req.01.identify_the_old_quote_as_la",
+      "observable_probe": "mab_late_constraint_1e1fa7c00b.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Replace only price and delivery with the current finish-backed counter.",
+      "id": "req.02.replace_only_price_and_deliv",
+      "observable_probe": "mab_late_constraint_1e1fa7c00b.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Close through a chronological bargaining-tool ledger.",
+      "id": "req.03.close_through_a_chronologica",
+      "observable_probe": "mab_late_constraint_1e1fa7c00b.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    }
+  ]
+}

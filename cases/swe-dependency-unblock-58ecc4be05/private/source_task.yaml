@@ -1,0 +1,3 @@
+{
+  "instruction": "Force sorting with `next_display_order(None)`\r\n\r\nThis also extends to subcommands.\r\n\r\nPrevious behavior:\r\n- They'd be sorted by default\r\n- They'd derive display order if `DeriveDisplayOrder` was set\r\n  - This could be set recursively\r\n- The initial display order value for subcommands was 0\r\n\r\nNew behavior:\r\n- Sorted order is derived by default\r\n- Sorting is turned on by `cmd.next_display_order(None)`\r\n  - This is not recursive, it must be set on each level\r\n- The display order incrementing is mixed with arguments\r\n  - This does make it slightly more difficult to predict\r\n\r\nAnd with that, we can remove `AppSettings` from the API, helping towards #3021\r\n\r\nFixes #2808"
+}

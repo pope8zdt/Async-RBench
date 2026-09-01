@@ -1,0 +1,76 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__e3ff13.cf.01_classify_scope_delta_integrate_dependen",
+          "swe_dependency__e3ff13.cf.02_revise_affected_add_the_shared_com",
+          "swe_dependency__e3ff13.cf.03_preserve_unaffected_retain_the_complet",
+          "swe_dependency__e3ff13.cf.04_verify_closure_guard_against_recu"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_470ff65add.event.receipt",
+          "swe_dependency_unblock_470ff65add.event.probes",
+          "swe_dependency_unblock_470ff65add.closure",
+          "swe_dependency_unblock_470ff65add.source.pin",
+          "swe_dependency_unblock_470ff65add.native.ansible_module_respawn"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Add an internal ctypes SELinux compatibility layer and a module respawn API so modules can locate dependencies under well-known system interpreters. Apply respawn behavior to package-management modules and preserve the updated upstream SELinux/import/module-bundling regression tests.",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "8a53cd2d1ee5f5bc14f61cec2682df263a84eeab54050417dcdf121281a15446",
+        "task_id": "instance_ansible__ansible-4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6-v1055803c3a812189a1133297f7f5468579283f86",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

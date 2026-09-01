@@ -1,0 +1,88 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_5c30d720ef.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_5c30d720ef.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "revert-source-fix",
+      "must_fail": [
+        "swe_dependency_unblock_5c30d720ef.native.svelte_inert_ssr_changed"
+      ],
+      "path": "task/negative_mutations/revert_source_fix.sh"
+    },
+    {
+      "id": "break-task-behavior",
+      "must_fail": [
+        "swe_dependency_unblock_5c30d720ef.native.svelte_inert_ssr_changed"
+      ],
+      "path": "task/negative_mutations/break_task_behavior.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__f75f4b.cf.01_classify_authority",
+          "swe_dependency__f75f4b.cf.02_revise_affected",
+          "swe_dependency__f75f4b.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "closure_consumes_receipt",
+          "receipt_bound_to_case"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_5c30d720ef.event.receipt",
+          "swe_dependency_unblock_5c30d720ef.event.probes",
+          "swe_dependency_unblock_5c30d720ef.closure",
+          "swe_dependency_unblock_5c30d720ef.source.pin",
+          "swe_dependency_unblock_5c30d720ef.native.svelte_inert_ssr_changed",
+          "swe_dependency_unblock_5c30d720ef.native.svelte_runtime_preserved"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "fixes #14731",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "97147eded4e5625f547a1f6b18c0c84c5ab03fcddd2f8cd8664289bed26a96ee",
+        "task_id": "sveltejs__svelte-14935",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

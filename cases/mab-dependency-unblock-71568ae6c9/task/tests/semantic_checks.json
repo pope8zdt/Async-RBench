@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The validated_map_checkpoint_recovered receipt is authentic and bound to coding:054 and mab-dependency-unblock-71568ae6c9.",
+      "id": "mab_dependency_unblock_71568ae6c9.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned Galactic Conquest event worker completes and records observable post-baseline probes.",
+      "id": "mab_dependency_unblock_71568ae6c9.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The validated map checkpoint releases multiplayer for one map revision while stale actions are rejected and accepted scores and progression are preserved.",
+      "id": "mab_dependency_unblock_71568ae6c9.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to the official MultiAgentBench source task coding:054.",
+      "id": "mab_dependency_unblock_71568ae6c9.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The submitted deliverable follows the official coding:054 solution.py output contract and emits the validated_map_multiplayer_gate evaluator closure schema.",
+      "id": "mab_dependency_unblock_71568ae6c9.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_galactic_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Galactic Conquest enforces character-to-AI-to-map-to-multiplayer dependencies, map objectives, synchronized action sequence checks, capture scoring, and winner progression.",
+      "id": "mab_dependency_unblock_71568ae6c9.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_galactic_dependency_map_and_multiplayer_functionality",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Valid prior Galactic Conquest work is preserved: character_abilities, adaptive_ai, capture_scores, progression, map_independent_tests.",
+      "id": "mab_dependency_unblock_71568ae6c9.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_galactic_preserves_character_ai_score_progression_and_rejects_stale",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The validated map checkpoint releases multiplayer for one map revision while stale actions are rejected and accepted scores and progression are preserved.",
+      "id": "mab_dependency_unblock_71568ae6c9.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_galactic_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

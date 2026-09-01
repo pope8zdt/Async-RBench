@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Equivalent private source-native scoring path.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_98b42677e4.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_98b42677e4.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_cross_app_artifact_98b42677e4.osworld.first_image"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_98b42677e4.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_wallpaper_98.cf.01_classify_authority_mail_wallpaper_osworld",
+          "osw_wallpaper_98.cf.02_revise_affected_mail_wallpaper_osworld",
+          "osw_wallpaper_98.cf.03_verify_closure_mail_wallpaper_osworld"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_98b42677e4.event.receipt",
+          "osw_cross_app_artifact_98b42677e4.event.probes",
+          "osw_cross_app_artifact_98b42677e4.closure",
+          "osw_cross_app_artifact_98b42677e4.source.pin",
+          "osw_cross_app_artifact_98b42677e4.osworld.identity",
+          "osw_cross_app_artifact_98b42677e4.osworld.official_score",
+          "osw_cross_app_artifact_98b42677e4.osworld.native_evidence",
+          "osw_cross_app_artifact_98b42677e4.osworld.task_assertion",
+          "osw_cross_app_artifact_98b42677e4.osworld.mail_identity",
+          "osw_cross_app_artifact_98b42677e4.osworld.attachment_identity",
+          "osw_cross_app_artifact_98b42677e4.osworld.first_image",
+          "osw_cross_app_artifact_98b42677e4.osworld.wallpaper_state"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "3fc7eeeb2470e64e37c525ac96c527a8f204a528b57637cc822beeb3637726e9",
+        "task_id": "osworld:multi_apps:c2751594-0cd5-4088-be1b-b5f2f9ec97c4",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

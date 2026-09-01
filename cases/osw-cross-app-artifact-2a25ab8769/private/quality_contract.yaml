@@ -1,0 +1,97 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline assembly of native result and closure, without invoking oracle.sh or the canonical upstream script.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_2a25ab8769.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_2a25ab8769.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_cross_app_artifact_2a25ab8769.osworld.cheng_track"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_2a25ab8769.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_mp3_2a25.cf.01_classify_completeness_batch_mp3_metadata_result",
+          "osw_mp3_2a25.cf.02_revise_affected_batch_mp3_metadata_result",
+          "osw_mp3_2a25.cf.03_preserve_unaffected_batch_mp3_metadata_result",
+          "osw_mp3_2a25.cf.04_verify_closure_batch_mp3_metadata_result"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_2a25ab8769.event.receipt",
+          "osw_cross_app_artifact_2a25ab8769.event.probes",
+          "osw_cross_app_artifact_2a25ab8769.closure",
+          "osw_cross_app_artifact_2a25ab8769.source.pin",
+          "osw_cross_app_artifact_2a25ab8769.osworld.identity",
+          "osw_cross_app_artifact_2a25ab8769.osworld.official_score",
+          "osw_cross_app_artifact_2a25ab8769.osworld.native_evidence",
+          "osw_cross_app_artifact_2a25ab8769.osworld.task_assertion",
+          "osw_cross_app_artifact_2a25ab8769.osworld.track_set",
+          "osw_cross_app_artifact_2a25ab8769.osworld.initial_blank_tags",
+          "osw_cross_app_artifact_2a25ab8769.osworld.cheng_track",
+          "osw_cross_app_artifact_2a25ab8769.osworld.han_track",
+          "osw_cross_app_artifact_2a25ab8769.osworld.huang_track",
+          "osw_cross_app_artifact_2a25ab8769.osworld.chen_track",
+          "osw_cross_app_artifact_2a25ab8769.osworld.zhou_track",
+          "osw_cross_app_artifact_2a25ab8769.osworld.audio_preservation"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "434c06648adf5b0335cd0c9a1c8cf05bdccd213920570fcaff1935a028c65679",
+        "task_id": "osworld:multi_apps:3f05f3b9-29ba-4b6b-95aa-2204697ffc06",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_conflict_correlate_returned_lock_time",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.classify_conflict",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.correlate_returned_lock_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The lock specialist returns SQL evidence of blocked sessions and sustained lock waits during the high-rate table1 workload.', perform classify_conflict for 'Correlate returned lock timestamps with the bulk-insert interval.' while retaining valid prior result 'Workload statistics establish 51,324 insert transactions and 5,132,400 inserted rows during the observed interval.'.",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Workload statistics establish 51,324 insert transactions and 5,132,400 inserted rows during the observed interval.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.correlate_returned_lock_"
+        ]
+      },
+      "id": "mab_conflict_db04.cf.01_classify_conflict_correlate_returned",
+      "independence_key": "mab_conflict_db04.cf.01_classify_conflict_correlate_returned",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db04.mutation.01_classify_conflict_correlate_returned",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_cf7b930f57.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.correlate_returned_lock_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "arbitrate_conflict_replace_any_unsupported_prov",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.arbitrate_conflict",
+      "evidence_spec": {
+        "primary_fact": "conflict_resolution",
+        "subject": "req.01.correlate_returned_lock_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The lock specialist returns SQL evidence of blocked sessions and sustained lock waits during the high-rate table1 workload.', perform arbitrate_conflict for 'Replace any unsupported provisional second cause with the lock-supported hypothesis.' while retaining valid prior result 'Catalog checks eliminate unsupported index and vacuum hypotheses.'.",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Catalog checks eliminate unsupported index and vacuum hypotheses.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.correlate_returned_lock_"
+        ]
+      },
+      "id": "mab_conflict_db04.cf.02_arbitrate_conflict_replace_any_unsupp",
+      "independence_key": "mab_conflict_db04.cf.02_arbitrate_conflict_replace_any_unsupp",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db04.mutation.02_arbitrate_conflict_replace_any_unsupp",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_cf7b930f57.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.correlate_returned_lock_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_retain_the_independently_est",
+      "dimension": "closure",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.correlate_returned_lock_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The lock specialist returns SQL evidence of blocked sessions and sustained lock waits during the high-rate table1 workload.', perform verify_closure for 'Retain the independently established bulk-insert evidence.' while retaining valid prior result 'A provisional report names bulk insertion but leaves the second cause unresolved.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A provisional report names bulk insertion but leaves the second cause unresolved.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.correlate_returned_lock_"
+        ]
+      },
+      "id": "mab_conflict_db04.cf.03_verify_closure_retain_the_indepen",
+      "independence_key": "mab_conflict_db04.cf.03_verify_closure_retain_the_indepen",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db04.mutation.03_verify_closure_retain_the_indepen",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_cf7b930f57.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.correlate_returned_lock_"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "event_theme": "conflicting_valid_results",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The lock specialist returns SQL evidence of blocked sessions and sustained lock waits during the high-rate table1 workload.",
+        "before": "The lock report arrives after the bulk-load diagnosis and alternative-cause eliminations are complete.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-83a415ed0c",
+  "source_task_id": "osworld:multi_apps:98e8e339-5f91-4ed2-b2b2-12647cb134f4",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "ordered_txt_manifest_and_content",
+  "upstream_dependency_graph": [
+    {
+      "id": "txt_file_inventory",
+      "app": "VS Code",
+      "description": "Enumerate all project .txt files while excluding metadata and scripts."
+    },
+    {
+      "id": "ordered_text_extraction",
+      "app": "VS Code",
+      "description": "Read 1.txt through 5.txt in manifest order.",
+      "depends_on": [
+        "txt_file_inventory"
+      ]
+    },
+    {
+      "id": "concatenation_validation",
+      "app": "Document worker",
+      "description": "Join extracted texts with no inserted separator and verify the content digest.",
+      "depends_on": [
+        "ordered_text_extraction"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/Desktop/concat.docx",
+    "source_files": [
+      "1.txt",
+      "2.txt",
+      "3.txt",
+      "4.txt",
+      "5.txt"
+    ],
+    "source_file_count": 5,
+    "concatenated_char_count": 2249,
+    "concatenated_text_sha256": "ee5fbcad825882637452da098bc494594838b008a5a4b5363d8e91ecebb8e8e9",
+    "separator": "",
+    "font_size_pt": 10,
+    "gold_docx_sha256": "65185ab2f4c60c69e76820e0bebbf87915a11988f47b7d9d47c6d512a4d68af5"
+  },
+  "task_assertion": "concat.docx contains the five project TXT files in order with no inserted separator and all text at 10 points.",
+  "finding": "The project worker returns exactly 1.txt through 5.txt in order and their separator-free 2249-character concatenation."
+}
+

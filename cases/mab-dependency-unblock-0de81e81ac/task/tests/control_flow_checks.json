@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_integrate_the_returned_route",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.integrate_the_returned_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.', perform classify_failure for 'Integrate the returned route and ETA fields into order and courier services.' while retaining valid prior result 'Restaurant browsing, menus, and order-state transitions are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Restaurant browsing, menus, and order-state transitions are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_the_returned_r"
+        ]
+      },
+      "id": "mab_code02_foodchain.cf.01_classify_failure_integrate_the_retu",
+      "independence_key": "mab_code02_foodchain.cf.01_classify_failure_integrate_the_retu",
+      "measurement_type": "control",
+      "mutation_id": "mab_code02_foodchain.mutation.01_classify_failure_integrate_the_retu",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0de81e81ac.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.integrate_the_returned_r"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_replace_static_priority_with",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "failure_recovery",
+        "subject": "req.01.integrate_the_returned_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.', perform recover_or_redelegate for 'Replace static priority with the returned reprioritization result.' while retaining valid prior result 'Courier location and delivery-status storage are available.'.",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Courier location and delivery-status storage are available.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_the_returned_r"
+        ]
+      },
+      "id": "mab_code02_foodchain.cf.02_recover_or_redelegate_replace_static_pri",
+      "independence_key": "mab_code02_foodchain.cf.02_recover_or_redelegate_replace_static_pri",
+      "measurement_type": "control",
+      "mutation_id": "mab_code02_foodchain.mutation.02_recover_or_redelegate_replace_static_pri",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0de81e81ac.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.integrate_the_returned_r"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_a_mutation_test_where_in",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.integrate_the_returned_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.', perform verify_closure for 'Add a mutation test where increased traffic changes route or ETA.' while retaining valid prior result 'Restaurant browsing, menus, and order-state transitions are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Restaurant browsing, menus, and order-state transitions are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.integrate_the_returned_r"
+        ]
+      },
+      "id": "mab_code02_foodchain.cf.03_verify_closure_add_a_mutation_tes",
+      "independence_key": "mab_code02_foodchain.cf.03_verify_closure_add_a_mutation_tes",
+      "measurement_type": "control",
+      "mutation_id": "mab_code02_foodchain.mutation.03_verify_closure_add_a_mutation_tes",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0de81e81ac.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.integrate_the_returned_r"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_dependency_unblock_0.child_failure_or_implici",
+      "event_theme": "child_failure_or_implicit_error",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Routing specialist returns `replan(order_id, courier_locations, traffic)` producing an ordered route, priority, and ETA with a defined schema.",
+        "before": "The dynamic-routing contract arrives after order and courier services have adopted static timing assumptions.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

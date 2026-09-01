@@ -1,0 +1,15 @@
+{
+  "author_name": "Async-RBench transformation",
+  "category": "multiagentbench",
+  "difficulty": "medium",
+  "instruction": "Software Development Task:\n\nPlease write a program called Music_Collaborator that facilitates collaborative music composition among multiple users. Music_Collaborator is a web-based application that enables musicians to work together in real-time to create and refine musical compositions. The application supports the integration of various musical elements, such as melodies, harmonies, and lyrics, and provides tools for users to collaborate effectively, even if they are in different locations.\n1. Implementation requirements:\n   - The application should allow multiple users to log in and collaborate on the same musical project in real-time.\n   - Users should be able to input musical notes, melodies, and harmonies using a graphical interface or by uploading MIDI files.\n   - The application should include a feature for real-time audio playback, allowing users to hear the composition as it evolves.\n   - Users should be able to add, edit, and delete lyrics, and the application should provide basic sentiment analysis and thematic insights for the lyrics.\n   - The application should support version control, allowing users to save and revert to previous versions of the composition.\n   - The system should adapt to user feedback by suggesting musical adjustments based on the current composition, such as recommending harmonies or suggesting melody variations.\n   - The application should provide a chat feature for users to communicate and coordinate their efforts while working on the composition.\n   - The application should be scalable and able to handle multiple simultaneous users and projects without performance degradation.\n\n\n2. Project structure:\n   - solution.py (main implementation)\n\n3. Development process:\n   - Developer: Create the code.\n   - Developer: Revise the code.\n   - Developer: Optimize the code.\n\nIf there are multiple files, please put them all in solution.py, but remember to add the file name in the following format:\n```python\n# file_name_1.py\n# your code here\n\n# file_name_2.py\n# your code here\n\n# file_name_3.py\n# your code here\n```\n\nPlease work together to complete this task following software engineering best practices.\n\nThe final deliverable should include:\nsolution.py\n\nASYNC-RBENCH EXTENSION\nPersist collaboration, lyric, chat, and revision work before the MIDI playback contract is complete. The harness then delivers the completed MIDI/timing result. Integrate only the affected playback and serialization paths, preserve the existing collaboration state, and close with receipt-bound re-verification.",
+  "max_agent_timeout_sec": 1800,
+  "max_test_timeout_sec": 1200,
+  "parser_name": "pytest",
+  "tags": [
+    "multiagentbench",
+    "coding",
+    "music_collaborator",
+    "partial_then_complete_result"
+  ]
+}

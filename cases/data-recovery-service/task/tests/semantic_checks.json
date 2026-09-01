@@ -1,0 +1,245 @@
+{
+  "version": "3",
+  "checks": [
+    {
+      "id": "dr.authority.exact_row_set",
+      "pytest_node": "test_case_outcomes.py::test_authority_exact_row_set",
+      "category": "authority_final_truth",
+      "description": "Final recovered IDs exactly match evaluator-owned WAL truth",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.authority.wal_updates",
+      "pytest_node": "test_case_outcomes.py::test_authority_wal_updates",
+      "category": "authority_final_truth",
+      "description": "All evaluator-owned WAL updates are applied",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.authority.wal_inserts",
+      "pytest_node": "test_case_outcomes.py::test_authority_wal_inserts",
+      "category": "authority_final_truth",
+      "description": "All evaluator-owned WAL inserts are applied",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.authority.schema_order_types",
+      "pytest_node": "test_case_outcomes.py::test_authority_schema_order_types",
+      "category": "authority_final_truth",
+      "description": "Recovered rows use the exact schema ordering and scalar types",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dr.stale.recovered_candidate_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_recovered_candidate_rejected",
+      "category": "stale_exclusion",
+      "description": "Checkpoint-only recovered candidate is absent from final recovery",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "dr.stale.seed_candidate_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_seed_candidate_rejected",
+      "category": "stale_exclusion",
+      "description": "Checkpoint-only values are absent from the integrated seed",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "dr.stale.runtime_candidate_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_runtime_candidate_rejected",
+      "category": "stale_exclusion",
+      "description": "Restarted runtime does not expose checkpoint-only state",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "dr.stale.lineage_candidate_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_lineage_candidate_rejected",
+      "category": "stale_exclusion",
+      "description": "Final lineage identifies authoritative recovery rather than the checkpoint candidate",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "dr.integration.seed_item_namespace",
+      "pytest_node": "test_case_outcomes.py::test_integration_seed_item_namespace",
+      "category": "downstream_rebuild",
+      "description": "Every authoritative recovered item is propagated to the seed",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.integration.seed_user_namespace",
+      "pytest_node": "test_case_outcomes.py::test_integration_seed_user_namespace",
+      "category": "downstream_rebuild",
+      "description": "Every independently merged user is propagated to the seed",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "supporting"
+    },
+    {
+      "id": "dr.integration.seed_exact_keyset",
+      "pytest_node": "test_case_outcomes.py::test_integration_seed_exact_keyset",
+      "category": "downstream_rebuild",
+      "description": "Integrated seed has no missing or extra keys",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.integration.seed_exact_values",
+      "pytest_node": "test_case_outcomes.py::test_integration_seed_exact_values",
+      "category": "downstream_rebuild",
+      "description": "Integrated seed values match evaluator-owned final truth",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.integration.single_final_snapshot",
+      "pytest_node": "test_case_outcomes.py::test_integration_single_final_snapshot",
+      "category": "downstream_rebuild",
+      "description": "Integrated seed is one coherent final-authority snapshot",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.runtime.proto_contract",
+      "pytest_node": "test_case_outcomes.py::test_runtime_proto_contract",
+      "category": "runtime_behavior",
+      "description": "Generated gRPC descriptors implement the exact public RPC contract",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dr.runtime.restart_loads_seed",
+      "pytest_node": "test_case_outcomes.py::test_runtime_restart_loads_seed",
+      "category": "runtime_behavior",
+      "description": "A verifier restart loads final integrated state",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.runtime.hidden_gets",
+      "pytest_node": "test_case_outcomes.py::test_runtime_hidden_authoritative_gets",
+      "category": "runtime_behavior",
+      "description": "Evaluator-owned hidden GetVal probes return final values",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.runtime.set_get_roundtrip",
+      "pytest_node": "test_case_outcomes.py::test_runtime_set_get_roundtrip",
+      "category": "runtime_behavior",
+      "description": "Real gRPC SetVal and GetVal round trips preserve signed int32 values",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dr.lineage.exact_schema",
+      "pytest_node": "test_case_outcomes.py::test_lineage_exact_schema",
+      "category": "lineage_reverification",
+      "description": "Lineage uses exactly the declared schema",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dr.lineage.recovered_digest_count",
+      "pytest_node": "test_case_outcomes.py::test_lineage_recovered_digest_count",
+      "category": "lineage_reverification",
+      "description": "Lineage records current recovery digest and authoritative row count",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.lineage.merged_digest",
+      "pytest_node": "test_case_outcomes.py::test_lineage_merged_digest",
+      "category": "lineage_reverification",
+      "description": "Lineage records the actual preserved merge artifact",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.lineage.seed_digest",
+      "pytest_node": "test_case_outcomes.py::test_lineage_seed_digest",
+      "category": "lineage_reverification",
+      "description": "Lineage records the actual rebuilt seed artifact",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dr.support.merge_exact_rows",
+      "pytest_node": "test_case_outcomes.py::test_support_merge_exact_rows",
+      "category": "independent_preservation",
+      "description": "Independent merge retains exact representative source truth",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dr.support.merge_priority_schema",
+      "pytest_node": "test_case_outcomes.py::test_support_merge_priority_schema",
+      "category": "independent_preservation",
+      "description": "Independent merge retains canonical schema and source priority",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dr.support.conflicts_exact",
+      "pytest_node": "test_case_outcomes.py::test_support_conflicts_exact",
+      "category": "independent_preservation",
+      "description": "Independent conflict report remains internally and semantically correct",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    }
+  ]
+}

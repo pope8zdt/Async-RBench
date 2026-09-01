@@ -1,0 +1,78 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-2a25ab8769",
+  "source_task_id": "osworld:multi_apps:3f05f3b9-29ba-4b6b-95aa-2204697ffc06",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "batch_mp3_metadata_result",
+  "upstream_dependency_graph": [
+    {
+      "id": "blank_tag_inventory",
+      "app": "Nautilus audio worker",
+      "description": "Verify all five official MP3 assets initially have empty easy tags."
+    },
+    {
+      "id": "filename_pair_parser",
+      "app": "Metadata parsing worker",
+      "description": "Parse each filename into one artist/title pair.",
+      "depends_on": [
+        "blank_tag_inventory"
+      ]
+    },
+    {
+      "id": "batch_tag_write",
+      "app": "Kid3 or Picard worker",
+      "description": "Write title and artist tags for all five tracks.",
+      "depends_on": [
+        "filename_pair_parser"
+      ]
+    },
+    {
+      "id": "five_track_validation",
+      "app": "OSWorld MP3 evaluator",
+      "description": "Run all five check_mp3_meta comparisons.",
+      "depends_on": [
+        "batch_tag_write"
+      ]
+    }
+  ],
+  "state": {
+    "track_count": 5,
+    "all_initial_tags_empty": true,
+    "all_audio_preserved": true,
+    "tracks": [
+      {
+        "path": "/home/user/Music/Cheng Xiang - Missing You.mp3",
+        "artist": "Cheng Xiang",
+        "title": "Missing You",
+        "source_sha256": "62f440c40938ac9bfaabfaa6440a70df4e34c46be0929cf64f02e0ef4b42a813"
+      },
+      {
+        "path": "/home/user/Music/Han Baoyi - Tears of Dancing Girl.mp3",
+        "artist": "Han Baoyi",
+        "title": "Tears of Dancing Girl",
+        "source_sha256": "314ef9fea528a60e192a817b040f724d0d1d8b41fa9569542af4eef291d6a445"
+      },
+      {
+        "path": "/home/user/Music/Huang An - I Know Missing is Painful.mp3",
+        "artist": "Huang An",
+        "title": "I Know Missing is Painful",
+        "source_sha256": "4648569c179c71171cbf6e504288a05b56b98f541441f8786bfc1ec6e80d9eed"
+      },
+      {
+        "path": "/home/user/Music/Chen Shaohua - Red Daughter.mp3",
+        "artist": "Chen Shaohua",
+        "title": "Red Daughter",
+        "source_sha256": "0d2b573a410b644d99ea81b01342c9c5b481b379eb9912348057fe45853e9bd1"
+      },
+      {
+        "path": "/home/user/Music/Zhou Xuan - Nights in Shanghai.mp3",
+        "artist": "Zhou Xuan",
+        "title": "Nights in Shanghai",
+        "source_sha256": "1ca88340b8af67007cd8f4ea6bf342e2bdf10a397d01755d9b0baccde2665053"
+      }
+    ]
+  },
+  "task_assertion": "All five audited MP3 files retain their audio identity and have exact artist and title tags matching the filename pairs checked by the official evaluators.",
+  "finding": "The completed batch result preserves all five audio identities and sets each title and artist exactly from its filename, with all five official check_mp3_meta evaluators passing."
+}
+

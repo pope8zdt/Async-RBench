@@ -1,0 +1,198 @@
+{
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "family": "wait_for_authority",
+      "id": "tbn_conflicting_bb224d.mutation.01_classify_completeness",
+      "may_fail": [],
+      "must_fail": [
+        "tbn_conflicting_bb224d.cf.01_classify_completeness"
+      ],
+      "must_still_pass": [
+        "tbn_conflicting_specialist_results_a76a766789.source.pin"
+      ],
+      "targets": [
+        "tbn_conflicting_bb224d.cf.01_classify_completeness",
+        "tbn_conflicting_specialist_results_a76a766789.event.receipt",
+        "tbn_conflicting_specialist_results_a76a766789.event.probes",
+        "tbn_conflicting_specialist_results_a76a766789.closure",
+        "tbn_conflicting_specialist_results_a76a766789.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "family": "resolve_authority",
+      "id": "tbn_conflicting_bb224d.mutation.02_revise_affected",
+      "may_fail": [],
+      "must_fail": [
+        "tbn_conflicting_bb224d.cf.02_revise_affected"
+      ],
+      "must_still_pass": [
+        "tbn_conflicting_specialist_results_a76a766789.source.pin"
+      ],
+      "targets": [
+        "tbn_conflicting_bb224d.cf.02_revise_affected",
+        "tbn_conflicting_specialist_results_a76a766789.event.receipt",
+        "tbn_conflicting_specialist_results_a76a766789.event.probes",
+        "tbn_conflicting_specialist_results_a76a766789.closure",
+        "tbn_conflicting_specialist_results_a76a766789.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "family": "rederive_from_authority",
+      "id": "tbn_conflicting_bb224d.mutation.03_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "tbn_conflicting_bb224d.cf.03_verify_closure"
+      ],
+      "must_still_pass": [
+        "tbn_conflicting_specialist_results_a76a766789.source.pin"
+      ],
+      "targets": [
+        "tbn_conflicting_bb224d.cf.03_verify_closure",
+        "tbn_conflicting_specialist_results_a76a766789.event.receipt",
+        "tbn_conflicting_specialist_results_a76a766789.event.probes",
+        "tbn_conflicting_specialist_results_a76a766789.closure",
+        "tbn_conflicting_specialist_results_a76a766789.source.pin"
+      ]
+    }
+  ],
+  "points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_the_main_branch_begins_mergi",
+      "dimension": "event_intake",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.the_main_branch_begins_m"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'downstream_invalidation', perform classify_completeness for 'The main branch begins merging, reporting, or selecting an implementation from the results already available.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_conflicting_bb224d.cf.01_classify_completeness",
+      "independence_key": "tbn_conflicting_bb224d.cf.01_classify_completeness",
+      "measurement_type": "control",
+      "mutation_id": "tbn_conflicting_bb224d.mutation.01_classify_completeness",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "tbn_conflicting_specialist_results_a76a766789.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_conflicting_bb224d.cf.01_classify_completeness]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.the_main_branch_begins_m"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_the_main_branch_begins_mergi",
+      "dimension": "state_revision",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.the_main_branch_begins_m"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'downstream_invalidation', perform revise_affected for 'The main branch begins merging, reporting, or selecting an implementation from the results already available.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_conflicting_bb224d.cf.02_revise_affected",
+      "independence_key": "tbn_conflicting_bb224d.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "tbn_conflicting_bb224d.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "tbn_conflicting_specialist_results_a76a766789.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_conflicting_bb224d.cf.02_revise_affected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.the_main_branch_begins_m"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_the_main_branch_begins_mergi",
+      "dimension": "closure",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.the_main_branch_begins_m"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'downstream_invalidation', perform verify_closure for 'The main branch begins merging, reporting, or selecting an implementation from the results already available.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "tbn_conflicting_bb224d.cf.03_verify_closure",
+      "independence_key": "tbn_conflicting_bb224d.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "tbn_conflicting_bb224d.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "tbn_conflicting_specialist_results_a76a766789.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_conflicting_bb224d.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.the_main_branch_begins_m"
+    }
+  ]
+}

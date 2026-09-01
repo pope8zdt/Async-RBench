@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific conditions_worker_recovered receipt bound to coding:015.",
+      "id": "mab_dependency_unblock_940b9b95f0.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned MATP authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_940b9b95f0.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered conditions replace static rankings without erasing preferences, feedback, shared destinations, or accepted-route history.",
+      "id": "mab_dependency_unblock_940b9b95f0.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:015.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and realtime_multimodal_plan_closure obey the task-specific four-upstream schema.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_matp_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Fresh normalized traffic, transit, and weather conditions deterministically adjust candidate legs and recompute fastest, cheapest, and greenest rankings; stale snapshots are ignored.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_matp_fresh_snapshot_recomputes_rankings_and_ignores_stale_data",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves user_preferences, feedback_history, shared_destinations, accepted_route_history.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_matp_feedback_preferences_and_accepted_routes_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered conditions replace static rankings without erasing preferences, feedback, shared destinations, or accepted-route history.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_matp_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-fe0736601e",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_optimizer_constraints_complete",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close optimizer_constraints_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_tasks_durati"
+        ]
+      },
+      "id": "01_classify_completeness_optimizer_constraint",
+      "must_still_pass": [
+        "mab_dependency_unblock_fe0736601e.source.preservation"
+      ],
+      "mutation_family": "classify_completeness",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fe0736601e.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness: A completed availability, dependency, and preference contract replaces provisional priority-only scheduling while preserving tasks, feedback, notifications, and report history.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_tasks_durati"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_optimizer_constraints_complete",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close optimizer_constraints_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_collaborative_edit"
+        ]
+      },
+      "id": "02_revise_affected_optimizer_constraint",
+      "must_still_pass": [
+        "mab_dependency_unblock_fe0736601e.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fe0736601e.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A completed availability, dependency, and preference contract replaces provisional priority-only scheduling while preserving tasks, feedback, notifications, and report history.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_collaborative_edit"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_optimizer_constraints_complete",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close optimizer_constraints_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_feedback_driven_pr"
+        ]
+      },
+      "id": "03_verify_closure_optimizer_constraint",
+      "must_still_pass": [
+        "mab_dependency_unblock_fe0736601e.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fe0736601e.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A completed availability, dependency, and preference contract replaces provisional priority-only scheduling while preserving tasks, feedback, notifications, and report history.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_feedback_driven_pr"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_users_tasks_durati"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_collaborative_edit"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_feedback_driven_pr"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_completed_opti"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_users_tasks_durati",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_collaborative_edit",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_feedback_driven_pr",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_completed_opti",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_users_tasks_durati",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_collaborative_edit",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_feedback_driven_pr",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_completed_opti",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_tasks_durati",
+      "req.02.implement_collaborative_edit",
+      "req.03.implement_feedback_driven_pr",
+      "req.04.integrate_the_completed_opti",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The complete optimizer contract produces a dependency-valid, availability-bound schedule and preserves collaboration evidence.",
+    "before_state": "A provisional schedule uses task priority but does not yet enforce shared availability, dependencies, and non-overlap together.",
+    "event_id": "evt.mab_dependency_unblock_fe07.optimizer_constraints_completed",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement users, tasks, duration, priority, dependencies, and availability.",
+      "id": "req.01.implement_users_tasks_durati",
+      "observable_probe": "mab_dependency_unblock_fe0736601e.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement collaborative edits and notifications for schedule changes.",
+      "id": "req.02.implement_collaborative_edit",
+      "observable_probe": "mab_dependency_unblock_fe0736601e.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement feedback-driven priority adjustment and deterministic no-overlap optimization.",
+      "id": "req.03.implement_feedback_driven_pr",
+      "observable_probe": "mab_dependency_unblock_fe0736601e.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the completed optimizer contract and generate Gantt and time-usage reports.",
+      "id": "req.04.integrate_the_completed_opti",
+      "observable_probe": "mab_dependency_unblock_fe0736601e.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

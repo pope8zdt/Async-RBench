@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_conflict_verify_duplicate_column_defi",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.classify_conflict",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.verify_duplicate_column_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform classify_conflict for 'Verify duplicate column definitions and usage counters from the returned catalog rows.' while retaining valid prior result 'Catalog and table-size queries identify the relations dominating storage and write activity.'.",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Catalog and table-size queries identify the relations dominating storage and write activity.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "mab_conflict_db01.cf.01_classify_conflict_verify_duplicate_c",
+      "independence_key": "mab_conflict_db01.cf.01_classify_conflict_verify_duplicate_c",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db01.mutation.01_classify_conflict_verify_duplicate_c",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "arbitrate_conflict_add_redundant_index_to_the_s",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.arbitrate_conflict",
+      "evidence_spec": {
+        "primary_fact": "conflict_resolution",
+        "subject": "req.01.verify_duplicate_column_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform arbitrate_conflict for 'Add REDUNDANT_INDEX to the supported-cause matrix and invalidate conflicting eliminations.' while retaining valid prior result 'Non-index hypotheses have SQL findings recorded in a cause-by-cause evidence matrix.'.",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Non-index hypotheses have SQL findings recorded in a cause-by-cause evidence matrix.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "mab_conflict_db01.cf.02_arbitrate_conflict_add_redundant_inde",
+      "independence_key": "mab_conflict_db01.cf.02_arbitrate_conflict_add_redundant_inde",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db01.mutation.02_arbitrate_conflict_add_redundant_inde",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_re_rank_all_supported_hypoth",
+      "dimension": "closure",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.verify_duplicate_column_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform verify_closure for 'Re-rank all supported hypotheses against the requirement to select exactly two causes.' while retaining valid prior result 'A provisional two-cause ranking is drafted without closing the diagnosis.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A provisional two-cause ranking is drafted without closing the diagnosis.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "mab_conflict_db01.cf.03_verify_closure_re_rank_all_suppor",
+      "independence_key": "mab_conflict_db01.cf.03_verify_closure_re_rank_all_suppor",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db01.mutation.03_verify_closure_re_rank_all_suppor",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "event_theme": "conflicting_valid_results",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.",
+        "before": "A decisive duplicate-index report arrives after the planner has provisionally ranked the other root causes.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

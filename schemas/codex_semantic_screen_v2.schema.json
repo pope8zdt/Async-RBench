@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reviews"],
+  "properties": {
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "candidate_id",
+          "evidence_quality",
+          "causal_origin",
+          "independent_result_candidate",
+          "affected_work_started_before_arrival",
+          "arrival_order_changes_required_plan",
+          "executable_outcome_scoreable",
+          "answer_leakage_risk",
+          "failure_attribution",
+          "semantic_family",
+          "decision",
+          "evidence_refs",
+          "rationale"
+        ],
+        "properties": {
+          "candidate_id": {"type": "string"},
+          "evidence_quality": {"enum": ["usable", "partial", "unusable"]},
+          "causal_origin": {"enum": ["observed_in_trace", "task_supported_injection", "unsupported"]},
+          "independent_result_candidate": {"enum": ["yes", "no", "uncertain"]},
+          "affected_work_started_before_arrival": {"enum": ["yes", "no", "uncertain"]},
+          "arrival_order_changes_required_plan": {"enum": ["yes", "no", "uncertain"]},
+          "executable_outcome_scoreable": {"enum": ["yes", "no", "uncertain"]},
+          "answer_leakage_risk": {"enum": ["low", "medium", "high"]},
+          "failure_attribution": {"enum": ["model", "benchmark", "infrastructure", "not_failure", "uncertain"]},
+          "semantic_family": {
+            "enum": [
+              "cross_app_artifact",
+              "late_test_evidence",
+              "conflicting_specialist_results",
+              "dependency_unblock",
+              "late_constraint",
+              "partial_failure_recovery",
+              "state_reconciliation",
+              "none"
+            ]
+          },
+          "decision": {"enum": ["promote_to_review", "expand_evidence", "reject"]},
+          "evidence_refs": {"type": "array", "items": {"type": "string"}, "maxItems": 6},
+          "rationale": {"type": "string", "maxLength": 800}
+        }
+      }
+    }
+  }
+}

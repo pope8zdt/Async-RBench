@@ -1,0 +1,86 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_constraint_17e23e3eb3.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_constr_be439e.cf.01_classify_completeness_use_the_predicate_",
+          "swe_late_constr_be439e.cf.02_revise_affected_verify_both_evalua",
+          "swe_late_constr_be439e.cf.03_verify_closure_confirm_genuinely_"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_constraint_17e23e3eb3.event.receipt",
+          "swe_late_constraint_17e23e3eb3.event.probes",
+          "swe_late_constraint_17e23e3eb3.closure",
+          "swe_late_constraint_17e23e3eb3.source.pin",
+          "swe_late_constraint_17e23e3eb3.native.pytest_01_test_point2d",
+          "swe_late_constraint_17e23e3eb3.native.pytest_02_test_normalize_dimension",
+          "swe_late_constraint_17e23e3eb3.native.pytest_03_test_arguments",
+          "swe_late_constraint_17e23e3eb3.native.pytest_04_test_concyclic_doctest_bug",
+          "swe_late_constraint_17e23e3eb3.native.pytest_05_test_dot",
+          "swe_late_constraint_17e23e3eb3.native.pytest_06_test_issue_11617",
+          "swe_late_constraint_17e23e3eb3.native.pytest_07_test_issue_22684",
+          "swe_late_constraint_17e23e3eb3.native.pytest_08_test_issue_9214",
+          "swe_late_constraint_17e23e3eb3.native.pytest_09_test_point",
+          "swe_late_constraint_17e23e3eb3.native.pytest_10_test_point3d",
+          "swe_late_constraint_17e23e3eb3.native.pytest_11_test_transform",
+          "swe_late_constraint_17e23e3eb3.native.pytest_12_test_unit"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "simpify gives `Imaginary coordinates are not permitted.` with evaluate(False)",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "8f731fd12b6c07e9f84b998f05ca1af0a625eac46c455f1fc95847822b4ac819",
+        "task_id": "sympy__sympy-22714",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

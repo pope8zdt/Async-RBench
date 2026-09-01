@@ -1,0 +1,191 @@
+{
+  "case_id": "osw-dependency-unblock-22ed3b1d66",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_vlc_persistence_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_vlc_22.cf.01_classify_authority_vlc_persistence_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_22ed3b1d66.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed vlc_play_and_exit_setting; preserve unaffected vlc state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.config_path"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_vlc_persistence_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_vlc_22.cf.02_revise_affected_vlc_persistence_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_22ed3b1d66.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed vlc_play_and_exit_setting; preserve unaffected vlc state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preference_value"
+    },
+    {
+      "critical": true,
+      "decision_group": "03_verify_closure_vlc_persistence_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_vlc_22.cf.03_verify_closure_vlc_persistence_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_22ed3b1d66.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed vlc_play_and_exit_setting; preserve unaffected vlc state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.single_effective_assignment"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.config_path"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.preference_value"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.single_effective_assignment"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.config_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preference_value",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.single_effective_assignment",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.config_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preference_value",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.single_effective_assignment",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.config_path",
+      "req.02.preference_value",
+      "req.03.single_effective_assignment",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The VLC worker returns ~/.config/vlc/vlcrc, the `play-and-exit` key, required value 0 and restart-backed persistence evidence.",
+    "before_state": "VLC is open with auto-close enabled, but the version-specific preference path, key and persistence check are pending.",
+    "event_id": "evt.osw_dependency_unblock_22ed3b1d66.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The active vlcrc path is exact.",
+      "id": "req.01.config_path",
+      "observable_probe": "osw_dependency_unblock_22ed3b1d66.osworld.config_path",
+      "public_evidence": "source instruction and task-specific config_path result"
+    },
+    {
+      "description": "play-and-exit changes from 1 to 0.",
+      "id": "req.02.preference_value",
+      "observable_probe": "osw_dependency_unblock_22ed3b1d66.osworld.preference_value",
+      "public_evidence": "source instruction and task-specific preference_value result"
+    },
+    {
+      "description": "Exactly one effective assignment remains and no enabled conflict survives.",
+      "id": "req.03.single_effective_assignment",
+      "observable_probe": "osw_dependency_unblock_22ed3b1d66.osworld.single_effective_assignment",
+      "public_evidence": "source instruction and task-specific single_effective_assignment result"
+    }
+  ]
+}

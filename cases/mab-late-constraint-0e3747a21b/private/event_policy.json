@@ -1,0 +1,30 @@
+{
+  "authority_rule": "Validate case/source identity and use source-specific evidence, not completion order.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.source_native_resolution",
+      "req.02.preserve_unaffected",
+      "req.03.receipt_bound_closure",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A late older offer is delivered after the current qualified agreement is persisted.",
+    "before_state": "A task-specific provisional artifact is persisted without evaluator truth.",
+    "event_id": "evt.bar001_remote.late_out_of_order_superseded_result",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.bar001_remote.late_out_of_order_superseded_result",
+  "forbidden_shortcut": "Do not ignore the event, expose private truth, or replace unaffected source findings.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

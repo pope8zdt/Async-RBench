@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific balance_worker_recovered receipt bound to coding:020.",
+      "id": "mab_dependency_unblock_94c68e7815.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Multi-Agent_Quest_Creator authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_94c68e7815.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered structured balance replaces scalar placeholders while quest history, revert points, simulations, and community ratings remain intact.",
+      "id": "mab_dependency_unblock_94c68e7815.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:020.",
+      "id": "mab_dependency_unblock_94c68e7815.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and versioned_quest_balance_closure obey the task-specific four-upstream schema.",
+      "id": "mab_dependency_unblock_94c68e7815.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_quest_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A deterministic version-bound balance result reports difficulty, fairness, and ranked enemy/reward/objective adjustments; accepted adjustments create collaborative quest versions.",
+      "id": "mab_dependency_unblock_94c68e7815.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_quest_structured_balance_enemy_strength_rewards_and_versioned_adjustments",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves quest_history, revert_points, simulation_results, community_ratings.",
+      "id": "mab_dependency_unblock_94c68e7815.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_quest_history_revert_simulations_and_ratings_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered structured balance replaces scalar placeholders while quest history, revert points, simulations, and community ratings remain intact.",
+      "id": "mab_dependency_unblock_94c68e7815.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_quest_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

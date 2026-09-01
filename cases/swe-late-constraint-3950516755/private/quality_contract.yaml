@@ -1,0 +1,74 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_constraint_3950516755.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_constraint_3950516755.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_constr_b45961.cf.01_classify_critical_path",
+          "swe_late_constr_b45961.cf.02_resource_triage",
+          "swe_late_constr_b45961.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_constraint_3950516755.event.receipt",
+          "swe_late_constraint_3950516755.event.probes",
+          "swe_late_constraint_3950516755.closure",
+          "swe_late_constraint_3950516755.source.pin",
+          "swe_late_constraint_3950516755.native.pytest_01_testing_test_mark_expression_py"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Pytest crashes the interpreter on debug build for 3.8+",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "9b624cef73a2cad10a427044f944b3515347dffe254b78c0ee037b8a8c785bf1",
+        "task_id": "pytest-dev__pytest-7324",
+        "task_path": "cases/swe-late-constraint-3950516755/private/source_task.yaml"
+      }
+    ]
+  }
+}

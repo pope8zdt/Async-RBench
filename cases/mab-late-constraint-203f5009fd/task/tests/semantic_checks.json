@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific rbac_endpoint_matrix_straggler_completed receipt bound to coding:040.",
+      "id": "mab_late_constraint_203f5009fd.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned TeamSyncPro authority runs after three upstream results.",
+      "id": "mab_late_constraint_203f5009fd.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The delayed RBAC endpoint matrix closes backend and frontend authorization while task history, allocations, communication, and report snapshots remain intact.",
+      "id": "mab_late_constraint_203f5009fd.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:040.",
+      "id": "mab_late_constraint_203f5009fd.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and department_rbac_api_closure expose the task-specific four-upstream project-management contract.",
+      "id": "mab_late_constraint_203f5009fd.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsyncpro_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Every task, resource, communication, and performance operation binds method, path, fields, department, and role; cross-department and altered-field requests are rejected and frontend visibility uses the same matrix.",
+      "id": "mab_late_constraint_203f5009fd.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsyncpro_department_role_endpoint_fields_and_frontend_visibility",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task_history, resource_allocations, communication_logs, report_snapshots.",
+      "id": "mab_late_constraint_203f5009fd.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsyncpro_tasks_allocations_messages_reports_and_audit_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed RBAC/API matrix revises backend and frontend authorization without erasing valid project state.",
+      "id": "mab_late_constraint_203f5009fd.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsyncpro_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

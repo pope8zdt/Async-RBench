@@ -1,0 +1,412 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_completeness_workspace_window_and_tab_state",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_state_reconciliation_8fec3dd813.partial_then_complete_result",
+      "evidence_group": "osw_workspace_8fec.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "workspace_window_and_tab_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness for workspace_window_and_tab_state; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip classify_completeness, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_workspace_8fec.cf.01_classify_completeness_workspace_window_and_tab_state",
+      "independence_key": "osw_workspace_8fec.cf.01_classify_completeness_workspace_window_and_tab_state",
+      "measurement_type": "control",
+      "mutation_id": "osw_workspace_8fec.mutation.01_classify_completeness_workspace_window_and_tab_state",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_state_reconciliation_8fec3dd813.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.project_archive"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_workspace_window_and_tab_state",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_state_reconciliation_8fec3dd813.partial_then_complete_result",
+      "evidence_group": "osw_workspace_8fec.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "workspace_window_and_tab_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for workspace_window_and_tab_state; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_workspace_8fec.cf.02_revise_affected_workspace_window_and_tab_state",
+      "independence_key": "osw_workspace_8fec.cf.02_revise_affected_workspace_window_and_tab_state",
+      "measurement_type": "control",
+      "mutation_id": "osw_workspace_8fec.mutation.02_revise_affected_workspace_window_and_tab_state",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_8fec3dd813.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.nautilus_window"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_workspace_window_and_tab_state",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_state_reconciliation_8fec3dd813.partial_then_complete_result",
+      "evidence_group": "osw_workspace_8fec.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "workspace_window_and_tab_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for workspace_window_and_tab_state; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_workspace_8fec.cf.03_preserve_unaffected_workspace_window_and_tab_state",
+      "independence_key": "osw_workspace_8fec.cf.03_preserve_unaffected_workspace_window_and_tab_state",
+      "measurement_type": "control",
+      "mutation_id": "osw_workspace_8fec.mutation.03_preserve_unaffected_workspace_window_and_tab_state",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_8fec3dd813.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.terminal_window"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_workspace_window_and_tab_state",
+      "dimension": "closure",
+      "event_id": "evt.osw_state_reconciliation_8fec3dd813.partial_then_complete_result",
+      "evidence_group": "osw_workspace_8fec.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "workspace_window_and_tab_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for workspace_window_and_tab_state; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_workspace_8fec.cf.04_verify_closure_workspace_window_and_tab_state",
+      "independence_key": "osw_workspace_8fec.cf.04_verify_closure_workspace_window_and_tab_state",
+      "measurement_type": "control",
+      "mutation_id": "osw_workspace_8fec.mutation.04_verify_closure_workspace_window_and_tab_state",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_state_reconciliation_8fec3dd813.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.chrome_tabs"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_completeness, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "wait_for_authority",
+      "id": "osw_workspace_8fec.mutation.01_classify_completeness_workspace_window_and_tab_state",
+      "may_fail": [],
+      "must_fail": [
+        "osw_workspace_8fec.cf.01_classify_completeness_workspace_window_and_tab_state"
+      ],
+      "must_still_pass": [
+        "osw_state_reconciliation_8fec3dd813.source.pin"
+      ],
+      "targets": [
+        "osw_workspace_8fec.cf.01_classify_completeness_workspace_window_and_tab_state",
+        "osw_state_reconciliation_8fec3dd813.event.receipt",
+        "osw_state_reconciliation_8fec3dd813.event.probes",
+        "osw_state_reconciliation_8fec3dd813.closure",
+        "osw_state_reconciliation_8fec3dd813.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "resolve_authority",
+      "id": "osw_workspace_8fec.mutation.02_revise_affected_workspace_window_and_tab_state",
+      "may_fail": [],
+      "must_fail": [
+        "osw_workspace_8fec.cf.02_revise_affected_workspace_window_and_tab_state"
+      ],
+      "must_still_pass": [
+        "osw_state_reconciliation_8fec3dd813.source.pin"
+      ],
+      "targets": [
+        "osw_workspace_8fec.cf.02_revise_affected_workspace_window_and_tab_state",
+        "osw_state_reconciliation_8fec3dd813.event.receipt",
+        "osw_state_reconciliation_8fec3dd813.event.probes",
+        "osw_state_reconciliation_8fec3dd813.closure",
+        "osw_state_reconciliation_8fec3dd813.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "selective_replan",
+      "id": "osw_workspace_8fec.mutation.03_preserve_unaffected_workspace_window_and_tab_state",
+      "may_fail": [],
+      "must_fail": [
+        "osw_workspace_8fec.cf.03_preserve_unaffected_workspace_window_and_tab_state"
+      ],
+      "must_still_pass": [
+        "osw_state_reconciliation_8fec3dd813.source.pin"
+      ],
+      "targets": [
+        "osw_workspace_8fec.cf.03_preserve_unaffected_workspace_window_and_tab_state",
+        "osw_state_reconciliation_8fec3dd813.event.receipt",
+        "osw_state_reconciliation_8fec3dd813.event.probes",
+        "osw_state_reconciliation_8fec3dd813.closure",
+        "osw_state_reconciliation_8fec3dd813.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "rederive_from_authority",
+      "id": "osw_workspace_8fec.mutation.04_verify_closure_workspace_window_and_tab_state",
+      "may_fail": [],
+      "must_fail": [
+        "osw_workspace_8fec.cf.04_verify_closure_workspace_window_and_tab_state"
+      ],
+      "must_still_pass": [
+        "osw_state_reconciliation_8fec3dd813.source.pin"
+      ],
+      "targets": [
+        "osw_workspace_8fec.cf.04_verify_closure_workspace_window_and_tab_state",
+        "osw_state_reconciliation_8fec3dd813.event.receipt",
+        "osw_state_reconciliation_8fec3dd813.event.probes",
+        "osw_state_reconciliation_8fec3dd813.closure",
+        "osw_state_reconciliation_8fec3dd813.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_state_reconciliation_8fec3dd813.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_state_reconciliation_8fec3dd813.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_state_reconciliation_8fec3dd813.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_state_reconciliation_8fec3dd813.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:48c46dc7-fe04-4505-ade7-723cba1aa6f6 and check_list+is_expected_tabs.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The OSWorld project is open in Nautilus and GNOME Terminal at the required directory while Chrome has https://github.com and https://docs.python.org/3/ open.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The audited project archive and member set are preserved.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.project_archive",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_project_archive",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Nautilus is open on OSWorld.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.nautilus_window",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_nautilus_window",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "GNOME Terminal is rooted at the exact OSWorld project directory.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.terminal_window",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_terminal_window",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Chrome has exactly the required GitHub and Python documentation URLs.",
+      "id": "osw_state_reconciliation_8fec3dd813.osworld.chrome_tabs",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_chrome_tabs",
+      "relevance_tier": "base"
+    }
+  ]
+}

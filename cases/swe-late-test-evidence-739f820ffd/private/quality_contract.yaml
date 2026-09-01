@@ -1,0 +1,75 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_test_evidence_739f820ffd.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_test_evidence_739f820ffd.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_test_e_438b1a.cf.01_classify_authority_recognize_both_p_a",
+          "swe_late_test_e_438b1a.cf.02_revise_affected_preserve_element_w",
+          "swe_late_test_e_438b1a.cf.03_verify_closure_add_p_q_self_compa"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_test_evidence_739f820ffd.event.receipt",
+          "swe_late_test_evidence_739f820ffd.event.probes",
+          "swe_late_test_evidence_739f820ffd.closure",
+          "swe_late_test_evidence_739f820ffd.source.pin",
+          "swe_late_test_evidence_739f820ffd.native.pytest_01_astropy_io_fits_tests_test_diff_py",
+          "swe_late_test_evidence_739f820ffd.native.pytest_02_astropy_io_fits_tests_test_diff_py"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "`io.fits.FITSDiff` may sometimes report differences between identical files",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "6f4f9b0301c8fc9699dd39623fcc7160dfff31dab446decbc38894432a542838",
+        "task_id": "astropy__astropy-14539",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

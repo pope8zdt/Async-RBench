@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_protect_itinerary_and_profil",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_8.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.classify_critical_path",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.protect_itinerary_and_pr"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An authentication subagent returns tested registration, login, session-expiry, profile-privacy, invitation, and itinerary-role authorization behavior.', perform classify_critical_path for 'Protect itinerary and profile operations with returned session validation.' while retaining valid prior result 'Itinerary, activity, accommodation, route, and comment domain records are implemented without user authorization assumptions.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Itinerary, activity, accommodation, route, and comment domain records are implemented without user authorization assumptions.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.protect_itinerary_and_pr"
+        ]
+      },
+      "id": "mab_code41_travel.cf.01_classify_critical_path_protect_itinerary_",
+      "independence_key": "mab_code41_travel.cf.01_classify_critical_path_protect_itinerary_",
+      "measurement_type": "control",
+      "mutation_id": "mab_code41_travel.mutation.01_classify_critical_path_protect_itinerary_",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_dependency_unblock_8d29bb0513.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.protect_itinerary_and_pr"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_map_invitations_to_owner_con",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_8.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.resource_triage",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.protect_itinerary_and_pr"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An authentication subagent returns tested registration, login, session-expiry, profile-privacy, invitation, and itinerary-role authorization behavior.', perform resource_triage for 'Map invitations to owner, contributor, and viewer permissions.' while retaining valid prior result 'Change synchronization is implemented for generic actor IDs.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Change synchronization is implemented for generic actor IDs.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.protect_itinerary_and_pr"
+        ]
+      },
+      "id": "mab_code41_travel.cf.02_resource_triage_map_invitations_to",
+      "independence_key": "mab_code41_travel.cf.02_resource_triage_map_invitations_to",
+      "measurement_type": "control",
+      "mutation_id": "mab_code41_travel.mutation.02_resource_triage_map_invitations_to",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_dependency_unblock_8d29bb0513.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.protect_itinerary_and_pr"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_filter_profile_and_itinerary",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_8.straggler_under_resource",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.protect_itinerary_and_pr"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An authentication subagent returns tested registration, login, session-expiry, profile-privacy, invitation, and itinerary-role authorization behavior.', perform verify_closure for 'Filter profile and itinerary data according to privacy settings.' while retaining valid prior result 'Itinerary, activity, accommodation, route, and comment domain records are implemented without user authorization assumptions.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Itinerary, activity, accommodation, route, and comment domain records are implemented without user authorization assumptions.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.protect_itinerary_and_pr"
+        ]
+      },
+      "id": "mab_code41_travel.cf.03_verify_closure_filter_profile_and",
+      "independence_key": "mab_code41_travel.cf.03_verify_closure_filter_profile_and",
+      "measurement_type": "control",
+      "mutation_id": "mab_code41_travel.mutation.03_verify_closure_filter_profile_and",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_8d29bb0513.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.protect_itinerary_and_pr"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_8.straggler_under_resource",
+      "event_theme": "straggler_under_resource_pressure",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An authentication subagent returns tested registration, login, session-expiry, profile-privacy, invitation, and itinerary-role authorization behavior.",
+        "before": "Authentication delivery is delayed until itinerary-domain and generic synchronization code exist with mocked identities.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

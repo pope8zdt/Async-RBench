@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_95969c461f.delayed_authoritative_result",
+  "authority_rule": "Delayed gemini_responses_and_iliad_ranges is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.response_coverage",
+      "req.03.paragraph_order",
+      "req.04.iliad_highlights",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The JSON worker returns six Gemini values in source order and all 33 Iliad occurrences with exact highlight ranges.",
+    "before_state": "The JSON file and Writer are open, but recursive Gemini selection and every Iliad match range have not yet been returned.",
+    "event_id": "evt.osw_cross_app_artifact_95969c461f.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

@@ -1,0 +1,34 @@
+{
+  "theme": "partial_then_complete_result",
+  "event_id": "evt.osw_cross_app_artifact_8e188f4a86.partial_then_complete_result",
+  "authority_rule": "cli_column_merge is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_8e188f4a86.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "before_state": "The 5,001-row XLSX and ODS columns are present; extraction and concatenation are partial until output.csv is validated and opened from a terminal-owned Calc process.",
+    "after_state": "All 5,001 rows are concatenated in order using an accepted delimiter form, output.csv is exact, and LibreOffice Calc is launched from the terminal with that file.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.row_counts",
+      "req.02.boundaries",
+      "req.03.order",
+      "req.04.output_path",
+      "req.05.terminal_calc",
+      "req.06.accepted_variant",
+      "final_state"
+    ]
+  }
+}

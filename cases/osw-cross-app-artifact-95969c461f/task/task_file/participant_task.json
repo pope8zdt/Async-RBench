@@ -1,0 +1,27 @@
+{
+  "schema_version": "async-rbench-participant-task-v1",
+  "case_id": "osw-cross-app-artifact-95969c461f",
+  "source_task_id": "osworld:multi_apps:5bc63fb9-276a-4439-a7c1-9dc76401737f",
+  "benchmark": "OSWorld",
+  "domain": "multi_apps",
+  "snapshot": "multiapps",
+  "applications": [
+    "libreoffice_writer"
+  ],
+  "instruction": "I have a JSON-formatted data file opened now that stores the responses of several large language models on a specific dataset. Now, I want to filter out all the responses from Gemini and specifically look at the sentences in the responses that contain \"Iliad\". Please copy all of Gemini's responses(values) from the JSON file, paste them into a Word document named \"gemini_results.docx\" under Desktop. Each response should be a new paragraph and sepreated by a new line. Highlight the all the \"Iliad\" word.",
+  "async_extension": {
+    "theme": "delayed_authoritative_result",
+    "evidence_kind": "gemini_responses_and_iliad_ranges",
+    "delivery": "after a persisted cross-app checkpoint",
+    "required_behavior": [
+      "classify the late authority",
+      "revise only affected work",
+      "reverify source-native closure"
+    ]
+  },
+  "privacy": {
+    "evaluator_truth_visible": false,
+    "event_payload_predeclared": false
+  }
+}
+

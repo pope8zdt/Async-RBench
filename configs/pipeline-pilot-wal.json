@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "screening_report": "artifacts/screen-authoritative-40-50/screening-report.json",
+  "review_inputs": [
+    "artifacts/screen-authoritative-40-50/03-human-review/main-candidates.json",
+    "artifacts/screen-authoritative-40-50/03-human-review/boundary-candidates.json",
+    "artifacts/screen-authoritative-40-50/03-human-review/negative-audit.json"
+  ],
+  "simulated_reviewer_id": "SIM-PIPELINE-01",
+  "simulated_confirmed_ids": [
+    "cand-main-558e2fd5",
+    "cand-main-b7bab920",
+    "cand-bound-0eefb3c8",
+    "cand-bound-2a6cefd7",
+    "cand-bound-d78e8068"
+  ],
+  "selected_review_id": "cand-bound-2a6cefd7",
+  "transformation_plan": {
+    "target_family": "data-recovery-service",
+    "instance_id": "pilot-wal-partial-complete-20260828",
+    "template_instance": "seed-1",
+    "source_event_type": "reverification",
+    "primary_event_theme": "partial_then_complete_result",
+    "secondary_event_themes": [
+      "task_scope_or_dependency_change"
+    ],
+    "async_scenario_class": "result_eventful",
+    "capabilities": [
+      "late_revision_adoption",
+      "stale_result_rejection",
+      "selective_invalidation"
+    ],
+    "affected_scope": "multiple_branches",
+    "topology_roles": [
+      "provisional_producer",
+      "authority_producer",
+      "downstream_consumer",
+      "validation_branch"
+    ],
+    "event_schedule": {
+      "dr_a_base": 2,
+      "dr_a_wal": 5
+    },
+    "dynamic_decision_contract": {
+      "prior_state": "A provisional recovery has been prepared from the base checkpoint.",
+      "late_event": "The complete WAL authority arrives after provisional downstream work started.",
+      "affected_scope": [
+        "recovered_rows",
+        "service_seed",
+        "service_lineage"
+      ],
+      "required_response": [
+        "consume the complete WAL authority",
+        "reject checkpoint-only stale lineage",
+        "revise only affected recovery work",
+        "rederive and reverify the service seed"
+      ],
+      "forbidden_response": [
+        "ignore the WAL result",
+        "retain stale checkpoint lineage",
+        "finish without authority-grounded reverification"
+      ],
+      "observable_evidence": [
+        "completion consumption",
+        "cancellation trace",
+        "artifact lineage",
+        "evaluator-owned verification"
+      ]
+    },
+    "dataset_split": "calibration",
+    "human_approval": {
+      "reviewer": "SIMULATED-TECHNICAL-GATE",
+      "reviewed_at": "2026-08-28T00:00:00+08:00"
+    }
+  }
+}

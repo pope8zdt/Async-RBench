@@ -1,0 +1,195 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_req_01_move_every_reported_per",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_4a74.delayed_authority",
+      "evidence_group": "swe_dependency_unb.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.move_every_reported_per_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Treat the delayed lifecycle and ownership result as the authority for the provisional voice-broadcast design.",
+      "forbidden_behavior": "Do not use the provisional model shape alone as final; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.move_every_reported_per_"
+        ]
+      },
+      "id": "swe_dependency__618bee.cf.01_classify_authority_move_every_reporte",
+      "independence_key": "swe_dependency__618bee.cf.01_classify_authority_move_every_reporte",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__618bee.mutation.01_classify_authority_move_every_reporte",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4a74272d52.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Treat the delayed lifecycle and ownership result as the authority for the provisional voice-broadcast design.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.move_every_reported_per_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_req_02_implement_voicebroadcast",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_4a74.delayed_authority",
+      "evidence_group": "swe_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_voicebroadcast"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Revise VoiceBroadcastRecordingsStore ownership and current-recording transitions to match the authoritative lifecycle result while retaining the valid typed recording event surface.",
+      "forbidden_behavior": "Do not retain store wiring that conflicts with the returned lifecycle graph; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_voicebroadcast"
+        ]
+      },
+      "id": "swe_dependency__618bee.cf.02_revise_affected_implement_voicebro",
+      "independence_key": "swe_dependency__618bee.cf.02_revise_affected_implement_voicebro",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__618bee.mutation.02_revise_affected_implement_voicebro",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4a74272d52.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Revise VoiceBroadcastRecordingsStore ownership and current-recording transitions to match the authoritative lifecycle result while retaining the valid typed recording event surface.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_voicebroadcast"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "verify_closure_req_04_update_each_reported_con",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_4a74.delayed_authority",
+      "evidence_group": "swe_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.update_each_reported_con"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Re-run the voice-broadcast integration tests and verify public exports and consumers against the exact delayed result receipt.",
+      "forbidden_behavior": "Do not close from only the pre-event checkpoint; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.update_each_reported_con"
+        ]
+      },
+      "id": "swe_dependency__618bee.cf.03_verify_closure_update_each_report",
+      "independence_key": "swe_dependency__618bee.cf.03_verify_closure_update_each_report",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__618bee.mutation.03_verify_closure_update_each_report",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4a74272d52.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.', Re-run the voice-broadcast integration tests and verify public exports and consumers against the exact delayed result receipt.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.update_each_reported_con"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.swe_dependency_unblock_4a74.delayed_authority",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The delayed authoritative Jest result confirms the required recording-state event surface, store ownership/current-recording lifecycle, start helper, exports, and RoomView-facing behavior.",
+        "before": "The recording model and initial store wiring are checkpointed before lifecycle ownership and consumer integration evidence is available.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

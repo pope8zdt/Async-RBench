@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-5585821bdf",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_causal_explanation_protocol_co",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close causal_explanation_protocol_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_the_safety_critical"
+        ]
+      },
+      "id": "01_classify_authority_causal_explanation_p",
+      "must_still_pass": [
+        "mab_dependency_unblock_5585821bdf.source.preservation"
+      ],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5585821bdf.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A delayed causal evaluation protocol replaces saliency-only validation with faithful concept and counterfactual explanations for safety-critical driving while preserving human-understandability and liability goals.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_safety_critical"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_causal_explanation_protocol_co",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close causal_explanation_protocol_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.contrast_causal_concept_coun"
+        ]
+      },
+      "id": "02_revise_affected_causal_explanation_p",
+      "must_still_pass": [
+        "mab_dependency_unblock_5585821bdf.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5585821bdf.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A delayed causal evaluation protocol replaces saliency-only validation with faithful concept and counterfactual explanations for safety-critical driving while preserving human-understandability and liability goals.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.contrast_causal_concept_coun"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_causal_explanation_protocol_co",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close causal_explanation_protocol_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_driving_scenes_inter"
+        ]
+      },
+      "id": "03_verify_closure_causal_explanation_p",
+      "must_still_pass": [
+        "mab_dependency_unblock_5585821bdf.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_5585821bdf.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A delayed causal evaluation protocol replaces saliency-only validation with faithful concept and counterfactual explanations for safety-critical driving while preserving human-understandability and liability goals.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.specify_driving_scenes_inter"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.preserve_the_safety_critical"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.contrast_causal_concept_coun"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.specify_driving_scenes_inter"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_delayed_causal"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.preserve_the_safety_critical",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.contrast_causal_concept_coun",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.specify_driving_scenes_inter",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_delayed_causal",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.preserve_the_safety_critical",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.contrast_causal_concept_coun",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.specify_driving_scenes_inter",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_delayed_causal",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_safety_critical",
+      "req.02.contrast_causal_concept_coun",
+      "req.03.specify_driving_scenes_inter",
+      "req.04.integrate_the_delayed_causal",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The returned protocol binds concept interventions, counterfactual validity, stability, and human usefulness to the proposal.",
+    "before_state": "A local-explanation proposal identifies saliency failures but lacks a causal intervention and human-evaluation protocol.",
+    "event_id": "evt.mab_dependency_unblock_5585.causal_explanation_protocol_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Preserve the safety-critical need for understandable local driving explanations.",
+      "id": "req.01.preserve_the_safety_critical",
+      "observable_probe": "mab_dependency_unblock_5585821bdf.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Contrast causal concept/counterfactual explanations with misleading saliency maps.",
+      "id": "req.02.contrast_causal_concept_coun",
+      "observable_probe": "mab_dependency_unblock_5585821bdf.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Specify driving scenes, interventions, fidelity, stability, human-usefulness metrics, and ablations.",
+      "id": "req.03.specify_driving_scenes_inter",
+      "observable_probe": "mab_dependency_unblock_5585821bdf.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the delayed causal explanation protocol and verify the final five-question proposal.",
+      "id": "req.04.integrate_the_delayed_causal",
+      "observable_probe": "mab_dependency_unblock_5585821bdf.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

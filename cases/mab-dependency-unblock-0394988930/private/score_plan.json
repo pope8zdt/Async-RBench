@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_f_divergence_surrogate_derivat",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_0394.f_divergence_surrogate_completed",
+      "evidence_group": "mab_research30_fdiv.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.preserve_the_introduction_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed mathematical derivation replaces a generic alignment objective with an assumption-bounded f-divergence surrogate and reverse-KL consistency case while preserving the five-question research proposal and diversity motivation.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_the_introduction_s"
+        ]
+      },
+      "id": "mab_research30_fdiv.cf.01_classify_authority_f_divergence_surro",
+      "independence_key": "mab_research30_fdiv.cf.01_classify_authority_f_divergence_surro",
+      "measurement_type": "control",
+      "mutation_id": "mab_research30_fdiv.mutation.01_classify_authority_f_divergence_surro",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0394988930.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_introduction_s"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_f_divergence_surrogate_derivat",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_0394.f_divergence_surrogate_completed",
+      "evidence_group": "mab_research30_fdiv.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.formulate_exactly_one_resear"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed mathematical derivation replaces a generic alignment objective with an assumption-bounded f-divergence surrogate and reverse-KL consistency case while preserving the five-question research proposal and diversity motivation.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.formulate_exactly_one_resear"
+        ]
+      },
+      "id": "mab_research30_fdiv.cf.02_revise_affected_f_divergence_surro",
+      "independence_key": "mab_research30_fdiv.cf.02_revise_affected_f_divergence_surro",
+      "measurement_type": "control",
+      "mutation_id": "mab_research30_fdiv.mutation.02_revise_affected_f_divergence_surro",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0394988930.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.formulate_exactly_one_resear"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_f_divergence_surrogate_derivat",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_0394.f_divergence_surrogate_completed",
+      "evidence_group": "mab_research30_fdiv.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.specify_preference_data_f_di"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed mathematical derivation replaces a generic alignment objective with an assumption-bounded f-divergence surrogate and reverse-KL consistency case while preserving the five-question research proposal and diversity motivation.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_preference_data_f_di"
+        ]
+      },
+      "id": "mab_research30_fdiv.cf.03_verify_closure_f_divergence_surro",
+      "independence_key": "mab_research30_fdiv.cf.03_verify_closure_f_divergence_surro",
+      "measurement_type": "control",
+      "mutation_id": "mab_research30_fdiv.mutation.03_verify_closure_f_divergence_surro",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0394988930.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.specify_preference_data_f_di"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "family": "wait_for_authority",
+      "id": "mab_research30_fdiv.mutation.01_classify_authority_f_divergence_surro",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research30_fdiv.cf.01_classify_authority_f_divergence_surro"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_0394988930.source.pin"
+      ],
+      "targets": [
+        "mab_research30_fdiv.cf.01_classify_authority_f_divergence_surro",
+        "mab_dependency_unblock_0394988930.event.receipt",
+        "mab_dependency_unblock_0394988930.event.authority_probe",
+        "mab_dependency_unblock_0394988930.closure",
+        "mab_dependency_unblock_0394988930.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "family": "resolve_authority",
+      "id": "mab_research30_fdiv.mutation.02_revise_affected_f_divergence_surro",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research30_fdiv.cf.02_revise_affected_f_divergence_surro"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_0394988930.source.pin"
+      ],
+      "targets": [
+        "mab_research30_fdiv.cf.02_revise_affected_f_divergence_surro",
+        "mab_dependency_unblock_0394988930.event.receipt",
+        "mab_dependency_unblock_0394988930.event.authority_probe",
+        "mab_dependency_unblock_0394988930.closure",
+        "mab_dependency_unblock_0394988930.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close f_divergence_surrogate_derivation_completed.",
+      "family": "rederive_from_authority",
+      "id": "mab_research30_fdiv.mutation.03_verify_closure_f_divergence_surro",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research30_fdiv.cf.03_verify_closure_f_divergence_surro"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_0394988930.source.pin"
+      ],
+      "targets": [
+        "mab_research30_fdiv.cf.03_verify_closure_f_divergence_surro",
+        "mab_dependency_unblock_0394988930.event.receipt",
+        "mab_dependency_unblock_0394988930.event.authority_probe",
+        "mab_dependency_unblock_0394988930.closure",
+        "mab_dependency_unblock_0394988930.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific f_divergence_surrogate_derivation_completed receipt bound to research:030.",
+      "id": "mab_dependency_unblock_0394988930.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned text-to-image f-divergence preference-alignment research task authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_0394988930.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A delayed mathematical derivation replaces a generic alignment objective with an assumption-bounded f-divergence surrogate and reverse-KL consistency case while preserving the five-question research proposal and diversity motivation.",
+      "id": "mab_dependency_unblock_0394988930.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench research:030.",
+      "id": "mab_dependency_unblock_0394988930.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The proposal exposes exactly five required questions and a five_question_f_divergence_proposal_closure.",
+      "id": "mab_dependency_unblock_0394988930.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_fdivergence_exact_five_question_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The method compares multiple f-divergences under explicit assumptions, includes reverse-KL recovery, preference data, quality/diversity metrics, and ablations.",
+      "id": "mab_dependency_unblock_0394988930.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_fdivergence_authority_method_datasets_metrics_and_consistency_case",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves the human-preference motivation, RLHF/reward-model limitation, diversity-collapse gap, and five-question structure.",
+      "id": "mab_dependency_unblock_0394988930.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_fdivergence_source_motivation_and_structure_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The delayed derivation revises only affected research claims and is bound to the final proposal receipt.",
+      "id": "mab_dependency_unblock_0394988930.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_fdivergence_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_d7e3da4ccb.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_d7e3da4ccb.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__fd059b.cf.01_classify_completeness_emit_source_read_f",
+          "swe_dependency__fd059b.cf.02_revise_affected_pass_a_mutable_sou",
+          "swe_dependency__fd059b.cf.03_verify_closure_preserve_include_s"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_d7e3da4ccb.event.receipt",
+          "swe_dependency_unblock_d7e3da4ccb.event.probes",
+          "swe_dependency_unblock_d7e3da4ccb.closure",
+          "swe_dependency_unblock_d7e3da4ccb.source.pin",
+          "swe_dependency_unblock_d7e3da4ccb.native.pytest_01_tests_test_directive_other_py",
+          "swe_dependency_unblock_d7e3da4ccb.native.pytest_02_tests_test_directive_other_py"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "source-read event does not modify include'd files source",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "526a3bbca153af0853dcefa86d45b4e4d0bfb7f9977d3b9f77ae9b3e088de9b5",
+        "task_id": "sphinx-doc__sphinx-11510",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

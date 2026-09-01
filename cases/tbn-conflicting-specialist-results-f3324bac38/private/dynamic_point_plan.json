@@ -1,0 +1,180 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_the_main_branch_starts_recon",
+      "dimension": "event_intake",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.the_main_branch_starts_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'conflicting_results', perform classify_completeness for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_conflicting_7491e3.cf.01_classify_completeness",
+      "independence_key": "tbn_conflicting_7491e3.cf.01_classify_completeness",
+      "measurement_type": "control",
+      "mutation_id": "tbn_conflicting_7491e3.mutation.01_classify_completeness",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "tbn_conflicting_specialist_results_f3324bac38.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_conflicting_7491e3.cf.01_classify_completeness]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_the_main_branch_starts_recon",
+      "dimension": "state_revision",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.the_main_branch_starts_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'conflicting_results', perform revise_affected for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_conflicting_7491e3.cf.02_revise_affected",
+      "independence_key": "tbn_conflicting_7491e3.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "tbn_conflicting_7491e3.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "tbn_conflicting_specialist_results_f3324bac38.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_conflicting_7491e3.cf.02_revise_affected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_the_main_branch_starts_recon",
+      "dimension": "closure",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.the_main_branch_starts_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'conflicting_results', perform verify_closure for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "tbn_conflicting_7491e3.cf.03_verify_closure",
+      "independence_key": "tbn_conflicting_7491e3.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "tbn_conflicting_7491e3.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "tbn_conflicting_specialist_results_f3324bac38.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_conflicting_7491e3.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re",
+      "event_theme": "partial_then_complete_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "conflicting_results",
+        "before": "useful source work is already persisted",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

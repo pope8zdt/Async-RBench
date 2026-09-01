@@ -1,0 +1,93 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "A separately frozen task-specific implementation creates equivalent behavior and closure without invoking the oracle entrypoint.",
+      "id": "independent-task-native-equivalence",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-authority-receipt",
+      "must_fail": [
+        "mab_late_constraint_3c40bbec7f.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_authority_receipt.sh"
+    },
+    {
+      "id": "broken-task-closure",
+      "must_fail": [
+        "mab_late_constraint_3c40bbec7f.closure"
+      ],
+      "path": "task/negative_mutations/broken_task_closure.sh"
+    },
+    {
+      "id": "wrong-task-behavior",
+      "must_fail": [
+        "mab_late_constraint_3c40bbec7f.source.task_behavior"
+      ],
+      "path": "task/negative_mutations/wrong_task_behavior.sh"
+    },
+    {
+      "id": "broken-task-preservation",
+      "must_fail": [
+        "mab_late_constraint_3c40bbec7f.source.preservation"
+      ],
+      "path": "task/negative_mutations/broken_task_preservation.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_research47_comerobot.cf.01_classify_scope_delta_recovery_safety_sc",
+          "mab_research47_comerobot.cf.02_revise_affected_recovery_safety_sc",
+          "mab_research47_comerobot.cf.03_preserve_unaffected_recovery_safety_sc",
+          "mab_research47_comerobot.cf.04_verify_closure_recovery_safety_sc"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_constraint_3c40bbec7f.event.receipt",
+          "mab_late_constraint_3c40bbec7f.event.authority_probe",
+          "mab_late_constraint_3c40bbec7f.closure",
+          "mab_late_constraint_3c40bbec7f.source.pin",
+          "mab_late_constraint_3c40bbec7f.source.output_schema",
+          "mab_late_constraint_3c40bbec7f.source.task_behavior",
+          "mab_late_constraint_3c40bbec7f.source.preservation",
+          "mab_late_constraint_3c40bbec7f.source.event_closure"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "The harness then",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "63049dd8c916f02e019a2c084a717e44185e7de8d0166736f7a116a16a25e5b7",
+        "task_id": "research:047",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

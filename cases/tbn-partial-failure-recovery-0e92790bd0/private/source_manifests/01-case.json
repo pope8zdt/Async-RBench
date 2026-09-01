@@ -1,0 +1,183 @@
+{
+  "schema_version": "async-rbench-unified-case-v3",
+  "case_id": "tbn-partial-failure-recovery-0e92790bd0",
+  "family": "partial_failure_recovery",
+  "lineage": {
+    "origin_collection": "legacy-300",
+    "original_case_id": "authcase-0297",
+    "original_schema_version": "authoritative-case-capsule-1",
+    "migration": "mechanical-normalization-with-audited-derived-stale-records"
+  },
+  "source": {
+    "source_id": "openhands-Moonshot__Kimi-K2-250905-git-leak-recovery-91bdc6bb",
+    "task_id": "git-leak-recovery",
+    "benchmark": "Terminal-Bench",
+    "source_kind": "locked_official_terminal_bench_task_plus_public_execution_trace",
+    "source_url": "https://github.com/laude-institute/terminal-bench",
+    "source_revision": "049d9e6fa8e9b79e2394d432080c07404a57e05af37f913e9f0f5f78c6971516",
+    "source_sha256": null,
+    "instruction": "A secret was accidentally committed to this repository in /app and then removed by rewriting history.\nPlease \n 1. recover the secret and write it to a /app/secret.txt file. \n 2. clean up the secret in that repo to make sure it cannot be found anywhere in that repo.\n 3. make sure irrelevant files and commit messages remain untouched.\nHint:\n  - The repo is in /app/repo\n  - The secret format is secret[...].\n  - There is only one string in the repo with secret[...] format.\n",
+    "instruction_sha256": "54ac693fd26a4c003f610d62c4b2671f1d1d04ac5b1286f780605e385a9a5861",
+    "source_repair": {
+      "method": "restored_from_authoritative_source",
+      "replaced_instruction_sha256": "3a15bbbee3efa0f3e6dc99dc5749ff72263cf5203fdb299e7c62bc75c2b8c048"
+    },
+    "evidence_class": "public_model_execution_trace_with_incomplete_provenance",
+    "causal_origin": "task_supported_injection"
+  },
+  "causal_record": {
+    "prior_work": [
+      {
+        "id": "step:37",
+        "kind": "observation",
+        "app": null,
+        "function": null,
+        "description": "Missing required parameters for function 'think': {'thought'}"
+      }
+    ],
+    "independent_event": {
+      "id": "step:38",
+      "kind": "action",
+      "app": null,
+      "function": null,
+      "description": "I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…"
+    },
+    "affected_work": [
+      {
+        "id": "required-response:step:38",
+        "kind": "required_response",
+        "app": null,
+        "function": null,
+        "description": "The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis."
+      }
+    ],
+    "superseded_work": [
+      {
+        "id": "provisional:required-response:step:38",
+        "description": "Provisional pre-authority variant of: The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.",
+        "migration_derived": true
+      }
+    ],
+    "event_sequence": [
+      {
+        "id": "step:38",
+        "kind": "action",
+        "app": null,
+        "function": null,
+        "description": "I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…",
+        "producer": "independent_environment_or_trace_producer",
+        "authority": "authoritative"
+      }
+    ]
+  },
+  "scenarios": {
+    "react": {
+      "delivery": "blocking_before_dependent_work",
+      "concurrency": 0
+    },
+    "linear": {
+      "event_release_tick": 0,
+      "concurrency": 0,
+      "events_available": "authoritative_final"
+    },
+    "async": {
+      "event_release_tick": 2,
+      "event_release_ticks": [
+        2
+      ],
+      "concurrency": 2
+    }
+  },
+  "review_binding": {
+    "decision": "reject",
+    "reviewer_type": "two_independent_codex_fixed_choice_reviews",
+    "reviewer_decisions": {
+      "causal": "reject",
+      "engineering": "reject"
+    },
+    "reviewer_agreement": true
+  },
+  "main_score_policy": "mode_neutral_task_outcome",
+  "async_process_points_are_diagnostics_only": true,
+  "quality_state": {
+    "fine_screen_status": "reject",
+    "semantic_family": "partial_failure_recovery",
+    "reviewer_decisions": {
+      "causal": "reject",
+      "engineering": "reject"
+    },
+    "reviewer_agreement": true,
+    "source_native_replay_ready": false,
+    "formal_promotion_ready": false,
+    "formal_blockers": [
+      "fine_screen_not_kept",
+      "source_native_replay_missing",
+      "empirical_async_challenge_not_case_validated"
+    ],
+    "deterministic_issue_count": 6,
+    "deterministic_issues": [
+      {
+        "code": "non_independent_event",
+        "detail": "The alleged event is the focal model's own action or reasoning.",
+        "severity": "fatal"
+      },
+      {
+        "code": "generic_affected_work",
+        "detail": "Affected work is a reusable template rather than task-specific behavior.",
+        "severity": "major"
+      },
+      {
+        "code": "invalid_prior_work",
+        "detail": "Prior work is an error/diagnostic rather than valid work to preserve.",
+        "severity": "major"
+      },
+      {
+        "code": "private_only_stale_work",
+        "detail": "Stale work exists only in private expected data.",
+        "severity": "major"
+      },
+      {
+        "code": "legacy_async_specific_scoring",
+        "detail": "The original eight-point rubric mixes async process with outcome score.",
+        "severity": "major"
+      },
+      {
+        "code": "weak_review_independence",
+        "detail": "Legacy stage labels are not independent reviewer judgments.",
+        "severity": "major"
+      }
+    ]
+  },
+  "score_points": [
+    {
+      "id": "required_action_01",
+      "weight": 0.7,
+      "description": "The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.",
+      "mode_neutral": true
+    },
+    {
+      "id": "no_superseded_action",
+      "weight": 0.1,
+      "description": "No stale action survives in the final outcome.",
+      "mode_neutral": true
+    },
+    {
+      "id": "no_extraneous_or_duplicate_action",
+      "weight": 0.1,
+      "description": "No unrelated or duplicate action is committed.",
+      "mode_neutral": true
+    },
+    {
+      "id": "prior_work_preserved",
+      "weight": 0.05,
+      "description": "Valid prior work is preserved exactly.",
+      "mode_neutral": true
+    },
+    {
+      "id": "closure_verified",
+      "weight": 0.05,
+      "description": "The final state is reverified.",
+      "mode_neutral": true
+    }
+  ]
+}

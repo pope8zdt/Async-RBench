@@ -1,0 +1,11 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "osw-dependency-unblock-75855f9fc5",
+  "benchmark": "OSWorld",
+  "source_binding": {"task_id": "2ad9387a-65d8-4e33-ad5b-7580065a27ca", "domain": "chrome", "config_path": "upstream/osworld/evaluation_examples/examples/chrome/2ad9387a-65d8-4e33-ad5b-7580065a27ca.json"},
+  "native_runtime": {"adapter": "osworld.DesktopEnv", "snapshot": "chrome", "provider": "vmware_or_docker", "final_state": "persisted VM state"},
+  "event_protocol": {"producer": "read-only Chrome bookmark profile probe on a snapshot clone", "payload": "case-bound bookmark-bar folder evidence", "release_predicate": "bookmark action checkpoint persisted", "rollback": "create only if absent and preserve unrelated bookmarks"},
+  "state_attestation": {"baseline_probe": "Chrome reset snapshot and bookmark profile digest", "checkpoint_probe": "bookmark profile digest after an actual folder action", "change_required": true, "journal_owner": "host harness"},
+  "native_evaluator": {"conj": "and", "func": "is_expected_bookmarks", "result": {"type": "bookmarks"}, "expected": {"type": "rule", "rules": {"type": "bookmark_bar_folders_names", "names": ["Favorites"]}}},
+  "quality_gates": {"official_config_bound": true, "native_evaluator_bound": true, "answer_catalogue_removed": true, "runtime_executed": false}
+}

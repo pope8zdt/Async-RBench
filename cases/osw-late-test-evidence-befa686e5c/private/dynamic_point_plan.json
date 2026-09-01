@@ -1,0 +1,257 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_snake_collision_test",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_late_test_evidence_befa686e5c.delayed_authoritative_result",
+      "evidence_group": "osw_snake_befa.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "snake_collision_test"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for snake_collision_test; preserve confirmed vs_code, python, pygame state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip classify_authority, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_snake_befa.cf.01_classify_authority_snake_collision_test",
+      "independence_key": "osw_snake_befa.cf.01_classify_authority_snake_collision_test",
+      "measurement_type": "control",
+      "mutation_id": "osw_snake_befa.mutation.01_classify_authority_snake_collision_test",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_late_test_evidence_befa686e5c.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.grid_size"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_snake_collision_test",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_late_test_evidence_befa686e5c.delayed_authoritative_result",
+      "evidence_group": "osw_snake_befa.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "snake_collision_test"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for snake_collision_test; preserve confirmed vs_code, python, pygame state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_snake_befa.cf.02_revise_affected_snake_collision_test",
+      "independence_key": "osw_snake_befa.cf.02_revise_affected_snake_collision_test",
+      "measurement_type": "control",
+      "mutation_id": "osw_snake_befa.mutation.02_revise_affected_snake_collision_test",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_befa686e5c.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.initial_spawn"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_snake_collision_test",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_late_test_evidence_befa686e5c.delayed_authoritative_result",
+      "evidence_group": "osw_snake_befa.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "snake_collision_test"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for snake_collision_test; preserve confirmed vs_code, python, pygame state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_snake_befa.cf.03_preserve_unaffected_snake_collision_test",
+      "independence_key": "osw_snake_befa.cf.03_preserve_unaffected_snake_collision_test",
+      "measurement_type": "control",
+      "mutation_id": "osw_snake_befa.mutation.03_preserve_unaffected_snake_collision_test",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_befa686e5c.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.respawn"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_snake_collision_test",
+      "dimension": "closure",
+      "event_id": "evt.osw_late_test_evidence_befa686e5c.delayed_authoritative_result",
+      "evidence_group": "osw_snake_befa.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "snake_collision_test"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for snake_collision_test; preserve confirmed vs_code, python, pygame state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_snake_befa.cf.04_verify_closure_snake_collision_test",
+      "independence_key": "osw_snake_befa.cf.04_verify_closure_snake_collision_test",
+      "measurement_type": "control",
+      "mutation_id": "osw_snake_befa.mutation.04_verify_closure_snake_collision_test",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_late_test_evidence_befa686e5c.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.snake_reaches_food"
+    }
+  ],
+  "event_contracts": [
+    {
+      "after_state": "Food respawns on the 10-pixel grid within 600×400 bounds, the snake can reach food, and the official OSWorld Python test suite passes.",
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_04",
+      "before_state": "The Snake project runs, but Food initially spawns off the 10-pixel movement grid and the independent official test has not yet authorized closure.",
+      "event_id": "evt.osw_late_test_evidence_befa686e5c.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Food respawns on the 10-pixel grid within 600×400 bounds, the snake can reach food, and the official OSWorld Python test suite passes.",
+        "before": "The Snake project runs, but Food initially spawns off the 10-pixel movement grid and the independent official test has not yet authorized closure.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

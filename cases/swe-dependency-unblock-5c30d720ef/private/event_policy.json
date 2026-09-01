@@ -1,0 +1,30 @@
+{
+  "authority_rule": "The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_inert_to_the_shared_",
+      "req.02.verify_true_emits_a_pres",
+      "req.03.check_spread_and_direct_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+    "event_id": "evt.swe_dependency_unblock_5c30d720ef.inert_boolean_attribute_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.swe_dependency_unblock_5c30d720ef.inert_boolean_attribute_authority",
+  "forbidden_shortcut": "Do not close from provisional evidence or widen changes beyond the event-affected source closure.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

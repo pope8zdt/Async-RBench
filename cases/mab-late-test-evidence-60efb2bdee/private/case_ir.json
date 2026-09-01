@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-late-test-evidence-60efb2bdee",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_duplicate_office_edge_test_evidence_repl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close office_edge_test_evidence_replayed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_task_creatio"
+        ]
+      },
+      "id": "01_classify_duplicate_office_edge_test_evi",
+      "must_still_pass": [
+        "mab_late_test_evidence_60efb2bdee.source.preservation"
+      ],
+      "mutation_family": "classify_duplicate",
+      "obligation": "classify_duplicate",
+      "outcome_anchors": [
+        "mab_late_test_evidence_60efb2bdee.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_duplicate:1",
+      "required_behavior": "classify_duplicate: Returned authorization, deadline, assignment, notification, and reporting edge tests are applied exactly once when completion is replayed, while tasks, comments, and audit history remain intact.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_task_creatio"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_idempotency_office_edge_test_evidence_repl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close office_edge_test_evidence_replayed.",
+      "gate": "deduplicate_completion",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_authorized_status"
+        ]
+      },
+      "id": "02_preserve_idempotency_office_edge_test_evi",
+      "must_still_pass": [
+        "mab_late_test_evidence_60efb2bdee.source.preservation"
+      ],
+      "mutation_family": "preserve_idempotency",
+      "obligation": "preserve_idempotency",
+      "outcome_anchors": [
+        "mab_late_test_evidence_60efb2bdee.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:preserve_idempotency:2",
+      "required_behavior": "preserve_idempotency: Returned authorization, deadline, assignment, notification, and reporting edge tests are applied exactly once when completion is replayed, while tasks, comments, and audit history remain intact.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_authorized_status"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_office_edge_test_evidence_repl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close office_edge_test_evidence_replayed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_completion_rate_ov"
+        ]
+      },
+      "id": "03_verify_closure_office_edge_test_evi",
+      "must_still_pass": [
+        "mab_late_test_evidence_60efb2bdee.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_test_evidence_60efb2bdee.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: Returned authorization, deadline, assignment, notification, and reporting edge tests are applied exactly once when completion is replayed, while tasks, comments, and audit history remain intact.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_completion_rate_ov"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_users_task_creatio"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_authorized_status"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_completion_rate_ov"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.deduplicate_and_integrate_re"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_users_task_creatio",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_authorized_status",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_completion_rate_ov",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.deduplicate_and_integrate_re",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_users_task_creatio",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_authorized_status",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_completion_rate_ov",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.deduplicate_and_integrate_re",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_task_creatio",
+      "req.02.implement_authorized_status",
+      "req.03.implement_completion_rate_ov",
+      "req.04.deduplicate_and_integrate_re",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The edge suite is registered once, invalid assignment/deadline/access behavior is rejected, and reports are reverified without duplicate effects.",
+    "before_state": "Core scheduling works, but task-specific edge tests arrive late and the same completion can be replayed.",
+    "event_id": "evt.mab_late_test_evidence_60ef.office_edge_tests_replayed",
+    "primary_event_theme": "duplicate_or_replayed_completion",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement users, task creation, assignment, deadline, priority, and dashboard views.",
+      "id": "req.01.implement_users_task_creatio",
+      "observable_probe": "mab_late_test_evidence_60efb2bdee.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement authorized status updates, comments, assignment and deadline notifications.",
+      "id": "req.02.implement_authorized_status",
+      "observable_probe": "mab_late_test_evidence_60efb2bdee.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement completion-rate, overdue, and task-distribution reports.",
+      "id": "req.03.implement_completion_rate_ov",
+      "observable_probe": "mab_late_test_evidence_60efb2bdee.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Deduplicate and integrate returned edge tests, then reverify affected task behavior.",
+      "id": "req.04.deduplicate_and_integrate_re",
+      "observable_probe": "mab_late_test_evidence_60efb2bdee.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

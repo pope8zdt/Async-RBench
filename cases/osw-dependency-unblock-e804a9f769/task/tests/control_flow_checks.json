@@ -1,0 +1,252 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_secret_path_clipboard",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_e804a9f769.delayed_authoritative_result",
+      "evidence_group": "osw_secret_e804.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "secret_path_clipboard"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for secret_path_clipboard; preserve confirmed terminal, filesystem, clipboard state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip classify_authority, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_secret_e804.cf.01_classify_authority_secret_path_clipboard",
+      "independence_key": "osw_secret_e804.cf.01_classify_authority_secret_path_clipboard",
+      "measurement_type": "control",
+      "mutation_id": "osw_secret_e804.mutation.01_classify_authority_secret_path_clipboard",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_e804a9f769.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.filename"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_secret_path_clipboard",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_e804a9f769.delayed_authoritative_result",
+      "evidence_group": "osw_secret_e804.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "secret_path_clipboard"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for secret_path_clipboard; preserve confirmed terminal, filesystem, clipboard state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_secret_e804.cf.02_revise_affected_secret_path_clipboard",
+      "independence_key": "osw_secret_e804.cf.02_revise_affected_secret_path_clipboard",
+      "measurement_type": "control",
+      "mutation_id": "osw_secret_e804.mutation.02_revise_affected_secret_path_clipboard",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_e804a9f769.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.unique_match"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_secret_path_clipboard",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_dependency_unblock_e804a9f769.delayed_authoritative_result",
+      "evidence_group": "osw_secret_e804.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "secret_path_clipboard"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for secret_path_clipboard; preserve confirmed terminal, filesystem, clipboard state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_secret_e804.cf.03_preserve_unaffected_secret_path_clipboard",
+      "independence_key": "osw_secret_e804.cf.03_preserve_unaffected_secret_path_clipboard",
+      "measurement_type": "control",
+      "mutation_id": "osw_secret_e804.mutation.03_preserve_unaffected_secret_path_clipboard",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_e804a9f769.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.canonical_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_secret_path_clipboard",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_e804a9f769.delayed_authoritative_result",
+      "evidence_group": "osw_secret_e804.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "secret_path_clipboard"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for secret_path_clipboard; preserve confirmed terminal, filesystem, clipboard state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_secret_e804.cf.04_verify_closure_secret_path_clipboard",
+      "independence_key": "osw_secret_e804.cf.04_verify_closure_secret_path_clipboard",
+      "measurement_type": "control",
+      "mutation_id": "osw_secret_e804.mutation.04_verify_closure_secret_path_clipboard",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_e804a9f769.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.clipboard"
+    }
+  ],
+  "event_contracts": [
+    {
+      "after_state": "The unique canonical path /home/user/Data3/List3/secret.docx is discovered and the clipboard contains that exact path, satisfying is_in_vm_clickboard.",
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_03",
+      "before_state": "Five Data/List search branches exist and the unique secret.docx location has not yet been authoritatively joined to the clipboard state.",
+      "event_id": "evt.osw_dependency_unblock_e804a9f769.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The unique canonical path /home/user/Data3/List3/secret.docx is discovered and the clipboard contains that exact path, satisfying is_in_vm_clickboard.",
+        "before": "Five Data/List search branches exist and the unique secret.docx location has not yet been authoritatively joined to the clipboard state.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

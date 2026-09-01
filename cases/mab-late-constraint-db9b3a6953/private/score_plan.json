@@ -1,0 +1,324 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_stale",
+      "dimension": "event_intake",
+      "event_id": "evt.bar004_cart.late_out_of_order_superseded_result",
+      "evidence_group": "bar004_cart.classify_stale",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Validate delivered offer identity and compare its revision with the persisted agreement.",
+      "forbidden_behavior": "Do not treat arrival order as authority.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar004_cart.cf.01_classify_stale",
+      "independence_key": "bar004_cart.cf.01_classify_stale",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "mutation_id": "bar004_cart.mutation.01_classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_db9b3a6953.event.receipt"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_exclude_stale",
+      "dimension": "state_revision",
+      "event_id": "evt.bar004_cart.late_out_of_order_superseded_result",
+      "evidence_group": "bar004_cart.exclude_stale",
+      "evidence_spec": {
+        "primary_fact": "stale_result_decision",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reject the superseded offer and preserve the newer product-specific agreement.",
+      "forbidden_behavior": "Do not let a late older offer overwrite current terms.",
+      "gate": "reject_late_stale",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar004_cart.cf.02_exclude_stale",
+      "independence_key": "bar004_cart.cf.02_exclude_stale",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ],
+      "mutation_family": "reject_late_stale",
+      "mutation_id": "bar004_cart.mutation.02_exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_db9b3a6953.event.chronology"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure",
+      "dimension": "closure",
+      "event_id": "evt.bar004_cart.late_out_of_order_superseded_result",
+      "evidence_group": "bar004_cart.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Reverify price, product terms, chronology, and receipt-bound closure.",
+      "forbidden_behavior": "Do not close from stale price or omit product constraints.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar004_cart.cf.03_verify_closure",
+      "independence_key": "bar004_cart.cf.03_verify_closure",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "mutation_id": "bar004_cart.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_db9b3a6953.closure"
+      ],
+      "precondition": "Evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.source_native_resolution"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not treat arrival order as authority.",
+      "family": "wait_for_authority",
+      "id": "bar004_cart.mutation.01_classify_stale",
+      "may_fail": [],
+      "must_fail": [
+        "bar004_cart.cf.01_classify_stale"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ],
+      "targets": [
+        "bar004_cart.cf.01_classify_stale",
+        "mab_late_constraint_db9b3a6953.event.receipt",
+        "mab_late_constraint_db9b3a6953.event.chronology",
+        "mab_late_constraint_db9b3a6953.closure",
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not let a late older offer overwrite current terms.",
+      "family": "reject_late_stale",
+      "id": "bar004_cart.mutation.02_exclude_stale",
+      "may_fail": [],
+      "must_fail": [
+        "bar004_cart.cf.02_exclude_stale"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ],
+      "targets": [
+        "bar004_cart.cf.02_exclude_stale",
+        "mab_late_constraint_db9b3a6953.event.receipt",
+        "mab_late_constraint_db9b3a6953.event.chronology",
+        "mab_late_constraint_db9b3a6953.closure",
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close from stale price or omit product constraints.",
+      "family": "rederive_from_authority",
+      "id": "bar004_cart.mutation.03_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "bar004_cart.cf.03_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ],
+      "targets": [
+        "bar004_cart.cf.03_verify_closure",
+        "mab_late_constraint_db9b3a6953.event.receipt",
+        "mab_late_constraint_db9b3a6953.event.chronology",
+        "mab_late_constraint_db9b3a6953.closure",
+        "mab_late_constraint_db9b3a6953.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Late-offer receipt is authentic and case/source bound.",
+      "id": "mab_late_constraint_db9b3a6953.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Delivered offer is demonstrably older than the accepted revision.",
+      "id": "mab_late_constraint_db9b3a6953.event.chronology",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_late_offer_is_stale",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the receipt while preserving the current agreement.",
+      "id": "mab_late_constraint_db9b3a6953.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_closure_rejects_stale",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Agreement stays pinned to bargaining:004.",
+      "id": "mab_late_constraint_db9b3a6953.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_source_pin",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Private report binds Evaluator.evaluate_task_world and agreement_reached.",
+      "id": "mab_late_constraint_db9b3a6953.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Exact current revision remains accepted.",
+      "id": "mab_late_constraint_db9b3a6953.agreement.current",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_current_revision",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Price satisfies this case seller floor and buyer ceiling.",
+      "id": "mab_late_constraint_db9b3a6953.price.bounds",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_price_bounds",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Terms are specific to 3 Tier Utility Rolling Cart Multifunction Organizer Shelf Storage Cart in Pink.",
+      "id": "mab_late_constraint_db9b3a6953.product.terms",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_product_terms",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Superseded offer cannot overwrite current terms.",
+      "id": "mab_late_constraint_db9b3a6953.stale.excluded",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_stale_excluded",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Ledger preserves chronology, evidence, and source priorities.",
+      "id": "mab_late_constraint_db9b3a6953.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ]
+}

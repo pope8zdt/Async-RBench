@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-cb636c66eb",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_common_threat_rulebook_complet",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_agents_turn_order"
+        ]
+      },
+      "id": "01_classify_completeness_common_threat_rulebo",
+      "must_still_pass": [
+        "mab_dependency_unblock_cb636c66eb.source.preservation"
+      ],
+      "mutation_family": "classify_completeness",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_cb636c66eb.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness: A complete common-threat and scoring rulebook replaces provisional event handling while preserving empire state, turn order, alliances, negotiations, and prior interactions.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_agents_turn_order"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_common_threat_rulebook_complet",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_adaptive_difficult"
+        ]
+      },
+      "id": "02_revise_affected_common_threat_rulebo",
+      "must_still_pass": [
+        "mab_dependency_unblock_cb636c66eb.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_cb636c66eb.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A complete common-threat and scoring rulebook replaces provisional event handling while preserving empire state, turn order, alliances, negotiations, and prior interactions.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_adaptive_difficult"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_common_threat_rulebook_complet",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close common_threat_rulebook_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_communication_alli"
+        ]
+      },
+      "id": "03_verify_closure_common_threat_rulebo",
+      "must_still_pass": [
+        "mab_dependency_unblock_cb636c66eb.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_cb636c66eb.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A complete common-threat and scoring rulebook replaces provisional event handling while preserving empire state, turn order, alliances, negotiations, and prior interactions.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_communication_alli"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_agents_turn_order"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_adaptive_difficult"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_communication_alli"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.replace_provisional_event_ha"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_agents_turn_order",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_adaptive_difficult",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_communication_alli",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.replace_provisional_event_ha",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_agents_turn_order",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_adaptive_difficult",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_communication_alli",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.replace_provisional_event_ha",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_agents_turn_order",
+      "req.02.implement_adaptive_difficult",
+      "req.03.implement_communication_alli",
+      "req.04.replace_provisional_event_ha",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The complete rulebook resolves common threats through alliances, fixes scoring, and preserves prior empire and diplomacy state.",
+    "before_state": "Empires and provisional random events exist without authoritative alliance, scoring, or difficulty semantics.",
+    "event_id": "evt.mab_dependency_unblock_cb63.common_threat_rulebook_completed",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement agents, turn order, resources, structures, technologies, and fleets.",
+      "id": "req.01.implement_agents_turn_order",
+      "observable_probe": "mab_dependency_unblock_cb636c66eb.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement adaptive difficulty and weighted territory, technology, and economy scoring.",
+      "id": "req.02.implement_adaptive_difficult",
+      "observable_probe": "mab_dependency_unblock_cb636c66eb.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement communication, alliances, negotiation terms, and persistent interaction history.",
+      "id": "req.03.implement_communication_alli",
+      "observable_probe": "mab_dependency_unblock_cb636c66eb.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Replace provisional event handling with the complete common-threat rulebook and reverify closure.",
+      "id": "req.04.replace_provisional_event_ha",
+      "observable_probe": "mab_dependency_unblock_cb636c66eb.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

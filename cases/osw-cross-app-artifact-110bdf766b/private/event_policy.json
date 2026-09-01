@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_110bd.delayed_authoritative_result",
+  "authority_rule": "Delayed normalized_receipt_records is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_110bd.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The original workbook layout and receipt inventory are available, but receipt values have not yet been normalized authoritatively.",
+    "after_state": "The receipt worker returns five source-bound normalized expense records; only the appended transaction rows and dependent running balances must be completed.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_existing_bo",
+      "req.02.append_exactly_five_expe",
+      "req.03.recalculate_the_running_",
+      "req.04.save_the_completed_workb",
+      "final_state"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

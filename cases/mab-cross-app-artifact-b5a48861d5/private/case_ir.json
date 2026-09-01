@@ -1,0 +1,248 @@
+{
+  "case_id": "mab-cross-app-artifact-b5a48861d5",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_b5a48861d5_classify_scope_delta_01",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.bind_each_review_and_ann"
+        ]
+      },
+      "id": "01_classify_scope_delta_8861d5",
+      "must_still_pass": [
+        "mab_cross_app_artifact_b.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_b5a48861d5.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "Classify the Git adapter receipt as a dependency change affecting repository-bound reviews and history, while leaving collaboration features in scope and intact. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.bind_each_review_and_ann"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_b5a48861d5_revise_affected_02",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_pull_diff_push"
+        ]
+      },
+      "id": "02_revise_affected_8861d5",
+      "must_still_pass": [
+        "mab_cross_app_artifact_b.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_b5a48861d5.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Rebind review snapshots to commits and apply the delivered pull, diff, push, history, non-fast-forward, retry, and idempotency contract. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_pull_diff_push"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_b5a48861d5_preserve_unaffected_03",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.handle_non_fast_forward_"
+        ]
+      },
+      "id": "03_preserve_unaffected_8861d5",
+      "must_still_pass": [
+        "mab_cross_app_artifact_b.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_b5a48861d5.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "Preserve snippets, annotations, chat, issue transitions, review comments, authentication, and role permissions while revising repository integration. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.handle_non_fast_forward_"
+    },
+    {
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_b5a48861d5_verify_closure_04",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_fake_repository_test"
+        ]
+      },
+      "id": "04_verify_closure_8861d5",
+      "must_still_pass": [
+        "mab_cross_app_artifact_b.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_b5a48861d5.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "Close only after fake-repository checks cover branch movement, conflict, history reconstruction, retry, and duplicate-push exclusion and bind the exact Git receipt. Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_fake_repository_test"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.bind_each_review_and_ann"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_pull_diff_push"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.handle_non_fast_forward_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_fake_repository_test"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.bind_each_review_and_ann",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_pull_diff_push",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.handle_non_fast_forward_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_fake_repository_test",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.bind_each_review_and_ann",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_pull_diff_push",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.handle_non_fast_forward_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_fake_repository_test",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.bind_each_review_and_ann",
+      "req.02.implement_pull_diff_push",
+      "req.03.handle_non_fast_forward_",
+      "req.04.add_fake_repository_test",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The Git integration worker delivers repository, branch, commit, diff, review-session, non-fast-forward, history, retry, and idempotent-push semantics.",
+    "before_state": "Shared snippets, annotations, chat, issue state, access control, and provisional repository references are functional before the Git adapter contract arrives.",
+    "event_id": "evt.mab_cross_app_artifact_b5a48861d5.task_scope_or_dependency_change",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Bind every review and annotation snapshot to an immutable commit identifier.",
+      "id": "req.01.bind_each_review_and_ann",
+      "observable_probe": "mab_cross_app_artifact_b.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source-native CodeSquad artifact and closure evidence for: Bind every review and annotation snapshot to an immutable commit identifier."
+    },
+    {
+      "description": "Implement pull, diff, push, and review-history mapping through the delivered Git adapter.",
+      "id": "req.02.implement_pull_diff_push",
+      "observable_probe": "mab_cross_app_artifact_b.sem.02.the_requested_program_passes",
+      "public_evidence": "source-native CodeSquad artifact and closure evidence for: Implement pull, diff, push, and review-history mapping through the delivered Git adapter."
+    },
+    {
+      "description": "Handle branch movement, non-fast-forward rejection, and retries without duplicating reviews or pushes.",
+      "id": "req.03.handle_non_fast_forward_",
+      "observable_probe": "mab_cross_app_artifact_b.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source-native CodeSquad artifact and closure evidence for: Handle branch movement, non-fast-forward rejection, and retries without duplicating reviews or pushes."
+    },
+    {
+      "description": "Verify history reconstruction, branch movement, conflict, and idempotent push behavior through the fake repository.",
+      "id": "req.04.add_fake_repository_test",
+      "observable_probe": "mab_cross_app_artifact_b.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source-native CodeSquad artifact and closure evidence for: Verify history reconstruction, branch movement, conflict, and idempotent push behavior through the fake repository."
+    }
+  ]
+}

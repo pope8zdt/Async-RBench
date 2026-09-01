@@ -1,0 +1,206 @@
+{
+  "case_id": "swe-late-constraint-3950516755",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_generate_a_crash_safe_ast_pr",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate AST generation in `Expression.compile`.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.generate_a_crash_safe_as"
+        ]
+      },
+      "id": "01_classify_critical_path_generate_a_crash_s",
+      "must_still_pass": [
+        "swe_late_constraint_3950.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "swe_late_constraint_3950.sem.01.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.02.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.03.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_late_constraint_3950.sem.01.the_repaired_repository_pass, swe_late_constraint_3950.sem.02.the_repaired_repository_pass, swe_late_constraint_3950.sem.03.the_repaired_repository_pass, swe_late_constraint_3950.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A version specialist reports compilation and evaluation semantics for `True`, `False`, and `None` on supported Python versions, including debug builds.', perform classify_critical_path for 'Generate a crash-safe AST preserving the reported expression lookup behavior.' while retaining valid prior result 'Locate AST generation in `Expression.compile`.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.generate_a_crash_safe_as"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_assert_compilation_and_evalu",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Create compile/evaluate checks for ordinary identifiers and boolean-like tokens.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.generate_a_crash_safe_as"
+        ]
+      },
+      "id": "02_resource_triage_assert_compilation",
+      "must_still_pass": [
+        "swe_late_constraint_3950.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "swe_late_constraint_3950.sem.01.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.02.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.03.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_late_constraint_3950.sem.01.the_repaired_repository_pass, swe_late_constraint_3950.sem.02.the_repaired_repository_pass, swe_late_constraint_3950.sem.03.the_repaired_repository_pass, swe_late_constraint_3950.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A version specialist reports compilation and evaluation semantics for `True`, `False`, and `None` on supported Python versions, including debug builds.', perform resource_triage for 'Assert compilation and evaluation for all three special identifiers and compound expressions.' while retaining valid prior result 'Create compile/evaluate checks for ordinary identifiers and boolean-like tokens.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.generate_a_crash_safe_as"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_run_mark_expression_tests_on",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate AST generation in `Expression.compile`.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.generate_a_crash_safe_as"
+        ]
+      },
+      "id": "03_verify_closure_run_mark_expressio",
+      "must_still_pass": [
+        "swe_late_constraint_3950.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_3950.sem.01.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.02.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.03.the_repaired_repository_pass",
+        "swe_late_constraint_3950.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_late_constraint_3950.sem.01.the_repaired_repository_pass, swe_late_constraint_3950.sem.02.the_repaired_repository_pass, swe_late_constraint_3950.sem.03.the_repaired_repository_pass, swe_late_constraint_3950.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A version specialist reports compilation and evaluation semantics for `True`, `False`, and `None` on supported Python versions, including debug builds.', perform verify_closure for 'Run mark-expression tests on the available interpreter and retain ordinary identifier behavior.' while retaining valid prior result 'Locate AST generation in `Expression.compile`.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.generate_a_crash_safe_as"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.generate_a_crash_safe_as"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.assert_compilation_and_e"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.run_mark_expression_test"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.generate_a_crash_safe_as",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.assert_compilation_and_e",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.run_mark_expression_test",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.generate_a_crash_safe_as",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.assert_compilation_and_e",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.run_mark_expression_test",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.generate_a_crash_safe_as",
+      "req.02.assert_compilation_and_e",
+      "req.03.run_mark_expression_test",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A version specialist reports compilation and evaluation semantics for `True`, `False`, and `None` on supported Python versions, including debug builds.",
+    "before_state": "Deliver the cross-version semantic matrix after an initial AST-node substitution has been written.",
+    "event_id": "evt.swe_late_constraint_3950.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Generate a crash-safe AST preserving the reported expression lookup behavior.",
+      "id": "req.01.generate_a_crash_safe_as",
+      "observable_probe": "swe_late_constraint_3950.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for generate_a_crash_safe_ast_preserving"
+    },
+    {
+      "description": "Assert compilation and evaluation for all three special identifiers and compound expressions.",
+      "id": "req.02.assert_compilation_and_e",
+      "observable_probe": "swe_late_constraint_3950.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for assert_compilation_and_evaluation_fo"
+    },
+    {
+      "description": "Run mark-expression tests on the available interpreter and retain ordinary identifier behavior.",
+      "id": "req.03.run_mark_expression_test",
+      "observable_probe": "swe_late_constraint_3950.sem.03.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for run_mark_expression_tests_on_the_ava"
+    }
+  ]
+}

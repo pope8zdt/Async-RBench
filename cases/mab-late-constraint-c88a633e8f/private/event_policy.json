@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Only the newest authoritative lineage may revise state; superseded results remain excluded.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_buyer_s_compreh",
+      "req.02.preserve_seller_logistics_co",
+      "req.03.record_every_offer_counter_r",
+      "req.04.apply_only_the_newest_warran",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The newest seller matrix supersedes earlier drafts and closes a complete warranty-and-logistics agreement while retaining the ledger.",
+    "before_state": "A provisional bag price has been discussed without authoritative warranty, support, return, and shipping terms.",
+    "event_id": "evt.mab_late_constraint_c88a.seller_warranty_logistics_matrix_arrived",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_constraint_c88a.seller_warranty_logistics_matrix_arrived",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close seller_warranty_logistics_matrix_arrived.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

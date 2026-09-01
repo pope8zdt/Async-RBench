@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_adopt_the_normalized_quote_c",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_7.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.adopt_the_normalized_quo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Retailer specialist returns a normalized quote contract containing retailer, product identity, price, currency, availability, and observation time, plus deterministic best-quote selection.', perform classify_failure for 'Adopt the normalized quote contract in comparison and alert services.' while retaining valid prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adopt_the_normalized_quo"
+        ]
+      },
+      "id": "mab_code04_price.cf.01_classify_failure_adopt_the_normaliz",
+      "independence_key": "mab_code04_price.cf.01_classify_failure_adopt_the_normaliz",
+      "measurement_type": "control",
+      "mutation_id": "mab_code04_price.mutation.01_classify_failure_adopt_the_normaliz",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_720c69400a.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.adopt_the_normalized_quo"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_convert_comparable_currencie",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_7.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "failure_recovery",
+        "subject": "req.01.adopt_the_normalized_quo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Retailer specialist returns a normalized quote contract containing retailer, product identity, price, currency, availability, and observation time, plus deterministic best-quote selection.', perform recover_or_redelegate for 'Convert comparable currencies before selecting the best available quote.' while retaining valid prior result 'Threshold evaluation is scaffolded against one provisional retailer price.'.",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Threshold evaluation is scaffolded against one provisional retailer price.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adopt_the_normalized_quo"
+        ]
+      },
+      "id": "mab_code04_price.cf.02_recover_or_redelegate_convert_comparable",
+      "independence_key": "mab_code04_price.cf.02_recover_or_redelegate_convert_comparable",
+      "measurement_type": "control",
+      "mutation_id": "mab_code04_price.mutation.02_recover_or_redelegate_convert_comparable",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_720c69400a.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.adopt_the_normalized_quo"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_a_mutation_where_a_lower",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_7.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.adopt_the_normalized_quo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Retailer specialist returns a normalized quote contract containing retailer, product identity, price, currency, availability, and observation time, plus deterministic best-quote selection.', perform verify_closure for 'Add a mutation where a lower second-retailer quote triggers an alert.' while retaining valid prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adopt_the_normalized_quo"
+        ]
+      },
+      "id": "mab_code04_price.cf.03_verify_closure_add_a_mutation_whe",
+      "independence_key": "mab_code04_price.cf.03_verify_closure_add_a_mutation_whe",
+      "measurement_type": "control",
+      "mutation_id": "mab_code04_price.mutation.03_verify_closure_add_a_mutation_whe",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_720c69400a.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.adopt_the_normalized_quo"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_7.child_failure_or_implici",
+      "event_theme": "child_failure_or_implicit_error",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Retailer specialist returns a normalized quote contract containing retailer, product identity, price, currency, availability, and observation time, plus deterministic best-quote selection.",
+        "before": "Normalized multi-retailer quotes arrive after alert logic has been written for a single scalar price.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

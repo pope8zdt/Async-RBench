@@ -1,0 +1,302 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_conflict_verify_duplicate_column_defi",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.classify_conflict",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.verify_duplicate_column_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform classify_conflict for 'Verify duplicate column definitions and usage counters from the returned catalog rows.' while retaining valid prior result 'Catalog and table-size queries identify the relations dominating storage and write activity.'.",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Catalog and table-size queries identify the relations dominating storage and write activity.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "mab_conflict_db01.cf.01_classify_conflict_verify_duplicate_c",
+      "independence_key": "mab_conflict_db01.cf.01_classify_conflict_verify_duplicate_c",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db01.mutation.01_classify_conflict_verify_duplicate_c",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "arbitrate_conflict_add_redundant_index_to_the_s",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.arbitrate_conflict",
+      "evidence_spec": {
+        "primary_fact": "conflict_resolution",
+        "subject": "req.01.verify_duplicate_column_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform arbitrate_conflict for 'Add REDUNDANT_INDEX to the supported-cause matrix and invalidate conflicting eliminations.' while retaining valid prior result 'Non-index hypotheses have SQL findings recorded in a cause-by-cause evidence matrix.'.",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Non-index hypotheses have SQL findings recorded in a cause-by-cause evidence matrix.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "mab_conflict_db01.cf.02_arbitrate_conflict_add_redundant_inde",
+      "independence_key": "mab_conflict_db01.cf.02_arbitrate_conflict_add_redundant_inde",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db01.mutation.02_arbitrate_conflict_add_redundant_inde",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_re_rank_all_supported_hypoth",
+      "dimension": "closure",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.verify_duplicate_column_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The index specialist reports that table1 has 22 indexes, including nine exact duplicate index pairs, with catalog sizes and scan counts for each pair.', perform verify_closure for 'Re-rank all supported hypotheses against the requirement to select exactly two causes.' while retaining valid prior result 'A provisional two-cause ranking is drafted without closing the diagnosis.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A provisional two-cause ranking is drafted without closing the diagnosis.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_duplicate_column_"
+        ]
+      },
+      "id": "mab_conflict_db01.cf.03_verify_closure_re_rank_all_suppor",
+      "independence_key": "mab_conflict_db01.cf.03_verify_closure_re_rank_all_suppor",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db01.mutation.03_verify_closure_re_rank_all_suppor",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_ce3ff5b928.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.verify_duplicate_column_"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Catalog and table-size queries identify the relations dominating storage and write activity.'.",
+      "family": "wait_for_authority",
+      "id": "mab_conflict_db01.mutation.01_classify_conflict_verify_duplicate_c",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db01.cf.01_classify_conflict_verify_duplicate_c"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_ce3ff5b928.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db01.cf.01_classify_conflict_verify_duplicate_c",
+        "mab_conflicting_specialist_results_ce3ff5b928.event.receipt",
+        "mab_conflicting_specialist_results_ce3ff5b928.event.probes",
+        "mab_conflicting_specialist_results_ce3ff5b928.closure",
+        "mab_conflicting_specialist_results_ce3ff5b928.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Non-index hypotheses have SQL findings recorded in a cause-by-cause evidence matrix.'.",
+      "family": "arbitrate_conflict",
+      "id": "mab_conflict_db01.mutation.02_arbitrate_conflict_add_redundant_inde",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db01.cf.02_arbitrate_conflict_add_redundant_inde"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_ce3ff5b928.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db01.cf.02_arbitrate_conflict_add_redundant_inde",
+        "mab_conflicting_specialist_results_ce3ff5b928.event.receipt",
+        "mab_conflicting_specialist_results_ce3ff5b928.event.probes",
+        "mab_conflicting_specialist_results_ce3ff5b928.closure",
+        "mab_conflicting_specialist_results_ce3ff5b928.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A provisional two-cause ranking is drafted without closing the diagnosis.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_conflict_db01.mutation.03_verify_closure_re_rank_all_suppor",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db01.cf.03_verify_closure_re_rank_all_suppor"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_ce3ff5b928.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db01.cf.03_verify_closure_re_rank_all_suppor",
+        "mab_conflicting_specialist_results_ce3ff5b928.event.receipt",
+        "mab_conflicting_specialist_results_ce3ff5b928.event.probes",
+        "mab_conflicting_specialist_results_ce3ff5b928.closure",
+        "mab_conflicting_specialist_results_ce3ff5b928.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent receipt is authentic and case/source bound.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent database authority worker completed with a host checkpoint probe.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "The final closure consumes the exact authority receipt and re-verifies source semantics.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The submitted diagnosis remains bound to the selected native MAB source task.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The evaluator-owned MARBLE report is bound to this exact database task and passed its native evaluator.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evaluator_binding_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final selected cause exactly matches the task-specific native root cause.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.diagnosis.exact",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_selected_database_cause_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The competing provisional diagnosis is explicitly superseded rather than merged into the answer.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.conflict.reconciled",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_competing_diagnosis_is_reconciled",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The diagnosis cites the exact evaluator-owned native evidence and host checkpoint digests.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.authority.evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_authority_evidence_is_consumed",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The final database diagnosis obeys the case-specific output schema and preservation contract.",
+      "id": "mab_conflicting_specialist_results_ce3ff5b928.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_database_diagnosis_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Wait for the delayed database:008 host checkpoint, verify its case/source binding and insertion metrics, then treat it as authoritative while preserving completed alternative-cause eliminations.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.validate_the_returned_pl",
+      "req.02.update_the_matrix_to_sup",
+      "req.03.remove_only_the_displace",
+      "req.04.produce_the_exact_two_ca",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:008 checkpoint reports 5,000 inserted rows and 1,556,480 bytes and authoritatively confirms INSERT_LARGE_DATA.",
+    "before_state": "The Finance five-hypothesis comparison and completed alternative-cause eliminations are persisted provisionally.",
+    "event_id": "evt.mab_finance_0298.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_finance_0298.delayed_authoritative_result",
+  "forbidden_shortcut": "Do not finalize the provisional Finance diagnosis before the authority receipt or discard already completed elimination evidence.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

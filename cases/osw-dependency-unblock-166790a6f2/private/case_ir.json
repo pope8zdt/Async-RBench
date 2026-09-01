@@ -1,0 +1,240 @@
+{
+  "case_id": "osw-dependency-unblock-166790a6f2",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_gnome_theme_state",
+      "forbidden_behavior": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_orchis_1667.cf.01_classify_authority_gnome_theme_state",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_166790a6f2.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for gnome_theme_state; preserve already-confirmed source-native state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.theme_identity"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_gnome_theme_state",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_orchis_1667.cf.02_revise_affected_gnome_theme_state",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_166790a6f2.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for gnome_theme_state; preserve already-confirmed source-native state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.theme_source"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_gnome_theme_state",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_orchis_1667.cf.03_preserve_unaffected_gnome_theme_state",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_166790a6f2.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for gnome_theme_state; preserve already-confirmed source-native state.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.gsettings_binding"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_gnome_theme_state",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_orchis_1667.cf.04_verify_closure_gnome_theme_state",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_166790a6f2.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for gnome_theme_state; preserve already-confirmed source-native state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.gsettings_output"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.theme_identity"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.theme_source"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.gsettings_binding"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.gsettings_output"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.theme_identity",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.theme_source",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.gsettings_binding",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.gsettings_output",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.theme_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.theme_source",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.gsettings_binding",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.gsettings_output",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.theme_identity",
+      "req.02.theme_source",
+      "req.03.gsettings_binding",
+      "req.04.gsettings_output",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed GNOME preference probe returns Orchis from org.gnome.desktop.interface gtk-theme after the theme package is installed.",
+    "before_state": "The browser can locate a GNOME theme, but installation and the authoritative gtk-theme preference have not been observed together.",
+    "event_id": "evt.osw_dependency_unblock_166790a6f2.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The installed and applied theme is exactly Orchis.",
+      "id": "req.01.theme_identity",
+      "observable_probe": "osw_dependency_unblock_166790a6f2.osworld.theme_identity",
+      "public_evidence": "source instruction and task-specific theme_identity result"
+    },
+    {
+      "description": "The source site is gnome-look.org.",
+      "id": "req.02.theme_source",
+      "observable_probe": "osw_dependency_unblock_166790a6f2.osworld.theme_source",
+      "public_evidence": "source instruction and task-specific theme_source result"
+    },
+    {
+      "description": "The evaluator reads the exact GNOME interface gtk-theme key.",
+      "id": "req.03.gsettings_binding",
+      "observable_probe": "osw_dependency_unblock_166790a6f2.osworld.gsettings_binding",
+      "public_evidence": "source instruction and task-specific gsettings_binding result"
+    },
+    {
+      "description": "The post-command output contains Orchis.",
+      "id": "req.04.gsettings_output",
+      "observable_probe": "osw_dependency_unblock_166790a6f2.osworld.gsettings_output",
+      "public_evidence": "source instruction and task-specific gsettings_output result"
+    }
+  ]
+}

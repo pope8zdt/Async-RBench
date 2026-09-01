@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Provisional work cannot close until the delayed authority is consumed and reverified.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_dietary_preference",
+      "req.02.implement_personalized_worko",
+      "req.03.implement_mood_tracking_medi",
+      "req.04.integrate_the_delayed_holist",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Diet state feeds exercise, both feed mental health, and all completed activity remains preserved.",
+    "before_state": "The three wellness modules are defined but their authoritative data dependencies are not yet available.",
+    "event_id": "evt.mab_dependency_unblock_284a.holistic_dependency_contract_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_284a.holistic_dependency_contract_completed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

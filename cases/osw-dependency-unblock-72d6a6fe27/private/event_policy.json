@@ -1,0 +1,34 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_72d6a6fe27.delayed_authoritative_result",
+  "authority_rule": "ssh_account_authority is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.account_identity",
+      "req.02.home_binding",
+      "req.03.access_scope",
+      "req.04.permission_probe",
+      "req.05.check_script_identity",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed account probe confirms charles authenticates, is bound to /home/test1, and the home directory has the exact group-write condition checked by the official evaluator.",
+    "before_state": "The home directory exists, but the evaluator-owned account identity, password authentication, home binding, and permission result are not yet available.",
+    "event_id": "evt.osw_dependency_unblock_72d6a6fe27.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

@@ -1,0 +1,88 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-586ab293bc",
+  "source_task_id": "osworld:multi_apps:d9b7c649-c975-4f53-88f5-940b29c47247",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "latest_five_daily_messages",
+  "upstream_dependency_graph": [
+    {
+      "id": "daily_folder_query",
+      "app": "Thunderbird",
+      "description": "Select messages from the local Daily folder and identify the latest five."
+    },
+    {
+      "id": "chronological_ordering",
+      "app": "Thunderbird",
+      "description": "Order those five from earliest to most recent.",
+      "depends_on": [
+        "daily_folder_query"
+      ]
+    },
+    {
+      "id": "message_field_normalization",
+      "app": "Thunderbird",
+      "description": "Normalize sender name/address, subject, CC and attachment count.",
+      "depends_on": [
+        "chronological_ordering"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/oai/share/report.xlsx",
+    "headers": [
+      "sender_name",
+      "sender_address",
+      "subject",
+      "CC",
+      "number_of_attachments"
+    ],
+    "row_count": 5,
+    "chronological_subject_dates": [
+      "25 JAN 2024",
+      "27 JAN 2024",
+      "28 JAN 2024",
+      "29 JAN 2024",
+      "30 JAN 2024"
+    ],
+    "rows": [
+      {
+        "sender_name": "HKU Bulk Email Delivery System",
+        "sender_address": "mail.service@intranet.hku.hk",
+        "subject": "HKU Daily Email Digest (25 JAN 2024)",
+        "CC": null,
+        "number_of_attachments": 0
+      },
+      {
+        "sender_name": "eNotices System",
+        "sender_address": "enotices.daily.digest@hku.hk",
+        "subject": "HKU Daily Notices (27 JAN 2024)",
+        "CC": "mail.service@intranet.hku.hk",
+        "number_of_attachments": 0
+      },
+      {
+        "sender_name": "eNotices System",
+        "sender_address": "enotices.daily.digest@hku.hk",
+        "subject": "HKU Daily Notices (28 JAN 2024)",
+        "CC": "mail.service@intranet.hku.hk",
+        "number_of_attachments": 0
+      },
+      {
+        "sender_name": "HKU Bulk Email Delivery System",
+        "sender_address": "mail.service@intranet.hku.hk",
+        "subject": "HKU Daily Email Digest (29 JAN 2024)",
+        "CC": null,
+        "number_of_attachments": 0
+      },
+      {
+        "sender_name": "HKU Bulk Email Delivery System",
+        "sender_address": "mail.service@intranet.hku.hk",
+        "subject": "HKU Daily Email Digest (30 JAN 2024)",
+        "CC": null,
+        "number_of_attachments": 0
+      }
+    ]
+  },
+  "task_assertion": "Desktop/report.xlsx contains the latest five Daily-folder messages in chronological order with exact sender, subject, CC and attachment fields.",
+  "finding": "The mail worker returns the latest five Daily messages in chronological order with normalized sender, CC and attachment fields; the Calc report can now be finalized."
+}
+

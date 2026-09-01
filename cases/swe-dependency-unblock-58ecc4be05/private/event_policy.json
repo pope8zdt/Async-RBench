@@ -1,0 +1,32 @@
+{
+  "authority_rule": "The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_non_recursive_",
+      "req.02.mix_argument_and_subcomm",
+      "req.03.update_all_inventoried_c",
+      "req.04.run_nested_command_order",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The authoritative ordering audit expands the affected closure to arguments, subcommands, derive consumers, and public AppSettings removal while forbidding recursive sorting propagation.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+    "event_id": "evt.swe_dependency_unblock_58ecc4be05.display_order_consumer_inventory",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.swe_dependency_unblock_58ecc4be05.display_order_consumer_inventory",
+  "forbidden_shortcut": "Do not close from provisional evidence or widen changes beyond the event-affected source closure.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

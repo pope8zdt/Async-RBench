@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Async-RBench normalized source trajectory",
+  "type": "object",
+  "required": ["schema_version", "review_id", "task_name", "source_agent", "manifest_solved", "result", "steps"],
+  "properties": {
+    "schema_version": {"const": "1"},
+    "review_id": {"type": "string", "minLength": 1},
+    "task_name": {"type": "string", "minLength": 1},
+    "source_agent": {"type": ["string", "null"]},
+    "source_model": {"type": ["string", "null"]},
+    "manifest_solved": {"type": ["boolean", "null"]},
+    "result": {"type": "object"},
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "source_ref", "role", "kind", "content"],
+        "properties": {
+          "step_id": {"type": "integer", "minimum": 0},
+          "source_ref": {"type": "string"},
+          "role": {"enum": ["user", "agent", "environment"]},
+          "kind": {"enum": ["task", "action", "observation", "analysis", "final"]},
+          "content": {"type": "string"},
+          "command": {"type": "string"},
+          "exit_code": {}
+        }
+      }
+    }
+  }
+}

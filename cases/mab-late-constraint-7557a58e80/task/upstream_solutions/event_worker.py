@@ -1,0 +1,6 @@
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-late-constraint-7557a58e80';SOURCE_ID='bargaining:042';EVENT='collectible_condition_delivery_confirmed';THEME='delayed_authoritative_result';AUTHORITY={'unit_price': 5.25, 'series': 'Factory Fresh 1/5', 'card_condition': 'sealed', 'delivery_days': 3, 'replacement_days': 30, 'contract_months': 12}
+def digest(path):return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+def main():
+ p=argparse.ArgumentParser();p.add_argument('--output',default='/app/output_data/event_receipt.json');a=p.parse_args();s=time.time();probes={x:digest(x) for x in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']};d={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':THEME,'meaning':'Collectibles control confirms a sealed Factory Fresh 1/5 Lucid Air at $5.25, three-day delivery, 30-day replacement, and a 12-month supply commitment.','authority':AUTHORITY,'worker_started_at':s,'worker_finished_at':time.time(),'worker_exit_code':0,'probes':probes};d['receipt_sha256']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest();pathlib.Path(a.output).write_text(json.dumps(d,sort_keys=True)+'\n')
+if __name__=='__main__':main()

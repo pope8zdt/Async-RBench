@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Partial evidence may inform provisional work but cannot close the complete-result contract.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.integrate_fixed_timestep",
+      "req.02.calculate_drift_scores_a",
+      "req.03.feed_grip_and_opponent_e",
+      "req.04.add_mutations_for_reduce",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Physics specialist returns a fixed-timestep drift transition and scoring contract based on handling parameters, speed, angle, surface grip, collision state, and combo duration.",
+    "before_state": "Deterministic drift physics and scoring arrive after the race engine and strategies have adopted simplified placeholders.",
+    "event_id": "evt.mab_dependency_unblock_a.partial_then_complete_re",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_dependency_unblock_a.partial_then_complete_re",
+  "forbidden_shortcut": "Do not treat partial evidence as a complete authoritative result.",
+  "required_decisions": [
+    "classify_partial_scope",
+    "adopt_completion_delta",
+    "reverify_closure"
+  ],
+  "theme": "partial_then_complete_result"
+}

@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_31978.delayed_authoritative_result",
+  "authority_rule": "Delayed canonical_open_blog_tabs is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_31978.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "Chrome contains the source browsing session, but the complete set of currently open blog tabs and canonical page titles has not yet been returned.",
+    "after_state": "The tab worker returns exactly two canonical blog URL/title pairs; both and only those pages must be printed as readable title-named PDFs.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.identify_every_blog_arti",
+      "req.02.use_each_page_s_canonica",
+      "req.03.print_exactly_one_readab",
+      "req.04.save_both_pdfs_under_hom",
+      "final_state"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

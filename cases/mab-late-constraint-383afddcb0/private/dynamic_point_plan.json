@@ -1,0 +1,257 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority",
+      "dimension": "event_intake",
+      "event_id": "evt.res051_mamba.delayed_authoritative_result",
+      "evidence_group": "res051_mamba.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Validate the delayed receipt identity and source-specific research evidence before finalizing.",
+      "forbidden_behavior": "Do not finalize the provisional 5Q or accept an unbound research receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res051_mamba.cf.01_classify_authority",
+      "independence_key": "res051_mamba.cf.01_classify_authority",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_383afddcb0.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "mutation_id": "res051_mamba.mutation.01_classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_383afddcb0.event.receipt"
+      ],
+      "precondition": "The evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_from_authority",
+      "dimension": "state_revision",
+      "event_id": "evt.res051_mamba.delayed_authoritative_result",
+      "evidence_group": "res051_mamba.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Revise the affected method around resolution-flexible continuous 2D scanning with pruning-aware hidden-state alignment and token-importance calibration while preserving the source problem framing.",
+      "forbidden_behavior": "Do not ignore the authority or replace the proposal with an unrelated method.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res051_mamba.cf.02_revise_from_authority",
+      "independence_key": "res051_mamba.cf.02_revise_from_authority",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_383afddcb0.source.pin"
+      ],
+      "mutation_family": "resolve_authority",
+      "mutation_id": "res051_mamba.mutation.02_revise_from_authority",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_383afddcb0.event.evidence"
+      ],
+      "precondition": "The evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_selective_replan",
+      "dimension": "plan_revision",
+      "event_id": "evt.res051_mamba.delayed_authoritative_result",
+      "evidence_group": "res051_mamba.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Update the datasets, metrics, and expected results that depend on the authoritative method while retaining unaffected literature findings.",
+      "forbidden_behavior": "Do not erase the unaffected review or leave evaluation disconnected from the revised method.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res051_mamba.cf.03_selective_replan",
+      "independence_key": "res051_mamba.cf.03_selective_replan",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_383afddcb0.source.pin"
+      ],
+      "mutation_family": "selective_replan",
+      "mutation_id": "res051_mamba.mutation.03_selective_replan",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_383afddcb0.event.evidence"
+      ],
+      "precondition": "The evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:revise_affected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure",
+      "dimension": "closure",
+      "event_id": "evt.res051_mamba.delayed_authoritative_result",
+      "evidence_group": "res051_mamba.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.source_native_resolution"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final 5Q and closure from the receipt, native evaluator binding, and preserved source facts.",
+      "forbidden_behavior": "Do not close without exact 5Q, digest, and preservation checks.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "res051_mamba.cf.04_verify_closure",
+      "independence_key": "res051_mamba.cf.04_verify_closure",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_late_constraint_383afddcb0.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "mutation_id": "res051_mamba.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_383afddcb0.closure"
+      ],
+      "precondition": "The evaluator-owned delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.source_native_resolution"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.res051_mamba.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The evaluator-only delivery exposes task-specific authority evidence.",
+        "before": "A task-specific provisional artifact is persisted without evaluator truth.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

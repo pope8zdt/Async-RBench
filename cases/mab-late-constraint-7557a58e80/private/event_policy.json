@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_provisional_price",
+      "req.02.authenticate_the_factory_fre",
+      "req.03.revise_price_delivery_replac",
+      "req.04.close_with_the_verified_coll",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Collectibles control confirms a sealed Factory Fresh 1/5 Lucid Air at $5.25, three-day delivery, 30-day replacement, and a 12-month supply commitment.",
+    "before_state": "A provisional Hot Wheels Lucid Air Factory Fresh Collectible bargain exists before collectible_condition_delivery_confirmed.",
+    "event_id": "evt.mab-late-constraint-7557a58e80.collectible_condition_delivery_confirmed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-7557a58e80.collectible_condition_delivery_confirmed",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

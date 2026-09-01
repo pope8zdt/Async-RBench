@@ -1,0 +1,282 @@
+format_version: 2
+case_id: swe-bench-selective-patch
+classification:
+  primary_event_theme: partial_then_complete_result
+  secondary_event_themes:
+  - late_or_out_of_order_superseded_result
+  async_scenario_class: result_eventful
+capabilities:
+- stale_result_rejection
+- selective_invalidation
+- verification_reopen
+workstream_bindings:
+  core_patch_applier:
+    result_kind: result_01
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
+      a=json.load(open('/app/task_file/authority/fix_authority.json',encoding='utf-8'));
+      assert r['fix_revision']==e['fix_revision']; assert r['authority_receipt']==e['source_receipt']==a['authority_receipt'];
+      assert r['patched_path']==e['patched_path']; assert os.path.isfile(r['patched_path'])"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      fix_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+      patched_path:
+        type: string
+      report_path:
+        type: string
+      source_receipt:
+        type: string
+        pattern: sp2-fix-authority-[0-9a-f]{16}
+    event_assets:
+    - /app/task_file/authority/fix_authority.json
+  test_module_A_runner:
+    result_kind: result_02
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
+      assert r['group']=='A'; assert bool(r['passed'])==bool(e['passed']); assert
+      r['run_revision']==e['run_revision']"
+    validator_timeout_sec: 300
+    private_evidence_schema:
+      group:
+        type: string
+        enum:
+        - A
+      passed:
+        type: boolean
+      run_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+      report_path:
+        type: string
+    event_assets: []
+  test_module_B_runner:
+    result_kind: result_03
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
+      assert r['group']=='B'; assert bool(r['passed'])==bool(e['passed']); assert
+      r['run_revision']==e['run_revision']"
+    validator_timeout_sec: 300
+    private_evidence_schema:
+      group:
+        type: string
+        enum:
+        - B
+      passed:
+        type: boolean
+      run_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+      report_path:
+        type: string
+    event_assets: []
+  test_module_C_runner:
+    result_kind: result_04
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
+      assert r['group']=='C'; assert bool(r['passed'])==bool(e['passed']); assert
+      r['run_revision']==e['run_revision']"
+    validator_timeout_sec: 300
+    private_evidence_schema:
+      group:
+        type: string
+        enum:
+        - C
+      passed:
+        type: boolean
+      run_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+      report_path:
+        type: string
+    event_assets: []
+  patch_integrator:
+    result_kind: result_05
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
+      assert r['fix_revision']==e['fix_revision']; assert set(r['integrated_groups'])>=set(['A','B','C'])"
+    validator_timeout_sec: 120
+    private_evidence_schema:
+      fix_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+      integrated_groups:
+        type: array
+        min_items: 3
+      report_path:
+        type: string
+    event_assets: []
+  regression_validator:
+    result_kind: result_06
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
+      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
+      assert bool(r['passed'])==bool(e['passed']); assert r['regression_revision']==e['regression_revision']"
+    validator_timeout_sec: 300
+    private_evidence_schema:
+      passed:
+        type: boolean
+      regression_revision:
+        type: string
+        pattern: '[0-9a-f]{64}'
+      report_path:
+        type: string
+    event_assets: []
+result_contract:
+  allowed_result_kinds:
+  - result_01
+  - result_02
+  - result_03
+  - result_04
+  - result_05
+  - result_06
+  rule: 'At child spawn assign a module-group runner (or the patch applier / integrator
+    / regression validator); at completion tag the result with the matching kind.
+    A passing result for one module group is not proof the other two pass: completion
+    requires every module-group result plus the full regression, and any result produced
+    against a superseded fix revision is stale.'
+authoritative_result_kind: result_01
+superseded_result_kind: result_03
+scenarios:
+  linear:
+    events: []
+  async:
+    events:
+    - id: c5_a_a
+      at: 2
+      result: result_02
+      invalidates_artifacts: []
+      reopens_milestones: []
+    - id: c5_a_c
+      at: 3
+      result: result_04
+      invalidates_artifacts: []
+      reopens_milestones: []
+    - id: c5_a_b
+      at: 4
+      result: result_03
+      invalidates_artifacts:
+      - integrated_fix
+      - applied_fix
+      reopens_milestones:
+      - repair_preprocessing_path
+artifact_observers: {}
+hidden_checks:
+  a_preserved: python3 -c "import json; a=json.load(open('/app/output_data/module_groups/A_result.json',encoding='utf-8'));
+    m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
+    assert a['passed'] is True; assert a['run_revision']==m['final_fix_revision']"
+  b_repaired: python3 -c "import json; b=json.load(open('/app/output_data/module_groups/B_result.json',encoding='utf-8'));
+    i=json.load(open('/app/output_data/module_groups/B_result_initial.json',encoding='utf-8'));
+    m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
+    assert b['passed'] is True; assert i['passed'] is False; assert m['repair_applied']
+    is True"
+  c_preserved: python3 -c "import json; c=json.load(open('/app/output_data/module_groups/C_result.json',encoding='utf-8'));
+    m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
+    assert c['passed'] is True; assert c['run_revision']==m['final_fix_revision']"
+  regression_green: python3 -c "import json; r=json.load(open('/app/output_data/regression_result.json',encoding='utf-8'));
+    m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
+    assert r['passed'] is True; assert r['regression_revision']==m['final_fix_revision']"
+reverification_anchors:
+  a_preserved:
+  - result_02
+  b_repaired:
+  - result_03
+  c_preserved:
+  - result_04
+  regression_green:
+  - result_06
+stale_predicate:
+  type: revision_mismatch
+  authoritative_fields:
+  - fix_revision
+  superseded_fields:
+  - run_revision
+stale_revalidation:
+  candidate_checks:
+  - b_repaired
+  - regression_green
+  artifact_checks:
+    applied_fix:
+    - b_repaired
+    integrated_fix:
+    - b_repaired
+    full_regression:
+    - regression_green
+information_sufficiency:
+- workstream_id: core_patch_applier
+  requirement_ids: [source_and_async_closure_contract]
+  public_inputs:
+  - /app/output_data/applied_fix.json
+  - /app/task_file/src/sklearn/utils/multiclass.py
+  required_output_fields:
+  - fix_revision
+  - source_receipt
+  - patched_path
+  - report_path
+  review_status: reviewed
+- workstream_id: test_module_A_runner
+  requirement_ids: [source_and_async_closure_contract]
+  public_inputs:
+  - /app/output_data/module_groups/A_result.json
+  required_output_fields:
+  - group
+  - passed
+  - run_revision
+  - report_path
+  review_status: reviewed
+- workstream_id: test_module_B_runner
+  requirement_ids: [source_and_async_closure_contract]
+  public_inputs:
+  - /app/output_data/module_groups/B_result.json
+  - /app/output_data/module_groups/B_result_initial.json
+  required_output_fields:
+  - group
+  - passed
+  - run_revision
+  - report_path
+  review_status: reviewed
+- workstream_id: test_module_C_runner
+  requirement_ids: [source_and_async_closure_contract]
+  public_inputs:
+  - /app/output_data/module_groups/C_result.json
+  required_output_fields:
+  - group
+  - passed
+  - run_revision
+  - report_path
+  review_status: reviewed
+- workstream_id: patch_integrator
+  requirement_ids: [source_and_async_closure_contract]
+  public_inputs:
+  - /app/output_data/integrated_fix.json
+  required_output_fields:
+  - fix_revision
+  - integrated_groups
+  - report_path
+  review_status: reviewed
+- workstream_id: regression_validator
+  requirement_ids: [source_and_async_closure_contract]
+  public_inputs:
+  - /app/output_data/regression_result.json
+  required_output_fields:
+  - passed
+  - regression_revision
+  - report_path
+  review_status: reviewed
+legacy_metadata:
+  metrics:
+    primary:
+    - test_point_pass_rate
+    - scenario_construction_rate
+    - parallel_effect
+    - replanning_drop
+    - signed_task_order_effect
+    diagnostics:
+    - stale_retention_rate
+    - recovery_latency
+    - obsolete_work_ratio
+    - reverification_completeness
+    - token_consumption
+  implementation: structure-derived
+  upstream_commit: 1faa91cade0562ba62b66c1c99e71f7b72d96f13
+  asset_copies: []

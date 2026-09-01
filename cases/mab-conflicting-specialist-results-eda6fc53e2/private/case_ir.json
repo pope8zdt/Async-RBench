@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-eda6fc53e2",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_fileshare_index_receipt",
+      "forbidden_behavior": "Do not finalize the File Sharing diagnosis before the database:003 receipt or infer redundancy from unused-index volume without the same-column pair.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "01_classify_authority_fileshare_index_receipt",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After the provisional File Sharing comparison exists, classify the delayed database:003 receipt as authority only after verifying that it identifies two indexes on the same column.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_from_authority_fileshare_index",
+      "forbidden_behavior": "Do not retain a displaced provisional VACUUM or LOCK_CONTENTION cause or erase valid file-access and table observations.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "02_revise_from_authority_fileshare_index",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Revise the affected File Sharing diagnosis to REDUNDANT_INDEX while preserving file-access, table-size, and query-latency observations for the other hypotheses.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_fileshare_index",
+      "forbidden_behavior": "Do not close without reverifying REDUNDANT_INDEX from the authoritative count of two same-column indexes.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_the_blocking_an"
+        ]
+      },
+      "id": "03_verify_closure_fileshare_index",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_eda6fc53e2.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Rederive the final File Sharing diagnosis from the authoritative same-column index evidence, remove stale vacuum or lock attribution, and verify the native answer contract.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.validate_the_blocking_an"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.validate_the_blocking_an"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.add_lock_contention_to_t"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.compare_lock_evidence_wi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.select_and_report_exactl"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.validate_the_blocking_an",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.add_lock_contention_to_t",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.compare_lock_evidence_wi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.select_and_report_exactl",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.validate_the_blocking_an",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.add_lock_contention_to_t",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.compare_lock_evidence_wi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.select_and_report_exactl",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.validate_the_blocking_an",
+      "req.02.add_lock_contention_to_t",
+      "req.03.compare_lock_evidence_wi",
+      "req.04.select_and_report_exactl",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:003 file-sharing checkpoint finds two indexes on the same column and authoritatively confirms REDUNDANT_INDEX.",
+    "before_state": "The File Sharing hypothesis matrix and table/index usage observations are persisted provisionally.",
+    "event_id": "evt.mab_fileshare_eda6.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Validate the delayed database:003 receipt identifies two indexes on the same file-sharing table column.",
+      "id": "req.01.validate_the_blocking_an",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for validate_the_blocking_and_blocked_se"
+    },
+    {
+      "description": "Revise the affected File Sharing diagnosis to REDUNDANT_INDEX from the authority evidence.",
+      "id": "req.02.add_lock_contention_to_t",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for add_lock_contention_to_the_evidence_"
+    },
+    {
+      "description": "Preserve file-access, table-size, and query-latency observations while removing stale vacuum or lock attribution.",
+      "id": "req.03.compare_lock_evidence_wi",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for compare_lock_evidence_with_the_alrea"
+    },
+    {
+      "description": "Rederive and verify the receipt-bound File Sharing answer under the native output contract.",
+      "id": "req.04.select_and_report_exactl",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for select_and_report_exactly_two_allowe"
+    }
+  ]
+}

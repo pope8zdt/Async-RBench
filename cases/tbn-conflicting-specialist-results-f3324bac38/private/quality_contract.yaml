@@ -1,0 +1,79 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "tbn_conflicting_specialist_results_f3324bac38.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "tbn_conflicting_specialist_results_f3324bac38.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "tbn_conflicting_7491e3.cf.01_classify_completeness",
+          "tbn_conflicting_7491e3.cf.02_revise_affected",
+          "tbn_conflicting_7491e3.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "tbn_conflicting_specialist_results_f3324bac38.event.receipt",
+          "tbn_conflicting_specialist_results_f3324bac38.event.probes",
+          "tbn_conflicting_specialist_results_f3324bac38.closure",
+          "tbn_conflicting_specialist_results_f3324bac38.source.pin",
+          "tbn_conflicting_specialist_results_f3324bac38.upstream.test_recovered_json_exists",
+          "tbn_conflicting_specialist_results_f3324bac38.upstream.test_recovered_json_is_valid",
+          "tbn_conflicting_specialist_results_f3324bac38.upstream.test_recovered_data_structure",
+          "tbn_conflicting_specialist_results_f3324bac38.upstream.test_recovered_data_sorted",
+          "tbn_conflicting_specialist_results_f3324bac38.upstream.test_recovered_data_completeness",
+          "tbn_conflicting_specialist_results_f3324bac38.upstream.test_no_duplicate_ids",
+          "tbn_conflicting_specialist_results_f3324bac38.upstream.test_wal_was_decrypted"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "I have a database in WAL (Write-Ahead Logging) mode in /app/.",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "7cf917cb780f3abec55b62cead575e72a4d4672d58fcf3271bcf6d52f9581b3b",
+        "task_id": "db-wal-recovery",
+        "task_path": "cases/tbn-conflicting-specialist-results-f3324bac38/private/source_task.yaml"
+      }
+    ]
+  }
+}

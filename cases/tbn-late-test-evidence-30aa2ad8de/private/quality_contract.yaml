@@ -1,0 +1,81 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "tbn_late_test_evidence_30aa2ad8de.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "tbn_late_test_e_63515a.cf.01_classify_scope_delta",
+          "tbn_late_test_e_63515a.cf.02_revise_affected",
+          "tbn_late_test_e_63515a.cf.03_preserve_unaffected",
+          "tbn_late_test_e_63515a.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "tbn_late_test_evidence_30aa2ad8de.event.receipt",
+          "tbn_late_test_evidence_30aa2ad8de.event.probes",
+          "tbn_late_test_evidence_30aa2ad8de.closure",
+          "tbn_late_test_evidence_30aa2ad8de.source.pin",
+          "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_installed",
+          "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_running",
+          "tbn_late_test_evidence_30aa2ad8de.upstream.test_index_page_content",
+          "tbn_late_test_evidence_30aa2ad8de.upstream.test_custom_404_page",
+          "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_config_syntax",
+          "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_config_settings",
+          "tbn_late_test_evidence_30aa2ad8de.upstream.test_log_file_creation",
+          "tbn_late_test_evidence_30aa2ad8de.upstream.test_log_file_format"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Set up an Nginx web server with advanced request logging and custom configurations. Your task is to:",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "7d61aaa7fb2c50ec88ab970ea8b77f311e3df4189694770d9ba363e603a55602",
+        "task_id": "nginx-request-logging",
+        "task_path": "cases/tbn-late-test-evidence-30aa2ad8de/private/source_task.yaml"
+      }
+    ]
+  }
+}

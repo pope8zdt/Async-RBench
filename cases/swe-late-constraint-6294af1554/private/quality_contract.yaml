@@ -1,0 +1,76 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_late_constraint_6294af1554.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_late_constraint_6294af1554.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_late_constr_0828f3.cf.01_classify_scope_delta_revise_the_splitte",
+          "swe_late_constr_0828f3.cf.02_revise_affected_compile_every_resu",
+          "swe_late_constr_0828f3.cf.03_preserve_unaffected_verify_ordinary_to",
+          "swe_late_constr_0828f3.cf.04_verify_closure_revise_the_splitte"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_late_constraint_6294af1554.event.receipt",
+          "swe_late_constraint_6294af1554.event.probes",
+          "swe_late_constraint_6294af1554.closure",
+          "swe_late_constraint_6294af1554.source.pin",
+          "swe_late_constraint_6294af1554.native.pytest_01_tests_config_test_config_py",
+          "swe_late_constraint_6294af1554.native.pytest_02_tests_config_test_config_py"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "bad-names-rgxs mangles regular expressions with commas",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "3e8fa6c0db91e70446b3047f9967c9c3aadc8cd9a612d44ae572d341a5ab70d0",
+        "task_id": "pylint-dev__pylint-8898",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

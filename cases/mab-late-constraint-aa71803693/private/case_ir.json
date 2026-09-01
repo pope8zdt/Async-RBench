@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-late-constraint-aa71803693",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_stale_seller_supply_terms_arrived",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_the_buyer_s_price_a"
+        ]
+      },
+      "id": "01_classify_stale_seller_supply_terms",
+      "must_still_pass": [
+        "mab_late_constraint_aa71803693.source.preservation"
+      ],
+      "mutation_family": "classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_aa71803693.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "classify_stale: Late seller supply and long-term-contract terms supersede provisional price-only drafts while the Elephant centerpiece product identity, buyer quality goal, transcript, and rejected offers remain auditable.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_buyer_s_price_a"
+    },
+    {
+      "critical": false,
+      "decision_group": "exclude_stale_seller_supply_terms_arrived",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.preserve_the_seller_s_long_t"
+        ]
+      },
+      "id": "02_exclude_stale_seller_supply_terms",
+      "must_still_pass": [
+        "mab_late_constraint_aa71803693.source.preservation"
+      ],
+      "mutation_family": "exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_aa71803693.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "exclude_stale: Late seller supply and long-term-contract terms supersede provisional price-only drafts while the Elephant centerpiece product identity, buyer quality goal, transcript, and rejected offers remain auditable.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_the_seller_s_long_t"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_seller_supply_terms_arrived",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.record_offers_counters_infor"
+        ]
+      },
+      "id": "03_verify_closure_seller_supply_terms",
+      "must_still_pass": [
+        "mab_late_constraint_aa71803693.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_aa71803693.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: Late seller supply and long-term-contract terms supersede provisional price-only drafts while the Elephant centerpiece product identity, buyer quality goal, transcript, and rejected offers remain auditable.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.record_offers_counters_infor"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.preserve_the_buyer_s_price_a"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.preserve_the_seller_s_long_t"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.record_offers_counters_infor"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.apply_the_newest_seller_supp"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.preserve_the_buyer_s_price_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_the_seller_s_long_t",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.record_offers_counters_infor",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.apply_the_newest_seller_supp",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.preserve_the_buyer_s_price_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_the_seller_s_long_t",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.record_offers_counters_infor",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.apply_the_newest_seller_supp",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_buyer_s_price_a",
+      "req.02.preserve_the_seller_s_long_t",
+      "req.03.record_offers_counters_infor",
+      "req.04.apply_the_newest_seller_supp",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The newest seller matrix supersedes the draft and yields an explicit auditable agreement without erasing negotiation history.",
+    "before_state": "A price-only centerpiece draft exists before authoritative quantity, contract-duration, and shipping terms arrive.",
+    "event_id": "evt.mab_late_constraint_aa71.seller_supply_terms_arrived",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Preserve the buyer's price and 4.7-quality objective for the Elephant centerpiece.",
+      "id": "req.01.preserve_the_buyer_s_price_a",
+      "observable_probe": "mab_late_constraint_aa71803693.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Preserve the seller's long-term-contract objective and explicit supply constraints.",
+      "id": "req.02.preserve_the_seller_s_long_t",
+      "observable_probe": "mab_late_constraint_aa71803693.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Record offers, counters, information, rejection reasons, and agreement progress.",
+      "id": "req.03.record_offers_counters_infor",
+      "observable_probe": "mab_late_constraint_aa71803693.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Apply the newest seller supply matrix and close only on complete mutually valid terms.",
+      "id": "req.04.apply_the_newest_seller_supp",
+      "observable_probe": "mab_late_constraint_aa71803693.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

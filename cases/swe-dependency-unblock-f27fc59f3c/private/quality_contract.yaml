@@ -1,0 +1,74 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_f27fc59f3c.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__715eb7.cf.01_classify_authority_update_type_commen",
+          "swe_dependency__715eb7.cf.02_revise_affected_verify_both_module",
+          "swe_dependency__715eb7.cf.03_verify_closure_add_negative_cover"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_f27fc59f3c.event.receipt",
+          "swe_dependency_unblock_f27fc59f3c.event.probes",
+          "swe_dependency_unblock_f27fc59f3c.closure",
+          "swe_dependency_unblock_f27fc59f3c.source.pin",
+          "swe_dependency_unblock_f27fc59f3c.native.pytest_01_tests_checkers_unittest_variables_py"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "unused-import false positive for a module used in a type comment",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "83ca5b74be69a51e6d1d34fcf03bfd22dda315dd45339e93a976ec8ec6c9ec64",
+        "task_id": "pylint-dev__pylint-4604",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

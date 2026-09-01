@@ -1,0 +1,6 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["sh", "-c", "mkdir -p /app/output_data && sleep infinity"]

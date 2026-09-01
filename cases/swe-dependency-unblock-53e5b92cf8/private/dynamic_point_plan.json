@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority:req.01.revise_parsing_and_seria",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_53e5b92cf8.toc_roundtrip_authority_result",
+      "evidence_group": "swe_dependency__d608cb:classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.revise_parsing_and_seria"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An isolated parser worker returns authoritative complex-TOC parse/serialize round trips covering optional metadata, mixed rows, and nesting.', perform classify_authority for 'Revise parsing and serialization to preserve every returned complex field.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Revise parsing and serialization to preserve every returned complex field.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_parsing_and_seria"
+        ]
+      },
+      "id": "swe_dependency__d608cb.cf.01_classify_authority_revise_parsing_and_seria",
+      "independence_key": "swe_dependency__d608cb.cf.01_classify_authority_revise_parsing_and_seria",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__d608cb.mutation.01_classify_authority_revise_parsing_and_seria",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_53e5b92cf8.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.revise_parsing_and_seria"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected:req.02.normalize_indentation_wi",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_53e5b92cf8.toc_roundtrip_authority_result",
+      "evidence_group": "swe_dependency__d608cb:revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.normalize_indentation_wi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An isolated parser worker returns authoritative complex-TOC parse/serialize round trips covering optional metadata, mixed rows, and nesting.', perform revise_affected for 'Normalize indentation without changing parent-child relationships.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Normalize indentation without changing parent-child relationships.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.normalize_indentation_wi"
+        ]
+      },
+      "id": "swe_dependency__d608cb.cf.02_revise_affected_normalize_indentation_wi",
+      "independence_key": "swe_dependency__d608cb.cf.02_revise_affected_normalize_indentation_wi",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__d608cb.mutation.02_revise_affected_normalize_indentation_wi",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_53e5b92cf8.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.normalize_indentation_wi"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure:req.03.display_the_warning_only",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_53e5b92cf8.toc_roundtrip_authority_result",
+      "evidence_group": "swe_dependency__d608cb:verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.display_the_warning_only"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An isolated parser worker returns authoritative complex-TOC parse/serialize round trips covering optional metadata, mixed rows, and nesting.', perform verify_closure for 'Display the warning only when complex metadata is present.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Display the warning only when complex metadata is present.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.display_the_warning_only"
+        ]
+      },
+      "id": "swe_dependency__d608cb.cf.03_verify_closure_display_the_warning_only",
+      "independence_key": "swe_dependency__d608cb.cf.03_verify_closure_display_the_warning_only",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__d608cb.mutation.03_verify_closure_display_the_warning_only",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_53e5b92cf8.closure"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.display_the_warning_only"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.swe_dependency_unblock_53e5b92cf8.toc_roundtrip_authority_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An isolated parser worker returns authoritative complex-TOC parse/serialize round trips covering optional metadata, mixed rows, and nesting.",
+        "before": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

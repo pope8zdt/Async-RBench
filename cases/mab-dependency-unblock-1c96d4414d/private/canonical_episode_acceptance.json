@@ -1,0 +1,16 @@
+{
+  "accepted": true,
+  "accepted_episode_owner": "evaluator",
+  "model_episode_required": false,
+  "native_report": "private/native_canonical_report.json",
+  "requirements": [
+    "compiled and executed official coding:019 SportsTeamCollaborator solution.py contract",
+    "SportsTeamCollaborator enforces team isolation, upload and report roles, player-specific metric access, accepted collaboration sequences, and stale-edit rejection.",
+    "The stale analyst edit is rejected against the authoritative sequence while accepted uploads, metrics, collaboration, and role permissions remain intact."
+  ],
+  "task_specific_acceptance": [
+    "Classify the analyst edit with expected sequence 41 as stale against authoritative accepted sequence 42.",
+    "Close only after team isolation, accepted match data, player metrics, dashboards, reports, and role permissions are reverified on the authoritative sequence and bound to this receipt.",
+    "Preserve team-isolated uploads, accepted collaboration event 42, normalized player metrics, reports, and coach/analyst/player permissions."
+  ]
+}

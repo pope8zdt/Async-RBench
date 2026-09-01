@@ -1,0 +1,218 @@
+{
+  "case_id": "osw-dependency-unblock-4bfe607faa",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_open_the_returned_catalog_st",
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The NBA Store is opened.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_the_returned_catalo"
+        ]
+      },
+      "id": "01_classify_authority_open_the_returned_",
+      "must_still_pass": [
+        "osw_dependency_unblock_4.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_4bfe607faa.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform classify_authority for 'Open the returned catalog state or reproduce its filters.' while retaining valid prior result 'The NBA Store is opened.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.open_the_returned_catalo"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_verify_women_nike_and_jersey",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Navigation reaches the women's or jerseys catalog without selecting unverified products.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_the_returned_catalo"
+        ]
+      },
+      "id": "02_revise_affected_verify_women_nike_",
+      "must_still_pass": [
+        "osw_dependency_unblock_4.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_4bfe607faa.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform revise_affected for 'Verify Women, Nike, and Jerseys filters are active.' while retaining valid prior result 'Navigation reaches the women's or jerseys catalog without selecting unverified products.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.open_the_returned_catalo"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_set_the_lower_price_bound_so",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The NBA Store is opened.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_the_returned_catalo"
+        ]
+      },
+      "id": "03_verify_closure_set_the_lower_pric",
+      "must_still_pass": [
+        "osw_dependency_unblock_4.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_4bfe607faa.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform verify_closure for 'Set the lower price bound so $60 items are excluded.' while retaining valid prior result 'The NBA Store is opened.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.open_the_returned_catalo"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.open_the_returned_catalo"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.verify_women_nike_and_je"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.set_the_lower_price_boun"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.confirm_the_displayed_it"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.open_the_returned_catalo",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.verify_women_nike_and_je",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.set_the_lower_price_boun",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.confirm_the_displayed_it",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.open_the_returned_catalo",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.verify_women_nike_and_je",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.set_the_lower_price_boun",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.confirm_the_displayed_it",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.open_the_returned_catalo",
+      "req.02.verify_women_nike_and_je",
+      "req.03.set_the_lower_price_boun",
+      "req.04.confirm_the_displayed_it",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.",
+    "before_state": "The exact filter state arrives after partial store navigation and redirects an unsuccessful search without discarding the valid store session.",
+    "event_id": "evt.osw_dependency_unblock_4.delayed_authoritative_re",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Open the returned catalog state or reproduce its filters.",
+      "id": "req.01.open_the_returned_catalo",
+      "observable_probe": "osw_dependency_unblock_4.sem.01.the_persisted_desktop_artifa",
+      "public_evidence": "source instruction and workstream result for open_the_returned_catalog_state_or_r"
+    },
+    {
+      "description": "Verify Women, Nike, and Jerseys filters are active.",
+      "id": "req.02.verify_women_nike_and_je",
+      "observable_probe": "osw_dependency_unblock_4.sem.02.the_required_result_artifact",
+      "public_evidence": "source instruction and workstream result for verify_women_nike_and_jerseys_filter"
+    },
+    {
+      "description": "Set the lower price bound so $60 items are excluded.",
+      "id": "req.03.set_the_lower_price_boun",
+      "observable_probe": "osw_dependency_unblock_4.sem.03.open_the_returned_catalog_st",
+      "public_evidence": "source instruction and workstream result for set_the_lower_price_bound_so_60_item"
+    },
+    {
+      "description": "Confirm the displayed items are Nike women's jerseys and each price exceeds $60.",
+      "id": "req.04.confirm_the_displayed_it",
+      "observable_probe": "osw_dependency_unblock_4.sem.04.verify_women_nike_and_jersey",
+      "public_evidence": "source instruction and workstream result for confirm_the_displayed_items_are_nike"
+    }
+  ]
+}

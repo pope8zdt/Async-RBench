@@ -1,0 +1,187 @@
+{
+  "case_id": "mab-late-constraint-49a364ba43",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_stale",
+      "forbidden_behavior": "Do not treat arrival order as offer authority.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar021_lexus.cf.01_classify_stale",
+      "must_still_pass": [
+        "mab_late_constraint_49a364ba43.source.pin"
+      ],
+      "mutation_family": "wait_for_authority",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_49a364ba43.sem.01.lexus_tow_hook"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "Validate the delivered offer identity and compare its revision with the accepted current agreement.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_exclude_stale",
+      "forbidden_behavior": "Do not let a late older offer overwrite the accepted revision.",
+      "gate": "reject_late_stale",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar021_lexus.cf.02_exclude_stale",
+      "must_still_pass": [
+        "mab_late_constraint_49a364ba43.source.pin"
+      ],
+      "mutation_family": "reject_late_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_49a364ba43.sem.02.lexus_tow_hook"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "Reject the superseded offer and preserve the newer qualified agreement and its product-specific terms.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.source_native_resolution"
+    },
+    {
+      "critical": true,
+      "decision_group": "03_verify_closure",
+      "forbidden_behavior": "Do not close from the stale price or omit product-specific constraints.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.source_native_resolution"
+        ]
+      },
+      "id": "bar021_lexus.cf.03_verify_closure",
+      "must_still_pass": [
+        "mab_late_constraint_49a364ba43.source.pin"
+      ],
+      "mutation_family": "rederive_from_authority",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_49a364ba43.sem.05.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Reverify price bounds, product terms, chronology, and receipt-bound closure from the current revision.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.source_native_resolution"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.source_native_resolution"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.source_native_resolution",
+        "target": "req.02.preserve_unaffected"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_unaffected",
+        "target": "req.03.receipt_bound_closure"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.receipt_bound_closure",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.source_native_resolution",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_unaffected",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.receipt_bound_closure",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.source_native_resolution",
+      "req.02.preserve_unaffected",
+      "req.03.receipt_bound_closure",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A late older offer is delivered after the current qualified agreement is persisted.",
+    "before_state": "A task-specific provisional artifact is persisted without evaluator truth.",
+    "event_id": "evt.bar021_lexus.late_out_of_order_superseded_result",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "source-native-rebuild",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Classify and consume the task-specific evaluator delivery.",
+      "id": "req.01.source_native_resolution",
+      "observable_probe": "mab_late_constraint_49a364ba43.event.chronology",
+      "public_evidence": "case-bound evaluator receipt"
+    },
+    {
+      "description": "Revise only affected findings and preserve source-grounded constraints.",
+      "id": "req.02.preserve_unaffected",
+      "observable_probe": "mab_late_constraint_49a364ba43.output.schema",
+      "public_evidence": "preserved source facts"
+    },
+    {
+      "description": "Reverify source semantics and close against the exact receipt.",
+      "id": "req.03.receipt_bound_closure",
+      "observable_probe": "mab_late_constraint_49a364ba43.closure",
+      "public_evidence": "receipt-bound closure"
+    }
+  ]
+}

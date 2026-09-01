@@ -1,0 +1,56 @@
+{
+  "minimum_official_score": 1.0,
+  "required_semantic_checks": [
+    "official_metric_01",
+    "official_metric_02",
+    "persisted_target_state",
+    "post_event_reverification"
+  ],
+  "checks": [
+    {
+      "id": "official_metric_01",
+      "kind": "official_osworld_metric",
+      "metric": "check_url_and_content_include",
+      "expected": {
+        "type": "rule",
+        "rules": {
+          "url_must_include": [
+            "women",
+            "nike",
+            "jerseys"
+          ],
+          "body_must_include": [
+            "$60"
+          ],
+          "body_must_exclude": []
+        }
+      }
+    },
+    {
+      "id": "official_metric_02",
+      "kind": "official_osworld_metric",
+      "metric": "check_url_and_content_include",
+      "expected": {
+        "type": "rule",
+        "rules": {
+          "url_must_include": [],
+          "body_must_include": [
+            "Women",
+            "Nike",
+            "Jerseys",
+            "$60"
+          ],
+          "body_must_exclude": []
+        }
+      }
+    },
+    {
+      "id": "persisted_target_state",
+      "kind": "checkpoint_state_digest"
+    },
+    {
+      "id": "post_event_reverification",
+      "kind": "event_to_evaluator_order"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "case_id": "tbn-conflicting-specialist-results-f3324bac38",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_the_main_branch_starts_recon",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.the_main_branch_starts_r"
+        ]
+      },
+      "id": "01_classify_completeness_the_main_branch_st",
+      "must_still_pass": [
+        "tbn_conflicting_speciali.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "treat_partial_as_final",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "tbn_conflicting_speciali.sem.01.the_main_branch_starts_recon",
+        "tbn_conflicting_speciali.sem.02.no_stale_action_survives_in_",
+        "tbn_conflicting_speciali.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_conflicting_speciali.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_conflicting_speciali.sem.01.the_main_branch_starts_recon, tbn_conflicting_speciali.sem.02.no_stale_action_survives_in_, tbn_conflicting_speciali.sem.03.no_unrelated_or_duplicate_ac, tbn_conflicting_speciali.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'conflicting_results', perform classify_completeness for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_the_main_branch_starts_recon",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.the_main_branch_starts_r"
+        ]
+      },
+      "id": "02_revise_affected_the_main_branch_st",
+      "must_still_pass": [
+        "tbn_conflicting_speciali.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "drop_confirmed_partial",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "tbn_conflicting_speciali.sem.01.the_main_branch_starts_recon",
+        "tbn_conflicting_speciali.sem.02.no_stale_action_survives_in_",
+        "tbn_conflicting_speciali.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_conflicting_speciali.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_conflicting_speciali.sem.01.the_main_branch_starts_recon, tbn_conflicting_speciali.sem.02.no_stale_action_survives_in_, tbn_conflicting_speciali.sem.03.no_unrelated_or_duplicate_ac, tbn_conflicting_speciali.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'conflicting_results', perform revise_affected for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_the_main_branch_starts_recon",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.the_main_branch_starts_r"
+        ]
+      },
+      "id": "03_verify_closure_the_main_branch_st",
+      "must_still_pass": [
+        "tbn_conflicting_speciali.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "tbn_conflicting_speciali.sem.01.the_main_branch_starts_recon",
+        "tbn_conflicting_speciali.sem.02.no_stale_action_survives_in_",
+        "tbn_conflicting_speciali.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_conflicting_speciali.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_conflicting_speciali.sem.01.the_main_branch_starts_recon, tbn_conflicting_speciali.sem.02.no_stale_action_survives_in_, tbn_conflicting_speciali.sem.03.no_unrelated_or_duplicate_ac, tbn_conflicting_speciali.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'conflicting_results', perform verify_closure for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result '<returncode>0</returncode> <output> 5 COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT </output>'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.the_main_branch_starts_r"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.the_main_branch_starts_r",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.the_main_branch_starts_r",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.the_main_branch_starts_r",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "conflicting_results",
+    "before_state": "useful source work is already persisted",
+    "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.",
+      "id": "req.01.the_main_branch_starts_r",
+      "observable_probe": "tbn_conflicting_speciali.sem.01.the_main_branch_starts_recon",
+      "public_evidence": "source instruction and workstream result for the_main_branch_starts_reconstructin"
+    }
+  ]
+}

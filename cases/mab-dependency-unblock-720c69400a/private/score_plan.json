@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_adopt_the_normalized_quote_c",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_7.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.adopt_the_normalized_quo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Retailer specialist returns a normalized quote contract containing retailer, product identity, price, currency, availability, and observation time, plus deterministic best-quote selection.', perform classify_failure for 'Adopt the normalized quote contract in comparison and alert services.' while retaining valid prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adopt_the_normalized_quo"
+        ]
+      },
+      "id": "mab_code04_price.cf.01_classify_failure_adopt_the_normaliz",
+      "independence_key": "mab_code04_price.cf.01_classify_failure_adopt_the_normaliz",
+      "measurement_type": "control",
+      "mutation_id": "mab_code04_price.mutation.01_classify_failure_adopt_the_normaliz",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_720c69400a.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.adopt_the_normalized_quo"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_convert_comparable_currencie",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_7.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "failure_recovery",
+        "subject": "req.01.adopt_the_normalized_quo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Retailer specialist returns a normalized quote contract containing retailer, product identity, price, currency, availability, and observation time, plus deterministic best-quote selection.', perform recover_or_redelegate for 'Convert comparable currencies before selecting the best available quote.' while retaining valid prior result 'Threshold evaluation is scaffolded against one provisional retailer price.'.",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Threshold evaluation is scaffolded against one provisional retailer price.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adopt_the_normalized_quo"
+        ]
+      },
+      "id": "mab_code04_price.cf.02_recover_or_redelegate_convert_comparable",
+      "independence_key": "mab_code04_price.cf.02_recover_or_redelegate_convert_comparable",
+      "measurement_type": "control",
+      "mutation_id": "mab_code04_price.mutation.02_recover_or_redelegate_convert_comparable",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_720c69400a.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.adopt_the_normalized_quo"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_a_mutation_where_a_lower",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_7.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.adopt_the_normalized_quo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Retailer specialist returns a normalized quote contract containing retailer, product identity, price, currency, availability, and observation time, plus deterministic best-quote selection.', perform verify_closure for 'Add a mutation where a lower second-retailer quote triggers an alert.' while retaining valid prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adopt_the_normalized_quo"
+        ]
+      },
+      "id": "mab_code04_price.cf.03_verify_closure_add_a_mutation_whe",
+      "independence_key": "mab_code04_price.cf.03_verify_closure_add_a_mutation_whe",
+      "measurement_type": "control",
+      "mutation_id": "mab_code04_price.mutation.03_verify_closure_add_a_mutation_whe",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_720c69400a.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.adopt_the_normalized_quo"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code04_price.mutation.01_classify_failure_adopt_the_normaliz",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code04_price.cf.01_classify_failure_adopt_the_normaliz"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_720c69400a.source.pin"
+      ],
+      "targets": [
+        "mab_code04_price.cf.01_classify_failure_adopt_the_normaliz",
+        "mab_dependency_unblock_720c69400a.event.receipt",
+        "mab_dependency_unblock_720c69400a.event.authority_probe",
+        "mab_dependency_unblock_720c69400a.closure",
+        "mab_dependency_unblock_720c69400a.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Threshold evaluation is scaffolded against one provisional retailer price.'.",
+      "family": "recover_failed_work",
+      "id": "mab_code04_price.mutation.02_recover_or_redelegate_convert_comparable",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code04_price.cf.02_recover_or_redelegate_convert_comparable"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_720c69400a.source.pin"
+      ],
+      "targets": [
+        "mab_code04_price.cf.02_recover_or_redelegate_convert_comparable",
+        "mab_dependency_unblock_720c69400a.event.receipt",
+        "mab_dependency_unblock_720c69400a.event.authority_probe",
+        "mab_dependency_unblock_720c69400a.closure",
+        "mab_dependency_unblock_720c69400a.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication, groups, and watchlist ownership are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code04_price.mutation.03_verify_closure_add_a_mutation_whe",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code04_price.cf.03_verify_closure_add_a_mutation_whe"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_720c69400a.source.pin"
+      ],
+      "targets": [
+        "mab_code04_price.cf.03_verify_closure_add_a_mutation_whe",
+        "mab_dependency_unblock_720c69400a.event.receipt",
+        "mab_dependency_unblock_720c69400a.event.authority_probe",
+        "mab_dependency_unblock_720c69400a.closure",
+        "mab_dependency_unblock_720c69400a.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific retailer_quote_worker_recovered receipt is authentic and bound to coding:004 and mab-dependency-unblock-720c69400a.",
+      "id": "mab_dependency_unblock_720c69400a.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned PriceTrackerCollaborator authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_720c69400a.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered multi-retailer comparison replaces scalar prices while user thresholds, groups, shared alerts, and notification preferences remain intact.",
+      "id": "mab_dependency_unblock_720c69400a.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:004.",
+      "id": "mab_dependency_unblock_720c69400a.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and normalized_price_alert_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_720c69400a.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_price_tracker_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Normalized quotes are currency-converted before best-price selection; unavailable or stale quotes cannot trigger threshold alerts, including a lower second-retailer quote case.",
+      "id": "mab_dependency_unblock_720c69400a.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_price_tracker_converts_quotes_filters_stale_unavailable_and_alerts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: user_thresholds, group_membership, shared_alerts, notification_preferences.",
+      "id": "mab_dependency_unblock_720c69400a.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_price_tracker_preserves_thresholds_groups_sharing_and_preferences",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered multi-retailer comparison replaces scalar prices while user thresholds, groups, shared alerts, and notification preferences remain intact.",
+      "id": "mab_dependency_unblock_720c69400a.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_price_tracker_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

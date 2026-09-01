@@ -1,0 +1,77 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "osw-cross-app-artifact-133984c167",
+  "benchmark": "OSWorld",
+  "source_binding": {
+    "task_id": "df67aebb-fb3a-44fd-b75b-51b6012df509",
+    "domain": "multi_apps",
+    "config_path": "upstream/osworld/evaluation_examples/examples/multi_apps/df67aebb-fb3a-44fd-b75b-51b6012df509.json",
+    "config_sha256": "1618382e920345d749fba3617d8e28d549e5292a1a3b67bae7758744cb00d816",
+    "upstream_revision": "fc31a9049664292fcb35d6e501ee1dc839f2cf6d"
+  },
+  "native_runtime": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "vscode",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "event_protocol": {
+    "producer": "read-only worker on a snapshot clone executes the delegable extraction/reproduction subtask",
+    "payload": "raw extracted artifact, observation, or verifier output; never expected actions",
+    "release_predicate": "official setup completed and main VM state differs from reset snapshot",
+    "rollback": "main agent must repair the already-mutated VM state after delivery"
+  },
+  "state_attestation": {
+    "baseline_probe": "OSWorld reset snapshot id plus native evaluator target-state digest",
+    "checkpoint_probe": "harness-owned VM observation/artifact digest after an actual pyautogui action",
+    "change_required": true,
+    "journal_owner": "host harness outside the model-visible VM"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "func": "compare_text_file",
+    "result": {
+      "type": "vm_file",
+      "path": "/home/user/Desktop/references.bib",
+      "dest": "references.bib"
+    },
+    "expected": {
+      "type": "cloud_file",
+      "path": "https://huggingface.co/datasets/xlangai/ubuntu_osworld_file_cache/resolve/main/multi_apps/df67aebb-fb3a-44fd-b75b-51b6012df509/references.bib",
+      "dest": "gold_references.bib"
+    },
+    "options": {
+      "ignore_blanks": true
+    }
+  },
+  "quality_gates": {
+    "official_config_bound": true,
+    "native_evaluator_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

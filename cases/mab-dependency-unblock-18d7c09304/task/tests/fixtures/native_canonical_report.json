@@ -1,0 +1,43 @@
+{
+  "anomaly": "VACUUM",
+  "anomaly_driver": "bounded PostgreSQL workload matching MARBLE anomaly semantics",
+  "canonical_episode_owner": "evaluator",
+  "case_id": "mab-dependency-unblock-18d7c09304",
+  "errors": [],
+  "evaluator_binding_score": 1.0,
+  "evidence_sha256": "4e8f55ffc936d4d6a9eadc1dadc703412df4156f08b5c2a2e5f6f999aa53a5aa",
+  "host_checkpoint": {
+    "after": {
+      "pg_version": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "tables": 6,
+      "txid": 1247
+    },
+    "anomaly_evidence": {
+      "remaining_rows": 500,
+      "vacuum_full_executed": true
+    },
+    "before": {
+      "tables": 5,
+      "txid": 1242
+    },
+    "owner": "host_runtime",
+    "sha256": "893f6fa5b23d721446e95ce968a9b16cefb92639f000d3d4acb919e3362763cb"
+  },
+  "model_episode_executed": false,
+  "native_evaluator_metrics": {
+    "predicted": "VACUUM",
+    "root_cause": [
+      "VACUUM"
+    ]
+  },
+  "native_evaluator_verified": true,
+  "passed": true,
+  "postgres_environment_reset": true,
+  "resource_lock": "exclusive_serial_postgres",
+  "schema_version": "async-rbench-mab-db-native-canonical-v1",
+  "source_init_sql_attempted": true,
+  "source_init_sql_error": null,
+  "source_native_marble_verified": true,
+  "source_task_id": "database:021",
+  "upstream_marble_evaluator": "marble.evaluator.evaluator.Evaluator.evaluate_task_db"
+}

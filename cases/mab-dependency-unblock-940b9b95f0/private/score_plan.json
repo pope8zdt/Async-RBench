@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_apply_snapshot_freshness_and",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.apply_snapshot_freshness"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Data specialist returns a normalized timestamped snapshot for traffic speeds, transit delays, and weather restrictions plus deterministic leg-cost adjustments.', perform classify_failure for 'Apply snapshot freshness and normalized cost adjustments to candidate legs.' while retaining valid prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_snapshot_freshness"
+        ]
+      },
+      "id": "mab_code15_matp.cf.01_classify_failure_apply_snapshot_fre",
+      "independence_key": "mab_code15_matp.cf.01_classify_failure_apply_snapshot_fre",
+      "measurement_type": "control",
+      "mutation_id": "mab_code15_matp.mutation.01_classify_failure_apply_snapshot_fre",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_940b9b95f0.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.apply_snapshot_freshness"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_recompute_all_three_route_ra",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "failure_recovery",
+        "subject": "req.01.apply_snapshot_freshness"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Data specialist returns a normalized timestamped snapshot for traffic speeds, transit delays, and weather restrictions plus deterministic leg-cost adjustments.', perform recover_or_redelegate for 'Recompute all three route rankings and selected-route details.' while retaining valid prior result 'Candidate legs currently use static travel times and costs.'.",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Candidate legs currently use static travel times and costs.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_snapshot_freshness"
+        ]
+      },
+      "id": "mab_code15_matp.cf.02_recover_or_redelegate_recompute_all_thre",
+      "independence_key": "mab_code15_matp.cf.02_recover_or_redelegate_recompute_all_thre",
+      "measurement_type": "control",
+      "mutation_id": "mab_code15_matp.mutation.02_recover_or_redelegate_recompute_all_thre",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_940b9b95f0.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.apply_snapshot_freshness"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_mutations_for_a_transit_",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.apply_snapshot_freshness"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Data specialist returns a normalized timestamped snapshot for traffic speeds, transit delays, and weather restrictions plus deterministic leg-cost adjustments.', perform verify_closure for 'Add mutations for a transit delay and severe cycling weather.' while retaining valid prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_snapshot_freshness"
+        ]
+      },
+      "id": "mab_code15_matp.cf.03_verify_closure_add_mutations_for_",
+      "independence_key": "mab_code15_matp.cf.03_verify_closure_add_mutations_for_",
+      "measurement_type": "control",
+      "mutation_id": "mab_code15_matp.mutation.03_verify_closure_add_mutations_for_",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_940b9b95f0.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.apply_snapshot_freshness"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code15_matp.mutation.01_classify_failure_apply_snapshot_fre",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code15_matp.cf.01_classify_failure_apply_snapshot_fre"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_940b9b95f0.source.pin"
+      ],
+      "targets": [
+        "mab_code15_matp.cf.01_classify_failure_apply_snapshot_fre",
+        "mab_dependency_unblock_940b9b95f0.event.receipt",
+        "mab_dependency_unblock_940b9b95f0.event.authority_probe",
+        "mab_dependency_unblock_940b9b95f0.closure",
+        "mab_dependency_unblock_940b9b95f0.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Candidate legs currently use static travel times and costs.'.",
+      "family": "recover_failed_work",
+      "id": "mab_code15_matp.mutation.02_recover_or_redelegate_recompute_all_thre",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code15_matp.cf.02_recover_or_redelegate_recompute_all_thre"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_940b9b95f0.source.pin"
+      ],
+      "targets": [
+        "mab_code15_matp.cf.02_recover_or_redelegate_recompute_all_thre",
+        "mab_dependency_unblock_940b9b95f0.event.receipt",
+        "mab_dependency_unblock_940b9b95f0.event.authority_probe",
+        "mab_dependency_unblock_940b9b95f0.closure",
+        "mab_dependency_unblock_940b9b95f0.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code15_matp.mutation.03_verify_closure_add_mutations_for_",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code15_matp.cf.03_verify_closure_add_mutations_for_"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_940b9b95f0.source.pin"
+      ],
+      "targets": [
+        "mab_code15_matp.cf.03_verify_closure_add_mutations_for_",
+        "mab_dependency_unblock_940b9b95f0.event.receipt",
+        "mab_dependency_unblock_940b9b95f0.event.authority_probe",
+        "mab_dependency_unblock_940b9b95f0.closure",
+        "mab_dependency_unblock_940b9b95f0.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific conditions_worker_recovered receipt bound to coding:015.",
+      "id": "mab_dependency_unblock_940b9b95f0.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned MATP authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_940b9b95f0.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered conditions replace static rankings without erasing preferences, feedback, shared destinations, or accepted-route history.",
+      "id": "mab_dependency_unblock_940b9b95f0.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:015.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and realtime_multimodal_plan_closure obey the task-specific four-upstream schema.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_matp_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Fresh normalized traffic, transit, and weather conditions deterministically adjust candidate legs and recompute fastest, cheapest, and greenest rankings; stale snapshots are ignored.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_matp_fresh_snapshot_recomputes_rankings_and_ignores_stale_data",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves user_preferences, feedback_history, shared_destinations, accepted_route_history.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_matp_feedback_preferences_and_accepted_routes_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered conditions replace static rankings without erasing preferences, feedback, shared destinations, or accepted-route history.",
+      "id": "mab_dependency_unblock_940b9b95f0.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_matp_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

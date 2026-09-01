@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-ce10d55597",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_detection_signature_bundle_com",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close detection_signature_bundle_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_real_time_packet_i"
+        ]
+      },
+      "id": "01_classify_authority_detection_signature",
+      "must_still_pass": [
+        "mab_dependency_unblock_ce10d55597.source.preservation"
+      ],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ce10d55597.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A delayed signature bundle unblocks deterministic malware, phishing, unauthorized-access, secure-source, and encrypted-traffic decisions while preserving the audit log.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_real_time_packet_i"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_detection_signature_bundle_com",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close detection_signature_bundle_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_severity_alerts_da"
+        ]
+      },
+      "id": "02_revise_affected_detection_signature",
+      "must_still_pass": [
+        "mab_dependency_unblock_ce10d55597.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ce10d55597.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A delayed signature bundle unblocks deterministic malware, phishing, unauthorized-access, secure-source, and encrypted-traffic decisions while preserving the audit log.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_severity_alerts_da"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_detection_signature_bundle_com",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close detection_signature_bundle_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.preserve_traffic_records_use"
+        ]
+      },
+      "id": "03_verify_closure_detection_signature",
+      "must_still_pass": [
+        "mab_dependency_unblock_ce10d55597.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ce10d55597.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A delayed signature bundle unblocks deterministic malware, phishing, unauthorized-access, secure-source, and encrypted-traffic decisions while preserving the audit log.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.preserve_traffic_records_use"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_real_time_packet_i"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_severity_alerts_da"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.preserve_traffic_records_use"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_delayed_signat"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_real_time_packet_i",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_severity_alerts_da",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.preserve_traffic_records_use",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_delayed_signat",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_real_time_packet_i",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_severity_alerts_da",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.preserve_traffic_records_use",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_delayed_signat",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_real_time_packet_i",
+      "req.02.implement_severity_alerts_da",
+      "req.03.preserve_traffic_records_use",
+      "req.04.integrate_the_delayed_signat",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The signature bundle closes threat decisions and edge cases while preserving complete audit and compliance history.",
+    "before_state": "Traffic, alerts, and logs exist, but authoritative signatures and encrypted-traffic handling are unavailable.",
+    "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement real-time packet inspection and deterministic threat classifications.",
+      "id": "req.01.implement_real_time_packet_i",
+      "observable_probe": "mab_dependency_unblock_ce10d55597.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement severity alerts, dashboard counts, and high-volume batch handling.",
+      "id": "req.02.implement_severity_alerts_da",
+      "observable_probe": "mab_dependency_unblock_ce10d55597.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Preserve traffic records, user actions, and compliance reporting.",
+      "id": "req.03.preserve_traffic_records_use",
+      "observable_probe": "mab_dependency_unblock_ce10d55597.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the delayed signature bundle and reverify secure-source and encrypted-traffic edge cases.",
+      "id": "req.04.integrate_the_delayed_signat",
+      "observable_probe": "mab_dependency_unblock_ce10d55597.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

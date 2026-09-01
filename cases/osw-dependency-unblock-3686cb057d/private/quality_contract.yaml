@@ -1,0 +1,93 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Equivalent private source-native scoring path with independently assembled closure invocation.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_3686cb057d.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_3686cb057d.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_dependency_unblock_3686cb057d.osworld.gold_fidelity"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_dependency_unblock_3686cb057d.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_period_368.cf.01_classify_authority_period_rate_osworld",
+          "osw_period_368.cf.02_revise_affected_period_rate_osworld",
+          "osw_period_368.cf.03_verify_closure_period_rate_osworld"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_3686cb057d.event.receipt",
+          "osw_dependency_unblock_3686cb057d.event.probes",
+          "osw_dependency_unblock_3686cb057d.closure",
+          "osw_dependency_unblock_3686cb057d.source.pin",
+          "osw_dependency_unblock_3686cb057d.osworld.identity",
+          "osw_dependency_unblock_3686cb057d.osworld.official_score",
+          "osw_dependency_unblock_3686cb057d.osworld.native_evidence",
+          "osw_dependency_unblock_3686cb057d.osworld.task_assertion",
+          "osw_dependency_unblock_3686cb057d.osworld.output_schema",
+          "osw_dependency_unblock_3686cb057d.osworld.formula_coverage",
+          "osw_dependency_unblock_3686cb057d.osworld.numeric_results",
+          "osw_dependency_unblock_3686cb057d.osworld.number_type",
+          "osw_dependency_unblock_3686cb057d.osworld.maximum_highlight",
+          "osw_dependency_unblock_3686cb057d.osworld.gold_fidelity"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "d7267aa37ea7a355b91c94e3aefe07ff12453b0bde04a225d8b1dbfa3507b8b7",
+        "task_id": "osworld:libreoffice_calc:21ab7b40-77c2-4ae6-8321-e00d3a086c73",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

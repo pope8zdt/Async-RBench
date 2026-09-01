@@ -1,0 +1,135 @@
+{
+  "anomaly": "INSERT_LARGE_DATA",
+  "canonical": {
+    "canonical_oracle": true,
+    "checkpoint_changed": true,
+    "control_checks_passed": true,
+    "control_ids": [
+      "01_classify_scope_delta_unpack_the_artifac",
+      "02_revise_affected_enable_developer_m",
+      "03_preserve_unaffected_choose_load_unpack",
+      "04_verify_closure_verify_the_extensi"
+    ],
+    "episode": "canonical",
+    "equivalent_solution": false,
+    "event_receipt": {
+      "producer": "evaluator_owned_read_only_snapshot_worker",
+      "raw_evidence": {
+        "target_url": "extensionpref:canonical"
+      },
+      "release_after_digest": "38b0f4cf35195e217b8072b498572ff4f14b091df2107385202c96d263bd5d55"
+    },
+    "expected_pass": true,
+    "hidden_checks_passed": true,
+    "model_episode_executed": false,
+    "negative_counterexample": false,
+    "observed_expected_outcome": true,
+    "official_evaluator_executed": true,
+    "official_score": 1.0,
+    "real_vm_executed": true,
+    "semantic_check_ids": [
+      "official_metric_01",
+      "persisted_target_state",
+      "post_event_reverification"
+    ],
+    "url": "extensionpref:canonical"
+  },
+  "case_id": "osw-cross-app-artifact-81b4557778",
+  "counterexamples": [
+    {
+      "canonical_oracle": false,
+      "checkpoint_changed": true,
+      "control_checks_passed": false,
+      "control_ids": [],
+      "episode": "negative_wrong_topic",
+      "equivalent_solution": false,
+      "event_receipt": {
+        "producer": "evaluator_owned_read_only_snapshot_worker",
+        "raw_evidence": {
+          "target_url": "extensionpref:negative2"
+        },
+        "release_after_digest": "9d41e75bebdbd9ec3a874ad1e6baabaf170d8f1ffb2d7b18f07bf019cb33e305"
+      },
+      "expected_pass": false,
+      "hidden_checks_passed": false,
+      "model_episode_executed": false,
+      "negative_counterexample": true,
+      "observed_expected_outcome": true,
+      "official_evaluator_executed": true,
+      "official_score": 0.0,
+      "real_vm_executed": true,
+      "semantic_check_ids": [],
+      "url": "extensionpref:negative2"
+    },
+    {
+      "canonical_oracle": false,
+      "checkpoint_changed": true,
+      "control_checks_passed": false,
+      "control_ids": [],
+      "episode": "negative_wrong_site",
+      "equivalent_solution": false,
+      "event_receipt": {
+        "producer": "evaluator_owned_read_only_snapshot_worker",
+        "raw_evidence": {
+          "target_url": "extensionpref:negative"
+        },
+        "release_after_digest": "6eb8e42445a3a00db4ed902d57f587c8e7216abc6c06236350e6dd813a392600"
+      },
+      "expected_pass": false,
+      "hidden_checks_passed": false,
+      "model_episode_executed": false,
+      "negative_counterexample": true,
+      "observed_expected_outcome": true,
+      "official_evaluator_executed": true,
+      "official_score": 0.0,
+      "real_vm_executed": true,
+      "semantic_check_ids": [],
+      "url": "extensionpref:negative"
+    }
+  ],
+  "episode_owner": "evaluator",
+  "equivalent": {
+    "canonical_oracle": false,
+    "checkpoint_changed": true,
+    "control_checks_passed": true,
+    "control_ids": [
+      "01_classify_scope_delta_unpack_the_artifac",
+      "02_revise_affected_enable_developer_m",
+      "03_preserve_unaffected_choose_load_unpack",
+      "04_verify_closure_verify_the_extensi"
+    ],
+    "episode": "equivalent",
+    "equivalent_solution": true,
+    "event_receipt": {
+      "producer": "evaluator_owned_read_only_snapshot_worker",
+      "raw_evidence": {
+        "target_url": "extensionpref:equivalent"
+      },
+      "release_after_digest": "9aa51129c18afa5214418ad5e31b7dc61fe60dd73956079e9b6f15d7c54e0367"
+    },
+    "expected_pass": true,
+    "hidden_checks_passed": true,
+    "model_episode_executed": false,
+    "negative_counterexample": false,
+    "observed_expected_outcome": true,
+    "official_evaluator_executed": true,
+    "official_score": 1.0,
+    "real_vm_executed": true,
+    "semantic_check_ids": [
+      "official_metric_01",
+      "persisted_target_state",
+      "post_event_reverification"
+    ],
+    "url": "extensionpref:equivalent"
+  },
+  "evidence_sha256": "38b0f4cf35195e217b8072b498572ff4f14b091df2107385202c96d263bd5d55",
+  "host_checkpoint": {
+    "checkpoint_sha256": "38b0f4cf35195e217b8072b498572ff4f14b091df2107385202c96d263bd5d55",
+    "owner": "host_runtime"
+  },
+  "model_episode_executed": false,
+  "native_evaluator_verified": true,
+  "passed": true,
+  "schema_version": "async-rbench-osworld-canonical-family-v1",
+  "source_native_marble_verified": true
+}

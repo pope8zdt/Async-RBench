@@ -1,0 +1,203 @@
+format_version: 2
+case_id: scheduler-selective-replan
+title: 'LLM inference batching scheduler: preserve the passing bucket, replan only
+  the failing bucket under a shared shape budget'
+task_instruction_path: task/task.yaml
+source_tasks:
+- id: llm-inference-batching-scheduler
+  upstream_path: upstream/terminal-bench/original-tasks-locked/llm-inference-batching-scheduler
+  benchmark: terminal-bench
+milestones:
+- id: optimize_bucket1
+  depends_on: []
+- id: optimize_bucket2
+  depends_on: []
+- id: allocate_global_shapes
+  depends_on:
+  - optimize_bucket1
+  - optimize_bucket2
+- id: validate_bucket1
+  depends_on:
+  - allocate_global_shapes
+- id: validate_bucket2
+  depends_on:
+  - allocate_global_shapes
+- id: replan_failing_bucket
+  depends_on:
+  - validate_bucket1
+  - validate_bucket2
+- id: final_validation
+  depends_on:
+  - replan_failing_bucket
+artifacts:
+- id: plan_b1
+  path: /app/task_file/output_data/plan_b1.jsonl
+- id: plan_b2
+  path: /app/task_file/output_data/plan_b2.jsonl
+- id: global_shape_plan
+  path: /app/task_file/output_data/global_shape_plan.json
+- id: combined_config_artifact
+  path: /app/task_file/output_data/decision_manifest.json
+- id: first_pass_snapshots
+  path: /app/task_file/output_data/first_pass
+- id: validator_reports
+  path: /app/task_file/output_data/validator_reports
+workstreams:
+- id: bucket1_optimizer
+  task: Optimize the batching plan for bucket 1. Under /app/task_file/input_data/requests_bucket_1.jsonl
+    every request must be covered by exactly one batch whose shape's seq_align is
+    a multiple of 64, covers the request's aligned prompt length, and keeps heads_align=32
+    / hidden_align=4096. Write the plan to /app/task_file/output_data/plan_b1.jsonl
+    as JSONL with request_id, batch_id and shape. Report plan_path, row_count and
+    plan_revision (sha256 of the file) as observations, not goals.
+  targets:
+  - plan_b1
+  expected_output: A valid per-bucket batching plan for bucket 1 written to plan_b1.jsonl,
+    reporting plan_path, row_count and plan_revision.
+  priority: normal
+  required_evidence_fields:
+  - plan_path
+  - row_count
+  - plan_revision
+  evidence_schema:
+    plan_path:
+      type: string
+    row_count:
+      type: integer
+    plan_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+  allowed_files:
+  - /app/task_file/output_data/plan_b1.jsonl
+  required_files:
+  - /app/task_file/output_data/plan_b1.jsonl
+  public_result_contract: {}
+- id: bucket2_optimizer
+  task: Optimize the batching plan for bucket 2. Under /app/task_file/input_data/requests_bucket_2.jsonl
+    every request must be covered by exactly one batch whose shape's seq_align is
+    a multiple of 64, covers the request's aligned prompt length, and keeps heads_align=32
+    / hidden_align=4096. Write the plan to /app/task_file/output_data/plan_b2.jsonl
+    as JSONL with request_id, batch_id and shape. Report plan_path, row_count and
+    plan_revision (sha256 of the file) as observations, not goals.
+  targets:
+  - plan_b2
+  expected_output: A valid per-bucket batching plan for bucket 2 written to plan_b2.jsonl,
+    reporting plan_path, row_count and plan_revision.
+  priority: normal
+  required_evidence_fields:
+  - plan_path
+  - row_count
+  - plan_revision
+  evidence_schema:
+    plan_path:
+      type: string
+    row_count:
+      type: integer
+    plan_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+  allowed_files:
+  - /app/task_file/output_data/plan_b2.jsonl
+  required_files:
+  - /app/task_file/output_data/plan_b2.jsonl
+  public_result_contract: {}
+- id: global_shape_allocator
+  task: 'Commit the shared global shape set for the combined scheduler. The union
+    of the two buckets'' batch shapes is budgeted by the shared MAX_SHAPES=8 ceiling:
+    at most eight distinct (seq_align, heads_align, hidden_align) triples across both
+    buckets combined. Write the committed set to /app/task_file/output_data/global_shape_plan.json
+    with the exact fields global_shape_set (a list of triples) and combined_unique_shapes.
+    Report shape_count and global_shape_set as observations.'
+  targets:
+  - global_shape_plan
+  expected_output: A committed global shape set respecting the shared eight-shape
+    budget, written to global_shape_plan.json.
+  priority: high
+  required_evidence_fields:
+  - shape_count
+  - global_shape_set
+  evidence_schema:
+    shape_count:
+      type: integer
+    global_shape_set:
+      type: array
+  allowed_files:
+  - /app/task_file/output_data/global_shape_plan.json
+  required_files:
+  - /app/task_file/output_data/global_shape_plan.json
+  public_result_contract: {}
+- id: bucket1_validator
+  task: Validate an isolated baseline candidate for bucket 1 against the shared
+    thresholds and shape budget. First run /app/task_file/scripts/baseline_packer.py
+    to create both baseline plans in this child workspace. Then run the documented
+    /app/task_file/scripts/validate_plan.py command and preserve its complete combined
+    report. Extract the object in results whose bucket is bucket1 verbatim to
+    /app/task_file/output_data/validator_reports/bucket1.json. Report bucket1_passes
+    from passes, bucket1_plan_revision from plan_revision, bucket1_pad_ratio from
+    metrics.pad_ratio and bucket1_cost from metrics.cost. These are observations,
+    not goals.
+  targets:
+  - validator_reports
+  expected_output: An objective validation report for bucket 1, reporting bucket1_passes,
+    bucket1_plan_revision, bucket1_pad_ratio and bucket1_cost.
+  priority: high
+  required_evidence_fields:
+  - bucket1_passes
+  - bucket1_plan_revision
+  - bucket1_pad_ratio
+  - bucket1_cost
+  evidence_schema:
+    bucket1_passes:
+      type: boolean
+    bucket1_plan_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    bucket1_pad_ratio:
+      type: number
+    bucket1_cost:
+      type: number
+  allowed_files:
+  - /app/task_file/output_data/validator_reports/bucket1.json
+  required_files:
+  - /app/task_file/output_data/validator_reports/bucket1.json
+  public_result_contract: {}
+- id: bucket2_validator
+  task: Validate an isolated baseline candidate for bucket 2. First run
+    /app/task_file/scripts/baseline_packer.py to create both baseline plans in this
+    child workspace. Then run the documented /app/task_file/scripts/validate_plan.py
+    command and preserve its complete combined report. Extract the object in results
+    whose bucket is bucket2 verbatim to /app/task_file/output_data/validator_reports/bucket2.json;
+    the public validator attaches the source receipt available to this workstream.
+    Report bucket2_passes from passes, bucket2_plan_revision from plan_revision,
+    bucket2_pad_ratio from metrics.pad_ratio, bucket2_cost from metrics.cost and the
+    emitted authority_receipt as source_receipt. These are observations, not goals.
+  targets:
+  - validator_reports
+  expected_output: An objective validation report for bucket 2, reporting bucket2_passes,
+    bucket2_plan_revision, bucket2_pad_ratio and bucket2_cost.
+  priority: high
+  required_evidence_fields:
+  - bucket2_passes
+  - bucket2_plan_revision
+  - source_receipt
+  - bucket2_pad_ratio
+  - bucket2_cost
+  evidence_schema:
+    bucket2_passes:
+      type: boolean
+    bucket2_plan_revision:
+      type: string
+      pattern: '[0-9a-f]{64}'
+    bucket2_pad_ratio:
+      type: number
+    bucket2_cost:
+      type: number
+    source_receipt:
+      type: string
+      pattern: 'sc-bucket2-authority-[0-9a-f]{16}'
+  allowed_files:
+  - /app/task_file/output_data/validator_reports/bucket2.json
+  required_files:
+  - /app/task_file/output_data/validator_reports/bucket2.json
+  public_result_contract: {}
+public_checks: []

@@ -1,0 +1,26 @@
+{
+  "assets": [
+    "official task configuration",
+    "libreoffice_writer snapshot",
+    "private source assets",
+    "private native fixture",
+    "private delayed payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "libreoffice_writer",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:libreoffice_writer:88fe4b2d-3040-4c70-9a70-546a47764b48 in pinned libreoffice_writer; truth remains private.",
+  "event_injection": "Release delayed first_paragraph_sentence_boundaries after a persisted task-specific checkpoint.",
+  "hidden_tests": "compare_docx_files, native digest, output_path, source_identity, sentence_boundaries, tail_preservation, accepted_variants, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "libreoffice_writer",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private sentence_spacing_osworld.sh scores compare_docx_files.",
+  "requires_authored_private_oracle": false
+}

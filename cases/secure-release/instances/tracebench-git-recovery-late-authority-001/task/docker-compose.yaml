@@ -1,0 +1,6 @@
+services:
+  client:
+    build: .
+    image: async_rbench-secure-release:locked
+    command: ["bash", "-lc", "sleep infinity"]
+    ports: ["18443:8443", "18080:8080"]

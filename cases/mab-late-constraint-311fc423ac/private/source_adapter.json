@@ -1,0 +1,71 @@
+{
+  "benchmark": "MultiAgentBench",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "private_copy": "private/source_manifests/01-native_case.json",
+      "sha256": "9906bef556dbb1bfb876ec44583a30fce2403ecaf5a1c727ec2c985e7b0b0225",
+      "source": "artifacts/source-native-v4/cases/multiagentbench/mab-late-constraint-311fc423ac/native_case.json"
+    },
+    {
+      "private_copy": "private/source_manifests/03-official_task.json",
+      "sha256": "709e7199c387c6a4e47cdadbb04c185d18744229ef8a908e2720f1b2b57126de",
+      "source": "artifacts/source-native-v4/cases/multiagentbench/mab-late-constraint-311fc423ac/official_task.json"
+    },
+    {
+      "private_copy": "private/source_manifests/04-native_config.yaml",
+      "sha256": "dba95503cb77b98b741e24224d0b023a0ad4df5d5e3384bbbd00d13846a2f434",
+      "source": "artifacts/source-native-v4/cases/multiagentbench/mab-late-constraint-311fc423ac/native_config.yaml"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task config",
+      "environment seed",
+      "role profiles",
+      "private root-cause truth",
+      "query/action journal"
+    ],
+    "docker": [
+      "MARBLE engine",
+      "scenario-specific service",
+      "tool gateway",
+      "state-attestation sidecar"
+    ],
+    "environment_strategy": "stage the pinned MARBLE task with a containerized database/game runtime and harness-owned transcript journal",
+    "event_injection": "execute a real bound specialist role and release its raw result only after a persisted environment action",
+    "hidden_tests": "native accuracy plus evidence coverage, exact label cardinality, eliminated alternatives, authority consumption and closure",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "marble.engine.Engine",
+      "environment": {
+        "max_iterations": "",
+        "name": "",
+        "type": "",
+        "workspace_dir": "workspace"
+      },
+      "final_state": "MARBLE environment and tool transcript",
+      "roles": [
+        {
+          "agent_id": "agent1",
+          "profile": "I am a Senior Software Developer specialized in Python development.\nI am good at creating the code framework from scratch based on the task description and requirements.\nSo I **have to** call \"create_code\" action to create the code in the first iteration at first.\nI am **very terrible** at do further modifications since I am not so creative or careful so I **have to** let agent 2 or agent 3 revise the code after I create the code and I **can't** call \"give_advice_and_revise_code\" action.\nAgent 2 is better at adding missing functions so it's better to let agent 2 revise the code at first.\nAgent 3 is better at fixing existing issues and optimizing the code so it's better to let agent 3 revise the code after agent 2 has revised the code so that the code is more optimized.\n",
+          "type": "CodingAgent"
+        },
+        {
+          "agent_id": "agent2",
+          "profile": "I am a Senior Software Developer specialized in Python development.\nI am better at adding missing functionality based on my decent understanding and compliance to the task description and requirements.\nI **have to** call \"give_advice_and_revise_code\" action to give advice to the code and revise the code.\nI **can't** call \"create_code\" action since I am not good at creating the code framework from scratch.\nI can let agent 3 to make the code more optimized after I have added the missing functionality.\n",
+          "type": "CodingAgent"
+        },
+        {
+          "agent_id": "agent3",
+          "profile": "I am a Senior Software Developer specialized in Python development.\nI am better at fixing existing issues and optimizing the code based on my innovation and creativity.\nI **have to** call \"give_advice_and_revise_code\" action to give advice to the code and revise the code.\nI **can't** call \"create_code\" action since I am not good at creating the code framework from scratch.\nI can let agent 2 to add the missing functionality after I have fixed the existing issues and optimized the code.\n",
+          "type": "CodingAgent"
+        }
+      ]
+    },
+    "oracle": "derive a private functional/property test suite from each program requirement and execute it in a clean participant clone",
+    "oracle_reconstruction_domain": "coding",
+    "requires_authored_private_oracle": true
+  },
+  "source_task_id": "coding:049"
+}

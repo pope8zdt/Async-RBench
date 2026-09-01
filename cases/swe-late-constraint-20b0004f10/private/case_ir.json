@@ -1,0 +1,267 @@
+{
+  "case_id": "swe-late-constraint-20b0004f10",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_req_01_expose_the_required_attr",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_constraint_20b0.scope_dependency_change",
+      "evidence_group": "bp_swe_20b0.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.expose_the_required_attr"
+      },
+      "expected_behavior": "After event 'The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.', Classify the repr attribute contract as a dependency change spanning both repeated splitters and the shared builder.",
+      "forbidden_behavior": "Do not patch one class-specific string representation only; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.expose_the_required_attr"
+        ]
+      },
+      "id": "bp_swe_20b0.cf.01_classify_scope_delta_expose_the_require",
+      "independence_key": "bp_swe_20b0.cf.01_classify_scope_delta_expose_the_require",
+      "must_still_pass": [
+        "swe_late_constraint_20b0.sem.21.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "bp_swe_20b0.mutation.01_classify_scope_delta_expose_the_require",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_constraint_20b0004f10.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "After event 'The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.', Classify the repr attribute contract as a dependency change spanning both repeated splitters and the shared builder.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.expose_the_required_attr"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_req_01_expose_the_required_attr",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_constraint_20b0.scope_dependency_change",
+      "evidence_group": "bp_swe_20b0.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.expose_the_required_attr"
+      },
+      "expected_behavior": "After event 'The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.', Add shared-builder delegation and cvargs fallback so constructor-named n_splits, n_repeats, and random_state values are represented correctly.",
+      "forbidden_behavior": "Do not hard-code defaults or bypass _build_repr; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.expose_the_required_attr"
+        ]
+      },
+      "id": "bp_swe_20b0.cf.02_revise_affected_expose_the_require",
+      "independence_key": "bp_swe_20b0.cf.02_revise_affected_expose_the_require",
+      "must_still_pass": [
+        "swe_late_constraint_20b0.sem.21.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "mutation_id": "bp_swe_20b0.mutation.02_revise_affected_expose_the_require",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_constraint_20b0004f10.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After event 'The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.', Add shared-builder delegation and cvargs fallback so constructor-named n_splits, n_repeats, and random_state values are represented correctly.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.expose_the_required_attr"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_req_02_assert_exact_default_and",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_constraint_20b0.scope_dependency_change",
+      "evidence_group": "bp_swe_20b0.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.02.assert_exact_default_and"
+      },
+      "expected_behavior": "After event 'The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.', Preserve existing repr behavior for estimators with direct constructor attributes and unaffected cross-validator splitting semantics.",
+      "forbidden_behavior": "Do not change generic estimator repr or split behavior unnecessarily; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.assert_exact_default_and"
+        ]
+      },
+      "id": "bp_swe_20b0.cf.03_preserve_unaffected_assert_exact_defau",
+      "independence_key": "bp_swe_20b0.cf.03_preserve_unaffected_assert_exact_defau",
+      "must_still_pass": [
+        "swe_late_constraint_20b0.sem.21.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "mutation_id": "bp_swe_20b0.mutation.03_preserve_unaffected_assert_exact_defau",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_constraint_20b0004f10.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "After event 'The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.', Preserve existing repr behavior for estimators with direct constructor attributes and unaffected cross-validator splitting semantics.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.02.assert_exact_default_and"
+    },
+    {
+      "critical": false,
+      "decision_group": "verify_closure_req_03_run_model_selection_repr",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_constraint_20b0.scope_dependency_change",
+      "evidence_group": "bp_swe_20b0.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.run_model_selection_repr"
+      },
+      "expected_behavior": "After event 'The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.', Run exact default and explicit-value repeated CV repr tests plus focused model-selection regressions using the scope receipt.",
+      "forbidden_behavior": "Do not close after only a default repr snapshot; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.run_model_selection_repr"
+        ]
+      },
+      "id": "bp_swe_20b0.cf.04_verify_closure_run_model_selectio",
+      "independence_key": "bp_swe_20b0.cf.04_verify_closure_run_model_selectio",
+      "must_still_pass": [
+        "swe_late_constraint_20b0.sem.21.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "bp_swe_20b0.mutation.04_verify_closure_run_model_selectio",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_20b0004f10.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "After event 'The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.', Run exact default and explicit-value repeated CV repr tests plus focused model-selection regressions using the scope receipt.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.run_model_selection_repr"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.expose_the_required_attr"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.assert_exact_default_and"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.run_model_selection_repr"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.expose_the_required_attr",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.assert_exact_default_and",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.run_model_selection_repr",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.expose_the_required_attr",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.assert_exact_default_and",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.run_model_selection_repr",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.expose_the_required_attr",
+      "req.02.assert_exact_default_and",
+      "req.03.run_model_selection_repr",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The API audit changes the dependency closure: both repeated splitter classes must delegate to _build_repr, which must resolve constructor parameters from attributes or cvargs while preserving exact defaults and explicit values.",
+    "before_state": "A provisional RepeatedKFold repr method is checkpointed before the shared repr-builder attribute contract is known.",
+    "event_id": "evt.swe_late_constraint_20b0.scope_dependency_change",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Expose the required attributes without changing splitting behavior.",
+      "id": "req.01.expose_the_required_attr",
+      "observable_probe": "swe_late_constraint_20b0.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for expose_the_required_attributes_witho"
+    },
+    {
+      "description": "Assert exact default and non-default repr strings for both classes.",
+      "id": "req.02.assert_exact_default_and",
+      "observable_probe": "swe_late_constraint_20b0.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for assert_exact_default_and_non_default"
+    },
+    {
+      "description": "Run model-selection repr and parameter-introspection tests.",
+      "id": "req.03.run_model_selection_repr",
+      "observable_probe": "swe_late_constraint_20b0.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for run_model_selection_repr_and_paramet"
+    }
+  ]
+}

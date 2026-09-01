@@ -1,0 +1,265 @@
+{
+  "case_id": "osw-cross-app-artifact-f96bcb2739",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_completeness_stock_median_result",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_stock_f96b.cf.01_classify_completeness_stock_median_result",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_f96bcb2739.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness for stock_median_result; preserve confirmed libreoffice_calc, vs_code, python state and revise only affected closure.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.row_accounting"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_stock_median_result",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_stock_f96b.cf.02_revise_affected_stock_median_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_f96bcb2739.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for stock_median_result; preserve confirmed libreoffice_calc, vs_code, python state and revise only affected closure.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.mean"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_stock_median_result",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_stock_f96b.cf.03_preserve_unaffected_stock_median_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_f96bcb2739.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for stock_median_result; preserve confirmed libreoffice_calc, vs_code, python state and revise only affected closure.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.median"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_stock_median_result",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_stock_f96b.cf.04_verify_closure_stock_median_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_f96bcb2739.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for stock_median_result; preserve confirmed libreoffice_calc, vs_code, python state and revise only affected closure.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.result_text"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.row_accounting"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.row_accounting",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.mean"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.mean",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.median"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.median",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.result_text"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.result_text",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.workflow"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.workflow",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.row_accounting",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.mean",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.median",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.result_text",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.workflow",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.row_accounting",
+      "req.02.mean",
+      "req.03.median",
+      "req.04.result_text",
+      "req.05.workflow",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The 12 missing Stock Price values are filled with the 48-value mean 39.20125, the resulting median is 25.27, and result.txt contains only that numeric answer.",
+    "before_state": "The 60-row stock table is available; CSV export, mean imputation, and median computation are independent partial results until the numeric file is verified.",
+    "event_id": "evt.osw_cross_app_artifact_f96bcb2739.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The workbook has 60 data rows: 48 observed and 12 missing prices.",
+      "id": "req.01.row_accounting",
+      "observable_probe": "osw_cross_app_artifact_f96bcb2739.osworld.row_accounting",
+      "public_evidence": "source instruction and native evaluator for row_accounting"
+    },
+    {
+      "description": "The imputation mean is 39.20125.",
+      "id": "req.02.mean",
+      "observable_probe": "osw_cross_app_artifact_f96bcb2739.osworld.mean",
+      "public_evidence": "source instruction and native evaluator for mean"
+    },
+    {
+      "description": "The post-imputation median is 25.27.",
+      "id": "req.03.median",
+      "observable_probe": "osw_cross_app_artifact_f96bcb2739.osworld.median",
+      "public_evidence": "source instruction and native evaluator for median"
+    },
+    {
+      "description": "result.txt contains only the numeric answer.",
+      "id": "req.04.result_text",
+      "observable_probe": "osw_cross_app_artifact_f96bcb2739.osworld.result_text",
+      "public_evidence": "source instruction and native evaluator for result_text"
+    },
+    {
+      "description": "CSV export and code-based computation are both represented.",
+      "id": "req.05.workflow",
+      "observable_probe": "osw_cross_app_artifact_f96bcb2739.osworld.workflow",
+      "public_evidence": "source instruction and native evaluator for workflow"
+    }
+  ]
+}

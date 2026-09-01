@@ -1,0 +1,45 @@
+{
+  "prior_work": [
+    {
+      "id": "step:115",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "<returncode>0</returncode> <output> </output>"
+    }
+  ],
+  "independent_event": {
+    "id": "evidence:42",
+    "kind": "observation",
+    "app": null,
+    "function": null,
+    "description": "downstream_invalidation"
+  },
+  "affected_work": [
+    {
+      "id": "required-response:evidence:42",
+      "kind": "required_response",
+      "app": null,
+      "function": null,
+      "description": "Downstream assembly, optimization, or reporting proceeds using provisional upstream output."
+    }
+  ],
+  "superseded_work": [
+    {
+      "id": "provisional:required-response:evidence:42",
+      "description": "Provisional pre-authority variant of: Downstream assembly, optimization, or reporting proceeds using provisional upstream output.",
+      "migration_derived": true
+    }
+  ],
+  "event_sequence": [
+    {
+      "id": "evidence:42",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "downstream_invalidation",
+      "producer": "independent_environment_or_trace_producer",
+      "authority": "authoritative"
+    }
+  ]
+}

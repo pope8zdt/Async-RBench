@@ -1,0 +1,31 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_725ce.delayed_authoritative_result",
+  "authority_rule": "Delayed receipt_image_identity is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_725ce.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The home directory can be inspected, but the authoritative receipt-image identity has not yet been returned and exporting a guessed image would be unsafe.",
+    "after_state": "The filesystem worker identifies /home/user/OIP.jpg by source evidence, enabling a one-page, image-faithful receipt.pdf export.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.use_the_authoritative_re",
+      "req.02.export_the_image_as_a_si",
+      "req.03.save_the_result_as_home_",
+      "final_state"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

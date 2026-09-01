@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-c27563df83",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_completeness_shared_budget_policy_completed",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close shared_budget_policy_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_profiles_mul"
+        ]
+      },
+      "id": "01_classify_completeness_shared_budget_policy",
+      "must_still_pass": [
+        "mab_dependency_unblock_c27563df83.source.preservation"
+      ],
+      "mutation_family": "classify_completeness",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_c27563df83.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness: A complete shared-budget policy replaces provisional arithmetic-only handling with integer-money, role, notification, goal, and adaptation semantics.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_profiles_mul"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_shared_budget_policy_completed",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close shared_budget_policy_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_categorized_income"
+        ]
+      },
+      "id": "02_revise_affected_shared_budget_policy",
+      "must_still_pass": [
+        "mab_dependency_unblock_c27563df83.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_c27563df83.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A complete shared-budget policy replaces provisional arithmetic-only handling with integer-money, role, notification, goal, and adaptation semantics.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_categorized_income"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_shared_budget_policy_completed",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close shared_budget_policy_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_dashboards_goals_a"
+        ]
+      },
+      "id": "03_verify_closure_shared_budget_policy",
+      "must_still_pass": [
+        "mab_dependency_unblock_c27563df83.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_c27563df83.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A complete shared-budget policy replaces provisional arithmetic-only handling with integer-money, role, notification, goal, and adaptation semantics.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_dashboards_goals_a"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_users_profiles_mul"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_categorized_income"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_dashboards_goals_a"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.replace_provisional_policy_w"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_users_profiles_mul",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_categorized_income",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_dashboards_goals_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.replace_provisional_policy_w",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_users_profiles_mul",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_categorized_income",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_dashboards_goals_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.replace_provisional_policy_w",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_profiles_mul",
+      "req.02.implement_categorized_income",
+      "req.03.implement_dashboards_goals_a",
+      "req.04.replace_provisional_policy_w",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The complete policy enforces exact money, access roles, alerts, goals, and suggestions without losing prior transactions.",
+    "before_state": "Profiles, budgets, and transactions exist under a provisional policy without authoritative money-unit and role semantics.",
+    "event_id": "evt.mab_dependency_unblock_c275.shared_budget_policy_completed",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement users, profiles, multiple shared budgets, invitations, and access roles.",
+      "id": "req.01.implement_users_profiles_mul",
+      "observable_probe": "mab_dependency_unblock_c27563df83.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement categorized income and expenses using exact integer cents.",
+      "id": "req.02.implement_categorized_income",
+      "observable_probe": "mab_dependency_unblock_c27563df83.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement dashboards, goals, alerts, visualizations, suggestions, and feedback.",
+      "id": "req.03.implement_dashboards_goals_a",
+      "observable_probe": "mab_dependency_unblock_c27563df83.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Replace provisional policy with the complete role and threshold contract and reverify preserved financial state.",
+      "id": "req.04.replace_provisional_policy_w",
+      "observable_probe": "mab_dependency_unblock_c27563df83.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

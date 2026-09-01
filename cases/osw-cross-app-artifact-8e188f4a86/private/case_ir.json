@@ -1,0 +1,286 @@
+{
+  "case_id": "osw-cross-app-artifact-8e188f4a86",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_completeness_cli_column_merge",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_merge_8e18.cf.01_classify_completeness_cli_column_merge",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_8e188f4a86.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness for cli_column_merge; preserve confirmed terminal, libreoffice_calc, xlsx_ods state and revise only affected closure.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.row_counts"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_cli_column_merge",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_merge_8e18.cf.02_revise_affected_cli_column_merge",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_8e188f4a86.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for cli_column_merge; preserve confirmed terminal, libreoffice_calc, xlsx_ods state and revise only affected closure.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.boundaries"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_cli_column_merge",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_merge_8e18.cf.03_preserve_unaffected_cli_column_merge",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_8e188f4a86.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for cli_column_merge; preserve confirmed terminal, libreoffice_calc, xlsx_ods state and revise only affected closure.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.order"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_cli_column_merge",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_merge_8e18.cf.04_verify_closure_cli_column_merge",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_8e188f4a86.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for cli_column_merge; preserve confirmed terminal, libreoffice_calc, xlsx_ods state and revise only affected closure.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.output_path"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.row_counts"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.row_counts",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.boundaries"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.boundaries",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.order"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.order",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.output_path"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.output_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.terminal_calc"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.terminal_calc",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.06.accepted_variant"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.06.accepted_variant",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.row_counts",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.boundaries",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.order",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.terminal_calc",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.06.accepted_variant",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.row_counts",
+      "req.02.boundaries",
+      "req.03.order",
+      "req.04.output_path",
+      "req.05.terminal_calc",
+      "req.06.accepted_variant",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "All 5,001 rows are concatenated in order using an accepted delimiter form, output.csv is exact, and LibreOffice Calc is launched from the terminal with that file.",
+    "before_state": "The 5,001-row XLSX and ODS columns are present; extraction and concatenation are partial until output.csv is validated and opened from a terminal-owned Calc process.",
+    "event_id": "evt.osw_cross_app_artifact_8e188f4a86.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Both source columns and output contain 5,001 ordered rows.",
+      "id": "req.01.row_counts",
+      "observable_probe": "osw_cross_app_artifact_8e188f4a86.osworld.row_counts",
+      "public_evidence": "source instruction and native evaluator for row_counts"
+    },
+    {
+      "description": "Header, first row, and last row are correctly paired.",
+      "id": "req.02.boundaries",
+      "observable_probe": "osw_cross_app_artifact_8e188f4a86.osworld.boundaries",
+      "public_evidence": "source instruction and native evaluator for boundaries"
+    },
+    {
+      "description": "Row ordering is preserved during concatenation.",
+      "id": "req.03.order",
+      "observable_probe": "osw_cross_app_artifact_8e188f4a86.osworld.order",
+      "public_evidence": "source instruction and native evaluator for order"
+    },
+    {
+      "description": "The required output.csv path is exact.",
+      "id": "req.04.output_path",
+      "observable_probe": "osw_cross_app_artifact_8e188f4a86.osworld.output_path",
+      "public_evidence": "source instruction and native evaluator for output_path"
+    },
+    {
+      "description": "The workflow is command-line only and Calc is launched from the terminal.",
+      "id": "req.05.terminal_calc",
+      "observable_probe": "osw_cross_app_artifact_8e188f4a86.osworld.terminal_calc",
+      "public_evidence": "source instruction and native evaluator for terminal_calc"
+    },
+    {
+      "description": "The output uses one officially accepted delimiter variant.",
+      "id": "req.06.accepted_variant",
+      "observable_probe": "osw_cross_app_artifact_8e188f4a86.osworld.accepted_variant",
+      "public_evidence": "source instruction and native evaluator for accepted_variant"
+    }
+  ]
+}

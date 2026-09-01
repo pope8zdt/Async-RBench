@@ -1,0 +1,244 @@
+{
+  "case_id": "osw-state-reconciliation-8fec3dd813",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_completeness_workspace_window_and_tab_state",
+      "forbidden_behavior": "Do not skip classify_completeness, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_workspace_8fec.cf.01_classify_completeness_workspace_window_and_tab_state",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_state_reconciliation_8fec3dd813.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness for workspace_window_and_tab_state; preserve already-confirmed source-native state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.project_archive"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_workspace_window_and_tab_state",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_workspace_8fec.cf.02_revise_affected_workspace_window_and_tab_state",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_8fec3dd813.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for workspace_window_and_tab_state; preserve already-confirmed source-native state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.nautilus_window"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_workspace_window_and_tab_state",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_workspace_8fec.cf.03_preserve_unaffected_workspace_window_and_tab_state",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_8fec3dd813.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for workspace_window_and_tab_state; preserve already-confirmed source-native state.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.terminal_window"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_workspace_window_and_tab_state",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_workspace_8fec.cf.04_verify_closure_workspace_window_and_tab_state",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_state_reconciliation_8fec3dd813.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for workspace_window_and_tab_state; preserve already-confirmed source-native state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.chrome_tabs"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.project_archive"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.nautilus_window"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.terminal_window"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.chrome_tabs"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.project_archive",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.nautilus_window",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.terminal_window",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.chrome_tabs",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.project_archive",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.nautilus_window",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.terminal_window",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.chrome_tabs",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.project_archive",
+      "req.02.nautilus_window",
+      "req.03.terminal_window",
+      "req.04.chrome_tabs",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The completed state combines the audited OSWorld archive, an OSWorld Nautilus window, a terminal rooted at ~/Documents/Projects/OSWorld, and the exact GitHub and Python documentation tabs.",
+    "before_state": "Project extraction can finish before desktop-window and browser-tab observations; each observation alone is only partial workspace evidence.",
+    "event_id": "evt.osw_state_reconciliation_8fec3dd813.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The audited project archive and member set are preserved.",
+      "id": "req.01.project_archive",
+      "observable_probe": "osw_state_reconciliation_8fec3dd813.osworld.project_archive",
+      "public_evidence": "source instruction and task-specific project_archive result"
+    },
+    {
+      "description": "Nautilus is open on OSWorld.",
+      "id": "req.02.nautilus_window",
+      "observable_probe": "osw_state_reconciliation_8fec3dd813.osworld.nautilus_window",
+      "public_evidence": "source instruction and task-specific nautilus_window result"
+    },
+    {
+      "description": "GNOME Terminal is rooted at the exact OSWorld project directory.",
+      "id": "req.03.terminal_window",
+      "observable_probe": "osw_state_reconciliation_8fec3dd813.osworld.terminal_window",
+      "public_evidence": "source instruction and task-specific terminal_window result"
+    },
+    {
+      "description": "Chrome has exactly the required GitHub and Python documentation URLs.",
+      "id": "req.04.chrome_tabs",
+      "observable_probe": "osw_state_reconciliation_8fec3dd813.osworld.chrome_tabs",
+      "public_evidence": "source instruction and task-specific chrome_tabs result"
+    }
+  ]
+}

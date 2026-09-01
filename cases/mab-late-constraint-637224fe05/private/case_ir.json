@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-637224fe05",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_scope_delta",
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_637224fe05.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: Production adds an 80-pack minimum for 100-piece, 3/4-inch unfinished natural wood bead packs at $7.35 with a seven-day lead time.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "bead_capacity_scope_added"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_637224fe05.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: Production adds an 80-pack minimum for 100-piece, 3/4-inch unfinished natural wood bead packs at $7.35 with a seven-day lead time.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "bead_capacity_scope_added"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_637224fe05.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: Production adds an 80-pack minimum for 100-piece, 3/4-inch unfinished natural wood bead packs at $7.35 with a seven-day lead time.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "bead_capacity_scope_added"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_637224fe05.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: Production adds an 80-pack minimum for 100-piece, 3/4-inch unfinished natural wood bead packs at $7.35 with a seven-day lead time.",
+      "stage_tag": "closure",
+      "task_requirement_id": "bead_capacity_scope_added"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.persist_the_provisional_smal"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.add_exact_pack_count_diamete"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.revise_minimum_packs_price_a"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.close_with_expanded_capacity"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.persist_the_provisional_smal",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.add_exact_pack_count_diamete",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_minimum_packs_price_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_with_expanded_capacity",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.persist_the_provisional_smal",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.add_exact_pack_count_diamete",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_minimum_packs_price_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_with_expanded_capacity",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.persist_the_provisional_smal",
+      "req.02.add_exact_pack_count_diamete",
+      "req.03.revise_minimum_packs_price_a",
+      "req.04.close_with_expanded_capacity",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Production adds an 80-pack minimum for 100-piece, 3/4-inch unfinished natural wood bead packs at $7.35 with a seven-day lead time.",
+    "before_state": "A provisional 100-Piece Unfinished Wooden Round Beads bargain exists before bead_capacity_scope_added.",
+    "event_id": "evt.mab-late-constraint-637224fe05.bead_capacity_scope_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Persist the provisional small order and unspecified dimensions.",
+      "id": "req.01.persist_the_provisional_smal",
+      "observable_probe": "mab_late_constraint_637224fe05.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Add exact pack count, diameter, and finish requirements.",
+      "id": "req.02.add_exact_pack_count_diamete",
+      "observable_probe": "mab_late_constraint_637224fe05.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Revise minimum packs, price, and lead time together.",
+      "id": "req.03.revise_minimum_packs_price_a",
+      "observable_probe": "mab_late_constraint_637224fe05.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close with expanded capacity while preserving scalability rationale.",
+      "id": "req.04.close_with_expanded_capacity",
+      "observable_probe": "mab_late_constraint_637224fe05.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

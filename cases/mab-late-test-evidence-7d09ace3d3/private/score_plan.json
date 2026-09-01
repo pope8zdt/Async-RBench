@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_duplicate_language_edge_test_evidence_re",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_test_evidence_7d09.language_edge_test_evidence_replayed",
+      "evidence_group": "mab_code10_language.classify_duplicate",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_unique_users_and_g"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_duplicate: A replayed edge-test completion must be deduplicated while retaining multi-user exercises, real-time feedback, access control, submissions, and independent peer reviews.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_unique_users_and_g"
+        ]
+      },
+      "id": "mab_code10_language.cf.01_classify_duplicate_language_edge_test",
+      "independence_key": "mab_code10_language.cf.01_classify_duplicate_language_edge_test",
+      "measurement_type": "control",
+      "mutation_id": "mab_code10_language.mutation.01_classify_duplicate_language_edge_test",
+      "obligation": "classify_duplicate",
+      "outcome_anchors": [
+        "mab_late_test_evidence_7d09ace3d3.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_duplicate:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_unique_users_and_g"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_idempotency_language_edge_test_evidence_re",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_late_test_evidence_7d09.language_edge_test_evidence_replayed",
+      "evidence_group": "mab_code10_language.preserve_idempotency",
+      "evidence_spec": {
+        "primary_fact": "idempotency_decision",
+        "subject": "req.02.implement_sharing_authorizat"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_idempotency: A replayed edge-test completion must be deduplicated while retaining multi-user exercises, real-time feedback, access control, submissions, and independent peer reviews.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "gate": "deduplicate_completion",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_sharing_authorizat"
+        ]
+      },
+      "id": "mab_code10_language.cf.02_preserve_idempotency_language_edge_test",
+      "independence_key": "mab_code10_language.cf.02_preserve_idempotency_language_edge_test",
+      "measurement_type": "control",
+      "mutation_id": "mab_code10_language.mutation.02_preserve_idempotency_language_edge_test",
+      "obligation": "preserve_idempotency",
+      "outcome_anchors": [
+        "mab_late_test_evidence_7d09ace3d3.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:preserve_idempotency:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_sharing_authorizat"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_language_edge_test_evidence_re",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_test_evidence_7d09.language_edge_test_evidence_replayed",
+      "evidence_group": "mab_code10_language.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_submissions_and_in"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A replayed edge-test completion must be deduplicated while retaining multi-user exercises, real-time feedback, access control, submissions, and independent peer reviews.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_submissions_and_in"
+        ]
+      },
+      "id": "mab_code10_language.cf.03_verify_closure_language_edge_test",
+      "independence_key": "mab_code10_language.cf.03_verify_closure_language_edge_test",
+      "measurement_type": "control",
+      "mutation_id": "mab_code10_language.mutation.03_verify_closure_language_edge_test",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_test_evidence_7d09ace3d3.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_submissions_and_in"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "family": "wait_for_authority",
+      "id": "mab_code10_language.mutation.01_classify_duplicate_language_edge_test",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code10_language.cf.01_classify_duplicate_language_edge_test"
+      ],
+      "must_still_pass": [
+        "mab_late_test_evidence_7d09ace3d3.source.pin"
+      ],
+      "targets": [
+        "mab_code10_language.cf.01_classify_duplicate_language_edge_test",
+        "mab_late_test_evidence_7d09ace3d3.event.receipt",
+        "mab_late_test_evidence_7d09ace3d3.event.authority_probe",
+        "mab_late_test_evidence_7d09ace3d3.closure",
+        "mab_late_test_evidence_7d09ace3d3.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "family": "deduplicate_completion",
+      "id": "mab_code10_language.mutation.02_preserve_idempotency_language_edge_test",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code10_language.cf.02_preserve_idempotency_language_edge_test"
+      ],
+      "must_still_pass": [
+        "mab_late_test_evidence_7d09ace3d3.source.pin"
+      ],
+      "targets": [
+        "mab_code10_language.cf.02_preserve_idempotency_language_edge_test",
+        "mab_late_test_evidence_7d09ace3d3.event.receipt",
+        "mab_late_test_evidence_7d09ace3d3.event.authority_probe",
+        "mab_late_test_evidence_7d09ace3d3.closure",
+        "mab_late_test_evidence_7d09ace3d3.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close language_edge_test_evidence_replayed.",
+      "family": "rederive_from_authority",
+      "id": "mab_code10_language.mutation.03_verify_closure_language_edge_test",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code10_language.cf.03_verify_closure_language_edge_test"
+      ],
+      "must_still_pass": [
+        "mab_late_test_evidence_7d09ace3d3.source.pin"
+      ],
+      "targets": [
+        "mab_code10_language.cf.03_verify_closure_language_edge_test",
+        "mab_late_test_evidence_7d09ace3d3.event.receipt",
+        "mab_late_test_evidence_7d09ace3d3.event.authority_probe",
+        "mab_late_test_evidence_7d09ace3d3.closure",
+        "mab_late_test_evidence_7d09ace3d3.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific language_edge_test_evidence_replayed receipt bound to coding:010.",
+      "id": "mab_late_test_evidence_7d09ace3d3.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned LanguageCollaborator authority runs after three upstream results.",
+      "id": "mab_late_test_evidence_7d09ace3d3.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A replayed edge-test completion must be deduplicated while retaining multi-user exercises, real-time feedback, access control, submissions, and independent peer reviews.",
+      "id": "mab_late_test_evidence_7d09ace3d3.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:010.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py exposes LanguageCollaborator and all three required exercise types.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_language_output_schema_exercise_types_and_closure",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Quiz and writing feedback, sharing authorization, and independent peer reviews follow language-task rules.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_language_feedback_sharing_authorization_and_peer_review_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Users, exercises, submissions, feedback, and peer-review history survive evidence replay.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_language_writing_feedback_and_learning_history_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Duplicate edge evidence is deduplicated by evidence_id and closes the case only once.",
+      "id": "mab_late_test_evidence_7d09ace3d3.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_language_duplicate_edge_evidence_is_idempotent_and_closes_once",
+      "relevance_tier": "base"
+    }
+  ]
+}

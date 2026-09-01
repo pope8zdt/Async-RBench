@@ -1,0 +1,288 @@
+{
+  "case_id": "swe-dependency-unblock-db84717172",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_req_01_include_keyword_only_par",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_db84.scope_dependency_change",
+      "evidence_group": "bp_swe_db84.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.include_keyword_only_par"
+      },
+      "expected_behavior": "After event 'The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.', Classify the signature matrix as a scope change covering keyword-only defaults and both template-tag adapters.",
+      "forbidden_behavior": "Do not treat ordinary positional and keyword parameters as the full parser surface; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.include_keyword_only_par"
+        ]
+      },
+      "id": "bp_swe_db84.cf.01_classify_scope_delta_include_keyword_on",
+      "independence_key": "bp_swe_db84.cf.01_classify_scope_delta_include_keyword_on",
+      "must_still_pass": [
+        "swe_dependency_unblock_d.sem.29.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "bp_swe_db84.mutation.01_classify_scope_delta_include_keyword_on",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_db84717172.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "After event 'The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.', Classify the signature matrix as a scope change covering keyword-only defaults and both template-tag adapters.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.include_keyword_only_par"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_req_02_check_already_bound_keyw",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_db84.scope_dependency_change",
+      "evidence_group": "bp_swe_db84.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.check_already_bound_keyw"
+      },
+      "expected_behavior": "After event 'The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.', Revise parse_bits keyword validation to admit keyword-only names while preserving already-bound and duplicate-keyword precedence.",
+      "forbidden_behavior": "Do not accept every unknown keyword or misclassify repeated bindings; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.check_already_bound_keyw"
+        ]
+      },
+      "id": "bp_swe_db84.cf.02_revise_affected_check_already_boun",
+      "independence_key": "bp_swe_db84.cf.02_revise_affected_check_already_boun",
+      "must_still_pass": [
+        "swe_dependency_unblock_d.sem.29.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "mutation_id": "bp_swe_db84.mutation.02_revise_affected_check_already_boun",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_db84717172.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After event 'The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.', Revise parse_bits keyword validation to admit keyword-only names while preserving already-bound and duplicate-keyword precedence.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.check_already_bound_keyw"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_req_03_verify_simple_tag_and_in",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_dependency_unblock_db84.scope_dependency_change",
+      "evidence_group": "bp_swe_db84.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.verify_simple_tag_and_in"
+      },
+      "expected_behavior": "After event 'The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.', Preserve existing positional, required, varargs, varkw, and filter behavior while extending only the affected tag-signature paths.",
+      "forbidden_behavior": "Do not rewrite unaffected template parsing semantics; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_simple_tag_and_in"
+        ]
+      },
+      "id": "bp_swe_db84.cf.03_preserve_unaffected_verify_simple_tag_",
+      "independence_key": "bp_swe_db84.cf.03_preserve_unaffected_verify_simple_tag_",
+      "must_still_pass": [
+        "swe_dependency_unblock_d.sem.29.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "mutation_id": "bp_swe_db84.mutation.03_preserve_unaffected_verify_simple_tag_",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_db84717172.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "After event 'The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.', Preserve existing positional, required, varargs, varkw, and filter behavior while extending only the affected tag-signature paths.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.verify_simple_tag_and_in"
+    },
+    {
+      "critical": false,
+      "decision_group": "verify_closure_req_04_verify_duplicate_keyword",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_db84.scope_dependency_change",
+      "evidence_group": "bp_swe_db84.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.verify_duplicate_keyword"
+      },
+      "expected_behavior": "After event 'The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.', Run native simple_tag and inclusion_tag success and error regressions against the exact scope-change receipt.",
+      "forbidden_behavior": "Do not close after one tag adapter or only the success path; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.verify_duplicate_keyword"
+        ]
+      },
+      "id": "bp_swe_db84.cf.04_verify_closure_verify_duplicate_k",
+      "independence_key": "bp_swe_db84.cf.04_verify_closure_verify_duplicate_k",
+      "must_still_pass": [
+        "swe_dependency_unblock_d.sem.29.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "bp_swe_db84.mutation.04_verify_closure_verify_duplicate_k",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_db84717172.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "After event 'The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.', Run native simple_tag and inclusion_tag success and error regressions against the exact scope-change receipt.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.verify_duplicate_keyword"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.include_keyword_only_par"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.check_already_bound_keyw"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_simple_tag_and_in"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.verify_duplicate_keyword"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.include_keyword_only_par",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.check_already_bound_keyw",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_simple_tag_and_in",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.verify_duplicate_keyword",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.include_keyword_only_par",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.check_already_bound_keyw",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_simple_tag_and_in",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.verify_duplicate_keyword",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.include_keyword_only_par",
+      "req.02.check_already_bound_keyw",
+      "req.03.verify_simple_tag_and_in",
+      "req.04.verify_duplicate_keyword",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The signature audit changes the required scope: keyword-only parameters are valid keywords, repeated bindings remain duplicate errors before unexpected-keyword checks, and simple and inclusion tags must share the corrected behavior.",
+    "before_state": "A provisional parse_bits keyword validation edit is checkpointed before the complete Python signature matrix arrives.",
+    "event_id": "evt.swe_dependency_unblock_db84.scope_dependency_change",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Include keyword-only parameters in the accepted-keyword set.",
+      "id": "req.01.include_keyword_only_par",
+      "observable_probe": "swe_dependency_unblock_d.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for include_keyword_only_parameters_in_t"
+    },
+    {
+      "description": "Check already-bound keywords before unexpected-keyword validation.",
+      "id": "req.02.check_already_bound_keyw",
+      "observable_probe": "swe_dependency_unblock_d.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for check_already_bound_keywords_before_"
+    },
+    {
+      "description": "Verify simple_tag and inclusion_tag with defaulted keyword-only arguments.",
+      "id": "req.03.verify_simple_tag_and_in",
+      "observable_probe": "swe_dependency_unblock_d.sem.03.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for verify_simple_tag_and_inclusion_tag_"
+    },
+    {
+      "description": "Verify duplicate keywords raise the multiple-values TemplateSyntaxError.",
+      "id": "req.04.verify_duplicate_keyword",
+      "observable_probe": "swe_dependency_unblock_d.sem.04.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for verify_duplicate_keywords_raise_the_"
+    }
+  ]
+}

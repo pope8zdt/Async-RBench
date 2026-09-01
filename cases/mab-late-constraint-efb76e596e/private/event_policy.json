@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.reject_any_delivery_tier",
+      "req.02.revise_the_offer_to_pair",
+      "req.03.request_written_delivery",
+      "req.04.finalize_with_an_agreeme",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A current seller counter offers $91 with four-business-day delivery or $84 with fourteen-day delivery; the stale low-price urgent draft must not be finalized.",
+    "before_state": "Task-specific provisional work exists before delivery_margin_tiers_countered.",
+    "event_id": "evt.mab-late-constraint-efb76e596e.delivery_margin_tiers_countered",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-efb76e596e.delivery_margin_tiers_countered",
+  "forbidden_shortcut": "Do not ignore the event, retain a superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

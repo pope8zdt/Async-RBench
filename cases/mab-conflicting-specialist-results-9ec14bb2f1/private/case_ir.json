@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-9ec14bb2f1",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_ecommerce_lock_receipt",
+      "forbidden_behavior": "Do not finalize the E-commerce diagnosis before the database:005 receipt or accept lock authority without both blocker rows and a waiter timeout.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.check_that_the_scan_stat"
+        ]
+      },
+      "id": "01_classify_authority_ecommerce_lock_receipt",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_9ec14bb2f1.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After the provisional E-commerce comparison exists, classify the delayed database:005 receipt as authority only after verifying four blocker lock rows and the observed waiter timeout.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.check_that_the_scan_stat"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_from_authority_ecommerce_lock",
+      "forbidden_behavior": "Do not retain a displaced provisional non-lock cause or erase completed non-lock observations.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.check_that_the_scan_stat"
+        ]
+      },
+      "id": "02_revise_from_authority_ecommerce_lock",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_9ec14bb2f1.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Revise the affected E-commerce latency diagnosis to LOCK_CONTENTION while preserving completed index, vacuum, fetch, and transaction observations.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.check_that_the_scan_stat"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_ecommerce_lock_chain",
+      "forbidden_behavior": "Do not close without reverifying LOCK_CONTENTION from the four blocker rows and waiter-timeout evidence.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.check_that_the_scan_stat"
+        ]
+      },
+      "id": "03_verify_closure_ecommerce_lock_chain",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_9ec14bb2f1.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Rederive the final E-commerce diagnosis from the authoritative blocker/waiter evidence, verify the lock-chain attribution, and satisfy the native answer contract.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.check_that_the_scan_stat"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.check_that_the_scan_stat"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.mark_fetch_large_data_su"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.preserve_the_independent"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.output_exactly_two_label"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.check_that_the_scan_stat",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.mark_fetch_large_data_su",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.preserve_the_independent",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.output_exactly_two_label",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.check_that_the_scan_stat",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.mark_fetch_large_data_su",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.preserve_the_independent",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.output_exactly_two_label",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.check_that_the_scan_stat",
+      "req.02.mark_fetch_large_data_su",
+      "req.03.preserve_the_independent",
+      "req.04.output_exactly_two_label",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:005 e-commerce checkpoint records four blocker lock rows and an observed waiter timeout and authoritatively confirms LOCK_CONTENTION.",
+    "before_state": "The E-commerce hypothesis matrix and non-lock query observations are persisted provisionally.",
+    "event_id": "evt.mab_ecommerce_9ec1.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Validate the delayed database:005 receipt records four blocker lock rows and an observed waiter timeout.",
+      "id": "req.01.check_that_the_scan_stat",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for check_that_the_scan_statistics_corre"
+    },
+    {
+      "description": "Revise the affected E-commerce latency diagnosis to LOCK_CONTENTION from the authority evidence.",
+      "id": "req.02.mark_fetch_large_data_su",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for mark_fetch_large_data_supported_and_"
+    },
+    {
+      "description": "Preserve completed index, vacuum, fetch, and transaction observations.",
+      "id": "req.03.preserve_the_independent",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for preserve_the_independently_establish"
+    },
+    {
+      "description": "Rederive and verify the receipt-bound E-commerce answer under the native output contract.",
+      "id": "req.04.output_exactly_two_label",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for output_exactly_two_labels_from_the_a"
+    }
+  ]
+}

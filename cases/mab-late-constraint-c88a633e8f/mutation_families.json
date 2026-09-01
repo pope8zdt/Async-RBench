@@ -1,0 +1,320 @@
+{
+  "families": [
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: Authentic task-specific seller_warranty_logistics_matrix_arrived receipt bound to bargaining:003.",
+      "id": "mab_bargain03_rhapsody.mut.01_receipt",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: Authentic task-specific seller_warranty_logistics_matrix_arrived receipt bound to bargaining:003.",
+      "id": "mab_bargain03_rhapsody.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: Evaluator-owned Rhapsody Cross Body Bag bargaining task authority runs after three upstream results.",
+      "id": "mab_bargain03_rhapsody.mut.02_authority_probe",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.event.authority_probe"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_authority_probe_evidence",
+        "corrupt_authority_probe_value",
+        "replay_stale_authority_probe_state",
+        "satisfy_manifest_without_authority_probe_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: Evaluator-owned Rhapsody Cross Body Bag bargaining task authority runs after three upstream results.",
+      "id": "mab_bargain03_rhapsody.mut.02_authority_probe_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.event.authority_probe"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_authority_probe_red",
+        "artifact_green_authority_probe_stale",
+        "receipt_valid_authority_probe_foreign",
+        "partial_closure_hides_authority_probe_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "id": "mab_bargain03_rhapsody.mut.03_closure",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "id": "mab_bargain03_rhapsody.mut.03_closure_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: Pinned official MultiAgentBench bargaining:003.",
+      "id": "mab_bargain03_rhapsody.mut.04_pin",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: Pinned official MultiAgentBench bargaining:003.",
+      "id": "mab_bargain03_rhapsody.mut.04_pin_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: The implementation and rhapsody_bag_warranty_agreement_closure expose the exact bag identity and required summary sections.",
+      "id": "mab_bargain03_rhapsody.mut.05_output_schema",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.output_schema"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_output_schema_evidence",
+        "corrupt_output_schema_value",
+        "replay_stale_output_schema_state",
+        "satisfy_manifest_without_output_schema_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: The implementation and rhapsody_bag_warranty_agreement_closure expose the exact bag identity and required summary sections.",
+      "id": "mab_bargain03_rhapsody.mut.05_output_schema_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.output_schema"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_output_schema_red",
+        "artifact_green_output_schema_stale",
+        "receipt_valid_output_schema_foreign",
+        "partial_closure_hides_output_schema_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: Newest warranty/logistics tiers govern price, coverage, support, returns, and shipping; stale offers cannot overwrite them.",
+      "id": "mab_bargain03_rhapsody.mut.06_task_behavior",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.task_behavior"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_task_behavior_evidence",
+        "corrupt_task_behavior_value",
+        "replay_stale_task_behavior_state",
+        "satisfy_manifest_without_task_behavior_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: Newest warranty/logistics tiers govern price, coverage, support, returns, and shipping; stale offers cannot overwrite them.",
+      "id": "mab_bargain03_rhapsody.mut.06_task_behavior_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.task_behavior"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_task_behavior_red",
+        "artifact_green_task_behavior_stale",
+        "receipt_valid_task_behavior_foreign",
+        "partial_closure_hides_task_behavior_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: Preserves transcript, rejected offers, buyer warranty priorities, and seller logistics goals.",
+      "id": "mab_bargain03_rhapsody.mut.07_preservation",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.preservation"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_preservation_evidence",
+        "corrupt_preservation_value",
+        "replay_stale_preservation_state",
+        "satisfy_manifest_without_preservation_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: Preserves transcript, rejected offers, buyer warranty priorities, and seller logistics goals.",
+      "id": "mab_bargain03_rhapsody.mut.07_preservation_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.preservation"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_preservation_red",
+        "artifact_green_preservation_stale",
+        "receipt_valid_preservation_foreign",
+        "partial_closure_hides_preservation_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: The late seller matrix displaces provisional terms and the final agreement is bound to its receipt.",
+      "id": "mab_bargain03_rhapsody.mut.08_event_closure",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.event_closure"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_event_closure_evidence",
+        "corrupt_event_closure_value",
+        "replay_stale_event_closure_state",
+        "satisfy_manifest_without_event_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: The late seller matrix displaces provisional terms and the final agreement is bound to its receipt.",
+      "id": "mab_bargain03_rhapsody.mut.08_event_closure_crosscheck",
+      "must_fail": [
+        "mab_late_constraint_c88a633e8f.source.event_closure"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_event_closure_red",
+        "artifact_green_event_closure_stale",
+        "receipt_valid_event_closure_foreign",
+        "partial_closure_hides_event_closure_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: classify_stale: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "id": "mab_bargain03_rhapsody.mut.09_01_classify_stale_seller_war",
+      "must_fail": [
+        "mab_bargain03_rhapsody.cf.01_classify_stale_seller_warranty_lo"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: classify_stale: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "id": "mab_bargain03_rhapsody.mut.09_01_classify_stale_seller_war_crosscheck",
+      "must_fail": [
+        "mab_bargain03_rhapsody.cf.01_classify_stale_seller_warranty_lo"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_stale_seller_war_red",
+        "artifact_green_01_classify_stale_seller_war_stale",
+        "receipt_valid_01_classify_stale_seller_war_foreign",
+        "partial_closure_hides_01_classify_stale_seller_war_failure"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: exclude_stale: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "id": "mab_bargain03_rhapsody.mut.10_02_exclude_stale_seller_warr",
+      "must_fail": [
+        "mab_bargain03_rhapsody.cf.02_exclude_stale_seller_warranty_lo"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Directly challenge: verify_closure: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "id": "mab_bargain03_rhapsody.mut.11_03_verify_closure_seller_war",
+      "must_fail": [
+        "mab_bargain03_rhapsody.cf.03_verify_closure_seller_warranty_lo"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "mab-late-constraint-c88a633e8f",
+      "description": "Cross-check independent evidence for: verify_closure: Late seller warranty and logistics terms supersede provisional Rhapsody bag drafts while buyer support goals, seller cost constraints, transcript, and rejected offers remain auditable.",
+      "id": "mab_bargain03_rhapsody.mut.11_03_verify_closure_seller_war_crosscheck",
+      "must_fail": [
+        "mab_bargain03_rhapsody.cf.03_verify_closure_seller_warranty_lo"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_seller_war_red",
+        "artifact_green_03_verify_closure_seller_war_stale",
+        "receipt_valid_03_verify_closure_seller_war_foreign",
+        "partial_closure_hides_03_verify_closure_seller_war_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

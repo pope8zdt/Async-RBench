@@ -1,0 +1,58 @@
+{
+  "controls": [
+    {
+      "id": "01_classify_authority_navigate_to_the_re",
+      "stage": "event_intake",
+      "required_behavior": "classify_authority",
+      "affected_nodes": [
+        "event_input",
+        "req.01.navigate_to_the_returned",
+        "req.02.verify_the_page_belongs_",
+        "req.03.verify_a_list_of_civil_d",
+        "req.04.leave_the_browser_on_tha",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The Department of Justice website is open.'."
+    },
+    {
+      "id": "02_revise_affected_verify_the_page_be",
+      "stage": "state_revision",
+      "required_behavior": "revise_affected",
+      "affected_nodes": [
+        "event_input",
+        "req.01.navigate_to_the_returned",
+        "req.02.verify_the_page_belongs_",
+        "req.03.verify_a_list_of_civil_d",
+        "req.04.leave_the_browser_on_tha",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not ignore the delayed authority, retain displaced state, or invalidate preserved prior work: the valid NBA Store session and catalog navigation remain preserved."
+    },
+    {
+      "id": "03_verify_closure_verify_a_list_of_c",
+      "stage": "closure",
+      "required_behavior": "verify_closure",
+      "affected_nodes": [
+        "event_input",
+        "req.01.navigate_to_the_returned",
+        "req.02.verify_the_page_belongs_",
+        "req.03.verify_a_list_of_civil_d",
+        "req.04.leave_the_browser_on_tha",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The Department of Justice website is open.'."
+    }
+  ]
+}

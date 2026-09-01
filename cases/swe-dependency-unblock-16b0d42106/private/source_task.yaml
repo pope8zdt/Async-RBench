@@ -1,0 +1,3 @@
+{
+  "instruction": "Fix codegen failures on incompatible FFI declarations\n\nThis change fixes a bug where the same FFI function was being declared with incompatible signatures in different packages without being validated, causing various crashes from both ponyc and LLVM.\r\n\r\nCloses #1552."
+}

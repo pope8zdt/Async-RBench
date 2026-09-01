@@ -1,0 +1,29 @@
+{
+  "assets": [
+    "official task configuration",
+    "os snapshot",
+    "private source assets",
+    "private native fixture",
+    "private event payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "nautilus",
+    "kid3_or_picard",
+    "filesystem",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:multi_apps:3f05f3b9-29ba-4b6b-95aa-2204697ffc06 in pinned os; evaluator truth remains private.",
+  "event_injection": "Release batch_mp3_metadata_result only after 3 persisted upstream result(s).",
+  "hidden_tests": "check_mp3_meta×5, native digest, track_set, initial_blank_tags, cheng_track, han_track, huang_track, chen_track, zhou_track, audio_preservation, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "os",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private mp3_metadata_osworld.sh scores check_mp3_meta×5.",
+  "requires_authored_private_oracle": false
+}
+

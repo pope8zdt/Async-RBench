@@ -1,0 +1,281 @@
+{
+  "async_depth": 3,
+  "case_id": "osw-cross-app-artifact-586ab293bc",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_daily_mail_report_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "daily_folder_query",
+          "chronological_ordering",
+          "message_field_normalization"
+        ]
+      },
+      "id": "01_classify_authority_daily_mail_rep",
+      "must_still_pass": [
+        "osw_cross_app_artifact_586ab293bc.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_586ab293bc.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed latest_five_daily_messages; preserve unaffected thunderbird/libreoffice_calc state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.select_the_latest_five_m"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_daily_mail_report_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "daily_folder_query",
+          "chronological_ordering",
+          "message_field_normalization"
+        ]
+      },
+      "id": "02_revise_affected_daily_mail_rep",
+      "must_still_pass": [
+        "osw_cross_app_artifact_586ab293bc.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_586ab293bc.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed latest_five_daily_messages; preserve unaffected thunderbird/libreoffice_calc state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.order_the_selected_messa"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_daily_mail_report_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "daily_folder_query",
+          "chronological_ordering",
+          "message_field_normalization"
+        ]
+      },
+      "id": "03_verify_closure_daily_mail_rep",
+      "must_still_pass": [
+        "osw_cross_app_artifact_586ab293bc.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_586ab293bc.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed latest_five_daily_messages; preserve unaffected thunderbird/libreoffice_calc state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.extract_exactly_the_five"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "depends_on",
+        "source": "upstream.daily_folder_query",
+        "target": "upstream.chronological_ordering"
+      },
+      {
+        "relation": "depends_on",
+        "source": "upstream.chronological_ordering",
+        "target": "upstream.message_field_normalization"
+      },
+      {
+        "relation": "produces",
+        "source": "upstream.message_field_normalization",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.select_the_latest_five_m"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.select_the_latest_five_m",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.order_the_selected_messa"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.order_the_selected_messa",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.extract_exactly_the_five"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.extract_exactly_the_five",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.04.save_report_xlsx_on_the_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.save_report_xlsx_on_the_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "Thunderbird",
+        "description": "Select messages from the local Daily folder and identify the latest five.",
+        "id": "upstream.daily_folder_query",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "Thunderbird",
+        "description": "Order those five from earliest to most recent.",
+        "id": "upstream.chronological_ordering",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "Thunderbird",
+        "description": "Normalize sender name/address, subject, CC and attachment count.",
+        "id": "upstream.message_field_normalization",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.select_the_latest_five_m",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.order_the_selected_messa",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.extract_exactly_the_five",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.save_report_xlsx_on_the_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.select_the_latest_five_m",
+      "req.02.order_the_selected_messa",
+      "req.03.extract_exactly_the_five",
+      "req.04.save_report_xlsx_on_the_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The mail worker returns the latest five Daily messages in chronological order with normalized sender, CC and attachment fields; the Calc report can now be finalized.",
+    "before_state": "The Thunderbird profile and empty report target are available, but the authoritative Daily-folder query, ordering and normalized message fields are still pending.",
+    "event_id": "evt.osw_cross_app_artifact_586ab.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Select the latest five messages from Thunderbird's Daily folder.",
+      "id": "req.01.select_the_latest_five_m",
+      "observable_probe": "osw_cross_app_artifact_586ab293bc.osworld.identity",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Order the selected messages from earliest to most recent.",
+      "id": "req.02.order_the_selected_messa",
+      "observable_probe": "osw_cross_app_artifact_586ab293bc.osworld.official_score",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Extract exactly the five requested message fields.",
+      "id": "req.03.extract_exactly_the_five",
+      "observable_probe": "osw_cross_app_artifact_586ab293bc.osworld.native_evidence",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Save report.xlsx on the desktop with the official headers and rows.",
+      "id": "req.04.save_report_xlsx_on_the_",
+      "observable_probe": "osw_cross_app_artifact_586ab293bc.osworld.task_assertion",
+      "public_evidence": "source instruction and delayed receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "Thunderbird",
+      "description": "Select messages from the local Daily folder and identify the latest five.",
+      "id": "daily_folder_query"
+    },
+    {
+      "app": "Thunderbird",
+      "depends_on": [
+        "daily_folder_query"
+      ],
+      "description": "Order those five from earliest to most recent.",
+      "id": "chronological_ordering"
+    },
+    {
+      "app": "Thunderbird",
+      "depends_on": [
+        "chronological_ordering"
+      ],
+      "description": "Normalize sender name/address, subject, CC and attachment count.",
+      "id": "message_field_normalization"
+    }
+  ]
+}

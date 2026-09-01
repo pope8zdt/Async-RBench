@@ -1,0 +1,6 @@
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-late-constraint-19947db02f';SOURCE_ID='bargaining:039';EVENT='current_quality_contract_counter';THEME='late_or_out_of_order_superseded_result';AUTHORITY={'current_counter': {'unit_price': 13.49, 'print_quality': 'verified_4.8_rating', 'contract_events': 12, 'replacement_days': 30}, 'supersedes': {'unit_price': 12.0, 'quality': 'unverified'}}
+def digest(path):return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+def main():
+ p=argparse.ArgumentParser();p.add_argument('--output',default='/app/output_data/event_receipt.json');a=p.parse_args();s=time.time();probes={x:digest(x) for x in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']};d={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':THEME,'meaning':'The current seller counter offers the verified birthday banner at $13.49 with a 12-event commitment and 30-day replacement, superseding the quality-unverified $12 offer.','authority':AUTHORITY,'worker_started_at':s,'worker_finished_at':time.time(),'worker_exit_code':0,'probes':probes};d['receipt_sha256']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest();pathlib.Path(a.output).write_text(json.dumps(d,sort_keys=True)+'\n')
+if __name__=='__main__':main()

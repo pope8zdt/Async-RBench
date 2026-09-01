@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_music_fetch_receipt",
+      "forbidden_behavior": "Do not finalize the Music diagnosis before the database:007 receipt or accept a receipt without both fetched-row and payload-byte metrics.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_that_the_observed"
+        ]
+      },
+      "id": "01_classify_authority_music_fetch_receipt",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f6f0d514a.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After the provisional Music catalog comparison exists, accept the delayed database:007 receipt as authority only after verifying its case/source binding and its 5,000-row, 1,280,000-byte fetch evidence.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.verify_that_the_observed"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_from_authority_music_fetch",
+      "forbidden_behavior": "Do not retain the displaced provisional read cause or erase the independent bulk-load and alternative-cause observations.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_that_the_observed"
+        ]
+      },
+      "id": "02_revise_from_authority_music_fetch",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f6f0d514a.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Revise the affected Music diagnosis to FETCH_LARGE_DATA from the authoritative fetch metrics while preserving the bulk-load findings and completed lock, vacuum, and index checks.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.verify_that_the_observed"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_music_fetch_diagnosis",
+      "forbidden_behavior": "Do not declare closure without rechecking FETCH_LARGE_DATA against the authoritative 5,000-row, 1,280,000-byte checkpoint.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_that_the_observed"
+        ]
+      },
+      "id": "03_verify_closure_music_fetch_diagnosis",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_8f6f0d514a.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Rederive the final Music diagnosis from the delayed receipt and preserved hypothesis matrix, exclude the unsupported provisional substitution, and verify the native answer shape.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.verify_that_the_observed"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.verify_that_the_observed"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.classify_the_measured_be"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.discard_the_unsupported_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.combine_the_read_result_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.verify_that_the_observed",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.classify_the_measured_be",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.discard_the_unsupported_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.combine_the_read_result_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.verify_that_the_observed",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.classify_the_measured_be",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.discard_the_unsupported_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.combine_the_read_result_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.verify_that_the_observed",
+      "req.02.classify_the_measured_be",
+      "req.03.discard_the_unsupported_",
+      "req.04.combine_the_read_result_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:007 checkpoint records 5,000 fetched rows and 1,280,000 payload bytes and authoritatively confirms FETCH_LARGE_DATA.",
+    "before_state": "The Music catalog five-hypothesis matrix and bulk-load observations are persisted provisionally.",
+    "event_id": "evt.mab_music_8f6f.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Validate the delayed database:007 receipt and its 5,000 fetched rows and 1,280,000 payload bytes.",
+      "id": "req.01.verify_that_the_observed",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for verify_that_the_observed_statements_"
+    },
+    {
+      "description": "Revise the affected Music diagnosis to FETCH_LARGE_DATA from the authority metrics.",
+      "id": "req.02.classify_the_measured_be",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for classify_the_measured_behavior_under"
+    },
+    {
+      "description": "Preserve the independent bulk-load finding and completed alternative-cause checks.",
+      "id": "req.03.discard_the_unsupported_",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for discard_the_unsupported_missing_inde"
+    },
+    {
+      "description": "Rederive and verify the receipt-bound Music answer under the native output contract.",
+      "id": "req.04.combine_the_read_result_",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for combine_the_read_result_with_the_val"
+    }
+  ]
+}

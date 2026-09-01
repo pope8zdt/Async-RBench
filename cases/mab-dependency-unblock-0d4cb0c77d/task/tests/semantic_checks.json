@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The adaptive_schedule_completed receipt is authentic and bound to coding:021 and mab-dependency-unblock-0d4cb0c77d.",
+      "id": "mab_dependency_unblock_0d4cb0c77d.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned TeamSyncPro authority runs after the persisted baseline and records probes.",
+      "id": "mab_dependency_unblock_0d4cb0c77d.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The completed assignment result atomically revises affected slots while communication, meetings, completed work, and unaffected assignments are preserved.",
+      "id": "mab_dependency_unblock_0d4cb0c77d.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to official MultiAgentBench coding:021.",
+      "id": "mab_dependency_unblock_0d4cb0c77d.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and the teamsync_adaptive_schedule_closure closure satisfy the task-specific output schema.",
+      "id": "mab_dependency_unblock_0d4cb0c77d.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsync_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Adaptive scheduling honors dependencies, availability, duration, and project priority, then emits member-specific reassignment and time-change notifications and updated productivity reports.",
+      "id": "mab_dependency_unblock_0d4cb0c77d.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsync_priority_dependencies_assignments_and_notifications",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: messages, meetings, completed_tasks, unaffected_assignments.",
+      "id": "mab_dependency_unblock_0d4cb0c77d.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsync_preserves_messages_and_reports_after_reschedule",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The completed assignment result atomically revises affected slots while communication, meetings, completed work, and unaffected assignments are preserved.",
+      "id": "mab_dependency_unblock_0d4cb0c77d.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_teamsync_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

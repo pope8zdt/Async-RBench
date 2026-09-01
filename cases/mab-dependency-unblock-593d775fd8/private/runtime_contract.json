@@ -1,0 +1,27 @@
+{
+  "assets": [
+    "official MultiAgentBench task/output contract",
+    "four-layer evaluator result graph",
+    "task-specific canonical implementation",
+    "task-specific hidden tests"
+  ],
+  "docker": [
+    "minimal Python participant image",
+    "participant-safe task_file",
+    "isolated evaluator mounts"
+  ],
+  "environment_strategy": "reconstruct source behavior because the official source provides no implementation or native tests",
+  "event_injection": "strategy_contract_completed is generated only from evaluator-owned task/upstream_solutions",
+  "hidden_tests": "four independent Board_Game_Team_Collaborator source-semantic nodes plus authority and closure checks",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "MultiAgentBench coding task",
+    "official_metrics": [
+      "code_quality",
+      "test_coverage",
+      "collaboration_effectiveness"
+    ],
+    "source_task_id": "coding:011"
+  },
+  "oracle": "evaluator-owned task-specific canonical solution and authority-bound closure"
+}

@@ -1,0 +1,90 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Equivalent private source-native scoring path.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_133984c167.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_133984c167.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_cross_app_artifact_133984c167.osworld.bibtex_format"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_133984c167.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_bibtex_133.cf.01_classify_authority_dblp_bibtex_os",
+          "osw_bibtex_133.cf.02_revise_affected_dblp_bibtex_os",
+          "osw_bibtex_133.cf.03_verify_closure_dblp_bibtex_os"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_133984c167.event.receipt",
+          "osw_cross_app_artifact_133984c167.event.probes",
+          "osw_cross_app_artifact_133984c167.closure",
+          "osw_cross_app_artifact_133984c167.source.pin",
+          "osw_cross_app_artifact_133984c167.osworld.identity",
+          "osw_cross_app_artifact_133984c167.osworld.official_score",
+          "osw_cross_app_artifact_133984c167.osworld.native_evidence",
+          "osw_cross_app_artifact_133984c167.osworld.task_assertion",
+          "osw_cross_app_artifact_133984c167.osworld.output_path",
+          "osw_cross_app_artifact_133984c167.osworld.bibtex_coverage",
+          "osw_cross_app_artifact_133984c167.osworld.published_preference",
+          "osw_cross_app_artifact_133984c167.osworld.bibtex_format"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "582bf94512635be746d27d8093b1fabe63db90739f40de388515a2a9f1c74a7a",
+        "task_id": "osworld:multi_apps:df67aebb-fb3a-44fd-b75b-51b6012df509",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

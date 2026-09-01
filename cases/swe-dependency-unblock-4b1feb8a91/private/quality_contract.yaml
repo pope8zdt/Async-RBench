@@ -1,0 +1,74 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_4b1feb8a91.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__7a0f94.cf.01_classify_authority_replace_structural_compa",
+          "swe_dependency__7a0f94.cf.02_revise_affected_verify_acceleration_time",
+          "swe_dependency__7a0f94.cf.03_verify_closure_verify_incompatible_dime"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_4b1feb8a91.event.receipt",
+          "swe_dependency_unblock_4b1feb8a91.event.probes",
+          "swe_dependency_unblock_4b1feb8a91.closure",
+          "swe_dependency_unblock_4b1feb8a91.source.pin",
+          "swe_dependency_unblock_4b1feb8a91.native.units_equivalent_add",
+          "swe_dependency_unblock_4b1feb8a91.native.units_incompatible_preserved"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "collect_factor_and_dimension does not detect equivalent dimensions in addition",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "365939104d97031ce6004b1af62e40d29a9a4a667371876ccf6404fc1fb6b22e",
+        "task_id": "sympy__sympy-24213",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

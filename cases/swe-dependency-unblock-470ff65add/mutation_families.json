@@ -1,0 +1,230 @@
+{
+  "families": [
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency__e3ff13.mut.01_receipt",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Cross-check independent evidence for: The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency__e3ff13.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency__e3ff13.mut.02_probes",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Cross-check independent evidence for: The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency__e3ff13.mut.02_probes_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency__e3ff13.mut.03_closure",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Cross-check independent evidence for: Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency__e3ff13.mut.03_closure_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: The task remains bound to its pinned source revision.",
+      "id": "swe_dependency__e3ff13.mut.04_pin",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Cross-check independent evidence for: The task remains bound to its pinned source revision.",
+      "id": "swe_dependency__e3ff13.mut.04_pin_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: The upstream Ansible SELinux compatibility and module respawn unit regression surface passes.",
+      "id": "swe_dependency__e3ff13.mut.05_ansible_module_respawn",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.native.ansible_module_respawn"
+      ],
+      "operation": "mutate_semantic_changed_behavior",
+      "variants": [
+        "omit_ansible_module_respawn_evidence",
+        "corrupt_ansible_module_respawn_value",
+        "replay_stale_ansible_module_respawn_state",
+        "satisfy_manifest_without_ansible_module_respawn_behavior"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Cross-check independent evidence for: The upstream Ansible SELinux compatibility and module respawn unit regression surface passes.",
+      "id": "swe_dependency__e3ff13.mut.05_ansible_module_respawn_crosscheck",
+      "must_fail": [
+        "swe_dependency_unblock_470ff65add.native.ansible_module_respawn"
+      ],
+      "operation": "cross_corrupt_changed_behavior_evidence",
+      "variants": [
+        "manifest_green_ansible_module_respawn_red",
+        "artifact_green_ansible_module_respawn_stale",
+        "receipt_valid_ansible_module_respawn_foreign",
+        "partial_closure_hides_ansible_module_respawn_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Classify the returned interpreter matrix as a scope and dependency expansion beyond the completed SELinux compatibility work.",
+      "id": "swe_dependency__e3ff13.mut.06_01_classify_scope_delta_inte",
+      "must_fail": [
+        "swe_dependency__e3ff13.cf.01_classify_scope_delta_integrate_dependen"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Cross-check independent evidence for: After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Classify the returned interpreter matrix as a scope and dependency expansion beyond the completed SELinux compatibility work.",
+      "id": "swe_dependency__e3ff13.mut.06_01_classify_scope_delta_inte_crosscheck",
+      "must_fail": [
+        "swe_dependency__e3ff13.cf.01_classify_scope_delta_integrate_dependen"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_scope_delta_inte_red",
+        "artifact_green_01_classify_scope_delta_inte_stale",
+        "receipt_valid_01_classify_scope_delta_inte_foreign",
+        "partial_closure_hides_01_classify_scope_delta_inte_failure"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Implement the shared respawn payload, module identity propagation, interpreter probing, and package-module call sites required by the expanded dependency closure.",
+      "id": "swe_dependency__e3ff13.mut.07_02_revise_affected_add_the_s",
+      "must_fail": [
+        "swe_dependency__e3ff13.cf.02_revise_affected_add_the_shared_com"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Preserve the completed ctypes SELinux layer and its cached AnsibleModule behavior while replanning only respawn-dependent modules.",
+      "id": "swe_dependency__e3ff13.mut.08_03_preserve_unaffected_retai",
+      "must_fail": [
+        "swe_dependency__e3ff13.cf.03_preserve_unaffected_retain_the_complet"
+      ],
+      "operation": "mutate_control_selective_replan",
+      "variants": [
+        "omit_selective_replan_decision",
+        "apply_selective_replan_to_wrong_scope",
+        "use_stale_evidence_for_selective_replan",
+        "declare_selective_replan_without_observation"
+      ]
+    },
+    {
+      "case_id": "swe-dependency-unblock-470ff65add",
+      "description": "Directly challenge: After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Verify single-respawn protection, recursive module bundling, imports, SELinux, and package-module integration using the scope-change receipt.",
+      "id": "swe_dependency__e3ff13.mut.09_04_verify_closure_guard_agai",
+      "must_fail": [
+        "swe_dependency__e3ff13.cf.04_verify_closure_guard_against_recu"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    }
+  ],
+  "version": "1"
+}

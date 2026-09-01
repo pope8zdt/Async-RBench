@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The authoritative_revision_schema_delivered receipt is authentic and bound to coding:064 and mab-cross-app-artifact-2763fffe05.",
+      "id": "mab_cross_app_artifact_2763fffe05.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned BookSynergy event worker completes and records observable post-baseline probes.",
+      "id": "mab_cross_app_artifact_2763fffe05.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The authoritative revision schema receipt is consumed and editor, subscriber, and external integration agree on one accepted revision lineage.",
+      "id": "mab_cross_app_artifact_2763fffe05.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to the official MultiAgentBench source task coding:064.",
+      "id": "mab_cross_app_artifact_2763fffe05.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The submitted deliverable follows the official coding:064 solution.py output contract and emits the immutable_revision_parent_schema evaluator closure schema.",
+      "id": "mab_cross_app_artifact_2763fffe05.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_booksynergy_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "BookSynergy enforces authenticated membership, immutable parented revisions, stale-parent rejection, realtime revision events, rendering, and external export.",
+      "id": "mab_cross_app_artifact_2763fffe05.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_booksynergy_immutable_revision_functionality",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Valid prior BookSynergy work is preserved: authentication, project_membership, editor, realtime_subscriber, external_review.",
+      "id": "mab_cross_app_artifact_2763fffe05.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_booksynergy_preserves_membership_render_and_external_export",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The authoritative revision schema receipt is consumed and editor, subscriber, and external integration agree on one accepted revision lineage.",
+      "id": "mab_cross_app_artifact_2763fffe05.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_booksynergy_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

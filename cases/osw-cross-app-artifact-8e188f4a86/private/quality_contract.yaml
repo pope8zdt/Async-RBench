@@ -1,0 +1,95 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline native-result and closure assembly without invoking oracle.sh or the canonical source-native solution.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_8e188f4a86.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_cross_app_artifact_8e188f4a86.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_cross_app_artifact_8e188f4a86.osworld.row_counts"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_8e188f4a86.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_merge_8e18.cf.01_classify_completeness_cli_column_merge",
+          "osw_merge_8e18.cf.02_revise_affected_cli_column_merge",
+          "osw_merge_8e18.cf.03_preserve_unaffected_cli_column_merge",
+          "osw_merge_8e18.cf.04_verify_closure_cli_column_merge"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_cross_app_artifact_8e188f4a86.event.receipt",
+          "osw_cross_app_artifact_8e188f4a86.event.probes",
+          "osw_cross_app_artifact_8e188f4a86.closure",
+          "osw_cross_app_artifact_8e188f4a86.source.pin",
+          "osw_cross_app_artifact_8e188f4a86.osworld.identity",
+          "osw_cross_app_artifact_8e188f4a86.osworld.official_score",
+          "osw_cross_app_artifact_8e188f4a86.osworld.native_evidence",
+          "osw_cross_app_artifact_8e188f4a86.osworld.task_assertion",
+          "osw_cross_app_artifact_8e188f4a86.osworld.row_counts",
+          "osw_cross_app_artifact_8e188f4a86.osworld.boundaries",
+          "osw_cross_app_artifact_8e188f4a86.osworld.order",
+          "osw_cross_app_artifact_8e188f4a86.osworld.output_path",
+          "osw_cross_app_artifact_8e188f4a86.osworld.terminal_calc",
+          "osw_cross_app_artifact_8e188f4a86.osworld.accepted_variant"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "7af318f2f3ef38c356c6c009b24a0f8eea1fb4e4ff97958781b37a68ea272815",
+        "task_id": "osworld:multi_apps:3680a5ee-6870-426a-a997-eba929a0d25c",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

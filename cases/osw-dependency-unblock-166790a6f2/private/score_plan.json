@@ -1,0 +1,408 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_gnome_theme_state",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_166790a6f2.delayed_authoritative_result",
+      "evidence_group": "osw_orchis_1667.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "gnome_theme_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority for gnome_theme_state; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_orchis_1667.cf.01_classify_authority_gnome_theme_state",
+      "independence_key": "osw_orchis_1667.cf.01_classify_authority_gnome_theme_state",
+      "measurement_type": "control",
+      "mutation_id": "osw_orchis_1667.mutation.01_classify_authority_gnome_theme_state",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_166790a6f2.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.theme_identity"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_gnome_theme_state",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_166790a6f2.delayed_authoritative_result",
+      "evidence_group": "osw_orchis_1667.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "gnome_theme_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for gnome_theme_state; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_orchis_1667.cf.02_revise_affected_gnome_theme_state",
+      "independence_key": "osw_orchis_1667.cf.02_revise_affected_gnome_theme_state",
+      "measurement_type": "control",
+      "mutation_id": "osw_orchis_1667.mutation.02_revise_affected_gnome_theme_state",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_166790a6f2.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.theme_source"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_gnome_theme_state",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_dependency_unblock_166790a6f2.delayed_authoritative_result",
+      "evidence_group": "osw_orchis_1667.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "gnome_theme_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for gnome_theme_state; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_orchis_1667.cf.03_preserve_unaffected_gnome_theme_state",
+      "independence_key": "osw_orchis_1667.cf.03_preserve_unaffected_gnome_theme_state",
+      "measurement_type": "control",
+      "mutation_id": "osw_orchis_1667.mutation.03_preserve_unaffected_gnome_theme_state",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_166790a6f2.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.gsettings_binding"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_gnome_theme_state",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_166790a6f2.delayed_authoritative_result",
+      "evidence_group": "osw_orchis_1667.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "gnome_theme_state"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for gnome_theme_state; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_orchis_1667.cf.04_verify_closure_gnome_theme_state",
+      "independence_key": "osw_orchis_1667.cf.04_verify_closure_gnome_theme_state",
+      "measurement_type": "control",
+      "mutation_id": "osw_orchis_1667.mutation.04_verify_closure_gnome_theme_state",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_166790a6f2.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.gsettings_output"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "wait_for_authority",
+      "id": "osw_orchis_1667.mutation.01_classify_authority_gnome_theme_state",
+      "may_fail": [],
+      "must_fail": [
+        "osw_orchis_1667.cf.01_classify_authority_gnome_theme_state"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_166790a6f2.source.pin"
+      ],
+      "targets": [
+        "osw_orchis_1667.cf.01_classify_authority_gnome_theme_state",
+        "osw_dependency_unblock_166790a6f2.event.receipt",
+        "osw_dependency_unblock_166790a6f2.event.probes",
+        "osw_dependency_unblock_166790a6f2.closure",
+        "osw_dependency_unblock_166790a6f2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "resolve_authority",
+      "id": "osw_orchis_1667.mutation.02_revise_affected_gnome_theme_state",
+      "may_fail": [],
+      "must_fail": [
+        "osw_orchis_1667.cf.02_revise_affected_gnome_theme_state"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_166790a6f2.source.pin"
+      ],
+      "targets": [
+        "osw_orchis_1667.cf.02_revise_affected_gnome_theme_state",
+        "osw_dependency_unblock_166790a6f2.event.receipt",
+        "osw_dependency_unblock_166790a6f2.event.probes",
+        "osw_dependency_unblock_166790a6f2.closure",
+        "osw_dependency_unblock_166790a6f2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "selective_replan",
+      "id": "osw_orchis_1667.mutation.03_preserve_unaffected_gnome_theme_state",
+      "may_fail": [],
+      "must_fail": [
+        "osw_orchis_1667.cf.03_preserve_unaffected_gnome_theme_state"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_166790a6f2.source.pin"
+      ],
+      "targets": [
+        "osw_orchis_1667.cf.03_preserve_unaffected_gnome_theme_state",
+        "osw_dependency_unblock_166790a6f2.event.receipt",
+        "osw_dependency_unblock_166790a6f2.event.probes",
+        "osw_dependency_unblock_166790a6f2.closure",
+        "osw_dependency_unblock_166790a6f2.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "rederive_from_authority",
+      "id": "osw_orchis_1667.mutation.04_verify_closure_gnome_theme_state",
+      "may_fail": [],
+      "must_fail": [
+        "osw_orchis_1667.cf.04_verify_closure_gnome_theme_state"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_166790a6f2.source.pin"
+      ],
+      "targets": [
+        "osw_orchis_1667.cf.04_verify_closure_gnome_theme_state",
+        "osw_dependency_unblock_166790a6f2.event.receipt",
+        "osw_dependency_unblock_166790a6f2.event.probes",
+        "osw_dependency_unblock_166790a6f2.closure",
+        "osw_dependency_unblock_166790a6f2.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_dependency_unblock_166790a6f2.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 3 task-specific upstream workers completed with observable probes.",
+      "id": "osw_dependency_unblock_166790a6f2.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_dependency_unblock_166790a6f2.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_dependency_unblock_166790a6f2.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:f8369178-fafe-40c2-adc4-b9b08a125456 and check_list.",
+      "id": "osw_dependency_unblock_166790a6f2.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_dependency_unblock_166790a6f2.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_dependency_unblock_166790a6f2.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The Orchis theme is installed from gnome-look.org and the GNOME gtk-theme preference resolves to Orchis under the official check_list evaluator.",
+      "id": "osw_dependency_unblock_166790a6f2.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The installed and applied theme is exactly Orchis.",
+      "id": "osw_dependency_unblock_166790a6f2.osworld.theme_identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_theme_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The source site is gnome-look.org.",
+      "id": "osw_dependency_unblock_166790a6f2.osworld.theme_source",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_theme_source",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The evaluator reads the exact GNOME interface gtk-theme key.",
+      "id": "osw_dependency_unblock_166790a6f2.osworld.gsettings_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_gsettings_binding",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The post-command output contains Orchis.",
+      "id": "osw_dependency_unblock_166790a6f2.osworld.gsettings_output",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_gsettings_output",
+      "relevance_tier": "base"
+    }
+  ]
+}

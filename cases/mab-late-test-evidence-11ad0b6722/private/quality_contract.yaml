@@ -1,0 +1,90 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen implementation and independent solution entrypoint.",
+      "id": "independent-task-native-equivalence",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_late_test_evidence_11ad0b6722.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_late_test_evidence_11ad0b6722.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-task-behavior",
+      "must_fail": [
+        "mab_late_test_evidence_11ad0b6722.source.native_binding"
+      ],
+      "path": "task/negative_mutations/wrong_task_behavior.sh"
+    },
+    {
+      "id": "ignored-task-event",
+      "must_fail": [
+        "mab_late_test_evidence_11ad0b6722.source.preservation"
+      ],
+      "path": "task/negative_mutations/ignored_task_event.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_late_test_evidence.cf.01_classify_authority",
+          "mab_late_test_evidence.cf.02_revise_affected",
+          "mab_late_test_evidence.cf.03_preserve_unaffected",
+          "mab_late_test_evidence.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_test_evidence_11ad0b6722.event.receipt",
+          "mab_late_test_evidence_11ad0b6722.event.probes",
+          "mab_late_test_evidence_11ad0b6722.closure",
+          "mab_late_test_evidence_11ad0b6722.source.pin",
+          "mab_late_test_evidence_11ad0b6722.source.native_binding",
+          "mab_late_test_evidence_11ad0b6722.source.core_behavior",
+          "mab_late_test_evidence_11ad0b6722.source.event_behavior",
+          "mab_late_test_evidence_11ad0b6722.source.edge_behavior",
+          "mab_late_test_evidence_11ad0b6722.source.preservation"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "2765f0256245e0158206ce4bde428a0d32c7c63d3439858894a67e58cea2c75d",
+        "task_id": "bargaining:010",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

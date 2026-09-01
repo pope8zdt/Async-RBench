@@ -1,0 +1,31 @@
+{
+  "schema_version": "1",
+  "case_id": "secure-release",
+  "instance_id": "tracebench-git-recovery-late-authority-001",
+  "stage": "approved_for_promotion",
+  "review_evidence": {
+    "trajectory_reviews": "review_evidence/trajectories.jsonl",
+    "decision_reviews": "review_evidence/decisions.jsonl",
+    "simple_review_record": "review_evidence/candidate_record.json",
+    "simple_review_annotations": "review_evidence/simple_annotations.jsonl",
+    "transformation_spec": "transformation_spec.json"
+  },
+  "design_binding": {
+    "accepted_decision_ids": [
+      "terminus2-OpenAI__GPT-5-git-leak-recovery-8156e2df:d1:transformation"
+    ],
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "async_scenario_class": "result_eventful",
+    "capabilities": [
+      "stale_result_rejection",
+      "selective_invalidation",
+      "verification_reopen"
+    ]
+  },
+  "human_approval": {
+    "reviewed_at": "2026-08-28T00:00:00+08:00",
+    "reviewer": "pipeline-pilot-technical-review",
+    "scope": "single end-to-end feasibility pilot",
+    "status": "approved"
+  }
+}

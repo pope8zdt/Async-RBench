@@ -1,0 +1,288 @@
+{
+  "case_id": "swe-dependency-unblock-866543c501",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_req_01_return_the_original_scan",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_8665.scope_dependency_change",
+      "evidence_group": "bp_swe_8665.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.return_the_original_scan"
+      },
+      "expected_behavior": "After event 'The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.', Classify the audit as a scope and dependency change spanning model return identity, both package maps, and Debian advisory callers.",
+      "forbidden_behavior": "Do not use the earlier local model-method edit as the whole task; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.return_the_original_scan"
+        ]
+      },
+      "id": "bp_swe_8665.cf.01_classify_scope_delta__the_original_scan",
+      "independence_key": "bp_swe_8665.cf.01_classify_scope_delta__the_original_scan",
+      "must_still_pass": [
+        "swe_dependency_unblock_8.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "bp_swe_8665.mutation.01_classify_scope_delta__the_original_scan",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_866543c501.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "After event 'The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.', Classify the audit as a scope and dependency change spanning model return identity, both package maps, and Debian advisory callers.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.return_the_original_scan"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_req_02_return_a_pointer_to_the",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_8665.scope_dependency_change",
+      "evidence_group": "bp_swe_8665.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.return_a_pointer_to_the_"
+      },
+      "expected_behavior": "After event 'The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.', Revise Raspbian filtering to return the required pointer and filter both binary and source package maps without mutating the input result.",
+      "forbidden_behavior": "Do not apply stale-result handling or a binary-only filter; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.return_a_pointer_to_the_"
+        ]
+      },
+      "id": "bp_swe_8665.cf.02_revise_affected_n_a_pointer_to_the",
+      "independence_key": "bp_swe_8665.cf.02_revise_affected_n_a_pointer_to_the",
+      "must_still_pass": [
+        "swe_dependency_unblock_8.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "mutation_id": "bp_swe_8665.mutation.02_revise_affected_n_a_pointer_to_the",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_866543c501.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After event 'The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.', Revise Raspbian filtering to return the required pointer and filter both binary and source package maps without mutating the input result.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.return_a_pointer_to_the_"
+    },
+    {
+      "critical": true,
+      "decision_group": "preserve_unaffected_req_01_return_the_original_scan",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_dependency_unblock_8665.scope_dependency_change",
+      "evidence_group": "bp_swe_8665.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.return_the_original_scan"
+      },
+      "expected_behavior": "After event 'The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.', Preserve the original ScanResult pointer and package contents for non-Raspbian families while replanning only the Raspbian and caller closure.",
+      "forbidden_behavior": "Do not rebuild or copy unaffected non-Raspbian results; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.return_the_original_scan"
+        ]
+      },
+      "id": "bp_swe_8665.cf.03_preserve_unaffected__the_original_scan",
+      "independence_key": "bp_swe_8665.cf.03_preserve_unaffected__the_original_scan",
+      "must_still_pass": [
+        "swe_dependency_unblock_8.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "mutation_id": "bp_swe_8665.mutation.03_preserve_unaffected__the_original_scan",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_866543c501.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "After event 'The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.', Preserve the original ScanResult pointer and package contents for non-Raspbian families while replanning only the Raspbian and caller closure.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.return_the_original_scan"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_req_03_update_every_reported_ca",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_8665.scope_dependency_change",
+      "evidence_group": "bp_swe_8665.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.update_every_reported_ca"
+      },
+      "expected_behavior": "After event 'The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.', Update gost and oval Debian callers and run models, gost, and oval tests against the scope-change receipt.",
+      "forbidden_behavior": "Do not close with an updated signature but stale callers; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.update_every_reported_ca"
+        ]
+      },
+      "id": "bp_swe_8665.cf.04_verify_closure__every_reported_ca",
+      "independence_key": "bp_swe_8665.cf.04_verify_closure__every_reported_ca",
+      "must_still_pass": [
+        "swe_dependency_unblock_8.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "bp_swe_8665.mutation.04_verify_closure__every_reported_ca",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_866543c501.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "After event 'The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.', Update gost and oval Debian callers and run models, gost, and oval tests against the scope-change receipt.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.update_every_reported_ca"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.return_the_original_scan"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.return_a_pointer_to_the_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.update_every_reported_ca"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_tests_for_pointer_id"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.return_the_original_scan",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.return_a_pointer_to_the_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.update_every_reported_ca",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_tests_for_pointer_id",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.return_the_original_scan",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.return_a_pointer_to_the_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.update_every_reported_ca",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_tests_for_pointer_id",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.return_the_original_scan",
+      "req.02.return_a_pointer_to_the_",
+      "req.03.update_every_reported_ca",
+      "req.04.add_tests_for_pointer_id",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The caller audit changes the required scope: preserve the original pointer for non-Raspbian results, return a filtered pointer for Raspbian, filter binary and source maps without mutating input, and update gost and oval Debian callers.",
+    "before_state": "A provisional pointer-returning RemoveRaspbianPackFromResult implementation is checkpointed before its caller and package-map dependency closure is known.",
+    "event_id": "evt.swe_dependency_unblock_8665.scope_dependency_change",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Return the original ScanResult pointer unchanged for non-Raspbian families.",
+      "id": "req.01.return_the_original_scan",
+      "observable_probe": "swe_dependency_unblock_8.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for return_the_original_scanresult_point"
+    },
+    {
+      "description": "Return a pointer to the filtered result for Raspbian without mutating excluded-package inputs unexpectedly.",
+      "id": "req.02.return_a_pointer_to_the_",
+      "observable_probe": "swe_dependency_unblock_8.sem.02.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for return_a_pointer_to_the_filtered_res"
+    },
+    {
+      "description": "Update every reported caller to the pointer-returning signature.",
+      "id": "req.03.update_every_reported_ca",
+      "observable_probe": "swe_dependency_unblock_8.sem.03.return_the_original_scanresu",
+      "public_evidence": "source instruction and workstream result for update_every_reported_caller_to_the_"
+    },
+    {
+      "description": "Add tests for pointer identity, Raspbian filtering, non-Raspbian preservation, and a mutation restoring the value return.",
+      "id": "req.04.add_tests_for_pointer_id",
+      "observable_probe": "swe_dependency_unblock_8.sem.04.return_a_pointer_to_the_filt",
+      "public_evidence": "source instruction and workstream result for add_tests_for_pointer_identity_raspb"
+    }
+  ]
+}

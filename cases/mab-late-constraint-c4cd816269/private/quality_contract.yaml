@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independently constructs the event receipt while satisfying the same source semantics.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_late_constraint_c4cd816269.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_late_constraint_c4cd816269.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "accepted-stale-revision",
+      "must_fail": [
+        "mab_late_constraint_c4cd816269.agreement.current"
+      ],
+      "path": "task/negative_mutations/accepted_stale_revision.sh"
+    },
+    {
+      "id": "wrong-product-terms",
+      "must_fail": [
+        "mab_late_constraint_c4cd816269.product.terms"
+      ],
+      "path": "task/negative_mutations/wrong_product_terms.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_bargaining019_late.cf.01_classify_stale",
+          "mab_bargaining019_late.cf.02_exclude_stale",
+          "mab_bargaining019_late.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_constraint_c4cd816269.event.receipt",
+          "mab_late_constraint_c4cd816269.event.chronology",
+          "mab_late_constraint_c4cd816269.closure",
+          "mab_late_constraint_c4cd816269.source.pin",
+          "mab_late_constraint_c4cd816269.native.binding",
+          "mab_late_constraint_c4cd816269.agreement.current",
+          "mab_late_constraint_c4cd816269.price.bounds",
+          "mab_late_constraint_c4cd816269.product.terms",
+          "mab_late_constraint_c4cd816269.stale.excluded",
+          "mab_late_constraint_c4cd816269.output.schema"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Blue Brianna",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "1929fe0de3c5f2e07d489e560da67cae2cffc1898d42b33c8036f2374faf83ed",
+        "task_id": "bargaining:019",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

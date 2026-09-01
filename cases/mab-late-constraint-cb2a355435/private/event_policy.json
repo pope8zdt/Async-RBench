@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.keep_the_provisional_price_s",
+      "req.02.validate_series_character_an",
+      "req.03.revise_price_warranty_and_de",
+      "req.04.close_with_an_authenticity_b",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An authenticity report confirms the sealed Black Series Princess Leia Endor figure at $21.99 with a 12-month warranty and four-day delivery.",
+    "before_state": "A provisional STAR WARS Black Series Princess Leia Endor Figure bargain exists before collectible_authenticity_warranty_delivered.",
+    "event_id": "evt.mab-late-constraint-cb2a355435.collectible_authenticity_warranty_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-cb2a355435.collectible_authenticity_warranty_delivered",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

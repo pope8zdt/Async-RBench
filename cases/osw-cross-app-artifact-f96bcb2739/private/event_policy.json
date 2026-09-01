@@ -1,0 +1,33 @@
+{
+  "theme": "partial_then_complete_result",
+  "event_id": "evt.osw_cross_app_artifact_f96bcb2739.partial_then_complete_result",
+  "authority_rule": "stock_median_result is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_f96bcb2739.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "before_state": "The 60-row stock table is available; CSV export, mean imputation, and median computation are independent partial results until the numeric file is verified.",
+    "after_state": "The 12 missing Stock Price values are filled with the 48-value mean 39.20125, the resulting median is 25.27, and result.txt contains only that numeric answer.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.row_accounting",
+      "req.02.mean",
+      "req.03.median",
+      "req.04.result_text",
+      "req.05.workflow",
+      "final_state"
+    ]
+  }
+}

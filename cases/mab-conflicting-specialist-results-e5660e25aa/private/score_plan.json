@@ -1,0 +1,302 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_education_vacuum_receipt",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_education_e566.delayed_authoritative_result",
+      "evidence_group": "education_e566.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.associate_the_returned_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After the provisional Education diagnosis exists, classify the delayed database:006 receipt as authoritative only when it proves VACUUM FULL executed and exactly 500 maintenance rows remain.",
+      "forbidden_behavior": "Do not finalize the Education diagnosis before the database:006 maintenance receipt or infer authority from unrelated scan volume.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.associate_the_returned_s"
+        ]
+      },
+      "id": "mab_conflict_db06.cf.01_classify_authority_education_vacuum_receipt",
+      "independence_key": "mab_conflict_db06.cf.01_classify_authority_education_vacuum_receipt",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db06.mutation.01_classify_authority_education_vacuum_receipt",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_e5660e25aa.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.associate_the_returned_s"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_from_authority_education_vacuum",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_education_e566.delayed_authoritative_result",
+      "evidence_group": "education_e566.revise_from_authority",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.associate_the_returned_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Revise the affected Education diagnosis to VACUUM from the host maintenance checkpoint while preserving completed dead-tuple, index, lock, and insertion observations.",
+      "forbidden_behavior": "Do not retain a displaced provisional FETCH_LARGE_DATA attribution or erase completed non-vacuum observations.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.associate_the_returned_s"
+        ]
+      },
+      "id": "mab_conflict_db06.cf.02_revise_from_authority_education_vacuum",
+      "independence_key": "mab_conflict_db06.cf.02_revise_from_authority_education_vacuum",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db06.mutation.02_revise_from_authority_education_vacuum",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_e5660e25aa.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.associate_the_returned_s"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_education_vacuum",
+      "dimension": "closure",
+      "event_id": "evt.mab_education_e566.delayed_authoritative_result",
+      "evidence_group": "mab_conflicting_sp.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.associate_the_returned_s"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final Education diagnosis from the VACUUM FULL receipt and preserved matrix, remove stale fetch attribution, and verify the native answer contract.",
+      "forbidden_behavior": "Do not close without reverifying VACUUM against both the executed flag and the 500 remaining maintenance rows.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.associate_the_returned_s"
+        ]
+      },
+      "id": "mab_conflict_db06.cf.03_verify_closure_education_vacuum",
+      "independence_key": "mab_conflict_db06.cf.03_verify_closure_education_vacuum",
+      "measurement_type": "control",
+      "mutation_id": "mab_conflict_db06.mutation.03_verify_closure_education_vacuum",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_e5660e25aa.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.associate_the_returned_s"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not finalize the Education diagnosis before the database:006 maintenance receipt or infer authority from unrelated scan volume.",
+      "family": "wait_for_authority",
+      "id": "mab_conflict_db06.mutation.01_classify_authority_education_vacuum_receipt",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db06.cf.01_classify_authority_education_vacuum_receipt"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_e5660e25aa.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db06.cf.01_classify_authority_education_vacuum_receipt",
+        "mab_conflicting_specialist_results_e5660e25aa.event.receipt",
+        "mab_conflicting_specialist_results_e5660e25aa.event.probes",
+        "mab_conflicting_specialist_results_e5660e25aa.closure",
+        "mab_conflicting_specialist_results_e5660e25aa.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not retain a displaced provisional FETCH_LARGE_DATA attribution or erase completed non-vacuum observations.",
+      "family": "resolve_authority",
+      "id": "mab_conflict_db06.mutation.02_revise_from_authority_education_vacuum",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db06.cf.02_revise_from_authority_education_vacuum"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_e5660e25aa.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db06.cf.02_revise_from_authority_education_vacuum",
+        "mab_conflicting_specialist_results_e5660e25aa.event.receipt",
+        "mab_conflicting_specialist_results_e5660e25aa.event.probes",
+        "mab_conflicting_specialist_results_e5660e25aa.closure",
+        "mab_conflicting_specialist_results_e5660e25aa.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close without reverifying VACUUM against both the executed flag and the 500 remaining maintenance rows.",
+      "family": "rederive_from_authority",
+      "id": "mab_conflict_db06.mutation.03_verify_closure_education_vacuum",
+      "may_fail": [],
+      "must_fail": [
+        "mab_conflict_db06.cf.03_verify_closure_education_vacuum"
+      ],
+      "must_still_pass": [
+        "mab_conflicting_specialist_results_e5660e25aa.source.pin"
+      ],
+      "targets": [
+        "mab_conflict_db06.cf.03_verify_closure_education_vacuum",
+        "mab_conflicting_specialist_results_e5660e25aa.event.receipt",
+        "mab_conflicting_specialist_results_e5660e25aa.event.probes",
+        "mab_conflicting_specialist_results_e5660e25aa.closure",
+        "mab_conflicting_specialist_results_e5660e25aa.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent receipt is authentic and case/source bound.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent database authority worker completed with a host checkpoint probe.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "The final closure consumes the exact authority receipt and re-verifies source semantics.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The submitted diagnosis remains bound to the selected native MAB source task.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The evaluator-owned MARBLE report is bound to this exact database task and passed its native evaluator.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evaluator_binding_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final selected cause exactly matches the task-specific native root cause.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.diagnosis.exact",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_selected_database_cause_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The competing provisional diagnosis is explicitly superseded rather than merged into the answer.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.conflict.reconciled",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_competing_diagnosis_is_reconciled",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The diagnosis cites the exact evaluator-owned native evidence and host checkpoint digests.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.authority.evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_authority_evidence_is_consumed",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The final database diagnosis obeys the case-specific output schema and preservation contract.",
+      "id": "mab_conflicting_specialist_results_e5660e25aa.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_database_diagnosis_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ]
+}

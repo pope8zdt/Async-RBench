@@ -1,0 +1,228 @@
+{
+  "case_id": "mab-late-constraint-3a268eae01",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_authority",
+      "must_still_pass": [],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_3a268eae01.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A synchronization specialist supplies operation IDs, base revisions, acknowledgments, broadcasts, and deterministic conflict handling after provisional realtime handlers exist.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "synchronization_contract_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "must_still_pass": [],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_3a268eae01.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A synchronization specialist supplies operation IDs, base revisions, acknowledgments, broadcasts, and deterministic conflict handling after provisional realtime handlers exist.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "synchronization_contract_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "must_still_pass": [],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_3a268eae01.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: A synchronization specialist supplies operation IDs, base revisions, acknowledgments, broadcasts, and deterministic conflict handling after provisional realtime handlers exist.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "synchronization_contract_delivered"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "must_still_pass": [],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_3a268eae01.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: A synchronization specialist supplies operation IDs, base revisions, acknowledgments, broadcasts, and deterministic conflict handling after provisional realtime handlers exist.",
+      "stage_tag": "closure",
+      "task_requirement_id": "synchronization_contract_delivered"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.replace_provisional_even"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_server_revisio"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.reconcile_acknowledged_a"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_concurrent_client_mu"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.replace_provisional_even",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_server_revisio",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.reconcile_acknowledged_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_concurrent_client_mu",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.replace_provisional_even",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_server_revisio",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.reconcile_acknowledged_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_concurrent_client_mu",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.replace_provisional_even",
+      "req.02.implement_server_revisio",
+      "req.03.reconcile_acknowledged_a",
+      "req.04.add_concurrent_client_mu",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A synchronization specialist supplies operation IDs, base revisions, acknowledgments, broadcasts, and deterministic conflict handling after provisional realtime handlers exist.",
+    "before_state": "Task-specific provisional work exists before synchronization_contract_delivered.",
+    "event_id": "evt.mab-late-constraint-3a268eae01.synchronization_contract_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Replace provisional event names and payloads with the returned contract.",
+      "id": "req.01.replace_provisional_even",
+      "observable_probe": "mab_late_constraint_3a26.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for replace_provisional_event_names_and_"
+    },
+    {
+      "description": "Implement server revision checks and the specified conflict outcome.",
+      "id": "req.02.implement_server_revisio",
+      "observable_probe": "mab_late_constraint_3a26.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for implement_server_revision_checks_and"
+    },
+    {
+      "description": "Reconcile acknowledged and remote operations in each client.",
+      "id": "req.03.reconcile_acknowledged_a",
+      "observable_probe": "mab_late_constraint_3a26.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for reconcile_acknowledged_and_remote_op"
+    },
+    {
+      "description": "Add concurrent-client mutation tests that fail for duplicate operations or stale revisions.",
+      "id": "req.04.add_concurrent_client_mu",
+      "observable_probe": "mab_late_constraint_3a26.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_concurrent_client_mutation_tests"
+    }
+  ]
+}

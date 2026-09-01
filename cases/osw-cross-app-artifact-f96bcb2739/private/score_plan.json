@@ -1,0 +1,422 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_completeness_stock_median_result",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_f96bcb2739.partial_then_complete_result",
+      "evidence_group": "osw_stock_f96b.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "stock_median_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness for stock_median_result; preserve confirmed libreoffice_calc, vs_code, python state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_stock_f96b.cf.01_classify_completeness_stock_median_result",
+      "independence_key": "osw_stock_f96b.cf.01_classify_completeness_stock_median_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_stock_f96b.mutation.01_classify_completeness_stock_median_result",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_f96bcb2739.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.row_accounting"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_stock_median_result",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_f96bcb2739.partial_then_complete_result",
+      "evidence_group": "osw_stock_f96b.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "stock_median_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for stock_median_result; preserve confirmed libreoffice_calc, vs_code, python state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_stock_f96b.cf.02_revise_affected_stock_median_result",
+      "independence_key": "osw_stock_f96b.cf.02_revise_affected_stock_median_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_stock_f96b.mutation.02_revise_affected_stock_median_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_f96bcb2739.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.mean"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_stock_median_result",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_cross_app_artifact_f96bcb2739.partial_then_complete_result",
+      "evidence_group": "osw_stock_f96b.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "stock_median_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for stock_median_result; preserve confirmed libreoffice_calc, vs_code, python state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_stock_f96b.cf.03_preserve_unaffected_stock_median_result",
+      "independence_key": "osw_stock_f96b.cf.03_preserve_unaffected_stock_median_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_stock_f96b.mutation.03_preserve_unaffected_stock_median_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_f96bcb2739.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.median"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_stock_median_result",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_f96bcb2739.partial_then_complete_result",
+      "evidence_group": "osw_stock_f96b.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "stock_median_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for stock_median_result; preserve confirmed libreoffice_calc, vs_code, python state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_stock_f96b.cf.04_verify_closure_stock_median_result",
+      "independence_key": "osw_stock_f96b.cf.04_verify_closure_stock_median_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_stock_f96b.mutation.04_verify_closure_stock_median_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_f96bcb2739.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.result_text"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "wait_for_authority",
+      "id": "osw_stock_f96b.mutation.01_classify_completeness_stock_median_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_stock_f96b.cf.01_classify_completeness_stock_median_result"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_f96bcb2739.source.pin"
+      ],
+      "targets": [
+        "osw_stock_f96b.cf.01_classify_completeness_stock_median_result",
+        "osw_cross_app_artifact_f96bcb2739.event.receipt",
+        "osw_cross_app_artifact_f96bcb2739.event.probes",
+        "osw_cross_app_artifact_f96bcb2739.closure",
+        "osw_cross_app_artifact_f96bcb2739.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "resolve_authority",
+      "id": "osw_stock_f96b.mutation.02_revise_affected_stock_median_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_stock_f96b.cf.02_revise_affected_stock_median_result"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_f96bcb2739.source.pin"
+      ],
+      "targets": [
+        "osw_stock_f96b.cf.02_revise_affected_stock_median_result",
+        "osw_cross_app_artifact_f96bcb2739.event.receipt",
+        "osw_cross_app_artifact_f96bcb2739.event.probes",
+        "osw_cross_app_artifact_f96bcb2739.closure",
+        "osw_cross_app_artifact_f96bcb2739.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "selective_replan",
+      "id": "osw_stock_f96b.mutation.03_preserve_unaffected_stock_median_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_stock_f96b.cf.03_preserve_unaffected_stock_median_result"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_f96bcb2739.source.pin"
+      ],
+      "targets": [
+        "osw_stock_f96b.cf.03_preserve_unaffected_stock_median_result",
+        "osw_cross_app_artifact_f96bcb2739.event.receipt",
+        "osw_cross_app_artifact_f96bcb2739.event.probes",
+        "osw_cross_app_artifact_f96bcb2739.closure",
+        "osw_cross_app_artifact_f96bcb2739.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "family": "rederive_from_authority",
+      "id": "osw_stock_f96b.mutation.04_verify_closure_stock_median_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_stock_f96b.cf.04_verify_closure_stock_median_result"
+      ],
+      "must_still_pass": [
+        "osw_cross_app_artifact_f96bcb2739.source.pin"
+      ],
+      "targets": [
+        "osw_stock_f96b.cf.04_verify_closure_stock_median_result",
+        "osw_cross_app_artifact_f96bcb2739.event.receipt",
+        "osw_cross_app_artifact_f96bcb2739.event.probes",
+        "osw_cross_app_artifact_f96bcb2739.closure",
+        "osw_cross_app_artifact_f96bcb2739.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_cross_app_artifact_f96bcb2739.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_cross_app_artifact_f96bcb2739.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_cross_app_artifact_f96bcb2739.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_cross_app_artifact_f96bcb2739.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:7f35355e-02a6-45b5-b140-f0be698bcf85 and compare_result_files.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "After CSV export, 12 missing Stock Price cells are imputed with the mean of 48 observed prices (39.20125), producing median 25.27 written as the only content of result.txt.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The workbook has 60 data rows: 48 observed and 12 missing prices.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.row_accounting",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_row_accounting",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The imputation mean is 39.20125.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.mean",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_mean",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The post-imputation median is 25.27.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.median",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_median",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "result.txt contains only the numeric answer.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.result_text",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_result_text",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "CSV export and code-based computation are both represented.",
+      "id": "osw_cross_app_artifact_f96bcb2739.osworld.workflow",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_workflow",
+      "relevance_tier": "base"
+    }
+  ]
+}

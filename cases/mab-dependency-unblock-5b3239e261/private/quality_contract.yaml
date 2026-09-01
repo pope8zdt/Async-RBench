@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "A separately frozen task-specific implementation creates equivalent behavior and closure without invoking the oracle entrypoint.",
+      "id": "independent-task-native-equivalence",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-sports_team_syncer-schema",
+      "must_fail": [
+        "mab_dependency_unblock_5b3239e261.source.output_schema"
+      ],
+      "path": "task/negative_mutations/wrong_output_schema.sh"
+    },
+    {
+      "id": "disable-sports_team_syncer-authority-behavior",
+      "must_fail": [
+        "mab_dependency_unblock_5b3239e261.source.task_behavior"
+      ],
+      "path": "task/negative_mutations/disable_task_behavior.sh"
+    },
+    {
+      "id": "drop-sports_team_syncer-preservation",
+      "must_fail": [
+        "mab_dependency_unblock_5b3239e261.source.preservation"
+      ],
+      "path": "task/negative_mutations/drop_task_preservation.sh"
+    },
+    {
+      "id": "wrong-video_metric_calibration_completed-contract",
+      "must_fail": [
+        "mab_dependency_unblock_5b3239e261.source.event_closure"
+      ],
+      "path": "task/negative_mutations/wrong_event_contract.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_code24_sports.cf.01_classify_authority_video_metric_calib",
+          "mab_code24_sports.cf.02_revise_affected_video_metric_calib",
+          "mab_code24_sports.cf.03_verify_closure_video_metric_calib"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_dependency_unblock_5b3239e261.event.receipt",
+          "mab_dependency_unblock_5b3239e261.event.authority_probe",
+          "mab_dependency_unblock_5b3239e261.closure",
+          "mab_dependency_unblock_5b3239e261.source.pin",
+          "mab_dependency_unblock_5b3239e261.source.output_schema",
+          "mab_dependency_unblock_5b3239e261.source.task_behavior",
+          "mab_dependency_unblock_5b3239e261.source.preservation",
+          "mab_dependency_unblock_5b3239e261.source.event_closure"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "The harness then",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "ab474e905edd8804f1c451caea522351f7a046bbd4c67d7b0b7379f702adb9d3",
+        "task_id": "coding:024",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

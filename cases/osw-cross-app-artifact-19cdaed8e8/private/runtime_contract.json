@@ -1,0 +1,31 @@
+{
+  "assets": [
+    "official task configuration",
+    "thunderbird snapshot",
+    "libreoffice_calc snapshot",
+    "os snapshot",
+    "private source assets",
+    "private native fixture",
+    "private delayed payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "thunderbird",
+    "libreoffice_calc",
+    "os",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:multi_apps:415ef462-bed3-493a-ac36-ca8c6d23bf1b in pinned thunderbird; truth is private.",
+  "event_injection": "Release delayed December invoice evidence after upstream checkpoint.",
+  "hidden_tests": "compare_table + check_list, native digest, output_paths, invoice_evidence, tally_row, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "thunderbird",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private aws_invoice_osworld.sh scores compare_table + check_list.",
+  "requires_authored_private_oracle": false
+}
+

@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Equivalent private source-native scoring path with independently assembled closure invocation.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_0ec654e205.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_0ec654e205.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_dependency_unblock_0ec654e205.osworld.accepted_variants"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_dependency_unblock_0ec654e205.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_writer_0ec.cf.01_classify_authority_sentence_spacing_osworld",
+          "osw_writer_0ec.cf.02_revise_affected_sentence_spacing_osworld",
+          "osw_writer_0ec.cf.03_verify_closure_sentence_spacing_osworld"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_0ec654e205.event.receipt",
+          "osw_dependency_unblock_0ec654e205.event.probes",
+          "osw_dependency_unblock_0ec654e205.closure",
+          "osw_dependency_unblock_0ec654e205.source.pin",
+          "osw_dependency_unblock_0ec654e205.osworld.identity",
+          "osw_dependency_unblock_0ec654e205.osworld.official_score",
+          "osw_dependency_unblock_0ec654e205.osworld.native_evidence",
+          "osw_dependency_unblock_0ec654e205.osworld.task_assertion",
+          "osw_dependency_unblock_0ec654e205.osworld.output_path",
+          "osw_dependency_unblock_0ec654e205.osworld.source_identity",
+          "osw_dependency_unblock_0ec654e205.osworld.sentence_boundaries",
+          "osw_dependency_unblock_0ec654e205.osworld.tail_preservation",
+          "osw_dependency_unblock_0ec654e205.osworld.accepted_variants"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "6738d34d2e2a89dcabeb9462783b428cb04fa40d766425c32c4324935b6069fa",
+        "task_id": "osworld:libreoffice_writer:88fe4b2d-3040-4c70-9a70-546a47764b48",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

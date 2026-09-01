@@ -1,0 +1,193 @@
+{
+  "version": "1",
+  "families": [
+    {
+      "id": "gc.mut.base_artifact_corruption",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "patch_git_case_base_outputs",
+      "description": "Remove scan/recovery/manifest evidence or alter preserved reachable state",
+      "variants": [
+        "missing_scan_report",
+        "missing_secret_file",
+        "malformed_manifest",
+        "drop_good_commit"
+      ],
+      "must_fail": [
+        "gc.base.scan_reports_exist",
+        "gc.base.secret_file_recovered",
+        "gc.base.decision_manifest_valid",
+        "gc.base.repo_reachable_state_preserved"
+      ]
+    },
+    {
+      "id": "gc.mut.authority_recovery_corruption",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "patch_recovery_authority",
+      "description": "Recover from a non-authoritative source or make hashes and report disagree",
+      "variants": [
+        "recover_from_worktree",
+        "wrong_secret_bytes",
+        "wrong_object_hash",
+        "inconsistent_report",
+        "authority_receipt_mismatch"
+      ],
+      "must_fail": [
+        "gc.rec.recovery_source_object_db",
+        "gc.rec.authority_hash_consistent",
+        "gc.rec.recovery_report_consistent"
+      ]
+    },
+    {
+      "id": "gc.mut.scan_selection_corruption",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "patch_scan_selection",
+      "description": "Choose negative scans, discard scan evidence or proceed before authority exists",
+      "variants": [
+        "select_ref_negative",
+        "select_pack_negative",
+        "drop_scan_set",
+        "cleanup_before_recovery"
+      ],
+      "must_fail": [
+        "gc.excl.negative_scans_excluded",
+        "gc.excl.scan_set_preserved",
+        "gc.excl.negative_scan_reports_negative",
+        "gc.excl.authority_scan_positive",
+        "gc.excl.wait_for_authority_recorded"
+      ]
+    },
+    {
+      "id": "gc.mut.cleanup_process_corruption",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "patch_cleanup_attempt_history",
+      "description": "Hide the failed attempt, skip redelegation or reorder recovery and cleanup",
+      "variants": [
+        "drop_attempt_log",
+        "mark_naive_success",
+        "omit_redelegation",
+        "cleanup_before_recovery"
+      ],
+      "must_fail": [
+        "gc.closure.cleanup_attempts_recorded",
+        "gc.closure.cleanup_failure_recorded",
+        "gc.closure.cleanup_redelegated",
+        "gc.closure.recovery_before_cleanup",
+        "gc.closure.closure_verified",
+        "gc.closure.closure_report_closed",
+        "gc.closure.cleanup_reports_consistent"
+      ]
+    },
+    {
+      "id": "gc.mut.repository_closure_corruption",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "patch_repository_closure",
+      "description": "Leave secret material or damage unrelated and reachable repository state",
+      "variants": [
+        "reachable_secret_blob",
+        "dangling_secret_blob",
+        "delete_unrelated_file",
+        "lose_good_history"
+      ],
+      "must_fail": [
+        "gc.closure.all_closure_checks_clean",
+        "gc.closure.secret_absent_reachable",
+        "gc.closure.secret_absent_object_store",
+        "gc.closure.unrelated_files_preserved",
+        "gc.closure.reachable_history_preserved"
+      ]
+    },
+    {
+      "id": "gc.mut.control_wait_cancel",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "mutate_recovery_wait_and_cancel_trace",
+      "description": "Skip authority recovery waiting or cancel the authoritative scan",
+      "variants": [
+        "omit_recovery_wait",
+        "wait_wrong_report",
+        "cancel_authority_scan",
+        "omit_negative_cancel"
+      ],
+      "must_fail": [
+        "gc.cf.wait_for_authority_recovery",
+        "gc.cf.cancel_superseded_negative_scan"
+      ]
+    },
+    {
+      "id": "gc.mut.control_stale_rederive",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "mutate_cleanup_stale_and_rederive_trace",
+      "description": "Accept a stale negative result or clean from a superseded authority",
+      "variants": [
+        "accept_late_negative",
+        "reject_positive_authority",
+        "omit_cleanup_rederive",
+        "rederive_from_negative"
+      ],
+      "must_fail": [
+        "gc.cf.reject_late_stale_negative",
+        "gc.cf.rederive_cleanup"
+      ]
+    },
+    {
+      "id": "gc.mut.critical_authority_selection_crosscheck",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "cross_corrupt_git_authority_evidence",
+      "description": "Create contradictory recovery and scan-selection evidence",
+      "variants": [
+        "positive_scan_wrong_hash",
+        "negative_scan_selected",
+        "recovered_bytes_wrong",
+        "authority_report_forged"
+      ],
+      "must_fail": [
+        "gc.rec.recovery_source_object_db",
+        "gc.rec.authority_hash_consistent",
+        "gc.excl.negative_scans_excluded",
+        "gc.excl.negative_scan_reports_negative",
+        "gc.excl.authority_scan_positive"
+      ]
+    },
+    {
+      "id": "gc.mut.critical_closure_crosscheck",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "cross_corrupt_repository_closure_evidence",
+      "description": "Declare closure while process history or repository-wide checks remain invalid",
+      "variants": [
+        "closed_with_failed_cleanup",
+        "closed_with_secret_object",
+        "closed_with_deleted_scaffold",
+        "closed_with_lost_history"
+      ],
+      "must_fail": [
+        "gc.closure.cleanup_attempts_recorded",
+        "gc.closure.cleanup_failure_recorded",
+        "gc.closure.cleanup_redelegated",
+        "gc.closure.recovery_before_cleanup",
+        "gc.closure.closure_verified",
+        "gc.closure.closure_report_closed",
+        "gc.closure.all_closure_checks_clean",
+        "gc.closure.cleanup_reports_consistent",
+        "gc.closure.secret_absent_reachable",
+        "gc.closure.secret_absent_object_store",
+        "gc.closure.unrelated_files_preserved",
+        "gc.closure.reachable_history_preserved"
+      ]
+    },
+    {
+      "id": "gc.mut.critical_control_crosscheck",
+      "case_id": "git-conflict-and-cleanup-closure",
+      "operation": "cross_corrupt_git_control_evidence",
+      "description": "Forge stale rejection or cleanup rederivation without the corresponding action",
+      "variants": [
+        "declare_reject_only",
+        "declare_rederive_only",
+        "accept_negative_then_clean",
+        "rederive_wrong_report"
+      ],
+      "must_fail": [
+        "gc.cf.reject_late_stale_negative",
+        "gc.cf.rederive_cleanup"
+      ]
+    }
+  ]
+}

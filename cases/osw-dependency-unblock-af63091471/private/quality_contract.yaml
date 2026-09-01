@@ -1,0 +1,83 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_af63091471.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_af63091471.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-font-size",
+      "must_fail": [
+        "osw_dependency_unblock_af63091471.osworld.font_value"
+      ],
+      "path": "task/negative_mutations/wrong_font_size.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_font_15.cf.01_classify_authority_open_each_returned",
+          "osw_font_15.cf.02_revise_affected_handle_any_interme",
+          "osw_font_15.cf.03_verify_closure_verify_cart_member"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_af63091471.event.receipt",
+          "osw_dependency_unblock_af63091471.event.probes",
+          "osw_dependency_unblock_af63091471.closure",
+          "osw_dependency_unblock_af63091471.source.pin",
+          "osw_dependency_unblock_af63091471.osworld.font_result",
+          "osw_dependency_unblock_af63091471.osworld.identity",
+          "osw_dependency_unblock_af63091471.osworld.official_score",
+          "osw_dependency_unblock_af63091471.osworld.font_value"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "font size",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "a33234a2061cd7dd85545761886ff6e1576ec253448c496feb29e2f7f51483f6",
+        "task_id": "osworld:chrome:af630914-714e-4a24-a7bb-f9af687d3b91",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

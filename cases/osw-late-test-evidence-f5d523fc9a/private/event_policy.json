@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_late_test_evidence_f5d523fc9a.delayed_authoritative_result",
+  "authority_rule": "sar_cpu_report is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_late_test_evidence_f5d523fc9a.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "sysstat availability and a report target are established, but the 30 one-second samples and the two official file checks are not yet complete.",
+    "after_state": "System_Resources_Report.txt contains 30 one-second CPU samples, all seven required labels, the official 31-line contract, and passes both OSWorld checks.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.report_path",
+      "req.02.sampling_contract",
+      "req.03.required_labels",
+      "req.04.line_count",
+      "final_state"
+    ]
+  }
+}

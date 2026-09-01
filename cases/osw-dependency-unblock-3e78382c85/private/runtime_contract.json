@@ -1,0 +1,26 @@
+{
+  "assets": [
+    "official task configuration",
+    "vscode snapshot",
+    "private source assets",
+    "private native fixture",
+    "private delayed payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "vscode",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:vs_code:ea98c5d7-3cf9-4f9b-8ad3-366b58e0fcae in pinned vscode; truth remains private.",
+  "event_injection": "Release delayed vscode_tree_find_keybinding_identity after a persisted task-specific checkpoint.",
+  "hidden_tests": "check_json_keybindings, native digest, output_path, entry_identity, context_scope, unique_valid_entry, scoped_behavior, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "vscode",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private vscode_keybinding_osworld.sh scores check_json_keybindings.",
+  "requires_authored_private_oracle": false
+}

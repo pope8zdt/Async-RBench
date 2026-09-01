@@ -1,0 +1,306 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "event_intake",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "current_genuine_part_delivery_counter"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_stale: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_6f49.cf.01_classify_stale",
+      "independence_key": "mab_late_constraint_6f49.cf.01_classify_stale",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_6f49.mutation.01_classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_6f49.cf.01_classify_stale]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "current_genuine_part_delivery_counter"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "exclude_stale: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_6f49.cf.02_exclude_stale",
+      "independence_key": "mab_late_constraint_6f49.cf.02_exclude_stale",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_6f49.mutation.02_exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_6f49.cf.02_exclude_stale]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "closure",
+      "dimension": "closure",
+      "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "current_genuine_part_delivery_counter"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_6f49.cf.03_verify_closure",
+      "independence_key": "mab_late_constraint_6f49.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_6f49.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.closure"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_6f49.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "family": "wait_for_authority",
+      "id": "mab_late_constraint_6f49.mutation.01_classify_stale",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_6f49.cf.01_classify_stale"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_6f495ee7e8.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_6f49.cf.01_classify_stale",
+        "mab_late_constraint_6f495ee7e8.event.receipt",
+        "mab_late_constraint_6f495ee7e8.event.probes",
+        "mab_late_constraint_6f495ee7e8.closure",
+        "mab_late_constraint_6f495ee7e8.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "family": "resolve_authority",
+      "id": "mab_late_constraint_6f49.mutation.02_exclude_stale",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_6f49.cf.02_exclude_stale"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_6f495ee7e8.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_6f49.cf.02_exclude_stale",
+        "mab_late_constraint_6f495ee7e8.event.receipt",
+        "mab_late_constraint_6f495ee7e8.event.probes",
+        "mab_late_constraint_6f495ee7e8.closure",
+        "mab_late_constraint_6f495ee7e8.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "family": "rederive_from_authority",
+      "id": "mab_late_constraint_6f49.mutation.03_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "mab_late_constraint_6f49.cf.03_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_6f495ee7e8.source.pin"
+      ],
+      "targets": [
+        "mab_late_constraint_6f49.cf.03_verify_closure",
+        "mab_late_constraint_6f495ee7e8.event.receipt",
+        "mab_late_constraint_6f495ee7e8.event.probes",
+        "mab_late_constraint_6f495ee7e8.closure",
+        "mab_late_constraint_6f495ee7e8.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt digest is authentic and bound to this exact case and bargaining source.",
+      "id": "mab_late_constraint_6f495ee7e8.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent worker observed both provisional and executable artifacts.",
+      "id": "mab_late_constraint_6f495ee7e8.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact receipt and records: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "id": "mab_late_constraint_6f495ee7e8.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The package remains pinned to bargaining:046 and its official record.",
+      "id": "mab_late_constraint_6f495ee7e8.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private fixture binds the exact evaluator, source task, artifact schema, and dependency depth.",
+      "id": "mab_late_constraint_6f495ee7e8.source.native_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding_and_schema",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Kohler Genuine Part 1266657 Valve Kit executes its offer-authority-counter-finalize workflow.",
+      "id": "mab_late_constraint_6f495ee7e8.source.core_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_core_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The authority payload exactly represents: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "id": "mab_late_constraint_6f495ee7e8.source.event_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Stale revisions and unauthorized authority payloads are rejected independently.",
+      "id": "mab_late_constraint_6f495ee7e8.source.edge_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_edge_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Unaffected source priorities remain preserved: kohler_1266657_identity, buyer_timely_delivery_priority, seller_premium_price_goal.",
+      "id": "mab_late_constraint_6f495ee7e8.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_closure_and_preservation",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Final selected terms and bargaining-tool chronology match this task-specific authority.",
+      "id": "mab_late_constraint_6f495ee7e8.source.final_terms",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_final_terms_and_tool_sequence",
+      "relevance_tier": "base"
+    }
+  ]
+}

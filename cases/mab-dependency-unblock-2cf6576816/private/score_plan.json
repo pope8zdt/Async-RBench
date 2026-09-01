@@ -1,0 +1,360 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_delivery_agent_declined_suborder",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-dependency-unblock-2cf6576816.delivery_agent_declined_suborder",
+      "evidence_group": "mab_dependency_unblo.cf.01_classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.partition_cart_items_int"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_failure: One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.partition_cart_items_int"
+        ]
+      },
+      "id": "mab_code68_multiserve.cf.01_classify_failure",
+      "independence_key": "mab_code68_multiserve.cf.01_classify_failure",
+      "measurement_type": "control",
+      "mutation_id": "mab_code68_multiserve.mutation.01_classify_failure",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_2cf6576816.event.receipt"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.partition_cart_items_int"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_delivery_agent_declined_suborder",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-dependency-unblock-2cf6576816.delivery_agent_declined_suborder",
+      "evidence_group": "mab_dependency_unblo.cf.02_recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.partition_cart_items_int"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "recover_or_redelegate: One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.partition_cart_items_int"
+        ]
+      },
+      "id": "mab_code68_multiserve.cf.02_recover_or_redelegate",
+      "independence_key": "mab_code68_multiserve.cf.02_recover_or_redelegate",
+      "measurement_type": "control",
+      "mutation_id": "mab_code68_multiserve.mutation.02_recover_or_redelegate",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_2cf6576816.event.authority_probe"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:recover_or_redelegate:2",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.partition_cart_items_int"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_delivery_agent_declined_suborder",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab-dependency-unblock-2cf6576816.delivery_agent_declined_suborder",
+      "evidence_group": "mab_dependency_unblo.cf.03_preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.partition_cart_items_int"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.partition_cart_items_int"
+        ]
+      },
+      "id": "mab_code68_multiserve.cf.03_preserve_unaffected",
+      "independence_key": "mab_code68_multiserve.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "mab_code68_multiserve.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_2cf6576816.event.authority_probe"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.partition_cart_items_int"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_delivery_agent_declined_suborder",
+      "dimension": "closure",
+      "event_id": "evt.mab-dependency-unblock-2cf6576816.delivery_agent_declined_suborder",
+      "evidence_group": "mab_dependency_unblo.cf.04_verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.partition_cart_items_int"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: One agent declines one restaurant suborder; reassign only that child delivery while preserving the unaffected route and aggregate order state.",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.partition_cart_items_int"
+        ]
+      },
+      "id": "mab_code68_multiserve.cf.04_verify_closure",
+      "independence_key": "mab_code68_multiserve.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_code68_multiserve.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_2cf6576816.closure"
+      ],
+      "precondition": "Evaluator event exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.partition_cart_items_int"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "family": "wait_for_authority",
+      "id": "mab_code68_multiserve.mutation.01_classify_failure",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code68_multiserve.cf.01_classify_failure"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_2cf6576816.source.pin"
+      ],
+      "targets": [
+        "mab_code68_multiserve.cf.01_classify_failure",
+        "mab_dependency_unblock_2cf6576816.event.receipt",
+        "mab_dependency_unblock_2cf6576816.event.authority_probe",
+        "mab_dependency_unblock_2cf6576816.closure",
+        "mab_dependency_unblock_2cf6576816.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "family": "resolve_authority",
+      "id": "mab_code68_multiserve.mutation.02_recover_or_redelegate",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code68_multiserve.cf.02_recover_or_redelegate"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_2cf6576816.source.pin"
+      ],
+      "targets": [
+        "mab_code68_multiserve.cf.02_recover_or_redelegate",
+        "mab_dependency_unblock_2cf6576816.event.receipt",
+        "mab_dependency_unblock_2cf6576816.event.authority_probe",
+        "mab_dependency_unblock_2cf6576816.closure",
+        "mab_dependency_unblock_2cf6576816.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "family": "selective_replan",
+      "id": "mab_code68_multiserve.mutation.03_preserve_unaffected",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code68_multiserve.cf.03_preserve_unaffected"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_2cf6576816.source.pin"
+      ],
+      "targets": [
+        "mab_code68_multiserve.cf.03_preserve_unaffected",
+        "mab_dependency_unblock_2cf6576816.event.receipt",
+        "mab_dependency_unblock_2cf6576816.event.authority_probe",
+        "mab_dependency_unblock_2cf6576816.closure",
+        "mab_dependency_unblock_2cf6576816.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, over-apply, or falsely close delivery_agent_declined_suborder.",
+      "family": "rederive_from_authority",
+      "id": "mab_code68_multiserve.mutation.04_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code68_multiserve.cf.04_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_2cf6576816.source.pin"
+      ],
+      "targets": [
+        "mab_code68_multiserve.cf.04_verify_closure",
+        "mab_dependency_unblock_2cf6576816.event.receipt",
+        "mab_dependency_unblock_2cf6576816.event.authority_probe",
+        "mab_dependency_unblock_2cf6576816.closure",
+        "mab_dependency_unblock_2cf6576816.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific logistics_worker_recovered receipt is authentic and bound to coding:068 and mab-dependency-unblock-2cf6576816.",
+      "id": "mab_dependency_unblock_2cf6576816.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned MultiServe authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_2cf6576816.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered logistics completes multi-restaurant delivery without resurrecting canceled orders or losing restaurant decisions and notifications.",
+      "id": "mab_dependency_unblock_2cf6576816.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:068.",
+      "id": "mab_dependency_unblock_2cf6576816.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and multi_restaurant_logistics_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_2cf6576816.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_multiserve_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A combined cart becomes restaurant-specific suborders, aggregate status reflects partial readiness/failure, and deterministic delivery tasks support decline and reassignment.",
+      "id": "mab_dependency_unblock_2cf6576816.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_multiserve_partitions_suborders_aggregates_status_and_assigns_agents",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: cart_items, restaurant_decisions, cancellation_state, user_notifications.",
+      "id": "mab_dependency_unblock_2cf6576816.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_multiserve_cancellation_restaurant_state_and_notifications_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered logistics completes multi-restaurant delivery without resurrecting canceled orders or losing restaurant decisions and notifications.",
+      "id": "mab_dependency_unblock_2cf6576816.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_multiserve_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "theme": "partial_then_complete_result",
+  "event_id": "evt.osw_cross_app_artifact_2a25ab8769.partial_then_complete_result",
+  "authority_rule": "batch_mp3_metadata_result is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.track_set",
+      "req.02.initial_blank_tags",
+      "req.03.cheng_track",
+      "req.04.han_track",
+      "req.05.huang_track",
+      "req.06.chen_track",
+      "req.07.zhou_track",
+      "req.08.audio_preservation",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The completed batch result preserves all five audio identities and sets each title and artist exactly from its filename, with all five official check_mp3_meta evaluators passing.",
+    "before_state": "Five audio files are present with blank tags; filename parsing and per-track metadata checks can arrive independently and are incomplete until every track is verified.",
+    "event_id": "evt.osw_cross_app_artifact_2a25ab8769.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

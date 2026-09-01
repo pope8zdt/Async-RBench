@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Async-RBench asynchronous decision-point review",
+  "type": "object",
+  "required": ["decision_id", "trajectory_review_id", "task_name", "agent_proposal", "human_review"],
+  "properties": {
+    "decision_id": {"type": "string"},
+    "trajectory_review_id": {"type": "string"},
+    "task_name": {"type": "string"},
+    "agent_proposal": {
+      "type": "object",
+      "required": ["event_type", "trigger_step_ids", "precondition_step_ids", "response_step_ids", "consequence_step_ids", "affected_scope", "suggested_topology_roles", "suggested_capability_target", "suggested_relevance_tier", "counterfactual_failure", "rationale"],
+      "properties": {
+        "event_type": {"enum": ["late_authoritative_result", "conflicting_results", "stale_result_risk", "downstream_invalidation", "selective_preservation", "cancellation", "redelegation", "reverification"]},
+        "trigger_step_ids": {"type": "array", "items": {"type": "integer"}},
+        "precondition_step_ids": {"type": "array", "items": {"type": "integer"}},
+        "response_step_ids": {"type": "array", "items": {"type": "integer"}},
+        "consequence_step_ids": {"type": "array", "items": {"type": "integer"}},
+        "affected_step_ids": {"type": "array", "items": {"type": "integer"}},
+        "affected_scope": {"enum": ["local_branch", "multiple_branches", "global", "none", "uncertain"]},
+        "suggested_topology_roles": {"type": "array"},
+        "suggested_capability_target": {"enum": ["async_result_integration", "async_dynamic_replanning", "async_consistency_closure"]},
+        "suggested_relevance_tier": {"enum": ["supporting", "direct", "critical"]},
+        "counterfactual_failure": {"type": "string"},
+        "rationale": {"type": "string"}
+      }
+    },
+    "human_review": {
+      "type": "object",
+      "required": ["trigger_can_be_async_result", "arrival_order_matters", "plan_change_required", "affected_scope", "semantic_consequence_observable", "control_consequence_observable", "prompt_leakage_risk", "benchmark_eligible", "capability_target", "relevance_tier", "topology_roles", "evidence_step_ids"],
+      "properties": {
+        "trigger_can_be_async_result": {"enum": ["pending", "yes", "no", "uncertain"]},
+        "arrival_order_matters": {"enum": ["pending", "yes", "no", "uncertain"]},
+        "plan_change_required": {"enum": ["pending", "yes", "no", "uncertain"]},
+        "affected_scope": {"enum": ["pending", "local_branch", "multiple_branches", "global", "none", "uncertain"]},
+        "semantic_consequence_observable": {"enum": ["pending", "yes", "no", "uncertain"]},
+        "control_consequence_observable": {"enum": ["pending", "yes", "no", "uncertain"]},
+        "prompt_leakage_risk": {"enum": ["pending", "yes", "no", "uncertain"]},
+        "benchmark_eligible": {"enum": ["pending", "accept", "revise", "reject"]},
+        "capability_target": {"enum": ["pending", "base_task_completion", "async_result_integration", "async_dynamic_replanning", "async_consistency_closure"]},
+        "relevance_tier": {"enum": ["pending", "base", "supporting", "direct", "critical"]},
+        "topology_roles": {"type": "array", "items": {"enum": ["independent_parallel", "authority_producer", "provisional_producer", "downstream_consumer", "validation_branch", "recovery_branch"]}, "uniqueItems": true},
+        "evidence_step_ids": {"type": "array", "items": {"type": "integer", "minimum": 0}, "uniqueItems": true},
+        "reviewer_note": {"type": "string"}
+      }
+    }
+  }
+}

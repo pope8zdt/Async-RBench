@@ -1,0 +1,243 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_versioned_maze_transition_depe",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
+      "evidence_group": "mab_code17_maze.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_maze_layout_obstac"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_scope_delta: A newly authoritative role-and-version transition dependency governs collaborative block movement while maze layout, communication, saved progress, tutorial state, and achievements remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close versioned_maze_transition_dependency_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_maze_layout_obstac"
+        ]
+      },
+      "id": "mab_code17_maze.cf.01_classify_scope_delta_versioned_maze_tra",
+      "independence_key": "mab_code17_maze.cf.01_classify_scope_delta_versioned_maze_tra",
+      "measurement_type": "control",
+      "mutation_id": "mab_code17_maze.mutation.01_classify_scope_delta_versioned_maze_tra",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_dependency_unblock_107bc4fe3f.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_maze_layout_obstac"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_versioned_maze_transition_depe",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
+      "evidence_group": "mab_code17_maze.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_distinct_cooperati"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A newly authoritative role-and-version transition dependency governs collaborative block movement while maze layout, communication, saved progress, tutorial state, and achievements remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close versioned_maze_transition_dependency_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_distinct_cooperati"
+        ]
+      },
+      "id": "mab_code17_maze.cf.02_revise_affected_versioned_maze_tra",
+      "independence_key": "mab_code17_maze.cf.02_revise_affected_versioned_maze_tra",
+      "measurement_type": "control",
+      "mutation_id": "mab_code17_maze.mutation.02_revise_affected_versioned_maze_tra",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_107bc4fe3f.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_distinct_cooperati"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_versioned_maze_transition_depe",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
+      "evidence_group": "mab_code17_maze.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.implement_path_validation_pr"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: A newly authoritative role-and-version transition dependency governs collaborative block movement while maze layout, communication, saved progress, tutorial state, and achievements remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close versioned_maze_transition_dependency_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_path_validation_pr"
+        ]
+      },
+      "id": "mab_code17_maze.cf.03_preserve_unaffected_versioned_maze_tra",
+      "independence_key": "mab_code17_maze.cf.03_preserve_unaffected_versioned_maze_tra",
+      "measurement_type": "control",
+      "mutation_id": "mab_code17_maze.mutation.03_preserve_unaffected_versioned_maze_tra",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_107bc4fe3f.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.implement_path_validation_pr"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_versioned_maze_transition_depe",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
+      "evidence_group": "mab_code17_maze.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.integrate_the_new_role_versi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A newly authoritative role-and-version transition dependency governs collaborative block movement while maze layout, communication, saved progress, tutorial state, and achievements remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close versioned_maze_transition_dependency_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.integrate_the_new_role_versi"
+        ]
+      },
+      "id": "mab_code17_maze.cf.04_verify_closure_versioned_maze_tra",
+      "independence_key": "mab_code17_maze.cf.04_verify_closure_versioned_maze_tra",
+      "measurement_type": "control",
+      "mutation_id": "mab_code17_maze.mutation.04_verify_closure_versioned_maze_tra",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_107bc4fe3f.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.integrate_the_new_role_versi"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "All affected moves enforce the returned role, expected-version, and occupied-destination protocol while prior maze and collaboration state is preserved.",
+        "before": "Players and blocks can move using provisional rules without authoritative role permissions or optimistic version checks.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

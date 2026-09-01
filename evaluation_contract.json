@@ -1,0 +1,161 @@
+{
+  "version": "9.1.0-dev",
+  "status": "development",
+  "evaluation_object": "Measure whether a main agent integrates independently completing subagent results, detects changed assumptions, and dynamically replans to a verified final state.",
+  "execution_modes": [
+    "linear",
+    "async"
+  ],
+  "case_capability_categories": [
+    "late_revision_adoption",
+    "stale_result_rejection",
+    "inflight_cancellation",
+    "selective_invalidation",
+    "cascading_replan",
+    "verification_reopen",
+    "failure_redelegation",
+    "conflict_arbitration"
+  ],
+  "case_event_themes": [
+    "delayed_authoritative_result",
+    "late_or_out_of_order_superseded_result",
+    "partial_then_complete_result",
+    "conflicting_valid_results",
+    "duplicate_or_replayed_completion",
+    "child_failure_or_implicit_error",
+    "task_scope_or_dependency_change",
+    "straggler_under_resource_pressure"
+  ],
+  "async_scenario_classes": [
+    "result_eventful",
+    "live_eventful",
+    "resource_eventful"
+  ],
+  "case_registration_policy": {
+    "case_family": "case_family is one of the eight primary_event_theme categories and is the headline macro-averaging category.",
+    "case_id": "case_id identifies one registered case unit within a case family.",
+    "instance_id": "instance_id identifies one immutable registered protocol bundle within a case.",
+    "registry": "Only case/instance pairs explicitly listed in cases/registry.json are official. The registry key case_families is a legacy schema-v2 field whose entries are registered cases, not the eight case families.",
+    "manifest_lock": "Each manifest pins the verifier bundle and complete case bundle digest for every case/instance pair.",
+    "pairing": "Linear and async counterfactual pairs must share case_id, instance_id, repeat, agent seed, evaluator source and case digest.",
+    "legacy_family_id": "Any legacy artifact field named family_id aliases case_id for backward compatibility and must not be interpreted as case_family."
+  },
+  "event_capability_separation": {
+    "event_theme": "The evaluator-owned stimulus used to create an asynchronous decision opportunity. Each case has exactly one primary event theme for dataset counting.",
+    "capability": "A separately scored agent ability. Capabilities are multi-label and are never added to event-theme counts.",
+    "trajectory_policy": "Source trajectories are discovery and provenance evidence only; they are forbidden as participant input, oracle truth, verifier input, or action-sequence scoring targets."
+  },
+  "x_rules": {
+    "fixed_mode_denominator": "Every model evaluated on the same case and execution mode shares the same frozen applicable-point set and denominator digest.",
+    "model_inaction_is_fail": "Failure to perform a registered behaviour is a failed point, never not_applicable.",
+    "infrastructure_failure_is_unscored": "Infrastructure failure that prevents construction of the designed opportunity is unscored and is never converted to X=0.",
+    "participant_exposure_failure_is_scored": "Participant-controlled early termination, invalid authority output, rejected completion, or failure to reach the event boundary remains a scored dynamic failure and never shrinks the denominator.",
+    "semantic_control_independence": "Semantic outcome anchors are reported as diagnostics; control-flow points are scored from evaluator-observed process evidence without double-penalising semantic failure.",
+    "private_truth_is_evaluator_only": "Result roles, staleness, invalidation, hidden checks, and event schedules never enter participant-visible messages or traces.",
+    "dynamic_primary": "Dynamic control is normalized independently over case-specific causal decision groups and is the primary async benchmark metric.",
+    "semantic_secondary": "The unchanged semantic verifier score is reported independently and contributes 20 percent to the secondary DTScore.",
+    "critical_dynamic_gate": "Dynamic success requires every critical dynamic point to pass and Dynamic Control Score >= 0.75."
+  },
+  "experiment_integrity": {
+    "official_track": "Track A only",
+    "harness": "fixed_reference_scaffold_api",
+    "backend": "real_api_only",
+    "workspace": "isolated_container_clone",
+    "verifier": "private_filesystem_snapshot_clone",
+    "participant_private_path_audit": "required",
+    "public_private_contract_audit": "required",
+    "conformance": "required_before_episode_execution",
+    "semantic_check_registry": "case_frozen_and_versioned",
+    "control_flow_check_registry": "case_frozen_and_versioned",
+    "reproducibility_digests": "required"
+  },
+  "default_guidance": "incentive",
+  "delegation_budget": {
+    "max_concurrent_children": 3,
+    "max_total_child_spawns": 5,
+    "max_benchmark_owned_initial_workstreams": 8,
+    "initial_wave_uses_separate_concurrency": true,
+    "cancelled_children_release_concurrency": true,
+    "initial_workstreams_are_explicit_and_unique": true
+  },
+  "resource_policy": {
+    "episode_timeout_sec": 2400,
+    "gateway_grace_sec": 15,
+    "exhaustion_semantics": "A harness turn ceiling produces local_status=budget_exhausted; it remains a scored participant outcome when scenario construction and score integrity are valid.",
+    "profile_limits": {
+      "max_output_tokens": 16384,
+      "max_main_turns": 100,
+      "max_child_turns": 40,
+      "max_concurrent_children": 3,
+      "max_total_child_spawns": 5,
+      "max_api_concurrency": 4,
+      "main_terminal_timeout_sec": 180,
+      "child_terminal_timeout_sec": 180,
+      "child_timeout_sec": 1200,
+      "start_barrier_timeout_sec": 120,
+      "live_cancellation_grace_sec": 60,
+      "workspace_mode": "container_clone",
+      "keep_child_workspaces": false,
+      "max_tool_output_chars": 20000,
+      "request_timeout_sec": 600
+    }
+  },
+  "primary_outcomes": {
+    "dynamic_control": "async_dynamic_control_score",
+    "semantic_task": "unchanged_programmatic_semantic_task_score",
+    "dt_score": "0.80_dynamic_control_plus_0.20_semantic_task",
+    "leaderboard": "equal_macro_mean_async_dynamic_control_across_the_eight_case_families_after_within_family_case_balancing_for_official_track_a_only",
+    "linear_semantic_baseline": "macro_mean_linear_semantic_task_score_across_cases",
+    "paired_semantic_drop": "paired_linear_semantic_minus_async_semantic",
+    "capability_breakdown": "macro_mean_async_dynamic_control_across_cases_tagged_with_each_capability"
+  },
+  "primary_metrics": [
+    "dynamic_control_score",
+    "dynamic_success_rate",
+    "critical_dynamic_success_rate",
+    "semantic_task_score",
+    "dt_score",
+    "paired_semantic_drop",
+    "capability_dynamic_control_scores",
+    "scenario_construction_rate"
+  ],
+  "diagnostics": [
+    "semantic_check_counts",
+    "control_flow_check_counts",
+    "stale_retention_rate",
+    "reverification_completeness",
+    "recovery_latency_ms",
+    "obsolete_work_ratio",
+    "cancellation_recall",
+    "redelegation_counts",
+    "result_contract_rejection_rate",
+    "scenario_exposure_complete",
+    "token_consumption_by_execution_mode"
+  ],
+  "calibration_diagnostics": {
+    "minimum_pilot_models": 5,
+    "minimum_model_families": 3,
+    "minimum_repetitions_per_model_mode": 3,
+    "reference_maximum_mean_dynamic_X": 0.85,
+    "reference_maximum_single_model_dynamic_X": 0.98,
+    "minimum_non_degenerate_point_fraction": 0.8,
+    "non_degenerate_point_pass_rate_interval": [0.05, 0.95],
+    "maximum_absolute_phi_between_distinct_points": 0.8,
+    "minimum_executed_mutants_per_case": 40,
+    "minimum_mutation_kill_rate": 0.95,
+    "minimum_critical_mutation_kill_rate": 1.0
+  },
+  "metric_definitions": {
+    "dynamic_control_score": "Primary metric. Equal-mass macro over the case-specific causal decision groups compiled from the task graph and event policy. Lifecycle stages are diagnostic tags, not fixed score mass.",
+    "semantic_task_score": "Unchanged weighted result of the frozen programmatic semantic verifier, reported for both execution modes.",
+    "dt_score": "Secondary summary equal to 0.80 Dynamic Control Score plus 0.20 Semantic Task Score for async episodes.",
+    "dynamic_success_rate": "Fraction of async episodes with Dynamic Control Score >= 0.75 and every critical dynamic point passing.",
+    "critical_dynamic_success_rate": "Fraction of async episodes in which every critical dynamic point passes.",
+    "paired_semantic_drop": "Within-instance paired linear Semantic Task Score minus async Semantic Task Score.",
+    "capability_dynamic_control_scores": "Case-macro Dynamic Control Score reported for each declared case capability category.",
+    "scenario_construction_rate": "Infrastructure audit that the harness admitted the complete bounded initial wave and established the required linear or async execution topology.",
+    "scenario_exposure_complete": "Participant-behaviour diagnostic: whether all case-designed async result roles and any required in-flight opportunity were observed before the participant ended. Incomplete exposure remains scored.",
+    "leaderboard_eligibility": "Only containerized, conformant, API-only runs using the fixed reference harness enter official leaderboard aggregation."
+  },
+  "judge": "programmatic_only"
+}

@@ -1,0 +1,206 @@
+{
+  "case_id": "swe-dependency-unblock-8902c7f431",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_change_typeserializer_to_con",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduced the flattened inner-class migration path.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.change_typeserializer_to"
+        ]
+      },
+      "id": "01_classify_critical_path_change_typeseriali",
+      "must_still_pass": [
+        "swe_dependency_unblock_8.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "swe_dependency_unblock_8.sem.01.the_repaired_repository_pass",
+        "swe_dependency_unblock_8.sem.02.the_repaired_repository_pass",
+        "swe_dependency_unblock_8.sem.03.previously_passing_behavior_",
+        "swe_dependency_unblock_8.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_dependency_unblock_8.sem.01.the_repaired_repository_pass, swe_dependency_unblock_8.sem.02.the_repaired_repository_pass, swe_dependency_unblock_8.sem.03.previously_passing_behavior_, swe_dependency_unblock_8.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A serializer specialist reports that TypeSerializer uses __name__ and loses outer context, while field deconstruction and EnumSerializer already preserve __qualname__.', perform classify_critical_path for 'Change TypeSerializer to construct paths with __qualname__.' while retaining valid prior result 'Reproduced the flattened inner-class migration path.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.change_typeserializer_to"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_preserve_existing_module_imp",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Started auditing migration serializers for class-name construction.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.change_typeserializer_to"
+        ]
+      },
+      "id": "02_resource_triage_preserve_existing_",
+      "must_still_pass": [
+        "swe_dependency_unblock_8.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "swe_dependency_unblock_8.sem.01.the_repaired_repository_pass",
+        "swe_dependency_unblock_8.sem.02.the_repaired_repository_pass",
+        "swe_dependency_unblock_8.sem.03.previously_passing_behavior_",
+        "swe_dependency_unblock_8.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_dependency_unblock_8.sem.01.the_repaired_repository_pass, swe_dependency_unblock_8.sem.02.the_repaired_repository_pass, swe_dependency_unblock_8.sem.03.previously_passing_behavior_, swe_dependency_unblock_8.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A serializer specialist reports that TypeSerializer uses __name__ and loses outer context, while field deconstruction and EnumSerializer already preserve __qualname__.', perform resource_triage for 'Preserve existing module import behavior.' while retaining valid prior result 'Started auditing migration serializers for class-name construction.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.change_typeserializer_to"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_test_top_level_nested_field_",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduced the flattened inner-class migration path.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.change_typeserializer_to"
+        ]
+      },
+      "id": "03_verify_closure_test_top_level_nes",
+      "must_still_pass": [
+        "swe_dependency_unblock_8.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_8.sem.01.the_repaired_repository_pass",
+        "swe_dependency_unblock_8.sem.02.the_repaired_repository_pass",
+        "swe_dependency_unblock_8.sem.03.previously_passing_behavior_",
+        "swe_dependency_unblock_8.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_dependency_unblock_8.sem.01.the_repaired_repository_pass, swe_dependency_unblock_8.sem.02.the_repaired_repository_pass, swe_dependency_unblock_8.sem.03.previously_passing_behavior_, swe_dependency_unblock_8.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A serializer specialist reports that TypeSerializer uses __name__ and loses outer context, while field deconstruction and EnumSerializer already preserve __qualname__.', perform verify_closure for 'Test top-level, nested field, and nested enum class serialization and migration loading.' while retaining valid prior result 'Reproduced the flattened inner-class migration path.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.change_typeserializer_to"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.change_typeserializer_to"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.preserve_existing_module"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.test_top_level_nested_fi"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.change_typeserializer_to",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_existing_module",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.test_top_level_nested_fi",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.change_typeserializer_to",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_existing_module",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.test_top_level_nested_fi",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.change_typeserializer_to",
+      "req.02.preserve_existing_module",
+      "req.03.test_top_level_nested_fi",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A serializer specialist reports that TypeSerializer uses __name__ and loses outer context, while field deconstruction and EnumSerializer already preserve __qualname__.",
+    "before_state": "The serializer comparison arrives after a broad path audit begins, localizing the fix to TypeSerializer.",
+    "event_id": "evt.swe_dependency_unblock_8.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Change TypeSerializer to construct paths with __qualname__.",
+      "id": "req.01.change_typeserializer_to",
+      "observable_probe": "swe_dependency_unblock_8.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for change_typeserializer_to_construct_p"
+    },
+    {
+      "description": "Preserve existing module import behavior.",
+      "id": "req.02.preserve_existing_module",
+      "observable_probe": "swe_dependency_unblock_8.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for preserve_existing_module_import_beha"
+    },
+    {
+      "description": "Test top-level, nested field, and nested enum class serialization and migration loading.",
+      "id": "req.03.test_top_level_nested_fi",
+      "observable_probe": "swe_dependency_unblock_8.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for test_top_level_nested_field_and_nest"
+    }
+  ]
+}

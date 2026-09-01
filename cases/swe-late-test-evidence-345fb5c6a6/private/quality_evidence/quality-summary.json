@@ -1,0 +1,40 @@
+{
+  "canonical_verifier_bundle_sha256": "b261a7290adadc4ee20a72a40dbebc86afc00bdcae76c1183b07ba856383b6b1",
+  "equivalence_solutions": [
+    {
+      "id": "alternative-source-native-closure",
+      "report": "artifacts\\runtime-swe-next-quality\\swe-late-test-evidence-345fb5c6a6\\reports\\equivalence-alternative-source-native-closure.json",
+      "success": true,
+      "verifier_bundle_sha256": "b261a7290adadc4ee20a72a40dbebc86afc00bdcae76c1183b07ba856383b6b1"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "killed": true,
+      "must_fail": [
+        "swe_late_test_evidence_345fb5c6a6.event.receipt"
+      ],
+      "observed_failed": [
+        "swe_late_test_evidence_345fb5c6a6.event.receipt"
+      ],
+      "report": "artifacts\\runtime-swe-next-quality\\swe-late-test-evidence-345fb5c6a6\\reports\\negative-wrong-event-receipt.json",
+      "verifier_bundle_sha256": "b261a7290adadc4ee20a72a40dbebc86afc00bdcae76c1183b07ba856383b6b1"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "killed": true,
+      "must_fail": [
+        "swe_late_test_evidence_345fb5c6a6.closure"
+      ],
+      "observed_failed": [
+        "swe_late_test_evidence_345fb5c6a6.closure"
+      ],
+      "report": "artifacts\\runtime-swe-next-quality\\swe-late-test-evidence-345fb5c6a6\\reports\\negative-broken-closure-lineage.json",
+      "verifier_bundle_sha256": "b261a7290adadc4ee20a72a40dbebc86afc00bdcae76c1183b07ba856383b6b1"
+    }
+  ],
+  "passed": true,
+  "same_verifier_bundle": true,
+  "schema_version": "1.0"
+}

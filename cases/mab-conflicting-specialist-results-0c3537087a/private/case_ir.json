@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-0c3537087a",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_healthcare_insert_receipt",
+      "forbidden_behavior": "Do not finalize the Healthcare diagnosis before the database:010 receipt or substitute unrelated index-catalog evidence for the insertion checkpoint.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.compare_index_definition"
+        ]
+      },
+      "id": "01_classify_authority_healthcare_insert_receipt",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0c3537087a.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After the provisional Healthcare comparison exists, classify the delayed database:010 receipt as authority only after verifying its 5,000 inserted rows and 1,556,480-byte workload evidence.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.compare_index_definition"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_from_authority_healthcare_insert",
+      "forbidden_behavior": "Do not retain a displaced provisional cause or erase completed non-insert hypothesis checks.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.compare_index_definition"
+        ]
+      },
+      "id": "02_revise_from_authority_healthcare_insert",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0c3537087a.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Revise the affected Healthcare diagnosis to INSERT_LARGE_DATA while preserving completed lock, fetch, vacuum, redundant-index, and join observations.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.compare_index_definition"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_healthcare_insert",
+      "forbidden_behavior": "Do not close without reverifying INSERT_LARGE_DATA against both the 5,000-row and 1,556,480-byte authority metrics.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.compare_index_definition"
+        ]
+      },
+      "id": "03_verify_closure_healthcare_insert",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_0c3537087a.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "Rederive the final Healthcare diagnosis from the authoritative insertion receipt and preserved matrix, then verify the native answer contract.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.compare_index_definition"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.compare_index_definition"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.recalculate_write_amplif"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.replace_the_unsupported_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.emit_exactly_two_allowed"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.compare_index_definition",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.recalculate_write_amplif",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.replace_the_unsupported_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.emit_exactly_two_allowed",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.compare_index_definition",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.recalculate_write_amplif",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.replace_the_unsupported_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.emit_exactly_two_allowed",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.compare_index_definition",
+      "req.02.recalculate_write_amplif",
+      "req.03.replace_the_unsupported_",
+      "req.04.emit_exactly_two_allowed",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:010 healthcare checkpoint records 5,000 inserted rows and 1,556,480 bytes and authoritatively confirms INSERT_LARGE_DATA.",
+    "before_state": "The Healthcare hypothesis matrix and completed non-insert checks are persisted provisionally.",
+    "event_id": "evt.mab_healthcare_0c35.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Validate the delayed database:010 receipt and its 5,000 inserted rows and 1,556,480 bytes.",
+      "id": "req.01.compare_index_definition",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for compare_index_definitions_to_confirm"
+    },
+    {
+      "description": "Revise the affected Healthcare diagnosis to INSERT_LARGE_DATA from the authoritative workload checkpoint.",
+      "id": "req.02.recalculate_write_amplif",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for recalculate_write_amplification_attr"
+    },
+    {
+      "description": "Preserve completed lock, fetch, vacuum, redundant-index, and join observations.",
+      "id": "req.03.replace_the_unsupported_",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for replace_the_unsupported_provisional_"
+    },
+    {
+      "description": "Rederive and verify the receipt-bound Healthcare answer under the native output contract.",
+      "id": "req.04.emit_exactly_two_allowed",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for emit_exactly_two_allowed_causes_with"
+    }
+  ]
+}

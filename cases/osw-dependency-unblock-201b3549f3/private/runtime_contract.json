@@ -1,0 +1,30 @@
+{
+  "assets": [
+    "official task configuration",
+    "os snapshot",
+    "chrome snapshot",
+    "vscode snapshot",
+    "private source assets",
+    "private native fixture",
+    "private delayed payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "os",
+    "chrome",
+    "vscode",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:multi_apps:69acbb55-d945-4927-a87b-8480e1a5bb7e in pinned os; truth remains private.",
+  "event_injection": "Release delayed instructor_dependency_install_plan after a persisted task-specific checkpoint.",
+  "hidden_tests": "check_include_exclude, native digest, project_identity, distribution_identity, dependency_lock, import_command, import_smoke, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "os",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private instructor_env_osworld.sh scores check_include_exclude.",
+  "requires_authored_private_oracle": false
+}

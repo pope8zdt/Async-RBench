@@ -1,0 +1,23 @@
+{
+  "assets": [
+    "upstream task assets",
+    "event assets",
+    "authority receipts",
+    "canonical/equivalent solutions"
+  ],
+  "docker": [
+    "locked upstream Dockerfile",
+    "pinned dependencies",
+    "participant service",
+    "private verifier clone"
+  ],
+  "environment_strategy": "copy the locked Terminal-Bench task image/assets and extend it with evaluator-owned event staging",
+  "event_injection": "evaluator-owned PostgreSQL authority event bound to database:004 and host checkpoint 277ff2325bd9d7fc4dfe90d2b0c8cc7437369c7ecaa61d9e9877a9b2fbf8b93c",
+  "hidden_tests": "upstream semantics plus task-specific preservation, stale exclusion, runtime behavior, lineage and closure assertions",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "terminal-bench locked task bundle"
+  },
+  "oracle": "compose the upstream canonical solutions and rederive final state after the injected event",
+  "source_task_id": "database:004"
+}

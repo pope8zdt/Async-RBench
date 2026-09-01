@@ -1,0 +1,261 @@
+{
+  "case_id": "osw-dependency-unblock-72d6a6fe27",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_ssh_account_authority",
+      "forbidden_behavior": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_ssh_72d6.cf.01_classify_authority_ssh_account_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_72d6a6fe27.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for ssh_account_authority; preserve already-confirmed source-native state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.account_identity"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_ssh_account_authority",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_ssh_72d6.cf.02_revise_affected_ssh_account_authority",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_72d6a6fe27.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for ssh_account_authority; preserve already-confirmed source-native state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.home_binding"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_ssh_account_authority",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_ssh_72d6.cf.03_preserve_unaffected_ssh_account_authority",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_72d6a6fe27.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for ssh_account_authority; preserve already-confirmed source-native state.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.access_scope"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_ssh_account_authority",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_ssh_72d6.cf.04_verify_closure_ssh_account_authority",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_72d6a6fe27.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for ssh_account_authority; preserve already-confirmed source-native state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.permission_probe"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.account_identity"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.home_binding"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.access_scope"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.permission_probe"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.check_script_identity"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.account_identity",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.home_binding",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.access_scope",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.permission_probe",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.check_script_identity",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.account_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.home_binding",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.access_scope",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.permission_probe",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.check_script_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.account_identity",
+      "req.02.home_binding",
+      "req.03.access_scope",
+      "req.04.permission_probe",
+      "req.05.check_script_identity",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed account probe confirms charles authenticates, is bound to /home/test1, and the home directory has the exact group-write condition checked by the official evaluator.",
+    "before_state": "The home directory exists, but the evaluator-owned account identity, password authentication, home binding, and permission result are not yet available.",
+    "event_id": "evt.osw_dependency_unblock_72d6a6fe27.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The requested charles account authenticates successfully.",
+      "id": "req.01.account_identity",
+      "observable_probe": "osw_dependency_unblock_72d6a6fe27.osworld.account_identity",
+      "public_evidence": "source instruction and task-specific account_identity result"
+    },
+    {
+      "description": "The passwd home is exactly /home/test1.",
+      "id": "req.02.home_binding",
+      "observable_probe": "osw_dependency_unblock_72d6a6fe27.osworld.home_binding",
+      "public_evidence": "source instruction and task-specific home_binding result"
+    },
+    {
+      "description": "The declared access scope contains only /home/test1.",
+      "id": "req.03.access_scope",
+      "observable_probe": "osw_dependency_unblock_72d6a6fe27.osworld.access_scope",
+      "public_evidence": "source instruction and task-specific access_scope result"
+    },
+    {
+      "description": "The official group-write and success-string probes pass.",
+      "id": "req.04.permission_probe",
+      "observable_probe": "osw_dependency_unblock_72d6a6fe27.osworld.permission_probe",
+      "public_evidence": "source instruction and task-specific permission_probe result"
+    },
+    {
+      "description": "The private official password checker has the audited digest.",
+      "id": "req.05.check_script_identity",
+      "observable_probe": "osw_dependency_unblock_72d6a6fe27.osworld.check_script_identity",
+      "public_evidence": "source instruction and task-specific check_script_identity result"
+    }
+  ]
+}

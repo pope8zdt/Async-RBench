@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Async-RBench agent trajectory coarse label",
+  "type": "object",
+  "required": ["schema_version", "review_id", "status", "screening_mode", "trajectory_quality", "failure_attribution", "replanning_evidence", "research_events", "summary", "candidate_decisions"],
+  "properties": {
+    "schema_version": {"const": "1"},
+    "review_id": {"type": "string", "minLength": 1},
+    "status": {"const": "completed"},
+    "screening_mode": {"enum": ["rules", "model"]},
+    "trajectory_quality": {"enum": ["usable", "partial", "unusable"]},
+    "failure_attribution": {"enum": ["model", "benchmark", "infrastructure", "not_failure", "uncertain"]},
+    "replanning_evidence": {"enum": ["direct", "indirect", "none", "uncertain"]},
+    "research_events": {"type": "array", "items": {"enum": ["late_authoritative_result", "conflicting_results", "stale_result_risk", "downstream_invalidation", "selective_preservation", "cancellation", "redelegation", "reverification", "no_research_event"]}},
+    "summary": {"type": "string"},
+    "candidate_decisions": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["decision_id", "event_type", "trigger_step_ids", "precondition_step_ids", "response_step_ids", "consequence_step_ids", "affected_scope", "topology_roles", "suggested_capability_target", "suggested_relevance_tier", "counterfactual_failure", "rationale"],
+        "properties": {
+          "decision_id": {"type": "string"},
+          "event_type": {"enum": ["late_authoritative_result", "conflicting_results", "stale_result_risk", "downstream_invalidation", "selective_preservation", "cancellation", "redelegation", "reverification"]},
+          "trigger_step_ids": {"type": "array", "items": {"type": "integer"}},
+          "precondition_step_ids": {"type": "array", "items": {"type": "integer"}},
+          "response_step_ids": {"type": "array", "items": {"type": "integer"}},
+          "consequence_step_ids": {"type": "array", "items": {"type": "integer"}},
+          "affected_scope": {"enum": ["local_branch", "multiple_branches", "global", "none", "uncertain"]},
+          "topology_roles": {"type": "array", "items": {"enum": ["independent_parallel", "authority_producer", "provisional_producer", "downstream_consumer", "validation_branch", "recovery_branch"]}},
+          "suggested_capability_target": {"enum": ["async_result_integration", "async_dynamic_replanning", "async_consistency_closure"]},
+          "suggested_relevance_tier": {"enum": ["supporting", "direct", "critical"]},
+          "counterfactual_failure": {"type": "string", "minLength": 1},
+          "rationale": {"type": "string"}
+        }
+      }
+    }
+  }
+}

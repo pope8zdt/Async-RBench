@@ -1,0 +1,128 @@
+{
+  "candidate_id": "terminus2-OpenAI__GPT-5-git-leak-recovery-8156e2df:d1",
+  "design": {
+    "affected_scope": "multiple_branches",
+    "async_scenario_class": "result_eventful",
+    "capabilities": [
+      "stale_result_rejection",
+      "selective_invalidation",
+      "verification_reopen"
+    ],
+    "event_schedule": {
+      "sr_a_patch": 2,
+      "sr_a_rewrite": 5
+    },
+    "human_approval": {
+      "reviewed_at": "2026-08-28T00:00:00+08:00",
+      "reviewer": "pipeline-pilot-technical-review",
+      "scope": "single end-to-end feasibility pilot",
+      "status": "approved"
+    },
+    "instance_id": "tracebench-git-recovery-late-authority-001",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "secondary_event_themes": [
+      "delayed_authoritative_result"
+    ],
+    "source_event_type": "reverification",
+    "target_family": "secure-release",
+    "template_instance": "seed-1",
+    "topology_roles": [
+      "authority_producer",
+      "provisional_producer",
+      "downstream_consumer",
+      "validation_branch"
+    ]
+  },
+  "evidence_card": {
+    "affected_action": {
+      "excerpts": [
+        {
+          "actor": "助手",
+          "step_id": "8",
+          "text": "We should attempt to inspect that specific object and its tree to recover the secret."
+        },
+        {
+          "actor": "助手",
+          "step_id": "10",
+          "text": "We can reconstruct the secret using the UUID present in the commit messages and write it to /app/secret.txt."
+        }
+      ],
+      "summary": "恢复方案因此转向直接检查 ORIG_HEAD 哈希，并在对象已丢失后从保留的提交信息重建秘密。"
+    },
+    "expanded_context": [
+      {
+        "actor": "助手",
+        "step_id": "2",
+        "text": "最初计划先恢复秘密，再删除备份引用、过期 reflog 并运行垃圾回收。"
+      },
+      {
+        "actor": "终端",
+        "step_id": "9",
+        "text": "git cat-file 无法读取 ORIG_HEAD 中记录的对象。"
+      },
+      {
+        "actor": "终端",
+        "step_id": "11",
+        "text": "最终从提交信息中的 UUID 重建并写出了 secret[e665d1a2-04a7-4e61-b523-e897e231d9cc]。"
+      }
+    ],
+    "late_information": {
+      "excerpts": [
+        {
+          "actor": "终端",
+          "step_id": "7",
+          "text": ".git/ORIG_HEAD 包含 e2a1bb130b05cb0bd2704456a4e4f61c3f91e1a7；git show ORIG_HEAD 返回 fatal: bad object ORIG_HEAD。"
+        }
+      ],
+      "summary": "清理之后才发现 ORIG_HEAD 记录了旧提交哈希，但该对象已经无法读取。"
+    },
+    "prior_work": {
+      "excerpts": [
+        {
+          "actor": "终端",
+          "step_id": "3",
+          "text": "git reflog expire --expire=now --expire-unreachable=now --all；随后执行 git gc --prune=now --aggressive。"
+        }
+      ],
+      "summary": "在尚未恢复秘密时，轨迹已经删除备份引用、过期 reflog，并执行了立即垃圾回收。"
+    }
+  },
+  "policy": {
+    "action_sequence_oracle": false,
+    "requires_static_promotion_gate": true,
+    "trajectory_role": "discovery_and_evidence_only"
+  },
+  "review_consensus": {
+    "annotations": [
+      {
+        "answers": {
+          "evidence_is_faithful": "yes",
+          "late_after_work_started": "yes",
+          "requires_plan_change": "yes"
+        },
+        "evidence_problem_parts": [],
+        "reason_codes": [],
+        "review_id": "terminus2-OpenAI__GPT-5-git-leak-recovery-8156e2df:d1",
+        "review_origin": "pilot_annotation_for_pipeline_validation",
+        "review_seconds": 54,
+        "reviewer_id": "pilot-reviewer-01",
+        "route": "candidate_confirmed",
+        "schema_version": "2",
+        "uncertainty_questions": []
+      }
+    ],
+    "required_route": "candidate_confirmed",
+    "reviewer_count": 1,
+    "reviewer_ids": [
+      "pilot-reviewer-01"
+    ]
+  },
+  "schema_version": "1",
+  "source": {
+    "benchmark": "TraceBench/Terminal-Bench",
+    "task_id": "git-leak-recovery",
+    "trajectory_id": "terminus2-OpenAI__GPT-5-git-leak-recovery-8156e2df"
+  },
+  "status": "ready_for_scaffolding",
+  "task_goal": "恢复曾经提交后又被历史重写移除的 secret[...]，写入 /app/secret.txt，并确保仓库中不再存在该秘密，同时保留无关文件和提交信息。"
+}

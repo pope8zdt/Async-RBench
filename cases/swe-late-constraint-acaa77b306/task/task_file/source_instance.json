@@ -1,0 +1,7 @@
+{
+  "base_commit": "6b4a3e019f8eeb3423065f7b24d790358e8cbc59",
+  "instance_id": "facebook__zstd-2094",
+  "problem_statement": "Add the experimental stable-output decompression parameter so callers with a sufficiently large, immutable output buffer can avoid the internal output allocation and copy. Fix single-pass handling for empty frames and preserve safe behavior for undersized or modified buffers. Validate the change with the native streaming and fuzz regressions.",
+  "repo": "facebook/zstd",
+  "version": "multi-swe-bench-pr-2094"
+}

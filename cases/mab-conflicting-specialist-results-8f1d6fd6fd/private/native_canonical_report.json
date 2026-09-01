@@ -1,0 +1,43 @@
+{
+  "anomaly": "FETCH_LARGE_DATA",
+  "anomaly_driver": "bounded PostgreSQL workload matching MARBLE anomaly semantics",
+  "canonical_episode_owner": "evaluator",
+  "case_id": "mab-conflicting-specialist-results-8f1d6fd6fd",
+  "errors": [],
+  "evaluator_binding_score": 1.0,
+  "evidence_sha256": "b9547cf163e91b90f887ef9610c33415e1ae2b61d5519e3f4244d85f233ea345",
+  "host_checkpoint": {
+    "after": {
+      "pg_version": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "tables": 8,
+      "txid": 1144
+    },
+    "anomaly_evidence": {
+      "fetched_rows": 5000,
+      "payload_bytes": 1280000
+    },
+    "before": {
+      "tables": 7,
+      "txid": 1141
+    },
+    "owner": "host_runtime",
+    "sha256": "6575848e09714573ebfd2587160c09a38c624f3f3daef0ccf18eef641aa66489"
+  },
+  "model_episode_executed": false,
+  "native_evaluator_metrics": {
+    "predicted": "FETCH_LARGE_DATA",
+    "root_cause": [
+      "FETCH_LARGE_DATA"
+    ]
+  },
+  "native_evaluator_verified": true,
+  "passed": true,
+  "postgres_environment_reset": true,
+  "resource_lock": "exclusive_serial_postgres",
+  "schema_version": "async-rbench-mab-db-native-canonical-v1",
+  "source_init_sql_attempted": true,
+  "source_init_sql_error": null,
+  "source_native_marble_verified": true,
+  "source_task_id": "database:009",
+  "upstream_marble_evaluator": "marble.evaluator.evaluator.Evaluator.evaluate_task_db"
+}

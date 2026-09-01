@@ -1,0 +1,166 @@
+{
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "requirements_manifest",
+    "manifest_review": {
+      "decision": "approved",
+      "reviewer_id": "formal-case-audit",
+      "reviewed_at": "2026-09-01"
+    },
+    "sources": [
+      {
+        "task_id": "db-wal-recovery",
+        "task_path": "private/source_db_wal.yaml",
+        "instruction_sha256": "bb9f631e3f2122fa8fb9b1319a46df9e59e3d0f760c27c5b7db0e8975542b43d",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Fix the WAL file so SQLite can read it",
+            "requirement_ids": [
+              "data-recovery-service.complete_task_and_async_closure"
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "multi-source-data-merger",
+        "task_path": "private/source_merge.yaml",
+        "instruction_sha256": "9a9e593109a9cbf18026089d2850ea7d43e03d7382487e9240d444d61270b2b1",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Merge user data from three different sources with different formats and schemas.",
+            "requirement_ids": [
+              "data-recovery-service.complete_task_and_async_closure"
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "kv-store-grpc",
+        "task_path": "private/source_grpc.yaml",
+        "instruction_sha256": "b02a3babf618b4eaf3ed54a88ae475cee5c4e88a747bc8916b1dfdd127ff0a2d",
+        "requirement_mappings": [
+          {
+            "source_anchor": "Build a Python dictionary-backed KV store server using gRPC.",
+            "requirement_ids": [
+              "data-recovery-service.complete_task_and_async_closure"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "id": "data-recovery-service.complete_task_and_async_closure",
+      "public_evidence": [
+        {
+          "path": "task/task.yaml",
+          "contains": "INITIAL CONCURRENT WORKSTREAMS"
+        },
+        {
+          "path": "task/task.yaml",
+          "contains": "INTEGRATION AND LINEAGE CONTRACT"
+        }
+      ],
+      "covers": {
+        "semantic_checks": [
+          "dr.authority.exact_row_set",
+          "dr.authority.wal_updates",
+          "dr.authority.wal_inserts",
+          "dr.authority.schema_order_types",
+          "dr.stale.recovered_candidate_rejected",
+          "dr.stale.seed_candidate_rejected",
+          "dr.stale.runtime_candidate_rejected",
+          "dr.stale.lineage_candidate_rejected",
+          "dr.integration.seed_item_namespace",
+          "dr.integration.seed_user_namespace",
+          "dr.integration.seed_exact_keyset",
+          "dr.integration.seed_exact_values",
+          "dr.integration.single_final_snapshot",
+          "dr.runtime.proto_contract",
+          "dr.runtime.restart_loads_seed",
+          "dr.runtime.hidden_gets",
+          "dr.runtime.set_get_roundtrip",
+          "dr.lineage.exact_schema",
+          "dr.lineage.recovered_digest_count",
+          "dr.lineage.merged_digest",
+          "dr.lineage.seed_digest",
+          "dr.support.merge_exact_rows",
+          "dr.support.merge_priority_schema",
+          "dr.support.conflicts_exact"
+        ],
+        "dynamic_control_checks": [
+          "dr.cf.wait_wal_before_seed",
+          "dr.cf.reject_checkpoint_only_seed",
+          "dr.cf.cancel_checkpoint_child",
+          "dr.cf.completeness_before_serving"
+        ],
+        "hidden_checks": [
+          "wal_row_count",
+          "service_seed",
+          "grpc_state"
+        ],
+        "workstream_validators": [
+          "checkpoint_recovery",
+          "wal_recovery",
+          "merge_support"
+        ]
+      }
+    }
+  ],
+  "equivalence_solutions": [
+    {
+      "id": "independent-task-native-equivalence",
+      "path": "task/equivalence_solutions/alternative_solution.sh",
+      "distinguishes_from_oracle": "A separately executable task-native implementation reconstructs required artifacts and authority-bound closure without invoking oracle.py or oracle.sh."
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-authoritative-recovery",
+      "path": "task/negative_mutations/wrong_authority_receipt.sh",
+      "must_fail": [
+        "dr.authority.exact_row_set",
+        "dr.authority.wal_inserts"
+      ],
+      "must_still_pass": [
+        "dr.support.merge_exact_rows"
+      ]
+    },
+    {
+      "id": "wrong-merge-semantics",
+      "path": "task/negative_mutations/wrong_task_semantics.sh",
+      "must_fail": [
+        "dr.support.conflicts_exact"
+      ],
+      "must_still_pass": [
+        "dr.authority.exact_row_set"
+      ]
+    },
+    {
+      "id": "broken-lineage-closure",
+      "path": "task/negative_mutations/broken_closure.sh",
+      "must_fail": [
+        "dr.lineage.recovered_digest_count"
+      ],
+      "must_still_pass": [
+        "dr.support.merge_exact_rows"
+      ]
+    },
+    {
+      "id": "wrong-runtime-authority",
+      "path": "task/negative_mutations/wrong_runtime_authority.sh",
+      "must_fail": [
+        "dr.integration.seed_exact_keyset"
+      ],
+      "must_still_pass": [
+        "dr.support.conflicts_exact"
+      ]
+    }
+  ],
+  "information_sufficiency": [
+    {"workstream_id": "checkpoint_recovery", "requirement_ids": ["data-recovery-service.complete_task_and_async_closure"]},
+    {"workstream_id": "wal_recovery", "requirement_ids": ["data-recovery-service.complete_task_and_async_closure"]},
+    {"workstream_id": "merge_support", "requirement_ids": ["data-recovery-service.complete_task_and_async_closure"]}
+  ]
+}

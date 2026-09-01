@@ -1,0 +1,265 @@
+{
+  "case_id": "osw-dependency-unblock-346b788fd5",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_completeness_dog_layer_resize",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_dog_346b.cf.01_classify_completeness_dog_layer_resize",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_dependency_unblock_346b788fd5.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness for dog_layer_resize; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.target_height"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_dog_layer_resize",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_dog_346b.cf.02_revise_affected_dog_layer_resize",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_346b788fd5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for dog_layer_resize; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.aspect_ratio"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_dog_layer_resize",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_dog_346b.cf.03_preserve_unaffected_dog_layer_resize",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_346b788fd5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for dog_layer_resize; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.structure_similarity"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_dog_layer_resize",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_dog_346b.cf.04_verify_closure_dog_layer_resize",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_346b788fd5.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for dog_layer_resize; preserve confirmed gimp, xcf_layer_editor, png_export state and revise only affected closure.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.background_preservation"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.target_height"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.target_height",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.aspect_ratio"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.aspect_ratio",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.structure_similarity"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.structure_similarity",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.background_preservation"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.background_preservation",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.output_path"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.output_path",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.target_height",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.aspect_ratio",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.structure_similarity",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.background_preservation",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.target_height",
+      "req.02.aspect_ratio",
+      "req.03.structure_similarity",
+      "req.04.background_preservation",
+      "req.05.output_path",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The dog layer is proportionally resized to a 512-pixel non-transparent height, the background remains intact, and resized.png passes both official OSWorld evaluators.",
+    "before_state": "The 1578×948 two-layer XCF is open; the dog layer target is known but the proportional resize and exported evidence are not yet complete.",
+    "event_id": "evt.osw_dependency_unblock_346b788fd5.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The non-transparent dog layer is exactly 512 pixels high.",
+      "id": "req.01.target_height",
+      "observable_probe": "osw_dependency_unblock_346b788fd5.osworld.target_height",
+      "public_evidence": "source instruction and native evaluator for target_height"
+    },
+    {
+      "description": "The dog layer keeps its original aspect ratio.",
+      "id": "req.02.aspect_ratio",
+      "observable_probe": "osw_dependency_unblock_346b788fd5.osworld.aspect_ratio",
+      "public_evidence": "source instruction and native evaluator for aspect_ratio"
+    },
+    {
+      "description": "The exported image passes the official structure-similarity evaluator.",
+      "id": "req.03.structure_similarity",
+      "observable_probe": "osw_dependency_unblock_346b788fd5.osworld.structure_similarity",
+      "public_evidence": "source instruction and native evaluator for structure_similarity"
+    },
+    {
+      "description": "The unrelated background layer remains preserved.",
+      "id": "req.04.background_preservation",
+      "observable_probe": "osw_dependency_unblock_346b788fd5.osworld.background_preservation",
+      "public_evidence": "source instruction and native evaluator for background_preservation"
+    },
+    {
+      "description": "The required resized.png path is exact.",
+      "id": "req.05.output_path",
+      "observable_probe": "osw_dependency_unblock_346b788fd5.osworld.output_path",
+      "public_evidence": "source instruction and native evaluator for output_path"
+    }
+  ]
+}

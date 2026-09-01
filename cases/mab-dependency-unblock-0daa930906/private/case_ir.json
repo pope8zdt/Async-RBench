@@ -1,0 +1,197 @@
+{
+  "case_id": "mab-dependency-unblock-0daa930906",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_adapt_frontend_messages_to_t",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adapt_frontend_messages_"
+        ]
+      },
+      "id": "01_classify_critical_path_adapt_frontend_mes",
+      "must_still_pass": [
+        "mab_dependency_unblock_0.sem.23.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0daa930906.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "required_behavior": "For event 'A backend specialist returns the WebSocket canvas-operation protocol, revision fields, acknowledgements, and deterministic conflict-resolution rules.', perform classify_critical_path for 'Adapt frontend messages to the returned protocol.' while retaining valid prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.adapt_frontend_messages_"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_implement_server_broadcastin",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Authentication and session scaffolding are present.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adapt_frontend_messages_"
+        ]
+      },
+      "id": "02_resource_triage_implement_server_b",
+      "must_still_pass": [
+        "mab_dependency_unblock_0.sem.23.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0daa930906.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "required_behavior": "For event 'A backend specialist returns the WebSocket canvas-operation protocol, revision fields, acknowledgements, and deterministic conflict-resolution rules.', perform resource_triage for 'Implement server broadcasting, acknowledgement, and conflict resolution.' while retaining valid prior result 'Authentication and session scaffolding are present.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.adapt_frontend_messages_"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_add_two_client_tests_for_ord",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.adapt_frontend_messages_"
+        ]
+      },
+      "id": "03_verify_closure_add_two_client_tes",
+      "must_still_pass": [
+        "mab_dependency_unblock_0.sem.23.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_0daa930906.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'A backend specialist returns the WebSocket canvas-operation protocol, revision fields, acknowledgements, and deterministic conflict-resolution rules.', perform verify_closure for 'Add two-client tests for ordered, duplicate, and concurrent operations.' while retaining valid prior result 'Local canvas drawing, brush, color, and layer operations are implemented.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.adapt_frontend_messages_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.adapt_frontend_messages_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_server_broadca"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.add_two_client_tests_for"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.adapt_frontend_messages_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_server_broadca",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.add_two_client_tests_for",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.adapt_frontend_messages_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_server_broadca",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.add_two_client_tests_for",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.adapt_frontend_messages_",
+      "req.02.implement_server_broadca",
+      "req.03.add_two_client_tests_for",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A backend specialist returns the WebSocket canvas-operation protocol, revision fields, acknowledgements, and deterministic conflict-resolution rules.",
+    "before_state": "The synchronization contract arrives after local drawing works, invalidating only provisional network bindings.",
+    "event_id": "evt.mab_dependency_unblock_0.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Adapt frontend messages to the returned protocol.",
+      "id": "req.01.adapt_frontend_messages_",
+      "observable_probe": "mab_dependency_unblock_0.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for adapt_frontend_messages_to_the_retur"
+    },
+    {
+      "description": "Implement server broadcasting, acknowledgement, and conflict resolution.",
+      "id": "req.02.implement_server_broadca",
+      "observable_probe": "mab_dependency_unblock_0.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for implement_server_broadcasting_acknow"
+    },
+    {
+      "description": "Add two-client tests for ordered, duplicate, and concurrent operations.",
+      "id": "req.03.add_two_client_tests_for",
+      "observable_probe": "mab_dependency_unblock_0.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_two_client_tests_for_ordered_dup"
+    }
+  ]
+}

@@ -1,0 +1,245 @@
+{
+  "version": "3",
+  "checks": [
+    {
+      "id": "sc.base.plan_files_exist",
+      "pytest_node": "test_case_outcomes.py::test_plan_files_exist",
+      "category": "base_task_completion",
+      "description": "Both per-bucket plan files exist under output_data",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sc.base.plan_jsonl_valid",
+      "pytest_node": "test_case_outcomes.py::test_plan_jsonl_valid",
+      "category": "base_task_completion",
+      "description": "Plan files are well-formed JSONL with request_id/batch_id/shape",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sc.base.all_requests_covered_exactly",
+      "pytest_node": "test_case_outcomes.py::test_all_requests_covered_exactly",
+      "category": "base_task_completion",
+      "description": "Every request is covered exactly once per bucket",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sc.base.shape_fields_valid",
+      "pytest_node": "test_case_outcomes.py::test_shape_fields_valid",
+      "category": "base_task_completion",
+      "description": "Shapes satisfy seq_align multiple of 64, heads 32, hidden 4096, coverage",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sc.preserve.snapshot_exists",
+      "pytest_node": "test_case_outcomes.py::test_preservation_snapshot_exists",
+      "category": "selective_preservation",
+      "description": "First-pass snapshots of both bucket plans were recorded",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sc.preserve.final_matches_snapshot",
+      "pytest_node": "test_case_outcomes.py::test_preserved_bucket_final_matches_snapshot",
+      "category": "selective_preservation",
+      "description": "The preserved bucket's final plan is byte-identical to its first-pass snapshot",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sc.preserve.manifest_names_preserved",
+      "pytest_node": "test_case_outcomes.py::test_manifest_names_preserved_bucket",
+      "category": "selective_preservation",
+      "description": "Manifest names the preserved bucket and its final hash is consistent",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sc.preserve.preserved_bucket_valid",
+      "pytest_node": "test_case_outcomes.py::test_preserved_bucket_plan_valid",
+      "category": "selective_preservation",
+      "description": "The preserved bucket's plan still satisfies shape coverage",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sc.replan.differs_from_snapshot",
+      "pytest_node": "test_case_outcomes.py::test_replanned_bucket_differs_from_snapshot",
+      "category": "replanning_recovery",
+      "description": "The replanned bucket binds the evaluator-scoped bucket2 authority receipt and differs from its first-pass snapshot",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.replan.coverage",
+      "pytest_node": "test_case_outcomes.py::test_replanned_bucket_coverage",
+      "category": "replanning_recovery",
+      "description": "The replanned bucket's final plan covers every request shape need",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.replan.pad_threshold",
+      "pytest_node": "test_case_outcomes.py::test_replanned_bucket_pad_threshold",
+      "category": "replanning_recovery",
+      "description": "The replanned bucket stays under its pad-ratio threshold",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.replan.cost_threshold",
+      "pytest_node": "test_case_outcomes.py::test_replanned_bucket_cost_threshold",
+      "category": "replanning_recovery",
+      "description": "The replanned bucket stays under its cost threshold",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.global.max_shapes",
+      "pytest_node": "test_case_outcomes.py::test_max_shapes_respected",
+      "category": "global_constraint",
+      "description": "Combined unique shapes respect the shared MAX_SHAPES=8 budget",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.global.bucket1_thresholds",
+      "pytest_node": "test_case_outcomes.py::test_bucket1_thresholds",
+      "category": "global_constraint",
+      "description": "Bucket1 cost/pad/p95/seq thresholds hold",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.global.bucket2_thresholds",
+      "pytest_node": "test_case_outcomes.py::test_bucket2_thresholds",
+      "category": "global_constraint",
+      "description": "Bucket2 cost/pad/p95/seq thresholds hold",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.global.shape_set_matches",
+      "pytest_node": "test_case_outcomes.py::test_global_shape_set_matches_actual",
+      "category": "global_constraint",
+      "description": "Manifest global_shape_set equals the actual combined shape set",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.global.unique_shape_count",
+      "pytest_node": "test_case_outcomes.py::test_combined_unique_shape_count_reported",
+      "category": "global_constraint",
+      "description": "Manifest combined unique shape count matches actual",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.global.no_missing_duplicates",
+      "pytest_node": "test_case_outcomes.py::test_no_missing_or_duplicate_requests_global",
+      "category": "global_constraint",
+      "description": "Across both buckets every request appears exactly once",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.closure.both_validators_pass",
+      "pytest_node": "test_case_outcomes.py::test_both_validator_reports_pass",
+      "category": "consistency_closure",
+      "description": "Manifest records both bucket validators as pass",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.closure.wait_for_all_validators",
+      "pytest_node": "test_case_outcomes.py::test_manifest_wait_for_all_validators",
+      "category": "consistency_closure",
+      "description": "Completion waited for all validator results",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.closure.closure_verified",
+      "pytest_node": "test_case_outcomes.py::test_manifest_closure_verified",
+      "category": "consistency_closure",
+      "description": "Manifest declares the combined plan closure was verified",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.closure.full_recompute_passes",
+      "pytest_node": "test_case_outcomes.py::test_full_recompute_both_buckets_pass",
+      "category": "consistency_closure",
+      "description": "Full recompute of both buckets passes every threshold",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.closure.preservation_hashes",
+      "pytest_node": "test_case_outcomes.py::test_manifest_preservation_hashes_consistent",
+      "category": "consistency_closure",
+      "description": "Manifest preservation hashes match the snapshot and final files",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sc.closure.replan_hashes",
+      "pytest_node": "test_case_outcomes.py::test_manifest_replan_hashes_consistent",
+      "category": "consistency_closure",
+      "description": "Manifest replan hashes match the snapshot and final files",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    }
+  ]
+}

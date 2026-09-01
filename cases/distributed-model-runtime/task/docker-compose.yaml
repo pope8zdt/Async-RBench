@@ -1,0 +1,5 @@
+services:
+  client:
+    build: .
+    image: async_rbench-distributed-model-runtime:locked
+    command: ["bash", "-lc", "sleep infinity"]

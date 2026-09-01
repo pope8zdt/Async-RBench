@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_duplicate_challenge_test_evidence_replay",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_test_evidence_4.challenge_test_evidence_replayed",
+      "evidence_group": "mab_code91_familyquest.classify_duplicate",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_users_family_sessi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_duplicate: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close challenge_test_evidence_replayed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_family_sessi"
+        ]
+      },
+      "id": "mab_code91_familyquest.cf.01_classify_duplicate_challenge_test_evi",
+      "independence_key": "mab_code91_familyquest.cf.01_classify_duplicate_challenge_test_evi",
+      "measurement_type": "control",
+      "mutation_id": "mab_code91_familyquest.mutation.01_classify_duplicate_challenge_test_evi",
+      "obligation": "classify_duplicate",
+      "outcome_anchors": [
+        "mab_late_test_evidence_4c6c77884e.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_duplicate:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_family_sessi"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_idempotency_challenge_test_evidence_replay",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_late_test_evidence_4.challenge_test_evidence_replayed",
+      "evidence_group": "mab_code91_familyquest.preserve_idempotency",
+      "evidence_spec": {
+        "primary_fact": "idempotency_decision",
+        "subject": "req.02.implement_deterministic_begi"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_idempotency: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close challenge_test_evidence_replayed.",
+      "gate": "deduplicate_completion",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_deterministic_begi"
+        ]
+      },
+      "id": "mab_code91_familyquest.cf.02_preserve_idempotency_challenge_test_evi",
+      "independence_key": "mab_code91_familyquest.cf.02_preserve_idempotency_challenge_test_evi",
+      "measurement_type": "control",
+      "mutation_id": "mab_code91_familyquest.mutation.02_preserve_idempotency_challenge_test_evi",
+      "obligation": "preserve_idempotency",
+      "outcome_anchors": [
+        "mab_late_test_evidence_4c6c77884e.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:preserve_idempotency:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_deterministic_begi"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_challenge_test_evidence_replay",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_test_evidence_4.challenge_test_evidence_replayed",
+      "evidence_group": "mab_code91_familyquest.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.persist_progress_hints_and_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: Task-specific challenge tests are incorporated exactly once even when completion is replayed, while shared sessions, saved progress, hints, and collaboration history remain intact.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close challenge_test_evidence_replayed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.persist_progress_hints_and_r"
+        ]
+      },
+      "id": "mab_code91_familyquest.cf.03_verify_closure_challenge_test_evi",
+      "independence_key": "mab_code91_familyquest.cf.03_verify_closure_challenge_test_evi",
+      "measurement_type": "control",
+      "mutation_id": "mab_code91_familyquest.mutation.03_verify_closure_challenge_test_evi",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_test_evidence_4c6c77884e.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.persist_progress_hints_and_r"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_late_test_evidence_4.challenge_test_evidence_replayed",
+      "event_theme": "duplicate_or_replayed_completion",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The authoritative sorting boundary suite is registered exactly once and affected challenge behavior is reverified without duplicating side effects.",
+        "before": "Collaboration and challenge execution exist, but boundary-test evidence has not yet been incorporated and may be delivered more than once.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

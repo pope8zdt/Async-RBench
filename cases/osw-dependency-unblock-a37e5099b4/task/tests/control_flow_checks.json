@@ -1,0 +1,255 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_completeness_script_fu_resize_result",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "evidence_group": "osw_scriptfu_a37e.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "script_fu_resize_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness for script_fu_resize_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip classify_completeness, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_scriptfu_a37e.cf.01_classify_completeness_script_fu_resize_result",
+      "independence_key": "osw_scriptfu_a37e.cf.01_classify_completeness_script_fu_resize_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_scriptfu_a37e.mutation.01_classify_completeness_script_fu_resize_result",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_dependency_unblock_a37e5099b4.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_image"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_script_fu_resize_result",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "evidence_group": "osw_scriptfu_a37e.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "script_fu_resize_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for script_fu_resize_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_scriptfu_a37e.cf.02_revise_affected_script_fu_resize_result",
+      "independence_key": "osw_scriptfu_a37e.cf.02_revise_affected_script_fu_resize_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_scriptfu_a37e.mutation.02_revise_affected_script_fu_resize_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_a37e5099b4.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.lisp_extension"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_script_fu_resize_result",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "evidence_group": "osw_scriptfu_a37e.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "script_fu_resize_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for script_fu_resize_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_scriptfu_a37e.cf.03_preserve_unaffected_script_fu_resize_result",
+      "independence_key": "osw_scriptfu_a37e.cf.03_preserve_unaffected_script_fu_resize_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_scriptfu_a37e.mutation.03_preserve_unaffected_script_fu_resize_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_a37e5099b4.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_script_fu_resize_result",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "evidence_group": "osw_scriptfu_a37e.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "script_fu_resize_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for script_fu_resize_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_scriptfu_a37e.cf.04_verify_closure_script_fu_resize_result",
+      "independence_key": "osw_scriptfu_a37e.cf.04_verify_closure_script_fu_resize_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_scriptfu_a37e.mutation.04_verify_closure_script_fu_resize_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_a37e5099b4.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.resize_dimensions"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_04",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "event_theme": "partial_then_complete_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The completed result combines a Lisp-capable VS Code extension with a GIMP-produced /home/user/Desktop/resized.png whose official dimensions are exactly 128×128.",
+        "before": "The source image and editor are available, but extension evidence and resized-image evidence arrive as separate partial results.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

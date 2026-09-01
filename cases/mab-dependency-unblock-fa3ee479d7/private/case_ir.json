@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-fa3ee479d7",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_group_integrity_contract_compl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_profiles_and_valid"
+        ]
+      },
+      "id": "01_classify_authority_group_integrity_cont",
+      "must_still_pass": [
+        "mab_dependency_unblock_fa3ee479d7.source.preservation"
+      ],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fa3ee479d7.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A delayed media, leadership, membership, and task-integrity contract unblocks collaborative craft projects while preserving profiles, posts, feedback, messages, and search state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_profiles_and_valid"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_group_integrity_contract_compl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_leader_managed_gro"
+        ]
+      },
+      "id": "02_revise_affected_group_integrity_cont",
+      "must_still_pass": [
+        "mab_dependency_unblock_fa3ee479d7.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fa3ee479d7.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A delayed media, leadership, membership, and task-integrity contract unblocks collaborative craft projects while preserving profiles, posts, feedback, messages, and search state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_leader_managed_gro"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_group_integrity_contract_compl",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close group_integrity_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_comments_helpfulne"
+        ]
+      },
+      "id": "03_verify_closure_group_integrity_cont",
+      "must_still_pass": [
+        "mab_dependency_unblock_fa3ee479d7.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_fa3ee479d7.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A delayed media, leadership, membership, and task-integrity contract unblocks collaborative craft projects while preserving profiles, posts, feedback, messages, and search state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_comments_helpfulne"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_profiles_and_valid"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_leader_managed_gro"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_comments_helpfulne"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_delayed_media"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_profiles_and_valid",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_leader_managed_gro",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_comments_helpfulne",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_delayed_media",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_profiles_and_valid",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_leader_managed_gro",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_comments_helpfulne",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_delayed_media",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_profiles_and_valid",
+      "req.02.implement_leader_managed_gro",
+      "req.03.implement_comments_helpfulne",
+      "req.04.integrate_the_delayed_media",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The returned contract governs media and group changes while preserving valid posts, feedback, messaging, and search results.",
+    "before_state": "Profiles, posts, and provisional groups exist without authoritative media-type, membership, and leader-only mutation rules.",
+    "event_id": "evt.mab_dependency_unblock_fa3e.group_integrity_contract_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement profiles and validated craft project posts with media and tags.",
+      "id": "req.01.implement_profiles_and_valid",
+      "observable_probe": "mab_dependency_unblock_fa3ee479d7.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement leader-managed group membership, task assignment, and progress tracking.",
+      "id": "req.02.implement_leader_managed_gro",
+      "observable_probe": "mab_dependency_unblock_fa3ee479d7.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement comments, helpfulness votes, private/group messages, and keyword/tag/profile search.",
+      "id": "req.03.implement_comments_helpfulne",
+      "observable_probe": "mab_dependency_unblock_fa3ee479d7.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the delayed media and group-integrity contract and reverify consistency.",
+      "id": "req.04.integrate_the_delayed_media",
+      "observable_probe": "mab_dependency_unblock_fa3ee479d7.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

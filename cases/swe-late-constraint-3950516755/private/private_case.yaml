@@ -1,0 +1,235 @@
+{
+  "artifact_observers": {},
+  "authoritative_result_kind": "result_03",
+  "capabilities": [
+    "inflight_cancellation",
+    "selective_invalidation",
+    "verification_reopen"
+  ],
+  "case_id": "swe-late-constraint-3950516755",
+  "classification": {
+    "async_scenario_class": "resource_eventful",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "secondary_event_themes": []
+  },
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_03",
+      "event_id": "evt.swe_late_constraint_3950.straggler_under_resource",
+      "event_theme": "straggler_under_resource_pressure",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "A version specialist reports compilation and evaluation semantics for `True`, `False`, and `None` on supported Python versions, including debug builds.",
+        "before": "Deliver the cross-version semantic matrix after an initial AST-node substitution has been written.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "format_version": 2,
+  "hidden_checks": {
+    "closure_consumes_receipt": "python3 -c \"import json; r=json.load(open('/app/output_data/event_receipt.json')); m=json.load(open('/app/output_data/decision_manifest.json')); assert m['event_receipt_sha256']==r['receipt_sha256']\"",
+    "receipt_bound_to_case": "python3 -c \"import json; r=json.load(open('/app/output_data/event_receipt.json')); assert r['case_id']=='swe-late-constraint-3950516755'\""
+  },
+  "information_sufficiency": [
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_01"
+    },
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_02"
+    },
+    {
+      "public_inputs": [
+        "task/task.yaml",
+        "public_case.yaml"
+      ],
+      "required_output_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "requirement_ids": [
+        "source_and_async_closure_contract"
+      ],
+      "review_status": "reviewed",
+      "workstream_id": "requirement_worker_03"
+    }
+  ],
+  "legacy_metadata": {
+    "asset_copies": [],
+    "implementation": "real-instance-derived",
+    "upstream_commit": null
+  },
+  "result_contract": {
+    "allowed_result_kinds": [
+      "result_01",
+      "result_02",
+      "result_03"
+    ],
+    "rule": "Integrate independently validated workstream evidence by receipt and workspace revision; completion order does not imply authority."
+  },
+  "reverification_anchors": {
+    "closure_consumes_receipt": [
+      "result_03"
+    ],
+    "receipt_bound_to_case": [
+      "result_03"
+    ]
+  },
+  "scenarios": {
+    "async": {
+      "events": [
+        {
+          "at": 2,
+          "id": "evt.swe_late_constraint_3950.straggler_under_resource.workstream_01",
+          "invalidates_artifacts": [],
+          "reopens_milestones": [],
+          "result": "result_01"
+        },
+        {
+          "at": 3,
+          "id": "evt.swe_late_constraint_3950.straggler_under_resource.workstream_02",
+          "invalidates_artifacts": [],
+          "reopens_milestones": [],
+          "result": "result_02"
+        },
+        {
+          "id": "evt.swe_late_constraint_3950.straggler_under_resource",
+          "invalidates_artifacts": [
+            "final_state"
+          ],
+          "reopens_milestones": [
+            "consume_async_evidence",
+            "reverify_and_close"
+          ],
+          "result": "result_03",
+          "stimulus_type": "resource_pressure",
+          "after_artifacts": [
+            "provisional_checkpoint",
+            "preserved_source_facts"
+          ],
+          "limit": 1,
+          "resource": "concurrency_slot",
+          "trigger": "after_artifacts_committed",
+          "workstream_id": "requirement_worker_03"
+        }
+      ]
+    },
+    "linear": {
+      "events": []
+    }
+  },
+  "stale_predicate": null,
+  "stale_revalidation": {},
+  "superseded_result_kind": null,
+  "workstream_bindings": {
+    "requirement_worker_01": {
+      "event_assets": [],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_01",
+      "validator_command": "python3 -c \"import base64,hashlib,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p,encoding='utf-8')); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']; assert len(e['revision_sha256'])==64\"",
+      "validator_timeout_sec": 120
+    },
+    "requirement_worker_02": {
+      "event_assets": [],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_02",
+      "validator_command": "python3 -c \"import base64,hashlib,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p,encoding='utf-8')); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']; assert len(e['revision_sha256'])==64\"",
+      "validator_timeout_sec": 120
+    },
+    "requirement_worker_03": {
+      "event_assets": [
+        "/app/task_file/scripts/event_worker.py"
+      ],
+      "private_evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "result_kind": "result_03",
+      "validator_command": "python3 -c \"import base64,hashlib,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p,encoding='utf-8')); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']; assert len(e['revision_sha256'])==64\"",
+      "validator_timeout_sec": 120
+    }
+  }
+}

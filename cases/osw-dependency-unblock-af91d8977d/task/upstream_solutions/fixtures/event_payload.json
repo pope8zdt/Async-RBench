@@ -1,0 +1,34 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-af91d8977d",
+  "source_task_id": "osworld:vs_code:930fdb3b-11a8-46fe-9bac-577332e2640e",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "terminal_focus_command_context",
+  "upstream_dependency_graph": [
+    {
+      "id": "command_identity_resolution",
+      "app": "VS Code command registry",
+      "description": "Resolve the command that moves focus to the active editor group."
+    },
+    {
+      "id": "scoped_keybinding_validation",
+      "app": "VS Code keybinding worker",
+      "description": "Bind Ctrl+J to that command only while the terminal has focus and validate unique JSON.",
+      "depends_on": [
+        "command_identity_resolution"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/.config/Code/User/keybindings.json",
+    "key": "ctrl+j",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "terminalFocus",
+    "matching_entry_count": 1,
+    "valid_json": true,
+    "terminal_to_editor_enabled": true,
+    "unrelated_keybindings_preserved": true
+  },
+  "task_assertion": "The active VS Code keybindings contain one terminal-scoped Ctrl+J entry that moves focus to the active editor group without replacing unrelated shortcuts.",
+  "finding": "The keybinding resolver returns the exact scoped entry ctrl+j, workbench.action.focusActiveEditorGroup, when terminalFocus."
+}

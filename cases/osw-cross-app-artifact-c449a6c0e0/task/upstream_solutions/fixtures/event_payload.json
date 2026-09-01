@@ -1,0 +1,63 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-c449a6c0e0",
+  "source_task_id": "osworld:multi_apps:51f5801c-18b3-4f25-b0c3-02f85507a078",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "ordered_presenter_notes",
+  "upstream_dependency_graph": [
+    {
+      "id": "presentation_structure_scan",
+      "app": "LibreOffice Impress",
+      "description": "Inventory all nine slides and identify which slides contain presenter notes."
+    },
+    {
+      "id": "presenter_note_extraction",
+      "app": "Impress note worker",
+      "description": "Extract plain note text with source slide indices.",
+      "depends_on": [
+        "presentation_structure_scan"
+      ]
+    },
+    {
+      "id": "ordered_note_validation",
+      "app": "Document worker",
+      "description": "Exclude the empty note, preserve slide order and validate the note digest.",
+      "depends_on": [
+        "presenter_note_extraction"
+      ]
+    }
+  ],
+  "state": {
+    "output_path": "/home/user/Desktop/notes.docx",
+    "presentation_path": "/home/user/Desktop/Dickinson_Slides.pptx",
+    "slide_count": 9,
+    "note_slide_indices": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      9
+    ],
+    "note_count": 8,
+    "notes": [
+      "This is opening slide.",
+      "Cover slide option #1",
+      "Cover slide option #3",
+      "This is a graph.",
+      "This is a table.",
+      "This is item lists.",
+      "This is an inserted image.",
+      "Blank ending slide"
+    ],
+    "notes_joined_sha256": "c9af232221b684a6e20d82fcf864f7817e828103d29cf0c98d8b2994386fda1d",
+    "plain_text_only": true,
+    "page_numbers_added": false,
+    "formatting_added": false,
+    "gold_docx_sha256": "184938c001aa31191fef4859698273f73a4c3ab3c3f105d44c02962a453a1eab"
+  },
+  "task_assertion": "notes.docx contains only the eight non-empty presenter notes in source slide order, with no page numbers or added formatting.",
+  "finding": "The presentation worker returns eight non-empty presenter notes from slides 1,2,3,4,5,6,8,9 in slide order, excluding the empty slide 7."
+}

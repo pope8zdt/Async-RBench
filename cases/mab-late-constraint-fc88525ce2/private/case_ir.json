@@ -1,0 +1,228 @@
+{
+  "case_id": "mab-late-constraint-fc88525ce2",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_scope_delta",
+      "must_still_pass": [],
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_fc88525ce2.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "production_scope_constraint_added"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "must_still_pass": [],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_fc88525ce2.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "production_scope_constraint_added"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "must_still_pass": [],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_fc88525ce2.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "production_scope_constraint_added"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "must_still_pass": [],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_fc88525ce2.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+      "stage_tag": "closure",
+      "task_requirement_id": "production_scope_constraint_added"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.choose_a_quantity_compat"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.counter_or_accept_the_90"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.revise_the_quantity_pric"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.submit_the_offer_and_rec"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.choose_a_quantity_compat",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.counter_or_accept_the_90",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_the_quantity_pric",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.submit_the_offer_and_rec",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.choose_a_quantity_compat",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.counter_or_accept_the_90",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_the_quantity_pric",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.submit_the_offer_and_rec",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.choose_a_quantity_compat",
+      "req.02.counter_or_accept_the_90",
+      "req.03.revise_the_quantity_pric",
+      "req.04.submit_the_offer_and_rec",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The seller adds a 100-doll immediate-batch ceiling, $14.25 price, 90-day replacement policy, and six-week second-batch dependency for larger quantities.",
+    "before_state": "Task-specific provisional work exists before production_scope_constraint_added.",
+    "event_id": "evt.mab-late-constraint-fc88525ce2.production_scope_constraint_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Choose a quantity compatible with the production lead time.",
+      "id": "req.01.choose_a_quantity_compat",
+      "observable_probe": "mab_late_constraint_fc88.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for choose_a_quantity_compatible_with_th"
+    },
+    {
+      "description": "Counter or accept the 90-day replacement coverage explicitly.",
+      "id": "req.02.counter_or_accept_the_90",
+      "observable_probe": "mab_late_constraint_fc88.sem.02.the_final_negotiation_ledger",
+      "public_evidence": "source instruction and workstream result for counter_or_accept_the_90_day_replace"
+    },
+    {
+      "description": "Revise the quantity, price, and delivery schedule in one offer.",
+      "id": "req.03.revise_the_quantity_pric",
+      "observable_probe": "mab_late_constraint_fc88.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for revise_the_quantity_price_and_delive"
+    },
+    {
+      "description": "Submit the offer and record agreement or termination.",
+      "id": "req.04.submit_the_offer_and_rec",
+      "observable_probe": "mab_late_constraint_fc88.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for submit_the_offer_and_record_agreemen"
+    }
+  ]
+}

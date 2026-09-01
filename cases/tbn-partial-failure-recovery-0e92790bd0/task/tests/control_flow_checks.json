@@ -1,0 +1,226 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_the_main_branch_starts_recon",
+      "dimension": "event_intake",
+      "event_id": "evt.tbn_partial_failure_reco.task_scope_or_dependency",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.the_main_branch_starts_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform classify_scope_delta for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_partial_fai_e5a821.cf.01_classify_scope_delta",
+      "independence_key": "tbn_partial_fai_e5a821.cf.01_classify_scope_delta",
+      "measurement_type": "control",
+      "mutation_id": "tbn_partial_fai_e5a821.mutation.01_classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "tbn_partial_failure_recovery_0e92790bd0.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_partial_fai_e5a821.cf.01_classify_scope_delta]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_the_main_branch_starts_recon",
+      "dimension": "state_revision",
+      "event_id": "evt.tbn_partial_failure_reco.task_scope_or_dependency",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.the_main_branch_starts_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform revise_affected for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_partial_fai_e5a821.cf.02_revise_affected",
+      "independence_key": "tbn_partial_fai_e5a821.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "tbn_partial_fai_e5a821.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "tbn_partial_failure_recovery_0e92790bd0.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_partial_fai_e5a821.cf.02_revise_affected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_the_main_branch_starts_recon",
+      "dimension": "plan_revision",
+      "event_id": "evt.tbn_partial_failure_reco.task_scope_or_dependency",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.the_main_branch_starts_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform preserve_unaffected for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "tbn_partial_fai_e5a821.cf.03_preserve_unaffected",
+      "independence_key": "tbn_partial_fai_e5a821.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "tbn_partial_fai_e5a821.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "tbn_partial_failure_recovery_0e92790bd0.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_partial_fai_e5a821.cf.03_preserve_unaffected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_the_main_branch_starts_recon",
+      "dimension": "closure",
+      "event_id": "evt.tbn_partial_failure_reco.task_scope_or_dependency",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.the_main_branch_starts_r"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…', perform verify_closure for 'The main branch starts reconstructing, cleaning, or serializing the artifact from an earlier hypothesis.' while retaining valid prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Missing required parameters for function 'think': {'thought'}'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "tbn_partial_fai_e5a821.cf.04_verify_closure",
+      "independence_key": "tbn_partial_fai_e5a821.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "tbn_partial_fai_e5a821.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "tbn_partial_failure_recovery_0e92790bd0.source.pin"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_partial_fai_e5a821.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.the_main_branch_starts_r"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.tbn_partial_failure_reco.task_scope_or_dependency",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery",
+        "pre_event_affected_commit",
+        "pre_event_unaffected_commit"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "I am thinking...: Let me verify what I've accomplished: 1. I successfully recovered the secret from the git history - it was `secret[lost_and_found_in_git]` from commit cca75de that was later reset/rewritten. 2. I wrote the secret to /app/secret.txt as requested. 3. I cleaned up the repository by: - Expiring all reflog entries with `git reflog expire --expire=all --all` - Running aggressive garbage collection with `git gc --prune=now --aggressive` - This removed the dangling commit that containe…",
+        "before": "useful source work is already persisted",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

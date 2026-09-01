@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific logistics_worker_recovered receipt is authentic and bound to coding:068 and mab-dependency-unblock-2cf6576816.",
+      "id": "mab_dependency_unblock_2cf6576816.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned MultiServe authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_2cf6576816.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Recovered logistics completes multi-restaurant delivery without resurrecting canceled orders or losing restaurant decisions and notifications.",
+      "id": "mab_dependency_unblock_2cf6576816.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:068.",
+      "id": "mab_dependency_unblock_2cf6576816.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and multi_restaurant_logistics_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_2cf6576816.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_multiserve_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A combined cart becomes restaurant-specific suborders, aggregate status reflects partial readiness/failure, and deterministic delivery tasks support decline and reassignment.",
+      "id": "mab_dependency_unblock_2cf6576816.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_multiserve_partitions_suborders_aggregates_status_and_assigns_agents",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: cart_items, restaurant_decisions, cancellation_state, user_notifications.",
+      "id": "mab_dependency_unblock_2cf6576816.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_multiserve_cancellation_restaurant_state_and_notifications_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recovered logistics completes multi-restaurant delivery without resurrecting canceled orders or losing restaurant decisions and notifications.",
+      "id": "mab_dependency_unblock_2cf6576816.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_multiserve_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

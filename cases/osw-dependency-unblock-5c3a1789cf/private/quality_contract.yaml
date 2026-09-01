@@ -1,0 +1,91 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_5c3a1789cf.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_5c3a1789cf.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_dependency_unblock_5c3a1789cf.osworld.state"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_dependency_unblock_5c3a1789cf.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_dependency_unblock_5.cf.01_classify_authority_enter_the_returned",
+          "osw_dependency_unblock_5.cf.02_revise_affected_apply_the_large_ca",
+          "osw_dependency_unblock_5.cf.03_verify_closure_verify_the_visible"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_5c3a1789cf.event.receipt",
+          "osw_dependency_unblock_5c3a1789cf.event.probes",
+          "osw_dependency_unblock_5c3a1789cf.closure",
+          "osw_dependency_unblock_5c3a1789cf.source.pin",
+          "osw_dependency_unblock_5c3a1789cf.osworld.identity",
+          "osw_dependency_unblock_5c3a1789cf.osworld.official_score",
+          "osw_dependency_unblock_5c3a1789cf.osworld.native_evidence",
+          "osw_dependency_unblock_5c3a1789cf.osworld.task_assertion",
+          "osw_dependency_unblock_5c3a1789cf.osworld.state"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "large car",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "2f886375d0fdf17f53469f18b77beb5467d3065a92834766fdc21919beb5951c",
+        "task_id": "osworld:chrome:1704f00f-79e6-43a7-961b-cedd3724d5fd",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

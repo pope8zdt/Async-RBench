@@ -1,0 +1,248 @@
+{
+  "case_id": "osw-cross-app-artifact-81b4557778",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_unpack_the_artifact_first_if",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions management page is open.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.unpack_the_artifact_firs"
+        ]
+      },
+      "id": "01_classify_scope_delta_unpack_the_artifac",
+      "must_still_pass": [
+        "osw_cross_app_artifact_8.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_81b4557778.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform classify_scope_delta for 'Unpack the artifact first if the returned package type requires it.' while retaining valid prior result 'Chrome's extensions management page is open.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.unpack_the_artifact_firs"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_enable_developer_mode",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Developer mode controls are located or enabled.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.unpack_the_artifact_firs"
+        ]
+      },
+      "id": "02_revise_affected_enable_developer_m",
+      "must_still_pass": [
+        "osw_cross_app_artifact_8.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_81b4557778.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform revise_affected for 'Enable Developer mode.' while retaining valid prior result 'Developer mode controls are located or enabled.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.unpack_the_artifact_firs"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_choose_load_unpacked_and_sel",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Chrome's extensions management page is open.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.unpack_the_artifact_firs"
+        ]
+      },
+      "id": "03_preserve_unaffected_choose_load_unpack",
+      "must_still_pass": [
+        "osw_cross_app_artifact_8.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_81b4557778.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform preserve_unaffected for 'Choose Load unpacked and select the returned manifest root.' while retaining valid prior result 'Chrome's extensions management page is open.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.unpack_the_artifact_firs"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_verify_the_extension_card_ap",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Developer mode controls are located or enabled.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.unpack_the_artifact_firs"
+        ]
+      },
+      "id": "04_verify_closure_verify_the_extensi",
+      "must_still_pass": [
+        "osw_cross_app_artifact_8.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_81b4557778.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "For event 'A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.', perform verify_closure for 'Verify the extension card appears without a manifest or load error.' while retaining valid prior result 'Developer mode controls are located or enabled.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.unpack_the_artifact_firs"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.unpack_the_artifact_firs"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.enable_developer_mode"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.choose_load_unpacked_and"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.verify_the_extension_car"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.unpack_the_artifact_firs",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.enable_developer_mode",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.choose_load_unpacked_and",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.verify_the_extension_car",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.unpack_the_artifact_firs",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.enable_developer_mode",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.choose_load_unpacked_and",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.verify_the_extension_car",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.unpack_the_artifact_firs",
+      "req.02.enable_developer_mode",
+      "req.03.choose_load_unpacked_and",
+      "req.04.verify_the_extension_car",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A filesystem worker returns the exact unpacked extension root on the Desktop containing the valid manifest.json and reports whether the artifact must first be unpacked.",
+    "before_state": "The valid manifest root arrives after Chrome setup and replaces stale menu searching or guessed folder selection.",
+    "event_id": "evt.osw_cross_app_artifact_8.task_scope_or_dependency",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Unpack the artifact first if the returned package type requires it.",
+      "id": "req.01.unpack_the_artifact_firs",
+      "observable_probe": "osw_cross_app_artifact_8.sem.01.the_persisted_desktop_artifa",
+      "public_evidence": "source instruction and workstream result for unpack_the_artifact_first_if_the_ret"
+    },
+    {
+      "description": "Enable Developer mode.",
+      "id": "req.02.enable_developer_mode",
+      "observable_probe": "osw_cross_app_artifact_8.sem.02.the_required_result_artifact",
+      "public_evidence": "source instruction and workstream result for enable_developer_mode"
+    },
+    {
+      "description": "Choose Load unpacked and select the returned manifest root.",
+      "id": "req.03.choose_load_unpacked_and",
+      "observable_probe": "osw_cross_app_artifact_8.sem.03.unpack_the_artifact_first_if",
+      "public_evidence": "source instruction and workstream result for choose_load_unpacked_and_select_the_"
+    },
+    {
+      "description": "Verify the extension card appears without a manifest or load error.",
+      "id": "req.04.verify_the_extension_car",
+      "observable_probe": "osw_cross_app_artifact_8.sem.04.enable_developer_mode",
+      "public_evidence": "source instruction and workstream result for verify_the_extension_card_appears_wi"
+    }
+  ]
+}

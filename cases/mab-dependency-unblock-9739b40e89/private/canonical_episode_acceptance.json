@@ -1,0 +1,15 @@
+{
+  "accepted": true,
+  "accepted_episode_owner": "evaluator",
+  "model_episode_required": false,
+  "native_report": "private/native_canonical_report.json",
+  "requirements": [
+    "Room events apply in sequence, gaps require resync, playback positions are revision-bound, and each user/mashup vote is idempotent before leaderboard updates.",
+    "The delayed backend contract replaces snapshots while room history, chat, private membership, and mashup versions remain intact.",
+    "four upstream results"
+  ],
+  "task_specific_acceptance": [
+    "Room events apply in sequence, gaps require resync, playback positions are revision-bound, and each user/mashup vote is idempotent before leaderboard updates.",
+    "Preserve room_history, chat_messages, private_room_membership, mashup_versions."
+  ]
+}

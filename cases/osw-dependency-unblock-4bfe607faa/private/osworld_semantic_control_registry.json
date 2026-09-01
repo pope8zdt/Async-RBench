@@ -1,0 +1,58 @@
+{
+  "controls": [
+    {
+      "id": "01_classify_authority_open_the_returned_",
+      "stage": "event_intake",
+      "required_behavior": "classify_authority",
+      "affected_nodes": [
+        "event_input",
+        "req.01.open_the_returned_catalo",
+        "req.02.verify_women_nike_and_je",
+        "req.03.set_the_lower_price_boun",
+        "req.04.confirm_the_displayed_it",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The NBA Store is opened.'."
+    },
+    {
+      "id": "02_revise_affected_verify_women_nike_",
+      "stage": "state_revision",
+      "required_behavior": "revise_affected",
+      "affected_nodes": [
+        "event_input",
+        "req.01.open_the_returned_catalo",
+        "req.02.verify_women_nike_and_je",
+        "req.03.set_the_lower_price_boun",
+        "req.04.confirm_the_displayed_it",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Navigation reaches the women's or jerseys catalog without selecting unverified products.'."
+    },
+    {
+      "id": "03_verify_closure_set_the_lower_pric",
+      "stage": "closure",
+      "required_behavior": "verify_closure",
+      "affected_nodes": [
+        "event_input",
+        "req.01.open_the_returned_catalo",
+        "req.02.verify_women_nike_and_je",
+        "req.03.set_the_lower_price_boun",
+        "req.04.confirm_the_displayed_it",
+        "final_state"
+      ],
+      "preserve": true,
+      "preserved_nodes": [
+        "preserve_prior"
+      ],
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The NBA Store is opened.'."
+    }
+  ]
+}

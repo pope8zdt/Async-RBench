@@ -1,0 +1,57 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-late-test-evidence-5b3f5ffce5",
+  "source_task_id": "osworld:multi_apps:9219480b-3aed-47fc-8bac-d2cffc5849f7",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "tetris_rotation_test_result",
+  "upstream_dependency_graph": [
+    {
+      "id": "project_source_audit",
+      "app": "Python source worker",
+      "description": "Verify the four official Tetris source files and private test suite."
+    },
+    {
+      "id": "boundary_failure_reproduction",
+      "app": "VS Code run worker",
+      "description": "Reproduce rotation behavior at the left and right board boundaries.",
+      "depends_on": [
+        "project_source_audit"
+      ]
+    },
+    {
+      "id": "rotation_fix",
+      "app": "VS Code edit worker",
+      "description": "Implement collision-aware rotation handling without changing unrelated game behavior.",
+      "depends_on": [
+        "boundary_failure_reproduction"
+      ]
+    },
+    {
+      "id": "official_test_probe",
+      "app": "Python test worker",
+      "description": "Execute private test() and report boundary safety.",
+      "depends_on": [
+        "rotation_fix"
+      ]
+    }
+  ],
+  "state": {
+    "project_path": "/home/user/Desktop/tetris",
+    "modified_file": "/home/user/Desktop/tetris/tetris.py",
+    "official_test_function": "test",
+    "official_test_sha256": "b266e83242c035256b9a6b0904615318e5bb90fd7ef19f8648a9503e7a96c9ff",
+    "source_files_sha256": {
+      "block.py": "173f6c788ba63b6fc695f00bdd28e82f362e47f99dedca8367ebb76f814fd82c",
+      "main.py": "094e808b626fbd936ceb800c3b055bcb432ec12a33b477bc745cf95caa333d69",
+      "settings.py": "fca04a7cc2e995f756bf9515d847d42b7447948ae53a4fbcde636f5bac2b5c13",
+      "tetris.py": "59ff97d002d5810e458e025d9943dafe53097e7c49026fefcdb789d5641f9b72"
+    },
+    "left_wall_rotation_safe": true,
+    "right_wall_rotation_safe": true,
+    "rotation_reverts_or_kicks_on_collision": true,
+    "official_test_passed": true
+  },
+  "task_assertion": "The fixed Tetris project passes the official test() suite and keeps left-wall and right-wall rotations collision-free without crashing.",
+  "finding": "The delayed test worker confirms the official test function returns true and rotations at both horizontal boundaries remain non-intersecting by reverting or safely repositioning invalid rotations."
+}
+

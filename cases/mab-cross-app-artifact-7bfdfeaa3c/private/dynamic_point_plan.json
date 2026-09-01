@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_map_parsed_midi_events_into_",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_cross_app_artifact_7.partial_then_complete_re",
+      "evidence_group": "mab_cross_app_arti.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.map_parsed_midi_events_i"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An audio specialist returns MIDI parsing fixtures, the composition-event schema, tempo conversion, track ordering, and playback scheduling rules.', perform classify_completeness for 'Map parsed MIDI events into the returned composition schema.' while retaining valid prior result 'Accounts, project collaboration, lyrics, and revision operations are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Accounts, project collaboration, lyrics, and revision operations are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_parsed_midi_events_i"
+        ]
+      },
+      "id": "mab_code66_music.cf.01_classify_completeness_map_parsed_midi_ev",
+      "independence_key": "mab_code66_music.cf.01_classify_completeness_map_parsed_midi_ev",
+      "measurement_type": "control",
+      "mutation_id": "mab_code66_music.mutation.01_classify_completeness_map_parsed_midi_ev",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_7bfdfeaa3c.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.map_parsed_midi_events_i"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_apply_tempo_changes_and_dete",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_cross_app_artifact_7.partial_then_complete_re",
+      "evidence_group": "mab_cross_app_arti.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.map_parsed_midi_events_i"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An audio specialist returns MIDI parsing fixtures, the composition-event schema, tempo conversion, track ordering, and playback scheduling rules.', perform revise_affected for 'Apply tempo changes and deterministic track ordering during playback scheduling.' while retaining valid prior result 'Composition playback uses provisional note events.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Composition playback uses provisional note events.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_parsed_midi_events_i"
+        ]
+      },
+      "id": "mab_code66_music.cf.02_revise_affected_apply_tempo_change",
+      "independence_key": "mab_code66_music.cf.02_revise_affected_apply_tempo_change",
+      "measurement_type": "control",
+      "mutation_id": "mab_code66_music.mutation.02_revise_affected_apply_tempo_change",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_7bfdfeaa3c.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.map_parsed_midi_events_i"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_update_revision_serializatio",
+      "dimension": "closure",
+      "event_id": "evt.mab_cross_app_artifact_7.partial_then_complete_re",
+      "evidence_group": "mab_cross_app_arti.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.map_parsed_midi_events_i"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'An audio specialist returns MIDI parsing fixtures, the composition-event schema, tempo conversion, track ordering, and playback scheduling rules.', perform verify_closure for 'Update revision serialization for the new event fields.' while retaining valid prior result 'Accounts, project collaboration, lyrics, and revision operations are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Accounts, project collaboration, lyrics, and revision operations are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.map_parsed_midi_events_i"
+        ]
+      },
+      "id": "mab_code66_music.cf.03_verify_closure_update_revision_se",
+      "independence_key": "mab_code66_music.cf.03_verify_closure_update_revision_se",
+      "measurement_type": "control",
+      "mutation_id": "mab_code66_music.mutation.03_verify_closure_update_revision_se",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_7bfdfeaa3c.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.map_parsed_midi_events_i"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_cross_app_artifact_7.partial_then_complete_re",
+      "event_theme": "partial_then_complete_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An audio specialist returns MIDI parsing fixtures, the composition-event schema, tempo conversion, track ordering, and playback scheduling rules.",
+        "before": "Deliver the MIDI and timing contract after collaboration, lyrics, revisions, and provisional playback exist.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

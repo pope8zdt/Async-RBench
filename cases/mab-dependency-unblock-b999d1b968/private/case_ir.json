@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-b999d1b968",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_performance_metric_contract_co",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_and_dated_pr"
+        ]
+      },
+      "id": "01_classify_authority_performance_metric_c",
+      "must_still_pass": [
+        "mab_dependency_unblock_b999d1b968.source.preservation"
+      ],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_b999d1b968.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_and_dated_pr"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_performance_metric_contract_co",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_uniquely_assigned"
+        ]
+      },
+      "id": "02_revise_affected_performance_metric_c",
+      "must_still_pass": [
+        "mab_dependency_unblock_b999d1b968.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_b999d1b968.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_uniquely_assigned"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_performance_metric_contract_co",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close performance_metric_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_project_task_messa"
+        ]
+      },
+      "id": "03_verify_closure_performance_metric_c",
+      "must_still_pass": [
+        "mab_dependency_unblock_b999d1b968.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_b999d1b968.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_project_task_messa"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_users_and_dated_pr"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_uniquely_assigned"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_project_task_messa"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_delayed_metric"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_users_and_dated_pr",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_uniquely_assigned",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_project_task_messa",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_delayed_metric",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_users_and_dated_pr",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_uniquely_assigned",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_project_task_messa",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_delayed_metric",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_and_dated_pr",
+      "req.02.implement_uniquely_assigned",
+      "req.03.implement_project_task_messa",
+      "req.04.integrate_the_delayed_metric",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The returned contract fixes unique assignment and performance calculations while preserving messages, feedback, and task history.",
+    "before_state": "Projects, tasks, and collaboration history exist, but duration origin and concurrent-assignment semantics are unresolved.",
+    "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement users and dated projects with membership validation.",
+      "id": "req.01.implement_users_and_dated_pr",
+      "observable_probe": "mab_dependency_unblock_b999d1b968.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement uniquely assigned tasks, deadlines, and ordered status transitions.",
+      "id": "req.02.implement_uniquely_assigned",
+      "observable_probe": "mab_dependency_unblock_b999d1b968.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement project/task messages, attachments, updates, and peer feedback.",
+      "id": "req.03.implement_project_task_messa",
+      "observable_probe": "mab_dependency_unblock_b999d1b968.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the delayed metric contract and produce deterministic dashboards and CSV reports.",
+      "id": "req.04.integrate_the_delayed_metric",
+      "observable_probe": "mab_dependency_unblock_b999d1b968.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "version": "4",
+  "checks": [
+    {
+      "id": "sr.cf.wait_sanitize_then_patch",
+      "gate": "wait_for_authority",
+      "dimension": "event_intake",
+      "gate_args": {
+        "artifacts": [
+          "vulnerability_patch",
+          "git_server",
+          "release_manifest"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sr.stale.pre_rewrite_main_patch_rejected",
+        "sr.stale.pre_rewrite_dev_patch_rejected",
+        "sr.stale.old_deployment_rejected"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sr.cf.reject_pre_rewrite_deployment",
+      "gate": "reject_late_stale",
+      "dimension": "state_revision",
+      "gate_args": {
+        "artifacts": [
+          "git_server",
+          "release_manifest",
+          "vulnerability_patch"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sr.stale.old_deployment_rejected",
+        "sr.stale.old_manifest_rejected"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sr.cf.cancel_pre_rewrite_child",
+      "gate": "timely_cancellation",
+      "dimension": "plan_revision",
+      "gate_args": {
+        "workstreams": [
+          "security_patch"
+        ]
+      },
+      "outcome_anchors": [
+        "sr.stale.pre_rewrite_main_patch_rejected",
+        "sr.stale.old_deployment_rejected"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sr.cf.redeploy_from_clean_baseline",
+      "gate": "rederive_from_authority",
+      "dimension": "closure",
+      "gate_args": {
+        "artifacts": [
+          "git_server",
+          "release_manifest"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sr.stale.old_deployment_rejected",
+        "sr.stale.old_manifest_rejected",
+        "sr.lineage.deployed_ref_consistency"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    }
+  ]
+}

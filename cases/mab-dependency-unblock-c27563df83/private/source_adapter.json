@@ -1,0 +1,28 @@
+{
+  "benchmark": "MultiAgentBench",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "private_copy": "private/source_manifests/01-native_case.json",
+      "sha256": "0a1152c87c757cc75b5b62ea71827988ad546790429b4dbd05ca62f02b0ab944",
+      "source": "source-native-v4/mab-dependency-unblock-c27563df83/native_case.json"
+    },
+    {
+      "private_copy": "private/source_manifests/03-official_task.json",
+      "sha256": "8b2d37a12ad37af56e9eb5beb40beae6f00d38bb2593a754d30cf200e637d90c",
+      "source": "source-native-v4/mab-dependency-unblock-c27563df83/official_task.json"
+    },
+    {
+      "private_copy": "private/source_manifests/04-native_config.yaml",
+      "sha256": "a741af47e5810817375f9471972a4f7c0a0d54c10297d6abb0eba4a17e68f9c0",
+      "source": "source-native-v4/mab-dependency-unblock-c27563df83/native_config.yaml"
+    }
+  ],
+  "runtime_plan": {
+    "adapter": "marble.engine.Engine",
+    "requires_authored_private_oracle": true,
+    "source_revision": "8d60fa17b5596b44458a52d4296061b9fc13d6f2",
+    "source_scenario": "coding"
+  },
+  "source_task_id": "coding:012"
+}

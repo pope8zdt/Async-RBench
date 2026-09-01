@@ -1,0 +1,195 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_req_01_separate_coordinate_attr",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_3fa1.delayed_authority",
+      "evidence_group": "bp_swe_3fa1.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.separate_coordinate_attr"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Treat the delayed provenance matrix as authority for xr.where keep_attrs behavior across every output object level.",
+      "forbidden_behavior": "Do not use the provisional where-level callable as the complete contract; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.separate_coordinate_attr"
+        ]
+      },
+      "id": "swe_dependency__a4ec16.cf.01_classify_authority_separate_coordinat",
+      "independence_key": "swe_dependency__a4ec16.cf.01_classify_authority_separate_coordinat",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__a4ec16.mutation.01_classify_authority_separate_coordinat",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3fa1a02dd5.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Treat the delayed provenance matrix as authority for xr.where keep_attrs behavior across every output object level.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.separate_coordinate_attr"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_req_02_assert_preservation_of_c",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_3fa1.delayed_authority",
+      "evidence_group": "bp_swe_3fa1.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.assert_preservation_of_c"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Revise result attribute restoration so coordinates retain coordinate attrs while Dataset, DataArray, and Variable attrs come from their corresponding source objects.",
+      "forbidden_behavior": "Do not copy data-variable attrs onto coordinates or ignore Dataset promotion; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.assert_preservation_of_c"
+        ]
+      },
+      "id": "swe_dependency__a4ec16.cf.02_revise_affected_assert_preservatio",
+      "independence_key": "swe_dependency__a4ec16.cf.02_revise_affected_assert_preservatio",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__a4ec16.mutation.02_revise_affected_assert_preservatio",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3fa1a02dd5.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Revise result attribute restoration so coordinates retain coordinate attrs while Dataset, DataArray, and Variable attrs come from their corresponding source objects.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.assert_preservation_of_c"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "verify_closure_req_03_run_where_tests_covering",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_3fa1.delayed_authority",
+      "evidence_group": "bp_swe_3fa1.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.run_where_tests_covering"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Run test_where_attrs and focused computation keep_attrs regressions using the exact authority receipt.",
+      "forbidden_behavior": "Do not close from a single DataArray example without native regressions; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.run_where_tests_covering"
+        ]
+      },
+      "id": "swe_dependency__a4ec16.cf.03_verify_closure_run_where_tests_co",
+      "independence_key": "swe_dependency__a4ec16.cf.03_verify_closure_run_where_tests_co",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__a4ec16.mutation.03_verify_closure_run_where_tests_co",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3fa1a02dd5.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Run test_where_attrs and focused computation keep_attrs regressions using the exact authority receipt.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.run_where_tests_covering"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_03",
+      "event_id": "evt.swe_dependency_unblock_3fa1.delayed_authority",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.",
+        "before": "A provisional xr.where keep_attrs implementation is checkpointed before object-level attribute provenance is known.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

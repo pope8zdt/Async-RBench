@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_stale_choose_or_counter_the_warran",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_constraint_23f2.late_or_out_of_order_sup",
+      "evidence_group": "mab_late_constrain.classify_stale",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.choose_or_counter_the_wa"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The seller role offers $45 per filter pack with a 90-day defect warranty, or $48 with a one-year replacement warranty and dedicated support, preserving its stated margin floor.', perform classify_stale for 'Choose or counter the warranty-price tier.' while retaining valid prior result 'Buyer specified warranty and after-sales-support requirements.'.",
+      "forbidden_behavior": "Do not handle classify_stale by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer specified warranty and after-sales-support requirements.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.choose_or_counter_the_wa"
+        ]
+      },
+      "id": "mab_bargain20_filter.cf.01_classify_stale_choose_or_counter_",
+      "independence_key": "mab_bargain20_filter.cf.01_classify_stale_choose_or_counter_",
+      "measurement_type": "control",
+      "mutation_id": "mab_bargain20_filter.mutation.01_classify_stale_choose_or_counter_",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_23f25a7748.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.choose_or_counter_the_wa"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "exclude_stale_state_the_exact_coverage_per",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_late_constraint_23f2.late_or_out_of_order_sup",
+      "evidence_group": "mab_late_constrain.exclude_stale",
+      "evidence_spec": {
+        "primary_fact": "stale_result_decision",
+        "subject": "req.01.choose_or_counter_the_wa"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The seller role offers $45 per filter pack with a 90-day defect warranty, or $48 with a one-year replacement warranty and dedicated support, preserving its stated margin floor.', perform exclude_stale for 'State the exact coverage period and replacement obligation.' while retaining valid prior result 'Buyer drafted an opening offer below the $50.99 reference price.'.",
+      "forbidden_behavior": "Do not handle exclude_stale by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer drafted an opening offer below the $50.99 reference price.'.",
+      "gate": "reject_late_stale",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.choose_or_counter_the_wa"
+        ]
+      },
+      "id": "mab_bargain20_filter.cf.02_exclude_stale_state_the_exact_co",
+      "independence_key": "mab_bargain20_filter.cf.02_exclude_stale_state_the_exact_co",
+      "measurement_type": "control",
+      "mutation_id": "mab_bargain20_filter.mutation.02_exclude_stale_state_the_exact_co",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_23f25a7748.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.choose_or_counter_the_wa"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_submit_a_revised_price_and_s",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_constraint_23f2.late_or_out_of_order_sup",
+      "evidence_group": "mab_late_constrain.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.choose_or_counter_the_wa"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'The seller role offers $45 per filter pack with a 90-day defect warranty, or $48 with a one-year replacement warranty and dedicated support, preserving its stated margin floor.', perform verify_closure for 'Submit a revised price-and-support offer.' while retaining valid prior result 'Buyer specified warranty and after-sales-support requirements.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Buyer specified warranty and after-sales-support requirements.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.choose_or_counter_the_wa"
+        ]
+      },
+      "id": "mab_bargain20_filter.cf.03_verify_closure_submit_a_revised_p",
+      "independence_key": "mab_bargain20_filter.cf.03_verify_closure_submit_a_revised_p",
+      "measurement_type": "control",
+      "mutation_id": "mab_bargain20_filter.mutation.03_verify_closure_submit_a_revised_p",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_23f25a7748.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.choose_or_counter_the_wa"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_late_constraint_23f2.late_or_out_of_order_sup",
+      "event_theme": "late_or_out_of_order_superseded_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The seller role offers $45 per filter pack with a 90-day defect warranty, or $48 with a one-year replacement warranty and dedicated support, preserving its stated margin floor.",
+        "before": "Deliver the margin-constrained warranty tiers after the buyer has drafted maximum coverage at its lowest price.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

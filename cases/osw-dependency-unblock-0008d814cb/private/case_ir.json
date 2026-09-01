@@ -1,0 +1,218 @@
+{
+  "case_id": "osw-dependency-unblock-0008d814cb",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_navigate_to_the_flightaware_",
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The FlightAware site or Discussions forum is open.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.navigate_to_the_flightaw"
+        ]
+      },
+      "id": "01_classify_authority_navigate_to_the_fl",
+      "must_still_pass": [
+        "osw_dependency_unblock_0.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0008d814cb.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "For event 'A forum worker returns the title, URL, and displayed reply/post count of the maximum-count topic in FlightAware > General after comparing the full category listing.', perform classify_authority for 'Navigate to the FlightAware > General category.' while retaining valid prior result 'The FlightAware site or Discussions forum is open.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.navigate_to_the_flightaw"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_verify_the_returned_topic_ha",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Navigation toward the FlightAware category is retained.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.navigate_to_the_flightaw"
+        ]
+      },
+      "id": "02_revise_affected_verify_the_returne",
+      "must_still_pass": [
+        "osw_dependency_unblock_0.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0008d814cb.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A forum worker returns the title, URL, and displayed reply/post count of the maximum-count topic in FlightAware > General after comparing the full category listing.', perform revise_affected for 'Verify the returned topic has the maximum displayed count in the listing.' while retaining valid prior result 'Navigation toward the FlightAware category is retained.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.navigate_to_the_flightaw"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_open_the_returned_topic",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The FlightAware site or Discussions forum is open.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.navigate_to_the_flightaw"
+        ]
+      },
+      "id": "03_verify_closure_open_the_returned_",
+      "must_still_pass": [
+        "osw_dependency_unblock_0.sem.22.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_0008d814cb.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'A forum worker returns the title, URL, and displayed reply/post count of the maximum-count topic in FlightAware > General after comparing the full category listing.', perform verify_closure for 'Open the returned topic.' while retaining valid prior result 'The FlightAware site or Discussions forum is open.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.navigate_to_the_flightaw"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.navigate_to_the_flightaw"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.verify_the_returned_topi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.open_the_returned_topic"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.confirm_the_browser_is_d"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.navigate_to_the_flightaw",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.verify_the_returned_topi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.open_the_returned_topic",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.confirm_the_browser_is_d",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.navigate_to_the_flightaw",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.verify_the_returned_topi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.open_the_returned_topic",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.confirm_the_browser_is_d",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.navigate_to_the_flightaw",
+      "req.02.verify_the_returned_topi",
+      "req.03.open_the_returned_topic",
+      "req.04.confirm_the_browser_is_d",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A forum worker returns the title, URL, and displayed reply/post count of the maximum-count topic in FlightAware > General after comparing the full category listing.",
+    "before_state": "The category aggregation result arrives after partial forum navigation and redirects an unsuccessful homepage branch to the scored topic.",
+    "event_id": "evt.osw_dependency_unblock_0.delayed_authoritative_re",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Navigate to the FlightAware > General category.",
+      "id": "req.01.navigate_to_the_flightaw",
+      "observable_probe": "osw_dependency_unblock_0.sem.01.the_persisted_desktop_artifa",
+      "public_evidence": "source instruction and workstream result for navigate_to_the_flightaware_general_"
+    },
+    {
+      "description": "Verify the returned topic has the maximum displayed count in the listing.",
+      "id": "req.02.verify_the_returned_topi",
+      "observable_probe": "osw_dependency_unblock_0.sem.02.the_required_result_artifact",
+      "public_evidence": "source instruction and workstream result for verify_the_returned_topic_has_the_ma"
+    },
+    {
+      "description": "Open the returned topic.",
+      "id": "req.03.open_the_returned_topic",
+      "observable_probe": "osw_dependency_unblock_0.sem.03.navigate_to_the_flightaware_",
+      "public_evidence": "source instruction and workstream result for open_the_returned_topic"
+    },
+    {
+      "description": "Confirm the browser is displaying that topic rather than the category or homepage.",
+      "id": "req.04.confirm_the_browser_is_d",
+      "observable_probe": "osw_dependency_unblock_0.sem.04.verify_the_returned_topic_ha",
+      "public_evidence": "source instruction and workstream result for confirm_the_browser_is_displaying_th"
+    }
+  ]
+}

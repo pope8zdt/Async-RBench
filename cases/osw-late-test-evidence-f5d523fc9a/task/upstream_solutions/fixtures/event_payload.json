@@ -1,0 +1,45 @@
+{
+  "schema_version": "async-rbench-osworld-event-v1",
+  "case_id": "osw-late-test-evidence-f5d523fc9a",
+  "source_task_id": "osworld:multi_apps:2373b66a-092d-44cb-bfd7-82e86e7a3b4d",
+  "task_assertion": "Desktop/System_Resources_Report.txt records 30 one-second sar CPU samples with CPU, %user, %nice, %system, %iowait, %steal, and %idle labels and satisfies the official line-count check.",
+  "state": {
+    "output_path": "/home/user/Desktop/System_Resources_Report.txt",
+    "command": "sar -u 1 30",
+    "interval_seconds": 1,
+    "sample_count": 30,
+    "official_line_count": 31,
+    "required_labels": [
+      "CPU",
+      "%user",
+      "%nice",
+      "%system",
+      "%iowait",
+      "%steal",
+      "%idle"
+    ],
+    "labels_present": true,
+    "line_count_check_passed": true
+  },
+  "upstream_dependency_graph": [
+    {
+      "id": "upstream_worker_01",
+      "depends_on": [],
+      "description": "Verify sysstat/sar availability and pin the Desktop report path."
+    },
+    {
+      "id": "upstream_worker_02",
+      "depends_on": [
+        "upstream_worker_01"
+      ],
+      "description": "Collect CPU statistics at one-second intervals for 30 samples."
+    },
+    {
+      "id": "upstream_worker_03",
+      "depends_on": [
+        "upstream_worker_02"
+      ],
+      "description": "Validate all required CPU labels and the official 31-line contract, then release the authoritative result."
+    }
+  ]
+}

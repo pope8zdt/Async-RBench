@@ -1,0 +1,94 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separate equivalent closure entrypoint after the same source-native evaluator evidence.",
+      "id": "alternative-tow-hook-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-tow-hook-receipt",
+      "must_fail": [
+        "mab_late_constraint_49a364ba43.sem.03.lexus_tow_hook"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "accepted-stale-tow-hook-revision",
+      "must_fail": [
+        "mab_late_constraint_49a364ba43.sem.01.lexus_tow_hook"
+      ],
+      "path": "task/negative_mutations/accepted_stale_revision.sh"
+    },
+    {
+      "id": "wrong-tow-hook-product-terms",
+      "must_fail": [
+        "mab_late_constraint_49a364ba43.sem.04.lexus_tow_hook"
+      ],
+      "path": "task/negative_mutations/wrong_product_terms.sh"
+    },
+    {
+      "id": "broken-tow-hook-closure",
+      "must_fail": [
+        "mab_late_constraint_49a364ba43.sem.07.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_bargaining021_late.cf.01_classify_stale",
+          "mab_bargaining021_late.cf.02_exclude_stale",
+          "mab_bargaining021_late.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_constraint_49a364ba43.sem.01.lexus_tow_hook",
+          "mab_late_constraint_49a364ba43.sem.02.lexus_tow_hook",
+          "mab_late_constraint_49a364ba43.sem.03.lexus_tow_hook",
+          "mab_late_constraint_49a364ba43.sem.04.lexus_tow_hook",
+          "mab_late_constraint_49a364ba43.sem.05.closure",
+          "mab_late_constraint_49a364ba43.sem.06.closure",
+          "mab_late_constraint_49a364ba43.sem.07.closure",
+          "mab_late_constraint_49a364ba43.sem.08.closure"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "iJDMTOY",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "$21.49",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "battery-condition",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "4b6a6876d627008ffb7808742c8a2dc36583573f140bc806672b1b2179f4b3c5",
+        "task_id": "bargaining:021",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

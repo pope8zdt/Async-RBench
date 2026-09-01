@@ -1,0 +1,238 @@
+{
+  "async_depth": 2,
+  "case_id": "osw-cross-app-artifact-725ceaa05e",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_receipt_pdf_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "receipt_image_locator",
+          "pdf_export_validation"
+        ]
+      },
+      "id": "01_classify_authority_receipt_pdf_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_725ceaa05e.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_725ceaa05e.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed receipt_image_identity; preserve unaffected os/gimp/pdf state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.use_the_authoritative_re"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_receipt_pdf_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "receipt_image_locator",
+          "pdf_export_validation"
+        ]
+      },
+      "id": "02_revise_affected_receipt_pdf_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_725ceaa05e.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_725ceaa05e.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed receipt_image_identity; preserve unaffected os/gimp/pdf state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.export_the_image_as_a_si"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_receipt_pdf_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "receipt_image_locator",
+          "pdf_export_validation"
+        ]
+      },
+      "id": "03_verify_closure_receipt_pdf_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_725ceaa05e.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_725ceaa05e.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed receipt_image_identity; preserve unaffected os/gimp/pdf state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.save_the_result_as_home_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "produces",
+        "source": "upstream.pdf_export_validation",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.use_the_authoritative_re"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.use_the_authoritative_re",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.export_the_image_as_a_si"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.export_the_image_as_a_si",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.save_the_result_as_home_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.save_the_result_as_home_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "upstream.receipt_image_locator",
+        "target": "upstream.pdf_export_validation"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "OS",
+        "description": "Locate and verify the receipt image under /home/user before GIMP/PDF export.",
+        "id": "upstream.receipt_image_locator",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.use_the_authoritative_re",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.export_the_image_as_a_si",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.save_the_result_as_home_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      },
+      {
+        "application": "GIMP/PDF",
+        "description": "Validate one-page PDF export settings and source-image fidelity.",
+        "id": "upstream.pdf_export_validation",
+        "kind": "upstream_task"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.use_the_authoritative_re",
+      "req.02.export_the_image_as_a_si",
+      "req.03.save_the_result_as_home_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The filesystem worker identifies /home/user/OIP.jpg by source evidence, enabling a one-page, image-faithful receipt.pdf export.",
+    "before_state": "The home directory can be inspected, but the authoritative receipt-image identity has not yet been returned and exporting a guessed image would be unsafe.",
+    "event_id": "evt.osw_cross_app_artifact_725ce.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Use the authoritative receipt image at /home/user/OIP.jpg.",
+      "id": "req.01.use_the_authoritative_re",
+      "observable_probe": "osw_cross_app_artifact_725ceaa05e.osworld.identity",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Export the image as a single-page PDF without changing its visual content.",
+      "id": "req.02.export_the_image_as_a_si",
+      "observable_probe": "osw_cross_app_artifact_725ceaa05e.osworld.official_score",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Save the result as /home/user/Desktop/receipt.pdf.",
+      "id": "req.03.save_the_result_as_home_",
+      "observable_probe": "osw_cross_app_artifact_725ceaa05e.osworld.native_evidence",
+      "public_evidence": "source instruction and delayed receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "OS",
+      "description": "Locate and verify the receipt image under /home/user before GIMP/PDF export.",
+      "id": "receipt_image_locator"
+    },
+    {
+      "app": "GIMP/PDF",
+      "depends_on": [
+        "receipt_image_locator"
+      ],
+      "description": "Validate one-page PDF export settings and source-image fidelity.",
+      "id": "pdf_export_validation"
+    }
+  ]
+}

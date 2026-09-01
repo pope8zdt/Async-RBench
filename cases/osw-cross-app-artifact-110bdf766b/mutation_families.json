@@ -1,0 +1,440 @@
+{
+  "families": [
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Authentic case-bound delayed receipt.",
+      "id": "osw_bookkeeping_110.mut.01_receipt",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.event.receipt"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_receipt_evidence",
+        "corrupt_receipt_value",
+        "replay_stale_receipt_state",
+        "satisfy_manifest_without_receipt_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Authentic case-bound delayed receipt.",
+      "id": "osw_bookkeeping_110.mut.01_receipt_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.event.receipt"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_receipt_red",
+        "artifact_green_receipt_stale",
+        "receipt_valid_receipt_foreign",
+        "partial_closure_hides_receipt_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Independent worker completed with probes.",
+      "id": "osw_bookkeeping_110.mut.02_probes",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.event.probes"
+      ],
+      "operation": "mutate_semantic_event_integration",
+      "variants": [
+        "omit_probes_evidence",
+        "corrupt_probes_value",
+        "replay_stale_probes_state",
+        "satisfy_manifest_without_probes_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Independent worker completed with probes.",
+      "id": "osw_bookkeeping_110.mut.02_probes_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.event.probes"
+      ],
+      "operation": "cross_corrupt_event_integration_evidence",
+      "variants": [
+        "manifest_green_probes_red",
+        "artifact_green_probes_stale",
+        "receipt_valid_probes_foreign",
+        "partial_closure_hides_probes_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Closure consumes receipt and reverifies semantics.",
+      "id": "osw_bookkeeping_110.mut.03_closure",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.closure"
+      ],
+      "operation": "mutate_semantic_closure",
+      "variants": [
+        "omit_closure_evidence",
+        "corrupt_closure_value",
+        "replay_stale_closure_state",
+        "satisfy_manifest_without_closure_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Closure consumes receipt and reverifies semantics.",
+      "id": "osw_bookkeeping_110.mut.03_closure_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.closure"
+      ],
+      "operation": "cross_corrupt_closure_evidence",
+      "variants": [
+        "manifest_green_closure_red",
+        "artifact_green_closure_stale",
+        "receipt_valid_closure_foreign",
+        "partial_closure_hides_closure_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Pinned OSWorld source identity is preserved.",
+      "id": "osw_bookkeeping_110.mut.04_pin",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.source.pin"
+      ],
+      "operation": "mutate_semantic_provenance",
+      "variants": [
+        "omit_pin_evidence",
+        "corrupt_pin_value",
+        "replay_stale_pin_state",
+        "satisfy_manifest_without_pin_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Pinned OSWorld source identity is preserved.",
+      "id": "osw_bookkeeping_110.mut.04_pin_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.source.pin"
+      ],
+      "operation": "cross_corrupt_provenance_evidence",
+      "variants": [
+        "manifest_green_pin_red",
+        "artifact_green_pin_stale",
+        "receipt_valid_pin_foreign",
+        "partial_closure_hides_pin_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Bound to osworld:multi_apps:8e116af7-7db7-4e35-a68b-b0939c066c78 and compare_table.",
+      "id": "osw_bookkeeping_110.mut.05_identity",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.identity"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_identity_evidence",
+        "corrupt_identity_value",
+        "replay_stale_identity_state",
+        "satisfy_manifest_without_identity_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Bound to osworld:multi_apps:8e116af7-7db7-4e35-a68b-b0939c066c78 and compare_table.",
+      "id": "osw_bookkeeping_110.mut.05_identity_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.identity"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_identity_red",
+        "artifact_green_identity_stale",
+        "receipt_valid_identity_foreign",
+        "partial_closure_hides_identity_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Official evaluator score equals one.",
+      "id": "osw_bookkeeping_110.mut.06_official_score",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.official_score"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_official_score_evidence",
+        "corrupt_official_score_value",
+        "replay_stale_official_score_state",
+        "satisfy_manifest_without_official_score_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Official evaluator score equals one.",
+      "id": "osw_bookkeeping_110.mut.06_official_score_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.official_score"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_official_score_red",
+        "artifact_green_official_score_stale",
+        "receipt_valid_official_score_foreign",
+        "partial_closure_hides_official_score_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Evidence digest matches private fixture.",
+      "id": "osw_bookkeeping_110.mut.07_native_evidence",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.native_evidence"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_native_evidence_evidence",
+        "corrupt_native_evidence_value",
+        "replay_stale_native_evidence_state",
+        "satisfy_manifest_without_native_evidence_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Evidence digest matches private fixture.",
+      "id": "osw_bookkeeping_110.mut.07_native_evidence_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.native_evidence"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_native_evidence_red",
+        "artifact_green_native_evidence_stale",
+        "receipt_valid_native_evidence_foreign",
+        "partial_closure_hides_native_evidence_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: The saved bookkeeping workbook preserves rows 1-8 and appends the five official expense transactions with correct running balances.",
+      "id": "osw_bookkeeping_110.mut.08_task_assertion",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.task_assertion"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_task_assertion_evidence",
+        "corrupt_task_assertion_value",
+        "replay_stale_task_assertion_state",
+        "satisfy_manifest_without_task_assertion_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: The saved bookkeeping workbook preserves rows 1-8 and appends the five official expense transactions with correct running balances.",
+      "id": "osw_bookkeeping_110.mut.08_task_assertion_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.task_assertion"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_task_assertion_red",
+        "artifact_green_task_assertion_stale",
+        "receipt_valid_task_assertion_foreign",
+        "partial_closure_hides_task_assertion_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: The workbook is saved to the source-native result path.",
+      "id": "osw_bookkeeping_110.mut.09_output_path",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.output_path"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_output_path_evidence",
+        "corrupt_output_path_value",
+        "replay_stale_output_path_state",
+        "satisfy_manifest_without_output_path_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: The workbook is saved to the source-native result path.",
+      "id": "osw_bookkeeping_110.mut.09_output_path_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.output_path"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_output_path_red",
+        "artifact_green_output_path_stale",
+        "receipt_valid_output_path_foreign",
+        "partial_closure_hides_output_path_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Rows A1:E8 from the original bookkeeping workbook are preserved.",
+      "id": "osw_bookkeeping_110.mut.10_preserved_rows",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.preserved_rows"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_preserved_rows_evidence",
+        "corrupt_preserved_rows_value",
+        "replay_stale_preserved_rows_state",
+        "satisfy_manifest_without_preserved_rows_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Rows A1:E8 from the original bookkeeping workbook are preserved.",
+      "id": "osw_bookkeeping_110.mut.10_preserved_rows_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.preserved_rows"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_preserved_rows_red",
+        "artifact_green_preserved_rows_stale",
+        "receipt_valid_preserved_rows_foreign",
+        "partial_closure_hides_preserved_rows_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: Exactly five official Expense amounts are appended.",
+      "id": "osw_bookkeeping_110.mut.11_expense_rows",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.expense_rows"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_expense_rows_evidence",
+        "corrupt_expense_rows_value",
+        "replay_stale_expense_rows_state",
+        "satisfy_manifest_without_expense_rows_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: Exactly five official Expense amounts are appended.",
+      "id": "osw_bookkeeping_110.mut.11_expense_rows_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.expense_rows"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_expense_rows_red",
+        "artifact_green_expense_rows_stale",
+        "receipt_valid_expense_rows_foreign",
+        "partial_closure_hides_expense_rows_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: The appended rows carry the official running balances.",
+      "id": "osw_bookkeeping_110.mut.12_running_balances",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.running_balances"
+      ],
+      "operation": "mutate_semantic_source_semantics",
+      "variants": [
+        "omit_running_balances_evidence",
+        "corrupt_running_balances_value",
+        "replay_stale_running_balances_state",
+        "satisfy_manifest_without_running_balances_behavior"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: The appended rows carry the official running balances.",
+      "id": "osw_bookkeeping_110.mut.12_running_balances_crosscheck",
+      "must_fail": [
+        "osw_cross_app_artifact_110bdf766b.osworld.running_balances"
+      ],
+      "operation": "cross_corrupt_source_semantics_evidence",
+      "variants": [
+        "manifest_green_running_balances_red",
+        "artifact_green_running_balances_stale",
+        "receipt_valid_running_balances_foreign",
+        "partial_closure_hides_running_balances_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: classify_authority for delayed normalized_receipt_records; preserve unaffected libreoffice_calc/os/image/pdf state.",
+      "id": "osw_bookkeeping_110.mut.13_01_classify_authority_bookke",
+      "must_fail": [
+        "osw_bookkeeping_110.cf.01_classify_authority_bookkeeping_os"
+      ],
+      "operation": "mutate_control_wait_for_authority",
+      "variants": [
+        "omit_wait_for_authority_decision",
+        "apply_wait_for_authority_to_wrong_scope",
+        "use_stale_evidence_for_wait_for_authority",
+        "declare_wait_for_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: classify_authority for delayed normalized_receipt_records; preserve unaffected libreoffice_calc/os/image/pdf state.",
+      "id": "osw_bookkeeping_110.mut.13_01_classify_authority_bookke_crosscheck",
+      "must_fail": [
+        "osw_bookkeeping_110.cf.01_classify_authority_bookkeeping_os"
+      ],
+      "operation": "cross_corrupt_wait_for_authority_evidence",
+      "variants": [
+        "manifest_green_01_classify_authority_bookke_red",
+        "artifact_green_01_classify_authority_bookke_stale",
+        "receipt_valid_01_classify_authority_bookke_foreign",
+        "partial_closure_hides_01_classify_authority_bookke_failure"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: revise_affected for delayed normalized_receipt_records; preserve unaffected libreoffice_calc/os/image/pdf state.",
+      "id": "osw_bookkeeping_110.mut.14_02_revise_affected_bookkeepi",
+      "must_fail": [
+        "osw_bookkeeping_110.cf.02_revise_affected_bookkeeping_os"
+      ],
+      "operation": "mutate_control_resolve_authority",
+      "variants": [
+        "omit_resolve_authority_decision",
+        "apply_resolve_authority_to_wrong_scope",
+        "use_stale_evidence_for_resolve_authority",
+        "declare_resolve_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Directly challenge: verify_closure for delayed normalized_receipt_records; preserve unaffected libreoffice_calc/os/image/pdf state.",
+      "id": "osw_bookkeeping_110.mut.15_03_verify_closure_bookkeepin",
+      "must_fail": [
+        "osw_bookkeeping_110.cf.03_verify_closure_bookkeeping_os"
+      ],
+      "operation": "mutate_control_rederive_from_authority",
+      "variants": [
+        "omit_rederive_from_authority_decision",
+        "apply_rederive_from_authority_to_wrong_scope",
+        "use_stale_evidence_for_rederive_from_authority",
+        "declare_rederive_from_authority_without_observation"
+      ]
+    },
+    {
+      "case_id": "osw-cross-app-artifact-110bdf766b",
+      "description": "Cross-check independent evidence for: verify_closure for delayed normalized_receipt_records; preserve unaffected libreoffice_calc/os/image/pdf state.",
+      "id": "osw_bookkeeping_110.mut.15_03_verify_closure_bookkeepin_crosscheck",
+      "must_fail": [
+        "osw_bookkeeping_110.cf.03_verify_closure_bookkeeping_os"
+      ],
+      "operation": "cross_corrupt_rederive_from_authority_evidence",
+      "variants": [
+        "manifest_green_03_verify_closure_bookkeepin_red",
+        "artifact_green_03_verify_closure_bookkeepin_stale",
+        "receipt_valid_03_verify_closure_bookkeepin_foreign",
+        "partial_closure_hides_03_verify_closure_bookkeepin_failure"
+      ]
+    }
+  ],
+  "version": "1"
+}

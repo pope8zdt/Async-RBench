@@ -1,0 +1,33 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_e804a9f769.delayed_authoritative_result",
+  "authority_rule": "secret_path_clipboard is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_dependency_unblock_e804a9f769.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "Five Data/List search branches exist and the unique secret.docx location has not yet been authoritatively joined to the clipboard state.",
+    "after_state": "The unique canonical path /home/user/Data3/List3/secret.docx is discovered and the clipboard contains that exact path, satisfying is_in_vm_clickboard.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.filename",
+      "req.02.unique_match",
+      "req.03.canonical_path",
+      "req.04.clipboard",
+      "req.05.asset_identity",
+      "final_state"
+    ]
+  }
+}

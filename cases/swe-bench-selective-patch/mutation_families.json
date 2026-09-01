@@ -1,0 +1,196 @@
+{
+  "version": "1",
+  "families": [
+    {
+      "id": "sp2.mut.base_patch_corruption",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "patch_base_fix_outputs",
+      "description": "Break package import, omit the fix or damage required reports and manifest",
+      "variants": [
+        "package_import_error",
+        "base_revision_unchanged",
+        "missing_group_report",
+        "malformed_manifest",
+        "applied_fix_authority_receipt_mismatch"
+      ],
+      "must_fail": [
+        "sp2.base.package_importable",
+        "sp2.base.fix_applied",
+        "sp2.base.reports_exist",
+        "sp2.base.manifest_valid"
+      ]
+    },
+    {
+      "id": "sp2.mut.passing_group_a_corruption",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "patch_group_a_result",
+      "description": "Damage group A verdict, revision or preservation evidence",
+      "variants": [
+        "group_a_fails",
+        "group_a_wrong_revision",
+        "metrics_file_changed",
+        "group_a_report_missing"
+      ],
+      "must_fail": [
+        "sp2.integ.a_group_passes",
+        "sp2.integ.a_run_revision_consistent",
+        "sp2.integ.a_branch_preserved"
+      ]
+    },
+    {
+      "id": "sp2.mut.passing_group_c_corruption",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "patch_group_c_result",
+      "description": "Damage group C verdict, revision or preservation evidence",
+      "variants": [
+        "group_c_fails",
+        "group_c_wrong_revision",
+        "multiclass_file_changed",
+        "group_c_report_missing"
+      ],
+      "must_fail": [
+        "sp2.integ.c_group_passes",
+        "sp2.integ.c_run_revision_consistent",
+        "sp2.integ.c_branch_preserved"
+      ]
+    },
+    {
+      "id": "sp2.mut.selective_repair_corruption",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "patch_failed_group_repair",
+      "description": "Hide the initial B failure or perform a non-selective or stale repair",
+      "variants": [
+        "erase_first_failure",
+        "omit_repair",
+        "repair_multiple_files",
+        "final_b_wrong_revision"
+      ],
+      "must_fail": [
+        "sp2.repair.b_first_failure_recorded",
+        "sp2.repair.b_repair_applied",
+        "sp2.repair.b_group_passes_final",
+        "sp2.repair.repair_selective_single_file",
+        "sp2.repair.passing_branches_preserved_recorded",
+        "sp2.repair.b_run_revision_final"
+      ]
+    },
+    {
+      "id": "sp2.mut.regression_closure_corruption",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "patch_full_regression_closure",
+      "description": "Finalize with a failed, incomplete, stale or report-inconsistent regression",
+      "variants": [
+        "one_group_red",
+        "missing_group_coverage",
+        "manifest_report_mismatch",
+        "close_before_all_groups"
+      ],
+      "must_fail": [
+        "sp2.closure.all_groups_pass_final",
+        "sp2.closure.regression_passes",
+        "sp2.closure.regression_covers_all_groups",
+        "sp2.closure.manifest_matches_reports",
+        "sp2.closure.waited_for_all_groups"
+      ]
+    },
+    {
+      "id": "sp2.mut.provenance_closure_corruption",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "patch_patch_provenance_closure",
+      "description": "Use a stale regression revision, leak gold material or damage case identity",
+      "variants": [
+        "stale_regression_revision",
+        "ship_gold_patch",
+        "wrong_case_id",
+        "wrong_result_kinds"
+      ],
+      "must_fail": [
+        "sp2.closure.regression_revision_final",
+        "sp2.closure.no_gold_patch_material",
+        "sp2.closure.manifest_case_id"
+      ]
+    },
+    {
+      "id": "sp2.mut.control_trace_corruption",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "mutate_patch_control_trace",
+      "description": "Skip authority wait, accept stale work, cancel the wrong runner or omit rederivation",
+      "variants": [
+        "omit_authority_wait",
+        "accept_late_stale",
+        "cancel_passing_group",
+        "omit_completion_rederive"
+      ],
+      "must_fail": [
+        "sp2.cf.wait_for_authority",
+        "sp2.cf.reject_late_stale",
+        "sp2.cf.cancel_superseded",
+        "sp2.cf.rederive_completion"
+      ]
+    },
+    {
+      "id": "sp2.mut.critical_integration_repair_crosscheck",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "cross_corrupt_patch_branch_evidence",
+      "description": "Create contradictions across passing branches, failed-group repair and final revision",
+      "variants": [
+        "passing_report_stale",
+        "preserved_branch_changed",
+        "failure_hidden",
+        "repair_revision_stale"
+      ],
+      "must_fail": [
+        "sp2.integ.a_group_passes",
+        "sp2.integ.c_group_passes",
+        "sp2.integ.a_run_revision_consistent",
+        "sp2.integ.c_run_revision_consistent",
+        "sp2.integ.a_branch_preserved",
+        "sp2.integ.c_branch_preserved",
+        "sp2.repair.b_first_failure_recorded",
+        "sp2.repair.b_repair_applied",
+        "sp2.repair.b_group_passes_final",
+        "sp2.repair.repair_selective_single_file",
+        "sp2.repair.passing_branches_preserved_recorded",
+        "sp2.repair.b_run_revision_final"
+      ]
+    },
+    {
+      "id": "sp2.mut.critical_closure_crosscheck",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "cross_corrupt_patch_closure_evidence",
+      "description": "Declare a closed patch episode while regression, reports or provenance disagree",
+      "variants": [
+        "manifest_green_regression_red",
+        "regression_green_group_red",
+        "stale_revision_green",
+        "gold_material_hidden"
+      ],
+      "must_fail": [
+        "sp2.closure.all_groups_pass_final",
+        "sp2.closure.regression_passes",
+        "sp2.closure.regression_covers_all_groups",
+        "sp2.closure.manifest_matches_reports",
+        "sp2.closure.waited_for_all_groups",
+        "sp2.closure.regression_revision_final",
+        "sp2.closure.no_gold_patch_material",
+        "sp2.closure.manifest_case_id"
+      ]
+    },
+    {
+      "id": "sp2.mut.critical_control_crosscheck",
+      "case_id": "swe-bench-selective-patch",
+      "operation": "cross_corrupt_patch_control_evidence",
+      "description": "Forge stale rejection or authority rederivation without the actual decision",
+      "variants": [
+        "declare_reject_only",
+        "declare_rederive_only",
+        "accept_stale_then_close",
+        "rederive_from_old_fix"
+      ],
+      "must_fail": [
+        "sp2.cf.reject_late_stale",
+        "sp2.cf.rederive_completion"
+      ]
+    }
+  ]
+}

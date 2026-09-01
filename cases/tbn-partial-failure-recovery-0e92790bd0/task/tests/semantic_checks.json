@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_flag_file_exists_and_correct passes.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.upstream.test_flag_file_exists_and_correct",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_flag_file_exists_and_correct",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_no_secrets_in_commits passes.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.upstream.test_no_secrets_in_commits",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_no_secrets_in_commits",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_good_commits_preserved passes.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.upstream.test_good_commits_preserved",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_good_commits_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_no_secrets_in_unreachable_objects passes.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.upstream.test_no_secrets_in_unreachable_objects",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_no_secrets_in_unreachable_objects",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_repository_contents_checksum passes.",
+      "id": "tbn_partial_failure_recovery_0e92790bd0.upstream.test_repository_contents_checksum",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_repository_contents_checksum",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

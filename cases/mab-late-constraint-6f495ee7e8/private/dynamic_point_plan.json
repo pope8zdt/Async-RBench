@@ -1,0 +1,183 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "event_intake",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "current_genuine_part_delivery_counter"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_stale: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_6f49.cf.01_classify_stale",
+      "independence_key": "mab_late_constraint_6f49.cf.01_classify_stale",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_6f49.mutation.01_classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_6f49.cf.01_classify_stale]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "current_genuine_part_delivery_counter"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "exclude_stale: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_6f49.cf.02_exclude_stale",
+      "independence_key": "mab_late_constraint_6f49.cf.02_exclude_stale",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_6f49.mutation.02_exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_6f49.cf.02_exclude_stale]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "closure",
+      "dimension": "closure",
+      "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "current_genuine_part_delivery_counter"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_6f49.cf.03_verify_closure",
+      "independence_key": "mab_late_constraint_6f49.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_6f49.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_6f495ee7e8.closure"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_6f49.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "current_genuine_part_delivery_counter"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_03",
+      "event_id": "evt.mab-late-constraint-6f495ee7e8.current_genuine_part_delivery_counter",
+      "event_theme": "late_or_out_of_order_superseded_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The current counter verifies genuine Kohler part 1266657 at $10.50 with two-day delivery and a 12-month warranty, superseding the unverified $9 offer.",
+        "before": "A provisional Kohler Genuine Part 1266657 Valve Kit bargain exists before current_genuine_part_delivery_counter.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

@@ -1,0 +1,72 @@
+instruction: |-
+  The trimmed sklearn package at /app/task_file/src/sklearn has a bug in
+  /app/task_file/src/sklearn/utils/multiclass.py (the fix target): its label
+  and target-type utilities mishandle object-dtype label arrays (the NumPy
+  manifestation of nullable labels). Three independent test module groups cover
+  the three public surfaces:
+
+  - Module group A (sklearn.metrics) via /app/task_file/scripts/run_module_group_a.py
+  - Module group B (sklearn.preprocessing) via /app/task_file/scripts/run_module_group_b.py
+  - Module group C (sklearn.utils.multiclass) via /app/task_file/scripts/run_module_group_c.py
+
+  Your job is to repair the package with a fix that stays inside the single fix
+  target file (sklearn/utils/multiclass.py) and leaves every other source file
+  byte-identical, then to verify the repair by running every module group and
+  the full regression suite.
+
+  Each runner executes its group's tests against the CURRENT state of the fix
+  target, records the revision it ran against (sha256 of
+  sklearn/utils/multiclass.py), and writes a report under
+  /app/output_data/module_groups/ (A_result.json, B_result.json, C_result.json).
+  The runner's exit code reflects that group's pass/fail and the report is
+  written either way.
+
+  /app/task_file/scripts/record_fix.py --stage initial records the first fix
+  revision you apply; --stage final records the last one (and writes
+  applied_fix.json). /app/task_file/scripts/record_integrated.py records the
+  integrated-fix verdict once every module group passes at the same revision.
+  /app/task_file/scripts/run_regression.py runs all module-group tests plus a
+  smoke test in a deterministic order and writes regression_result.json.
+  /app/task_file/scripts/write_manifest.py assembles decision_manifest.json
+  from the artifacts on disk.
+
+  The build-time base revision of every source file is recorded in
+  /app/task_file/src/BASE_MANIFEST.json; a fix is detected by comparing current
+  file hashes against that manifest, and the repair is required to stay
+  selective (only the fix target may change).
+
+  DELIVERABLES
+
+  Produce:
+  - A fix to /app/task_file/src/sklearn/utils/multiclass.py (the only source
+    file that may change).
+  - /app/output_data/module_groups/A_result.json, B_result.json, C_result.json:
+    one report per module group recording whether its tests passed against the
+    revision they ran.
+  - /app/output_data/module_groups/{GROUP}_result_initial.json: if a module
+    group fails on an earlier run, preserve that failing report (copy/rename it
+    to {GROUP}_result_initial.json BEFORE re-running that group) so the
+    first-run outcome is recorded; the manifest carries each group's first-run
+    status.
+  - /app/output_data/fix_initial.json and /app/output_data/applied_fix.json:
+    the first and final fix revisions, including any provenance token emitted
+    by the fix-recording tool.
+  - /app/output_data/integrated_fix.json: the integrated-fix verdict.
+  - /app/output_data/regression_result.json: the full regression result.
+  - /app/output_data/decision_manifest.json: a machine-readable summary built
+    from the fix, module-group and regression reports by
+    /app/task_file/scripts/write_manifest.py.
+
+  The benchmark has already started isolated workstreams for the fix and test
+  groups. Their reports may arrive in any order. Determine applicability by
+  comparing the recorded file revisions and actual pass/fail reports; no
+  result is designated in advance as the one to prefer. If a later observation
+  changes an earlier assumption, rerun only the affected groups and then close
+  with a full regression on one consistent revision.
+author_name: Async-RBench transformation
+difficulty: hard
+category: code_repair
+tags: [sklearn, swe-bench, selective-patch, asynchronous-replanning]
+parser_name: pytest
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 600

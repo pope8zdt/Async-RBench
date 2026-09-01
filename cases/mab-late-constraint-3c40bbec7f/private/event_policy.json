@@ -1,0 +1,32 @@
+{
+  "authority_rule": "The live scope delta changes only its dependency closure and preserves unaffected commitments.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_active_perception_s",
+      "req.02.explain_perception_planning",
+      "req.03.specify_real_robot_navigatio",
+      "req.04.integrate_the_late_unsafe_ac",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The scope-expanded proposal jointly measures success, recovery, safety violations, interventions, and failure-specific behavior.",
+    "before_state": "The proposal measures success and recovery but lacks explicit unsafe-action and human-intervention constraints.",
+    "event_id": "evt.mab_late_constraint_3c40.recovery_safety_scope_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_constraint_3c40.recovery_safety_scope_added",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close recovery_safety_scope_added.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

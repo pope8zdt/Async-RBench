@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific drift_physics_contract_completed receipt bound to coding:022.",
+      "id": "mab_dependency_unblock_a36888cf46.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Multi-Agent Drift Championship authority runs after three upstream results.",
+      "id": "mab_dependency_unblock_a36888cf46.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The completed fixed-timestep physics contract replaces provisional transitions while agent customization, tracks, replay history, and feedback remain intact.",
+      "id": "mab_dependency_unblock_a36888cf46.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench coding:022.",
+      "id": "mab_dependency_unblock_a36888cf46.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and fixed_timestep_drift_closure expose the task-specific four-upstream racing contract.",
+      "id": "mab_dependency_unblock_a36888cf46.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_drift_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Fixed-timestep transitions bind handling, speed, angle, grip, collisions, and combo duration to deterministic drift scores; strategy reacts to grip and opponent performance.",
+      "id": "mab_dependency_unblock_a36888cf46.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_drift_fixed_timestep_grip_collision_scoring_and_strategy",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves agent_customizations, track_layouts, race_replays, performance_feedback.",
+      "id": "mab_dependency_unblock_a36888cf46.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_drift_agent_track_replay_and_feedback_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Completed drift physics revises transitions and scoring without erasing agent, track, replay, or feedback state.",
+      "id": "mab_dependency_unblock_a36888cf46.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_drift_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

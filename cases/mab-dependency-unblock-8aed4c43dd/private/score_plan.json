@@ -1,0 +1,302 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_checkpoint",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_fileshare_db013.delayed_authoritative_result",
+      "evidence_group": "dep_db013.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.authority_bound_database_diagnosis"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After the provisional file sharing diagnosis is persisted, accept the delayed database:013 receipt only after validating its identity and the post-checkpoint exclusive-writer probe showing a timed-out file-metadata waiter and blocker lock rows.",
+      "forbidden_behavior": "Do not finalize from the provisional diagnosis or accept a receipt without the exact case/source and checkpoint evidence.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "dep_db013.cf.01_classify_authority_checkpoint",
+      "independence_key": "dep_db013.cf.01_classify_authority_checkpoint",
+      "measurement_type": "control",
+      "mutation_id": "dep_db013.mutation.01_classify_authority_checkpoint",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_8aed4c43dd.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_from_authority",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_fileshare_db013.delayed_authoritative_result",
+      "evidence_group": "dep_db013.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.authority_bound_database_diagnosis"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Use the post-checkpoint exclusive-writer probe showing a timed-out file-metadata waiter and blocker lock rows to revise the affected diagnosis while preserving the completed file sharing findings.",
+      "forbidden_behavior": "Do not retain the displaced tentative cause and do not erase unaffected specialist findings.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "dep_db013.cf.02_revise_from_authority",
+      "independence_key": "dep_db013.cf.02_revise_from_authority",
+      "measurement_type": "control",
+      "mutation_id": "dep_db013.mutation.02_revise_from_authority",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_8aed4c43dd.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure",
+      "dimension": "closure",
+      "event_id": "evt.mab_fileshare_db013.delayed_authoritative_result",
+      "evidence_group": "dep_db013.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.authority_bound_database_diagnosis"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final file sharing diagnosis from the delayed authority receipt, native evaluator binding, and preserved hypothesis record.",
+      "forbidden_behavior": "Do not declare closure without rechecking the exact cause, authority digests, preservation list, and output schema.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "dep_db013.cf.03_verify_closure",
+      "independence_key": "dep_db013.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "dep_db013.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_8aed4c43dd.closure"
+      ],
+      "precondition": "The evaluator-owned authority delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not finalize from the provisional diagnosis or accept a receipt without the exact case/source and checkpoint evidence.",
+      "family": "wait_for_authority",
+      "id": "dep_db013.mutation.01_classify_authority_checkpoint",
+      "may_fail": [],
+      "must_fail": [
+        "dep_db013.cf.01_classify_authority_checkpoint"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_8aed4c43dd.source.pin"
+      ],
+      "targets": [
+        "dep_db013.cf.01_classify_authority_checkpoint",
+        "mab_dependency_unblock_8aed4c43dd.event.receipt",
+        "mab_dependency_unblock_8aed4c43dd.event.probes",
+        "mab_dependency_unblock_8aed4c43dd.closure",
+        "mab_dependency_unblock_8aed4c43dd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not retain the displaced tentative cause and do not erase unaffected specialist findings.",
+      "family": "resolve_authority",
+      "id": "dep_db013.mutation.02_revise_from_authority",
+      "may_fail": [],
+      "must_fail": [
+        "dep_db013.cf.02_revise_from_authority"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_8aed4c43dd.source.pin"
+      ],
+      "targets": [
+        "dep_db013.cf.02_revise_from_authority",
+        "mab_dependency_unblock_8aed4c43dd.event.receipt",
+        "mab_dependency_unblock_8aed4c43dd.event.probes",
+        "mab_dependency_unblock_8aed4c43dd.closure",
+        "mab_dependency_unblock_8aed4c43dd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not declare closure without rechecking the exact cause, authority digests, preservation list, and output schema.",
+      "family": "rederive_from_authority",
+      "id": "dep_db013.mutation.03_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "dep_db013.cf.03_verify_closure"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_8aed4c43dd.source.pin"
+      ],
+      "targets": [
+        "dep_db013.cf.03_verify_closure",
+        "mab_dependency_unblock_8aed4c43dd.event.receipt",
+        "mab_dependency_unblock_8aed4c43dd.event.probes",
+        "mab_dependency_unblock_8aed4c43dd.closure",
+        "mab_dependency_unblock_8aed4c43dd.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The delayed database:013 receipt is authentic and bound to this case and source.",
+      "id": "mab_dependency_unblock_8aed4c43dd.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The receipt carries the exact file sharing authority checkpoint and task-specific anomaly evidence.",
+      "id": "mab_dependency_unblock_8aed4c43dd.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_task_specific_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "The final closure consumes the exact receipt and re-verifies source semantics.",
+      "id": "mab_dependency_unblock_8aed4c43dd.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The diagnosis remains pinned to database:013 and its official source revision.",
+      "id": "mab_dependency_unblock_8aed4c43dd.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private report passed the upstream MARBLE database evaluator for database:013.",
+      "id": "mab_dependency_unblock_8aed4c43dd.native.binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evaluator_binding_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The selected diagnosis exactly matches the evaluator-owned official root for this file sharing task.",
+      "id": "mab_dependency_unblock_8aed4c43dd.diagnosis.exact",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_selected_database_cause_is_exact",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The displaced tentative cause is excluded instead of being merged into the final answer.",
+      "id": "mab_dependency_unblock_8aed4c43dd.tentative.excluded",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_tentative_diagnosis_is_excluded",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The diagnosis consumes the native evidence digest, checkpoint digest, and the post-checkpoint exclusive-writer probe showing a timed-out file-metadata waiter and blocker lock rows.",
+      "id": "mab_dependency_unblock_8aed4c43dd.authority.evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_authority_evidence_is_consumed",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The database_diagnosis schema preserves the task-specific file sharing findings and closure flags.",
+      "id": "mab_dependency_unblock_8aed4c43dd.output.schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_database_diagnosis_schema_and_preservation",
+      "relevance_tier": "base"
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_downstream_assembly_optimiza",
+      "dimension": "event_intake",
+      "event_id": "evt.tbn_late_test_evidence_9.straggler_under_resource",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.downstream_assembly_opti"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'downstream_invalidation', perform classify_critical_path for 'Downstream assembly, optimization, or reporting proceeds using provisional upstream output.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_late_test_e_7bb776.cf.01_classify_critical_path",
+      "independence_key": "tbn_late_test_e_7bb776.cf.01_classify_critical_path",
+      "measurement_type": "control",
+      "mutation_id": "tbn_late_test_e_7bb776.mutation.01_classify_critical_path",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_9685a54f22.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_late_test_e_7bb776.cf.01_classify_critical_path]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.downstream_assembly_opti"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_downstream_assembly_optimiza",
+      "dimension": "plan_revision",
+      "event_id": "evt.tbn_late_test_evidence_9.straggler_under_resource",
+      "evidence_group": "plan_revision:2",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.downstream_assembly_opti"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'downstream_invalidation', perform resource_triage for 'Downstream assembly, optimization, or reporting proceeds using provisional upstream output.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "cancel_workstreams": [
+          "requirement_worker_02"
+        ],
+        "preserve_workstreams": [
+          "requirement_worker_01"
+        ]
+      },
+      "id": "tbn_late_test_e_7bb776.cf.02_resource_triage",
+      "independence_key": "tbn_late_test_e_7bb776.cf.02_resource_triage",
+      "measurement_type": "control",
+      "mutation_id": "tbn_late_test_e_7bb776.mutation.02_resource_triage",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_9685a54f22.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_late_test_e_7bb776.cf.02_resource_triage]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.downstream_assembly_opti"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_downstream_assembly_optimiza",
+      "dimension": "closure",
+      "event_id": "evt.tbn_late_test_evidence_9.straggler_under_resource",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.downstream_assembly_opti"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'downstream_invalidation', perform verify_closure for 'Downstream assembly, optimization, or reporting proceeds using provisional upstream output.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "tbn_late_test_e_7bb776.cf.03_verify_closure",
+      "independence_key": "tbn_late_test_e_7bb776.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "tbn_late_test_e_7bb776.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_9685a54f22.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_late_test_e_7bb776.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.downstream_assembly_opti"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.tbn_late_test_evidence_9.straggler_under_resource",
+      "event_theme": "straggler_under_resource_pressure",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "downstream_invalidation",
+        "before": "useful source work is already persisted",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

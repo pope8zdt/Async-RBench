@@ -1,0 +1,227 @@
+{
+  "case_id": "swe-late-constraint-6294af1554",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_revise_the_splitter_to_satis",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_the_splitter_to_s"
+        ]
+      },
+      "id": "01_classify_scope_delta_revise_the_splitte",
+      "must_still_pass": [
+        "swe_late_constraint_6294.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_constraint_6294af1554.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "For event 'A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.', perform classify_scope_delta for 'Revise the splitter to satisfy every reported boundary case.' while retaining valid prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.revise_the_splitter_to_s"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_compile_every_resulting_rege",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comma-aware splitter implementation.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_the_splitter_to_s"
+        ]
+      },
+      "id": "02_revise_affected_compile_every_resu",
+      "must_still_pass": [
+        "swe_late_constraint_6294.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_constraint_6294af1554.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.', perform revise_affected for 'Compile every resulting regex and assert the intended pattern count.' while retaining valid prior result 'Draft a comma-aware splitter implementation.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.revise_the_splitter_to_s"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_verify_ordinary_top_level_co",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_the_splitter_to_s"
+        ]
+      },
+      "id": "03_preserve_unaffected_verify_ordinary_to",
+      "must_still_pass": [
+        "swe_late_constraint_6294.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_constraint_6294af1554.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "For event 'A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.', perform preserve_unaffected for 'Verify ordinary top-level comma-separated patterns and configuration loading remain compatible.' while retaining valid prior result 'Locate `_regexp_csv_transfomer` and reproduce the quantifier-comma crash.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.revise_the_splitter_to_s"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_revise_the_splitter_to_satis",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Draft a comma-aware splitter implementation.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_the_splitter_to_s"
+        ]
+      },
+      "id": "04_verify_closure_revise_the_splitte",
+      "must_still_pass": [
+        "swe_late_constraint_6294.sem.20.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_6294af1554.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "For event 'A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.', perform verify_closure for 'Revise the splitter to satisfy every reported boundary case.' while retaining valid prior result 'Draft a comma-aware splitter implementation.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.revise_the_splitter_to_s"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.revise_the_splitter_to_s"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.compile_every_resulting_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_ordinary_top_leve"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.revise_the_splitter_to_s",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.compile_every_resulting_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_ordinary_top_leve",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.revise_the_splitter_to_s",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.compile_every_resulting_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_ordinary_top_leve",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.revise_the_splitter_to_s",
+      "req.02.compile_every_resulting_",
+      "req.03.verify_ordinary_top_leve",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A parser specialist supplies expected split boundaries for regexes containing quantifier, character-class, escaped, grouped, and top-level commas.",
+    "before_state": "Release the regex corpus after a simple quantifier-aware splitter is implemented.",
+    "event_id": "evt.swe_late_constraint_6294.task_scope_or_dependency",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Revise the splitter to satisfy every reported boundary case.",
+      "id": "req.01.revise_the_splitter_to_s",
+      "observable_probe": "swe_late_constraint_6294.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for revise_the_splitter_to_satisfy_every"
+    },
+    {
+      "description": "Compile every resulting regex and assert the intended pattern count.",
+      "id": "req.02.compile_every_resulting_",
+      "observable_probe": "swe_late_constraint_6294.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for compile_every_resulting_regex_and_as"
+    },
+    {
+      "description": "Verify ordinary top-level comma-separated patterns and configuration loading remain compatible.",
+      "id": "req.03.verify_ordinary_top_leve",
+      "observable_probe": "swe_late_constraint_6294.sem.03.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for verify_ordinary_top_level_comma_sepa"
+    }
+  ]
+}

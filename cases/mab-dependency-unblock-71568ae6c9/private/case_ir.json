@@ -1,0 +1,248 @@
+{
+  "case_id": "mab-dependency-unblock-71568ae6c9",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "mab_dependency_unblock_71568ae6c9_classify_scope_delta_01",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_the_provisional_"
+        ]
+      },
+      "id": "01_classify_scope_delta_8ae6c9",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_dependency_unblock_71568ae6c9.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "Classify the recovered map checkpoint as a dependency-state change that releases multiplayer only for the validated map revision. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_the_provisional_"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_dependency_unblock_71568ae6c9_revise_affected_02",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.persist_team_coordinatio"
+        ]
+      },
+      "id": "02_revise_affected_8ae6c9",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_71568ae6c9.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "Unblock matchmaking, chat, and synchronized actions from the validated map checkpoint and reject actions tied to stale map revisions. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.persist_team_coordinatio"
+    },
+    {
+      "critical": false,
+      "decision_group": "mab_dependency_unblock_71568ae6c9_preserve_unaffected_03",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.integrate_capture_defens"
+        ]
+      },
+      "id": "03_preserve_unaffected_8ae6c9",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_71568ae6c9.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and map-independent test results. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.integrate_capture_defens"
+    },
+    {
+      "critical": true,
+      "decision_group": "mab_dependency_unblock_71568ae6c9_verify_closure_04",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.run_fixed_seed_balance_a"
+        ]
+      },
+      "id": "04_verify_closure_8ae6c9",
+      "must_still_pass": [
+        "mab_dependency_unblock_7.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_71568ae6c9.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "Close only after fixed-seed map invariants, multiplayer synchronization, stale-action rejection, scoring/progression, and UI checks consume the exact checkpoint receipt. Preserve validated character abilities, adaptive-AI state, accepted capture scores, progression, and completed map-independent tests.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.run_fixed_seed_balance_a"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.replace_the_provisional_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.persist_team_coordinatio"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.integrate_capture_defens"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.run_fixed_seed_balance_a"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.replace_the_provisional_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.persist_team_coordinatio",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.integrate_capture_defens",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.run_fixed_seed_balance_a",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.replace_the_provisional_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.persist_team_coordinatio",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.integrate_capture_defens",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.run_fixed_seed_balance_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.replace_the_provisional_",
+      "req.02.persist_team_coordinatio",
+      "req.03.integrate_capture_defens",
+      "req.04.run_fixed_seed_balance_a",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The recovered map worker delivers an authoritative fixed-seed checkpoint proving objective placement, destructible terrain, power-ups, and balance invariants, which releases the multiplayer dependency.",
+    "before_state": "Validated character customization and adaptive-AI state exist while multiplayer, synchronization, scoring integration, and UI closure remain blocked on map validation.",
+    "event_id": "evt.mab_dependency_unblock_71568ae6c9.task_scope_or_dependency_change",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Consume the recovered fixed-seed map checkpoint and require all map validation invariants before releasing multiplayer.",
+      "id": "req.01.replace_the_provisional_",
+      "observable_probe": "mab_dependency_unblock_7.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source-native Galactic Conquest artifact and closure evidence for: Consume the recovered fixed-seed map checkpoint and require all map validation invariants before releasing multiplayer."
+    },
+    {
+      "description": "Release matchmaking, chat, and synchronized actions only from the validated map revision.",
+      "id": "req.02.persist_team_coordinatio",
+      "observable_probe": "mab_dependency_unblock_7.sem.02.the_requested_program_passes",
+      "public_evidence": "source-native Galactic Conquest artifact and closure evidence for: Release matchmaking, chat, and synchronized actions only from the validated map revision."
+    },
+    {
+      "description": "Reject stale synchronized actions while preserving accepted capture scores and progression.",
+      "id": "req.03.integrate_capture_defens",
+      "observable_probe": "mab_dependency_unblock_7.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source-native Galactic Conquest artifact and closure evidence for: Reject stale synchronized actions while preserving accepted capture scores and progression."
+    },
+    {
+      "description": "Reverify fixed-seed map balance, multiplayer synchronization, scoring/progression, and UI closure against the checkpoint receipt.",
+      "id": "req.04.run_fixed_seed_balance_a",
+      "observable_probe": "mab_dependency_unblock_7.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source-native Galactic Conquest artifact and closure evidence for: Reverify fixed-seed map balance, multiplayer synchronization, scoring/progression, and UI closure against the checkpoint receipt."
+    }
+  ]
+}

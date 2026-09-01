@@ -1,0 +1,44 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:47f7c0ce-a5fb-4100-a5e6-65cd0e7429e5",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/47f7c0ce-a5fb-4100-a5e6-65cd0e7429e5.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "libreoffice_impress snapshot",
+      "vlc snapshot",
+      "private source assets",
+      "private native fixture",
+      "private delayed payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "libreoffice_impress",
+      "vlc",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:47f7c0ce-a5fb-4100-a5e6-65cd0e7429e5 in pinned vlc; truth remains private.",
+    "event_injection": "Release delayed validated_video_frame_at_8s after a persisted cross-app checkpoint.",
+    "hidden_tests": "compare_images, native digest, timestamp, frame_identity, presentation_target, selective_change, persistence, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "vlc",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private slide_background_osworld.sh scores compare_images.",
+    "requires_authored_private_oracle": false
+  }
+}
+

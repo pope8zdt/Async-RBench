@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-e4a188e60e",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_authority",
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_e4a188e60e.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A sealed-batch report confirms $18.88 pricing, traceability, a 30-day replacement window, three-day support response, and consolidated logistics.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "sealed_batch_support_terms_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_e4a188e60e.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A sealed-batch report confirms $18.88 pricing, traceability, a 30-day replacement window, three-day support response, and consolidated logistics.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "sealed_batch_support_terms_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_e4a188e60e.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: A sealed-batch report confirms $18.88 pricing, traceability, a 30-day replacement window, three-day support response, and consolidated logistics.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "sealed_batch_support_terms_delivered"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore authority, retain invalid terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_e4a188e60e.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: A sealed-batch report confirms $18.88 pricing, traceability, a 30-day replacement window, three-day support response, and consolidated logistics.",
+      "stage_tag": "closure",
+      "task_requirement_id": "sealed_batch_support_terms_delivered"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.01.record_the_provisional_buyer"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.02.authenticate_the_seal_and_ba"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.03.revise_price_replacement_sup"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.04.close_with_one_verified_qual"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.record_the_provisional_buyer",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.authenticate_the_seal_and_ba",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_price_replacement_sup",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_with_one_verified_qual",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.record_the_provisional_buyer",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.authenticate_the_seal_and_ba",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_price_replacement_sup",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_with_one_verified_qual",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_provisional_buyer",
+      "req.02.authenticate_the_seal_and_ba",
+      "req.03.revise_price_replacement_sup",
+      "req.04.close_with_one_verified_qual",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A sealed-batch report confirms $18.88 pricing, traceability, a 30-day replacement window, three-day support response, and consolidated logistics.",
+    "before_state": "A provisional JAFRA Tender Moments Fresh Baby Cologne bargain exists before sealed_batch_support_terms_delivered.",
+    "event_id": "evt.mab-late-constraint-e4a188e60e.sealed_batch_support_terms_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Record the provisional buyer offer before batch verification.",
+      "id": "req.01.record_the_provisional_buyer",
+      "observable_probe": "mab_late_constraint_e4a188e60e.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Authenticate the seal and batch traceability.",
+      "id": "req.02.authenticate_the_seal_and_ba",
+      "observable_probe": "mab_late_constraint_e4a188e60e.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Revise price, replacement, support, and logistics terms.",
+      "id": "req.03.revise_price_replacement_sup",
+      "observable_probe": "mab_late_constraint_e4a188e60e.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close with one verified quality-and-support package.",
+      "id": "req.04.close_with_one_verified_qual",
+      "observable_probe": "mab_late_constraint_e4a188e60e.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

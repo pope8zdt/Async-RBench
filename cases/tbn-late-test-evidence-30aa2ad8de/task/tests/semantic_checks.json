@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_nginx_installed passes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_installed",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_nginx_installed",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_nginx_running passes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_running",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_nginx_running",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_index_page_content passes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_index_page_content",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_index_page_content",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_custom_404_page passes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_custom_404_page",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_custom_404_page",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_nginx_config_syntax passes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_config_syntax",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_nginx_config_syntax",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_nginx_config_settings passes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_config_settings",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_nginx_config_settings",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_log_file_creation passes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_log_file_creation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_log_file_creation",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "Locked upstream semantic assertion test_log_file_format passes.",
+      "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_log_file_format",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_log_file_format",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

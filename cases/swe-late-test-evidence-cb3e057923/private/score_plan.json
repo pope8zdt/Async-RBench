@@ -1,0 +1,348 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_req_01_add_an_explicit_empty_in",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_test_evidence_cb3e.scope_dependency_change",
+      "evidence_group": "bp_swe_cb3e.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.add_an_explicit_empty_in"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The warnings-as-errors audit changes the scope: empty lists and NumPy arrays must bypass numeric deprecation and return empty float arrays without corrupting UnitData, while nonempty numeric inputs retain existing deprecation behavior.', Classify the container matrix as a scope change from cosmetic warning handling to explicit typed empty conversion.",
+      "forbidden_behavior": "Do not treat warning suppression alone as the required behavior; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_an_explicit_empty_in"
+        ]
+      },
+      "id": "swe_late_test_e_1c17f1.cf.01_classify_scope_delta_add_an_explicit_em",
+      "independence_key": "swe_late_test_e_1c17f1.cf.01_classify_scope_delta_add_an_explicit_em",
+      "measurement_type": "control",
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "swe_late_test_e_1c17f1.mutation.01_classify_scope_delta_add_an_explicit_em",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_late_test_evidence_cb3e057923.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The warnings-as-errors audit changes the scope: empty lists and NumPy arrays must bypass numeric deprecation and return empty float arrays without corrupting UnitData, while nonempty numeric inputs retain existing deprecation behavior.', Classify the container matrix as a scope change from cosmetic warning handling to explicit typed empty conversion.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_an_explicit_empty_in"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_req_01_add_an_explicit_empty_in",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_test_evidence_cb3e.scope_dependency_change",
+      "evidence_group": "bp_swe_cb3e.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.add_an_explicit_empty_in"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The warnings-as-errors audit changes the scope: empty lists and NumPy arrays must bypass numeric deprecation and return empty float arrays without corrupting UnitData, while nonempty numeric inputs retain existing deprecation behavior.', Revise StrCategoryConverter and UnitData empty guards so empty containers bypass numeric conversion warnings and preserve initialized category state.",
+      "forbidden_behavior": "Do not alter an unrelated units module or accept untyped empty output; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_an_explicit_empty_in"
+        ]
+      },
+      "id": "swe_late_test_e_1c17f1.cf.02_revise_affected_add_an_explicit_em",
+      "independence_key": "swe_late_test_e_1c17f1.cf.02_revise_affected_add_an_explicit_em",
+      "measurement_type": "control",
+      "mutation_family": "under_invalidate",
+      "mutation_id": "swe_late_test_e_1c17f1.mutation.02_revise_affected_add_an_explicit_em",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_cb3e057923.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The warnings-as-errors audit changes the scope: empty lists and NumPy arrays must bypass numeric deprecation and return empty float arrays without corrupting UnitData, while nonempty numeric inputs retain existing deprecation behavior.', Revise StrCategoryConverter and UnitData empty guards so empty containers bypass numeric conversion warnings and preserve initialized category state.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.add_an_explicit_empty_in"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_req_04_retain_a_control_asserti",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_late_test_evidence_cb3e.scope_dependency_change",
+      "evidence_group": "bp_swe_cb3e.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.04.retain_a_control_asserti"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The warnings-as-errors audit changes the scope: empty lists and NumPy arrays must bypass numeric deprecation and return empty float arrays without corrupting UnitData, while nonempty numeric inputs retain existing deprecation behavior.', Preserve deprecation behavior for nonempty numeric inputs and all existing string-category mapping semantics.",
+      "forbidden_behavior": "Do not remove the nonempty numeric warning or reset valid category mappings; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.retain_a_control_asserti"
+        ]
+      },
+      "id": "swe_late_test_e_1c17f1.cf.03_preserve_unaffected_retain_a_control_a",
+      "independence_key": "swe_late_test_e_1c17f1.cf.03_preserve_unaffected_retain_a_control_a",
+      "measurement_type": "control",
+      "mutation_family": "over_invalidate",
+      "mutation_id": "swe_late_test_e_1c17f1.mutation.03_preserve_unaffected_retain_a_control_a",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_cb3e057923.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The warnings-as-errors audit changes the scope: empty lists and NumPy arrays must bypass numeric deprecation and return empty float arrays without corrupting UnitData, while nonempty numeric inputs retain existing deprecation behavior.', Preserve deprecation behavior for nonempty numeric inputs and all existing string-category mapping semantics.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.04.retain_a_control_asserti"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "verify_closure_req_03_assert_the_returned_obje",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_test_evidence_cb3e.scope_dependency_change",
+      "evidence_group": "bp_swe_cb3e.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.assert_the_returned_obje"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The warnings-as-errors audit changes the scope: empty lists and NumPy arrays must bypass numeric deprecation and return empty float arrays without corrupting UnitData, while nonempty numeric inputs retain existing deprecation behavior.', Run the empty-data warning, return-type, UnitData, and nonempty control regressions using the exact scope receipt.",
+      "forbidden_behavior": "Do not close after empty-list behavior without NumPy and control cases; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.assert_the_returned_obje"
+        ]
+      },
+      "id": "swe_late_test_e_1c17f1.cf.04_verify_closure_assert_the_returne",
+      "independence_key": "swe_late_test_e_1c17f1.cf.04_verify_closure_assert_the_returne",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_late_test_e_1c17f1.mutation.04_verify_closure_assert_the_returne",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_cb3e057923.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The warnings-as-errors audit changes the scope: empty lists and NumPy arrays must bypass numeric deprecation and return empty float arrays without corrupting UnitData, while nonempty numeric inputs retain existing deprecation behavior.', Run the empty-data warning, return-type, UnitData, and nonempty control regressions using the exact scope receipt.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.assert_the_returned_obje"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not treat warning suppression alone as the required behavior; preserve valid source-native behavior and consume the event receipt.",
+      "family": "wait_for_authority",
+      "id": "swe_late_test_e_1c17f1.mutation.01_classify_scope_delta_add_an_explicit_em",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_test_e_1c17f1.cf.01_classify_scope_delta_add_an_explicit_em"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_cb3e057923.source.pin"
+      ],
+      "targets": [
+        "swe_late_test_e_1c17f1.cf.01_classify_scope_delta_add_an_explicit_em",
+        "swe_late_test_evidence_cb3e057923.event.receipt",
+        "swe_late_test_evidence_cb3e057923.event.probes",
+        "swe_late_test_evidence_cb3e057923.closure",
+        "swe_late_test_evidence_cb3e057923.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not alter an unrelated units module or accept untyped empty output; preserve valid source-native behavior and consume the event receipt.",
+      "family": "resolve_authority",
+      "id": "swe_late_test_e_1c17f1.mutation.02_revise_affected_add_an_explicit_em",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_test_e_1c17f1.cf.02_revise_affected_add_an_explicit_em"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_cb3e057923.source.pin"
+      ],
+      "targets": [
+        "swe_late_test_e_1c17f1.cf.02_revise_affected_add_an_explicit_em",
+        "swe_late_test_evidence_cb3e057923.event.receipt",
+        "swe_late_test_evidence_cb3e057923.event.probes",
+        "swe_late_test_evidence_cb3e057923.closure",
+        "swe_late_test_evidence_cb3e057923.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not remove the nonempty numeric warning or reset valid category mappings; preserve valid source-native behavior and consume the event receipt.",
+      "family": "selective_replan",
+      "id": "swe_late_test_e_1c17f1.mutation.03_preserve_unaffected_retain_a_control_a",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_test_e_1c17f1.cf.03_preserve_unaffected_retain_a_control_a"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_cb3e057923.source.pin"
+      ],
+      "targets": [
+        "swe_late_test_e_1c17f1.cf.03_preserve_unaffected_retain_a_control_a",
+        "swe_late_test_evidence_cb3e057923.event.receipt",
+        "swe_late_test_evidence_cb3e057923.event.probes",
+        "swe_late_test_evidence_cb3e057923.closure",
+        "swe_late_test_evidence_cb3e057923.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close after empty-list behavior without NumPy and control cases; preserve valid source-native behavior and consume the event receipt.",
+      "family": "rederive_from_authority",
+      "id": "swe_late_test_e_1c17f1.mutation.04_verify_closure_assert_the_returne",
+      "may_fail": [],
+      "must_fail": [
+        "swe_late_test_e_1c17f1.cf.04_verify_closure_assert_the_returne"
+      ],
+      "must_still_pass": [
+        "swe_late_test_evidence_cb3e057923.source.pin"
+      ],
+      "targets": [
+        "swe_late_test_e_1c17f1.cf.04_verify_closure_assert_the_returne",
+        "swe_late_test_evidence_cb3e057923.event.receipt",
+        "swe_late_test_evidence_cb3e057923.event.probes",
+        "swe_late_test_evidence_cb3e057923.closure",
+        "swe_late_test_evidence_cb3e057923.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_late_test_evidence_cb3e057923.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_late_test_evidence_cb3e057923.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_late_test_evidence_cb3e057923.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_late_test_evidence_cb3e057923.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "Declared native pytest failing surface remains green: lib/matplotlib/tests/test_category.py (1 assertions)",
+      "id": "swe_late_test_evidence_cb3e057923.native.pytest_01_lib_matplotlib_tests_test_category_py",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_01_lib_matplotlib_tests_test_category_py",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: lib/matplotlib/tests/test_category.py (8 assertions)",
+      "id": "swe_late_test_evidence_cb3e057923.native.pytest_02_lib_matplotlib_tests_test_category_py",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_02_lib_matplotlib_tests_test_category_py",
+      "relevance_tier": "base"
+    }
+  ]
+}

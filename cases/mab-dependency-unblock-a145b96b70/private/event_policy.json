@@ -1,0 +1,30 @@
+{
+  "authority_rule": "Wait for the delayed database:023 checkpoint, verify the post-checkpoint bulk-write probe recording exactly 5,000 inserted rows and the resulting relation bytes, then revise only the affected diagnosis.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.authority_bound_database_diagnosis",
+      "req.02.preserve_unaffected_findings",
+      "req.03.receipt_bound_closure",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed database:023 authority receipt releases the post-checkpoint bulk-write probe recording exactly 5,000 inserted rows and the resulting relation bytes.",
+    "before_state": "The transportation operations schema review and provisional hypothesis matrix are persisted without evaluator truth.",
+    "event_id": "evt.mab_transport_db023.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_transport_db023.delayed_authoritative_result",
+  "forbidden_shortcut": "Do not finalize by completion order, ignore the delayed authority, or erase unaffected database findings.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

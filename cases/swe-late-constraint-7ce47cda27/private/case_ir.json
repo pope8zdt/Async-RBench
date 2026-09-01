@@ -1,0 +1,206 @@
+{
+  "case_id": "swe-late-constraint-7ce47cda27",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_emit_member_name_subscript_s",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.emit_member_name_subscri"
+        ]
+      },
+      "id": "01_classify_critical_path_emit_member_name_s",
+      "must_still_pass": [
+        "swe_late_constraint_7ce4.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "swe_late_constraint_7ce4.sem.01.the_repaired_repository_pass",
+        "swe_late_constraint_7ce4.sem.02.the_repaired_repository_pass",
+        "swe_late_constraint_7ce4.sem.03.previously_passing_behavior_",
+        "swe_late_constraint_7ce4.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_late_constraint_7ce4.sem.01.the_repaired_repository_pass, swe_late_constraint_7ce4.sem.02.the_repaired_repository_pass, swe_late_constraint_7ce4.sem.03.previously_passing_behavior_, swe_late_constraint_7ce4.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A serialization specialist reports that stable migration code must use module.EnumClass['MEMBER_NAME'] with the enum class's qualified name and existing module import.', perform classify_critical_path for 'Emit member-name subscript syntax using the enum class qualified name.' while retaining valid prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.emit_member_name_subscri"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_retain_the_required_module_i",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Started changing Enum reconstruction away from translated values.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.emit_member_name_subscri"
+        ]
+      },
+      "id": "02_resource_triage_retain_the_require",
+      "must_still_pass": [
+        "swe_late_constraint_7ce4.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "swe_late_constraint_7ce4.sem.01.the_repaired_repository_pass",
+        "swe_late_constraint_7ce4.sem.02.the_repaired_repository_pass",
+        "swe_late_constraint_7ce4.sem.03.previously_passing_behavior_",
+        "swe_late_constraint_7ce4.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_late_constraint_7ce4.sem.01.the_repaired_repository_pass, swe_late_constraint_7ce4.sem.02.the_repaired_repository_pass, swe_late_constraint_7ce4.sem.03.previously_passing_behavior_, swe_late_constraint_7ce4.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A serialization specialist reports that stable migration code must use module.EnumClass['MEMBER_NAME'] with the enum class's qualified name and existing module import.', perform resource_triage for 'Retain the required module import.' while retaining valid prior result 'Started changing Enum reconstruction away from translated values.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.emit_member_name_subscri"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_test_plain_translated_lazy_v",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.emit_member_name_subscri"
+        ]
+      },
+      "id": "03_verify_closure_test_plain_transla",
+      "must_still_pass": [
+        "swe_late_constraint_7ce4.sem.24.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_constraint_7ce4.sem.01.the_repaired_repository_pass",
+        "swe_late_constraint_7ce4.sem.02.the_repaired_repository_pass",
+        "swe_late_constraint_7ce4.sem.03.previously_passing_behavior_",
+        "swe_late_constraint_7ce4.sem.04.previously_passing_behavior_"
+      ],
+      "primary_evidence": "gateway event receipt joined to swe_late_constraint_7ce4.sem.01.the_repaired_repository_pass, swe_late_constraint_7ce4.sem.02.the_repaired_repository_pass, swe_late_constraint_7ce4.sem.03.previously_passing_behavior_, swe_late_constraint_7ce4.sem.04.previously_passing_behavior_",
+      "required_behavior": "For event 'A serialization specialist reports that stable migration code must use module.EnumClass['MEMBER_NAME'] with the enum class's qualified name and existing module import.', perform verify_closure for 'Test plain, translated lazy-value, and nested enum members by evaluating serialized output.' while retaining valid prior result 'Located EnumSerializer and reproduced value-based migration output.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.emit_member_name_subscri"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.emit_member_name_subscri"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.retain_the_required_modu"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.test_plain_translated_la"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.emit_member_name_subscri",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.retain_the_required_modu",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.test_plain_translated_la",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.emit_member_name_subscri",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.retain_the_required_modu",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.test_plain_translated_la",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.emit_member_name_subscri",
+      "req.02.retain_the_required_modu",
+      "req.03.test_plain_translated_la",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A serialization specialist reports that stable migration code must use module.EnumClass['MEMBER_NAME'] with the enum class's qualified name and existing module import.",
+    "before_state": "The stable reconstruction syntax arrives after a value-serialization edit has begun.",
+    "event_id": "evt.swe_late_constraint_7ce4.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Emit member-name subscript syntax using the enum class qualified name.",
+      "id": "req.01.emit_member_name_subscri",
+      "observable_probe": "swe_late_constraint_7ce4.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for emit_member_name_subscript_syntax_us"
+    },
+    {
+      "description": "Retain the required module import.",
+      "id": "req.02.retain_the_required_modu",
+      "observable_probe": "swe_late_constraint_7ce4.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for retain_the_required_module_import"
+    },
+    {
+      "description": "Test plain, translated lazy-value, and nested enum members by evaluating serialized output.",
+      "id": "req.03.test_plain_translated_la",
+      "observable_probe": "swe_late_constraint_7ce4.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for test_plain_translated_lazy_value_and"
+    }
+  ]
+}

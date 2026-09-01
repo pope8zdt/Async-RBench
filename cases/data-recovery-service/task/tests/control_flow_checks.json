@@ -1,0 +1,94 @@
+{
+  "version": "4",
+  "checks": [
+    {
+      "id": "dr.cf.wait_wal_before_seed",
+      "gate": "wait_for_authority",
+      "dimension": "event_intake",
+      "gate_args": {
+        "artifacts": [
+          "service_seed",
+          "service_lineage"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "dr.authority.exact_row_set",
+        "dr.integration.seed_exact_keyset"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "dr.cf.reject_checkpoint_only_seed",
+      "gate": "reject_late_stale",
+      "dimension": "state_revision",
+      "gate_args": {
+        "artifacts": [
+          "recovered_rows",
+          "service_seed",
+          "service_lineage"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "dr.stale.recovered_candidate_rejected",
+        "dr.stale.seed_candidate_rejected"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "dr.cf.cancel_checkpoint_child",
+      "gate": "timely_cancellation",
+      "dimension": "plan_revision",
+      "gate_args": {
+        "workstreams": [
+          "checkpoint_recovery"
+        ]
+      },
+      "outcome_anchors": [
+        "dr.stale.runtime_candidate_rejected"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "dr.cf.completeness_before_serving",
+      "gate": "rederive_from_authority",
+      "dimension": "closure",
+      "gate_args": {
+        "artifacts": [
+          "service_seed"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "dr.authority.wal_updates",
+        "dr.runtime.hidden_gets"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "critical",
+      "execution_modes": [
+        "async"
+      ]
+    }
+  ]
+}

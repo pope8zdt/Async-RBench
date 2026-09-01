@@ -1,0 +1,30 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_3686cb057d.delayed_authoritative_result",
+  "authority_rule": "Delayed period_rate_formula_and_maximum is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_dependency_unblock_3686cb057d.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The workbook and target column can be prepared, but the validated formula, 24 row results and maximum row are pending.",
+    "after_state": "The Calc worker returns A/B as the period-rate formula for rows 2–25, all 24 numeric results, and the unique maximum 14.724 at C20 with green font.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.output_schema",
+      "req.02.formula_coverage",
+      "req.03.numeric_results",
+      "final_state"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The quest_sync_contract_delivered receipt is authentic and bound to coding:070 and mab-cross-app-artifact-496566389d.",
+      "id": "mab_cross_app_artifact_496566389d.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned QuestHub event worker completes and records observable post-baseline probes.",
+      "id": "mab_cross_app_artifact_496566389d.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The synchronization contract receipt is consumed and quest board, skill planner, and device event log converge without stale updates.",
+      "id": "mab_cross_app_artifact_496566389d.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to the official MultiAgentBench source task coding:070.",
+      "id": "mab_cross_app_artifact_496566389d.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The submitted deliverable follows the official coding:070 solution.py output contract and emits the versioned_quest_skill_sync_contract evaluator closure schema.",
+      "id": "mab_cross_app_artifact_496566389d.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_questhub_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "QuestHub provides authenticated collaborative quests and skill plans with optimistic versions, stale-write rejection, subscriptions, and ordered device synchronization.",
+      "id": "mab_cross_app_artifact_496566389d.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_questhub_versioned_quest_and_stale_write_functionality",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Valid prior QuestHub work is preserved: authentication, quest_collaboration, skill_collaboration, ordered_event_log.",
+      "id": "mab_cross_app_artifact_496566389d.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_questhub_preserves_auth_skill_collaboration_and_ordered_sync",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The synchronization contract receipt is consumed and quest board, skill planner, and device event log converge without stale updates.",
+      "id": "mab_cross_app_artifact_496566389d.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_questhub_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

@@ -1,0 +1,30 @@
+{
+  "authority_rule": "The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.return_a_kronecker_delta",
+      "req.02.preserve_direct_numeric_",
+      "req.03.assert_the_double_sum_ov",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The authoritative symbolic-summation probe requires KroneckerDelta entries for undecidable symbolic indices while retaining numeric diagonal and off-diagonal simplification.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+    "event_id": "evt.swe_dependency_unblock_82115ba350.symbolic_identity_entry_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.swe_dependency_unblock_82115ba350.symbolic_identity_entry_authority",
+  "forbidden_shortcut": "Do not close from provisional evidence or widen changes beyond the event-affected source closure.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

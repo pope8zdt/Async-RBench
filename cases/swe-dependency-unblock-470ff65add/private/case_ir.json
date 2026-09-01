@@ -1,0 +1,288 @@
+{
+  "case_id": "swe-dependency-unblock-470ff65add",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_req_03_integrate_dependency_pro",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_470f.scope_dependency_change",
+      "evidence_group": "bp_swe_470f.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.03.integrate_dependency_pro"
+      },
+      "expected_behavior": "After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Classify the returned interpreter matrix as a scope and dependency expansion beyond the completed SELinux compatibility work.",
+      "forbidden_behavior": "Do not treat SELinux compatibility alone as task completion; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.integrate_dependency_pro"
+        ]
+      },
+      "id": "bp_swe_470f.cf.01_classify_scope_delta_integrate_dependen",
+      "independence_key": "bp_swe_470f.cf.01_classify_scope_delta_integrate_dependen",
+      "must_still_pass": [
+        "swe_dependency_unblock_4.sem.32.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "bp_swe_470f.mutation.01_classify_scope_delta_integrate_dependen",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_470ff65add.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Classify the returned interpreter matrix as a scope and dependency expansion beyond the completed SELinux compatibility work.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.03.integrate_dependency_pro"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_req_01_add_the_shared_compatibl",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_470f.scope_dependency_change",
+      "evidence_group": "bp_swe_470f.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.add_the_shared_compatibl"
+      },
+      "expected_behavior": "After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Implement the shared respawn payload, module identity propagation, interpreter probing, and package-module call sites required by the expanded dependency closure.",
+      "forbidden_behavior": "Do not add isolated package-module workarounds without the shared respawn contract; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_the_shared_compatibl"
+        ]
+      },
+      "id": "bp_swe_470f.cf.02_revise_affected_add_the_shared_com",
+      "independence_key": "bp_swe_470f.cf.02_revise_affected_add_the_shared_com",
+      "must_still_pass": [
+        "swe_dependency_unblock_4.sem.32.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "mutation_id": "bp_swe_470f.mutation.02_revise_affected_add_the_shared_com",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_470ff65add.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Implement the shared respawn payload, module identity propagation, interpreter probing, and package-module call sites required by the expanded dependency closure.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.add_the_shared_compatibl"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_req_04_retain_the_completed_sel",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_dependency_unblock_470f.scope_dependency_change",
+      "evidence_group": "bp_swe_470f.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.04.retain_the_completed_sel"
+      },
+      "expected_behavior": "After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Preserve the completed ctypes SELinux layer and its cached AnsibleModule behavior while replanning only respawn-dependent modules.",
+      "forbidden_behavior": "Do not replace or invalidate working SELinux compatibility behavior; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.retain_the_completed_sel"
+        ]
+      },
+      "id": "bp_swe_470f.cf.03_preserve_unaffected_retain_the_complet",
+      "independence_key": "bp_swe_470f.cf.03_preserve_unaffected_retain_the_complet",
+      "must_still_pass": [
+        "swe_dependency_unblock_4.sem.32.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "mutation_id": "bp_swe_470f.mutation.03_preserve_unaffected_retain_the_complet",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_470ff65add.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Preserve the completed ctypes SELinux layer and its cached AnsibleModule behavior while replanning only respawn-dependent modules.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.04.retain_the_completed_sel"
+    },
+    {
+      "critical": false,
+      "decision_group": "verify_closure_req_02_guard_against_recursive",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_470f.scope_dependency_change",
+      "evidence_group": "bp_swe_470f.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.02.guard_against_recursive_"
+      },
+      "expected_behavior": "After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Verify single-respawn protection, recursive module bundling, imports, SELinux, and package-module integration using the scope-change receipt.",
+      "forbidden_behavior": "Do not close before the shared helper and all required consumers agree; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.guard_against_recursive_"
+        ]
+      },
+      "id": "bp_swe_470f.cf.04_verify_closure_guard_against_recu",
+      "independence_key": "bp_swe_470f.cf.04_verify_closure_guard_against_recu",
+      "must_still_pass": [
+        "swe_dependency_unblock_4.sem.32.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "bp_swe_470f.mutation.04_verify_closure_guard_against_recu",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_470ff65add.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "After event 'The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.', Verify single-respawn protection, recursive module bundling, imports, SELinux, and package-module integration using the scope-change receipt.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.02.guard_against_recursive_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.add_the_shared_compatibl"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.guard_against_recursive_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.integrate_dependency_pro"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.retain_the_completed_sel"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.add_the_shared_compatibl",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.guard_against_recursive_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.integrate_dependency_pro",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.retain_the_completed_sel",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.add_the_shared_compatibl",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.guard_against_recursive_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.integrate_dependency_pro",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.retain_the_completed_sel",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_the_shared_compatibl",
+      "req.02.guard_against_recursive_",
+      "req.03.integrate_dependency_pro",
+      "req.04.retain_the_completed_sel",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The dependency audit expands the task to preserve module identity in AnsiballZ, prohibit recursive respawn, probe interpreters for required imports, integrate apt/dnf/yum and related package modules, and retain SELinux behavior.",
+    "before_state": "The ctypes SELinux compatibility layer is checkpointed before the module-interpreter dependency and caller matrix is available.",
+    "event_id": "evt.swe_dependency_unblock_470f.scope_dependency_change",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Add the shared compatible-interpreter discovery and respawn utility.",
+      "id": "req.01.add_the_shared_compatibl",
+      "observable_probe": "swe_dependency_unblock_4.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for add_the_shared_compatible_interprete"
+    },
+    {
+      "description": "Guard against recursive respawning.",
+      "id": "req.02.guard_against_recursive_",
+      "observable_probe": "swe_dependency_unblock_4.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for guard_against_recursive_respawning"
+    },
+    {
+      "description": "Integrate dependency probes into each affected package module.",
+      "id": "req.03.integrate_dependency_pro",
+      "observable_probe": "swe_dependency_unblock_4.sem.03.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for integrate_dependency_probes_into_eac"
+    },
+    {
+      "description": "Retain the completed SELinux CLI fallback.",
+      "id": "req.04.retain_the_completed_sel",
+      "observable_probe": "swe_dependency_unblock_4.sem.04.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for retain_the_completed_selinux_cli_fal"
+    }
+  ]
+}

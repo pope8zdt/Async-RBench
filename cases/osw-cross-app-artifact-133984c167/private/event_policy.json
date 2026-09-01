@@ -1,0 +1,32 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
+  "authority_rule": "Delayed dblp_published_records is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The thesis DOCX can be inspected locally, but authoritative publication records and citation keys are still unresolved.",
+    "after_state": "The DBLP worker returns six published-record BibTeX identities, replacing any provisional arXiv guesses before references.bib is written.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.extract_all_six_paper_ti",
+      "req.02.resolve_each_title_to_th",
+      "req.03.write_six_bibtex_entries",
+      "req.04.save_utf_8_references_bi",
+      "final_state"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

@@ -1,0 +1,26 @@
+# Copy this file outside version control and select exact, immutable model IDs.
+backend: openai_compatible
+api_url: https://api.openai.com/v1/chat/completions
+api_key_env: OPENAI_API_KEY
+api_key_required: true
+main_model: replace-with-exact-model-id
+child_model: replace-with-exact-model-id
+# Set null for reasoning APIs that do not accept temperature.
+temperature: null
+max_output_tokens: 16384
+max_tokens_parameter: max_completion_tokens
+send_seed: true
+max_main_turns: 100
+max_child_turns: 40
+max_concurrent_children: 3
+max_total_child_spawns: 5
+max_api_concurrency: 4
+main_terminal_timeout_sec: 180
+child_terminal_timeout_sec: 180
+child_timeout_sec: 1200
+start_barrier_timeout_sec: 120
+live_cancellation_grace_sec: 60
+workspace_mode: container_clone
+keep_child_workspaces: false
+max_tool_output_chars: 20000
+request_timeout_sec: 600

@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_emit_source_read_for_include",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_d.partial_then_complete_re",
+      "evidence_group": "swe_dependency_unb.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.emit_source_read_for_inc"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A pipeline analysis reports the included-file text stage at which slicing and decoding are complete but reST parsing has not begun, together with the source identifier expected by `source-read` handlers.', perform classify_completeness for 'Emit `source-read` for included text at the identified pre-parse stage.' while retaining valid prior result 'Located top-level `source-read` emission in Sphinx input processing.'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located top-level `source-read` emission in Sphinx input processing.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.emit_source_read_for_inc"
+        ]
+      },
+      "id": "swe_dependency__fd059b.cf.01_classify_completeness_emit_source_read_f",
+      "independence_key": "swe_dependency__fd059b.cf.01_classify_completeness_emit_source_read_f",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__fd059b.mutation.01_classify_completeness_emit_source_read_f",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "swe_dependency_unblock_d7e3da4ccb.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.emit_source_read_for_inc"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_pass_a_mutable_source_contai",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_d.partial_then_complete_re",
+      "evidence_group": "swe_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.emit_source_read_for_inc"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A pipeline analysis reports the included-file text stage at which slicing and decoding are complete but reST parsing has not begun, together with the source identifier expected by `source-read` handlers.', perform revise_affected for 'Pass a mutable source container and the included file’s source identifier.' while retaining valid prior result 'Located the Sphinx include directive and its file-reading path.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located the Sphinx include directive and its file-reading path.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.emit_source_read_for_inc"
+        ]
+      },
+      "id": "swe_dependency__fd059b.cf.02_revise_affected_pass_a_mutable_sou",
+      "independence_key": "swe_dependency__fd059b.cf.02_revise_affected_pass_a_mutable_sou",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__fd059b.mutation.02_revise_affected_pass_a_mutable_sou",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_d7e3da4ccb.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.emit_source_read_for_inc"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_preserve_include_slicing_and",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_d.partial_then_complete_re",
+      "evidence_group": "swe_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.emit_source_read_for_inc"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A pipeline analysis reports the included-file text stage at which slicing and decoding are complete but reST parsing has not begun, together with the source identifier expected by `source-read` handlers.', perform verify_closure for 'Preserve include slicing and encoding behavior.' while retaining valid prior result 'Located top-level `source-read` emission in Sphinx input processing.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Located top-level `source-read` emission in Sphinx input processing.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.emit_source_read_for_inc"
+        ]
+      },
+      "id": "swe_dependency__fd059b.cf.03_verify_closure_preserve_include_s",
+      "independence_key": "swe_dependency__fd059b.cf.03_verify_closure_preserve_include_s",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__fd059b.mutation.03_verify_closure_preserve_include_s",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_d7e3da4ccb.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.emit_source_read_for_inc"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.swe_dependency_unblock_d.partial_then_complete_re",
+      "event_theme": "partial_then_complete_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "A pipeline analysis reports the included-file text stage at which slicing and decoding are complete but reST parsing has not begun, together with the source identifier expected by `source-read` handlers.",
+        "before": "The event-ordering result arrives while the main patch is targeting the include directive but before the hook position is fixed.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

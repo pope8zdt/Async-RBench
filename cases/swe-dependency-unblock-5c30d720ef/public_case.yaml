@@ -1,0 +1,133 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/testbed"
+    }
+  ],
+  "case_id": "swe-dependency-unblock-5c30d720ef",
+  "format_version": 2,
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "resolve_requirement_01"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_01"
+      ],
+      "id": "resolve_requirement_02"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_02"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_tasks": [
+    {
+      "benchmark": "swe-bench",
+      "id": "sveltejs__svelte-14935",
+      "source_sha256": "0da7c3eabe83cd23caa72ed04dedddb6562306b6462a5c498613a9b021eab268",
+      "upstream_path": "private/source_task.yaml"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench source-native rebuild: sveltejs__svelte-14935",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 1: Add `inert` to the shared boolean-attribute classification. Review together: Verify true emits a present boolean attribute and false omits it in SSR.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Perform a bounded, read-only review of this source-task requirement: Add `inert` to the shared boolean-attribute classification. Review together: Verify true emits a present boolean attribute and false omits it in SSR. Do not implement the main task, run a full repository build, or broaden the investigation beyond this requirement. Inspect the current shared workspace state, compute revision_sha256 as the SHA-256 of `git diff --binary HEAD`, and write exactly one JSON object to /app/output_data/workstreams/requirement_worker_01.json with string fields `finding` and `revision_sha256`. Then complete with payload.evidence containing `report_path`, the same `revision_sha256`, and the same concise `finding`, and payload.files equal to [`/app/output_data/workstreams/requirement_worker_01.json`]."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 2: Check spread and direct-attribute serialization paths.",
+      "id": "requirement_worker_02",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Perform a bounded, read-only review of this source-task requirement: Check spread and direct-attribute serialization paths. Do not implement the main task, run a full repository build, or broaden the investigation beyond this requirement. Inspect the current shared workspace state, compute revision_sha256 as the SHA-256 of `git diff --binary HEAD`, and write exactly one JSON object to /app/output_data/workstreams/requirement_worker_02.json with string fields `finding` and `revision_sha256`. Then complete with payload.evidence containing `report_path`, the same `revision_sha256`, and the same concise `finding`, and payload.files equal to [`/app/output_data/workstreams/requirement_worker_02.json`]."
+    }
+  ]
+}

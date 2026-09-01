@@ -1,0 +1,92 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline assembly of native result and closure, without invoking oracle.sh or the canonical upstream script.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_dependency_unblock_166790a6f2.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_dependency_unblock_166790a6f2.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_dependency_unblock_166790a6f2.osworld.theme_identity"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_dependency_unblock_166790a6f2.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_orchis_1667.cf.01_classify_authority_gnome_theme_state",
+          "osw_orchis_1667.cf.02_revise_affected_gnome_theme_state",
+          "osw_orchis_1667.cf.03_preserve_unaffected_gnome_theme_state",
+          "osw_orchis_1667.cf.04_verify_closure_gnome_theme_state"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_dependency_unblock_166790a6f2.event.receipt",
+          "osw_dependency_unblock_166790a6f2.event.probes",
+          "osw_dependency_unblock_166790a6f2.closure",
+          "osw_dependency_unblock_166790a6f2.source.pin",
+          "osw_dependency_unblock_166790a6f2.osworld.identity",
+          "osw_dependency_unblock_166790a6f2.osworld.official_score",
+          "osw_dependency_unblock_166790a6f2.osworld.native_evidence",
+          "osw_dependency_unblock_166790a6f2.osworld.task_assertion",
+          "osw_dependency_unblock_166790a6f2.osworld.theme_identity",
+          "osw_dependency_unblock_166790a6f2.osworld.theme_source",
+          "osw_dependency_unblock_166790a6f2.osworld.gsettings_binding",
+          "osw_dependency_unblock_166790a6f2.osworld.gsettings_output"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "b7a8baeb586704b9d09da55f7bf9582b1d60578b146edec78014ab15727c2c1e",
+        "task_id": "osworld:multi_apps:f8369178-fafe-40c2-adc4-b9b08a125456",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

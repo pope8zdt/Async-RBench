@@ -1,0 +1,57 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-201b3549f3",
+  "source_task_id": "osworld:multi_apps:69acbb55-d945-4927-a87b-8480e1a5bb7e",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "instructor_dependency_install_plan",
+  "upstream_dependency_graph": [
+    {
+      "id": "repository_metadata_resolution",
+      "app": "Chrome/OS",
+      "description": "Resolve the authoritative repository URL, package name and pinned revision."
+    },
+    {
+      "id": "dependency_lock_resolution",
+      "app": "Terminal/VS Code",
+      "description": "Resolve the package dependency ranges required for installation.",
+      "depends_on": [
+        "repository_metadata_resolution"
+      ]
+    },
+    {
+      "id": "import_smoke_validation",
+      "app": "Terminal",
+      "description": "Install the project and verify the official INSTRUCTOR import without an Error result.",
+      "depends_on": [
+        "dependency_lock_resolution"
+      ]
+    }
+  ],
+  "state": {
+    "project_path": "/home/user/instructor-embedding",
+    "repository_url": "https://github.com/xlang-ai/instructor-embedding",
+    "repository_revision": "9a9742c130cef6e028af9f3bd582204c5bcfe96e",
+    "distribution_name": "InstructorEmbedding",
+    "distribution_version": "1.0.2",
+    "import_statement": "from InstructorEmbedding import INSTRUCTOR;",
+    "import_exit_code": 0,
+    "import_stderr": "",
+    "official_exclude_token": "Error:",
+    "dependency_ranges": [
+      "transformers>=4.20,<5.0",
+      "datasets>=2.20,<3.0",
+      "pyarrow>=17.0,<18.0",
+      "numpy>=1.0,<=1.26.4",
+      "requests>=2.26,<3.0",
+      "scikit_learn>=1.0.2,<2.0",
+      "scipy>=1.14,<2.0",
+      "sentence-transformers>=3.0.1,<4.0",
+      "torch>=2.0",
+      "tqdm>=4.0,<5.0",
+      "rich>=13.0,<14.0",
+      "huggingface-hub>=0.24.1"
+    ]
+  },
+  "task_assertion": "The /home/user instructor-embedding environment imports INSTRUCTOR successfully and remains bound to the official repository and dependency lock.",
+  "finding": "The environment worker returns the pinned instructor-embedding repository identity, dependency ranges and a successful `from InstructorEmbedding import INSTRUCTOR` smoke result."
+}

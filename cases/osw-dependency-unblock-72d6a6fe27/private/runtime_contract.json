@@ -1,0 +1,28 @@
+{
+  "assets": [
+    "official task configuration",
+    "os snapshot",
+    "private source assets",
+    "private native fixture",
+    "private event payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "terminal",
+    "ubuntu user management",
+    "evaluator/event sidecars"
+  ],
+  "environment_strategy": "Run osworld:os:5812b315-e7bd-4265-b51f-863c02174c28 in pinned os; evaluator truth remains private.",
+  "event_injection": "Release ssh_account_authority only after 2 persisted upstream result(s).",
+  "hidden_tests": "check_include_exclude, native digest, account_identity, home_binding, access_scope, permission_probe, check_script_identity, receipt lineage, closure.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "os",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private ssh_account_osworld.sh scores check_include_exclude.",
+  "requires_authored_private_oracle": false
+}
+

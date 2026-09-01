@@ -1,0 +1,78 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "tbn_partial_failure_recovery_0e92790bd0.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "tbn_partial_fai_e5a821.cf.01_classify_scope_delta",
+          "tbn_partial_fai_e5a821.cf.02_revise_affected",
+          "tbn_partial_fai_e5a821.cf.03_preserve_unaffected",
+          "tbn_partial_fai_e5a821.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "tbn_partial_failure_recovery_0e92790bd0.event.receipt",
+          "tbn_partial_failure_recovery_0e92790bd0.event.probes",
+          "tbn_partial_failure_recovery_0e92790bd0.closure",
+          "tbn_partial_failure_recovery_0e92790bd0.source.pin",
+          "tbn_partial_failure_recovery_0e92790bd0.upstream.test_flag_file_exists_and_correct",
+          "tbn_partial_failure_recovery_0e92790bd0.upstream.test_no_secrets_in_commits",
+          "tbn_partial_failure_recovery_0e92790bd0.upstream.test_good_commits_preserved",
+          "tbn_partial_failure_recovery_0e92790bd0.upstream.test_no_secrets_in_unreachable_objects",
+          "tbn_partial_failure_recovery_0e92790bd0.upstream.test_repository_contents_checksum"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "A secret was accidentally committed to this repository in /app and then removed by rewriting history.",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "116609811f402c269380824689117dbba2e7672cb69e1d916b32cbd2ddccfdd1",
+        "task_id": "git-leak-recovery",
+        "task_path": "cases/tbn-partial-failure-recovery-0e92790bd0/private/source_task.yaml"
+      }
+    ]
+  }
+}

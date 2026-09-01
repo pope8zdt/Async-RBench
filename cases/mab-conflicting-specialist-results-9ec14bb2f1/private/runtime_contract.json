@@ -1,0 +1,22 @@
+{
+  "assets": [
+    "upstream task assets",
+    "event assets",
+    "authority receipts",
+    "canonical/equivalent solutions"
+  ],
+  "docker": [
+    "locked upstream Dockerfile",
+    "pinned dependencies",
+    "participant service",
+    "private verifier clone"
+  ],
+  "environment_strategy": "run the pinned MultiAgentBench PostgreSQL task with evaluator-owned MARBLE evidence and asynchronous authority staging",
+  "event_injection": "delayed database:005 authority receipt bound to the native PostgreSQL host checkpoint",
+  "hidden_tests": "upstream semantics plus task-specific preservation, stale exclusion, runtime behavior, lineage and closure assertions",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "pinned MultiAgentBench database evaluator bundle"
+  },
+  "oracle": "compose the upstream canonical solutions and rederive final state after the injected event"
+}

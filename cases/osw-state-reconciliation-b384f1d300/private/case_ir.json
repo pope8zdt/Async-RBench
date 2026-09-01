@@ -1,0 +1,240 @@
+{
+  "case_id": "osw-state-reconciliation-b384f1d300",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_next_chapter_repository_result",
+      "forbidden_behavior": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_chapter_b384.cf.01_classify_authority_next_chapter_repository_result",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_state_reconciliation_b384f1d300.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for next_chapter_repository_result; preserve already-confirmed source-native state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.archive_inventory"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_next_chapter_repository_result",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_chapter_b384.cf.02_revise_affected_next_chapter_repository_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_b384f1d300.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for next_chapter_repository_result; preserve already-confirmed source-native state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.next_chapter"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_next_chapter_repository_result",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_chapter_b384.cf.03_preserve_unaffected_next_chapter_repository_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_state_reconciliation_b384f1d300.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for next_chapter_repository_result; preserve already-confirmed source-native state.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.output_path"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_next_chapter_repository_result",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_chapter_b384.cf.04_verify_closure_next_chapter_repository_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_state_reconciliation_b384f1d300.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for next_chapter_repository_result; preserve already-confirmed source-native state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.gold_content"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.archive_inventory"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.next_chapter"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.output_path"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.gold_content"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.archive_inventory",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.next_chapter",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.output_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.gold_content",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.archive_inventory",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.next_chapter",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.gold_content",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.archive_inventory",
+      "req.02.next_chapter",
+      "req.03.output_path",
+      "req.04.gold_content",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed repository inventory identifies Early Buildings.tex as the next missing chapter and supplies the exact 5,045-byte text accepted by diff_text_file.",
+    "before_state": "Seven archived chapters are present locally, but the repository order and identity of the next missing chapter have not yet been reconciled.",
+    "event_id": "evt.osw_state_reconciliation_b384f1d300.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The audited archive contains exactly the seven previously downloaded chapter files.",
+      "id": "req.01.archive_inventory",
+      "observable_probe": "osw_state_reconciliation_b384f1d300.osworld.archive_inventory",
+      "public_evidence": "source instruction and task-specific archive_inventory result"
+    },
+    {
+      "description": "The repository reconciliation selects Early Buildings.tex.",
+      "id": "req.02.next_chapter",
+      "observable_probe": "osw_state_reconciliation_b384f1d300.osworld.next_chapter",
+      "public_evidence": "source instruction and task-specific next_chapter result"
+    },
+    {
+      "description": "The next chapter is saved in the requested collection folder.",
+      "id": "req.03.output_path",
+      "observable_probe": "osw_state_reconciliation_b384f1d300.osworld.output_path",
+      "public_evidence": "source instruction and task-specific output_path result"
+    },
+    {
+      "description": "The output exactly matches the audited 5045-byte, 76-line gold chapter.",
+      "id": "req.04.gold_content",
+      "observable_probe": "osw_state_reconciliation_b384f1d300.osworld.gold_content",
+      "public_evidence": "source instruction and task-specific gold_content result"
+    }
+  ]
+}

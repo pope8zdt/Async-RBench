@@ -1,0 +1,3 @@
+# Data Recovery Service (real-instance-derived)
+
+The executable participant instruction is [task/task.yaml](task/task.yaml). This case directly uses Terminal-Bench's encrypted WAL/database bytes, three JSON/CSV/Parquet inputs and gRPC API. Its initial delegation contract creates distinct checkpoint-only recovery, authoritative WAL recovery and independent merge completions. Recovery and merge remain independently valid branches; both feed the running service, so late complete WAL recovery selectively invalidates only recovery-dependent integration artifacts. Private scoring targets that authority transition, selective preservation, rebuilt consumer state and final lineage rather than replaying the upstream task suites.

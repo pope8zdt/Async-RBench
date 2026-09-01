@@ -1,0 +1,30 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.record_the_provisional_buyer",
+      "req.02.replace_it_with_the_current_",
+      "req.03.close_through_an_auditable_c",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The current seller counter verifies a new PS4 game at $14.25 with three-day delivery and supersedes the unsupported $12 offer.",
+    "before_state": "A provisional Hasbro Family Fun Pack - PlayStation 4 Standard Edition bargain exists before verified_delivery_quality_counter.",
+    "event_id": "evt.mab-late-constraint-99180ff520.verified_delivery_quality_counter",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-99180ff520.verified_delivery_quality_counter",
+  "forbidden_shortcut": "Do not ignore the event, retain superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

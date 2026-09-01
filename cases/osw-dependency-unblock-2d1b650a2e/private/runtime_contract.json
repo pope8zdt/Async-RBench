@@ -1,0 +1,26 @@
+{
+  "assets": [
+    "pinned official OSWorld task configuration",
+    "Chrome snapshot/profile state",
+    "private native-evaluator fixture",
+    "private delayed event payload"
+  ],
+  "docker": [
+    "OSWorld desktop runtime",
+    "Chrome",
+    "pyautogui bridge",
+    "host-owned evaluator and event sidecar"
+  ],
+  "environment_strategy": "Run osworld:chrome:030eeff7-b492-4218-b312-701ec99ee0cc in its pinned OSWorld Chrome environment; evaluator truth and event payload are injected only into Oracle/private-verifier paths.",
+  "event_injection": "Release a case-bound delayed authoritative observation after a persisted browser-state checkpoint; no answer payload is present in participant-visible task_file.",
+  "hidden_tests": "Official exact_match score, native evidence digest, Chrome Do Not Track state invariant, receipt lineage, selective revision, and closure reverification.",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "osworld.DesktopEnv",
+    "snapshot": "chrome",
+    "provider": "vmware_or_docker",
+    "final_state": "persisted VM state"
+  },
+  "oracle": "Private chrome_dnt_osworld.sh materializes evaluator-owned evidence and a source-native result scored by exact_match.",
+  "requires_authored_private_oracle": false
+}

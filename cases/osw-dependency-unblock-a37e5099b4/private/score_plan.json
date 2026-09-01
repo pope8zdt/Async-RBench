@@ -1,0 +1,412 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_completeness_script_fu_resize_result",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "evidence_group": "osw_scriptfu_a37e.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "script_fu_resize_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness for script_fu_resize_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip classify_completeness, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_scriptfu_a37e.cf.01_classify_completeness_script_fu_resize_result",
+      "independence_key": "osw_scriptfu_a37e.cf.01_classify_completeness_script_fu_resize_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_scriptfu_a37e.mutation.01_classify_completeness_script_fu_resize_result",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_dependency_unblock_a37e5099b4.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.source_image"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_script_fu_resize_result",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "evidence_group": "osw_scriptfu_a37e.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "script_fu_resize_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for script_fu_resize_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_scriptfu_a37e.cf.02_revise_affected_script_fu_resize_result",
+      "independence_key": "osw_scriptfu_a37e.cf.02_revise_affected_script_fu_resize_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_scriptfu_a37e.mutation.02_revise_affected_script_fu_resize_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_a37e5099b4.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.lisp_extension"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_script_fu_resize_result",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "evidence_group": "osw_scriptfu_a37e.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "script_fu_resize_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for script_fu_resize_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_scriptfu_a37e.cf.03_preserve_unaffected_script_fu_resize_result",
+      "independence_key": "osw_scriptfu_a37e.cf.03_preserve_unaffected_script_fu_resize_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_scriptfu_a37e.mutation.03_preserve_unaffected_script_fu_resize_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_a37e5099b4.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.output_path"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_script_fu_resize_result",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+      "evidence_group": "osw_scriptfu_a37e.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "script_fu_resize_result"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for script_fu_resize_result; preserve already-confirmed source-native state.",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_scriptfu_a37e.cf.04_verify_closure_script_fu_resize_result",
+      "independence_key": "osw_scriptfu_a37e.cf.04_verify_closure_script_fu_resize_result",
+      "measurement_type": "control",
+      "mutation_id": "osw_scriptfu_a37e.mutation.04_verify_closure_script_fu_resize_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_a37e5099b4.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.resize_dimensions"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip classify_completeness, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "wait_for_authority",
+      "id": "osw_scriptfu_a37e.mutation.01_classify_completeness_script_fu_resize_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_scriptfu_a37e.cf.01_classify_completeness_script_fu_resize_result"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_a37e5099b4.source.pin"
+      ],
+      "targets": [
+        "osw_scriptfu_a37e.cf.01_classify_completeness_script_fu_resize_result",
+        "osw_dependency_unblock_a37e5099b4.event.receipt",
+        "osw_dependency_unblock_a37e5099b4.event.probes",
+        "osw_dependency_unblock_a37e5099b4.closure",
+        "osw_dependency_unblock_a37e5099b4.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "resolve_authority",
+      "id": "osw_scriptfu_a37e.mutation.02_revise_affected_script_fu_resize_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_scriptfu_a37e.cf.02_revise_affected_script_fu_resize_result"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_a37e5099b4.source.pin"
+      ],
+      "targets": [
+        "osw_scriptfu_a37e.cf.02_revise_affected_script_fu_resize_result",
+        "osw_dependency_unblock_a37e5099b4.event.receipt",
+        "osw_dependency_unblock_a37e5099b4.event.probes",
+        "osw_dependency_unblock_a37e5099b4.closure",
+        "osw_dependency_unblock_a37e5099b4.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "selective_replan",
+      "id": "osw_scriptfu_a37e.mutation.03_preserve_unaffected_script_fu_resize_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_scriptfu_a37e.cf.03_preserve_unaffected_script_fu_resize_result"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_a37e5099b4.source.pin"
+      ],
+      "targets": [
+        "osw_scriptfu_a37e.cf.03_preserve_unaffected_script_fu_resize_result",
+        "osw_dependency_unblock_a37e5099b4.event.receipt",
+        "osw_dependency_unblock_a37e5099b4.event.probes",
+        "osw_dependency_unblock_a37e5099b4.closure",
+        "osw_dependency_unblock_a37e5099b4.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "family": "rederive_from_authority",
+      "id": "osw_scriptfu_a37e.mutation.04_verify_closure_script_fu_resize_result",
+      "may_fail": [],
+      "must_fail": [
+        "osw_scriptfu_a37e.cf.04_verify_closure_script_fu_resize_result"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_a37e5099b4.source.pin"
+      ],
+      "targets": [
+        "osw_scriptfu_a37e.cf.04_verify_closure_script_fu_resize_result",
+        "osw_dependency_unblock_a37e5099b4.event.receipt",
+        "osw_dependency_unblock_a37e5099b4.event.probes",
+        "osw_dependency_unblock_a37e5099b4.closure",
+        "osw_dependency_unblock_a37e5099b4.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_dependency_unblock_a37e5099b4.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_dependency_unblock_a37e5099b4.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_dependency_unblock_a37e5099b4.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_dependency_unblock_a37e5099b4.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:42f4d1c7-4521-4161-b646-0a8934e36081 and is_extension_installed+check_image_size.",
+      "id": "osw_dependency_unblock_a37e5099b4.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_dependency_unblock_a37e5099b4.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_dependency_unblock_a37e5099b4.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A VS Code extension identifier containing lisp is installed and /home/user/Desktop/resized.png has official width and height 128×128.",
+      "id": "osw_dependency_unblock_a37e5099b4.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official character.png source digest and 1280×1280 dimensions are preserved.",
+      "id": "osw_dependency_unblock_a37e5099b4.osworld.source_image",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_source_image",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "VS Code reports an installed extension containing lisp.",
+      "id": "osw_dependency_unblock_a37e5099b4.osworld.lisp_extension",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_lisp_extension",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The resized image is saved at the official Desktop path.",
+      "id": "osw_dependency_unblock_a37e5099b4.osworld.output_path",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_output_path",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The output dimensions are exactly 128×128.",
+      "id": "osw_dependency_unblock_a37e5099b4.osworld.resize_dimensions",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_resize_dimensions",
+      "relevance_tier": "base"
+    }
+  ]
+}

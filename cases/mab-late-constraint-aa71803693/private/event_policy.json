@@ -1,0 +1,31 @@
+{
+  "authority_rule": "Only the newest authoritative lineage may revise state; superseded results remain excluded.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_buyer_s_price_a",
+      "req.02.preserve_the_seller_s_long_t",
+      "req.03.record_offers_counters_infor",
+      "req.04.apply_the_newest_seller_supp",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The newest seller matrix supersedes the draft and yields an explicit auditable agreement without erasing negotiation history.",
+    "before_state": "A price-only centerpiece draft exists before authoritative quantity, contract-duration, and shipping terms arrive.",
+    "event_id": "evt.mab_late_constraint_aa71.seller_supply_terms_arrived",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_constraint_aa71.seller_supply_terms_arrived",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close seller_supply_terms_arrived.",
+  "required_decisions": [
+    "classify_stale",
+    "exclude_stale",
+    "verify_closure"
+  ],
+  "theme": "late_or_out_of_order_superseded_result"
+}

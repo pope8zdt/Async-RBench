@@ -1,0 +1,212 @@
+{
+  "case_id": "swe-dependency-unblock-4b1feb8a91",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority:req.01.replace_structural_compa",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Replace structural comparison with the identified equivalence predicate.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_structural_compa"
+        ]
+      },
+      "id": "01_classify_authority_replace_structural_compa",
+      "must_still_pass": [],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4b1feb8a91.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform classify_authority for 'Replace structural comparison with the identified equivalence predicate.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_structural_compa"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.verify_acceleration_time",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Verify acceleration*time and velocity add successfully.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.verify_acceleration_time"
+        ]
+      },
+      "id": "02_revise_affected_verify_acceleration_time",
+      "must_still_pass": [],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4b1feb8a91.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform revise_affected for 'Verify acceleration*time and velocity add successfully.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.verify_acceleration_time"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.03.verify_incompatible_dime",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Verify incompatible dimensions still raise ValueError.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_incompatible_dime"
+        ]
+      },
+      "id": "03_verify_closure_verify_incompatible_dime",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4b1feb8a91.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform verify_closure for 'Verify incompatible dimensions still raise ValueError.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_incompatible_dime"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.replace_structural_compa"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.verify_acceleration_time"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_incompatible_dime"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.run_the_supplied_multi_q"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.replace_structural_compa",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.verify_acceleration_time",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_incompatible_dime",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.run_the_supplied_multi_q",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.replace_structural_compa",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.verify_acceleration_time",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_incompatible_dime",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.run_the_supplied_multi_q",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.replace_structural_compa",
+      "req.02.verify_acceleration_time",
+      "req.03.verify_incompatible_dime",
+      "req.04.run_the_supplied_multi_q",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+    "event_id": "evt.swe_dependency_unblock_4b1feb8a91.dimension_equivalence_authority_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Replace structural comparison with the identified equivalence predicate.",
+      "id": "req.01.replace_structural_compa",
+      "observable_probe": "swe_dependency_unblock_4.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for replace_structural_comparison_with_t"
+    },
+    {
+      "description": "Verify acceleration*time and velocity add successfully.",
+      "id": "req.02.verify_acceleration_time",
+      "observable_probe": "swe_dependency_unblock_4.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for verify_acceleration_time_and_velocit"
+    },
+    {
+      "description": "Verify incompatible dimensions still raise ValueError.",
+      "id": "req.03.verify_incompatible_dime",
+      "observable_probe": "swe_dependency_unblock_4.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for verify_incompatible_dimensions_still"
+    },
+    {
+      "description": "Run the supplied multi-quantity cases and units tests.",
+      "id": "req.04.run_the_supplied_multi_q",
+      "observable_probe": "swe_dependency_unblock_4.sem.04.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for run_the_supplied_multi_quantity_case"
+    }
+  ]
+}

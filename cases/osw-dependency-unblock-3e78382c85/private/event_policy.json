@@ -1,0 +1,30 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_3e78382c85.delayed_authoritative_result",
+  "authority_rule": "Delayed vscode_tree_find_keybinding_identity is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_dependency_unblock_3e78382c85.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "VS Code and user keybindings can be opened, but the exact Tree Find command and context expression to negate are pending.",
+    "after_state": "The keybinding worker returns the exact scoped removal entry: key ctrl+f, command -list.find, when listFocus && listSupportsFind.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.entry_identity",
+      "req.03.context_scope",
+      "final_state"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-dependency-unblock-75855f9fc5",
+  "source_task_id": "osworld:chrome:2ad9387a-65d8-4e33-ad5b-7580065a27ca",
+  "authority": "chrome_bookmark_profile_probe",
+  "evidence_kind": "bookmark_bar_folder_state",
+  "state": {
+    "folders": [
+      {
+        "name": "Favorites",
+        "parent": "bookmark_bar",
+        "persisted": true
+      }
+    ],
+    "profile_reloaded": true
+  },
+  "finding": "The delayed profile observation reports the persisted bookmarks-bar folder state."
+}

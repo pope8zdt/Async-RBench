@@ -1,0 +1,5 @@
+I am grading students' English exam papers, but the test consists only of multiple-choice questions. It's too exhausting to check each question one by one and record the detailed scores. Can you help me compare the remaining students' answers with the answer key and record the detailed scoring in the opened spreadsheet?
+
+ASYNC-RBENCH EXTENSION
+Consume delayed authoritative evidence after the checkpoint, revise only affected desktop state, and reverify closure.
+

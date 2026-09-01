@@ -1,0 +1,41 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-cross-app-artifact-19cdaed8e8",
+  "source_task_id": "osworld:multi_apps:415ef462-bed3-493a-ac36-ca8c6d23bf1b",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "aws_december_invoice_record",
+  "upstream_dependency_graph": [
+    {
+      "id": "mail_attachment_locator",
+      "app": "Thunderbird",
+      "description": "Locate the December AWS invoice message and attachment in the local Bills folder."
+    },
+    {
+      "id": "receipt_pattern_inspection",
+      "app": "OS/LibreOffice Calc",
+      "description": "Inspect existing receipt filenames and tally columns independently."
+    },
+    {
+      "id": "invoice_field_extraction",
+      "app": "PDF",
+      "description": "Extract service, month, amount and billing period from the located invoice.",
+      "depends_on": [
+        "mail_attachment_locator"
+      ]
+    }
+  ],
+  "state": {
+    "receipt_path": "/home/oai/share/receipts/aws-invoice-2312.pdf",
+    "receipt_sha256": "db1e923997754a453688e60bcda8845a6bb2bb31e60d1997424633ce4e086983",
+    "tally_path": "/home/oai/share/tally_book.xlsx",
+    "service": "AWS",
+    "month": 2023.12,
+    "amount": 10.02,
+    "billing_period": "2023-12-01/2023-12-31",
+    "invoice_date": "2024-01-03",
+    "prior_receipt_count": 5
+  },
+  "task_assertion": "The December AWS invoice is saved as aws-invoice-2312.pdf and the tally ends with AWS, 2023.12, 10.02.",
+  "finding": "The mail worker returns the exact December AWS attachment and normalized billing fields, enabling a correctly named PDF copy and one matching tally row."
+}
+

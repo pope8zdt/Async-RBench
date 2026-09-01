@@ -1,0 +1,227 @@
+{
+  "case_id": "swe-late-test-evidence-b844373562",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_req_01_format_bytes_like_parame",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_late_test_evidence_b844.delayed_authority",
+      "evidence_group": "bp_swe_b844.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.format_bytes_like_parame"
+      },
+      "expected_behavior": "After event 'The delayed authoritative regression matrix requires saferepr-based bounded rendering that avoids BytesWarning under -bb and preserves readable parameter output across setup reporting modes.', Treat the delayed subprocess matrix as authority for fixture parameter display under warnings-as-errors.",
+      "forbidden_behavior": "Do not use ordinary str.format conversion as sufficient; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.format_bytes_like_parame"
+        ]
+      },
+      "id": "bp_swe_b844.cf.01_classify_authority_format_bytes_like_",
+      "independence_key": "bp_swe_b844.cf.01_classify_authority_format_bytes_like_",
+      "must_still_pass": [
+        "swe_late_test_evidence_b.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_authority",
+      "mutation_id": "bp_swe_b844.mutation.01_classify_authority_format_bytes_like_",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_late_test_evidence_b844373562.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After event 'The delayed authoritative regression matrix requires saferepr-based bounded rendering that avoids BytesWarning under -bb and preserves readable parameter output across setup reporting modes.', Treat the delayed subprocess matrix as authority for fixture parameter display under warnings-as-errors.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.format_bytes_like_parame"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_req_01_format_bytes_like_parame",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_late_test_evidence_b844.delayed_authority",
+      "evidence_group": "bp_swe_b844.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.format_bytes_like_parame"
+      },
+      "expected_behavior": "After event 'The delayed authoritative regression matrix requires saferepr-based bounded rendering that avoids BytesWarning under -bb and preserves readable parameter output across setup reporting modes.', Route cached fixture parameters through bounded saferepr so bytes-like and custom values render safely without destabilizing setup output.",
+      "forbidden_behavior": "Do not special-case only bytes or suppress warnings globally; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.format_bytes_like_parame"
+        ]
+      },
+      "id": "bp_swe_b844.cf.02_revise_affected_format_bytes_like_",
+      "independence_key": "bp_swe_b844.cf.02_revise_affected_format_bytes_like_",
+      "must_still_pass": [
+        "swe_late_test_evidence_b.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "retain_provisional",
+      "mutation_id": "bp_swe_b844.mutation.02_revise_affected_format_bytes_like_",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_late_test_evidence_b844373562.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After event 'The delayed authoritative regression matrix requires saferepr-based bounded rendering that avoids BytesWarning under -bb and preserves readable parameter output across setup reporting modes.', Route cached fixture parameters through bounded saferepr so bytes-like and custom values render safely without destabilizing setup output.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.format_bytes_like_parame"
+    },
+    {
+      "critical": false,
+      "decision_group": "verify_closure_req_03_verify_displayed_values",
+      "dimension": "closure",
+      "event_id": "evt.swe_late_test_evidence_b844.delayed_authority",
+      "evidence_group": "bp_swe_b844.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.verify_displayed_values_"
+      },
+      "expected_behavior": "After event 'The delayed authoritative regression matrix requires saferepr-based bounded rendering that avoids BytesWarning under -bb and preserves readable parameter output across setup reporting modes.', Run the native setuponly module across setup-only, setup-plan, setup-show, parameter IDs, and -bb using the exact receipt.",
+      "forbidden_behavior": "Do not close from one bytes example without the reporting matrix; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_displayed_values_"
+        ]
+      },
+      "id": "bp_swe_b844.cf.03_verify_closure_verify_displayed_v",
+      "independence_key": "bp_swe_b844.cf.03_verify_closure_verify_displayed_v",
+      "must_still_pass": [
+        "swe_late_test_evidence_b.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "bp_swe_b844.mutation.03_verify_closure_verify_displayed_v",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_late_test_evidence_b844373562.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After event 'The delayed authoritative regression matrix requires saferepr-based bounded rendering that avoids BytesWarning under -bb and preserves readable parameter output across setup reporting modes.', Run the native setuponly module across setup-only, setup-plan, setup-show, parameter IDs, and -bb using the exact receipt.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_displayed_values_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.format_bytes_like_parame"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.assert_bb_setup_show_exi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.verify_displayed_values_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.format_bytes_like_parame",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.assert_bb_setup_show_exi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.verify_displayed_values_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.format_bytes_like_parame",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.assert_bb_setup_show_exi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.verify_displayed_values_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.format_bytes_like_parame",
+      "req.02.assert_bb_setup_show_exi",
+      "req.03.verify_displayed_values_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed authoritative regression matrix requires saferepr-based bounded rendering that avoids BytesWarning under -bb and preserves readable parameter output across setup reporting modes.",
+    "before_state": "A provisional fixture display formatting change is checkpointed before warnings-as-errors and bounded-representation evidence is available.",
+    "event_id": "evt.swe_late_test_evidence_b844.delayed_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Format bytes-like parameters through the safe representation path identified by the matrix.",
+      "id": "req.01.format_bytes_like_parame",
+      "observable_probe": "swe_late_test_evidence_b.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for format_bytes_like_parameters_through"
+    },
+    {
+      "description": "Assert `-bb --setup-show` exits successfully for bytes and bytearray.",
+      "id": "req.02.assert_bb_setup_show_exi",
+      "observable_probe": "swe_late_test_evidence_b.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for assert_bb_setup_show_exits_successfu"
+    },
+    {
+      "description": "Verify displayed values and existing setup-show formatting for non-bytes parameters.",
+      "id": "req.03.verify_displayed_values_",
+      "observable_probe": "swe_late_test_evidence_b.sem.03.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for verify_displayed_values_and_existing"
+    }
+  ]
+}

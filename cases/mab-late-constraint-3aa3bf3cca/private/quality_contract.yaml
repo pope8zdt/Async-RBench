@@ -1,0 +1,91 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately implemented bargaining state machine with equivalent observable behavior.",
+      "id": "independent-task-native-equivalence",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "mab_late_constraint_3aa3bf3cca.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_late_constraint_3aa3bf3cca.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-organizer-product-scope",
+      "must_fail": [
+        "mab_late_constraint_3aa3bf3cca.source.final_terms"
+      ],
+      "path": "task/negative_mutations/wrong_organizer_product_scope.sh"
+    },
+    {
+      "id": "ignored-product-quality-scope-clarified",
+      "must_fail": [
+        "mab_late_constraint_3aa3bf3cca.source.event_behavior"
+      ],
+      "path": "task/negative_mutations/ignored_product_quality_scope_clarified.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "mab_late_constraint_3aa3.cf.01_classify_scope_delta",
+          "mab_late_constraint_3aa3.cf.02_revise_affected",
+          "mab_late_constraint_3aa3.cf.03_preserve_unaffected",
+          "mab_late_constraint_3aa3.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_constraint_3aa3bf3cca.event.receipt",
+          "mab_late_constraint_3aa3bf3cca.event.probes",
+          "mab_late_constraint_3aa3bf3cca.closure",
+          "mab_late_constraint_3aa3bf3cca.source.pin",
+          "mab_late_constraint_3aa3bf3cca.source.native_binding",
+          "mab_late_constraint_3aa3bf3cca.source.core_behavior",
+          "mab_late_constraint_3aa3bf3cca.source.event_behavior",
+          "mab_late_constraint_3aa3bf3cca.source.edge_behavior",
+          "mab_late_constraint_3aa3bf3cca.source.preservation",
+          "mab_late_constraint_3aa3bf3cca.source.final_terms"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "543f1e5bf34d7f61919fc07aeebabb125a4450dc66282cbf453233e79ba43033",
+        "task_id": "bargaining:030",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_4a74272d52.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_4a74272d52.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__618bee.cf.01_classify_authority_move_every_reporte",
+          "swe_dependency__618bee.cf.02_revise_affected_implement_voicebro",
+          "swe_dependency__618bee.cf.03_verify_closure_update_each_report"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_4a74272d52.event.receipt",
+          "swe_dependency_unblock_4a74272d52.event.probes",
+          "swe_dependency_unblock_4a74272d52.closure",
+          "swe_dependency_unblock_4a74272d52.source.pin",
+          "swe_dependency_unblock_4a74272d52.native.element_voice_broadcast"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "Add voice-broadcast recording models and a recordings store with explicit state-change events, lifecycle management, and public exports while preserving existing voice-broadcast component behavior.",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "499a5be9ce9abc48a5bf7f5a62d43992d4d68624b10b7397fdb7bc54f0ccb78d",
+        "task_id": "instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

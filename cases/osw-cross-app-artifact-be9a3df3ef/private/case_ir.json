@@ -1,0 +1,281 @@
+{
+  "async_depth": 3,
+  "case_id": "osw-cross-app-artifact-be9a3df3ef",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_slide_background_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "01_classify_authority_slide_background_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_be9a3df3ef.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_be9a3df3ef.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed validated_video_frame_at_8s; preserve unaffected libreoffice_impress/vlc state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.timestamp"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_slide_background_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "02_revise_affected_slide_background_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_be9a3df3ef.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_be9a3df3ef.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed validated_video_frame_at_8s; preserve unaffected libreoffice_impress/vlc state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.frame_identity"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_slide_background_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "03_verify_closure_slide_background_osworld",
+      "must_still_pass": [
+        "osw_cross_app_artifact_be9a3df3ef.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_be9a3df3ef.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed validated_video_frame_at_8s; preserve unaffected libreoffice_impress/vlc state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.presentation_target"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "depends_on",
+        "source": "upstream.video_seek_and_decode",
+        "target": "upstream.frame_identity_validation"
+      },
+      {
+        "relation": "depends_on",
+        "source": "upstream.frame_identity_validation",
+        "target": "upstream.slide_background_plan"
+      },
+      {
+        "relation": "produces",
+        "source": "upstream.slide_background_plan",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.timestamp"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.timestamp",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.frame_identity"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.frame_identity",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.presentation_target"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.presentation_target",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.04.selective_change"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.selective_change",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "VLC",
+        "description": "Seek landscape.mp4 to exactly 00:08.000 and decode the frame.",
+        "id": "upstream.video_seek_and_decode",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "Media worker",
+        "description": "Validate frame dimensions and official image digest.",
+        "id": "upstream.frame_identity_validation",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "LibreOffice Impress",
+        "description": "Bind the validated frame to slide index 1 only.",
+        "id": "upstream.slide_background_plan",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.timestamp",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.frame_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.presentation_target",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.selective_change",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.timestamp",
+      "req.02.frame_identity",
+      "req.03.presentation_target",
+      "req.04.selective_change",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The media worker returns the official 1920x1080 frame extracted at 8.000 seconds for use only as slide 2 background.",
+    "before_state": "Slide 2 and VLC can be prepared, but the exact frame at 00:08.000 and its image identity have not yet been delivered.",
+    "event_id": "evt.osw_cross_app_artifact_be9a3df3ef.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Extract the landscape.mp4 frame at exactly 00:08.000.",
+      "id": "req.01.timestamp",
+      "observable_probe": "osw_cross_app_artifact_be9a3df3ef.osworld.timestamp",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Use the official 1920x1080 frame as slide 2 background.",
+      "id": "req.02.frame_identity",
+      "observable_probe": "osw_cross_app_artifact_be9a3df3ef.osworld.frame_identity",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Do not change any other slide background.",
+      "id": "req.03.presentation_target",
+      "observable_probe": "osw_cross_app_artifact_be9a3df3ef.osworld.presentation_target",
+      "public_evidence": "source instruction and delayed authority receipt"
+    },
+    {
+      "description": "Save and reopen Robotic_Workshop_Infographics.pptx.",
+      "id": "req.04.selective_change",
+      "observable_probe": "osw_cross_app_artifact_be9a3df3ef.osworld.selective_change",
+      "public_evidence": "source instruction and delayed authority receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "VLC",
+      "description": "Seek landscape.mp4 to exactly 00:08.000 and decode the frame.",
+      "id": "video_seek_and_decode"
+    },
+    {
+      "app": "Media worker",
+      "depends_on": [
+        "video_seek_and_decode"
+      ],
+      "description": "Validate frame dimensions and official image digest.",
+      "id": "frame_identity_validation"
+    },
+    {
+      "app": "LibreOffice Impress",
+      "depends_on": [
+        "frame_identity_validation"
+      ],
+      "description": "Bind the validated frame to slide index 1 only.",
+      "id": "slide_background_plan"
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "case_id": "mab-late-constraint-efb76e596e",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_stale",
+      "must_still_pass": [],
+      "mutation_family": "classify_stale",
+      "obligation": "classify_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_efb76e596e.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_stale:1",
+      "required_behavior": "classify_stale: A current seller counter offers $91 with four-business-day delivery or $84 with fourteen-day delivery; the stale low-price urgent draft must not be finalized.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "delivery_margin_tiers_countered"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_exclude_stale",
+      "must_still_pass": [],
+      "mutation_family": "exclude_stale",
+      "obligation": "exclude_stale",
+      "outcome_anchors": [
+        "mab_late_constraint_efb76e596e.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:exclude_stale:2",
+      "required_behavior": "exclude_stale: A current seller counter offers $91 with four-business-day delivery or $84 with fourteen-day delivery; the stale low-price urgent draft must not be finalized.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "delivery_margin_tiers_countered"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore, misclassify, over-apply, or falsely close this task-specific event.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_verify_closure",
+      "must_still_pass": [],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_efb76e596e.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A current seller counter offers $91 with four-business-day delivery or $84 with fourteen-day delivery; the stale low-price urgent draft must not be finalized.",
+      "stage_tag": "closure",
+      "task_requirement_id": "delivery_margin_tiers_countered"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.reject_any_delivery_tier"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.revise_the_offer_to_pair"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.request_written_delivery"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.finalize_with_an_agreeme"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.reject_any_delivery_tier",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.revise_the_offer_to_pair",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.request_written_delivery",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.finalize_with_an_agreeme",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.reject_any_delivery_tier",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.revise_the_offer_to_pair",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.request_written_delivery",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.finalize_with_an_agreeme",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.reject_any_delivery_tier",
+      "req.02.revise_the_offer_to_pair",
+      "req.03.request_written_delivery",
+      "req.04.finalize_with_an_agreeme",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A current seller counter offers $91 with four-business-day delivery or $84 with fourteen-day delivery; the stale low-price urgent draft must not be finalized.",
+    "before_state": "Task-specific provisional work exists before delivery_margin_tiers_countered.",
+    "event_id": "evt.mab-late-constraint-efb76e596e.delivery_margin_tiers_countered",
+    "primary_event_theme": "late_or_out_of_order_superseded_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Reject any delivery tier that misses the buyer's required window.",
+      "id": "req.01.reject_any_delivery_tier",
+      "observable_probe": "mab_late_constraint_efb7.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for reject_any_delivery_tier_that_misses"
+    },
+    {
+      "description": "Revise the offer to pair an exact delivery deadline with an exact price.",
+      "id": "req.02.revise_the_offer_to_pair",
+      "observable_probe": "mab_late_constraint_efb7.sem.02.the_final_negotiation_ledger",
+      "public_evidence": "source instruction and workstream result for revise_the_offer_to_pair_an_exact_de"
+    },
+    {
+      "description": "Request written delivery confirmation in the bargaining action.",
+      "id": "req.03.request_written_delivery",
+      "observable_probe": "mab_late_constraint_efb7.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for request_written_delivery_confirmatio"
+    },
+    {
+      "description": "Finalize with an agreement or explicit impasse.",
+      "id": "req.04.finalize_with_an_agreeme",
+      "observable_probe": "mab_late_constraint_efb7.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for finalize_with_an_agreement_or_explic"
+    }
+  ]
+}

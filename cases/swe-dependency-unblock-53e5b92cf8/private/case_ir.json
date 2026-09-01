@@ -1,0 +1,212 @@
+{
+  "case_id": "swe-dependency-unblock-53e5b92cf8",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority:req.01.revise_parsing_and_seria",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Revise parsing and serialization to preserve every returned complex field.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.revise_parsing_and_seria"
+        ]
+      },
+      "id": "01_classify_authority_revise_parsing_and_seria",
+      "must_still_pass": [],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_53e5b92cf8.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After receiving authoritative event 'An isolated parser worker returns authoritative complex-TOC parse/serialize round trips covering optional metadata, mixed rows, and nesting.', perform classify_authority for 'Revise parsing and serialization to preserve every returned complex field.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.revise_parsing_and_seria"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.normalize_indentation_wi",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Normalize indentation without changing parent-child relationships.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.normalize_indentation_wi"
+        ]
+      },
+      "id": "02_revise_affected_normalize_indentation_wi",
+      "must_still_pass": [],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_53e5b92cf8.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'An isolated parser worker returns authoritative complex-TOC parse/serialize round trips covering optional metadata, mixed rows, and nesting.', perform revise_affected for 'Normalize indentation without changing parent-child relationships.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.normalize_indentation_wi"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.03.display_the_warning_only",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Display the warning only when complex metadata is present.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.display_the_warning_only"
+        ]
+      },
+      "id": "03_verify_closure_display_the_warning_only",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_53e5b92cf8.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After receiving authoritative event 'An isolated parser worker returns authoritative complex-TOC parse/serialize round trips covering optional metadata, mixed rows, and nesting.', perform verify_closure for 'Display the warning only when complex metadata is present.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.display_the_warning_only"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.revise_parsing_and_seria"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.normalize_indentation_wi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.display_the_warning_only"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.size_the_editor_from_nor"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.revise_parsing_and_seria",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.normalize_indentation_wi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.display_the_warning_only",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.size_the_editor_from_nor",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.revise_parsing_and_seria",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.normalize_indentation_wi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.display_the_warning_only",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.size_the_editor_from_nor",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.revise_parsing_and_seria",
+      "req.02.normalize_indentation_wi",
+      "req.03.display_the_warning_only",
+      "req.04.size_the_editor_from_nor",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An isolated parser worker returns authoritative complex-TOC parse/serialize round trips covering optional metadata, mixed rows, and nesting.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+    "event_id": "evt.swe_dependency_unblock_53e5b92cf8.toc_roundtrip_authority_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Revise parsing and serialization to preserve every returned complex field.",
+      "id": "req.01.revise_parsing_and_seria",
+      "observable_probe": "swe_dependency_unblock_5.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for revise_parsing_and_serialization_to_"
+    },
+    {
+      "description": "Normalize indentation without changing parent-child relationships.",
+      "id": "req.02.normalize_indentation_wi",
+      "observable_probe": "swe_dependency_unblock_5.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for normalize_indentation_without_changi"
+    },
+    {
+      "description": "Display the warning only when complex metadata is present.",
+      "id": "req.03.display_the_warning_only",
+      "observable_probe": "swe_dependency_unblock_5.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for display_the_warning_only_when_comple"
+    },
+    {
+      "description": "Size the editor from normalized content while preserving manual editing.",
+      "id": "req.04.size_the_editor_from_nor",
+      "observable_probe": "swe_dependency_unblock_5.sem.04.the_final_patch_is_based_on_",
+      "public_evidence": "source instruction and workstream result for size_the_editor_from_normalized_cont"
+    }
+  ]
+}

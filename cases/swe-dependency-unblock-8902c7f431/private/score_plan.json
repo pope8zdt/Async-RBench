@@ -1,0 +1,202 @@
+{
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduced the flattened inner-class migration path.'.",
+      "family": "wait_for_authority",
+      "id": "swe_dependency__3f6bf3.mutation.01_classify_critical_path",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__3f6bf3.cf.01_classify_critical_path"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_8902c7f431.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__3f6bf3.cf.01_classify_critical_path",
+        "swe_dependency_unblock_8902c7f431.event.receipt",
+        "swe_dependency_unblock_8902c7f431.event.probes",
+        "swe_dependency_unblock_8902c7f431.closure",
+        "swe_dependency_unblock_8902c7f431.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Started auditing migration serializers for class-name construction.'.",
+      "family": "resource_triage",
+      "id": "swe_dependency__3f6bf3.mutation.02_resource_triage",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__3f6bf3.cf.02_resource_triage"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_8902c7f431.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__3f6bf3.cf.02_resource_triage",
+        "swe_dependency_unblock_8902c7f431.event.receipt",
+        "swe_dependency_unblock_8902c7f431.event.probes",
+        "swe_dependency_unblock_8902c7f431.closure",
+        "swe_dependency_unblock_8902c7f431.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduced the flattened inner-class migration path.'.",
+      "family": "rederive_from_authority",
+      "id": "swe_dependency__3f6bf3.mutation.03_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__3f6bf3.cf.03_verify_closure"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_8902c7f431.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__3f6bf3.cf.03_verify_closure",
+        "swe_dependency_unblock_8902c7f431.event.receipt",
+        "swe_dependency_unblock_8902c7f431.event.probes",
+        "swe_dependency_unblock_8902c7f431.closure",
+        "swe_dependency_unblock_8902c7f431.source.pin"
+      ]
+    }
+  ],
+  "points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_critical_path_change_typeserializer_to_con",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_8.straggler_under_resource",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.change_typeserializer_to"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A serializer specialist reports that TypeSerializer uses __name__ and loses outer context, while field deconstruction and EnumSerializer already preserve __qualname__.', perform classify_critical_path for 'Change TypeSerializer to construct paths with __qualname__.' while retaining valid prior result 'Reproduced the flattened inner-class migration path.'.",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduced the flattened inner-class migration path.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "swe_dependency__3f6bf3.cf.01_classify_critical_path",
+      "independence_key": "swe_dependency__3f6bf3.cf.01_classify_critical_path",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__3f6bf3.mutation.01_classify_critical_path",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "swe_dependency_unblock_8902c7f431.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_critical_path:1",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__3f6bf3.cf.01_classify_critical_path]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.change_typeserializer_to"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "resource_triage_preserve_existing_module_imp",
+      "dimension": "plan_revision",
+      "event_id": "evt.swe_dependency_unblock_8.straggler_under_resource",
+      "evidence_group": "plan_revision:2",
+      "evidence_spec": {
+        "primary_fact": "resource_decision",
+        "subject": "req.01.change_typeserializer_to"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A serializer specialist reports that TypeSerializer uses __name__ and loses outer context, while field deconstruction and EnumSerializer already preserve __qualname__.', perform resource_triage for 'Preserve existing module import behavior.' while retaining valid prior result 'Started auditing migration serializers for class-name construction.'.",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Started auditing migration serializers for class-name construction.'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "cancel_workstreams": [
+          "requirement_worker_03"
+        ],
+        "preserve_workstreams": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "swe_dependency__3f6bf3.cf.02_resource_triage",
+      "independence_key": "swe_dependency__3f6bf3.cf.02_resource_triage",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__3f6bf3.mutation.02_resource_triage",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "swe_dependency_unblock_8902c7f431.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:resource_triage:2",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__3f6bf3.cf.02_resource_triage]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.change_typeserializer_to"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_test_top_level_nested_field_",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_8.straggler_under_resource",
+      "evidence_group": "closure:3",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.change_typeserializer_to"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A serializer specialist reports that TypeSerializer uses __name__ and loses outer context, while field deconstruction and EnumSerializer already preserve __qualname__.', perform verify_closure for 'Test top-level, nested field, and nested enum class serialization and migration loading.' while retaining valid prior result 'Reproduced the flattened inner-class migration path.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Reproduced the flattened inner-class migration path.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "swe_dependency__3f6bf3.cf.03_verify_closure",
+      "independence_key": "swe_dependency__3f6bf3.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "swe_dependency__3f6bf3.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_8902c7f431.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "pytest_node": "test_control_flow.py::test_control_point[swe_dependency__3f6bf3.cf.03_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.change_typeserializer_to"
+    }
+  ]
+}

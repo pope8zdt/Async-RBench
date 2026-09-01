@@ -1,0 +1,45 @@
+{
+  "prior_work": [
+    {
+      "id": "step:25",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "<returncode>1</returncode> <warning> The output of your last command was too long. Please try a different command that produces less output. If you're looking at a file you can try use head, tail or sed to view a smaller number of lines selectively. If you're using grep or find and it produced too much output, you can use a more selective search pattern. If you really need to see something from the full command's output, you can redirect output to a file and then search in that file. </warning><…"
+    }
+  ],
+  "independent_event": {
+    "id": "evidence:10",
+    "kind": "observation",
+    "app": null,
+    "function": null,
+    "description": "reverification"
+  },
+  "affected_work": [
+    {
+      "id": "required-response:evidence:10",
+      "kind": "required_response",
+      "app": null,
+      "function": null,
+      "description": "The main branch implements and prepares to accept a security or sanitization fix."
+    }
+  ],
+  "superseded_work": [
+    {
+      "id": "provisional:required-response:evidence:10",
+      "description": "Provisional pre-authority variant of: The main branch implements and prepares to accept a security or sanitization fix.",
+      "migration_derived": true
+    }
+  ],
+  "event_sequence": [
+    {
+      "id": "evidence:10",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "reverification",
+      "producer": "independent_environment_or_trace_producer",
+      "authority": "authoritative"
+    }
+  ]
+}

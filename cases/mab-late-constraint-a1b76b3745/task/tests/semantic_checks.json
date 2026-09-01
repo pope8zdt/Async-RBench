@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Receipt digest is authentic and bound to this exact case and bargaining source.",
+      "id": "mab_late_constraint_a1b76b3745.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independent worker observed both provisional and executable artifacts.",
+      "id": "mab_late_constraint_a1b76b3745.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact receipt and records the authoritative bargain: Product authority clarifies that the spray has no battery; condition is established by a sealed-lot certificate with 24-month shelf life, at $17.50 for 60 units and five-day delivery.",
+      "id": "mab_late_constraint_a1b76b3745.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The package remains pinned to bargaining:034 and its official record.",
+      "id": "mab_late_constraint_a1b76b3745.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The private fixture binds the exact evaluator, source task, artifact schema, and dependency depth.",
+      "id": "mab_late_constraint_a1b76b3745.source.native_binding",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_binding_and_schema",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Delay Spray for Him executes its offer-authority-counter-finalize workflow.",
+      "id": "mab_late_constraint_a1b76b3745.source.core_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_core_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The injected authority payload exactly represents: Product authority clarifies that the spray has no battery; condition is established by a sealed-lot certificate with 24-month shelf life, at $17.50 for 60 units and five-day delivery.",
+      "id": "mab_late_constraint_a1b76b3745.source.event_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Stale revisions and unauthorized authority payloads are rejected independently.",
+      "id": "mab_late_constraint_a1b76b3745.source.edge_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_edge_behavior",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Unaffected source priorities remain preserved: delay_spray_identity, buyer_condition_priority, seller_production_demand_goal.",
+      "id": "mab_late_constraint_a1b76b3745.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_event_closure_and_preservation",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Final selected terms and the bargaining-tool chronology match this task-specific authority.",
+      "id": "mab_late_constraint_a1b76b3745.source.final_terms",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_final_terms_and_tool_sequence",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

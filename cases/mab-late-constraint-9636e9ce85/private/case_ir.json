@@ -1,0 +1,248 @@
+{
+  "case_id": "mab-late-constraint-9636e9ce85",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_dependency_approval_sla_policy",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close dependency_approval_sla_policy_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_users_roles_task_c"
+        ]
+      },
+      "id": "01_classify_scope_delta_dependency_approval",
+      "must_still_pass": [
+        "mab_late_constraint_9636e9ce85.source.preservation"
+      ],
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_9636e9ce85.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: A late dependency, approval, and SLA policy changes task completion and alert behavior while assignments, comments, audit history, and report snapshots remain intact.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_users_roles_task_c"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_dependency_approval_sla_policy",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close dependency_approval_sla_policy_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_dependencies_comme"
+        ]
+      },
+      "id": "02_revise_affected_dependency_approval",
+      "must_still_pass": [
+        "mab_late_constraint_9636e9ce85.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_9636e9ce85.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A late dependency, approval, and SLA policy changes task completion and alert behavior while assignments, comments, audit history, and report snapshots remain intact.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_dependencies_comme"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_dependency_approval_sla_policy",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close dependency_approval_sla_policy_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_overdue_alerts_and"
+        ]
+      },
+      "id": "03_preserve_unaffected_dependency_approval",
+      "must_still_pass": [
+        "mab_late_constraint_9636e9ce85.source.preservation"
+      ],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_9636e9ce85.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: A late dependency, approval, and SLA policy changes task completion and alert behavior while assignments, comments, audit history, and report snapshots remain intact.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.implement_overdue_alerts_and"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_dependency_approval_sla_policy",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close dependency_approval_sla_policy_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.integrate_the_late_dependenc"
+        ]
+      },
+      "id": "04_verify_closure_dependency_approval",
+      "must_still_pass": [
+        "mab_late_constraint_9636e9ce85.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_9636e9ce85.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: A late dependency, approval, and SLA policy changes task completion and alert behavior while assignments, comments, audit history, and report snapshots remain intact.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.integrate_the_late_dependenc"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_users_roles_task_c"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_dependencies_comme"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_overdue_alerts_and"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_late_dependenc"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_users_roles_task_c",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_dependencies_comme",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_overdue_alerts_and",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_late_dependenc",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_users_roles_task_c",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_dependencies_comme",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_overdue_alerts_and",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_late_dependenc",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_roles_task_c",
+      "req.02.implement_dependencies_comme",
+      "req.03.implement_overdue_alerts_and",
+      "req.04.integrate_the_late_dependenc",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Completion and alerts follow the returned dependency/approval/SLA policy while assignments, comments, audit history, and reports are preserved.",
+    "before_state": "Tasks can be marked done and alerts generated under provisional rules that ignore dependency closure and high-priority approval.",
+    "event_id": "evt.mab_late_constraint_9636.dependency_approval_sla_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement users, roles, task creation, assignment, delegation, and status tracking.",
+      "id": "req.01.implement_users_roles_task_c",
+      "observable_probe": "mab_late_constraint_9636e9ce85.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement dependencies, comments, collaborative updates, and task history.",
+      "id": "req.02.implement_dependencies_comme",
+      "observable_probe": "mab_late_constraint_9636e9ce85.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement overdue alerts and status/assignee/department reports.",
+      "id": "req.03.implement_overdue_alerts_and",
+      "observable_probe": "mab_late_constraint_9636e9ce85.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the late dependency, approval, and SLA policy and reverify affected workflows.",
+      "id": "req.04.integrate_the_late_dependenc",
+      "observable_probe": "mab_late_constraint_9636e9ce85.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

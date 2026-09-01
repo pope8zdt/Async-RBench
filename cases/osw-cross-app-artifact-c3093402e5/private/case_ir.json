@@ -1,0 +1,248 @@
+{
+  "case_id": "osw-cross-app-artifact-c3093402e5",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_verify_planet_wav_decodes_as",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The target slideshow is open in Impress.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_planet_wav_decode"
+        ]
+      },
+      "id": "01_classify_scope_delta_verify_planet_wav_",
+      "must_still_pass": [
+        "osw_cross_app_artifact_c.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c3093402e5.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "For event 'A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.', perform classify_scope_delta for 'Verify planet.wav decodes as WAV audio.' while retaining valid prior result 'The target slideshow is open in Impress.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.verify_planet_wav_decode"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_configure_planet_wav_as_the_",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The slideshow sound or transition controls are prepared.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_planet_wav_decode"
+        ]
+      },
+      "id": "02_revise_affected_configure_planet_w",
+      "must_still_pass": [
+        "osw_cross_app_artifact_c.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c3093402e5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "For event 'A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.', perform revise_affected for 'Configure planet.wav as the slideshow's background sound rather than a visible media object.' while retaining valid prior result 'The slideshow sound or transition controls are prepared.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.verify_planet_wav_decode"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_enable_continuation_or_loopi",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The expected planet.wav destination is identified.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_planet_wav_decode"
+        ]
+      },
+      "id": "03_preserve_unaffected_enable_continuatio",
+      "must_still_pass": [
+        "osw_cross_app_artifact_c.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c3093402e5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "For event 'A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.', perform preserve_unaffected for 'Enable continuation or looping across slides as required by the presentation controls.' while retaining valid prior result 'The expected planet.wav destination is identified.'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.verify_planet_wav_decode"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_save_the_presentation",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The target slideshow is open in Impress.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.verify_planet_wav_decode"
+        ]
+      },
+      "id": "04_verify_closure_save_the_presentat",
+      "must_still_pass": [
+        "osw_cross_app_artifact_c.sem.25.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_c3093402e5.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "For event 'A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.', perform verify_closure for 'Save the presentation.' while retaining valid prior result 'The target slideshow is open in Impress.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.verify_planet_wav_decode"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.verify_planet_wav_decode"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.configure_planet_wav_as_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.enable_continuation_or_l"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.save_the_presentation"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.verify_planet_wav_decode",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.configure_planet_wav_as_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.enable_continuation_or_l",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.save_the_presentation",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.verify_planet_wav_decode",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.configure_planet_wav_as_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.enable_continuation_or_l",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.save_the_presentation",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.verify_planet_wav_decode",
+      "req.02.configure_planet_wav_as_",
+      "req.03.enable_continuation_or_l",
+      "req.04.save_the_presentation",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A media worker returns planet.wav extracted from the video currently loaded in VLC and confirms its WAV format and duration.",
+    "before_state": "Deliver planet.wav after slideshow audio controls are prepared and after a single-slide media-insertion plan has become stale.",
+    "event_id": "evt.osw_cross_app_artifact_c.task_scope_or_dependency",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Verify planet.wav decodes as WAV audio.",
+      "id": "req.01.verify_planet_wav_decode",
+      "observable_probe": "osw_cross_app_artifact_c.sem.01.the_persisted_desktop_artifa",
+      "public_evidence": "source instruction and workstream result for verify_planet_wav_decodes_as_wav_aud"
+    },
+    {
+      "description": "Configure planet.wav as the slideshow's background sound rather than a visible media object.",
+      "id": "req.02.configure_planet_wav_as_",
+      "observable_probe": "osw_cross_app_artifact_c.sem.02.the_required_result_artifact",
+      "public_evidence": "source instruction and workstream result for configure_planet_wav_as_the_slidesho"
+    },
+    {
+      "description": "Enable continuation or looping across slides as required by the presentation controls.",
+      "id": "req.03.enable_continuation_or_l",
+      "observable_probe": "osw_cross_app_artifact_c.sem.03.verify_planet_wav_decodes_as",
+      "public_evidence": "source instruction and workstream result for enable_continuation_or_looping_acros"
+    },
+    {
+      "description": "Save the presentation.",
+      "id": "req.04.save_the_presentation",
+      "observable_probe": "osw_cross_app_artifact_c.sem.04.configure_planet_wav_as_the_",
+      "public_evidence": "source instruction and workstream result for save_the_presentation"
+    }
+  ]
+}

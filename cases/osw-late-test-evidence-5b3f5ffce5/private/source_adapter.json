@@ -1,0 +1,43 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:9219480b-3aed-47fc-8bac-d2cffc5849f7",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/9219480b-3aed-47fc-8bac-d2cffc5849f7.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "vs_code snapshot",
+      "private source assets",
+      "private native fixture",
+      "private event payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "vs_code",
+      "python",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:9219480b-3aed-47fc-8bac-d2cffc5849f7 in pinned vs_code; evaluator truth remains private.",
+    "event_injection": "Release tetris_rotation_test_result only after 3 persisted upstream result(s).",
+    "hidden_tests": "check_python_file_by_test_suite, native digest, project_identity, test_suite_identity, boundary_rotation, collision_handling, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "vs_code",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private tetris_rotation_osworld.sh scores check_python_file_by_test_suite.",
+    "requires_authored_private_oracle": false
+  }
+}
+

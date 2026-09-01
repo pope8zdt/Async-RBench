@@ -1,0 +1,16 @@
+{
+  "accepted": true,
+  "accepted_episode_owner": "evaluator",
+  "model_episode_required": false,
+  "native_report": "private/native_canonical_report.json",
+  "requirements": [
+    "compiled and executed official coding:063 CodeSquad solution.py contract",
+    "Commit-bound reviews, annotations, chat, adaptive issue transitions, and non-fast-forward rejection satisfy the CodeSquad contract.",
+    "The Git adapter receipt is consumed without losing accepted review, chat, annotation, or access-control state."
+  ],
+  "task_specific_acceptance": [
+    "Classify the Git adapter receipt as a dependency change affecting repository-bound reviews and history, while leaving collaboration features in scope and intact.",
+    "Close only after fake-repository checks cover branch movement, conflict, history reconstruction, retry, and duplicate-push exclusion and bind the exact Git receipt.",
+    "Preserve shared snippets, annotations, chat, issue state, review comments, authentication, and role permissions."
+  ]
+}

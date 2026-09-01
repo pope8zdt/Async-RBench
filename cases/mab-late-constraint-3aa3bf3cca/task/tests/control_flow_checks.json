@@ -1,0 +1,230 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "event_intake",
+      "dimension": "event_intake",
+      "event_id": "evt.mab-late-constraint-3aa3bf3cca.product_quality_scope_clarified",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "product_quality_scope_clarified"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_scope_delta: Product authority clarifies that the organizer has no power requirement; quality is the velvet ring holder, with a 60-unit minimum at $17.49.",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_3aa3.cf.01_classify_scope_delta",
+      "independence_key": "mab_late_constraint_3aa3.cf.01_classify_scope_delta",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_3aa3.mutation.01_classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_3aa3bf3cca.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_3aa3.cf.01_classify_scope_delta]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "product_quality_scope_clarified"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "state_revision",
+      "dimension": "state_revision",
+      "event_id": "evt.mab-late-constraint-3aa3bf3cca.product_quality_scope_clarified",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "product_quality_scope_clarified"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: Product authority clarifies that the organizer has no power requirement; quality is the velvet ring holder, with a 60-unit minimum at $17.49.",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_3aa3.cf.02_revise_affected",
+      "independence_key": "mab_late_constraint_3aa3.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_3aa3.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_3aa3bf3cca.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_3aa3.cf.02_revise_affected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "product_quality_scope_clarified"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "plan_revision",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab-late-constraint-3aa3bf3cca.product_quality_scope_clarified",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "product_quality_scope_clarified"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: Product authority clarifies that the organizer has no power requirement; quality is the velvet ring holder, with a 60-unit minimum at $17.49.",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_3aa3.cf.03_preserve_unaffected",
+      "independence_key": "mab_late_constraint_3aa3.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_3aa3.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_3aa3bf3cca.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_3aa3.cf.03_preserve_unaffected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "product_quality_scope_clarified"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "closure",
+      "dimension": "closure",
+      "event_id": "evt.mab-late-constraint-3aa3bf3cca.product_quality_scope_clarified",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "product_quality_scope_clarified"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: Product authority clarifies that the organizer has no power requirement; quality is the velvet ring holder, with a 60-unit minimum at $17.49.",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "mab_late_constraint_3aa3.cf.04_verify_closure",
+      "independence_key": "mab_late_constraint_3aa3.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "mab_late_constraint_3aa3.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_3aa3bf3cca.closure"
+      ],
+      "precondition": "The evaluator-owned authority has crossed the gateway.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[mab_late_constraint_3aa3.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "product_quality_scope_clarified"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab-late-constraint-3aa3bf3cca.product_quality_scope_clarified",
+      "event_theme": "task_scope_or_dependency_change",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Product authority clarifies that the organizer has no power requirement; quality is the velvet ring holder, with a 60-unit minimum at $17.49.",
+        "before": "A provisional Jewelry Organizer Stand with Velvet Ring Holder bargain exists before product_quality_scope_clarified.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

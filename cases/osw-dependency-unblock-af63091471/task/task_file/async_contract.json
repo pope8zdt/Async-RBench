@@ -1,0 +1,19 @@
+{
+  "case_id": "osw-dependency-unblock-af63091471",
+  "participant_visible_event_fields": [
+    "receipt_id",
+    "result_kind",
+    "released_at",
+    "evidence"
+  ],
+  "protocol": "runtime_receipt_v1",
+  "delivery_transport": "The evaluator injects the authoritative font receipt through the result gateway; it is not a participant filesystem resource.",
+  "required_evidence": [
+    "/app/output_data/event_receipt.json"
+  ],
+  "privacy": {
+    "evaluator_truth_visible": false,
+    "event_payload_predeclared": false,
+    "private_fixture_access": "prohibited: do not search, read, poll, retry, or sleep for evaluator-private fixture paths; wait for result_delivered"
+  }
+}

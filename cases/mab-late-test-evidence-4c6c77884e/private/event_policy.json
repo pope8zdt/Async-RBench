@@ -1,0 +1,31 @@
+{
+  "authority_rule": "A replayed completion is consumed exactly once and cannot duplicate side effects.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_users_family_sessi",
+      "req.02.implement_deterministic_begi",
+      "req.03.persist_progress_hints_and_r",
+      "req.04.deduplicate_and_integrate_re",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The authoritative sorting boundary suite is registered exactly once and affected challenge behavior is reverified without duplicating side effects.",
+    "before_state": "Collaboration and challenge execution exist, but boundary-test evidence has not yet been incorporated and may be delivered more than once.",
+    "event_id": "evt.mab_late_test_evidence_4.challenge_test_evidence_replayed",
+    "primary_event_theme": "duplicate_or_replayed_completion",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab_late_test_evidence_4.challenge_test_evidence_replayed",
+  "forbidden_shortcut": "Do not ignore, double-apply, over-apply, or falsely close challenge_test_evidence_replayed.",
+  "required_decisions": [
+    "classify_duplicate",
+    "preserve_idempotency",
+    "verify_closure"
+  ],
+  "theme": "duplicate_or_replayed_completion"
+}

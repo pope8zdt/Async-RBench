@@ -1,0 +1,34 @@
+{
+  "theme": "partial_then_complete_result",
+  "event_id": "evt.osw_cross_app_artifact_6dec97765d.partial_then_complete_result",
+  "authority_rule": "terminal_vscode_project is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_6dec97765d.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "before_state": "The project assets and evaluator extension are installed, but terminal command lineage and VS Code's opened-folder probe remain independent partial evidence.",
+    "after_state": "A terminal-issued code command opens /home/user/Desktop/project, shell history confirms terminal use, and the VS Code OpenProject probe returns project.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.project_path",
+      "req.02.project_assets",
+      "req.03.terminal_history",
+      "req.04.open_project_probe",
+      "req.05.vscode_state",
+      "req.06.official_checks",
+      "final_state"
+    ]
+  }
+}

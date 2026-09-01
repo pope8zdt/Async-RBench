@@ -1,0 +1,257 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_completeness_cli_column_merge",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_cross_app_artifact_8e188f4a86.partial_then_complete_result",
+      "evidence_group": "osw_merge_8e18.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "cli_column_merge"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_completeness for cli_column_merge; preserve confirmed terminal, libreoffice_calc, xlsx_ods state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip classify_completeness, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_merge_8e18.cf.01_classify_completeness_cli_column_merge",
+      "independence_key": "osw_merge_8e18.cf.01_classify_completeness_cli_column_merge",
+      "measurement_type": "control",
+      "mutation_id": "osw_merge_8e18.mutation.01_classify_completeness_cli_column_merge",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_8e188f4a86.event.receipt"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.row_counts"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_affected_cli_column_merge",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_cross_app_artifact_8e188f4a86.partial_then_complete_result",
+      "evidence_group": "osw_merge_8e18.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "cli_column_merge"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected for cli_column_merge; preserve confirmed terminal, libreoffice_calc, xlsx_ods state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_merge_8e18.cf.02_revise_affected_cli_column_merge",
+      "independence_key": "osw_merge_8e18.cf.02_revise_affected_cli_column_merge",
+      "measurement_type": "control",
+      "mutation_id": "osw_merge_8e18.mutation.02_revise_affected_cli_column_merge",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_8e188f4a86.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.boundaries"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_cli_column_merge",
+      "dimension": "plan_revision",
+      "event_id": "evt.osw_cross_app_artifact_8e188f4a86.partial_then_complete_result",
+      "evidence_group": "osw_merge_8e18.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "cli_column_merge"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected for cli_column_merge; preserve confirmed terminal, libreoffice_calc, xlsx_ods state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_merge_8e18.cf.03_preserve_unaffected_cli_column_merge",
+      "independence_key": "osw_merge_8e18.cf.03_preserve_unaffected_cli_column_merge",
+      "measurement_type": "control",
+      "mutation_id": "osw_merge_8e18.mutation.03_preserve_unaffected_cli_column_merge",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_8e188f4a86.event.probes"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.order"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "04_verify_closure_cli_column_merge",
+      "dimension": "closure",
+      "event_id": "evt.osw_cross_app_artifact_8e188f4a86.partial_then_complete_result",
+      "evidence_group": "osw_merge_8e18.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "cli_column_merge"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure for cli_column_merge; preserve confirmed terminal, libreoffice_calc, xlsx_ods state and revise only affected closure.",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_merge_8e18.cf.04_verify_closure_cli_column_merge",
+      "independence_key": "osw_merge_8e18.cf.04_verify_closure_cli_column_merge",
+      "measurement_type": "control",
+      "mutation_id": "osw_merge_8e18.mutation.04_verify_closure_cli_column_merge",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_8e188f4a86.closure"
+      ],
+      "precondition": "Authority delivery exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.output_path"
+    }
+  ],
+  "event_contracts": [
+    {
+      "after_state": "All 5,001 rows are concatenated in order using an accepted delimiter form, output.csv is exact, and LibreOffice Calc is launched from the terminal with that file.",
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "upstream_worker_04",
+      "before_state": "The 5,001-row XLSX and ODS columns are present; extraction and concatenation are partial until output.csv is validated and opened from a terminal-owned Calc process.",
+      "event_id": "evt.osw_cross_app_artifact_8e188f4a86.partial_then_complete_result",
+      "event_theme": "partial_then_complete_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "All 5,001 rows are concatenated in order using an accepted delimiter form, output.csv is exact, and LibreOffice Calc is launched from the terminal with that file.",
+        "before": "The 5,001-row XLSX and ODS columns are present; extraction and concatenation are partial until output.csv is validated and opened from a terminal-owned Calc process.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "dynamic_replanning"
+    }
+  ],
+  "version": "7"
+}

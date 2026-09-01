@@ -1,0 +1,34 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_late_test_evidence_befa686e5c.delayed_authoritative_result",
+  "authority_rule": "snake_collision_test is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_late_test_evidence_befa686e5c.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The Snake project runs, but Food initially spawns off the 10-pixel movement grid and the independent official test has not yet authorized closure.",
+    "after_state": "Food respawns on the 10-pixel grid within 600×400 bounds, the snake can reach food, and the official OSWorld Python test suite passes.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.grid_size",
+      "req.02.initial_spawn",
+      "req.03.respawn",
+      "req.04.snake_reaches_food",
+      "req.05.official_test",
+      "req.06.fixed_file",
+      "final_state"
+    ]
+  }
+}

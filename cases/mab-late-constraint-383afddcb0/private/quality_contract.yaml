@@ -1,0 +1,93 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independently constructs the event receipt while satisfying the same source-specific semantics.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-research-method",
+      "must_fail": [
+        "mab_late_constraint_383afddcb0.method.anchor"
+      ],
+      "path": "task/negative_mutations/wrong_research_method.sh"
+    },
+    {
+      "id": "malformed-fiveq",
+      "must_fail": [
+        "mab_late_constraint_383afddcb0.fiveq.exact"
+      ],
+      "path": "task/negative_mutations/malformed_fiveq.sh"
+    },
+    {
+      "id": "ignored-research-authority",
+      "must_fail": [
+        "mab_late_constraint_383afddcb0.output.schema"
+      ],
+      "path": "task/negative_mutations/ignored_research_authority.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "mab_late_constraint_383afddcb0.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "res051_mamba.cf.01_classify_authority",
+          "res051_mamba.cf.02_revise_from_authority",
+          "res051_mamba.cf.03_selective_replan",
+          "res051_mamba.cf.04_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "mab_late_constraint_383afddcb0.event.receipt",
+          "mab_late_constraint_383afddcb0.event.evidence",
+          "mab_late_constraint_383afddcb0.closure",
+          "mab_late_constraint_383afddcb0.source.pin",
+          "mab_late_constraint_383afddcb0.native.binding",
+          "mab_late_constraint_383afddcb0.fiveq.exact",
+          "mab_late_constraint_383afddcb0.problem.anchor",
+          "mab_late_constraint_383afddcb0.method.anchor",
+          "mab_late_constraint_383afddcb0.evaluation.plan",
+          "mab_late_constraint_383afddcb0.output.schema"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "PlainMamba",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "da147c7bf9fe6f33e1ed468372fa2635805f678b3ce5d3f79590c1e105fee09d",
+        "task_id": "research:051",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

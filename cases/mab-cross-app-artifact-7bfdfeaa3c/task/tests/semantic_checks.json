@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The midi_timing_contract_completed receipt is authentic and bound to coding:066 and mab-cross-app-artifact-7bfdfeaa3c.",
+      "id": "mab_cross_app_artifact_7bfdfeaa3c.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned Music_Collaborator authority runs after the persisted baseline and records probes.",
+      "id": "mab_cross_app_artifact_7bfdfeaa3c.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The completed MIDI contract revises playback and serialization without erasing lyrics, chat, collaborators, or version history.",
+      "id": "mab_cross_app_artifact_7bfdfeaa3c.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to official MultiAgentBench coding:066.",
+      "id": "mab_cross_app_artifact_7bfdfeaa3c.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and the music_collaboration_playback_closure closure satisfy the task-specific output schema.",
+      "id": "mab_cross_app_artifact_7bfdfeaa3c.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_music_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "MIDI events are validated and scheduled by track then tick with tempo conversion, while lyrics, revisions, collaboration, and chat remain intact.",
+      "id": "mab_cross_app_artifact_7bfdfeaa3c.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_music_midi_tempo_track_order_and_schema",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: lyrics, chat, versions, collaborators.",
+      "id": "mab_cross_app_artifact_7bfdfeaa3c.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_music_collaboration_lyrics_versions_and_chat_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The completed MIDI contract revises playback and serialization without erasing lyrics, chat, collaborators, or version history.",
+      "id": "mab_cross_app_artifact_7bfdfeaa3c.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_music_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

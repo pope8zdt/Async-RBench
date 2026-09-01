@@ -1,0 +1,328 @@
+{
+  "case_id": "osw-cross-app-artifact-2a25ab8769",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_completeness_batch_mp3_metadata_result",
+      "forbidden_behavior": "Do not skip classify_completeness, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_mp3_2a25.cf.01_classify_completeness_batch_mp3_metadata_result",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_2a25ab8769.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "required_behavior": "classify_completeness for batch_mp3_metadata_result; preserve already-confirmed source-native state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.track_set"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_batch_mp3_metadata_result",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_mp3_2a25.cf.02_revise_affected_batch_mp3_metadata_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_2a25ab8769.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for batch_mp3_metadata_result; preserve already-confirmed source-native state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.initial_blank_tags"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_batch_mp3_metadata_result",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_mp3_2a25.cf.03_preserve_unaffected_batch_mp3_metadata_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_2a25ab8769.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for batch_mp3_metadata_result; preserve already-confirmed source-native state.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.cheng_track"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_batch_mp3_metadata_result",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_mp3_2a25.cf.04_verify_closure_batch_mp3_metadata_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_2a25ab8769.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for batch_mp3_metadata_result; preserve already-confirmed source-native state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.han_track"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.track_set"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.initial_blank_tags"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.cheng_track"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.han_track"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.huang_track"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.06.chen_track"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.07.zhou_track"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.08.audio_preservation"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.track_set",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.initial_blank_tags",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.cheng_track",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.han_track",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.huang_track",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.06.chen_track",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.07.zhou_track",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.08.audio_preservation",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.track_set",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.initial_blank_tags",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.cheng_track",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.han_track",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.huang_track",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.06.chen_track",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.07.zhou_track",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.08.audio_preservation",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.track_set",
+      "req.02.initial_blank_tags",
+      "req.03.cheng_track",
+      "req.04.han_track",
+      "req.05.huang_track",
+      "req.06.chen_track",
+      "req.07.zhou_track",
+      "req.08.audio_preservation",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The completed batch result preserves all five audio identities and sets each title and artist exactly from its filename, with all five official check_mp3_meta evaluators passing.",
+    "before_state": "Five audio files are present with blank tags; filename parsing and per-track metadata checks can arrive independently and are incomplete until every track is verified.",
+    "event_id": "evt.osw_cross_app_artifact_2a25ab8769.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Exactly five audited MP3 paths are represented.",
+      "id": "req.01.track_set",
+      "observable_probe": "osw_cross_app_artifact_2a25ab8769.osworld.track_set",
+      "public_evidence": "source instruction and task-specific track_set result"
+    },
+    {
+      "description": "Every official source MP3 starts with blank metadata.",
+      "id": "req.02.initial_blank_tags",
+      "observable_probe": "osw_cross_app_artifact_2a25ab8769.osworld.initial_blank_tags",
+      "public_evidence": "source instruction and task-specific initial_blank_tags result"
+    },
+    {
+      "description": "Cheng Xiang / Missing You metadata is exact.",
+      "id": "req.03.cheng_track",
+      "observable_probe": "osw_cross_app_artifact_2a25ab8769.osworld.cheng_track",
+      "public_evidence": "source instruction and task-specific cheng_track result"
+    },
+    {
+      "description": "Han Baoyi / Tears of Dancing Girl metadata is exact.",
+      "id": "req.04.han_track",
+      "observable_probe": "osw_cross_app_artifact_2a25ab8769.osworld.han_track",
+      "public_evidence": "source instruction and task-specific han_track result"
+    },
+    {
+      "description": "Huang An / I Know Missing is Painful metadata is exact.",
+      "id": "req.05.huang_track",
+      "observable_probe": "osw_cross_app_artifact_2a25ab8769.osworld.huang_track",
+      "public_evidence": "source instruction and task-specific huang_track result"
+    },
+    {
+      "description": "Chen Shaohua / Red Daughter metadata is exact.",
+      "id": "req.06.chen_track",
+      "observable_probe": "osw_cross_app_artifact_2a25ab8769.osworld.chen_track",
+      "public_evidence": "source instruction and task-specific chen_track result"
+    },
+    {
+      "description": "Zhou Xuan / Nights in Shanghai metadata is exact.",
+      "id": "req.07.zhou_track",
+      "observable_probe": "osw_cross_app_artifact_2a25ab8769.osworld.zhou_track",
+      "public_evidence": "source instruction and task-specific zhou_track result"
+    },
+    {
+      "description": "The batch edit preserves the five audio identities.",
+      "id": "req.08.audio_preservation",
+      "observable_probe": "osw_cross_app_artifact_2a25ab8769.osworld.audio_preservation",
+      "public_evidence": "source instruction and task-specific audio_preservation result"
+    }
+  ]
+}

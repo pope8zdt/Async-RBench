@@ -1,0 +1,261 @@
+{
+  "case_id": "osw-dependency-unblock-e804a9f769",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_secret_path_clipboard",
+      "forbidden_behavior": "Do not skip classify_authority, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_secret_e804.cf.01_classify_authority_secret_path_clipboard",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_e804a9f769.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for secret_path_clipboard; preserve confirmed terminal, filesystem, clipboard state and revise only affected closure.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.filename"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_secret_path_clipboard",
+      "forbidden_behavior": "Do not skip revise_affected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_secret_e804.cf.02_revise_affected_secret_path_clipboard",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_e804a9f769.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for secret_path_clipboard; preserve confirmed terminal, filesystem, clipboard state and revise only affected closure.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.unique_match"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_secret_path_clipboard",
+      "forbidden_behavior": "Do not skip preserve_unaffected, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_secret_e804.cf.03_preserve_unaffected_secret_path_clipboard",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_e804a9f769.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for secret_path_clipboard; preserve confirmed terminal, filesystem, clipboard state and revise only affected closure.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.canonical_path"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_secret_path_clipboard",
+      "forbidden_behavior": "Do not skip verify_closure, finalize incomplete evidence, retain displaced task state, or invent OSWorld evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03"
+        ]
+      },
+      "id": "osw_secret_e804.cf.04_verify_closure_secret_path_clipboard",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_e804a9f769.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for secret_path_clipboard; preserve confirmed terminal, filesystem, clipboard state and revise only affected closure.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.clipboard"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.filename"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.filename",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.unique_match"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.unique_match",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.canonical_path"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.canonical_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.clipboard"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.clipboard",
+        "target": "final_state"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.05.asset_identity"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.05.asset_identity",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.filename",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.unique_match",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.canonical_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.clipboard",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.05.asset_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.filename",
+      "req.02.unique_match",
+      "req.03.canonical_path",
+      "req.04.clipboard",
+      "req.05.asset_identity",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The unique canonical path /home/user/Data3/List3/secret.docx is discovered and the clipboard contains that exact path, satisfying is_in_vm_clickboard.",
+    "before_state": "Five Data/List search branches exist and the unique secret.docx location has not yet been authoritatively joined to the clipboard state.",
+    "event_id": "evt.osw_dependency_unblock_e804a9f769.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The exact lowercase filename is secret.docx.",
+      "id": "req.01.filename",
+      "observable_probe": "osw_dependency_unblock_e804a9f769.osworld.filename",
+      "public_evidence": "source instruction and native evaluator for filename"
+    },
+    {
+      "description": "Exactly one matching document is selected.",
+      "id": "req.02.unique_match",
+      "observable_probe": "osw_dependency_unblock_e804a9f769.osworld.unique_match",
+      "public_evidence": "source instruction and native evaluator for unique_match"
+    },
+    {
+      "description": "The discovered path is the exact Data3/List3 path.",
+      "id": "req.03.canonical_path",
+      "observable_probe": "osw_dependency_unblock_e804a9f769.osworld.canonical_path",
+      "public_evidence": "source instruction and native evaluator for canonical_path"
+    },
+    {
+      "description": "The clipboard contains exactly the canonical path.",
+      "id": "req.04.clipboard",
+      "observable_probe": "osw_dependency_unblock_e804a9f769.osworld.clipboard",
+      "public_evidence": "source instruction and native evaluator for clipboard"
+    },
+    {
+      "description": "The found document matches the pinned source asset.",
+      "id": "req.05.asset_identity",
+      "observable_probe": "osw_dependency_unblock_e804a9f769.osworld.asset_identity",
+      "public_evidence": "source instruction and native evaluator for asset_identity"
+    }
+  ]
+}

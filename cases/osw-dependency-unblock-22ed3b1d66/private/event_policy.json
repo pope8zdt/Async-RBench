@@ -1,0 +1,30 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_22ed3b1d66.delayed_authoritative_result",
+  "authority_rule": "Delayed vlc_play_and_exit_setting is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_dependency_unblock_22ed3b1d66.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "VLC is open with auto-close enabled, but the version-specific preference path, key and persistence check are pending.",
+    "after_state": "The VLC worker returns ~/.config/vlc/vlcrc, the `play-and-exit` key, required value 0 and restart-backed persistence evidence.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.config_path",
+      "req.02.preference_value",
+      "req.03.single_effective_assignment",
+      "final_state"
+    ]
+  }
+}

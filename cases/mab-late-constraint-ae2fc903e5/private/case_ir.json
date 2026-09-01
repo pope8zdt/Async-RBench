@@ -1,0 +1,224 @@
+{
+  "case_id": "mab-late-constraint-ae2fc903e5",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "event_intake",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "01_classify_authority",
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_late_constraint_ae2fc903e5.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A condition certificate confirms the changing station passed inspection, carries 12 months of coverage, ships in six days, and is offered at $57.79.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "condition_and_shipping_certificate_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "state_revision",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "02_revise_affected",
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_ae2fc903e5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A condition certificate confirms the changing station passed inspection, carries 12 months of coverage, ships in six days, and is offered at $57.79.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "condition_and_shipping_certificate_delivered"
+    },
+    {
+      "critical": false,
+      "decision_group": "plan_revision",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_ae2fc903e5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: A condition certificate confirms the changing station passed inspection, carries 12 months of coverage, ships in six days, and is offered at $57.79.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "condition_and_shipping_certificate_delivered"
+    },
+    {
+      "critical": true,
+      "decision_group": "closure",
+      "forbidden_behavior": "Do not ignore the authority, retain superseded terms, over-invalidate preserved priorities, or close without re-verification.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "04_verify_closure",
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_ae2fc903e5.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: A condition certificate confirms the changing station passed inspection, carries 12 months of coverage, ships in six days, and is offered at $57.79.",
+      "stage_tag": "closure",
+      "task_requirement_id": "condition_and_shipping_certificate_delivered"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.01.keep_the_provisional_quality"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.02.authenticate_the_product_con"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.03.revise_price_and_shipping_fr"
+      },
+      {
+        "relation": "updates",
+        "source": "event_input",
+        "target": "req.04.close_without_converting_the"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.keep_the_provisional_quality",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.authenticate_the_product_con",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.revise_price_and_shipping_fr",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.close_without_converting_the",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.keep_the_provisional_quality",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.authenticate_the_product_con",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.revise_price_and_shipping_fr",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.close_without_converting_the",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.keep_the_provisional_quality",
+      "req.02.authenticate_the_product_con",
+      "req.03.revise_price_and_shipping_fr",
+      "req.04.close_without_converting_the",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A condition certificate confirms the changing station passed inspection, carries 12 months of coverage, ships in six days, and is offered at $57.79.",
+    "before_state": "A provisional Olivia's Little World Baby Doll Changing Station bargain exists before condition_and_shipping_certificate_delivered.",
+    "event_id": "evt.mab-late-constraint-ae2fc903e5.condition_and_shipping_certificate_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Keep the provisional quality claim pending until evidence arrives.",
+      "id": "req.01.keep_the_provisional_quality",
+      "observable_probe": "mab_late_constraint_ae2fc903e5.source.core_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Authenticate the product condition and coverage certificate.",
+      "id": "req.02.authenticate_the_product_con",
+      "observable_probe": "mab_late_constraint_ae2fc903e5.source.event_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Revise price and shipping from the certified result.",
+      "id": "req.03.revise_price_and_shipping_fr",
+      "observable_probe": "mab_late_constraint_ae2fc903e5.source.edge_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Close without converting the source condition priority into an unsupported claim.",
+      "id": "req.04.close_without_converting_the",
+      "observable_probe": "mab_late_constraint_ae2fc903e5.source.preservation",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

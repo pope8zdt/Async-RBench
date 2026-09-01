@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.capture_the_provisional_pric",
+      "req.02.validate_warranty_duration_a",
+      "req.03.revise_price_and_delivery_on",
+      "req.04.close_with_the_confirmed_sup",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An authorized support desk confirms a $44.50 price, 24-month warranty, 30-day replacement window, and five-day delivery for the activity station.",
+    "before_state": "A provisional Infantino Super Soft 1st Building Blocks Activity Station bargain exists before warranty_support_terms_delivered.",
+    "event_id": "evt.mab-late-constraint-a9a5dd3ff0.warranty_support_terms_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-a9a5dd3ff0.warranty_support_terms_delivered",
+  "forbidden_shortcut": "Do not ignore the event, retain superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

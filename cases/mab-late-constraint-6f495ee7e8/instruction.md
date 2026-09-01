@@ -1,0 +1,8 @@
+
+            Welcome to our negotiation scenario for the Kohler Genuine Part 1266657 Valve Kit. This high-quality product boasts a stellar 4.4/5 star rating, with an original price of 11.26 USD. As buyers strive for timely delivery, sellers are keen on justifying the premium pricing. Finding common ground amidst these differing priorities poses a challenge, but with effective communication and negotiation skills, a mutually beneficial agreement can surely be reached. Let the negotiations begin!
+            The agents are encouraged to actively use the tools provided, such as offering a price, rejecting and countering offers, providing information, or ending the negotiation, to achieve their respective goals.
+            The simulation should focus on effective tool usage to simulate a realistic bargaining process.
+            
+
+ASYNC-RBENCH EXTENSION
+During the task, the harness may deliver independently produced evidence. Treat a delivered receipt as new evidence rather than as an answer. Reassess only the work actually affected by that evidence, preserve still-valid work, and verify the final task outcome. Runtime event details are intentionally not disclosed in advance.

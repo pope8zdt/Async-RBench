@@ -1,0 +1,209 @@
+{
+  "case_id": "osw-dependency-unblock-af91d8977d",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_terminal_focus_keybinding_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain displaced state, overwrite confirmed partial work, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02"
+        ]
+      },
+      "id": "osw_focus_af91.cf.01_classify_authority_terminal_focus_keybinding_osworld",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af91d8977d.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for terminal_focus_command_context; preserve unaffected vscode state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.output_path"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_terminal_focus_keybinding_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain displaced state, overwrite confirmed partial work, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02"
+        ]
+      },
+      "id": "osw_focus_af91.cf.02_revise_affected_terminal_focus_keybinding_osworld",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af91d8977d.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for terminal_focus_command_context; preserve unaffected vscode state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.entry_identity"
+    },
+    {
+      "critical": true,
+      "decision_group": "03_verify_closure_terminal_focus_keybinding_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain displaced state, overwrite confirmed partial work, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02"
+        ]
+      },
+      "id": "osw_focus_af91.cf.03_verify_closure_terminal_focus_keybinding_osworld",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_af91d8977d.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for terminal_focus_command_context; preserve unaffected vscode state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.terminal_scope"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.output_path"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.entry_identity"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.terminal_scope"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.unique_valid_entry"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.output_path",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.entry_identity",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.terminal_scope",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.unique_valid_entry",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.output_path",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.entry_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.terminal_scope",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.unique_valid_entry",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.entry_identity",
+      "req.03.terminal_scope",
+      "req.04.unique_valid_entry",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The keybinding resolver returns the exact scoped entry ctrl+j, workbench.action.focusActiveEditorGroup, when terminalFocus.",
+    "before_state": "VS Code and the user keybindings file are available, but the exact editor-focus command and terminal-only context are unresolved.",
+    "event_id": "evt.osw_dependency_unblock_af91d8977d.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The active VS Code keybindings path is exact.",
+      "id": "req.01.output_path",
+      "observable_probe": "osw_dependency_unblock_af91d8977d.osworld.output_path",
+      "public_evidence": "source instruction and task-specific output_path result"
+    },
+    {
+      "description": "Ctrl+J and workbench.action.focusActiveEditorGroup are exact.",
+      "id": "req.02.entry_identity",
+      "observable_probe": "osw_dependency_unblock_af91d8977d.osworld.entry_identity",
+      "public_evidence": "source instruction and task-specific entry_identity result"
+    },
+    {
+      "description": "The shortcut is active only for terminalFocus.",
+      "id": "req.03.terminal_scope",
+      "observable_probe": "osw_dependency_unblock_af91d8977d.osworld.terminal_scope",
+      "public_evidence": "source instruction and task-specific terminal_scope result"
+    },
+    {
+      "description": "Exactly one matching entry exists in valid JSON.",
+      "id": "req.04.unique_valid_entry",
+      "observable_probe": "osw_dependency_unblock_af91d8977d.osworld.unique_valid_entry",
+      "public_evidence": "source instruction and task-specific unique_valid_entry result"
+    }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_detection_signature_bundle_com",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
+      "evidence_group": "mab_code26_netguard.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_real_time_packet_i"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed signature bundle unblocks deterministic malware, phishing, unauthorized-access, secure-source, and encrypted-traffic decisions while preserving the audit log.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close detection_signature_bundle_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_real_time_packet_i"
+        ]
+      },
+      "id": "mab_code26_netguard.cf.01_classify_authority_detection_signatur",
+      "independence_key": "mab_code26_netguard.cf.01_classify_authority_detection_signatur",
+      "measurement_type": "control",
+      "mutation_id": "mab_code26_netguard.mutation.01_classify_authority_detection_signatur",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ce10d55597.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_real_time_packet_i"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_detection_signature_bundle_com",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
+      "evidence_group": "mab_code26_netguard.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_severity_alerts_da"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed signature bundle unblocks deterministic malware, phishing, unauthorized-access, secure-source, and encrypted-traffic decisions while preserving the audit log.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close detection_signature_bundle_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_severity_alerts_da"
+        ]
+      },
+      "id": "mab_code26_netguard.cf.02_revise_affected_detection_signatur",
+      "independence_key": "mab_code26_netguard.cf.02_revise_affected_detection_signatur",
+      "measurement_type": "control",
+      "mutation_id": "mab_code26_netguard.mutation.02_revise_affected_detection_signatur",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ce10d55597.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_severity_alerts_da"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_detection_signature_bundle_com",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
+      "evidence_group": "mab_code26_netguard.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.preserve_traffic_records_use"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed signature bundle unblocks deterministic malware, phishing, unauthorized-access, secure-source, and encrypted-traffic decisions while preserving the audit log.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close detection_signature_bundle_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.preserve_traffic_records_use"
+        ]
+      },
+      "id": "mab_code26_netguard.cf.03_verify_closure_detection_signatur",
+      "independence_key": "mab_code26_netguard.cf.03_verify_closure_detection_signatur",
+      "measurement_type": "control",
+      "mutation_id": "mab_code26_netguard.mutation.03_verify_closure_detection_signatur",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ce10d55597.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.preserve_traffic_records_use"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The signature bundle closes threat decisions and edge cases while preserving complete audit and compliance history.",
+        "before": "Traffic, alerts, and logs exist, but authoritative signatures and encrypted-traffic handling are unavailable.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

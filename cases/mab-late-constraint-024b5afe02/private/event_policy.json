@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.persist_the_provisional_smal",
+      "req.02.classify_the_no_power_produc",
+      "req.03.add_assortment_minimum_batch",
+      "req.04.close_with_corrected_sock_sc",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Product authority removes the irrelevant battery condition and adds cotton-blend material, assorted bear-cat-fox patterns, a 100-pair minimum, $7.49 price, and eight-day lead time.",
+    "before_state": "A provisional Girls Cotton Cartoon Animal Knee-High Socks bargain exists before sock_assortment_scope_clarified.",
+    "event_id": "evt.mab-late-constraint-024b5afe02.sock_assortment_scope_clarified",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-024b5afe02.sock_assortment_scope_clarified",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

@@ -1,0 +1,292 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_completeness_replace_text_suggestions_wit",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_5.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.classify_completeness",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.replace_text_suggestions"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Strategy specialist returns a deterministic recommendation interface keyed by game, team composition, score trend, and role metrics, including ranked adjustments and expected score deltas.', perform classify_completeness for 'Replace text suggestions with ranked structured recommendations.' while retaining valid prior result 'Team composition, roles, per-game settings, scoring, and leaderboard updates are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Team composition, roles, per-game settings, scoring, and leaderboard updates are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_text_suggestions"
+        ]
+      },
+      "id": "mab_code11_boardgame.cf.01_classify_completeness_replace_text_sugge",
+      "independence_key": "mab_code11_boardgame.cf.01_classify_completeness_replace_text_sugge",
+      "measurement_type": "control",
+      "mutation_id": "mab_code11_boardgame.mutation.01_classify_completeness_replace_text_sugge",
+      "obligation": "classify_completeness",
+      "outcome_anchors": [
+        "mab_dependency_unblock_593d775fd8.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_completeness:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_text_suggestions"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_apply_only_permitted_role_or",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_5.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.replace_text_suggestions"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Strategy specialist returns a deterministic recommendation interface keyed by game, team composition, score trend, and role metrics, including ranked adjustments and expected score deltas.', perform revise_affected for 'Apply only permitted role or composition adjustments for the selected game.' while retaining valid prior result 'Strategy display code consumes provisional text suggestions.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Strategy display code consumes provisional text suggestions.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_text_suggestions"
+        ]
+      },
+      "id": "mab_code11_boardgame.cf.02_revise_affected_apply_only_permitt",
+      "independence_key": "mab_code11_boardgame.cf.02_revise_affected_apply_only_permitt",
+      "measurement_type": "control",
+      "mutation_id": "mab_code11_boardgame.mutation.02_revise_affected_apply_only_permitt",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_593d775fd8.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.replace_text_suggestions"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_a_mutation_where_a_chang",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_5.partial_then_complete_re",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.replace_text_suggestions"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Strategy specialist returns a deterministic recommendation interface keyed by game, team composition, score trend, and role metrics, including ranked adjustments and expected score deltas.', perform verify_closure for 'Add a mutation where a changed score trend changes recommendation ranking.' while retaining valid prior result 'Team composition, roles, per-game settings, scoring, and leaderboard updates are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Team composition, roles, per-game settings, scoring, and leaderboard updates are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_text_suggestions"
+        ]
+      },
+      "id": "mab_code11_boardgame.cf.03_verify_closure_add_a_mutation_whe",
+      "independence_key": "mab_code11_boardgame.cf.03_verify_closure_add_a_mutation_whe",
+      "measurement_type": "control",
+      "mutation_id": "mab_code11_boardgame.mutation.03_verify_closure_add_a_mutation_whe",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_593d775fd8.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.replace_text_suggestions"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_completeness by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Team composition, roles, per-game settings, scoring, and leaderboard updates are implemented.'.",
+      "family": "wait_for_authority",
+      "id": "mab_code11_boardgame.mutation.01_classify_completeness_replace_text_sugge",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code11_boardgame.cf.01_classify_completeness_replace_text_sugge"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_593d775fd8.source.pin"
+      ],
+      "targets": [
+        "mab_code11_boardgame.cf.01_classify_completeness_replace_text_sugge",
+        "mab_dependency_unblock_593d775fd8.event.receipt",
+        "mab_dependency_unblock_593d775fd8.event.authority_probe",
+        "mab_dependency_unblock_593d775fd8.closure",
+        "mab_dependency_unblock_593d775fd8.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Strategy display code consumes provisional text suggestions.'.",
+      "family": "resolve_authority",
+      "id": "mab_code11_boardgame.mutation.02_revise_affected_apply_only_permitt",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code11_boardgame.cf.02_revise_affected_apply_only_permitt"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_593d775fd8.source.pin"
+      ],
+      "targets": [
+        "mab_code11_boardgame.cf.02_revise_affected_apply_only_permitt",
+        "mab_dependency_unblock_593d775fd8.event.receipt",
+        "mab_dependency_unblock_593d775fd8.event.authority_probe",
+        "mab_dependency_unblock_593d775fd8.closure",
+        "mab_dependency_unblock_593d775fd8.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Team composition, roles, per-game settings, scoring, and leaderboard updates are implemented.'.",
+      "family": "rederive_from_authority",
+      "id": "mab_code11_boardgame.mutation.03_verify_closure_add_a_mutation_whe",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code11_boardgame.cf.03_verify_closure_add_a_mutation_whe"
+      ],
+      "must_still_pass": [
+        "mab_dependency_unblock_593d775fd8.source.pin"
+      ],
+      "targets": [
+        "mab_code11_boardgame.cf.03_verify_closure_add_a_mutation_whe",
+        "mab_dependency_unblock_593d775fd8.event.receipt",
+        "mab_dependency_unblock_593d775fd8.event.authority_probe",
+        "mab_dependency_unblock_593d775fd8.closure",
+        "mab_dependency_unblock_593d775fd8.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The task-specific strategy_contract_completed receipt is authentic and bound to coding:011 and mab-dependency-unblock-593d775fd8.",
+      "id": "mab_dependency_unblock_593d775fd8.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned Board_Game_Team_Collaborator authority executes only after three upstream results are persisted.",
+      "id": "mab_dependency_unblock_593d775fd8.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "Structured strategy analysis remains advisory and cannot alter leaderboard totals, game rules, turn order, or team membership.",
+      "id": "mab_dependency_unblock_593d775fd8.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains pinned to official MultiAgentBench coding:011.",
+      "id": "mab_dependency_unblock_593d775fd8.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and ranked_boardgame_strategy_closure obey the task-specific output schema and four-upstream closure.",
+      "id": "mab_dependency_unblock_593d775fd8.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_boardgame_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Recommendations are deterministic ranked structures keyed by game, composition, score trend, and role metrics; only game-permitted role changes may be applied.",
+      "id": "mab_dependency_unblock_593d775fd8.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_boardgame_ranked_recommendations_follow_trend_and_permitted_roles",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: leaderboard_totals, game_rules, turn_order, team_membership.",
+      "id": "mab_dependency_unblock_593d775fd8.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_boardgame_advice_preserves_leaderboard_rules_turns_and_membership",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Structured strategy analysis remains advisory and cannot alter leaderboard totals, game rules, turn order, or team membership.",
+      "id": "mab_dependency_unblock_593d775fd8.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_boardgame_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

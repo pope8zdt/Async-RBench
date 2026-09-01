@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The validation_contract_replayed receipt is authentic and bound to coding:087 and mab-dependency-unblock-031ed6f5bc.",
+      "id": "mab_dependency_unblock_031ed6f5bc.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned DataFlowCoordinator authority runs after the persisted baseline and records probes.",
+      "id": "mab_dependency_unblock_031ed6f5bc.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A replayed validation completion is deduplicated and cannot duplicate transformation or export side effects.",
+      "id": "mab_dependency_unblock_031ed6f5bc.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to official MultiAgentBench coding:087.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "solution.py and the validated_data_pipeline_closure closure satisfy the task-specific output schema.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dataflow_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Ingestion normalizes CSV, spreadsheet, and database rows; validation partitions accepted and rejected rows; only accepted rows are transformed and exported once.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dataflow_validation_partition_and_stage_order",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves task-native state: raw_rows, source_types, export_configuration.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dataflow_invalid_rows_never_reach_export_and_replay_is_idempotent",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "A replayed validation completion is deduplicated and cannot duplicate transformation or export side effects.",
+      "id": "mab_dependency_unblock_031ed6f5bc.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_dataflow_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

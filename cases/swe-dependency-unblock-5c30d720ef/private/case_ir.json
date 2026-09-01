@@ -1,0 +1,177 @@
+{
+  "case_id": "swe-dependency-unblock-5c30d720ef",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority:req.01.add_inert_to_the_shared_",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add `inert` to the shared boolean-attribute classification.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "01_classify_authority_add_inert_to_the_shared_bool",
+      "must_still_pass": [],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_5c30d720ef.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "After receiving authoritative event 'The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.', perform classify_authority for 'Add `inert` to the shared boolean-attribute classification.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_inert_to_the_shared_"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.verify_true_emits_a_pres",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Verify true emits a present boolean attribute and false omits it in SSR.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "02_revise_affected_verify_true_emits_a_present_",
+      "must_still_pass": [],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_5c30d720ef.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.', perform revise_affected for 'Verify true emits a present boolean attribute and false omits it in SSR.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.verify_true_emits_a_pres"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.03.check_spread_and_direct_",
+      "forbidden_behavior": "Do not ignore the authority result, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Check spread and direct-attribute serialization paths.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "03_verify_closure_check_spread_and_direct_attr",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_5c30d720ef.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "After receiving authoritative event 'The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.', perform verify_closure for 'Check spread and direct-attribute serialization paths.' and preserve valid source behavior established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.check_spread_and_direct_"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.add_inert_to_the_shared_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.verify_true_emits_a_pres"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.check_spread_and_direct_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.add_inert_to_the_shared_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.verify_true_emits_a_pres",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.check_spread_and_direct_",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.add_inert_to_the_shared_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.verify_true_emits_a_pres",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.check_spread_and_direct_",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_inert_to_the_shared_",
+      "req.02.verify_true_emits_a_pres",
+      "req.03.check_spread_and_direct_",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The authoritative HTML-semantics audit identifies inert as a shared DOM boolean attribute and rejects server-only string serialization.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before the authoritative evidence arrives.",
+    "event_id": "evt.swe_dependency_unblock_5c30d720ef.inert_boolean_attribute_authority",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Add `inert` to the shared boolean-attribute classification.",
+      "id": "req.01.add_inert_to_the_shared_",
+      "observable_probe": "swe_dependency_unblock_5.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for add_inert_to_the_shared_boolean_attr"
+    },
+    {
+      "description": "Verify true emits a present boolean attribute and false omits it in SSR.",
+      "id": "req.02.verify_true_emits_a_pres",
+      "observable_probe": "swe_dependency_unblock_5.sem.02.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for verify_true_emits_a_present_boolean_"
+    },
+    {
+      "description": "Check spread and direct-attribute serialization paths.",
+      "id": "req.03.check_spread_and_direct_",
+      "observable_probe": "swe_dependency_unblock_5.sem.03.previously_passing_behavior_",
+      "public_evidence": "source instruction and workstream result for check_spread_and_direct_attribute_se"
+    }
+  ],
+  "upstream_task_depth": 3
+}

@@ -1,0 +1,109 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "mab-conflicting-specialist-results-8f6f0d514a",
+  "benchmark": "MultiAgentBench",
+  "source_binding": {
+    "task_id": "database:007",
+    "scenario": "database",
+    "jsonl_path": "upstream/marble/multiagentbench/database/database_main.jsonl",
+    "line_number": 7,
+    "record_sha256": "73f1292dc44592c73ac2d9a3f746b047bfd7b07999d91e79f29fdcc6f7b2e470",
+    "upstream_revision": "8d60fa17b5596b44458a52d4296061b9fc13d6f2"
+  },
+  "native_runtime": {
+    "adapter": "marble.engine.Engine",
+    "environment": {
+      "type": "",
+      "name": "",
+      "max_iterations": "",
+      "init_sql": "-- 1. Users table (stores information about users)\nCREATE TABLE users (\n    user_id SERIAL PRIMARY KEY,  -- Unique user ID\n    username VARCHAR(50) UNIQUE NOT NULL,  -- Username\n    first_name VARCHAR(100),  -- User's first name\n    last_name VARCHAR(100),   -- User's last name\n    email VARCHAR(255) UNIQUE NOT NULL,  -- User email\n    password VARCHAR(255) NOT NULL,  -- User password\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Account creation time\n);\n\n-- 2. Artists table (stores artist information)\nCREATE TABLE artists (\n    artist_id SERIAL PRIMARY KEY,  -- Unique artist ID\n    name VARCHAR(255) NOT NULL,  -- Artist name\n    bio TEXT,  -- Artist biography\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Artist creation time\n);\n\n-- 3. Albums table (stores album details)\nCREATE TABLE albums (\n    album_id SERIAL PRIMARY KEY,  -- Unique album ID\n    artist_id INT REFERENCES artists(artist_id),  -- Foreign key to artists\n    title VARCHAR(255) NOT NULL,  -- Album title\n    release_date DATE,  -- Album release date\n    genre VARCHAR(100),  -- Genre of the album\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Album creation time\n);\n\n-- 4. Songs table (stores song details)\nCREATE TABLE songs (\n    song_id SERIAL PRIMARY KEY,  -- Unique song ID\n    album_id INT REFERENCES albums(album_id),  -- Foreign key to albums\n    title VARCHAR(255) NOT NULL,  -- Song title\n    duration INT,  -- Duration in seconds\n    track_number INT,  -- Track number in the album\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Song creation time\n);\n\n-- 5. Playlists table (stores playlists created by users)\nCREATE TABLE playlists (\n    playlist_id SERIAL PRIMARY KEY,  -- Unique playlist ID\n    user_id INT REFERENCES users(user_id),  -- Foreign key to users\n    name VARCHAR(255) NOT NULL,  -- Playlist name\n    description TEXT,  -- Playlist description\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Playlist creation time\n);\n\n-- 6. Playlist_Songs table (stores songs in playlists)\nCREATE TABLE playlist_songs (\n    playlist_song_id SERIAL PRIMARY KEY,  -- Unique playlist song ID\n    playlist_id INT REFERENCES playlists(playlist_id),  -- Foreign key to playlists\n    song_id INT REFERENCES songs(song_id),  -- Foreign key to songs\n    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Song added to playlist time\n);\n\n-- 7. User_Activity table (stores users' listening activity)\nCREATE TABLE user_activity (\n    activity_id SERIAL PRIMARY KEY,  -- Unique activity ID\n    user_id INT REFERENCES users(user_id),  -- Foreign key to users\n    song_id INT REFERENCES songs(song_id),  -- Foreign key to songs\n    played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Time song was played\n);\n\n-- 8. Subscriptions table (stores subscription details for users)\nCREATE TABLE subscriptions (\n    subscription_id SERIAL PRIMARY KEY,  -- Unique subscription ID\n    user_id INT REFERENCES users(user_id),  -- Foreign key to users\n    start_date DATE,  -- Subscription start date\n    end_date DATE,  -- Subscription end date\n    plan_type VARCHAR(50),  -- Subscription plan (e.g., free, premium)\n    status VARCHAR(50) DEFAULT 'active'  -- Subscription status\n);\n\n-- 9. Payments table (stores payment information for subscriptions)\nCREATE TABLE payments (\n    payment_id SERIAL PRIMARY KEY,  -- Unique payment ID\n    subscription_id INT REFERENCES subscriptions(subscription_id),  -- Foreign key to subscriptions\n    amount DECIMAL(10, 2) NOT NULL,  -- Payment amount\n    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Payment date\n    payment_method VARCHAR(50),  -- Payment method (e.g., credit card, PayPal)\n    status VARCHAR(50) DEFAULT 'completed'  -- Payment status\n);\n\n-- Insert sample users\nINSERT INTO users (username, first_name, last_name, email, password)\nVALUES \n('johndoe', 'John', 'Doe', 'john.doe@example.com', 'password123'),\n('janesmith', 'Jane', 'Smith', 'jane.smith@example.com', 'password456');\n\n-- Insert sample artists\nINSERT INTO artists (name, bio)\nVALUES \n('Artist A', 'Bio of Artist A'),\n('Artist B', 'Bio of Artist B');\n\n-- Insert sample albums\nINSERT INTO albums (artist_id, title, release_date, genre)\nVALUES \n(1, 'Album A', '2024-01-01', 'Pop'),\n(2, 'Album B', '2023-12-01', 'Rock');\n\n-- Insert sample songs\nINSERT INTO songs (album_id, title, duration, track_number)\nVALUES \n(1, 'Song 1', 240, 1),\n(1, 'Song 2', 210, 2),\n(2, 'Song 3', 220, 1);\n\n-- Insert sample playlists\nINSERT INTO playlists (user_id, name, description)\nVALUES \n(1, 'My Playlist', 'A playlist of my favorite songs'),\n(2, 'Rock Playlist', 'A playlist for rock music');\n\n-- Insert songs into playlists\nINSERT INTO playlist_songs (playlist_id, song_id)\nVALUES \n(1, 1),\n(1, 2),\n(2, 3);\n\n-- Insert sample user activity\nINSERT INTO user_activity (user_id, song_id)\nVALUES \n(1, 1),\n(1, 2),\n(2, 3);\n\n-- Insert sample subscriptions\nINSERT INTO subscriptions (user_id, start_date, end_date, plan_type)\nVALUES \n(1, '2024-01-01', '2025-01-01', 'premium'),\n(2, '2023-12-01', '2024-12-01', 'free');\n\n-- Insert sample payments\nINSERT INTO payments (subscription_id, amount, payment_method, status)\nVALUES \n(1, 99.99, 'Credit Card', 'completed'),\n(2, 0.00, 'None', 'completed');\n\n-- Select all songs in a specific playlist\nSELECT ps.playlist_song_id, s.title, s.duration\nFROM playlist_songs ps\nJOIN songs s ON ps.song_id = s.song_id\nWHERE ps.playlist_id = 1;\n\n-- Select all activities of a user\nSELECT ua.activity_id, s.title, ua.played_at\nFROM user_activity ua\nJOIN songs s ON ua.song_id = s.song_id\nWHERE ua.user_id = 1;\n\n-- Select all subscriptions for a user\nSELECT * FROM subscriptions WHERE user_id = 1;\n\n-- Select all payments for a subscription\nSELECT * FROM payments WHERE subscription_id = 1;\n\n-- Select all songs by a specific artist\nSELECT s.title, s.duration\nFROM songs s\nJOIN albums a ON s.album_id = a.album_id\nJOIN artists ar ON a.artist_id = ar.artist_id\nWHERE ar.name = 'Artist A';\n",
+      "anomalies": [
+        {
+          "anomaly": "FETCH_LARGE_DATA",
+          "threads": 100,
+          "ncolumn": 20,
+          "nrow": 20000,
+          "colsize": 100
+        }
+      ]
+    },
+    "roles": [
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent1",
+        "profile": "agent1 will explore the possibility of INSERT_LARGE_DATA as a root cause. Recommended tables: `pg_stat_statements`. You can search for INSERTs."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent2",
+        "profile": "agent2 will explore the possibility of LOCK_CONTENTION as a root cause. Recommended tables: `pg_locks`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent3",
+        "profile": "agent3 will explore the possibility of VACUUM as a root cause. Recommended to search for inappropiate VACUUMs from `pg_stat_all_tables`: SELECT query, calls, total_plan_time, rows, mean_plan_time FROM pg_stat_statements WHERE query LIKE 'VACUUM%';"
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent4",
+        "profile": "agent4 will explore the possibility of REDUNDANT_INDEX as a root cause. Recommended tables: `pg_stat_user_indexes`, `pg_indexes`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent5",
+        "profile": "agent5 will explore the possibility of FETCH_LARGE_DATA as a root cause. Recommended to search for SELECTs from `pg_stat_statements`."
+      }
+    ],
+    "final_state": "MARBLE environment and tool transcript"
+  },
+  "event_protocol": {
+    "producer": "an actual MARBLE role executes with its declared profile and tools",
+    "payload": "the role's native message/tool result with provenance and logical clock",
+    "release_predicate": "coordinator committed at least one environment action after launching the role",
+    "rollback": "messages and tool calls remain in the native transcript; correction is additive and auditable"
+  },
+  "state_attestation": {
+    "baseline_probe": "serialized MARBLE environment state and transcript sequence zero",
+    "checkpoint_probe": "environment digest plus strictly increased native tool/action sequence",
+    "change_required": true,
+    "journal_owner": "MARBLE engine logger, not an agent workspace file"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "metrics": {
+      "accuracy": true,
+      "response_time": true
+    },
+    "agreement_or_environment_state": true
+  },
+  "quality_gates": {
+    "official_scenario_bound": true,
+    "native_roles_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

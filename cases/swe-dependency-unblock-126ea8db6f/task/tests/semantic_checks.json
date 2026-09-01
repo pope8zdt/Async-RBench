@@ -1,0 +1,65 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency_unblock_126ea8db6f.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency_unblock_126ea8db6f.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency_unblock_126ea8db6f.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_dependency_unblock_126ea8db6f.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "The source-native ad-hoc play-data regression verifies timeout propagation into generated task data.",
+      "id": "swe_dependency_unblock_126ea8db6f.native.ansible_adhoc_timeout",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_ansible_adhoc_timeout",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Five stable neighboring native ad-hoc CLI paths (parse, command, missing argument, include-role, and no-extra-vars) remain green after shared option-flow changes.",
+      "id": "swe_dependency_unblock_126ea8db6f.native.ansible_cli_preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_ansible_cli_preservation",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "01_classify_authority_checkpoint",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_healthcare_db021.delayed_authoritative_result",
+      "evidence_group": "dep_db021.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.authority_bound_database_diagnosis"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After the provisional healthcare management diagnosis is persisted, accept the delayed database:021 receipt only after validating its identity and the post-maintenance checkpoint proving VACUUM FULL completed and only 500 probe rows remained.",
+      "forbidden_behavior": "Do not finalize from the provisional diagnosis or accept a receipt without the exact case/source and checkpoint evidence.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "dep_db021.cf.01_classify_authority_checkpoint",
+      "independence_key": "dep_db021.cf.01_classify_authority_checkpoint",
+      "measurement_type": "control",
+      "mutation_id": "dep_db021.mutation.01_classify_authority_checkpoint",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_18d7c09304.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "02_revise_from_authority",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_healthcare_db021.delayed_authoritative_result",
+      "evidence_group": "dep_db021.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.authority_bound_database_diagnosis"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Use the post-maintenance checkpoint proving VACUUM FULL completed and only 500 probe rows remained to revise the affected diagnosis while preserving the completed healthcare management findings.",
+      "forbidden_behavior": "Do not retain the displaced tentative cause and do not erase unaffected specialist findings.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "dep_db021.cf.02_revise_from_authority",
+      "independence_key": "dep_db021.cf.02_revise_from_authority",
+      "measurement_type": "control",
+      "mutation_id": "dep_db021.mutation.02_revise_from_authority",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_18d7c09304.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "03_verify_closure",
+      "dimension": "closure",
+      "event_id": "evt.mab_healthcare_db021.delayed_authoritative_result",
+      "evidence_group": "dep_db021.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.authority_bound_database_diagnosis"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rederive the final healthcare management diagnosis from the delayed authority receipt, native evaluator binding, and preserved hypothesis record.",
+      "forbidden_behavior": "Do not declare closure without rechecking the exact cause, authority digests, preservation list, and output schema.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.authority_bound_database_diagnosis"
+        ]
+      },
+      "id": "dep_db021.cf.03_verify_closure",
+      "independence_key": "dep_db021.cf.03_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "dep_db021.mutation.03_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_18d7c09304.closure"
+      ],
+      "precondition": "The evaluator-owned authority delivery opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.authority_bound_database_diagnosis"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.mab_healthcare_db021.delayed_authoritative_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "The delayed database:021 authority receipt releases the post-maintenance checkpoint proving VACUUM FULL completed and only 500 probe rows remained.",
+        "before": "The healthcare management schema review and provisional hypothesis matrix are persisted without evaluator truth.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

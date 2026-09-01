@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The calendar_adapter_contract_delivered receipt is authentic and bound to coding:059 and mab-cross-app-artifact-4e6f0120bd.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned Office Task Collaborator event worker completes and records observable post-baseline probes.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The exact calendar contract receipt is consumed and the synchronized task/calendar closure is reverified.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to the official MultiAgentBench source task coding:059.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The submitted deliverable follows the official coding:059 solution.py output contract and emits the calendar_deadline_sync_contract evaluator closure schema.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Calendar synchronization uses task-specific provider events while task assignment, status, messaging, dashboards, and reports remain functional.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_task_calendar_functionality",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Valid prior Office Task Collaborator work is preserved: assignments, messaging, dashboards, project_reports, authentication, authorization.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_preserves_assignment_messaging_dashboard_and_report",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The exact calendar contract receipt is consumed and the synchronized task/calendar closure is reverified.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

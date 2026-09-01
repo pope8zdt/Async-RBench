@@ -1,0 +1,264 @@
+{
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "family": "wait_for_authority",
+      "id": "tbn_late_test_e_63515a.mutation.01_classify_scope_delta",
+      "may_fail": [],
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.01_classify_scope_delta"
+      ],
+      "must_still_pass": [
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ],
+      "targets": [
+        "tbn_late_test_e_63515a.cf.01_classify_scope_delta",
+        "tbn_late_test_evidence_30aa2ad8de.event.receipt",
+        "tbn_late_test_evidence_30aa2ad8de.event.probes",
+        "tbn_late_test_evidence_30aa2ad8de.closure",
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "family": "resolve_authority",
+      "id": "tbn_late_test_e_63515a.mutation.02_revise_affected",
+      "may_fail": [],
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.02_revise_affected"
+      ],
+      "must_still_pass": [
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ],
+      "targets": [
+        "tbn_late_test_e_63515a.cf.02_revise_affected",
+        "tbn_late_test_evidence_30aa2ad8de.event.receipt",
+        "tbn_late_test_evidence_30aa2ad8de.event.probes",
+        "tbn_late_test_evidence_30aa2ad8de.closure",
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "family": "selective_replan",
+      "id": "tbn_late_test_e_63515a.mutation.03_preserve_unaffected",
+      "may_fail": [],
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.03_preserve_unaffected"
+      ],
+      "must_still_pass": [
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ],
+      "targets": [
+        "tbn_late_test_e_63515a.cf.03_preserve_unaffected",
+        "tbn_late_test_evidence_30aa2ad8de.event.receipt",
+        "tbn_late_test_evidence_30aa2ad8de.event.probes",
+        "tbn_late_test_evidence_30aa2ad8de.closure",
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "family": "rederive_from_authority",
+      "id": "tbn_late_test_e_63515a.mutation.04_verify_closure",
+      "may_fail": [],
+      "must_fail": [
+        "tbn_late_test_e_63515a.cf.04_verify_closure"
+      ],
+      "must_still_pass": [
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ],
+      "targets": [
+        "tbn_late_test_e_63515a.cf.04_verify_closure",
+        "tbn_late_test_evidence_30aa2ad8de.event.receipt",
+        "tbn_late_test_evidence_30aa2ad8de.event.probes",
+        "tbn_late_test_evidence_30aa2ad8de.closure",
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ]
+    }
+  ],
+  "points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_the_main_agent_continues_con",
+      "dimension": "event_intake",
+      "event_id": "evt.tbn_late_test_evidence_3.task_scope_or_dependency",
+      "evidence_group": "event_intake:1",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.the_main_agent_continues"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'late_authoritative_result', perform classify_scope_delta for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "forbidden_behavior": "Do not handle classify_scope_delta by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_late_test_e_63515a.cf.01_classify_scope_delta",
+      "independence_key": "tbn_late_test_e_63515a.cf.01_classify_scope_delta",
+      "measurement_type": "control",
+      "mutation_id": "tbn_late_test_e_63515a.mutation.01_classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_30aa2ad8de.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_late_test_e_63515a.cf.01_classify_scope_delta]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.the_main_agent_continues"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_the_main_agent_continues_con",
+      "dimension": "state_revision",
+      "event_id": "evt.tbn_late_test_evidence_3.task_scope_or_dependency",
+      "evidence_group": "state_revision:2",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.the_main_agent_continues"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'late_authoritative_result', perform revise_affected for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ]
+      },
+      "id": "tbn_late_test_e_63515a.cf.02_revise_affected",
+      "independence_key": "tbn_late_test_e_63515a.cf.02_revise_affected",
+      "measurement_type": "control",
+      "mutation_id": "tbn_late_test_e_63515a.mutation.02_revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_30aa2ad8de.event.probes"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_late_test_e_63515a.cf.02_revise_affected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.the_main_agent_continues"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_the_main_agent_continues_con",
+      "dimension": "plan_revision",
+      "event_id": "evt.tbn_late_test_evidence_3.task_scope_or_dependency",
+      "evidence_group": "plan_revision:3",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.01.the_main_agent_continues"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'late_authoritative_result', perform preserve_unaffected for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "forbidden_behavior": "Do not handle preserve_unaffected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "tbn_late_test_e_63515a.cf.03_preserve_unaffected",
+      "independence_key": "tbn_late_test_e_63515a.cf.03_preserve_unaffected",
+      "measurement_type": "control",
+      "mutation_id": "tbn_late_test_e_63515a.mutation.03_preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_30aa2ad8de.closure"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_late_test_e_63515a.cf.03_preserve_unaffected]",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.the_main_agent_continues"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure_the_main_agent_continues_con",
+      "dimension": "closure",
+      "event_id": "evt.tbn_late_test_evidence_3.task_scope_or_dependency",
+      "evidence_group": "closure:4",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.the_main_agent_continues"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'late_authoritative_result', perform verify_closure for 'The main agent continues configuration, deployment, or completion preparation while the probe runs.' while retaining valid prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "id": "tbn_late_test_e_63515a.cf.04_verify_closure",
+      "independence_key": "tbn_late_test_e_63515a.cf.04_verify_closure",
+      "measurement_type": "control",
+      "mutation_id": "tbn_late_test_e_63515a.mutation.04_verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_30aa2ad8de.source.pin"
+      ],
+      "precondition": "The evaluator-owned event has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "pytest_node": "test_control_flow.py::test_control_point[tbn_late_test_e_63515a.cf.04_verify_closure]",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.the_main_agent_continues"
+    }
+  ]
+}

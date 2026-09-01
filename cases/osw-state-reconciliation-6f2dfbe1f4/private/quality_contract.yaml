@@ -1,0 +1,94 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Independent inline native-result and closure assembly without invoking oracle.sh or the canonical source-native solution.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "osw_state_reconciliation_6f2dfbe1f4.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "osw_state_reconciliation_6f2dfbe1f4.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    },
+    {
+      "id": "wrong-osworld-state",
+      "must_fail": [
+        "osw_state_reconciliation_6f2dfbe1f4.osworld.green_rgb"
+      ],
+      "path": "task/negative_mutations/wrong_osworld_state.sh"
+    },
+    {
+      "id": "ignored-native-evidence",
+      "must_fail": [
+        "osw_state_reconciliation_6f2dfbe1f4.osworld.native_evidence"
+      ],
+      "path": "task/negative_mutations/ignored_native_evidence.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "osw_green_6f2d.cf.01_classify_completeness_green_background_result",
+          "osw_green_6f2d.cf.02_revise_affected_green_background_result",
+          "osw_green_6f2d.cf.03_preserve_unaffected_green_background_result",
+          "osw_green_6f2d.cf.04_verify_closure_green_background_result"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "osw_state_reconciliation_6f2dfbe1f4.event.receipt",
+          "osw_state_reconciliation_6f2dfbe1f4.event.probes",
+          "osw_state_reconciliation_6f2dfbe1f4.closure",
+          "osw_state_reconciliation_6f2dfbe1f4.source.pin",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.identity",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.official_score",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.native_evidence",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.task_assertion",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.canvas",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.green_rgb",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.object_preserved",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.background_only",
+          "osw_state_reconciliation_6f2dfbe1f4.osworld.green_evaluator"
+        ],
+        "workstream_validators": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "f9ca288cb563844efab539bff4912c33a227d9fa0ba1733f26c5261ffc85fb02",
+        "task_id": "osworld:gimp:734d6579-c07d-47a8-9ae2-13339795476b",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "case_id": "mab-dependency-unblock-19d693bd13",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_invasive_species_scope_added",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_stored_health_wi"
+        ]
+      },
+      "id": "01_classify_scope_delta",
+      "must_still_pass": [],
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_dependency_unblock_19d693bd13.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_stored_health_wi"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_invasive_species_scope_added",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_stored_health_wi"
+        ]
+      },
+      "id": "02_revise_affected",
+      "must_still_pass": [],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_19d693bd13.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.replace_stored_health_wi"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_invasive_species_scope_added",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_stored_health_wi"
+        ]
+      },
+      "id": "03_preserve_unaffected",
+      "must_still_pass": [],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_19d693bd13.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.replace_stored_health_wi"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_invasive_species_scope_added",
+      "forbidden_behavior": "Do not ignore, over-apply, or falsely close invasive_species_scope_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_stored_health_wi"
+        ]
+      },
+      "id": "04_verify_closure",
+      "must_still_pass": [],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_19d693bd13.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.replace_stored_health_wi"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.replace_stored_health_wi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.apply_population_resourc"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.add_mutations_for_increa"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.verify_repeated_state_an"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.replace_stored_health_wi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.apply_population_resourc",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.add_mutations_for_increa",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.verify_repeated_state_an",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.replace_stored_health_wi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.apply_population_resourc",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.add_mutations_for_increa",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.verify_repeated_state_an",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.replace_stored_health_wi",
+      "req.02.apply_population_resourc",
+      "req.03.add_mutations_for_increa",
+      "req.04.verify_repeated_state_an",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "An invasive-species alert adds containment and resource dependencies; revise affected simulation scope while preserving habitats, collaboration, and history.",
+    "before_state": "A provisional EcoSphere Manager result exists before invasive_species_scope_added.",
+    "event_id": "evt.mab-dependency-unblock-19d693bd13.invasive_species_scope_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Replace stored health with the returned derived score.",
+      "id": "req.01.replace_stored_health_wi",
+      "observable_probe": "mab_dependency_unblock_1.sem.01.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for replace_stored_health_with_the_retur"
+    },
+    {
+      "description": "Apply population, resource, and environmental deltas atomically each tick.",
+      "id": "req.02.apply_population_resourc",
+      "observable_probe": "mab_dependency_unblock_1.sem.02.the_requested_program_passes",
+      "public_evidence": "source instruction and workstream result for apply_population_resource_and_enviro"
+    },
+    {
+      "description": "Add mutations for increased pollution and reduced food capacity.",
+      "id": "req.03.add_mutations_for_increa",
+      "observable_probe": "mab_dependency_unblock_1.sem.03.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for add_mutations_for_increased_pollutio"
+    },
+    {
+      "description": "Verify repeated state-and-seed inputs produce identical tick results.",
+      "id": "req.04.verify_repeated_state_an",
+      "observable_probe": "mab_dependency_unblock_1.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for verify_repeated_state_and_seed_input"
+    }
+  ]
+}

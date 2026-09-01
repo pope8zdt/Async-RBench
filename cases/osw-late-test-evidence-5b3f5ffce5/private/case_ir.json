@@ -1,0 +1,244 @@
+{
+  "case_id": "osw-late-test-evidence-5b3f5ffce5",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "01_classify_authority_tetris_rotation_test_result",
+      "forbidden_behavior": "Do not skip classify_authority, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_tetris_5b3f.cf.01_classify_authority_tetris_rotation_test_result",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_late_test_evidence_5b3f5ffce5.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for tetris_rotation_test_result; preserve already-confirmed source-native state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.project_identity"
+    },
+    {
+      "critical": false,
+      "decision_group": "02_revise_affected_tetris_rotation_test_result",
+      "forbidden_behavior": "Do not skip revise_affected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_tetris_5b3f.cf.02_revise_affected_tetris_rotation_test_result",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_5b3f5ffce5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for tetris_rotation_test_result; preserve already-confirmed source-native state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.test_suite_identity"
+    },
+    {
+      "critical": false,
+      "decision_group": "03_preserve_unaffected_tetris_rotation_test_result",
+      "forbidden_behavior": "Do not skip preserve_unaffected, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_tetris_5b3f.cf.03_preserve_unaffected_tetris_rotation_test_result",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "osw_late_test_evidence_5b3f5ffce5.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected for tetris_rotation_test_result; preserve already-confirmed source-native state.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.boundary_rotation"
+    },
+    {
+      "critical": true,
+      "decision_group": "04_verify_closure_tetris_rotation_test_result",
+      "forbidden_behavior": "Do not skip verify_closure, treat partial evidence as final, retain displaced state, or invent evaluator values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "upstream_worker_01",
+          "upstream_worker_02",
+          "upstream_worker_03",
+          "upstream_worker_04"
+        ]
+      },
+      "id": "osw_tetris_5b3f.cf.04_verify_closure_tetris_rotation_test_result",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_late_test_evidence_5b3f5ffce5.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure for tetris_rotation_test_result; preserve already-confirmed source-native state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.collision_handling"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.project_identity"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.test_suite_identity"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.boundary_rotation"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.collision_handling"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.project_identity",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.test_suite_identity",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.boundary_rotation",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.collision_handling",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.project_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.test_suite_identity",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.boundary_rotation",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.collision_handling",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.project_identity",
+      "req.02.test_suite_identity",
+      "req.03.boundary_rotation",
+      "req.04.collision_handling",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The delayed test worker confirms the official test function returns true and rotations at both horizontal boundaries remain non-intersecting by reverting or safely repositioning invalid rotations.",
+    "before_state": "The Tetris project is editable and the wall-rotation failure can be reproduced, but the private official test result arrives only after a candidate fix is persisted.",
+    "event_id": "evt.osw_late_test_evidence_5b3f5ffce5.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "The official four-file Tetris source set is the audited project.",
+      "id": "req.01.project_identity",
+      "observable_probe": "osw_late_test_evidence_5b3f5ffce5.osworld.project_identity",
+      "public_evidence": "source instruction and task-specific project_identity result"
+    },
+    {
+      "description": "The private official test.py digest and test entrypoint are exact.",
+      "id": "req.02.test_suite_identity",
+      "observable_probe": "osw_late_test_evidence_5b3f5ffce5.osworld.test_suite_identity",
+      "public_evidence": "source instruction and task-specific test_suite_identity result"
+    },
+    {
+      "description": "Rotations remain safe at both left and right walls.",
+      "id": "req.03.boundary_rotation",
+      "observable_probe": "osw_late_test_evidence_5b3f5ffce5.osworld.boundary_rotation",
+      "public_evidence": "source instruction and task-specific boundary_rotation result"
+    },
+    {
+      "description": "Invalid rotations are reverted or safely repositioned and the official test passes.",
+      "id": "req.04.collision_handling",
+      "observable_probe": "osw_late_test_evidence_5b3f5ffce5.osworld.collision_handling",
+      "public_evidence": "source instruction and task-specific collision_handling result"
+    }
+  ]
+}

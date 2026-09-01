@@ -1,0 +1,240 @@
+{
+  "case_id": "swe-dependency-unblock-16b0d42106",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta:req.01.add_or_invoke_a_program_",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add or invoke a program-wide FFI signature consistency check before LLVM declaration reuse.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.add_or_invoke_a_program_"
+        ]
+      },
+      "id": "01_classify_scope_delta_add_or_invoke_a_program_",
+      "must_still_pass": [],
+      "mutation_family": "under_invalidate",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "swe_dependency_unblock_16b0d42106.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "After receiving authoritative event 'A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.', perform classify_scope_delta for 'Add or invoke a program-wide FFI signature consistency check before LLVM declaration reuse.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.add_or_invoke_a_program_"
+    },
+    {
+      "critical": true,
+      "decision_group": "revise_affected:req.02.compare_return_parameter",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Compare return, parameter, and variadic components and emit a source diagnostic on mismatch.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.compare_return_parameter"
+        ]
+      },
+      "id": "02_revise_affected_compare_return_parameter",
+      "must_still_pass": [],
+      "mutation_family": "ignore_new_requirement",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_16b0d42106.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "After receiving authoritative event 'A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.', perform revise_affected for 'Compare return, parameter, and variadic components and emit a source diagnostic on mismatch.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.compare_return_parameter"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected:req.03.retain_successful_reuse_",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Retain successful reuse for identical declarations across packages.'.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.retain_successful_reuse_"
+        ]
+      },
+      "id": "03_preserve_unaffected_retain_successful_reuse_",
+      "must_still_pass": [],
+      "mutation_family": "over_invalidate",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_16b0d42106.event.probes"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "After receiving authoritative event 'A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.', perform preserve_unaffected for 'Retain successful reuse for identical declarations across packages.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.retain_successful_reuse_"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure:req.04.add_multi_package_compil",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Add multi-package compiler tests for identical and independently varied incompatible signatures.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_multi_package_compil"
+        ]
+      },
+      "id": "04_verify_closure_add_multi_package_compil",
+      "must_still_pass": [],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_16b0d42106.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "After receiving authoritative event 'A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.', perform verify_closure for 'Add multi-package compiler tests for identical and independently varied incompatible signatures.' and preserve valid source behavior already established before delivery.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_multi_package_compil"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.add_or_invoke_a_program_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.compare_return_parameter"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.retain_successful_reuse_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.add_multi_package_compil"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.add_or_invoke_a_program_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.compare_return_parameter",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.retain_successful_reuse_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.add_multi_package_compil",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.add_or_invoke_a_program_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.compare_return_parameter",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.retain_successful_reuse_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.add_multi_package_compil",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.add_or_invoke_a_program_",
+      "req.02.compare_return_parameter",
+      "req.03.retain_successful_reuse_",
+      "req.04.add_multi_package_compil",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A compiler representation audit expands FFI validation from package-local declarations to program-wide external symbols and internal ABI collisions.",
+    "before_state": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+    "event_id": "evt.swe_dependency_unblock_16b0d42106.program_wide_ffi_scope_delta",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Add or invoke a program-wide FFI signature consistency check before LLVM declaration reuse.",
+      "id": "req.01.add_or_invoke_a_program_",
+      "observable_probe": "swe_dependency_unblock_1.sem.01.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for add_or_invoke_a_program_wide_ffi_sig"
+    },
+    {
+      "description": "Compare return, parameter, and variadic components and emit a source diagnostic on mismatch.",
+      "id": "req.02.compare_return_parameter",
+      "observable_probe": "swe_dependency_unblock_1.sem.02.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for compare_return_parameter_and_variadi"
+    },
+    {
+      "description": "Retain successful reuse for identical declarations across packages.",
+      "id": "req.03.retain_successful_reuse_",
+      "observable_probe": "swe_dependency_unblock_1.sem.03.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for retain_successful_reuse_for_identica"
+    },
+    {
+      "description": "Add multi-package compiler tests for identical and independently varied incompatible signatures.",
+      "id": "req.04.add_multi_package_compil",
+      "observable_probe": "swe_dependency_unblock_1.sem.04.the_repaired_repository_pass",
+      "public_evidence": "source instruction and workstream result for add_multi_package_compiler_tests_for"
+    }
+  ]
+}

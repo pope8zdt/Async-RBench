@@ -1,0 +1,92 @@
+{
+  "version": "4",
+  "checks": [
+    {
+      "id": "sm.cf.wait_authority",
+      "gate": "wait_for_authority",
+      "dimension": "event_intake",
+      "gate_args": {
+        "artifacts": [
+          "saved_list_artifact"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sm.closure.final_saved_closure",
+        "sm.closure.wait_for_window_closed"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sm.cf.reject_late_stale",
+      "gate": "reject_late_stale",
+      "dimension": "state_revision",
+      "gate_args": {
+        "artifacts": [
+          "saved_list_artifact"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sm.eval.decoys_ignored",
+        "sm.notify.no_message_other_decoys"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "supporting",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sm.cf.cancel_stale_monitor",
+      "gate": "timely_cancellation",
+      "dimension": "plan_revision",
+      "gate_args": {
+        "workstreams": [
+          "action_planner"
+        ]
+      },
+      "outcome_anchors": [
+        "sm.notify.no_message_lofts",
+        "sm.eval.matching_events_acted"
+      ],
+      "critical": false,
+      "measurement_type": "control",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct",
+      "execution_modes": [
+        "async"
+      ]
+    },
+    {
+      "id": "sm.cf.rederive_authority",
+      "gate": "rederive_from_authority",
+      "dimension": "closure",
+      "gate_args": {
+        "artifacts": [
+          "saved_list_artifact"
+        ],
+        "workstreams": []
+      },
+      "outcome_anchors": [
+        "sm.closure.final_saved_closure",
+        "sm.closure.notifications_match_additions"
+      ],
+      "critical": true,
+      "measurement_type": "control",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "supporting",
+      "execution_modes": [
+        "async"
+      ]
+    }
+  ]
+}

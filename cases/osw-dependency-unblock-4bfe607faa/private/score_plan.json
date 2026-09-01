@@ -1,0 +1,302 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_open_the_returned_catalog_st",
+      "dimension": "event_intake",
+      "event_id": "evt.osw_dependency_unblock_4.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.open_the_returned_catalo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform classify_authority for 'Open the returned catalog state or reproduce its filters.' while retaining valid prior result 'The NBA Store is opened.'.",
+      "forbidden_behavior": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The NBA Store is opened.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_the_returned_catalo"
+        ]
+      },
+      "id": "osw_nba_9.cf.01_classify_authority_open_the_returned_",
+      "independence_key": "osw_nba_9.cf.01_classify_authority_open_the_returned_",
+      "measurement_type": "control",
+      "mutation_id": "osw_nba_9.mutation.01_classify_authority_open_the_returned_",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_dependency_unblock_4bfe607faa.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.open_the_returned_catalo"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_verify_women_nike_and_jersey",
+      "dimension": "state_revision",
+      "event_id": "evt.osw_dependency_unblock_4.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.01.open_the_returned_catalo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform revise_affected for 'Verify Women, Nike, and Jerseys filters are active.' while retaining valid prior result 'Navigation reaches the women's or jerseys catalog without selecting unverified products.'.",
+      "forbidden_behavior": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Navigation reaches the women's or jerseys catalog without selecting unverified products.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_the_returned_catalo"
+        ]
+      },
+      "id": "osw_nba_9.cf.02_revise_affected_verify_women_nike_",
+      "independence_key": "osw_nba_9.cf.02_revise_affected_verify_women_nike_",
+      "measurement_type": "control",
+      "mutation_id": "osw_nba_9.mutation.02_revise_affected_verify_women_nike_",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_dependency_unblock_4bfe607faa.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.open_the_returned_catalo"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_set_the_lower_price_bound_so",
+      "dimension": "closure",
+      "event_id": "evt.osw_dependency_unblock_4.delayed_authoritative_re",
+      "evidence_group": "osw_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.open_the_returned_catalo"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'A catalog worker returns the task-specific filtered catalog URL or filter state for gender Women, brand Nike, product type Jerseys, and prices strictly above $60.', perform verify_closure for 'Set the lower price bound so $60 items are excluded.' while retaining valid prior result 'The NBA Store is opened.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The NBA Store is opened.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.open_the_returned_catalo"
+        ]
+      },
+      "id": "osw_nba_9.cf.03_verify_closure_set_the_lower_pric",
+      "independence_key": "osw_nba_9.cf.03_verify_closure_set_the_lower_pric",
+      "measurement_type": "control",
+      "mutation_id": "osw_nba_9.mutation.03_verify_closure_set_the_lower_pric",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_dependency_unblock_4bfe607faa.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.open_the_returned_catalo"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not handle classify_authority by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The NBA Store is opened.'.",
+      "family": "wait_for_authority",
+      "id": "osw_nba_9.mutation.01_classify_authority_open_the_returned_",
+      "may_fail": [],
+      "must_fail": [
+        "osw_nba_9.cf.01_classify_authority_open_the_returned_"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_4bfe607faa.source.pin"
+      ],
+      "targets": [
+        "osw_nba_9.cf.01_classify_authority_open_the_returned_",
+        "osw_dependency_unblock_4bfe607faa.event.receipt",
+        "osw_dependency_unblock_4bfe607faa.event.probes",
+        "osw_dependency_unblock_4bfe607faa.closure",
+        "osw_dependency_unblock_4bfe607faa.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle revise_affected by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Navigation reaches the women's or jerseys catalog without selecting unverified products.'.",
+      "family": "resolve_authority",
+      "id": "osw_nba_9.mutation.02_revise_affected_verify_women_nike_",
+      "may_fail": [],
+      "must_fail": [
+        "osw_nba_9.cf.02_revise_affected_verify_women_nike_"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_4bfe607faa.source.pin"
+      ],
+      "targets": [
+        "osw_nba_9.cf.02_revise_affected_verify_women_nike_",
+        "osw_dependency_unblock_4bfe607faa.event.receipt",
+        "osw_dependency_unblock_4bfe607faa.event.probes",
+        "osw_dependency_unblock_4bfe607faa.closure",
+        "osw_dependency_unblock_4bfe607faa.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'The NBA Store is opened.'.",
+      "family": "rederive_from_authority",
+      "id": "osw_nba_9.mutation.03_verify_closure_set_the_lower_pric",
+      "may_fail": [],
+      "must_fail": [
+        "osw_nba_9.cf.03_verify_closure_set_the_lower_pric"
+      ],
+      "must_still_pass": [
+        "osw_dependency_unblock_4bfe607faa.source.pin"
+      ],
+      "targets": [
+        "osw_nba_9.cf.03_verify_closure_set_the_lower_pric",
+        "osw_dependency_unblock_4bfe607faa.event.receipt",
+        "osw_dependency_unblock_4bfe607faa.event.probes",
+        "osw_dependency_unblock_4bfe607faa.closure",
+        "osw_dependency_unblock_4bfe607faa.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The event receipt is authentic and bound to the real OSWorld task.",
+      "id": "osw_dependency_unblock_4bfe607faa.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The delayed OSWorld evidence producer completed with observable probes.",
+      "id": "osw_dependency_unblock_4bfe607faa.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and records source-semantic reverification.",
+      "id": "osw_dependency_unblock_4bfe607faa.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The case remains bound to its pinned OSWorld source task.",
+      "id": "osw_dependency_unblock_4bfe607faa.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native result is bound to osworld:chrome:9f3f70fc-5afc-4958-a7b7-3bb4fcb01805 and check_url_and_content_include.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The official OSWorld evaluator score is exactly 1.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The native evidence digest matches the evaluator-owned fixture.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": false,
+      "description": "The final catalog state is Women's Nike Jerseys with a lower price bound strictly above $60.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The final NBA Store women's Nike jerseys state satisfies its task-specific OSWorld invariant.",
+      "id": "osw_dependency_unblock_4bfe607faa.osworld.state",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_nike_womens_jersey_filter_state",
+      "relevance_tier": "base"
+    }
+  ]
+}

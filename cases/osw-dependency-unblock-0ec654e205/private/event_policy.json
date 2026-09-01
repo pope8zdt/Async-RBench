@@ -1,0 +1,30 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_dependency_unblock_0ec654e205.delayed_authoritative_result",
+  "authority_rule": "Delayed first_paragraph_sentence_boundaries is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_dependency_unblock_0ec654e205.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "The source document and later paragraphs can be preserved, but exact first-paragraph sentence boundaries and empty-line insertion points are pending.",
+    "after_state": "The Writer analysis returns seven first-paragraph sentences and six required between-sentence empty paragraphs while preserving the remaining 27 source paragraphs.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.source_identity",
+      "req.03.sentence_boundaries",
+      "final_state"
+    ]
+  }
+}

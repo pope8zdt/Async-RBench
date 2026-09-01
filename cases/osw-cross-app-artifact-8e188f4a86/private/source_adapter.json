@@ -1,0 +1,43 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:3680a5ee-6870-426a-a997-eba929a0d25c",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/3680a5ee-6870-426a-a997-eba929a0d25c.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "libreoffice_calc snapshot",
+      "private source assets",
+      "private native fixture",
+      "private event payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "terminal",
+      "libreoffice_calc",
+      "xlsx_ods",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:3680a5ee-6870-426a-a997-eba929a0d25c in pinned libreoffice_calc; evaluator truth remains private.",
+    "event_injection": "Release cli_column_merge only after 3 persisted upstream result(s).",
+    "hidden_tests": "check_include_exclude+compare_csv, native digest, row_counts, boundaries, order, output_path, terminal_calc, accepted_variant, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "libreoffice_calc",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private cli_column_merge_osworld.sh binds check_include_exclude+compare_csv.",
+    "requires_authored_private_oracle": false
+  }
+}

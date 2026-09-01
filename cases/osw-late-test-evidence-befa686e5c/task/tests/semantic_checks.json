@@ -1,0 +1,145 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic case-bound asynchronous receipt.",
+      "id": "osw_late_test_evidence_befa686e5c.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "All 4 task-specific upstream workers completed with observable probes.",
+      "id": "osw_late_test_evidence_befa686e5c.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_workers_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Closure consumes the exact receipt and reverifies the source-native result.",
+      "id": "osw_late_test_evidence_befa686e5c.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned OSWorld source identity is preserved through receipt and closure.",
+      "id": "osw_late_test_evidence_befa686e5c.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Bound to osworld:multi_apps:26150609-0da3-4a7d-8868-0faf9c5f01bb and check_python_file_by_test_suite.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.identity",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Official evaluator score equals one.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.official_score",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Native evidence digest matches the private official-source fixture.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.native_evidence",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Food spawn coordinates are 10-pixel grid aligned and in bounds, so the Snake can reach food and the official OSWorld test suite passes.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.task_assertion",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The fix honors the 10-pixel Snake movement grid.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.grid_size",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_grid_size",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Food initialization is grid aligned.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.initial_spawn",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_initial_spawn",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Food respawn remains grid aligned and in bounds.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.respawn",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_respawn",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The Snake can reach the Food position.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.snake_reaches_food",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_snake_reaches_food",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The bound official Python test suite passes.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.official_test",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_official_test",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The repair is localized to food.py semantics.",
+      "id": "osw_late_test_evidence_befa686e5c.osworld.fixed_file",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_fixed_file",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.persist_the_provisional_orde",
+      "req.02.add_the_120_unit_and_assorte",
+      "req.03.revise_price_and_replacement",
+      "req.04.close_with_the_capacity_resu",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Capacity planning adds a 120-shirt minimum, assorted youth size run, $16.50 price, and 30-day defect replacement condition.",
+    "before_state": "A provisional Boys' First Light Youth Short Sleeve Shirt bargain exists before size_run_capacity_constraint_added.",
+    "event_id": "evt.mab-late-constraint-53ea21919b.size_run_capacity_constraint_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-53ea21919b.size_run_capacity_constraint_added",
+  "forbidden_shortcut": "Do not ignore the event, retain superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_scope_delta",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "task_scope_or_dependency_change"
+}

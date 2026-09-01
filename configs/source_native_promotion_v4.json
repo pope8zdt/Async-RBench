@@ -1,0 +1,39 @@
+{
+  "schema_version": "source-native-promotion-policy-v4",
+  "unit_of_analysis": "matched case-model-seed",
+  "execution_modes": ["react", "linear", "async"],
+  "shared_primary_score": "unchanged source-native evaluator result",
+  "development_case_gates": {
+    "official_source_binding": true,
+    "participant_evaluator_isolation": true,
+    "linear_runtime_valid": true,
+    "linear_primary_score_minimum": 0.8,
+    "async_checkpoint_revision_must_differ_from_reset": true,
+    "async_event_must_be_delivered_after_checkpoint": true,
+    "async_final_native_evaluator_must_run": true,
+    "mechanistic_failure_trace_required_when_async_is_lower": true
+  },
+  "experimental_design": {
+    "minimum_models": 2,
+    "minimum_repeats_per_mode": 3,
+    "randomize_mode_order": true,
+    "same_model_prompt_budget_and_native_evaluator": true,
+    "development_models_may_select_cases": true,
+    "held_out_confirmation_models_must_not_select_cases": true
+  },
+  "collection_claim_gates": {
+    "paired_valid_episode_rate_minimum": 0.95,
+    "mean_linear_minus_async_minimum": 0.1,
+    "bootstrap_confidence_level": 0.95,
+    "bootstrap_lower_bound_must_exceed": 0.0,
+    "minimum_async_lower_case_fraction": 0.5
+  },
+  "invalid_episode_policy": {
+    "environment_setup_failure": "exclude_and_report_as_infrastructure_failure",
+    "evaluator_not_run": "exclude_and_report_as_infrastructure_failure",
+    "event_not_delivered": "exclude_and_report_as_protocol_failure",
+    "checkpoint_unchanged": "exclude_and_report_as_protocol_failure",
+    "never_impute_zero_for_unscored_episode": true
+  },
+  "release_rule": "A case is not benchmark-ready from static preflight alone; collection claims require preregistered paired native execution."
+}

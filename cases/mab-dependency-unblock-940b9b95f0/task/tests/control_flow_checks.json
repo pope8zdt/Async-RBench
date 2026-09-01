@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_failure_apply_snapshot_freshness_and",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.classify_failure",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.apply_snapshot_freshness"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Data specialist returns a normalized timestamped snapshot for traffic speeds, transit delays, and weather restrictions plus deterministic leg-cost adjustments.', perform classify_failure for 'Apply snapshot freshness and normalized cost adjustments to candidate legs.' while retaining valid prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "forbidden_behavior": "Do not handle classify_failure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_snapshot_freshness"
+        ]
+      },
+      "id": "mab_code15_matp.cf.01_classify_failure_apply_snapshot_fre",
+      "independence_key": "mab_code15_matp.cf.01_classify_failure_apply_snapshot_fre",
+      "measurement_type": "control",
+      "mutation_id": "mab_code15_matp.mutation.01_classify_failure_apply_snapshot_fre",
+      "obligation": "classify_failure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_940b9b95f0.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_failure:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.apply_snapshot_freshness"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "recover_or_redelegate_recompute_all_three_route_ra",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.recover_or_redelegate",
+      "evidence_spec": {
+        "primary_fact": "failure_recovery",
+        "subject": "req.01.apply_snapshot_freshness"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Data specialist returns a normalized timestamped snapshot for traffic speeds, transit delays, and weather restrictions plus deterministic leg-cost adjustments.', perform recover_or_redelegate for 'Recompute all three route rankings and selected-route details.' while retaining valid prior result 'Candidate legs currently use static travel times and costs.'.",
+      "forbidden_behavior": "Do not handle recover_or_redelegate by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Candidate legs currently use static travel times and costs.'.",
+      "gate": "recover_failed_work",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_snapshot_freshness"
+        ]
+      },
+      "id": "mab_code15_matp.cf.02_recover_or_redelegate_recompute_all_thre",
+      "independence_key": "mab_code15_matp.cf.02_recover_or_redelegate_recompute_all_thre",
+      "measurement_type": "control",
+      "mutation_id": "mab_code15_matp.mutation.02_recover_or_redelegate_recompute_all_thre",
+      "obligation": "recover_or_redelegate",
+      "outcome_anchors": [
+        "mab_dependency_unblock_940b9b95f0.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:recover_or_redelegate:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.apply_snapshot_freshness"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_add_mutations_for_a_transit_",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "evidence_group": "mab_dependency_unb.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.01.apply_snapshot_freshness"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "For event 'Data specialist returns a normalized timestamped snapshot for traffic speeds, transit delays, and weather restrictions plus deterministic leg-cost adjustments.', perform verify_closure for 'Add mutations for a transit delay and severe cycling weather.' while retaining valid prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'User preferences and fastest, cheapest, and greenest route-ranking scaffolds are implemented.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.apply_snapshot_freshness"
+        ]
+      },
+      "id": "mab_code15_matp.cf.03_verify_closure_add_mutations_for_",
+      "independence_key": "mab_code15_matp.cf.03_verify_closure_add_mutations_for_",
+      "measurement_type": "control",
+      "mutation_id": "mab_code15_matp.mutation.03_verify_closure_add_mutations_for_",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_940b9b95f0.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.apply_snapshot_freshness"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
+      "event_theme": "child_failure_or_implicit_error",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Data specialist returns a normalized timestamped snapshot for traffic speeds, transit delays, and weather restrictions plus deterministic leg-cost adjustments.",
+        "before": "Normalized real-time conditions arrive after route options have been ranked using static costs.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

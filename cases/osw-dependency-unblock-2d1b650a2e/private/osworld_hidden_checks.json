@@ -1,0 +1,29 @@
+{
+  "minimum_official_score": 1.0,
+  "required_semantic_checks": [
+    "official_metric_01",
+    "persisted_target_state",
+    "post_event_reverification"
+  ],
+  "checks": [
+    {
+      "id": "official_metric_01",
+      "kind": "official_osworld_metric",
+      "metric": "is_in_list",
+      "expected": {
+        "type": "rule",
+        "rules": {
+          "expected": "/home/user/Desktop/helloExtension"
+        }
+      }
+    },
+    {
+      "id": "persisted_target_state",
+      "kind": "checkpoint_state_digest"
+    },
+    {
+      "id": "post_event_reverification",
+      "kind": "event_to_evaluator_order"
+    }
+  ]
+}

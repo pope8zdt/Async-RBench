@@ -1,0 +1,43 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:510f64c8-9bcc-4be1-8d30-638705850618",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/510f64c8-9bcc-4be1-8d30-638705850618.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "vscode snapshot",
+      "private source assets",
+      "private native fixture",
+      "private event payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "terminal",
+      "vscode",
+      "vscode_extension",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:510f64c8-9bcc-4be1-8d30-638705850618 in pinned vscode; evaluator truth remains private.",
+    "event_injection": "Release terminal_vscode_project only after 3 persisted upstream result(s).",
+    "hidden_tests": "check_include_exclude+compare_config, native digest, project_path, project_assets, terminal_history, open_project_probe, vscode_state, official_checks, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "vscode",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private terminal_vscode_project_osworld.sh binds check_include_exclude+compare_config.",
+    "requires_authored_private_oracle": false
+  }
+}

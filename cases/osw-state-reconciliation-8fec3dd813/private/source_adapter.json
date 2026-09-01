@@ -1,0 +1,44 @@
+{
+  "benchmark": "OSWorld",
+  "source_task_id": "osworld:multi_apps:48c46dc7-fe04-4505-ade7-723cba1aa6f6",
+  "participant_source": "task/task_file/participant_task.json",
+  "private_source_manifests": [
+    {
+      "source": "upstream/osworld/evaluation_examples/examples/multi_apps/48c46dc7-fe04-4505-ade7-723cba1aa6f6.json",
+      "private_copy": "private/source_manifests/01-native_case.json"
+    },
+    {
+      "source": "pinned official OSWorld task",
+      "private_copy": "private/official_task.json"
+    }
+  ],
+  "runtime_plan": {
+    "assets": [
+      "official task configuration",
+      "chrome snapshot",
+      "private source assets",
+      "private native fixture",
+      "private event payload"
+    ],
+    "docker": [
+      "OSWorld desktop runtime",
+      "nautilus",
+      "gnome-terminal",
+      "chrome",
+      "evaluator/event sidecars"
+    ],
+    "environment_strategy": "Run osworld:multi_apps:48c46dc7-fe04-4505-ade7-723cba1aa6f6 in pinned chrome; evaluator truth remains private.",
+    "event_injection": "Release workspace_window_and_tab_state only after 3 persisted upstream result(s).",
+    "hidden_tests": "check_list+is_expected_tabs, native digest, project_archive, nautilus_window, terminal_window, chrome_tabs, receipt lineage, closure.",
+    "missing_environment_is_reconstructable": true,
+    "native_runtime_ref": {
+      "adapter": "osworld.DesktopEnv",
+      "snapshot": "chrome",
+      "provider": "vmware_or_docker",
+      "final_state": "persisted VM state"
+    },
+    "oracle": "Private workspace_setup_osworld.sh scores check_list+is_expected_tabs.",
+    "requires_authored_private_oracle": false
+  }
+}
+

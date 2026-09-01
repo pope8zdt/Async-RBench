@@ -1,0 +1,6 @@
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-late-constraint-efb76e596e';SOURCE_ID='bargaining:013';EVENT='delivery_margin_tiers_countered';THEME='late_or_out_of_order_superseded_result';AUTHORITY={'unit_price': 91.0, 'delivery_business_days': 4, 'written_confirmation': True, 'tier_rejected': {'unit_price': 84.0, 'delivery_business_days': 14}}
+def dg(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+def main():
+ a=argparse.ArgumentParser();a.add_argument('--output',default='/app/output_data/event_receipt.json');x=a.parse_args();st=time.time();probes={p:dg(p) for p in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']};d={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':THEME,'meaning':'A current seller counter offers $91 with four-business-day delivery or $84 with fourteen-day delivery; the stale low-price urgent draft must not be finalized.','authority':AUTHORITY,'worker_started_at':st,'worker_finished_at':time.time(),'worker_exit_code':0,'probes':probes};d['receipt_sha256']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest();pathlib.Path(x.output).write_text(json.dumps(d,sort_keys=True)+'\n')
+if __name__=='__main__':main()

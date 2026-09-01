@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-dependency-unblock-284a3e6eea",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_holistic_dependency_contract_c",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_dietary_preference"
+        ]
+      },
+      "id": "01_classify_authority_holistic_dependency",
+      "must_still_pass": [
+        "mab_dependency_unblock_284a3e6eea.source.preservation"
+      ],
+      "mutation_family": "classify_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_284a3e6eea.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority: A delayed dependency contract unblocks the required diet-to-exercise-to-mental-health chain while preserving nutrition, workout, mood, and activity history.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_dietary_preference"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_holistic_dependency_contract_c",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_personalized_worko"
+        ]
+      },
+      "id": "02_revise_affected_holistic_dependency",
+      "must_still_pass": [
+        "mab_dependency_unblock_284a3e6eea.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_284a3e6eea.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A delayed dependency contract unblocks the required diet-to-exercise-to-mental-health chain while preserving nutrition, workout, mood, and activity history.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_personalized_worko"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_holistic_dependency_contract_c",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close holistic_dependency_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_mood_tracking_medi"
+        ]
+      },
+      "id": "03_verify_closure_holistic_dependency",
+      "must_still_pass": [
+        "mab_dependency_unblock_284a3e6eea.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_284a3e6eea.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure: A delayed dependency contract unblocks the required diet-to-exercise-to-mental-health chain while preserving nutrition, workout, mood, and activity history.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_mood_tracking_medi"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.implement_dietary_preference"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.implement_personalized_worko"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.implement_mood_tracking_medi"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_delayed_holist"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.implement_dietary_preference",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.implement_personalized_worko",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.implement_mood_tracking_medi",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_delayed_holist",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.implement_dietary_preference",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.implement_personalized_worko",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.implement_mood_tracking_medi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_delayed_holist",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.implement_dietary_preference",
+      "req.02.implement_personalized_worko",
+      "req.03.implement_mood_tracking_medi",
+      "req.04.integrate_the_delayed_holist",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "Diet state feeds exercise, both feed mental health, and all completed activity remains preserved.",
+    "before_state": "The three wellness modules are defined but their authoritative data dependencies are not yet available.",
+    "event_id": "evt.mab_dependency_unblock_284a.holistic_dependency_contract_completed",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Implement dietary preferences, restrictions, goals, weekly meal plans, and nutrition tracking.",
+      "id": "req.01.implement_dietary_preference",
+      "observable_probe": "mab_dependency_unblock_284a3e6eea.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Implement personalized workout schedules and videos derived from diet and nutrition.",
+      "id": "req.02.implement_personalized_worko",
+      "observable_probe": "mab_dependency_unblock_284a3e6eea.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Implement mood tracking, meditation, and stress support derived from diet and exercise state.",
+      "id": "req.03.implement_mood_tracking_medi",
+      "observable_probe": "mab_dependency_unblock_284a3e6eea.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the delayed holistic dependency contract and reverify the end-to-end wellness plan.",
+      "id": "req.04.integrate_the_delayed_holist",
+      "observable_probe": "mab_dependency_unblock_284a3e6eea.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

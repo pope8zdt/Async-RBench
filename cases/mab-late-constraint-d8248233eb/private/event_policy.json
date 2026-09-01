@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.keep_the_provisional_price_s",
+      "req.02.validate_the_two_piece_scope",
+      "req.03.revise_price_and_contract_du",
+      "req.04.close_with_one_receipt_bound",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The service desk confirms a two-piece set at $7.50, a 24-month warranty, two-business-day support, and a 12-month purchasing contract.",
+    "before_state": "A provisional Two-Piece Keychain Set bargain exists before warranty_contract_terms_delivered.",
+    "event_id": "evt.mab-late-constraint-d8248233eb.warranty_contract_terms_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-d8248233eb.warranty_contract_terms_delivered",
+  "forbidden_shortcut": "Do not ignore the event, retain invalid state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

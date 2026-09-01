@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority:req.01.replace_structural_compa",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_4b1feb8a91.dimension_equivalence_authority_result",
+      "evidence_group": "swe_dependency__7a0f94:classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.replace_structural_compa"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform classify_authority for 'Replace structural comparison with the identified equivalence predicate.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Replace structural comparison with the identified equivalence predicate.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.replace_structural_compa"
+        ]
+      },
+      "id": "swe_dependency__7a0f94.cf.01_classify_authority_replace_structural_compa",
+      "independence_key": "swe_dependency__7a0f94.cf.01_classify_authority_replace_structural_compa",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__7a0f94.mutation.01_classify_authority_replace_structural_compa",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4b1feb8a91.event.receipt"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.replace_structural_compa"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "revise_affected:req.02.verify_acceleration_time",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_4b1feb8a91.dimension_equivalence_authority_result",
+      "evidence_group": "swe_dependency__7a0f94:revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.verify_acceleration_time"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform revise_affected for 'Verify acceleration*time and velocity add successfully.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Verify acceleration*time and velocity add successfully.'.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.verify_acceleration_time"
+        ]
+      },
+      "id": "swe_dependency__7a0f94.cf.02_revise_affected_verify_acceleration_time",
+      "independence_key": "swe_dependency__7a0f94.cf.02_revise_affected_verify_acceleration_time",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__7a0f94.mutation.02_revise_affected_verify_acceleration_time",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4b1feb8a91.event.probes"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.verify_acceleration_time"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "critical": true,
+      "decision_group": "verify_closure:req.03.verify_incompatible_dime",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_4b1feb8a91.dimension_equivalence_authority_result",
+      "evidence_group": "swe_dependency__7a0f94:verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.verify_incompatible_dime"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After receiving authoritative event 'An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.', perform verify_closure for 'Verify incompatible dimensions still raise ValueError.' and preserve valid source behavior already established before delivery.",
+      "forbidden_behavior": "Do not ignore the event, retain displaced provisional assumptions, or alter unaffected source behavior while handling 'Verify incompatible dimensions still raise ValueError.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.verify_incompatible_dime"
+        ]
+      },
+      "id": "swe_dependency__7a0f94.cf.03_verify_closure_verify_incompatible_dime",
+      "independence_key": "swe_dependency__7a0f94.cf.03_verify_closure_verify_incompatible_dime",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__7a0f94.mutation.03_verify_closure_verify_incompatible_dime",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_4b1feb8a91.closure"
+      ],
+      "precondition": "The evaluator-owned authority delivery has crossed its declared arrival boundary.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.verify_incompatible_dime"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_02",
+      "event_id": "evt.swe_dependency_unblock_4b1feb8a91.dimension_equivalence_authority_result",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "An independent units audit returns the authoritative DimensionSystem equivalence predicate and compatible/incompatible comparison fixtures.",
+        "before": "A source-valid provisional implementation and preserved baseline facts have been persisted before independent evidence delivery.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

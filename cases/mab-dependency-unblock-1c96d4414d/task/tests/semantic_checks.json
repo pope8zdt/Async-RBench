@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The stale_analyst_edit_arrived receipt is authentic and bound to coding:019 and mab-dependency-unblock-1c96d4414d.",
+      "id": "mab_dependency_unblock_1c96d4414d.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned SportsTeamCollaborator event worker completes and records observable post-baseline probes.",
+      "id": "mab_dependency_unblock_1c96d4414d.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The stale analyst edit is rejected against the authoritative sequence while accepted uploads, metrics, collaboration, and role permissions remain intact.",
+      "id": "mab_dependency_unblock_1c96d4414d.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to the official MultiAgentBench source task coding:019.",
+      "id": "mab_dependency_unblock_1c96d4414d.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The submitted deliverable follows the official coding:019 solution.py output contract and emits the authoritative_collaboration_sequence evaluator closure schema.",
+      "id": "mab_dependency_unblock_1c96d4414d.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "SportsTeamCollaborator enforces team isolation, upload and report roles, player-specific metric access, accepted collaboration sequences, and stale-edit rejection.",
+      "id": "mab_dependency_unblock_1c96d4414d.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_upload_metric_and_stale_sequence_functionality",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Valid prior SportsTeamCollaborator work is preserved: team_isolation, match_uploads, player_metrics, role_permissions, accepted_collaboration.",
+      "id": "mab_dependency_unblock_1c96d4414d.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_preserves_team_isolation_and_role_permissions",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The stale analyst edit is rejected against the authoritative sequence while accepted uploads, metrics, collaboration, and role permissions remain intact.",
+      "id": "mab_dependency_unblock_1c96d4414d.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_sports_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ],
+  "version": "4"
+}

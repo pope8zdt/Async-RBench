@@ -1,0 +1,278 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_req_01_separate_coordinate_attr",
+      "dimension": "event_intake",
+      "event_id": "evt.swe_dependency_unblock_3fa1.delayed_authority",
+      "evidence_group": "bp_swe_3fa1.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.separate_coordinate_attr"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Treat the delayed provenance matrix as authority for xr.where keep_attrs behavior across every output object level.",
+      "forbidden_behavior": "Do not use the provisional where-level callable as the complete contract; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.separate_coordinate_attr"
+        ]
+      },
+      "id": "swe_dependency__a4ec16.cf.01_classify_authority_separate_coordinat",
+      "independence_key": "swe_dependency__a4ec16.cf.01_classify_authority_separate_coordinat",
+      "measurement_type": "control",
+      "mutation_family": "ignore_authority",
+      "mutation_id": "swe_dependency__a4ec16.mutation.01_classify_authority_separate_coordinat",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3fa1a02dd5.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "required_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Treat the delayed provenance matrix as authority for xr.where keep_attrs behavior across every output object level.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.separate_coordinate_attr"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_req_02_assert_preservation_of_c",
+      "dimension": "state_revision",
+      "event_id": "evt.swe_dependency_unblock_3fa1.delayed_authority",
+      "evidence_group": "bp_swe_3fa1.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.assert_preservation_of_c"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Revise result attribute restoration so coordinates retain coordinate attrs while Dataset, DataArray, and Variable attrs come from their corresponding source objects.",
+      "forbidden_behavior": "Do not copy data-variable attrs onto coordinates or ignore Dataset promotion; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.assert_preservation_of_c"
+        ]
+      },
+      "id": "swe_dependency__a4ec16.cf.02_revise_affected_assert_preservatio",
+      "independence_key": "swe_dependency__a4ec16.cf.02_revise_affected_assert_preservatio",
+      "measurement_type": "control",
+      "mutation_family": "retain_provisional",
+      "mutation_id": "swe_dependency__a4ec16.mutation.02_revise_affected_assert_preservatio",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3fa1a02dd5.event.probes"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Revise result attribute restoration so coordinates retain coordinate attrs while Dataset, DataArray, and Variable attrs come from their corresponding source objects.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.assert_preservation_of_c"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "verify_closure_req_03_run_where_tests_covering",
+      "dimension": "closure",
+      "event_id": "evt.swe_dependency_unblock_3fa1.delayed_authority",
+      "evidence_group": "bp_swe_3fa1.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.run_where_tests_covering"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Run test_where_attrs and focused computation keep_attrs regressions using the exact authority receipt.",
+      "forbidden_behavior": "Do not close from a single DataArray example without native regressions; preserve valid source-native behavior and consume the event receipt.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.run_where_tests_covering"
+        ]
+      },
+      "id": "swe_dependency__a4ec16.cf.03_verify_closure_run_where_tests_co",
+      "independence_key": "swe_dependency__a4ec16.cf.03_verify_closure_run_where_tests_co",
+      "measurement_type": "control",
+      "mutation_family": "skip_reverification",
+      "mutation_id": "swe_dependency__a4ec16.mutation.03_verify_closure_run_where_tests_co",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "swe_dependency_unblock_3fa1a02dd5.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "direct",
+      "required_behavior": "After event 'The delayed authoritative pytest result establishes distinct provenance for global, data-variable, promoted Dataset, and coordinate attributes and confirms the surrounding keep_attrs regressions.', Run test_where_attrs and focused computation keep_attrs regressions using the exact authority receipt.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.run_where_tests_covering"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not use the provisional where-level callable as the complete contract; preserve valid source-native behavior and consume the event receipt.",
+      "family": "wait_for_authority",
+      "id": "swe_dependency__a4ec16.mutation.01_classify_authority_separate_coordinat",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__a4ec16.cf.01_classify_authority_separate_coordinat"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_3fa1a02dd5.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__a4ec16.cf.01_classify_authority_separate_coordinat",
+        "swe_dependency_unblock_3fa1a02dd5.event.receipt",
+        "swe_dependency_unblock_3fa1a02dd5.event.probes",
+        "swe_dependency_unblock_3fa1a02dd5.closure",
+        "swe_dependency_unblock_3fa1a02dd5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not copy data-variable attrs onto coordinates or ignore Dataset promotion; preserve valid source-native behavior and consume the event receipt.",
+      "family": "resolve_authority",
+      "id": "swe_dependency__a4ec16.mutation.02_revise_affected_assert_preservatio",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__a4ec16.cf.02_revise_affected_assert_preservatio"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_3fa1a02dd5.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__a4ec16.cf.02_revise_affected_assert_preservatio",
+        "swe_dependency_unblock_3fa1a02dd5.event.receipt",
+        "swe_dependency_unblock_3fa1a02dd5.event.probes",
+        "swe_dependency_unblock_3fa1a02dd5.closure",
+        "swe_dependency_unblock_3fa1a02dd5.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not close from a single DataArray example without native regressions; preserve valid source-native behavior and consume the event receipt.",
+      "family": "rederive_from_authority",
+      "id": "swe_dependency__a4ec16.mutation.03_verify_closure_run_where_tests_co",
+      "may_fail": [],
+      "must_fail": [
+        "swe_dependency__a4ec16.cf.03_verify_closure_run_where_tests_co"
+      ],
+      "must_still_pass": [
+        "swe_dependency_unblock_3fa1a02dd5.source.pin"
+      ],
+      "targets": [
+        "swe_dependency__a4ec16.cf.03_verify_closure_run_where_tests_co",
+        "swe_dependency_unblock_3fa1a02dd5.event.receipt",
+        "swe_dependency_unblock_3fa1a02dd5.event.probes",
+        "swe_dependency_unblock_3fa1a02dd5.closure",
+        "swe_dependency_unblock_3fa1a02dd5.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "id": "swe_dependency_unblock_3fa1a02dd5.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The worker completed successfully and returned observable task-specific probes.",
+      "id": "swe_dependency_unblock_3fa1a02dd5.event.probes",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "direct"
+    },
+    {
+      "capability_target": "async_consistency_closure",
+      "category": "closure",
+      "critical": true,
+      "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "id": "swe_dependency_unblock_3fa1a02dd5.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to its pinned source revision.",
+      "id": "swe_dependency_unblock_3fa1a02dd5.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "changed_behavior",
+      "critical": true,
+      "description": "Declared native pytest failing surface remains green: xarray/tests/test_computation.py (1 assertions)",
+      "id": "swe_dependency_unblock_3fa1a02dd5.native.pytest_01_xarray_tests_test_computation_py",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_01_xarray_tests_test_computation_py",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "preserved_behavior",
+      "critical": false,
+      "description": "Declared native pytest passing surface remains green: xarray/tests/test_computation.py (8 assertions)",
+      "id": "swe_dependency_unblock_3fa1a02dd5.native.pytest_02_xarray_tests_test_computation_py",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_native_pytest_02_xarray_tests_test_computation_py",
+      "relevance_tier": "base"
+    }
+  ]
+}

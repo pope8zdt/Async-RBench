@@ -1,0 +1,30 @@
+{
+  "theme": "delayed_authoritative_result",
+  "event_id": "evt.osw_cross_app_artifact_c449a6c0e0.delayed_authoritative_result",
+  "authority_rule": "Delayed ordered_presenter_notes is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, guess values, or restart unaffected work.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "event_id": "evt.osw_cross_app_artifact_c449a6c0e0.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "before_state": "Impress and Writer can be prepared, but slide-by-slide presenter-note text and source-slide order are unresolved.",
+    "after_state": "The presentation worker returns eight non-empty presenter notes from slides 1,2,3,4,5,6,8,9 in slide order, excluding the empty slide 7.",
+    "affected_nodes": [
+      "event_input"
+    ],
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ],
+    "affected_closure": [
+      "event_input",
+      "req.01.output_path",
+      "req.02.slide_coverage",
+      "req.03.note_order",
+      "final_state"
+    ]
+  }
+}

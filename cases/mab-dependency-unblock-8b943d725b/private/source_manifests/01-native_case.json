@@ -1,0 +1,109 @@
+{
+  "schema_version": "async-rbench-source-native-case-v4",
+  "case_id": "mab-dependency-unblock-8b943d725b",
+  "benchmark": "MultiAgentBench",
+  "source_binding": {
+    "task_id": "database:019",
+    "scenario": "database",
+    "jsonl_path": "upstream/marble/multiagentbench/database/database_main.jsonl",
+    "line_number": 19,
+    "record_sha256": "f5e65ed07f55a9d6f3ef89a38f0b937f91c7b076dd5bb3bd53ec74b4b95b679b",
+    "upstream_revision": "8d60fa17b5596b44458a52d4296061b9fc13d6f2"
+  },
+  "native_runtime": {
+    "adapter": "marble.engine.Engine",
+    "environment": {
+      "type": "",
+      "name": "",
+      "max_iterations": "",
+      "init_sql": "-- 1. Users table (stores information about users)\nCREATE TABLE users (\n    user_id SERIAL PRIMARY KEY,  -- Unique user ID\n    username VARCHAR(50) UNIQUE NOT NULL,  -- Username\n    first_name VARCHAR(100),  -- User's first name\n    last_name VARCHAR(100),   -- User's last name\n    email VARCHAR(255) UNIQUE NOT NULL,  -- User email\n    password VARCHAR(255) NOT NULL,  -- User password\n    bio TEXT,  -- User's biography\n    profile_picture VARCHAR(255),  -- URL to profile picture\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Account creation time\n);\n\n-- 2. Posts table (stores user posts)\nCREATE TABLE posts (\n    post_id SERIAL PRIMARY KEY,  -- Unique post ID\n    user_id INT REFERENCES users(user_id),  -- Foreign key to users\n    content TEXT,  -- Post content\n    image_url VARCHAR(255),  -- URL to image associated with post\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Post creation time\n    updated_at TIMESTAMP  -- Post last updated time\n);\n\n-- 3. Comments table (stores comments on posts)\nCREATE TABLE comments (\n    comment_id SERIAL PRIMARY KEY,  -- Unique comment ID\n    post_id INT REFERENCES posts(post_id) ON DELETE CASCADE,  -- Foreign key to posts\n    user_id INT REFERENCES users(user_id),  -- Foreign key to users\n    content TEXT NOT NULL,  -- Comment content\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Comment creation time\n);\n\n-- 4. Likes table (stores likes on posts)\nCREATE TABLE likes (\n    like_id SERIAL PRIMARY KEY,  -- Unique like ID\n    post_id INT REFERENCES posts(post_id) ON DELETE CASCADE,  -- Foreign key to posts\n    user_id INT REFERENCES users(user_id),  -- Foreign key to users\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Like timestamp\n);\n\n-- 5. Followers table (stores follow relationships between users)\nCREATE TABLE followers (\n    follower_id INT REFERENCES users(user_id),  -- User who follows\n    followed_id INT REFERENCES users(user_id),  -- User being followed\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Follow time\n    PRIMARY KEY (follower_id, followed_id)  -- Composite primary key\n);\n\n-- 6. Messages table (stores direct messages between users)\nCREATE TABLE messages (\n    message_id SERIAL PRIMARY KEY,  -- Unique message ID\n    sender_id INT REFERENCES users(user_id),  -- User who sent the message\n    receiver_id INT REFERENCES users(user_id),  -- User who received the message\n    content TEXT,  -- Message content\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Message sent time\n    read_status BOOLEAN DEFAULT FALSE  -- Read status of the message\n);\n\n-- 7. Media table (stores media files associated with posts and messages)\nCREATE TABLE media (\n    media_id SERIAL PRIMARY KEY,  -- Unique media ID\n    user_id INT REFERENCES users(user_id),  -- User who uploaded the media\n    media_type VARCHAR(50) NOT NULL,  -- Type of media (image, video, etc.)\n    media_url VARCHAR(255) NOT NULL,  -- URL to the media file\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Upload time\n);\n\n-- Insert some sample users\nINSERT INTO users (username, first_name, last_name, email, password) \nVALUES \n('john_doe', 'John', 'Doe', 'john.doe@example.com', 'password123'),\n('jane_smith', 'Jane', 'Smith', 'jane.smith@example.com', 'password456');\n\n-- Insert some posts\nINSERT INTO posts (user_id, content, image_url) \nVALUES \n(1, 'Excited to be part of this platform!', 'https://example.com/images/welcome.jpg'),\n(2, 'Good morning, everyone!', 'https://example.com/images/morning.jpg');\n\n-- Insert comments on posts\nINSERT INTO comments (post_id, user_id, content) \nVALUES \n(1, 2, 'Welcome to the platform, John!'),\n(2, 1, 'Good morning, Jane!');\n\n-- Insert likes on posts\nINSERT INTO likes (post_id, user_id) \nVALUES \n(1, 2),\n(2, 1);\n\n-- Insert follow relationships\nINSERT INTO followers (follower_id, followed_id) \nVALUES \n(1, 2),  -- John follows Jane\n(2, 1);  -- Jane follows John\n\n-- Insert direct messages\nINSERT INTO messages (sender_id, receiver_id, content) \nVALUES \n(1, 2, 'Hi Jane, how are you?'),\n(2, 1, 'Im good, John! How about you?');\n\n-- Insert media uploaded by users\nINSERT INTO media (user_id, media_type, media_url) \nVALUES \n(1, 'image', 'https://example.com/media/photo1.jpg'),\n(2, 'video', 'https://example.com/media/video1.mp4');\n\n-- Select all posts along with user details\nSELECT p.post_id, p.content, u.username, p.created_at\nFROM posts p\nJOIN users u ON p.user_id = u.user_id;\n\n-- Select comments on a post\nSELECT c.comment_id, c.content, u.username, c.created_at\nFROM comments c\nJOIN users u ON c.user_id = u.user_id\nWHERE c.post_id = 1;\n\n-- Select all likes on a post\nSELECT l.like_id, u.username, l.created_at\nFROM likes l\nJOIN users u ON l.user_id = u.user_id\nWHERE l.post_id = 1;\n\n-- Select all followers of a user\nSELECT u.username\nFROM followers f\nJOIN users u ON f.follower_id = u.user_id\nWHERE f.followed_id = 1;\n\n-- Select all direct messages between two users\nSELECT m.content, u1.username AS sender, u2.username AS receiver, m.created_at\nFROM messages m\nJOIN users u1 ON m.sender_id = u1.user_id\nJOIN users u2 ON m.receiver_id = u2.user_id\nWHERE m.sender_id = 1 AND m.receiver_id = 2;\n",
+      "anomalies": [
+        {
+          "anomaly": "REDUNDANT_INDEX",
+          "threads": 100,
+          "ncolumn": 20,
+          "nrow": 20000,
+          "colsize": 100
+        }
+      ]
+    },
+    "roles": [
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent1",
+        "profile": "agent1 will explore the possibility of INSERT_LARGE_DATA as a root cause. Recommended tables: `pg_stat_statements`. You can search for INSERTs."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent2",
+        "profile": "agent2 will explore the possibility of LOCK_CONTENTION as a root cause. Recommended tables: `pg_locks`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent3",
+        "profile": "agent3 will explore the possibility of VACUUM as a root cause. Recommended to search for inappropiate VACUUMs from `pg_stat_all_tables`: SELECT query, calls, total_plan_time, rows, mean_plan_time FROM pg_stat_statements WHERE query LIKE 'VACUUM%';"
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent4",
+        "profile": "agent4 will explore the possibility of REDUNDANT_INDEX as a root cause. Recommended tables: `pg_stat_user_indexes`, `pg_indexes`."
+      },
+      {
+        "type": "BaseAgent",
+        "agent_id": "agent5",
+        "profile": "agent5 will explore the possibility of FETCH_LARGE_DATA as a root cause. Recommended to search for SELECTs from `pg_stat_statements`."
+      }
+    ],
+    "final_state": "MARBLE environment and tool transcript"
+  },
+  "event_protocol": {
+    "producer": "an actual MARBLE role executes with its declared profile and tools",
+    "payload": "the role's native message/tool result with provenance and logical clock",
+    "release_predicate": "coordinator committed at least one environment action after launching the role",
+    "rollback": "messages and tool calls remain in the native transcript; correction is additive and auditable"
+  },
+  "state_attestation": {
+    "baseline_probe": "serialized MARBLE environment state and transcript sequence zero",
+    "checkpoint_probe": "environment digest plus strictly increased native tool/action sequence",
+    "change_required": true,
+    "journal_owner": "MARBLE engine logger, not an agent workspace file"
+  },
+  "modes": {
+    "react": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence producer awaited synchronously"
+    },
+    "linear": {
+      "agents": 1,
+      "concurrent_subagents": 0,
+      "evidence_delivery": "same native evidence is materialized before dependent work"
+    },
+    "async": {
+      "concurrent_subagents": 1,
+      "evidence_delivery": "raw result delivered only after a persisted native-state checkpoint",
+      "checkpoint_is_stateful": true,
+      "final_response_cannot_replace_checkpoint_history": true
+    },
+    "prompt_privacy": {
+      "expected_action_ids_exposed": false,
+      "candidate_action_catalogue_exposed": false,
+      "stale_action_ids_exposed": false,
+      "closure_hash_exposed": false
+    },
+    "score_policy": "the unchanged source-native evaluator scores final persisted state in every mode"
+  },
+  "native_evaluator": {
+    "metrics": {
+      "accuracy": true,
+      "response_time": true
+    },
+    "agreement_or_environment_state": true
+  },
+  "quality_gates": {
+    "official_scenario_bound": true,
+    "native_roles_bound": true,
+    "answer_catalogue_removed": true,
+    "runtime_executed": false
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_3361c7af50.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__cf8907.cf.01_classify_critical_path",
+          "swe_dependency__cf8907.cf.02_resource_triage",
+          "swe_dependency__cf8907.cf.03_verify_closure"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_3361c7af50.event.receipt",
+          "swe_dependency_unblock_3361c7af50.event.probes",
+          "swe_dependency_unblock_3361c7af50.closure",
+          "swe_dependency_unblock_3361c7af50.source.pin",
+          "swe_dependency_unblock_3361c7af50.native.pytest_01_lib_matplotlib_tests_test_pickle_py",
+          "swe_dependency_unblock_3361c7af50.native.pytest_02_lib_matplotlib_tests_test_pickle_py"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "[Bug]: Unable to pickle figure with aligned labels",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "59c56370afef2505ff0faa1d8bf51aa6e676c9d748df4ea617c9a23903b3d8e5",
+        "task_id": "matplotlib__matplotlib-25332",
+        "task_path": "cases/swe-dependency-unblock-3361c7af50/private/source_task.yaml"
+      }
+    ]
+  }
+}

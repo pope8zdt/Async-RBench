@@ -1,0 +1,245 @@
+{
+  "version": "3",
+  "checks": [
+    {
+      "id": "dm.authority.profile_exact",
+      "pytest_node": "test_case_outcomes.py::test_authority_profile_exact",
+      "category": "authority_final_truth",
+      "description": "Promoted authority profile exactly matches evaluator-owned v2 truth",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.authority.backend_feasible",
+      "pytest_node": "test_case_outcomes.py::test_authority_backend_feasible",
+      "category": "authority_final_truth",
+      "description": "Final backend is feasible under authoritative capability flags",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.authority.version_world_size",
+      "pytest_node": "test_case_outcomes.py::test_authority_version_world_size",
+      "category": "authority_final_truth",
+      "description": "Deployment records final profile version and world size",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.authority.implementation_matches_backend",
+      "pytest_node": "test_case_outcomes.py::test_authority_implementation_matches_backend",
+      "category": "authority_final_truth",
+      "description": "Selected implementation artifact matches authoritative backend",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.stale.tensor_candidate_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_tensor_candidate_rejected",
+      "category": "stale_exclusion",
+      "description": "Provisional tensor-parallel deployment is not final",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "dm.stale.provisional_profile_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_provisional_profile_rejected",
+      "category": "stale_exclusion",
+      "description": "Provisional v1 profile dimensions are absent from deployment",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "dm.stale.provisional_implementation_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_provisional_implementation_rejected",
+      "category": "stale_exclusion",
+      "description": "Deployment does not hash the provisional tensor implementation",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "dm.stale.provisional_lineage_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_provisional_lineage_rejected",
+      "category": "stale_exclusion",
+      "description": "Batch lineage contains no provisional backend or profile",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "dm.plans.bucket1_complete_unique",
+      "pytest_node": "test_case_outcomes.py::test_plans_bucket1_complete_unique",
+      "category": "downstream_rebuild",
+      "description": "Bucket one plan covers every request exactly once",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.plans.bucket2_complete_unique",
+      "pytest_node": "test_case_outcomes.py::test_plans_bucket2_complete_unique",
+      "category": "downstream_rebuild",
+      "description": "Bucket two plan covers every request exactly once",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.plans.final_shape_contract",
+      "pytest_node": "test_case_outcomes.py::test_plans_final_shape_contract",
+      "category": "downstream_rebuild",
+      "description": "Plans use feasible batch-consistent authoritative shapes",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.plans.global_shape_budget",
+      "pytest_node": "test_case_outcomes.py::test_plans_global_shape_budget",
+      "category": "downstream_rebuild",
+      "description": "Both regenerated plans respect the joint shape budget",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.plans.cost_thresholds",
+      "pytest_node": "test_case_outcomes.py::test_plans_cost_thresholds",
+      "category": "downstream_rebuild",
+      "description": "Untampered workloads satisfy all evaluator cost and latency thresholds",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.runtime.model_hidden_inference",
+      "pytest_node": "test_case_outcomes.py::test_runtime_model_hidden_inference",
+      "category": "runtime_behavior",
+      "description": "TorchScript model executes evaluator-owned hidden tensors",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dm.runtime.pipeline_world_size_one",
+      "pytest_node": "test_case_outcomes.py::test_runtime_pipeline_world_size_one",
+      "category": "runtime_behavior",
+      "description": "Selected pipeline executes a real world-size-one training step",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.runtime.pipeline_world_size_two",
+      "pytest_node": "test_case_outcomes.py::test_runtime_pipeline_world_size_two",
+      "category": "runtime_behavior",
+      "description": "Selected pipeline executes a real two-rank training step",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.runtime.selected_backend_smoke",
+      "pytest_node": "test_case_outcomes.py::test_runtime_selected_backend_smoke",
+      "category": "runtime_behavior",
+      "description": "Selected backend exports the required hook-free implementation",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "supporting"
+    },
+    {
+      "id": "dm.lineage.deployment_schema",
+      "pytest_node": "test_case_outcomes.py::test_lineage_deployment_schema",
+      "category": "lineage_reverification",
+      "description": "Deployment record has the exact frozen schema",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dm.lineage.model_implementation_hashes",
+      "pytest_node": "test_case_outcomes.py::test_lineage_model_implementation_hashes",
+      "category": "lineage_reverification",
+      "description": "Deployment hashes current model and selected implementation",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.lineage.plan_hashes",
+      "pytest_node": "test_case_outcomes.py::test_lineage_plan_hashes",
+      "category": "lineage_reverification",
+      "description": "Deployment hashes both current regenerated plans",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.lineage.batch_lineage_exact",
+      "pytest_node": "test_case_outcomes.py::test_lineage_batch_lineage_exact",
+      "category": "lineage_reverification",
+      "description": "Batch lineage exactly matches final deployment and plans",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "dm.support.model_quality_improved",
+      "pytest_node": "test_case_outcomes.py::test_support_model_quality_improved",
+      "category": "independent_preservation",
+      "description": "Independent reconstructed model retains verified tuning improvement",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dm.support.tensor_parallel_minimal_numerics",
+      "pytest_node": "test_case_outcomes.py::test_support_tensor_parallel_minimal_numerics",
+      "category": "independent_preservation",
+      "description": "Required tensor-parallel APIs retain minimal numerical behavior",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "dm.support.required_artifacts_usable",
+      "pytest_node": "test_case_outcomes.py::test_support_required_artifacts_usable",
+      "category": "independent_preservation",
+      "description": "All public independent and integrated artifacts remain usable",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    }
+  ]
+}

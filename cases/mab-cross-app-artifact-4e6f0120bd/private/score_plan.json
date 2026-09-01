@@ -1,0 +1,380 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_4e6f0120bd_classify_scope_delta_01",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_cross_app_artifact_4e6f0120bd.task_scope_or_dependency_change",
+      "evidence_group": "mab_cross_app_artifact_4.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.persist_stable_external_"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Classify the delivered calendar adapter contract as a dependency change scoped to deadline synchronization, not as a replacement for the task domain model. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.persist_stable_external_"
+        ]
+      },
+      "id": "mab_code59_cross.cf.01_classify_scope_delta_0120bd",
+      "independence_key": "mab_code59_cross.cf.01_classify_scope_delta_0120bd",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "ignore_new_requirement",
+      "mutation_id": "mab_code59_cross.mutation.01_classify_scope_delta_0120bd",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_4e6f0120bd.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "required_behavior": "Classify the delivered calendar adapter contract as a dependency change scoped to deadline synchronization, not as a replacement for the task domain model. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.persist_stable_external_"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_4e6f0120bd_revise_affected_02",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_cross_app_artifact_4e6f0120bd.task_scope_or_dependency_change",
+      "evidence_group": "mab_cross_app_artifact_4.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.apply_canonical_timezone"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Rebind calendar create, update, and cancellation to stable provider IDs and the delivered timezone, retry, and conflict semantics. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.apply_canonical_timezone"
+        ]
+      },
+      "id": "mab_code59_cross.cf.02_revise_affected_0120bd",
+      "independence_key": "mab_code59_cross.cf.02_revise_affected_0120bd",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "under_invalidate",
+      "mutation_id": "mab_code59_cross.mutation.02_revise_affected_0120bd",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "required_behavior": "Rebind calendar create, update, and cancellation to stable provider IDs and the delivered timezone, retry, and conflict semantics. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.apply_canonical_timezone"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "mab_cross_app_artifact_4e6f0120bd_preserve_unaffected_03",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_cross_app_artifact_4e6f0120bd.task_scope_or_dependency_change",
+      "evidence_group": "mab_cross_app_artifact_4.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.implement_idempotent_upd"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Preserve existing projects, assignments, statuses, dashboards, messaging, authentication, and authorization while revising only calendar integration artifacts. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_idempotent_upd"
+        ]
+      },
+      "id": "mab_code59_cross.cf.03_preserve_unaffected_0120bd",
+      "independence_key": "mab_code59_cross.cf.03_preserve_unaffected_0120bd",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "over_invalidate",
+      "mutation_id": "mab_code59_cross.mutation.03_preserve_unaffected_0120bd",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "required_behavior": "Preserve existing projects, assignments, statuses, dashboards, messaging, authentication, and authorization while revising only calendar integration artifacts. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.implement_idempotent_upd"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "mab_cross_app_artifact_4e6f0120bd_verify_closure_04",
+      "dimension": "closure",
+      "event_id": "evt.mab_cross_app_artifact_4e6f0120bd.task_scope_or_dependency_change",
+      "evidence_group": "mab_cross_app_artifact_4.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.add_fake_adapter_tests_f"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "Close only after fake-adapter checks prove moved deadlines, conflicts, retries, and deletion and the manifest consumes this exact calendar receipt. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "forbidden_behavior": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.add_fake_adapter_tests_f"
+        ]
+      },
+      "id": "mab_code59_cross.cf.04_verify_closure_0120bd",
+      "independence_key": "mab_code59_cross.cf.04_verify_closure_0120bd",
+      "measurement_type": "control",
+      "must_still_pass": [
+        "mab_cross_app_artifact_4.sem.26.the_final_artifact_records_a"
+      ],
+      "mutation_family": "skip_reverification",
+      "mutation_id": "mab_code59_cross.mutation.04_verify_closure_0120bd",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_cross_app_artifact_4e6f0120bd.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "required_behavior": "Close only after fake-adapter checks prove moved deadlines, conflicts, retries, and deletion and the manifest consumes this exact calendar receipt. Preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.add_fake_adapter_tests_f"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "family": "wait_for_authority",
+      "id": "mab_code59_cross.mutation.01_classify_scope_delta_0120bd",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code59_cross.cf.01_classify_scope_delta_0120bd"
+      ],
+      "must_still_pass": [
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ],
+      "targets": [
+        "mab_code59_cross.cf.01_classify_scope_delta_0120bd",
+        "mab_cross_app_artifact_4e6f0120bd.event.receipt",
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe",
+        "mab_cross_app_artifact_4e6f0120bd.closure",
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "family": "resolve_authority",
+      "id": "mab_code59_cross.mutation.02_revise_affected_0120bd",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code59_cross.cf.02_revise_affected_0120bd"
+      ],
+      "must_still_pass": [
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ],
+      "targets": [
+        "mab_code59_cross.cf.02_revise_affected_0120bd",
+        "mab_cross_app_artifact_4e6f0120bd.event.receipt",
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe",
+        "mab_cross_app_artifact_4e6f0120bd.closure",
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "family": "selective_replan",
+      "id": "mab_code59_cross.mutation.03_preserve_unaffected_0120bd",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code59_cross.cf.03_preserve_unaffected_0120bd"
+      ],
+      "must_still_pass": [
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ],
+      "targets": [
+        "mab_code59_cross.cf.03_preserve_unaffected_0120bd",
+        "mab_cross_app_artifact_4e6f0120bd.event.receipt",
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe",
+        "mab_cross_app_artifact_4e6f0120bd.closure",
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not skip or counterfeit this decision with a foreign receipt, stale lineage, broad reset, or unverified success; preserve projects, task assignments, status history, dashboards, messaging, authentication, and authorization.",
+      "family": "rederive_from_authority",
+      "id": "mab_code59_cross.mutation.04_verify_closure_0120bd",
+      "may_fail": [],
+      "must_fail": [
+        "mab_code59_cross.cf.04_verify_closure_0120bd"
+      ],
+      "must_still_pass": [
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ],
+      "targets": [
+        "mab_code59_cross.cf.04_verify_closure_0120bd",
+        "mab_cross_app_artifact_4e6f0120bd.event.receipt",
+        "mab_cross_app_artifact_4e6f0120bd.event.authority_probe",
+        "mab_cross_app_artifact_4e6f0120bd.closure",
+        "mab_cross_app_artifact_4e6f0120bd.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The calendar_adapter_contract_delivered receipt is authentic and bound to coding:059 and mab-cross-app-artifact-4e6f0120bd.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "The evaluator-owned Office Task Collaborator event worker completes and records observable post-baseline probes.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "The exact calendar contract receipt is consumed and the synchronized task/calendar closure is reverified.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "The task remains bound to the official MultiAgentBench source task coding:059.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The submitted deliverable follows the official coding:059 solution.py output contract and emits the calendar_deadline_sync_contract evaluator closure schema.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_output_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Calendar synchronization uses task-specific provider events while task assignment, status, messaging, dashboards, and reports remain functional.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_task_calendar_functionality",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Valid prior Office Task Collaborator work is preserved: assignments, messaging, dashboards, project_reports, authentication, authorization.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_preserves_assignment_messaging_dashboard_and_report",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The exact calendar contract receipt is consumed and the synchronized task/calendar closure is reverified.",
+      "id": "mab_cross_app_artifact_4e6f0120bd.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_office_event_receipt_and_post_event_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

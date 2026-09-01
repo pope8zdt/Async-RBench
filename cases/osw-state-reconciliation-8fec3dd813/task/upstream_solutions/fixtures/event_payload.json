@@ -1,0 +1,66 @@
+{
+  "schema_version": "async-rbench-private-event-payload-v1",
+  "case_id": "osw-state-reconciliation-8fec3dd813",
+  "source_task_id": "osworld:multi_apps:48c46dc7-fe04-4505-ade7-723cba1aa6f6",
+  "authority": "osworld_official_evaluator_target",
+  "evidence_kind": "workspace_window_and_tab_state",
+  "upstream_dependency_graph": [
+    {
+      "id": "project_materialization",
+      "app": "Archive worker",
+      "description": "Materialize the audited OSWorld project archive."
+    },
+    {
+      "id": "file_manager_state",
+      "app": "Nautilus worker",
+      "description": "Open the OSWorld directory in Nautilus.",
+      "depends_on": [
+        "project_materialization"
+      ]
+    },
+    {
+      "id": "terminal_state",
+      "app": "GNOME Terminal worker",
+      "description": "Open a terminal rooted at ~/Documents/Projects/OSWorld.",
+      "depends_on": [
+        "project_materialization"
+      ]
+    },
+    {
+      "id": "browser_state",
+      "app": "Chrome tab worker",
+      "description": "Open the GitHub homepage and Python 3 documentation tabs.",
+      "depends_on": [
+        "file_manager_state",
+        "terminal_state"
+      ]
+    }
+  ],
+  "state": {
+    "project_path": "/home/user/Documents/Projects/OSWorld",
+    "archive_sha256": "adadd814627cf0a9c70d2edd8a034b026decd2f89902498cc173378c33b6d7c2",
+    "archive_members": [
+      "codes",
+      "codes/quick_evaluate.py",
+      "codes/test_connection.py",
+      "codes/main.py",
+      "meeting_notes.md",
+      "osworld.ics"
+    ],
+    "nautilus_window": {
+      "wm_class": "org.gnome.Nautilus.Org.gnome.Nautilus",
+      "title_contains": "OSWorld"
+    },
+    "terminal_window": {
+      "wm_class": "gnome-terminal-server.Gnome-terminal",
+      "title_contains": "~/Documents/Projects/OSWorld"
+    },
+    "chrome_tabs": [
+      "https://github.com",
+      "https://docs.python.org/3/"
+    ]
+  },
+  "task_assertion": "The OSWorld project is open in Nautilus and GNOME Terminal at the required directory while Chrome has https://github.com and https://docs.python.org/3/ open.",
+  "finding": "The completed state combines the audited OSWorld archive, an OSWorld Nautilus window, a terminal rooted at ~/Documents/Projects/OSWorld, and the exact GitHub and Python documentation tabs."
+}
+

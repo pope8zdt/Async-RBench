@@ -1,0 +1,45 @@
+{
+  "prior_work": [
+    {
+      "id": "step:66",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "The file /etc/nginx/conf.d/benchmark-site.conf has been edited. Here's the result of running `cat -n` on a snippet of /etc/nginx/conf.d/benchmark-site.conf: 1 server { 2 listen 8081; 3 server_name localhost; 4 5 root /var/www/html; 6 index index.html; 7 Review the changes and make sure they are as expected. Edit the file again if necessary."
+    }
+  ],
+  "independent_event": {
+    "id": "evidence:37",
+    "kind": "observation",
+    "app": null,
+    "function": null,
+    "description": "late_authoritative_result"
+  },
+  "affected_work": [
+    {
+      "id": "required-response:evidence:37",
+      "kind": "required_response",
+      "app": null,
+      "function": null,
+      "description": "The main agent continues configuration, deployment, or completion preparation while the probe runs."
+    }
+  ],
+  "superseded_work": [
+    {
+      "id": "provisional:required-response:evidence:37",
+      "description": "Provisional pre-authority variant of: The main agent continues configuration, deployment, or completion preparation while the probe runs.",
+      "migration_derived": true
+    }
+  ],
+  "event_sequence": [
+    {
+      "id": "evidence:37",
+      "kind": "observation",
+      "app": null,
+      "function": null,
+      "description": "late_authoritative_result",
+      "producer": "independent_environment_or_trace_producer",
+      "authority": "authoritative"
+    }
+  ]
+}

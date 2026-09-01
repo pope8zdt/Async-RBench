@@ -1,0 +1,273 @@
+{
+  "async_depth": 3,
+  "case_id": "osw-cross-app-artifact-19cdaed8e8",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_authority_aws_invoice_osworld",
+      "forbidden_behavior": "Do not skip classify_authority, retain a displaced state, or guess source values.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "01_classify_authority_aws_invoice_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ],
+      "mutation_family": "ignore_authority",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "required_behavior": "classify_authority for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.locate_the_december_aws_"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_aws_invoice_osworld",
+      "forbidden_behavior": "Do not skip revise_affected, retain a displaced state, or guess source values.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "02_revise_affected_aws_invoice_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ],
+      "mutation_family": "retain_provisional",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_the_exact_invoi"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_aws_invoice_osworld",
+      "forbidden_behavior": "Do not skip verify_closure, retain a displaced state, or guess source values.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "mail_attachment_locator",
+          "receipt_pattern_inspection",
+          "invoice_field_extraction"
+        ]
+      },
+      "id": "03_verify_closure_aws_invoice_os",
+      "must_still_pass": [
+        "osw_cross_app_artifact_19cdaed8e8.source.pin"
+      ],
+      "mutation_family": "skip_reverification",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "osw_cross_app_artifact_19cdaed8e8.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "verify_closure for delayed aws_december_invoice_record; preserve unaffected thunderbird/libreoffice_calc/os state.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.append_the_aws_2023_12_a"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "depends_on",
+        "source": "upstream.mail_attachment_locator",
+        "target": "upstream.invoice_field_extraction"
+      },
+      {
+        "relation": "produces",
+        "source": "upstream.invoice_field_extraction",
+        "target": "event_input"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.01.locate_the_december_aws_"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.locate_the_december_aws_",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.02.preserve_the_exact_invoi"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.preserve_the_exact_invoi",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.03.append_the_aws_2023_12_a"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.append_the_aws_2023_12_a",
+        "target": "final_state"
+      },
+      {
+        "relation": "unlocks",
+        "source": "event_input",
+        "target": "req.04.keep_all_earlier_receipt"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.keep_all_earlier_receipt",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "application": "Thunderbird",
+        "description": "Locate the December AWS invoice message and attachment in the local Bills folder.",
+        "id": "upstream.mail_attachment_locator",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "OS/LibreOffice Calc",
+        "description": "Inspect existing receipt filenames and tally columns independently.",
+        "id": "upstream.receipt_pattern_inspection",
+        "kind": "upstream_task"
+      },
+      {
+        "application": "PDF",
+        "description": "Extract service, month, amount and billing period from the located invoice.",
+        "id": "upstream.invoice_field_extraction",
+        "kind": "upstream_task"
+      },
+      {
+        "id": "req.01.locate_the_december_aws_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.preserve_the_exact_invoi",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.append_the_aws_2023_12_a",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.keep_all_earlier_receipt",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserved_source_facts",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.locate_the_december_aws_",
+      "req.02.preserve_the_exact_invoi",
+      "req.03.append_the_aws_2023_12_a",
+      "req.04.keep_all_earlier_receipt",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The mail worker returns the exact December AWS attachment and normalized billing fields, enabling a correctly named PDF copy and one matching tally row.",
+    "before_state": "The Bills folder, receipts directory and tally layout are inspectable, but the authoritative December invoice message and fields have not yet been joined.",
+    "event_id": "evt.osw_cross_app_artifact_19cda.delayed_authoritative_result",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_cross_app_dependency_graph",
+  "task_requirements": [
+    {
+      "description": "Locate the December AWS invoice attachment in Thunderbird Bills.",
+      "id": "req.01.locate_the_december_aws_",
+      "observable_probe": "osw_cross_app_artifact_19cdaed8e8.osworld.identity",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Preserve the exact invoice PDF while copying it to the receipts folder with the established filename pattern.",
+      "id": "req.02.preserve_the_exact_invoi",
+      "observable_probe": "osw_cross_app_artifact_19cdaed8e8.osworld.official_score",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Append the AWS 2023.12 amount 10.02 row to the tally workbook.",
+      "id": "req.03.append_the_aws_2023_12_a",
+      "observable_probe": "osw_cross_app_artifact_19cdaed8e8.osworld.native_evidence",
+      "public_evidence": "source instruction and delayed receipt"
+    },
+    {
+      "description": "Keep all earlier receipt files and tally rows intact.",
+      "id": "req.04.keep_all_earlier_receipt",
+      "observable_probe": "osw_cross_app_artifact_19cdaed8e8.osworld.task_assertion",
+      "public_evidence": "source instruction and delayed receipt"
+    }
+  ],
+  "upstream_tasks": [
+    {
+      "app": "Thunderbird",
+      "description": "Locate the December AWS invoice message and attachment in the local Bills folder.",
+      "id": "mail_attachment_locator"
+    },
+    {
+      "app": "OS/LibreOffice Calc",
+      "description": "Inspect existing receipt filenames and tally columns independently.",
+      "id": "receipt_pattern_inspection"
+    },
+    {
+      "app": "PDF",
+      "depends_on": [
+        "mail_attachment_locator"
+      ],
+      "description": "Extract service, month, amount and billing period from the located invoice.",
+      "id": "invoice_field_extraction"
+    }
+  ]
+}

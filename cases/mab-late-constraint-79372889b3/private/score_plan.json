@@ -1,0 +1,360 @@
+{
+  "control_points": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_scope_delta_codebook_efficiency_scope_adde",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_late_constraint_7937.codebook_efficiency_scope_added",
+      "evidence_group": "mab_research56_magvit.classify_scope_delta",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.preserve_lookup_free_quantiz"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_scope_delta: A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_lookup_free_quantiz"
+        ]
+      },
+      "id": "mab_research56_magvit.cf.01_classify_scope_delta_codebook_efficienc",
+      "independence_key": "mab_research56_magvit.cf.01_classify_scope_delta_codebook_efficienc",
+      "measurement_type": "control",
+      "mutation_id": "mab_research56_magvit.mutation.01_classify_scope_delta_codebook_efficienc",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_79372889b3.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_lookup_free_quantiz"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_codebook_efficiency_scope_adde",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_late_constraint_7937.codebook_efficiency_scope_added",
+      "evidence_group": "mab_research56_magvit.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.preserve_asymmetric_token_fa"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.preserve_asymmetric_token_fa"
+        ]
+      },
+      "id": "mab_research56_magvit.cf.02_revise_affected_codebook_efficienc",
+      "independence_key": "mab_research56_magvit.cf.02_revise_affected_codebook_efficienc",
+      "measurement_type": "control",
+      "mutation_id": "mab_research56_magvit.mutation.02_revise_affected_codebook_efficienc",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_79372889b3.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.preserve_asymmetric_token_fa"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "preserve_unaffected_codebook_efficiency_scope_adde",
+      "dimension": "plan_revision",
+      "event_id": "evt.mab_late_constraint_7937.codebook_efficiency_scope_added",
+      "evidence_group": "mab_research56_magvit.preserve_unaffected",
+      "evidence_spec": {
+        "primary_fact": "pre_post_replan",
+        "subject": "req.03.specify_imagenet_data_rfid_f"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "preserve_unaffected: A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_imagenet_data_rfid_f"
+        ]
+      },
+      "id": "mab_research56_magvit.cf.03_preserve_unaffected_codebook_efficienc",
+      "independence_key": "mab_research56_magvit.cf.03_preserve_unaffected_codebook_efficienc",
+      "measurement_type": "control",
+      "mutation_id": "mab_research56_magvit.mutation.03_preserve_unaffected_codebook_efficienc",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_79372889b3.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.specify_imagenet_data_rfid_f"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_codebook_efficiency_scope_adde",
+      "dimension": "closure",
+      "event_id": "evt.mab_late_constraint_7937.codebook_efficiency_scope_added",
+      "evidence_group": "mab_research56_magvit.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.04.integrate_the_late_throughpu"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.integrate_the_late_throughpu"
+        ]
+      },
+      "id": "mab_research56_magvit.cf.04_verify_closure_codebook_efficienc",
+      "independence_key": "mab_research56_magvit.cf.04_verify_closure_codebook_efficienc",
+      "measurement_type": "control",
+      "mutation_id": "mab_research56_magvit.mutation.04_verify_closure_codebook_efficienc",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_79372889b3.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.integrate_the_late_throughpu"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "family": "wait_for_authority",
+      "id": "mab_research56_magvit.mutation.01_classify_scope_delta_codebook_efficienc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research56_magvit.cf.01_classify_scope_delta_codebook_efficienc"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_79372889b3.source.pin"
+      ],
+      "targets": [
+        "mab_research56_magvit.cf.01_classify_scope_delta_codebook_efficienc",
+        "mab_late_constraint_79372889b3.event.receipt",
+        "mab_late_constraint_79372889b3.event.authority_probe",
+        "mab_late_constraint_79372889b3.closure",
+        "mab_late_constraint_79372889b3.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "family": "resolve_authority",
+      "id": "mab_research56_magvit.mutation.02_revise_affected_codebook_efficienc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research56_magvit.cf.02_revise_affected_codebook_efficienc"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_79372889b3.source.pin"
+      ],
+      "targets": [
+        "mab_research56_magvit.cf.02_revise_affected_codebook_efficienc",
+        "mab_late_constraint_79372889b3.event.receipt",
+        "mab_late_constraint_79372889b3.event.authority_probe",
+        "mab_late_constraint_79372889b3.closure",
+        "mab_late_constraint_79372889b3.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "family": "selective_replan",
+      "id": "mab_research56_magvit.mutation.03_preserve_unaffected_codebook_efficienc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research56_magvit.cf.03_preserve_unaffected_codebook_efficienc"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_79372889b3.source.pin"
+      ],
+      "targets": [
+        "mab_research56_magvit.cf.03_preserve_unaffected_codebook_efficienc",
+        "mab_late_constraint_79372889b3.event.receipt",
+        "mab_late_constraint_79372889b3.event.authority_probe",
+        "mab_late_constraint_79372889b3.closure",
+        "mab_late_constraint_79372889b3.source.pin"
+      ]
+    },
+    {
+      "error_mechanism": "Do not ignore, double-apply, over-apply, or falsely close codebook_efficiency_scope_added.",
+      "family": "rederive_from_authority",
+      "id": "mab_research56_magvit.mutation.04_verify_closure_codebook_efficienc",
+      "may_fail": [],
+      "must_fail": [
+        "mab_research56_magvit.cf.04_verify_closure_codebook_efficienc"
+      ],
+      "must_still_pass": [
+        "mab_late_constraint_79372889b3.source.pin"
+      ],
+      "targets": [
+        "mab_research56_magvit.cf.04_verify_closure_codebook_efficienc",
+        "mab_late_constraint_79372889b3.event.receipt",
+        "mab_late_constraint_79372889b3.event.authority_probe",
+        "mab_late_constraint_79372889b3.closure",
+        "mab_late_constraint_79372889b3.source.pin"
+      ]
+    }
+  ],
+  "semantic_points": [
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Authentic task-specific codebook_efficiency_scope_added receipt bound to research:056.",
+      "id": "mab_late_constraint_79372889b3.event.receipt",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "event_integration",
+      "critical": true,
+      "description": "Evaluator-owned Open-MAGVIT2 lookup-free tokenizer research task authority runs after three upstream results.",
+      "id": "mab_late_constraint_79372889b3.event.authority_probe",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "async_result_integration",
+      "category": "closure",
+      "critical": true,
+      "description": "A late codebook-efficiency and low-memory scope extends the open lookup-free tokenizer proposal while preserving reconstruction, autoregressive scaling, and asymmetric factorization goals.",
+      "id": "mab_late_constraint_79372889b3.closure",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
+      "relevance_tier": "critical"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "provenance",
+      "critical": true,
+      "description": "Pinned official MultiAgentBench research:056.",
+      "id": "mab_late_constraint_79372889b3.source.pin",
+      "measurement_type": "semantic",
+      "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The result has exactly five questions and an open_magvit_tokenizer_research_closure.",
+      "id": "mab_late_constraint_79372889b3.source.output_schema",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_exact_five_question_schema_and_artifacts",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The method binds lookup-free quantization, asymmetric factorization, next-sub-token prediction, ImageNet, rFID/FID, utilization, throughput, memory, and ablations.",
+      "id": "mab_late_constraint_79372889b3.source.task_behavior",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_task_specific_method_data_metrics_and_ablations",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "Preserves open replication, reconstruction quality, super-large codebooks, and autoregressive scaling.",
+      "id": "mab_late_constraint_79372889b3.source.preservation",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_source_premises_and_structure_are_preserved",
+      "relevance_tier": "base"
+    },
+    {
+      "capability_target": "base_task_completion",
+      "category": "source_semantics",
+      "critical": true,
+      "description": "The efficiency scope augments evaluation without erasing tokenizer or generation objectives.",
+      "id": "mab_late_constraint_79372889b3.source.event_closure",
+      "measurement_type": "semantic",
+      "pytest_node": "upstream_tests/test_outputs.py::test_research_event_contract_and_closure",
+      "relevance_tier": "base"
+    }
+  ]
+}

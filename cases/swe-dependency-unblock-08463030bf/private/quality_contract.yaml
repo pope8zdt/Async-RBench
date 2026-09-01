@@ -1,0 +1,74 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_08463030bf.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_08463030bf.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__7e696b.cf.01_classify_authority_add_an_await_expression_",
+          "swe_dependency__7e696b.cf.02_revise_affected_detect_await_expressions",
+          "swe_dependency__7e696b.cf.03_verify_closure_emit_async_thunks_only_w"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_08463030bf.event.receipt",
+          "swe_dependency_unblock_08463030bf.event.probes",
+          "swe_dependency_unblock_08463030bf.closure",
+          "swe_dependency_unblock_08463030bf.source.pin",
+          "swe_dependency_unblock_08463030bf.native.svelte_async_destructure",
+          "swe_dependency_unblock_08463030bf.native.svelte_compiler_parse"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "fix: Fixes destructuring signal with await bug",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "c99ebb43b6f6c1196f68c49d97a70878fb763718c8512fa1249f7a8e80b0dce7",
+        "task_id": "sveltejs__svelte-9962",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

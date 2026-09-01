@@ -1,0 +1,28 @@
+{
+  "schema_version": "async-rbench-participant-task-v1",
+  "case_id": "osw-cross-app-artifact-98b42677e4",
+  "source_task_id": "osworld:multi_apps:c2751594-0cd5-4088-be1b-b5f2f9ec97c4",
+  "benchmark": "OSWorld",
+  "domain": "multi_apps",
+  "snapshot": "thunderbird",
+  "applications": [
+    "thunderbird",
+    "os"
+  ],
+  "instruction": "Help me export the first image from the doc file attached in the most recent email in Notes folder, and set this image as the new desktop background.",
+  "async_extension": {
+    "theme": "delayed_authoritative_result",
+    "evidence_kind": "latest_notes_first_embedded_image",
+    "delivery": "after a persisted cross-app checkpoint",
+    "required_behavior": [
+      "classify the late authority",
+      "revise only affected work",
+      "reverify source-native closure"
+    ]
+  },
+  "privacy": {
+    "evaluator_truth_visible": false,
+    "event_payload_predeclared": false
+  }
+}
+

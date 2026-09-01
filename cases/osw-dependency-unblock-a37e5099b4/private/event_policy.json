@@ -1,0 +1,33 @@
+{
+  "theme": "partial_then_complete_result",
+  "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+  "authority_rule": "script_fu_resize_result is authoritative for dependent closure.",
+  "forbidden_shortcut": "Do not ignore authority, finalize partial evidence, invent values, overwrite confirmed work, or restart unaffected work.",
+  "required_decisions": [
+    "classify_completeness",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.source_image",
+      "req.02.lisp_extension",
+      "req.03.output_path",
+      "req.04.resize_dimensions",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The completed result combines a Lisp-capable VS Code extension with a GIMP-produced /home/user/Desktop/resized.png whose official dimensions are exactly 128×128.",
+    "before_state": "The source image and editor are available, but extension evidence and resized-image evidence arrive as separate partial results.",
+    "event_id": "evt.osw_dependency_unblock_a37e5099b4.partial_then_complete_result",
+    "primary_event_theme": "partial_then_complete_result",
+    "unaffected_nodes": [
+      "preserved_source_facts"
+    ]
+  }
+}
+

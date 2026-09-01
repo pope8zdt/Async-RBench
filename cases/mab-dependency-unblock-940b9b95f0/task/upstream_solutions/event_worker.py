@@ -1,0 +1,8 @@
+from __future__ import annotations
+import argparse,hashlib,json,pathlib,time
+CASE_ID='mab-dependency-unblock-940b9b95f0'; SOURCE_ID='coding:015'; EVENT='conditions_worker_recovered'; EVENT_THEME='child_failure_or_implicit_error'; MEANING='Recovered conditions replace static rankings without erasing preferences, feedback, shared destinations, or accepted-route history.'; AUTHORITY={'contract': 'conditions_snapshot_v3', 'fields': ['observed_at', 'traffic_speeds', 'transit_delays', 'weather_restrictions'], 'freshness_seconds': 300, 'deterministic_adjustments': True}
+def digest(p):
+ p=pathlib.Path(p); return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
+def main():
+ a=argparse.ArgumentParser(); a.add_argument('--workspace',default='/app'); a.add_argument('--output',default='/app/output_data/event_receipt.json'); x=a.parse_args(); start=time.time(); probes={p:digest(p) for p in ['/app/output_data/provisional_checkpoint.json','/app/output_data/solution.py']}; d={'schema_version':'async-rbench-event-receipt-v1','case_id':CASE_ID,'source_task_id':SOURCE_ID,'event':EVENT,'event_theme':EVENT_THEME,'meaning':MEANING,'authority':AUTHORITY,'worker_started_at':start,'worker_finished_at':time.time(),'worker_exit_code':0,'worker_output':'task-specific evaluator authority completed','workspace_revision_before':probes['/app/output_data/provisional_checkpoint.json'],'workspace_revision_after':probes['/app/output_data/solution.py'],'probes':probes}; d['receipt_sha256']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest(); p=pathlib.Path(x.output); p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n'); return 0
+if __name__=='__main__':raise SystemExit(main())

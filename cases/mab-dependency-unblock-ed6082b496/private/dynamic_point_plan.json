@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "classify_authority_module_dependency_contract_com",
+      "dimension": "event_intake",
+      "event_id": "evt.mab_dependency_unblock_ed60.module_dependency_contract_completed",
+      "evidence_group": "mab_code01_culture.classify_authority",
+      "evidence_spec": {
+        "primary_fact": "authority_consumption",
+        "subject": "req.01.implement_profiles_with_cult"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "classify_authority: A delayed module dependency contract unblocks virtual tours, language exchange, workshops, and feedback in the required order while preserving profiles and completed learning activity.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close module_dependency_contract_completed.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.implement_profiles_with_cult"
+        ]
+      },
+      "id": "mab_code01_culture.cf.01_classify_authority_module_dependency",
+      "independence_key": "mab_code01_culture.cf.01_classify_authority_module_dependency",
+      "measurement_type": "control",
+      "mutation_id": "mab_code01_culture.mutation.01_classify_authority_module_dependency",
+      "obligation": "classify_authority",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ed6082b496.event.receipt"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:event_intake:classify_authority:1",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.implement_profiles_with_cult"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": false,
+      "decision_group": "revise_affected_module_dependency_contract_com",
+      "dimension": "state_revision",
+      "event_id": "evt.mab_dependency_unblock_ed60.module_dependency_contract_completed",
+      "evidence_group": "mab_code01_culture.revise_affected",
+      "evidence_spec": {
+        "primary_fact": "state_transition",
+        "subject": "req.02.implement_interactive_virtua"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "revise_affected: A delayed module dependency contract unblocks virtual tours, language exchange, workshops, and feedback in the required order while preserving profiles and completed learning activity.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close module_dependency_contract_completed.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.implement_interactive_virtua"
+        ]
+      },
+      "id": "mab_code01_culture.cf.02_revise_affected_module_dependency",
+      "independence_key": "mab_code01_culture.cf.02_revise_affected_module_dependency",
+      "measurement_type": "control",
+      "mutation_id": "mab_code01_culture.mutation.02_revise_affected_module_dependency",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ed6082b496.event.authority_probe"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "relevance_tier": "direct",
+      "requires_outcome_anchor": false,
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.implement_interactive_virtua"
+    },
+    {
+      "capability_target": "async_dynamic_replanning",
+      "critical": true,
+      "decision_group": "verify_closure_module_dependency_contract_com",
+      "dimension": "closure",
+      "event_id": "evt.mab_dependency_unblock_ed60.module_dependency_contract_completed",
+      "evidence_group": "mab_code01_culture.verify_closure",
+      "evidence_spec": {
+        "primary_fact": "closure_reverification",
+        "subject": "req.03.implement_paired_language_ex"
+      },
+      "execution_modes": [
+        "async"
+      ],
+      "expected_behavior": "verify_closure: A delayed module dependency contract unblocks virtual tours, language exchange, workshops, and feedback in the required order while preserving profiles and completed learning activity.",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close module_dependency_contract_completed.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.implement_paired_language_ex"
+        ]
+      },
+      "id": "mab_code01_culture.cf.03_verify_closure_module_dependency",
+      "independence_key": "mab_code01_culture.cf.03_verify_closure_module_dependency",
+      "measurement_type": "control",
+      "mutation_id": "mab_code01_culture.mutation.03_verify_closure_module_dependency",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_dependency_unblock_ed6082b496.closure"
+      ],
+      "precondition": "The evaluator-owned event opportunity exists.",
+      "precondition_contract": {
+        "on_missing": "fail_point",
+        "required_facts": [
+          "authority_delivery"
+        ]
+      },
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "relevance_tier": "critical",
+      "requires_outcome_anchor": false,
+      "stage_tag": "closure",
+      "task_requirement_id": "req.03.implement_paired_language_ex"
+    }
+  ],
+  "event_contracts": [
+    {
+      "arrival_contract": {
+        "after_artifacts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ],
+        "after_facts": [
+          "authority_delivery"
+        ],
+        "after_results": [
+          "result_01",
+          "result_02",
+          "result_03"
+        ],
+        "before_facts": [
+          "provisional_checkpoint",
+          "preserved_source_facts"
+        ]
+      },
+      "authority_source": "requirement_worker_04",
+      "event_id": "evt.mab_dependency_unblock_ed60.module_dependency_contract_completed",
+      "event_theme": "delayed_authoritative_result",
+      "main_visible_before_delivery": false,
+      "observation_mode": "gateway_only",
+      "required_opportunities": [
+        "authority_delivery"
+      ],
+      "state_delta": {
+        "affected_artifacts": [
+          "provisional_checkpoint",
+          "final_state"
+        ],
+        "after": "Tours, language sessions, workshops, and feedback follow the returned order and preserve completed cultural activity.",
+        "before": "Profiles and provisional learning modules exist, but the authoritative dependency and experience-gating contract has not arrived.",
+        "unaffected_artifacts": [
+          "preserved_source_facts"
+        ]
+      },
+      "track": "atomic_event"
+    }
+  ],
+  "version": "7"
+}

@@ -1,0 +1,164 @@
+{
+  "case_id": "tbn-late-test-evidence-9685a54f22",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_critical_path_downstream_assembly_optimiza",
+      "forbidden_behavior": "Do not handle classify_critical_path by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.downstream_assembly_opti"
+        ]
+      },
+      "id": "01_classify_critical_path_downstream_assembl",
+      "must_still_pass": [
+        "tbn_late_test_evidence_9.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "wait_for_low_value_straggler",
+      "obligation": "classify_critical_path",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_9.sem.01.downstream_assembly_optimiza",
+        "tbn_late_test_evidence_9.sem.02.no_stale_action_survives_in_",
+        "tbn_late_test_evidence_9.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_late_test_evidence_9.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_late_test_evidence_9.sem.01.downstream_assembly_optimiza, tbn_late_test_evidence_9.sem.02.no_stale_action_survives_in_, tbn_late_test_evidence_9.sem.03.no_unrelated_or_duplicate_ac, tbn_late_test_evidence_9.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'downstream_invalidation', perform classify_critical_path for 'Downstream assembly, optimization, or reporting proceeds using provisional upstream output.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.downstream_assembly_opti"
+    },
+    {
+      "critical": false,
+      "decision_group": "resource_triage_downstream_assembly_optimiza",
+      "forbidden_behavior": "Do not handle resource_triage by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "resource_triage",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.downstream_assembly_opti"
+        ]
+      },
+      "id": "02_resource_triage_downstream_assembl",
+      "must_still_pass": [
+        "tbn_late_test_evidence_9.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "cancel_critical_work",
+      "obligation": "resource_triage",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_9.sem.01.downstream_assembly_optimiza",
+        "tbn_late_test_evidence_9.sem.02.no_stale_action_survives_in_",
+        "tbn_late_test_evidence_9.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_late_test_evidence_9.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_late_test_evidence_9.sem.01.downstream_assembly_optimiza, tbn_late_test_evidence_9.sem.02.no_stale_action_survives_in_, tbn_late_test_evidence_9.sem.03.no_unrelated_or_duplicate_ac, tbn_late_test_evidence_9.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'downstream_invalidation', perform resource_triage for 'Downstream assembly, optimization, or reporting proceeds using provisional upstream output.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.01.downstream_assembly_opti"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_downstream_assembly_optimiza",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result '<returncode>0</returncode> <output> </output>'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserve_prior"
+        ],
+        "workstreams": [
+          "req.01.downstream_assembly_opti"
+        ]
+      },
+      "id": "03_verify_closure_downstream_assembl",
+      "must_still_pass": [
+        "tbn_late_test_evidence_9.sem.11.the_final_artifact_records_a"
+      ],
+      "mutation_family": "exceed_budget",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "tbn_late_test_evidence_9.sem.01.downstream_assembly_optimiza",
+        "tbn_late_test_evidence_9.sem.02.no_stale_action_survives_in_",
+        "tbn_late_test_evidence_9.sem.03.no_unrelated_or_duplicate_ac",
+        "tbn_late_test_evidence_9.sem.04.valid_prior_work_is_preserve"
+      ],
+      "primary_evidence": "gateway event receipt joined to tbn_late_test_evidence_9.sem.01.downstream_assembly_optimiza, tbn_late_test_evidence_9.sem.02.no_stale_action_survives_in_, tbn_late_test_evidence_9.sem.03.no_unrelated_or_duplicate_ac, tbn_late_test_evidence_9.sem.04.valid_prior_work_is_preserve",
+      "required_behavior": "For event 'downstream_invalidation', perform verify_closure for 'Downstream assembly, optimization, or reporting proceeds using provisional upstream output.' while retaining valid prior result '<returncode>0</returncode> <output> </output>'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.downstream_assembly_opti"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.downstream_assembly_opti"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.downstream_assembly_opti",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.downstream_assembly_opti",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.downstream_assembly_opti",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "downstream_invalidation",
+    "before_state": "useful source work is already persisted",
+    "event_id": "evt.tbn_late_test_evidence_9.straggler_under_resource",
+    "primary_event_theme": "straggler_under_resource_pressure",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Downstream assembly, optimization, or reporting proceeds using provisional upstream output.",
+      "id": "req.01.downstream_assembly_opti",
+      "observable_probe": "tbn_late_test_evidence_9.sem.01.downstream_assembly_optimiza",
+      "public_evidence": "source instruction and workstream result for downstream_assembly_optimization_or_"
+    }
+  ]
+}

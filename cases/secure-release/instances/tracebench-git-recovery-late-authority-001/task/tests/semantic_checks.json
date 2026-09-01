@@ -1,0 +1,245 @@
+{
+  "version": "3",
+  "checks": [
+    {
+      "id": "sr.authority.secret_recovered",
+      "pytest_node": "test_case_outcomes.py::test_authority_secret_recovered",
+      "category": "authority_final_truth",
+      "description": "Leaked secret is recovered exactly outside Git history",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sr.authority.no_secret_objects",
+      "pytest_node": "test_case_outcomes.py::test_authority_no_secret_in_any_object",
+      "category": "authority_final_truth",
+      "description": "No reachable or unreachable Git object retains the leaked secret",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.authority.final_main_baseline",
+      "pytest_node": "test_case_outcomes.py::test_authority_final_main_baseline",
+      "category": "authority_final_truth",
+      "description": "Final main descends from the evaluator authority baseline",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.authority.final_dev_baseline",
+      "pytest_node": "test_case_outcomes.py::test_authority_final_dev_baseline",
+      "category": "authority_final_truth",
+      "description": "Final dev descends from the evaluator authority baseline",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_result_integration",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.stale.pre_rewrite_main_patch_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_pre_rewrite_main_patch_rejected",
+      "category": "stale_exclusion",
+      "description": "Main security patch is rebuilt after the authority baseline",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sr.stale.pre_rewrite_dev_patch_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_pre_rewrite_dev_patch_rejected",
+      "category": "stale_exclusion",
+      "description": "Dev security patch is rebuilt after the authority baseline",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sr.stale.old_deployment_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_old_deployment_rejected",
+      "category": "stale_exclusion",
+      "description": "Bare deployment refs do not retain pre-authority revisions",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sr.stale.old_manifest_rejected",
+      "pytest_node": "test_case_outcomes.py::test_stale_old_manifest_rejected",
+      "category": "stale_exclusion",
+      "description": "Release manifest does not retain stale patch or deployment refs",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "critical"
+    },
+    {
+      "id": "sr.patch.main_header_controls",
+      "pytest_node": "test_case_outcomes.py::test_downstream_main_header_controls",
+      "category": "downstream_rebuild",
+      "description": "Final main rejects all hidden header control variants",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.patch.dev_header_controls",
+      "pytest_node": "test_case_outcomes.py::test_downstream_dev_header_controls",
+      "category": "downstream_rebuild",
+      "description": "Final dev rejects all hidden header control variants",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.patch.valid_header_regression",
+      "pytest_node": "test_case_outcomes.py::test_downstream_valid_header_regression",
+      "category": "downstream_rebuild",
+      "description": "Rebased patch preserves valid header normalization",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "supporting"
+    },
+    {
+      "id": "sr.report.cwe93_exact",
+      "pytest_node": "test_case_outcomes.py::test_downstream_report_cwe93_exact",
+      "category": "downstream_rebuild",
+      "description": "Security report identifies the public Bottle path and CWE-93",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sr.remote.final_refs",
+      "pytest_node": "test_case_outcomes.py::test_downstream_remote_final_refs",
+      "category": "downstream_rebuild",
+      "description": "Remote branch contents exactly match rebuilt local refs",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_dynamic_replanning",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.runtime.https_main",
+      "pytest_node": "test_case_outcomes.py::test_runtime_https_main",
+      "category": "runtime_behavior",
+      "description": "HTTPS main endpoint serves the final main ref",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.runtime.https_dev",
+      "pytest_node": "test_case_outcomes.py::test_runtime_https_dev",
+      "category": "runtime_behavior",
+      "description": "HTTPS dev endpoint serves the final dev ref",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.runtime.push_deploy_main",
+      "pytest_node": "test_case_outcomes.py::test_runtime_push_deploy_main",
+      "category": "runtime_behavior",
+      "description": "A real main push deploys synchronously within three seconds",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.runtime.push_deploy_dev",
+      "pytest_node": "test_case_outcomes.py::test_runtime_push_deploy_dev",
+      "category": "runtime_behavior",
+      "description": "A real dev push deploys synchronously within three seconds",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.lineage.manifest_schema",
+      "pytest_node": "test_case_outcomes.py::test_lineage_manifest_schema",
+      "category": "lineage_reverification",
+      "description": "Release manifest has exactly the frozen lineage schema",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sr.lineage.sanitized_head_reachable",
+      "pytest_node": "test_case_outcomes.py::test_lineage_sanitized_head_reachable",
+      "category": "lineage_reverification",
+      "description": "Sanitized authority head is reachable from final main",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.lineage.security_revision_final",
+      "pytest_node": "test_case_outcomes.py::test_lineage_security_revision_final",
+      "category": "lineage_reverification",
+      "description": "Security revision is the actual final patched main commit",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.lineage.deployed_ref_consistency",
+      "pytest_node": "test_case_outcomes.py::test_lineage_deployed_ref_consistency",
+      "category": "lineage_reverification",
+      "description": "Manifest local and bare deployed refs all agree",
+      "critical": true,
+      "measurement_type": "semantic",
+      "capability_target": "async_consistency_closure",
+      "relevance_tier": "direct"
+    },
+    {
+      "id": "sr.support.nginx_content_404",
+      "pytest_node": "test_case_outcomes.py::test_support_nginx_content_and_404",
+      "category": "independent_preservation",
+      "description": "Independent HTTP service preserves exact index and 404 behavior",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sr.support.nginx_logs",
+      "pytest_node": "test_case_outcomes.py::test_support_nginx_logs",
+      "category": "independent_preservation",
+      "description": "Independent HTTP service writes the declared detailed logs",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    },
+    {
+      "id": "sr.support.nginx_rate_limit",
+      "pytest_node": "test_case_outcomes.py::test_support_nginx_rate_limit_config",
+      "category": "independent_preservation",
+      "description": "Independent HTTP service preserves valid rate-limit configuration",
+      "critical": false,
+      "measurement_type": "semantic",
+      "capability_target": "base_task_completion",
+      "relevance_tier": "base"
+    }
+  ]
+}

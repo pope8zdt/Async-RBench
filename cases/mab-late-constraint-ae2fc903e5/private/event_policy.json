@@ -1,0 +1,32 @@
+{
+  "authority_rule": "Consume the evaluator-owned task-specific event exactly once and revise only its affected closure.",
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.keep_the_provisional_quality",
+      "req.02.authenticate_the_product_con",
+      "req.03.revise_price_and_shipping_fr",
+      "req.04.close_without_converting_the",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "A condition certificate confirms the changing station passed inspection, carries 12 months of coverage, ships in six days, and is offered at $57.79.",
+    "before_state": "A provisional Olivia's Little World Baby Doll Changing Station bargain exists before condition_and_shipping_certificate_delivered.",
+    "event_id": "evt.mab-late-constraint-ae2fc903e5.condition_and_shipping_certificate_delivered",
+    "primary_event_theme": "delayed_authoritative_result",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "event_id": "evt.mab-late-constraint-ae2fc903e5.condition_and_shipping_certificate_delivered",
+  "forbidden_shortcut": "Do not ignore the event, retain superseded state, over-invalidate preserved work, or claim closure without re-verification.",
+  "required_decisions": [
+    "classify_authority",
+    "revise_affected",
+    "preserve_unaffected",
+    "verify_closure"
+  ],
+  "theme": "delayed_authoritative_result"
+}

@@ -1,0 +1,218 @@
+{
+  "case_id": "mab-conflicting-specialist-results-5f19377089",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_conflict_validate_relation_and_worklo",
+      "forbidden_behavior": "Do not handle classify_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Table sizing and timestamps establish a dense two-million-row bulk load.'.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_relation_and_wo"
+        ]
+      },
+      "id": "01_classify_conflict_validate_relation_",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "blind_first_result",
+      "obligation": "classify_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_5f19377089.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_conflict:1",
+      "required_behavior": "For event 'The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.', perform classify_conflict for 'Validate relation and workload-window attribution for the returned scan counters.' while retaining valid prior result 'Table sizing and timestamps establish a dense two-million-row bulk load.'.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.validate_relation_and_wo"
+    },
+    {
+      "critical": false,
+      "decision_group": "arbitrate_conflict_record_fetch_large_data_as_s",
+      "forbidden_behavior": "Do not handle arbitrate_conflict by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'Catalog checks eliminate duplicate-index and vacuum explanations.'.",
+      "gate": "arbitrate_conflict",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_relation_and_wo"
+        ]
+      },
+      "id": "02_arbitrate_conflict_record_fetch_large",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "blind_last_result",
+      "obligation": "arbitrate_conflict",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_5f19377089.event.probes"
+      ],
+      "primary_evidence": "episode_trace:state_revision:arbitrate_conflict:2",
+      "required_behavior": "For event 'The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.', perform arbitrate_conflict for 'Record FETCH_LARGE_DATA as supported.' while retaining valid prior result 'Catalog checks eliminate duplicate-index and vacuum explanations.'.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.01.validate_relation_and_wo"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_remove_the_conflicting_preli",
+      "forbidden_behavior": "Do not handle verify_closure by ignoring the event, retaining a displaced state, or invalidating the preserved prior result 'A preliminary report leaves read volume unresolved.'.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.validate_relation_and_wo"
+        ]
+      },
+      "id": "03_verify_closure_remove_the_conflic",
+      "must_still_pass": [
+        "mab_conflicting_speciali.sem.35.the_final_artifact_records_a"
+      ],
+      "mutation_family": "inconsistent_merge",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_conflicting_specialist_results_5f19377089.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:3",
+      "required_behavior": "For event 'The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.', perform verify_closure for 'Remove the conflicting preliminary label while preserving the insert findings.' while retaining valid prior result 'A preliminary report leaves read volume unresolved.'.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.01.validate_relation_and_wo"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.validate_relation_and_wo"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.record_fetch_large_data_"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.remove_the_conflicting_p"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.return_the_required_pair"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.validate_relation_and_wo",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.record_fetch_large_data_",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.remove_the_conflicting_p",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.return_the_required_pair",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.validate_relation_and_wo",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.record_fetch_large_data_",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.remove_the_conflicting_p",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.return_the_required_pair",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.validate_relation_and_wo",
+      "req.02.record_fetch_large_data_",
+      "req.03.remove_the_conflicting_p",
+      "req.04.return_the_required_pair",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.",
+    "before_state": "Read-path measurements arrive only after physical-load analysis and draft synthesis.",
+    "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
+    "primary_event_theme": "conflicting_valid_results",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "seed-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Validate relation and workload-window attribution for the returned scan counters.",
+      "id": "req.01.validate_relation_and_wo",
+      "observable_probe": "mab_conflicting_speciali.sem.01.the_final_diagnosis_contains",
+      "public_evidence": "source instruction and workstream result for validate_relation_and_workload_windo"
+    },
+    {
+      "description": "Record FETCH_LARGE_DATA as supported.",
+      "id": "req.02.record_fetch_large_data_",
+      "observable_probe": "mab_conflicting_speciali.sem.02.the_final_answer_selects_exa",
+      "public_evidence": "source instruction and workstream result for record_fetch_large_data_as_supported"
+    },
+    {
+      "description": "Remove the conflicting preliminary label while preserving the insert findings.",
+      "id": "req.03.remove_the_conflicting_p",
+      "observable_probe": "mab_conflicting_speciali.sem.03.the_final_deliverable_obeys_",
+      "public_evidence": "source instruction and workstream result for remove_the_conflicting_preliminary_l"
+    },
+    {
+      "description": "Return the required pair of allowed tokens.",
+      "id": "req.04.return_the_required_pair",
+      "observable_probe": "mab_conflicting_speciali.sem.04.evidence_produced_by_bound_r",
+      "public_evidence": "source instruction and workstream result for return_the_required_pair_of_allowed_"
+    }
+  ]
+}

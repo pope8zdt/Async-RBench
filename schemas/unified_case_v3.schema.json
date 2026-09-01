@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://async-rbench.local/schemas/unified_case_v3.schema.json",
+  "title": "Async-RBench unified case v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "case_id", "family", "lineage", "source",
+    "causal_record", "scenarios", "review_binding", "main_score_policy",
+    "async_process_points_are_diagnostics_only", "quality_state", "score_points"
+  ],
+  "properties": {
+    "schema_version": {"const": "async-rbench-unified-case-v3"},
+    "case_id": {"type": "string", "minLength": 8},
+    "family": {
+      "enum": [
+        "conflicting_specialist_results", "cross_app_artifact",
+        "dependency_unblock", "late_constraint", "late_test_evidence",
+        "partial_failure_recovery", "state_reconciliation"
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "required": ["origin_collection", "original_case_id", "original_schema_version", "migration"]
+    },
+    "source": {
+      "type": "object",
+      "required": ["task_id", "benchmark", "instruction", "instruction_sha256", "evidence_class"]
+    },
+    "causal_record": {
+      "type": "object",
+      "required": ["prior_work", "independent_event", "event_sequence", "superseded_work", "affected_work"],
+      "properties": {
+        "prior_work": {"type": "array", "minItems": 1},
+        "independent_event": {"type": "object"},
+        "event_sequence": {"type": "array", "minItems": 1},
+        "superseded_work": {"type": "array", "minItems": 1},
+        "affected_work": {"type": "array", "minItems": 1}
+      }
+    },
+    "scenarios": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["react", "linear", "async"],
+      "properties": {
+        "react": {"type": "object"},
+        "linear": {"type": "object"},
+        "async": {"type": "object"}
+      }
+    },
+    "review_binding": {"type": "object"},
+    "main_score_policy": {"const": "mode_neutral_task_outcome"},
+    "async_process_points_are_diagnostics_only": {"const": true},
+    "quality_state": {"type": "object"},
+    "score_points": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "weight", "description", "mode_neutral"],
+        "properties": {
+          "id": {"type": "string"},
+          "weight": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+          "description": {"type": "string"},
+          "mode_neutral": {"const": true}
+        }
+      }
+    }
+  }
+}

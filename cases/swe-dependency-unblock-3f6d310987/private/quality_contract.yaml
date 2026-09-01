@@ -1,0 +1,83 @@
+{
+  "equivalence_solutions": [
+    {
+      "distinguishes_from_oracle": "Uses a separately frozen solution entrypoint and explicit receipt-bound closure sequence; acceptance depends only on semantic and causal evidence.",
+      "id": "alternative-source-native-closure",
+      "path": "task/equivalence_solutions/alternative_solution.sh"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "id": "wrong-event-receipt",
+      "must_fail": [
+        "swe_dependency_unblock_3f6d310987.event.receipt"
+      ],
+      "path": "task/negative_mutations/wrong_event_receipt.sh"
+    },
+    {
+      "id": "broken-closure-lineage",
+      "must_fail": [
+        "swe_dependency_unblock_3f6d310987.closure"
+      ],
+      "path": "task/negative_mutations/broken_closure_lineage.sh"
+    }
+  ],
+  "requirements": [
+    {
+      "covers": {
+        "dynamic_control_checks": [
+          "swe_dependency__a10662.cf.01_classify_completeness_use_the_dimension_",
+          "swe_dependency__a10662.cf.02_revise_affected_limit_dimensionles",
+          "swe_dependency__a10662.cf.03_verify_closure_verify_the_reporte"
+        ],
+        "hidden_checks": [
+          "receipt_bound_to_case",
+          "closure_consumes_receipt"
+        ],
+        "semantic_checks": [
+          "swe_dependency_unblock_3f6d310987.event.receipt",
+          "swe_dependency_unblock_3f6d310987.event.probes",
+          "swe_dependency_unblock_3f6d310987.closure",
+          "swe_dependency_unblock_3f6d310987.source.pin",
+          "swe_dependency_unblock_3f6d310987.native.pytest_01_test_quantity_definition",
+          "swe_dependency_unblock_3f6d310987.native.pytest_02_test_quantity_eq",
+          "swe_dependency_unblock_3f6d310987.native.pytest_03_test_abbrev",
+          "swe_dependency_unblock_3f6d310987.native.pytest_04_test_add_sub",
+          "swe_dependency_unblock_3f6d310987.native.pytest_05_test_convert_to",
+          "swe_dependency_unblock_3f6d310987.native.pytest_06_test_eq",
+          "swe_dependency_unblock_3f6d310987.native.pytest_07_test_issue_24062",
+          "swe_dependency_unblock_3f6d310987.native.pytest_08_test_print",
+          "swe_dependency_unblock_3f6d310987.native.pytest_09_test_str_repr"
+        ],
+        "workstream_validators": [
+          "requirement_worker_01",
+          "requirement_worker_02",
+          "requirement_worker_03",
+          "requirement_worker_04"
+        ]
+      },
+      "id": "source_and_async_closure_contract",
+      "public_evidence": [
+        {
+          "contains": "ASYNC-RBENCH EXTENSION",
+          "path": "task/task.yaml"
+        },
+        {
+          "contains": "SI._collect_factor_and_dimension() cannot properly detect that exponent is dimensionless",
+          "path": "task/task.yaml"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_contract": {
+    "instruction_preservation": "verbatim_append",
+    "sources": [
+      {
+        "instruction_sha256": "ed79e5753fad00825dbc449f03cd9b9cdd0cfa7e67aba812f02f73b5e3b4ac18",
+        "task_id": "sympy__sympy-24066",
+        "task_path": "private/source_task.yaml"
+      }
+    ]
+  }
+}

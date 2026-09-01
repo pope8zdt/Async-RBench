@@ -1,0 +1,133 @@
+{
+  "artifacts": [
+    {
+      "id": "provisional_checkpoint",
+      "path": "/app/output_data/provisional_checkpoint.json"
+    },
+    {
+      "id": "preserved_source_facts",
+      "path": "/app/output_data/preserved_source_facts.json"
+    },
+    {
+      "id": "final_state",
+      "path": "/app/output_data/decision_manifest.json"
+    },
+    {
+      "id": "workspace_state",
+      "path": "/testbed"
+    }
+  ],
+  "case_id": "swe-dependency-unblock-53e5b92cf8",
+  "format_version": 2,
+  "milestones": [
+    {
+      "depends_on": [],
+      "id": "inspect_source"
+    },
+    {
+      "depends_on": [
+        "inspect_source"
+      ],
+      "id": "resolve_requirement_01"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_01"
+      ],
+      "id": "resolve_requirement_02"
+    },
+    {
+      "depends_on": [
+        "resolve_requirement_02"
+      ],
+      "id": "consume_async_evidence"
+    },
+    {
+      "depends_on": [
+        "consume_async_evidence"
+      ],
+      "id": "reverify_and_close"
+    }
+  ],
+  "public_checks": [],
+  "source_tasks": [
+    {
+      "benchmark": "swe-bench",
+      "id": "instance_internetarchive__openlibrary-e1e502986a3b003899a8347ac8a7ff7b08cbfc39-v08d8e8889ec945ab821fb156c04c7d2e2810debb",
+      "source_sha256": "ac60bdc74c0d8550ea2457caff00d594375478a180704f971f6972bb482f38a9",
+      "upstream_path": "private/source_task.yaml"
+    }
+  ],
+  "task_instruction_path": "task/task.yaml",
+  "title": "Async-RBench source-native rebuild: instance_internetarchive__openlibrary-e1e502986a3b003899a8347ac8a7ff7b08cbfc39-v08d8e8889ec945ab821fb156c04c7d2e2810debb",
+  "workstreams": [
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 1: Revise parsing and serialization to preserve every returned complex field. Review together: Normalize indentation without changing parent-child relationships.",
+      "id": "requirement_worker_01",
+      "priority": "normal",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_01.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Perform a bounded, read-only review of this source-task requirement: Revise parsing and serialization to preserve every returned complex field. Review together: Normalize indentation without changing parent-child relationships. Do not implement the main task, run a full repository build, or broaden the investigation beyond this requirement. Inspect the current shared workspace state, compute revision_sha256 as the SHA-256 of `git diff --binary HEAD`, and write exactly one JSON object to /app/output_data/workstreams/requirement_worker_01.json with string fields `finding` and `revision_sha256`. Then complete with payload.evidence containing `report_path`, the same `revision_sha256`, and the same concise `finding`, and payload.files equal to [`/app/output_data/workstreams/requirement_worker_01.json`]."
+    },
+    {
+      "allowed_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "evidence_schema": {
+        "finding": {
+          "type": "string"
+        },
+        "report_path": {
+          "pattern": "^/app/output_data/workstreams/.+\\.json$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "expected_output": "Receipt-bound evidence for requirement 2: Display the warning only when complex metadata is present. Review together: Size the editor from normalized content while preserving manual editing.",
+      "id": "requirement_worker_02",
+      "priority": "high",
+      "public_result_contract": {},
+      "required_evidence_fields": [
+        "report_path",
+        "revision_sha256",
+        "finding"
+      ],
+      "required_files": [
+        "/app/output_data/workstreams/requirement_worker_02.json"
+      ],
+      "targets": [
+        "workspace_state"
+      ],
+      "task": "Perform a bounded, read-only review of this source-task requirement: Display the warning only when complex metadata is present. Review together: Size the editor from normalized content while preserving manual editing. Do not implement the main task, run a full repository build, or broaden the investigation beyond this requirement. Inspect the current shared workspace state, compute revision_sha256 as the SHA-256 of `git diff --binary HEAD`, and write exactly one JSON object to /app/output_data/workstreams/requirement_worker_02.json with string fields `finding` and `revision_sha256`. Then complete with payload.evidence containing `report_path`, the same `revision_sha256`, and the same concise `finding`, and payload.files equal to [`/app/output_data/workstreams/requirement_worker_02.json`]."
+    }
+  ]
+}

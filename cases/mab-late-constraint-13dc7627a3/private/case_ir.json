@@ -1,0 +1,248 @@
+{
+  "case_id": "mab-late-constraint-13dc7627a3",
+  "decision_contracts": [
+    {
+      "critical": true,
+      "decision_group": "classify_scope_delta_streaming_latency_memory_scope",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close streaming_latency_memory_scope_added.",
+      "gate": "wait_for_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.01.preserve_the_broad_empirical"
+        ]
+      },
+      "id": "01_classify_scope_delta_streaming_latency_me",
+      "must_still_pass": [
+        "mab_late_constraint_13dc7627a3.source.preservation"
+      ],
+      "mutation_family": "classify_scope_delta",
+      "obligation": "classify_scope_delta",
+      "outcome_anchors": [
+        "mab_late_constraint_13dc7627a3.event.receipt"
+      ],
+      "primary_evidence": "episode_trace:event_intake:classify_scope_delta:1",
+      "required_behavior": "classify_scope_delta: A late streaming latency and memory requirement expands the TCN-versus-RNN comparison without discarding sequence accuracy, receptive-field, or long-memory evaluation.",
+      "stage_tag": "event_intake",
+      "task_requirement_id": "req.01.preserve_the_broad_empirical"
+    },
+    {
+      "critical": false,
+      "decision_group": "revise_affected_streaming_latency_memory_scope",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close streaming_latency_memory_scope_added.",
+      "gate": "resolve_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.02.formulate_a_streaming_sequen"
+        ]
+      },
+      "id": "02_revise_affected_streaming_latency_me",
+      "must_still_pass": [
+        "mab_late_constraint_13dc7627a3.source.preservation"
+      ],
+      "mutation_family": "revise_affected",
+      "obligation": "revise_affected",
+      "outcome_anchors": [
+        "mab_late_constraint_13dc7627a3.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:state_revision:revise_affected:2",
+      "required_behavior": "revise_affected: A late streaming latency and memory requirement expands the TCN-versus-RNN comparison without discarding sequence accuracy, receptive-field, or long-memory evaluation.",
+      "stage_tag": "state_revision",
+      "task_requirement_id": "req.02.formulate_a_streaming_sequen"
+    },
+    {
+      "critical": false,
+      "decision_group": "preserve_unaffected_streaming_latency_memory_scope",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close streaming_latency_memory_scope_added.",
+      "gate": "selective_replan",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.03.specify_music_language_and_s"
+        ]
+      },
+      "id": "03_preserve_unaffected_streaming_latency_me",
+      "must_still_pass": [
+        "mab_late_constraint_13dc7627a3.source.preservation"
+      ],
+      "mutation_family": "preserve_unaffected",
+      "obligation": "preserve_unaffected",
+      "outcome_anchors": [
+        "mab_late_constraint_13dc7627a3.event.authority_probe"
+      ],
+      "primary_evidence": "episode_trace:plan_revision:preserve_unaffected:3",
+      "required_behavior": "preserve_unaffected: A late streaming latency and memory requirement expands the TCN-versus-RNN comparison without discarding sequence accuracy, receptive-field, or long-memory evaluation.",
+      "stage_tag": "plan_revision",
+      "task_requirement_id": "req.03.specify_music_language_and_s"
+    },
+    {
+      "critical": true,
+      "decision_group": "verify_closure_streaming_latency_memory_scope",
+      "forbidden_behavior": "Do not ignore, double-apply, over-apply, or falsely close streaming_latency_memory_scope_added.",
+      "gate": "rederive_from_authority",
+      "gate_args": {
+        "artifacts": [
+          "final_state"
+        ],
+        "preserve_artifacts": [
+          "preserved_source_facts"
+        ],
+        "workstreams": [
+          "req.04.integrate_the_late_latency_m"
+        ]
+      },
+      "id": "04_verify_closure_streaming_latency_me",
+      "must_still_pass": [
+        "mab_late_constraint_13dc7627a3.source.preservation"
+      ],
+      "mutation_family": "verify_closure",
+      "obligation": "verify_closure",
+      "outcome_anchors": [
+        "mab_late_constraint_13dc7627a3.closure"
+      ],
+      "primary_evidence": "episode_trace:closure:verify_closure:4",
+      "required_behavior": "verify_closure: A late streaming latency and memory requirement expands the TCN-versus-RNN comparison without discarding sequence accuracy, receptive-field, or long-memory evaluation.",
+      "stage_tag": "closure",
+      "task_requirement_id": "req.04.integrate_the_late_latency_m"
+    }
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.01.preserve_the_broad_empirical"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.02.formulate_a_streaming_sequen"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.03.specify_music_language_and_s"
+      },
+      {
+        "relation": "invalidates",
+        "source": "event_input",
+        "target": "req.04.integrate_the_late_latency_m"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.01.preserve_the_broad_empirical",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.02.formulate_a_streaming_sequen",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.03.specify_music_language_and_s",
+        "target": "final_state"
+      },
+      {
+        "relation": "depends_on",
+        "source": "req.04.integrate_the_late_latency_m",
+        "target": "final_state"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "event_input",
+        "kind": "event"
+      },
+      {
+        "id": "req.01.preserve_the_broad_empirical",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.02.formulate_a_streaming_sequen",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.03.specify_music_language_and_s",
+        "kind": "requirement"
+      },
+      {
+        "id": "req.04.integrate_the_late_latency_m",
+        "kind": "requirement"
+      },
+      {
+        "id": "final_state",
+        "kind": "closure"
+      },
+      {
+        "id": "preserve_prior",
+        "kind": "preservation"
+      }
+    ]
+  },
+  "event_contract": {
+    "affected_closure": [
+      "event_input",
+      "req.01.preserve_the_broad_empirical",
+      "req.02.formulate_a_streaming_sequen",
+      "req.03.specify_music_language_and_s",
+      "req.04.integrate_the_late_latency_m",
+      "final_state"
+    ],
+    "affected_nodes": [
+      "event_input"
+    ],
+    "after_state": "The scope-expanded proposal measures accuracy together with streaming latency, memory, and history under controlled architecture ablations.",
+    "before_state": "The proposal compares TCNs and recurrent models offline but has no streaming latency, peak-memory, or effective-history constraint.",
+    "event_id": "evt.mab_late_constraint_13dc.streaming_budget_scope_added",
+    "primary_event_theme": "task_scope_or_dependency_change",
+    "unaffected_nodes": [
+      "preserve_prior"
+    ]
+  },
+  "instance_id": "strict-source-native-1",
+  "schema_version": "1",
+  "task_archetype": "source_native_task_causal_rebuild",
+  "task_requirements": [
+    {
+      "description": "Preserve the broad empirical comparison between TCN, LSTM, and GRU sequence models.",
+      "id": "req.01.preserve_the_broad_empirical",
+      "observable_probe": "mab_late_constraint_13dc7627a3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_01 result"
+    },
+    {
+      "description": "Formulate a streaming sequence-modeling question and explain importance, hardness, and prior gaps.",
+      "id": "req.02.formulate_a_streaming_sequen",
+      "observable_probe": "mab_late_constraint_13dc7627a3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_02 result"
+    },
+    {
+      "description": "Specify music, language, and synthetic long-memory tasks with accuracy and receptive-field ablations.",
+      "id": "req.03.specify_music_language_and_s",
+      "observable_probe": "mab_late_constraint_13dc7627a3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_03 result"
+    },
+    {
+      "description": "Integrate the late latency, memory, and effective-history scope without dropping existing comparisons.",
+      "id": "req.04.integrate_the_late_latency_m",
+      "observable_probe": "mab_late_constraint_13dc7627a3.source.task_behavior",
+      "public_evidence": "source instruction and requirement_worker_04 result"
+    }
+  ]
+}

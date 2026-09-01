@@ -1,0 +1,143 @@
+format_version: 2
+case_id: distributed-model-runtime
+title: Recover and deploy a real PyTorch model with distributed candidates and exact
+  scheduler workload
+task_instruction_path: task/task.yaml
+source_tasks:
+- id: pytorch-model-recovery
+  upstream_path: upstream/terminal-bench/original-tasks-locked/pytorch-model-recovery
+  benchmark: terminal-bench
+- id: torch-tensor-parallelism
+  upstream_path: upstream/terminal-bench/original-tasks-locked/torch-tensor-parallelism
+  benchmark: terminal-bench
+- id: torch-pipeline-parallelism
+  upstream_path: upstream/terminal-bench/original-tasks-locked/torch-pipeline-parallelism
+  benchmark: terminal-bench
+- id: llm-inference-batching-scheduler
+  upstream_path: upstream/terminal-bench/original-tasks-locked/llm-inference-batching-scheduler
+  benchmark: terminal-bench
+milestones:
+- id: recover_model
+  depends_on: []
+- id: implement_tp
+  depends_on:
+  - recover_model
+- id: implement_pp
+  depends_on:
+  - recover_model
+- id: select_backend
+  depends_on:
+  - implement_tp
+  - implement_pp
+- id: schedule_batches
+  depends_on:
+  - select_backend
+- id: final_qa
+  depends_on:
+  - schedule_batches
+artifacts:
+- id: recovered_model
+  path: /app/model.pt
+- id: tp_candidate
+  path: /app/parallel_linear.py
+- id: pp_candidate
+  path: /app/pipeline_parallel.py
+- id: batch_plan_1
+  path: /app/task_file/output_data/plan_b1.jsonl
+- id: batch_plan_2
+  path: /app/task_file/output_data/plan_b2.jsonl
+- id: deployment
+  path: /app/deployment.json
+- id: batch_lineage
+  path: /app/batch-lineage.json
+- id: pre_event_verification
+  path: runtime:qa
+workstreams:
+- id: implement_tp
+  task: 'Build the candidate profile-v1 tensor-parallel candidate: implement the original
+    ColumnParallelLinear and RowParallelLinear APIs (bias zero-init, all-gather/all-reduce
+    semantics) in /app/parallel_linear.py and verify outputs and weight/bias gradients
+    match nn.Linear in the supplied single-process Gloo validation environment. The
+    candidate profile being evaluated declares world_size 4; report that declared
+    profile value separately from the validator process size. Report the observed
+    evidence fields profile_version, backend, world_size and verification_passed.'
+  targets:
+  - tp_candidate
+  expected_output: /app/parallel_linear.py implementing the original ColumnParallelLinear/RowParallelLinear
+    verified against nn.Linear in the supplied Gloo validation environment, reporting
+    candidate profile_version v1, backend gloo, declared world_size 4 and verification_passed.
+  priority: normal
+  required_evidence_fields:
+  - profile_version
+  - backend
+  - world_size
+  - verification_passed
+  evidence_schema:
+    profile_version:
+      type: string
+    backend:
+      type: string
+    world_size:
+      type: integer
+    verification_passed:
+      type: boolean
+  allowed_files:
+  - /app/parallel_linear.py
+  - /app/simple_test.py
+  required_files:
+  - /app/parallel_linear.py
+  public_result_contract: {}
+- id: select_backend
+  task: Inspect the hardware-profile inputs available in this isolated workspace and
+    report the observed profile version, world size, supported parallel modes and
+    a feasible canonical backend. Use exactly one public backend identifier from
+    tensor, pipeline or data; select it from the observed support flags rather than
+    inventing a provider/library name.
+  targets: []
+  expected_output: Evidence-backed hardware-profile recommendation.
+  priority: high
+  required_evidence_fields:
+  - profile_version
+  - world_size
+  - tensor_parallel_supported
+  - pipeline_parallel_supported
+  - recommended_backend
+  evidence_schema:
+    profile_version:
+      type: string
+    world_size:
+      type: integer
+    tensor_parallel_supported:
+      type: boolean
+    pipeline_parallel_supported:
+      type: boolean
+    recommended_backend:
+      type: string
+      enum:
+      - tensor
+      - pipeline
+      - data
+  allowed_files: []
+  required_files: []
+  public_result_contract: {}
+- id: recover_model
+  task: Reconstruct the model implied by /app/weights.pt and /app/dataset.pt, tune
+    only output_layer, and save the improved TorchScript model as /app/model.pt. Verify
+    the saved model loads with torch.jit.load and accepts the original two-input src/tgt
+    forward contract. Report model_loadable=true only after that verification.
+  targets:
+  - recovered_model
+  expected_output: Verified reconstructed model /app/model.pt (TorchScript), loadable
+    via torch.jit.load.
+  priority: normal
+  required_evidence_fields:
+  - model_loadable
+  evidence_schema:
+    model_loadable:
+      type: boolean
+  allowed_files:
+  - /app/model.pt
+  required_files:
+  - /app/model.pt
+  public_result_contract: {}
+public_checks: []

@@ -1,0 +1,22 @@
+{
+  "assets": [
+    "official MultiAgentBench task/output contract",
+    "four-layer evaluator result graph",
+    "task-specific canonical and hidden tests"
+  ],
+  "docker": [
+    "python:3.11-slim",
+    "explicit bash installation",
+    "ensurepip plus pytest installation",
+    "participant-safe task_file COPY"
+  ],
+  "environment_strategy": "reconstruct source behavior because official source has no implementation or native tests",
+  "event_injection": "authentication_straggler_completed is evaluator-owned",
+  "hidden_tests": "four independent Travel_Collaborator source-semantic nodes plus authority and closure",
+  "missing_environment_is_reconstructable": true,
+  "native_runtime_ref": {
+    "adapter": "MultiAgentBench coding task",
+    "source_task_id": "coding:041"
+  },
+  "oracle": "evaluator-owned canonical, event authority, and receipt-bound closure"
+}
