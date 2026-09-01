@@ -1,0 +1,6 @@
+# Normalize text files to LF in the repository and in every checkout
+# (attributes take precedence over core.autocrlf), so content-derived
+# provenance hashes recorded in per-case source_lock.json are identical on
+# every platform and don't depend on how a machine checks out the repo.
+# Binary files are detected and left untouched by text=auto.
+* text=auto eol=lf

@@ -257,6 +257,14 @@ def validate_sources(root: Path, cases) -> list[str]:
             elif benchmark == "swe-bench":
                 _validate_hash_locked_source(case, source, lock, "instances", errors)
         for copy in case.raw.get("asset_copies", []):
+            # Same rationale as the collection locks: without vendored
+            # upstream/ the original asset tree is unavailable, so the
+            # case-contained copy cannot be compared against it.
+            if (
+                not _upstream_locks_vendored(root)
+                and str(copy.get("from") or "").startswith("upstream/")
+            ):
+                continue
             source = root / copy["from"]
             # ``to`` is resolved case-directory-relative first, so the same
             # The contract validates both as a candidate (candidate_cases/<id>/)

@@ -83,3 +83,27 @@ def test_source_native_locks_stay_strict_without_vendored_upstream(tmp_path: Pat
     source.write_text("tampered content\n", encoding="utf-8")
     errors = validate_sources(tmp_path, [case])
     assert any("source-native hash mismatch" in error for error in errors)
+
+
+def test_upstream_asset_copies_skipped_without_vendored_upstream(tmp_path: Path) -> None:
+    # asset_copies may point at upstream/ originals; without vendored
+    # upstream/ the compare is skipped, not an error.
+    case = _case(tmp_path, "example", {"id": "task-1", "upstream_path": "upstream/terminal-bench/original-tasks-locked/task-1"})
+    case.raw["asset_copies"] = [
+        {"from": "upstream/terminal-bench/original-tasks-locked/task-1/solution.sh",
+         "to": "task/upstream_solutions/task-1.sh"},
+    ]
+    # Neither source nor target exists, so a strict run would error.
+    assert validate_sources(tmp_path, [case]) == []
+
+
+def test_upstream_asset_copies_strict_once_vendored(tmp_path: Path) -> None:
+    (tmp_path / "upstream/terminal-bench").mkdir(parents=True)
+    (tmp_path / "upstream/terminal-bench/SOURCE_LOCK.json").write_text("{}", encoding="utf-8")
+    case = _case(tmp_path, "example", {"id": "task-1", "upstream_path": "upstream/terminal-bench/original-tasks-locked/task-1"})
+    case.raw["asset_copies"] = [
+        {"from": "upstream/terminal-bench/original-tasks-locked/task-1/solution.sh",
+         "to": "task/upstream_solutions/task-1.sh"},
+    ]
+    errors = validate_sources(tmp_path, [case])
+    assert any("copied asset differs" in error for error in errors)

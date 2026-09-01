@@ -209,7 +209,9 @@ artifacts/experiments/manual-<case>-<timestamp>/
 
 `upstream/` 不进入 Git，因为它包含多个独立仓库、缓存和超大数据文件。需要 provenance 或 source-native 重建时，由负责人提供固定 revision/资产清单，或按照对应文档单独获取。
 
-因此，在未包含 `upstream` 的克隆上，`validate` 会**跳过集合级 source lock 校验**：`upstream/<benchmark>/SOURCE_LOCK.json` 不存在时不再判为错误。case 自包含的 per-case source-native 锁（`cases/<case>/private/source_lock.json`）不受影响、照常校验。一旦工作区中存在任意一个集合锁（即已下载完整 `upstream/`），校验立即恢复严格：任何缺失或内容不匹配的集合锁都会使 `validate` 失败——避免把部分下载误当完整源头。
+因此，在未包含 `upstream` 的克隆上，`validate` 会**跳过集合级 source lock 校验**：`upstream/<benchmark>/SOURCE_LOCK.json` 不存在时不再判为错误；`asset_copies` 中指向 `upstream/` 的原件比对同样跳过（case 内副本本身照常存在并可运行）。case 自包含的 per-case source-native 锁（`cases/<case>/private/source_lock.json`）不受影响、照常校验。一旦工作区中存在任意一个集合锁（即已下载完整 `upstream/`），校验立即恢复严格：任何缺失或内容不匹配的集合锁、任何与上传原件不一致的资产副本都会使 `validate` 失败——避免把部分下载误当完整源头。
+
+仓库通过 `.gitattributes`（`* text=auto eol=lf`）把文本文件统一为 LF 行尾；`core.autocrlf` 等本地换行设置不会改变克隆出的字节，因此 `source_lock.json` 记录的 provenance 哈希在任何平台、任何克隆上都是一致的。
 
 ## 11. 向负责人返回什么
 
