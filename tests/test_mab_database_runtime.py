@@ -3,8 +3,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+from author_local import requires_author_local
+
 ROOT = Path(__file__).resolve().parents[1]
 BATCH = ROOT / "candidate_cases/rebuild-to-100/runtime-mab-db"
+pytestmark = requires_author_local(
+    "candidate_cases/rebuild-to-100/selection-manifest.json",
+)
 
 
 def test_materialize_refuses_published_cases_and_batch_stays_verified() -> None:

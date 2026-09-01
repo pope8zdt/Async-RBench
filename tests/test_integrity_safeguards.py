@@ -14,6 +14,8 @@ from async_rbench.evaluation.version import EVALUATION_CONTRACT_VERSION
 from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 from async_rbench.spec import CaseSpec, load_case, validate_case
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -63,6 +65,7 @@ def test_case_validation_requires_authority_scoped_event_asset() -> None:
     assert any("authoritative workstream" in error for error in errors)
 
 
+@requires_author_local("candidate_cases/nginx-live-port-conflict")
 def test_case_validation_rejects_unobservable_runtime_artifact() -> None:
     source = load_case(ROOT / "candidate_cases/nginx-live-port-conflict/public_case.yaml")
     raw = deepcopy(source.raw)

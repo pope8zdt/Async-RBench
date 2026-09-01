@@ -6,9 +6,14 @@ from pathlib import Path
 
 from async_rbench.spec import load_case
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "materialize_selected_case_blueprints.py"
+pytestmark = requires_author_local(
+    "candidate_cases/rebuild-to-100/selection-manifest.json",
+)
 
 
 def _module():

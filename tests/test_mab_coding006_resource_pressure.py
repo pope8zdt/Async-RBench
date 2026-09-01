@@ -5,9 +5,14 @@ import importlib.util
 import json
 from pathlib import Path
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = ROOT / "candidate_cases/mab-dependency-unblock-895f0a4354/task/task_file/scripts/projectorganizer_pressure.py"
+pytestmark = requires_author_local(
+    "candidate_cases/mab-dependency-unblock-895f0a4354",
+)
 
 
 def load_runtime():

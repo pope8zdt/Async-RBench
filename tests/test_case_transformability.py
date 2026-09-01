@@ -3,8 +3,13 @@ from pathlib import Path
 from async_rbench.case_ir import validate_case_ir, validate_score_plan
 from async_rbench.case_transformability import build_transformability_audit
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
+pytestmark = requires_author_local(
+    "artifacts/authoritative-expansion-v2/03-case-production/case_manifest.jsonl",
+)
 
 
 def test_all_607_records_receive_deep_task_specific_transformability_audits():

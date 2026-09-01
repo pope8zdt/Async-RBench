@@ -13,9 +13,12 @@ from async_rbench.native_runtime_registry import (
     synchronize_runtime_metadata,
 )
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT = ROOT / "artifacts" / "source-native-v4"
+pytestmark = requires_author_local("artifacts/source-native-v4/native_manifest.jsonl")
 
 
 def read_jsonl(path):

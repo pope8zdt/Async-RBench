@@ -8,6 +8,8 @@ from pathlib import Path
 
 import pytest
 
+from author_local import requires_author_local
+
 import async_rbench.marble_runtime as marble_runtime
 
 from async_rbench.marble_runtime import (
@@ -35,6 +37,18 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = ROOT / "artifacts/source-native-v4"
 UPSTREAM_ROOT = ROOT / "upstream/marble"
 
+_NATIVE_SOURCE_MANIFEST = requires_author_local(
+    "artifacts/source-native-v4/native_manifest.jsonl",
+)
+_UPSTREAM_MARBLE = requires_author_local(
+    "upstream/marble/marble/evaluator/evaluator.py",
+)
+_NATIVE_BINDING = requires_author_local(
+    "artifacts/native-runtime-v4/marble_native_dependencies.lock",
+    "artifacts/native-runtime-v4/marble_bootstrap_report.json",
+    "artifacts/native-runtime-v4/marble_environment_smoke.jsonl",
+)
+
 
 def _read_jsonl(path: Path):
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
@@ -55,6 +69,8 @@ def _assert_audit_chain(audit):
         previous = record["record_sha256"]
 
 
+@_UPSTREAM_MARBLE
+@_NATIVE_SOURCE_MANIFEST
 def test_all_341_marble_cases_have_environment_smoke_lifecycle_evidence():
     manifest = [
         row
@@ -190,6 +206,7 @@ def test_registry_merge_preserves_other_benchmarks_and_gold_entries():
     assert merged["native"]["environment_smoke"]["status"] == MARBLE_SMOKE_STATUS
 
 
+@_UPSTREAM_MARBLE
 def test_temporary_staging_repairs_runtime_without_mutating_upstream(tmp_path):
     watched = [
         UPSTREAM_ROOT / "marble/evaluator/evaluator.py",
@@ -235,6 +252,7 @@ def test_temporary_staging_repairs_runtime_without_mutating_upstream(tmp_path):
     }
 
 
+@_NATIVE_SOURCE_MANIFEST
 def test_real_episode_preflight_rejects_offline_provider():
     row = next(
         row
@@ -255,6 +273,7 @@ def test_real_episode_preflight_rejects_offline_provider():
     assert "actual_native_environment_initialized_and_reset" not in result.checks
 
 
+@_UPSTREAM_MARBLE
 def test_database_readiness_probe_never_starts_or_stops_compose(tmp_path, monkeypatch):
     staged = stage_marble_runtime(UPSTREAM_ROOT, tmp_path / "runtime")
     commands = []
@@ -315,6 +334,8 @@ def test_database_provisioning_is_explicit_and_fixed_project_scoped(
     assert any("up" in command and "--wait" in command for command in commands)
 
 
+@_UPSTREAM_MARBLE
+@_NATIVE_SOURCE_MANIFEST
 def test_native_initialization_evidence_validator_pins_all_six_sources(
     tmp_path,
     monkeypatch,
@@ -443,6 +464,7 @@ def test_native_initialization_evidence_validator_pins_all_six_sources(
     assert reason == "marble_native_environment_staging_source_hash_invalid"
 
 
+@_NATIVE_BINDING
 def test_isolated_runtime_binding_pins_lock_report_and_imports():
     binding, error = native_runtime_binding(repository_root=ROOT)
     assert error is None
@@ -458,6 +480,7 @@ def test_isolated_runtime_binding_pins_lock_report_and_imports():
     assert all(binding["checks"].values())
 
 
+@_NATIVE_SOURCE_MANIFEST
 def test_batch_resume_refuses_existing_evidence_when_runtime_is_missing(
     tmp_path,
     monkeypatch,
@@ -509,6 +532,7 @@ def test_batch_resume_refuses_existing_evidence_when_runtime_is_missing(
     assert report["failed_count"] >= 1
 
 
+@_NATIVE_SOURCE_MANIFEST
 def test_batch_empty_selection_is_never_reported_validated(tmp_path, monkeypatch):
     import scripts.initialize_marble_collection as batch
 
@@ -531,6 +555,7 @@ def test_batch_empty_selection_is_never_reported_validated(tmp_path, monkeypatch
     assert report["infrastructure_error"] == "marble_collection_selection_empty"
 
 
+@_NATIVE_SOURCE_MANIFEST
 def test_launcher_preflight_report_never_claims_model_episode():
     row = next(
         row
@@ -577,6 +602,7 @@ def test_python_discovery_never_selects_an_unsupported_version():
     assert completed.stdout.strip() in {"(3, 9)", "(3, 10)", "(3, 11)"}
 
 
+@_UPSTREAM_MARBLE
 def test_materialized_config_is_ascii_safe_and_preserves_cjk_for_upstream_loader(
     tmp_path,
 ):
@@ -620,6 +646,7 @@ def test_materialized_config_is_ascii_safe_and_preserves_cjk_for_upstream_loader
     assert json.loads(completed.stdout) == expected
 
 
+@_NATIVE_BINDING
 def test_checked_in_evidence_matches_full_qualification_output():
     entries = _read_jsonl(
         ROOT / "artifacts/native-runtime-v4/marble_environment_smoke.jsonl"

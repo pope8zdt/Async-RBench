@@ -12,9 +12,12 @@ from async_rbench.evaluation.mutation_audit import validate_candidate_mutation_s
 from async_rbench.provenance import validate_sources
 from async_rbench.spec import load_case, validate_case
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 BATCH = ROOT / "candidate_cases" / "rebuild-batch-001"
+pytestmark = requires_author_local("candidate_cases/rebuild-batch-001/batch-manifest.json")
 
 
 def _cases() -> list[dict]:

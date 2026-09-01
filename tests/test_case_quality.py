@@ -9,15 +9,20 @@ from async_rbench.case_quality import validate_case_quality
 from async_rbench.retrospective_quality import build_retrospective_quality_audit
 from async_rbench.spec import discover_case_instances
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "candidate_cases/nginx-live-port-conflict"
+_CANDIDATE = requires_author_local("candidate_cases/nginx-live-port-conflict")
 
 
+@_CANDIDATE
 def test_nginx_candidate_quality_contract_is_complete() -> None:
     assert validate_case_quality(ROOT, SOURCE, require_contract=True) == []
 
 
+@_CANDIDATE
 def test_quality_gate_detects_public_instruction_loss(tmp_path: Path) -> None:
     candidate = tmp_path / "nginx-live-port-conflict"
     shutil.copytree(SOURCE, candidate)
@@ -32,6 +37,7 @@ def test_quality_gate_detects_public_instruction_loss(tmp_path: Path) -> None:
     assert any("Welcome to the benchmark webserver" in error for error in errors)
 
 
+@_CANDIDATE
 def test_quality_gate_detects_uncovered_semantic_point(tmp_path: Path) -> None:
     candidate = tmp_path / "nginx-live-port-conflict"
     shutil.copytree(SOURCE, candidate)
@@ -46,6 +52,7 @@ def test_quality_gate_detects_uncovered_semantic_point(tmp_path: Path) -> None:
     assert any("np.runtime.index" in error for error in errors)
 
 
+@_CANDIDATE
 def test_quality_gate_requires_noncanonical_solution(tmp_path: Path) -> None:
     candidate = tmp_path / "nginx-live-port-conflict"
     shutil.copytree(SOURCE, candidate)
@@ -57,6 +64,7 @@ def test_quality_gate_requires_noncanonical_solution(tmp_path: Path) -> None:
     assert any("at least one equivalence solution" in error for error in errors)
 
 
+@_CANDIDATE
 def test_quality_gate_rejects_arbitrary_file_as_public_evidence(tmp_path: Path) -> None:
     candidate = tmp_path / "nginx-live-port-conflict"
     shutil.copytree(SOURCE, candidate)
@@ -72,6 +80,7 @@ def test_quality_gate_rejects_arbitrary_file_as_public_evidence(tmp_path: Path) 
     assert any("not an allowed participant-visible contract" in error for error in errors)
 
 
+@_CANDIDATE
 def test_requirements_manifest_needs_source_anchors_and_human_approval(tmp_path: Path) -> None:
     candidate = tmp_path / "nginx-live-port-conflict"
     shutil.copytree(SOURCE, candidate)

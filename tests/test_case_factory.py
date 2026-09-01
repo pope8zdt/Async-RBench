@@ -19,8 +19,13 @@ from async_rbench.evaluation.weighting import (
     DYNAMIC_CONTROL_DIMENSIONS, SCORE_POLICY_VERSION,
 )
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
+_CANDIDATE_SOURCE = requires_author_local(
+    "upstream/terminal-bench/original-tasks-locked/git-leak-recovery/task.yaml",
+)
 SIMPLE_DEMO = ROOT / "examples/simple-review/secure-release-demo.json"
 
 
@@ -208,6 +213,7 @@ def _candidate(tmp_path: Path) -> Path:
     return candidate
 
 
+@_CANDIDATE_SOURCE
 def test_candidate_instance_passes_all_static_promotion_gates(tmp_path: Path) -> None:
     metadata, errors = validate_candidate_instance(
         ROOT, "secure-release", _candidate(tmp_path), require_execution_evidence=False,
@@ -216,11 +222,13 @@ def test_candidate_instance_passes_all_static_promotion_gates(tmp_path: Path) ->
     assert errors == []
 
 
+@_CANDIDATE_SOURCE
 def test_candidate_instance_cannot_promote_without_executed_release_evidence(tmp_path: Path) -> None:
     _, errors = validate_candidate_instance(ROOT, "secure-release", _candidate(tmp_path))
     assert any("missing executed Oracle/verifier evidence" in error for error in errors)
 
 
+@_CANDIDATE_SOURCE
 def test_candidate_instance_rejects_missing_quality_contract(tmp_path: Path) -> None:
     candidate = _candidate(tmp_path)
     (candidate / "private/quality_contract.yaml").unlink()
@@ -230,6 +238,7 @@ def test_candidate_instance_rejects_missing_quality_contract(tmp_path: Path) -> 
     assert any("missing transformed-case quality contract" in error for error in errors)
 
 
+@_CANDIDATE_SOURCE
 def test_candidate_instance_rejects_unlinked_accepted_decision(tmp_path: Path) -> None:
     candidate = _candidate(tmp_path)
     _write_jsonl(
@@ -240,6 +249,7 @@ def test_candidate_instance_rejects_unlinked_accepted_decision(tmp_path: Path) -
     assert any("does not reference an accepted trajectory" in error for error in errors)
 
 
+@_CANDIDATE_SOURCE
 def test_candidate_instance_requires_explicit_human_approval(tmp_path: Path) -> None:
     candidate = _candidate(tmp_path)
     metadata_path = candidate / "candidate_metadata.json"
@@ -250,6 +260,7 @@ def test_candidate_instance_requires_explicit_human_approval(tmp_path: Path) -> 
     assert "human_approval.status must be 'approved'" in errors
 
 
+@_CANDIDATE_SOURCE
 def test_candidate_design_binding_must_match_private_contract(tmp_path: Path) -> None:
     candidate = _candidate(tmp_path)
     metadata_path = candidate / "candidate_metadata.json"

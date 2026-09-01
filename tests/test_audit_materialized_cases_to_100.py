@@ -3,9 +3,14 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "audit_materialized_cases_to_100.py"
+pytestmark = requires_author_local(
+    "candidate_cases/rebuild-to-100/selection-manifest.json",
+)
 
 
 def _module():

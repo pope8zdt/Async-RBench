@@ -4,9 +4,14 @@ import importlib.util
 import json
 from pathlib import Path
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 CASE = ROOT / "candidate_cases" / "mab-state-reconciliation-bda6dda56f"
+pytestmark = requires_author_local(
+    "candidate_cases/mab-state-reconciliation-bda6dda56f",
+)
 RUNTIME = CASE / "task" / "task_file" / "scripts" / "state_reconciliation.py"
 
 

@@ -6,8 +6,13 @@ from pathlib import Path
 from async_rbench.evaluation.scoring import score_trace
 from async_rbench.spec import load_case
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
+_CANCELLATION_GATE = requires_author_local(
+    "candidate_instances/gaia2-stockholm-moveout/gaia2-zip-revision-sim-001/public_case.yaml",
+)
 
 
 def _scores(root: Path):
@@ -170,6 +175,7 @@ def test_delivery_intervention_failure_remains_unscored_infrastructure() -> None
     assert "delivery intervention failed" in score["dynamic_scenario_errors"][0]
 
 
+@_CANCELLATION_GATE
 def test_registered_cancellation_gate_creates_opportunity_without_capability_label() -> None:
     case = load_case(
         ROOT

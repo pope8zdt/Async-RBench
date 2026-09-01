@@ -8,8 +8,14 @@ import sys
 import types
 from pathlib import Path
 
+from author_local import requires_author_local
 
+
+ROOT = Path(__file__).resolve().parents[1]
 SOURCE = Path("upstream/osworld/scripts/python/run_multienv_dart_gui.py")
+pytestmark = requires_author_local(
+    "upstream/osworld/scripts/python/run_multienv_dart_gui.py",
+)
 
 
 class _Logger:

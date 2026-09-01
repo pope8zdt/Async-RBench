@@ -3,8 +3,13 @@ from pathlib import Path
 
 from async_rbench.dynamic_pilot import build_dynamic_pilot_batch
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
+pytestmark = requires_author_local(
+    "candidate_instances/gaia2-stockholm-moveout/gaia2-zip-revision-sim-001",
+)
 
 
 def test_review_is_a_hard_input_to_case_production(tmp_path: Path) -> None:

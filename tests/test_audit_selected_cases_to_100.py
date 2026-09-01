@@ -5,6 +5,12 @@ import json
 
 from scripts.audit_selected_cases_to_100 import DEFAULT_CASES, DEFAULT_MANIFEST, ROOT, _read_jsonl, audit_selection
 
+from author_local import requires_author_local
+
+pytestmark = requires_author_local(
+    "candidate_cases/rebuild-to-100/selection-manifest.json",
+)
+
 
 def test_selected_batch_is_absorbed_by_the_registered_registry() -> None:
     # The 82-case selection was superseded: its absorbable sources have since been

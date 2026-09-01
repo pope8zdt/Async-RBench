@@ -13,6 +13,10 @@ from scripts.preflight_source_native_v4 import (
 
 SOURCE_ROOT = ROOT / "artifacts/source-native-v4"
 
+from author_local import requires_author_local
+
+_MANIFEST_IDENTITY = requires_author_local("artifacts/source-native-v4/native_manifest.jsonl")
+
 
 def test_resolve_contained_rejects_absolute_and_parent_escape(tmp_path):
     assert resolve_contained(tmp_path, "../escape", "candidate")[1] == (
@@ -38,6 +42,7 @@ def test_source_task_identity_is_benchmark_specific():
     ) == "coding:001"
 
 
+@_MANIFEST_IDENTITY
 def test_audit_cross_checks_manifest_identity_against_spec():
     rows = [
         json.loads(line)

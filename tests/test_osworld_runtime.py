@@ -45,6 +45,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture(scope="module")
 def osworld_cases():
+    manifest = ROOT / "artifacts/source-native-v4/native_manifest.jsonl"
+    if not manifest.is_file():
+        pytest.skip(
+            "author-local source-native manifest is not part of the repository checkout",
+            allow_module_level=False,
+        )
     return load_osworld_cases(ROOT)
 
 

@@ -2,8 +2,11 @@ from pathlib import Path
 
 from async_rbench.strict_case_task_audit import build_strict_case_task_audit
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
+pytestmark = requires_author_local("artifacts/source-native-v4/native_manifest.jsonl")
 
 
 def test_strict_audit_keeps_generation_family_separate_from_async_classification():

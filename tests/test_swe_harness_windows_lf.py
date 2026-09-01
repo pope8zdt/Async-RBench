@@ -1,9 +1,14 @@
 import ast
 from pathlib import Path
 
+from author_local import requires_author_local
+
 
 ROOT = Path(__file__).resolve().parents[1]
 HARNESS = ROOT / "upstream" / "swe-bench-harness" / "swebench" / "harness" / "run_evaluation.py"
+pytestmark = requires_author_local(
+    "upstream/swe-bench-harness/swebench/harness/run_evaluation.py",
+)
 
 
 def load_write_container_text():
