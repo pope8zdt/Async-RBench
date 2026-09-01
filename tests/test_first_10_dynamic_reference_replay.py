@@ -12,6 +12,13 @@ from async_rbench.spec import load_case
 
 ROOT = Path(__file__).resolve().parents[1]
 BATCH = ROOT / "candidate_cases/rebuild-batch-001/batch-manifest.json"
+if not BATCH.is_file():
+    # candidate_cases/ is author-local production input and not vendored in
+    # the repository; the replay test can only run where the batch exists.
+    pytest.skip(
+        "author-local candidate batch manifest is not part of the repository checkout",
+        allow_module_level=True,
+    )
 CASE_IDS = [
     str(item["case_id"])
     for item in json.loads(BATCH.read_text(encoding="utf-8"))["cases"]
