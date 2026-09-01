@@ -35,6 +35,17 @@ if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) {
     throw "Model config not found: $configPath"
 }
 
+# Credential + request preflight: fail before any episode work if the provider
+# config is malformed, the required bearer credential is missing, or it carries
+# whitespace / non-ASCII bytes that would corrupt the Authorization header and
+# burn the whole run as a 401.  Surfaces here (driver) so the operator sees it
+# immediately rather than as an unscored infrastructure_crash at the end.
+$preflightOut = & python -c "import sys; from async_rbench.evaluation.model_backend import run_provider_preflight; sys.exit(run_provider_preflight(sys.argv[1]))" $configPath
+if ($LASTEXITCODE -ne 0) {
+    throw ("Provider preflight failed: " + ($preflightOut -join ' '))
+}
+Write-Host ("[preflight] " + ($preflightOut | Select-Object -Last 1))
+
 if ($Resume -and [string]::IsNullOrWhiteSpace($ExperimentRoot)) {
     throw "-Resume requires -ExperimentRoot pointing to the existing experiment directory."
 }

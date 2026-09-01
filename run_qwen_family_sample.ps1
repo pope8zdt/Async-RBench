@@ -14,7 +14,12 @@
 param(
     [string]$Config = "configs/model-profiles/qwen3-coder-480b-a35b-instruct-relay.yaml",
     [int]$Repetitions = 1,
-    [int]$Seed = 2026
+    [int]$Seed = 2026,
+    # Instances to re-run even though they already have a results.json. Use for
+    # runs that "completed" under an earlier infrastructure bug (e.g. an async
+    # episode left unscored by a child asset-staging failure). Non-destructive:
+    # a fresh auto-named attempt is started and the old one is left untouched.
+    [string[]]$ForceRerun = @()
 )
 
 $ErrorActionPreference = "Stop"
@@ -89,12 +94,13 @@ foreach ($inst in $instances) {
     $prior = Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot "artifacts\experiments") `
         -Directory -Filter "manual-$safe-*" -ErrorAction SilentlyContinue
     $completed = $prior | Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "results.json") }
-    if ($completed) {
+    $force = ($ForceRerun -contains $inst)
+    if ($completed -and -not $force) {
         Write-Host ("[skip] already completed -> " + $completed[0].Name) -ForegroundColor Yellow
         $skip += $inst
         continue
-    } elseif ($prior) {
-        Write-Host ("[note] prior incomplete run for " + $inst + " -> starting a fresh attempt") -ForegroundColor Magenta
+    } elseif ($prior -or $force) {
+        Write-Host ("[note] " + $(if ($force) { "forced re-run for " + $inst } else { "prior incomplete run for " + $inst }) + " -> starting a fresh attempt") -ForegroundColor Magenta
     }
 
     try {

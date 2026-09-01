@@ -43,7 +43,7 @@
           "provisional_checkpoint",
           "final_state"
         ],
-        "after": "The fetch specialist reports repeated full-table scans and excessive tuple-return counts over the 1.4 GB table.",
+        "after": "The receipt-bound authority checkpoint identifies VACUUM and supersedes the provisional LOCK_CONTENTION diagnosis.",
         "before": "Read-path measurements arrive only after physical-load analysis and draft synthesis.",
         "unaffected_artifacts": [
           "preserved_source_facts"
@@ -81,6 +81,8 @@
       ],
       "required_output_fields": [
         "report_path",
+        "receipt_path",
+        "receipt_sha256",
         "revision_sha256",
         "finding"
       ],
@@ -171,19 +173,28 @@
       ],
       "private_evidence_schema": {
         "finding": {
+          "const": "VACUUM",
           "type": "string"
         },
         "report_path": {
           "pattern": "^/app/output_data/workstreams/.+\\.json$",
           "type": "string"
         },
-        "revision_sha256": {
+        "receipt_path": {
+          "const": "/app/output_data/event_receipt.json",
+          "type": "string"
+        },
+        "receipt_sha256": {
           "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "revision_sha256": {
+          "const": "1c3a50e63e7f8a6ba73633054c752f3f4623e4fd9c68f159a44e4c3bf7bd8385",
           "type": "string"
         }
       },
       "result_kind": "result_02",
-      "validator_command": "python3 -c \"import base64,hashlib,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p,encoding='utf-8')); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']; assert len(e['revision_sha256'])==64\"",
+      "validator_command": "python3 -c \"import base64,hashlib,json,os,pathlib; payload=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64'])); e=payload['evidence']; report=json.load(open(e['report_path'],encoding='utf-8')); receipt=json.load(open(e['receipt_path'],encoding='utf-8')); claimed=receipt.pop('receipt_sha256'); actual=hashlib.sha256(json.dumps(receipt,sort_keys=True,separators=(',',':')).encode()).hexdigest(); assert claimed==actual==e['receipt_sha256']==report['receipt_sha256']; assert report['finding']==e['finding']=='VACUUM'; assert report['revision_sha256']==e['revision_sha256']=='1c3a50e63e7f8a6ba73633054c752f3f4623e4fd9c68f159a44e4c3bf7bd8385'; assert receipt['case_id']=='mab-conflicting-specialist-results-5f19377089' and receipt['source_task_id']=='database:011' and receipt['worker_exit_code']==0; assert receipt['probes']['host_checkpoint_sha256']==e['revision_sha256'] and receipt['probes']['selected_cause']=='VACUUM' and receipt['probes']['native_evidence_sha256']=='83b87e43a8e475cf654f4aaf6be405c4d8ccfb86040be4d9c600e5275d9908c0'\"",
       "validator_timeout_sec": 120
     }
   }

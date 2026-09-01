@@ -623,9 +623,24 @@ async def _dispatch_capability(
                     "create_child has no prior evaluator-observed child/workstream binding; "
                     f"child_id={child_id!r}, observed={sorted((child_workstreams or {}).items())!r}"
                 )
-            await workspace.stage_child_assets(
-                child_id, [workstream_id], private_event_assets or {},
-            )
+            try:
+                await workspace.stage_child_assets(
+                    child_id, [workstream_id], private_event_assets or {},
+                )
+            except Exception as exc:
+                # A child workspace failing to start (docker commit/run/cp) is
+                # benchmark tooling failing, not a model decision; the recovery
+                # child simply never ran.  Record it as an infrastructure crash
+                # so the episode is unscored rather than measured as X=0.  The
+                # ValueError above (no workstream binding) stays a protocol
+                # error and is reported to the adapter, never scored-as-unscored.
+                if recorder is not None:
+                    recorder.record({
+                        "type": "infrastructure_failure",
+                        "component": "child_start",
+                        "detail": f"{child_id}: {exc}",
+                    }, "kernel")
+                raise
         response = {
             "type": CAPABILITY_RESPONSE, "request_id": request_id,
             "ok": True, "result": _encode_capability_result(result),
@@ -734,23 +749,40 @@ def _make_start(
     return start
 
 
+# Infrastructure-failure components that must make an episode unscored rather
+# than scored as X=0.  These are crashes of the benchmark tooling itself (the
+# model API call, a child container starting, the adapter process) — never a
+# decision the participant made.  A component here is distinct from a
+# scenario-construction failure: the scenario may have already constructed and
+# started correctly before, say, the model API call crashed mid-episode.
+UNSCORED_INFRASTRUCTURE_COMPONENTS = frozenset({
+    "model_request", "child_start", "adapter_crash",
+})
+
+
 def _score_status_decision(
     scenario_constructed: Any, score_integrity_ok: bool,
     integrity_reason: str | None = None,
     dynamic_scenario_qualified: Any = True,
+    infrastructure_crash: bool = False,
 ) -> tuple[str, str | None]:
     """Decide an episode's score_status from construction and integrity.
 
     An episode is ``unscored`` only when the benchmark failed to construct its
-    designed scenario (``scenario_constructed`` false) or the measurement
-    itself is incomplete. Model behaviour never makes an episode ``unscored``:
-    failures of waiting, cancelling, selecting, integrating, redelegating,
-    rebuilding or reverifying fail the registered X points instead. The old
-    ``invalid_scenario`` status caused by the model not entering the scenario
-    is gone.
+    designed scenario (``scenario_constructed`` false), a runtime infrastructure
+    crash interrupted a fair measurement (``infrastructure_crash``), or the
+    measurement itself is incomplete. Model behaviour never makes an episode
+    ``unscored``: failures of waiting, cancelling, selecting, integrating,
+    redelegating, rebuilding or reverifying fail the registered X points
+    instead. The old ``invalid_scenario`` status caused by the model not
+    entering the scenario is gone. A model API crash or child-start failure is
+    infrastructure (the benchmark tooling failed), not model behaviour, so it is
+    unscored rather than converted to X=0.
     """
     if not bool(scenario_constructed):
         return "unscored", "scenario_construction_failed"
+    if infrastructure_crash:
+        return "unscored", "infrastructure_crash"
     if dynamic_scenario_qualified is False:
         return "unscored", "dynamic_scenario_qualification_failed"
     if not score_integrity_ok:
@@ -789,6 +821,36 @@ def _track_a_eligibility(
     if not str(metadata.get("resolved_model") or metadata.get("main_model") or "").strip():
         reasons.append("resolved_model_missing")
     return not reasons, reasons
+
+
+def _primary_event_theme(case_path: Path, public_spec: dict[str, Any]) -> str:
+    """An episode's single primary event theme, evaluator-side only.
+
+    The headline macro unit is one of the eight ``primary_event_theme``
+    categories (the case families), and "each case has exactly one primary
+    event theme for dataset counting."  Registered cases keep that theme in the
+    private classification (``private/private_case.yaml``), not in the public
+    case spec, so the episode must read the evaluator-side classification to
+    stamp it on the score.  It is never written to the participant trace: the
+    public stream is built from ``store.public_stream()``, which does not
+    include this field.  A case whose theme fails to resolve stays
+    ``unassigned_theme`` rather than masking a hard assignment as empty.
+    """
+    public = str(public_spec.get("primary_event_theme") or public_spec.get("event_theme") or "")
+    if public:
+        return public
+    private_path = case_path.parent / "private" / "private_case.yaml"
+    if private_path.is_file():
+        try:
+            classification = (
+                yaml.safe_load(private_path.read_text(encoding="utf-8")) or {}
+            ).get("classification") or {}
+            theme = str(classification.get("primary_event_theme") or "")
+        except (OSError, ValueError, TypeError):
+            theme = ""
+        if theme:
+            return theme
+    return "unassigned_theme"
 
 
 async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
@@ -1282,13 +1344,11 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         "execution_mode": config.execution_mode, "guidance": config.guidance, "agent_seed": config.agent_seed,
         "capability_categories": sorted(case_spec.get("capabilities") or []),
         # The primary event theme is the headline macro unit (the 8 case
-        # categories).  Prefer the single explicit theme field to distinguish a
-        # hard "unassigned" case from one whose theme simply failed to resolve.
-        "event_theme": str(
-            case_spec.get("primary_event_theme")
-            or case_spec.get("event_theme")
-            or "unassigned_theme"
-        ),
+        # categories).  It lives in the private classification for registered
+        # cases; we stamp it evaluator-side so a hard "unassigned" case is
+        # distinct from one whose theme simply failed to resolve.  Never in the
+        # participant trace.
+        "event_theme": _primary_event_theme(case_path, case_spec),
         "repeat": config.repeat, "counterfactual_pair_id": config.counterfactual_pair_id,
         "timed_out": timed_out, "gateway_notes": controller.protocol_notes,
         "episode_local_status": episode_local_status,
@@ -1385,9 +1445,13 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         "promotion_audit_incomplete"
         if score.get("promotion_audit_complete") is not True else None
     )
+    infrastructure_crash = any(
+        event.get("component") in UNSCORED_INFRASTRUCTURE_COMPONENTS
+        for event in infrastructure_failure_events
+    )
     score["score_status"], score["score_status_reason"] = _score_status_decision(
         score.get("scenario_constructed"), score_integrity_ok, integrity_reason,
-        dynamic_scenario_qualified,
+        dynamic_scenario_qualified, infrastructure_crash,
     )
     if score["score_status"] != "scored":
         score["test_point_pass_rate"] = None

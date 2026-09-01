@@ -508,6 +508,74 @@ def function_tool(name: str, description: str, properties: dict[str, Any], requi
     }
 
 
+def validate_credential(api_key: str) -> None:
+    """Fail fast when a bearer credential would corrupt the Authorization header.
+
+    Authorization headers must be printable ASCII.  A key carrying leading or
+    trailing whitespace, a control character, or an invisible non-ASCII byte (a
+    stray BOM or non-breaking space from a copy/paste) turns an otherwise valid
+    key into a 401 that silently burns the whole episode.  An empty key is
+    allowed (some endpoints need no auth); the caller decides whether an
+    unauthenticated request is acceptable.
+    """
+    if not api_key:
+        return
+    if api_key != api_key.strip():
+        raise RuntimeError(
+            "model API credential has leading/trailing whitespace; trim the key"
+        )
+    bad = {hex(ord(ch)) for ch in api_key if ord(ch) < 0x20 or ord(ch) > 0x7E}
+    if bad:
+        raise RuntimeError(
+            "model API credential contains non-Bearer characters "
+            f"{sorted(bad)}; expected a flat ASCII token"
+        )
+
+
+def provider_preflight(config: dict[str, Any]) -> str:
+    """Return an error reason for a bad provider config, or ``''`` when ready.
+
+    Validates the request surface and the bearer credential so a Unicode/orphan
+    key or a malformed endpoint fails before the first episode rather than as a
+    burned 401.  The driver preflight and ``build_backend`` both call this so the
+    two always agree on what is acceptable.  Empty credentials are allowed unless
+    the config says ``api_key_required``.
+    """
+    api_key_env = str(config.get("api_key_env") or "")
+    api_key = os.environ.get(api_key_env) if api_key_env else ""
+    if bool(config.get("api_key_required")) and not api_key:
+        return f"missing credential {api_key_env!r} (set it before running)"
+    try:
+        validate_credential(api_key)
+    except RuntimeError as exc:
+        return f"credential is not a flat bearer token: {exc}"
+    if not str(config.get("api_url") or "").strip():
+        return "provider config has no api_url"
+    if not str(config.get("main_model") or "").strip():
+        return "provider config has no main_model"
+    return ""
+
+
+def run_provider_preflight(config_path: str | os.PathLike) -> int:
+    """CLI entry for the driver preflight; prints a reason and returns nonzero."""
+    try:
+        import yaml
+        config = yaml.safe_load(Path(config_path).read_text(encoding="utf-8")) or {}
+    except (OSError, ValueError, TypeError) as exc:
+        print(f"cannot load provider config {config_path}: {exc}")
+        return 3
+    try:
+        reason = provider_preflight(config)
+    except Exception as exc:  # noqa: BLE001 — a preflight must fail cleanly, not traceback
+        print(f"provider preflight error: {exc}")
+        return 3
+    if reason:
+        print(f"provider preflight failed: {reason}")
+        return 3
+    print(f"provider preflight OK: model={config.get('main_model')} url={config.get('api_url')}")
+    return 0
+
+
 def build_backend(config: ProviderConfig) -> ModelBackend:
     # The kernel backend factory is provider-neutral. The deterministic
     # ``scripted_test`` backend is a conformance concern and lives in the
@@ -519,4 +587,5 @@ def build_backend(config: ProviderConfig) -> ModelBackend:
             f"kernel backend factory only builds openai_compatible; "
             f"got {config.backend!r} (select a profile backend instead)"
         )
+    validate_credential(config.api_key())
     return OpenAICompatibleBackend(config)

@@ -136,6 +136,25 @@ class DockerWorkspaceRuntime(WorkspaceRuntime):
         matches = [p for p in root.rglob(pure.name) if p.is_file()]
         return matches[0].resolve() if len(matches) == 1 else None
 
+    def _container_asset_destination(self, container_path: str) -> str:
+        """The in-container path an event asset is staged to.
+
+        ``/app/...`` destinations are already absolute and are used verbatim.
+        Some cases author the asset path as ``task/<rel>``
+        (``task/upstream_solutions/event_worker.py``): that ``task/`` label is
+        the build-context root, and the equivalent location inside a task
+        container is the legacy evaluator helper mount ``/async_rbench/<rel>``.
+        Normalise it so ``mkdir -p`` and ``docker cp`` always address a real
+        absolute path; anything malformed is left as authored.
+        """
+        if container_path.startswith("task/"):
+            rest = container_path[len("task/"):]
+            pure = Path(rest)
+            if pure.is_absolute() or ".." in pure.parts:
+                return container_path
+            return "/async_rbench/" + rest
+        return container_path
+
     async def prepare_event_assets(self, event_assets: dict[str, list[str]]) -> None:
         paths = sorted({str(path) for values in event_assets.values() for path in values})
         if not paths:
@@ -173,11 +192,12 @@ class DockerWorkspaceRuntime(WorkspaceRuntime):
             local = self._event_asset_files.get(path)
             if local is None:
                 raise RuntimeError(f"event asset was not prepared: {path}")
-            parent = str(Path(path).parent).replace("\\", "/")
+            destination = self._container_asset_destination(path)
+            parent = str(Path(destination).parent).replace("\\", "/")
             created = await _command("docker", "exec", container, "mkdir", "-p", parent, timeout=60)
             if created.exit_code != 0:
                 raise RuntimeError(f"failed to prepare event asset parent {parent}")
-            copied = await _command("docker", "cp", str(local), f"{container}:{path}", timeout=120)
+            copied = await _command("docker", "cp", str(local), f"{container}:{destination}", timeout=120)
             if copied.exit_code != 0:
                 raise RuntimeError(f"failed to stage event asset {path}: {copied.output[-4000:]}")
 

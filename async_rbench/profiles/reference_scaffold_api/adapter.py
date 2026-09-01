@@ -57,6 +57,10 @@ async def run_adapter(args: argparse.Namespace) -> int:
         await scaffold.run()
     except Exception as exc:
         logging.getLogger("async_rbench.profiles.reference_scaffold_api").exception("reference scaffold failed")
+        # An unhandled adapter exception is benchmark tooling failing (the
+        # scaffold process died), never a model decision.  Emit an
+        # infrastructure crash so the episode is unscored instead of X=0.
+        emitter.emit("infrastructure_failure", component="adapter_crash", detail=f"scaffold failure: {exc}")
         scaffold.finish_status = "incomplete"
         scaffold.final_summary = f"scaffold failure: {exc}"
     finally:

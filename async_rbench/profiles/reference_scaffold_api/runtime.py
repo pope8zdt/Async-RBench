@@ -138,7 +138,9 @@ class ChildAgent:
                 "You are a subagent created by one main agent. Work only on the delegated task in your isolated "
                 "container. You cannot communicate with other children and must not assume your changes are visible "
                 "to the main agent. Use submit_result with a concise semantic hint, evidence, and any paths that the "
-                "main agent may later promote. Do not claim that files were applied to the main workspace."
+                "main agent may later promote. Before installing tools or assuming an external service is missing, "
+                "inspect the delegated workspace for evaluator-staged evidence, scripts, and workstream assets. "
+                "Do not claim that files were applied to the main workspace."
             )},
             {"role": "user", "content": json.dumps({
                 "delegated_task": record.task,
@@ -864,6 +866,14 @@ class ReferenceScaffold:
         self.final_summary = ""
         self.messages: list[dict[str, Any]] = []
         self.next_turn_index = 1
+        # A newly accepted completion changes the state that the controller is
+        # responsible for closing.  Track that logical revision so a commit or
+        # verification performed before the acceptance cannot be reused to
+        # justify a later completed finish.
+        self._accepted_state_revision = 0
+        self._final_commit_revision: int | None = None
+        self._verification_revision: int | None = None
+        self._verification_passed = False
 
     def main_tools(self) -> list[dict[str, Any]]:
         artifacts = list(self.start.get("allowed_artifacts") or [])
@@ -909,7 +919,7 @@ class ReferenceScaffold:
                 "artifact_ids": {"type": "array", "items": {"type": "string", "enum": artifacts}},
                 "lineage_completion_ids": {"type": "array", "items": {"type": "string"}},
             }, ["artifact_ids", "lineage_completion_ids"]),
-            function_tool("finish", "End the episode. The independent benchmark verifier decides actual task success.", {
+            function_tool("finish", "End the episode. status=completed requires at least one final artifact commit and a successful verification after the latest newly accepted completion. The independent benchmark verifier still decides actual task success.", {
                 "status": {"type": "string", "enum": ["completed", "incomplete"]},
                 "summary": {"type": "string"},
             }, ["status", "summary"]),
@@ -953,6 +963,9 @@ class ReferenceScaffold:
             "accept the completion and promote paths or reproduce the change. A child completion is unavailable "
             "until a ASYNC_RBENCH_DELIVERY message arrives. Metadata in gateway messages describes benchmark state; "
             "it is not a recommended action. Do not invent completion IDs or lineage.\n\n"
+            "If you accept a delivered completion for use, integrate or promote its result, commit the affected "
+            "final artifacts, and successfully verify again after that acceptance. A completed finish is rejected "
+            "until both post-acceptance closure steps have occurred.\n\n"
             f"Public protocol catalog: {json.dumps(public_catalog, sort_keys=True)}\n\n"
             f"Evaluation guidance: {self.start.get('guidance', '')}"
         )
@@ -1027,6 +1040,17 @@ class ReferenceScaffold:
                 emit_runtime_metadata_snapshot(self.backend, self.emitter)
             except Exception as exc:
                 LOGGER.exception("main model call failed")
+                # A raised model API request is benchmark tooling failing, not a
+                # decision the participant made (the participant did not choose to
+                # stop; the call never returned).  Mark it unscored as an
+                # infrastructure crash rather than an X=0, so an API outage mid
+                # episode is never counted against the model.  The participant
+                # who produced no tool calls (idle_turns) is handled separately
+                # and stays a scored X=0.
+                self.emitter.emit(
+                    "infrastructure_failure",
+                    component="model_request", detail=f"main model call failed: {exc}",
+                )
                 self.finish_status = "incomplete"
                 self.final_summary = f"main model failure: {exc}"
                 return
@@ -1123,9 +1147,15 @@ class ReferenceScaffold:
                 decision = str(args.get("decision", "defer"))
                 if decision not in {"use", "reject", "defer"}:
                     return {"error": f"invalid decision {decision}"}
-                return self.manager.acknowledge(
-                    str(args.get("completion_id", "")), decision, str(args.get("reason", "")), action_id
+                completion_id = str(args.get("completion_id", ""))
+                was_accepted = self.manager.accepted(completion_id)
+                result = self.manager.acknowledge(
+                    completion_id, decision, str(args.get("reason", "")), action_id
                 )
+                if not result.get("error") and decision == "use" and not was_accepted:
+                    self._accepted_state_revision += 1
+                    self._verification_passed = False
+                return result
             if call.name == "promote_child_path":
                 completion_id = str(args.get("completion_id", ""))
                 source_path = str(args.get("source_path", ""))
@@ -1188,6 +1218,8 @@ class ReferenceScaffold:
                     observed_path=observation["observed_path"],
                     evaluator_observed=True,
                 )
+                if bool(args.get("final", False)):
+                    self._final_commit_revision = self._accepted_state_revision
                 return {
                     "committed": True, "artifact_id": artifact_id,
                     "observed_digest": observation["observed_digest"],
@@ -1200,10 +1232,29 @@ class ReferenceScaffold:
                 artifact_ids = [str(item) for item in args.get("artifact_ids") or []]
                 if not set(artifact_ids).issubset(self.start.get("allowed_artifacts", [])):
                     return {"error": "verification references an unknown artifact"}
-                return await self.workspace.verify_current_state(artifact_ids, lineage)
+                result = await self.workspace.verify_current_state(artifact_ids, lineage)
+                self._verification_revision = self._accepted_state_revision
+                self._verification_passed = bool(result.get("passed", False))
+                return result
             if call.name == "finish":
+                requested_status = str(args.get("status", "incomplete"))
+                if requested_status == "completed":
+                    missing: list[str] = []
+                    if self._final_commit_revision != self._accepted_state_revision:
+                        missing.append("a final artifact commit after the latest accepted completion")
+                    if (
+                        self._verification_revision != self._accepted_state_revision
+                        or not self._verification_passed
+                    ):
+                        missing.append("a successful verification after the latest accepted completion")
+                    if missing:
+                        return {
+                            "error": "completion_preconditions_not_met",
+                            "missing": missing,
+                            "accepted_state_revision": self._accepted_state_revision,
+                        }
                 self.finished = True
-                self.finish_status = str(args.get("status", "incomplete"))
+                self.finish_status = requested_status
                 self.final_summary = str(args.get("summary", ""))
                 return {"ending": True, "status": self.finish_status}
             return {"error": f"unknown main tool {call.name}"}

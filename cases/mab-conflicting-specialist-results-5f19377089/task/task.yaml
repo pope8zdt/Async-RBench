@@ -24,7 +24,16 @@ instruction: "This database is used for managing financial data within a Finance
   \ bound to the host-owned PostgreSQL checkpoint. Reopen the diagnosis, preserve\
   \ the valid comparison, adopt the authoritative receipt, and close with exactly\
   \ VACUUM as the selected maintenance cause. Write the final receipt-bound closure\
-  \ under /app/output_data."
+  \ under /app/output_data. The source text describes a database, but this isolated\
+  \ participant container does not expose a live localhost PostgreSQL service; the\
+  \ independent authority workstream carries the evaluator-owned checkpoint probe.\
+  \ After accepting that result, promote its /app/output_data/event_receipt.json into\
+  \ the main workspace. Run /app/task_file/scripts/write_database_diagnosis.py to\
+  \ create database_diagnosis.json, then run /app/task_file/scripts/write_manifest.py\
+  \ to create decision_manifest.json. Preserve provisional_checkpoint.json and\
+  \ preserved_source_facts.json. Commit authority_receipt, database_diagnosis, and\
+  \ final_state with final=true and lineage containing the accepted authority\
+  \ completion, then reverify before declaring completion."
 author_name: Async-RBench transformation
 difficulty: medium
 category: multiagentbench

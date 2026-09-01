@@ -71,6 +71,38 @@ def test_completion_contract_fails_fast_before_private_validator() -> None:
     assert workspace.calls == []
 
 
+def test_database_authority_contract_rejects_unverified_or_wrong_finding() -> None:
+    case = load_case(
+        ROOT / "cases" / "mab-conflicting-specialist-results-5f19377089"
+        / "public_case.yaml"
+    ).raw
+    workstream = next(
+        item for item in case["delegation_workstreams"]
+        if item["id"] == "requirement_worker_02"
+    )
+    assert "/app/output_data/event_receipt.json" in workstream["required_files"]
+    assert workstream["evidence_schema"]["finding"]["const"] == "VACUUM"
+
+    event = {"child_id": "authority", "payload": {
+        "evidence": {
+            "finding": "unable_to_verify",
+            "report_path": "/app/output_data/workstreams/requirement_worker_02.json",
+            "receipt_path": "/app/output_data/event_receipt.json",
+            "receipt_sha256": "a" * 64,
+            "revision_sha256": "1c3a50e63e7f8a6ba73633054c752f3f4623e4fd9c68f159a44e4c3bf7bd8385",
+        },
+        "files": [
+            "/app/output_data/workstreams/requirement_worker_02.json",
+            "/app/output_data/event_receipt.json",
+        ],
+    }}
+    workspace = _Workspace()
+    result = asyncio.run(validate_completion_contract(workstream, event, workspace))
+    assert result.valid is False
+    assert result.reason_codes == ("evidence_constraint_failed",)
+    assert workspace.calls == []
+
+
 def test_episode_start_exposes_only_structural_constraints() -> None:
     case = _case()
     start = _make_start(

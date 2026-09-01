@@ -284,6 +284,24 @@ def test_host_event_asset_basename_fallback_is_ambiguous_only(tmp_path):
     assert manager._host_event_asset("/app/nowhere/asset.json") is None
 
 
+def test_container_asset_destination_normalizes_task_prefix(tmp_path):
+    """A task/<rel> asset is staged to the legacy evaluator helper mount
+    /async_rbench/<rel>; /app/... stays absolute; malformed task/ paths are
+    left untouched."""
+    config = ScaffoldConfig(
+        backend="scripted_test", main_model="scripted-test", child_model="scripted-test",
+        workspace_mode="container_clone",
+    )
+    manager = DockerWorkspaceRuntime("unused", "host-event", "host-event", config)
+
+    assert manager._container_asset_destination("task/upstream_solutions/event_worker.py") == \
+        "/async_rbench/upstream_solutions/event_worker.py"
+    assert manager._container_asset_destination("/app/events/authority.json") == \
+        "/app/events/authority.json"
+    assert manager._container_asset_destination("task/../escape.py") == \
+        "task/../escape.py"
+
+
 @pytest.mark.skipif(os.getenv("ASYNC_RBENCH_RUN_DOCKER_TESTS") != "1", reason="opt-in Docker mutation test")
 def test_secure_authority_bundle_changes_revision_and_is_workstream_scoped():
     subprocess.run(

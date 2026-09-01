@@ -10,13 +10,14 @@ import pytest
 
 import async_rbench.evaluation.runner as runner_module
 from async_rbench.evaluation.case_contract import find_private_fields
+from async_rbench.evaluation.model_backend import ToolCall
 from async_rbench.evaluation.runner import EpisodeConfig, _make_start, run_episode
 from async_rbench.evaluation.workspace_runtime import DisabledWorkspaceRuntime, _safe_name
 from async_rbench.profiles.conformance_mock.scripted_backend import ScriptedTestBackend
 from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 from async_rbench.profiles.reference_scaffold_api.gateway import DeliveryReader, ProtocolEmitter
 from async_rbench.profiles.reference_scaffold_api.runtime import (
-    EpisodeTokenBudget, ReferenceScaffold,
+    ChildRecord, EpisodeTokenBudget, ReferenceScaffold,
 )
 from async_rbench.spec import load_case
 
@@ -106,6 +107,99 @@ def test_main_tools_expose_opaque_verification_not_commands() -> None:
     assert "command" not in json.dumps(schema).lower()
 
 
+def test_completed_finish_requires_fresh_final_commit_and_verification() -> None:
+    class PassingWorkspace(DisabledWorkspaceRuntime):
+        async def observe_artifact(self, artifact_id: str) -> dict[str, str]:
+            return {
+                "observed_digest": "a" * 64,
+                "observed_path": f"/app/output_data/{artifact_id}.json",
+            }
+
+        async def verify_current_state(
+            self, artifact_ids: list[str], lineage_completion_ids: list[str],
+        ) -> dict[str, object]:
+            return {"passed": True, "checks_total": 1, "checks_passed": 1}
+
+    async def exercise() -> None:
+        scaffold = _scaffold(_start())
+        scaffold.workspace = PassingWorkspace()
+        artifact_id = scaffold.start["allowed_artifacts"][0]
+
+        blocked = await scaffold._execute_main_tool(ToolCall(
+            "finish-early", "finish", {"status": "completed", "summary": "too early"},
+        ))
+        assert blocked["error"] == "completion_preconditions_not_met"
+        assert scaffold.finished is False
+
+        committed = await scaffold._execute_main_tool(ToolCall(
+            "commit-1", "commit_artifact", {
+                "artifact_id": artifact_id,
+                "version": "v1",
+                "lineage_completion_ids": [],
+                "evidence_paths": [],
+                "final": True,
+            },
+        ))
+        assert committed["committed"] is True
+        verified = await scaffold._execute_main_tool(ToolCall(
+            "verify-1", "verify_current_state", {
+                "artifact_ids": [artifact_id], "lineage_completion_ids": [],
+            },
+        ))
+        assert verified["passed"] is True
+
+        completion_id = "completion-authority"
+        scaffold.manager.children["child-authority"] = ChildRecord(
+            child_id="child-authority",
+            task="authority",
+            work_units=[],
+            targets=[],
+            expected_output="authority",
+            priority="high",
+            status="delivered",
+            completion_id=completion_id,
+            delivery={"completion_id": completion_id},
+        )
+        scaffold.manager.completion_to_child[completion_id] = "child-authority"
+        accepted = await scaffold._execute_main_tool(ToolCall(
+            "accept-1", "acknowledge_result", {
+                "completion_id": completion_id,
+                "decision": "use",
+                "reason": "authoritative evidence",
+            },
+        ))
+        assert accepted["decision"] == "use"
+
+        stale_finish = await scaffold._execute_main_tool(ToolCall(
+            "finish-stale", "finish", {"status": "completed", "summary": "stale closure"},
+        ))
+        assert stale_finish["error"] == "completion_preconditions_not_met"
+        assert len(stale_finish["missing"]) == 2
+
+        await scaffold._execute_main_tool(ToolCall(
+            "commit-2", "commit_artifact", {
+                "artifact_id": artifact_id,
+                "version": "v2",
+                "lineage_completion_ids": [completion_id],
+                "evidence_paths": [],
+                "final": True,
+            },
+        ))
+        await scaffold._execute_main_tool(ToolCall(
+            "verify-2", "verify_current_state", {
+                "artifact_ids": [artifact_id],
+                "lineage_completion_ids": [completion_id],
+            },
+        ))
+        finished = await scaffold._execute_main_tool(ToolCall(
+            "finish-good", "finish", {"status": "completed", "summary": "closed"},
+        ))
+        assert finished == {"ending": True, "status": "completed"}
+        assert scaffold.finished is True
+
+    asyncio.run(exercise())
+
+
 def test_config_rejects_scripted_backend_for_official_api_identity() -> None:
     config = ScaffoldConfig.from_file(
         None, {"backend": "scripted_test", "workspace_mode": "disabled"},
@@ -181,3 +275,45 @@ def test_scripted_backend_runs_protocol3_end_to_end(
     private_source = (tmp_path / mode / "event_source.jsonl").read_text(encoding="utf-8")
     assert "verification_requested" in private_source
     assert '"visibility": "kernel_private"' in private_source
+
+
+def test_initial_wave_asset_staging_failure_is_unscored(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The complete initial-wave startup must not silently score a broken episode.
+
+    Regression for the async=None episodes where an event asset failed to stage
+    into an initial-wave child's container: the benchmark constructed no usable
+    scenario and the episode carried an infrastructure_failure (component
+    ``child_start``), so it must be unscored rather than measured as X=0.
+    """
+    class FailingStagingWorkspace(DisabledWorkspaceRuntime):
+        async def stage_child_assets(
+            self, child_id: str, work_units: list[str], event_assets: dict[str, list[str]],
+        ) -> None:
+            raise RuntimeError("simulated event asset staging failure")
+
+    monkeypatch.setattr(
+        runner_module, "build_workspace_runtime",
+        lambda start, config, event_asset_source_root=None: FailingStagingWorkspace(),
+    )
+    config = EpisodeConfig(
+        episode_id="reference-failstage",
+        case_id="data-recovery-service",
+        execution_mode="async",
+        guidance="incentive",
+        agent_seed=7,
+        adapter_command=[
+            sys.executable,
+            str(ROOT / "adapters" / "reference_scaffold_api.py"),
+            "--backend", "scripted_test", "--workspace-mode", "disabled",
+        ],
+        output_dir=tmp_path / "failstage",
+        use_container=False,
+        timeout_sec=60,
+    )
+    score = asyncio.run(run_episode(ROOT, config))
+    assert score["score_status"] == "unscored"
+    assert score["scenario_constructed"] is False
+    infra = score.get("infrastructure_failures") or []
+    assert any(failure.get("component") == "child_start" for failure in infra), infra

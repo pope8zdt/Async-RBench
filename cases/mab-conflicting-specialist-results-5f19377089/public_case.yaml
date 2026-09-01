@@ -13,6 +13,14 @@
       "path": "/app/output_data/decision_manifest.json"
     },
     {
+      "id": "authority_receipt",
+      "path": "/app/output_data/event_receipt.json"
+    },
+    {
+      "id": "database_diagnosis",
+      "path": "/app/output_data/database_diagnosis.json"
+    },
+    {
       "id": "workspace_state",
       "path": "/app"
     }
@@ -95,7 +103,8 @@
     },
     {
       "allowed_files": [
-        "/app/output_data/workstreams/requirement_worker_02.json"
+        "/app/output_data/workstreams/requirement_worker_02.json",
+        "/app/output_data/event_receipt.json"
       ],
       "evidence_schema": {
         "finding": {
@@ -105,27 +114,38 @@
           "pattern": "^/app/output_data/workstreams/.+\\.json$",
           "type": "string"
         },
+        "receipt_path": {
+          "pattern": "^/app/output_data/event_receipt\\.json$",
+          "type": "string"
+        },
+        "receipt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
         "revision_sha256": {
           "pattern": "^[0-9a-f]{64}$",
           "type": "string"
         }
       },
-      "expected_output": "Receipt-bound authoritative PostgreSQL evidence identifying VACUUM.",
+      "expected_output": "A promotable, receipt-bound authoritative PostgreSQL report identifying VACUUM, together with /app/output_data/event_receipt.json.",
       "id": "requirement_worker_02",
       "priority": "high",
       "public_result_contract": {},
       "required_evidence_fields": [
         "report_path",
+        "receipt_path",
+        "receipt_sha256",
         "revision_sha256",
         "finding"
       ],
       "required_files": [
-        "/app/output_data/workstreams/requirement_worker_02.json"
+        "/app/output_data/workstreams/requirement_worker_02.json",
+        "/app/output_data/event_receipt.json"
       ],
       "targets": [
         "workspace_state"
       ],
-      "task": "Independently validate the host-owned PostgreSQL checkpoint and report whether VACUUM is the authoritative cause."
+      "task": "Use the evaluator-staged /app/task_file/scripts/event_worker.py to validate the host-owned PostgreSQL checkpoint. Run it with --workspace /app, then report its observed VACUUM finding, checkpoint revision, receipt path, and receipt digest. Do not replace the staged checkpoint probe with a connection to a live localhost PostgreSQL service."
     }
   ]
 }
