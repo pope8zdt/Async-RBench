@@ -209,6 +209,8 @@ artifacts/experiments/manual-<case>-<timestamp>/
 
 `upstream/` 不进入 Git，因为它包含多个独立仓库、缓存和超大数据文件。需要 provenance 或 source-native 重建时，由负责人提供固定 revision/资产清单，或按照对应文档单独获取。
 
+因此，在未包含 `upstream` 的克隆上，`validate` 会**跳过集合级 source lock 校验**：`upstream/<benchmark>/SOURCE_LOCK.json` 不存在时不再判为错误。case 自包含的 per-case source-native 锁（`cases/<case>/private/source_lock.json`）不受影响、照常校验。一旦工作区中存在任意一个集合锁（即已下载完整 `upstream/`），校验立即恢复严格：任何缺失或内容不匹配的集合锁都会使 `validate` 失败——避免把部分下载误当完整源头。
+
 ## 11. 向负责人返回什么
 
 不要手工修改输出。压缩完整实验目录并计算 SHA-256：

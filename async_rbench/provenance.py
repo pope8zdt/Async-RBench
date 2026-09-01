@@ -61,6 +61,22 @@ LOCK_PATHS = {
 }
 GATED_BENCHMARKS = {"gaia"}
 SOURCE_NATIVE_BENCHMARKS = {"multiagentbench", "osworld"}
+UPSTREAM_LOCK_BENCHMARKS = ("terminal-bench", "gaia2", "swe-bench")
+
+
+def _upstream_locks_vendored(root: Path) -> bool:
+    """True once any collection-wide upstream lock has been vendored.
+
+    upstream/ is optional provenance material: a normal clone of this repo
+    carries only upstream/README.md, not the source trees or collection
+    locks.  Lock-based checks are skipped when no lock is vendored, and stay
+    strict as soon as any one of them is present (a partial upstream checkout
+    is still a checkout and must not pass silently).
+    """
+    return any(
+        (root / LOCK_PATHS[benchmark]).is_file()
+        for benchmark in UPSTREAM_LOCK_BENCHMARKS
+    )
 
 
 def _load_lock(root: Path, benchmark: str) -> tuple[dict | None, str | None]:
@@ -227,7 +243,12 @@ def validate_sources(root: Path, cases) -> list[str]:
                 continue
             lock, lock_error = _load_lock(root, benchmark)
             if lock_error:
-                errors.append(lock_error)
+                # A clone without vendored upstream cannot evaluate lock-based
+                # checks; the collection locks are not tracked by git.  Fail
+                # hard when upstream has been (partially) vendored, so a
+                # partial checkout is never mistaken for a full one.
+                if _upstream_locks_vendored(root):
+                    errors.append(lock_error)
                 continue
             if benchmark == "terminal-bench":
                 _validate_terminal_bench_task(root, case, source, lock, errors)
