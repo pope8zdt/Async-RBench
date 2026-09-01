@@ -108,9 +108,9 @@ def cmd_validate(args: argparse.Namespace) -> int:
         return 1
     print(json.dumps({
         "valid": True,
-        "registered_cases": [case.case_id for case in cases],
+        "case_count": len(cases),
         "instances": len(instances),
-    }, indent=2))
+    }))
     return 0
 
 

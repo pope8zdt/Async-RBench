@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import json
+import warnings
 from pathlib import Path
 from typing import Any
 
@@ -55,7 +56,11 @@ def _registered_families(root: Path) -> tuple[list[dict], list[str]]:
 
 
 def _function_names(path: Path) -> set[str]:
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    # Author test files may contain non-raw regex (e.g. '*/\.*'); that raises a
+    # SyntaxWarning during parse.  We only need function names, so drop it.
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", SyntaxWarning)
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     return {
         node.name
         for node in ast.walk(tree)

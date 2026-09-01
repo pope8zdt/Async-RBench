@@ -219,6 +219,71 @@ def test_host_event_asset_mapping_accepts_task_file_runtime_script(tmp_path):
     assert manager._host_event_asset("/app/task_file/scripts/event_worker.py") == worker.resolve()
 
 
+def test_host_event_asset_mapping_accepts_legacy_task_prefix(tmp_path):
+    """Legacy cases author event assets as task/<rel> (no /app/ prefix). These
+    resolve against the task build context root, so they never need to exist in
+    the participant image."""
+    task = tmp_path / "task"
+    worker = task / "upstream_solutions" / "event_worker.py"
+    worker.parent.mkdir(parents=True)
+    worker.write_text("# event worker\n", encoding="utf-8")
+    config = ScaffoldConfig(
+        backend="scripted_test", main_model="scripted-test", child_model="scripted-test",
+        workspace_mode="container_clone",
+    )
+    manager = DockerWorkspaceRuntime(
+        "unused", "host-event", "host-event", config,
+        event_asset_source_root=task,
+    )
+
+    assert manager._host_event_asset("task/upstream_solutions/event_worker.py") == worker.resolve()
+    assert manager._host_event_asset("../private.txt") is None
+    assert manager._host_event_asset("other/upstream_solutions/event_worker.py") is None
+
+
+def test_host_event_asset_locates_by_basename_when_destination_mismatches(tmp_path):
+    """Some cases author a destination path that does not match the on-disk layout
+    (e.g. /app/task_file/scripts/event_worker.py while the file sits under
+    upstream_solutions/). The destination stays as authored; the host source is
+    located uniquely by basename, and an ambiguous multi-match falls back to None."""
+    task = tmp_path / "task"
+    (task / "task_file" / "scripts").mkdir(parents=True)
+    (task / "task_file" / "scripts" / "write_manifest.py").write_text("# m\n", encoding="utf-8")
+    worker = task / "upstream_solutions" / "event_worker.py"
+    worker.parent.mkdir(parents=True)
+    worker.write_text("# event worker\n", encoding="utf-8")
+    config = ScaffoldConfig(
+        backend="scripted_test", main_model="scripted-test", child_model="scripted-test",
+        workspace_mode="container_clone",
+    )
+    manager = DockerWorkspaceRuntime(
+        "unused", "host-event", "host-event", config,
+        event_asset_source_root=task,
+    )
+
+    # Destination path is wrong, but the file exists uniquely under upstream_solutions/.
+    assert manager._host_event_asset("/app/task_file/scripts/event_worker.py") == worker.resolve()
+
+
+def test_host_event_asset_basename_fallback_is_ambiguous_only(tmp_path):
+    """When the authored destination misses and two files share the basename, the
+    resolver must NOT guess: it returns None so the docker-cp path is used."""
+    task = tmp_path / "task"
+    for sub in ("a", "b"):
+        (task / sub).mkdir(parents=True)
+        (task / sub / "asset.json").write_text(sub, encoding="utf-8")
+    config = ScaffoldConfig(
+        backend="scripted_test", main_model="scripted-test", child_model="scripted-test",
+        workspace_mode="container_clone",
+    )
+    manager = DockerWorkspaceRuntime(
+        "unused", "host-event", "host-event", config,
+        event_asset_source_root=task,
+    )
+
+    assert manager._host_event_asset("/app/nowhere/asset.json") is None
+
+
 @pytest.mark.skipif(os.getenv("ASYNC_RBENCH_RUN_DOCKER_TESTS") != "1", reason="opt-in Docker mutation test")
 def test_secure_authority_bundle_changes_revision_and_is_workstream_scoped():
     subprocess.run(

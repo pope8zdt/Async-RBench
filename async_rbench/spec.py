@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import json
 import re
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -955,7 +956,13 @@ def validate_case(spec: CaseSpec) -> list[str]:
                 if not test_file.is_relative_to(tests_root) or not test_file.is_file():
                     errors.append(f"{spec.path}: semantic pytest file does not exist: {relative_file!r}")
                     continue
-                tree = ast.parse(test_file.read_text(encoding="utf-8"))
+                # Author test files are not ours: a non-raw regex in one of them
+                # (e.g. '*/\.*') raises a SyntaxWarning during parse that would
+                # otherwise spam every validate/run log.  This parse is only a
+                # node-existence check, so the warning carries no signal here.
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", SyntaxWarning)
+                    tree = ast.parse(test_file.read_text(encoding="utf-8"))
                 function_names = {
                     item.name for item in ast.walk(tree)
                     if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef))

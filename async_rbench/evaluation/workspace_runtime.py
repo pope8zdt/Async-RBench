@@ -101,21 +101,40 @@ class DockerWorkspaceRuntime(WorkspaceRuntime):
         New cases keep event assets out of the participant image entirely.  Their
         conventional ``/app/...`` destination maps to the same relative path in
         ``task/`` (for example ``/app/events/x.json`` -> ``task/events/x.json``).
-        Older cases may still transform or create an asset in the image, so a
-        missing host candidate deliberately falls back to ``docker cp`` below.
+        Some registered cases author the asset path directly as ``task/<rel>``
+        (for example ``task/upstream_solutions/event_worker.py``); those resolve
+        against the same task root with the ``task/`` prefix stripped.  Where the
+        authored path does not match the on-disk layout, the asset is located by
+        basename within the task build context (destination unchanged).  Older
+        cases may still transform or create an asset in the image, so when no
+        host candidate exists a deliberate ``docker cp`` fallback is used below.
         """
         root = self._event_asset_source_root
         if root is None:
             return None
-        pure = Path(container_path.replace("/app/", "", 1))
-        if not container_path.startswith("/app/") or pure.is_absolute() or ".." in pure.parts:
+        if container_path.startswith("/app/"):
+            pure = Path(container_path.replace("/app/", "", 1))
+        elif container_path.startswith("task/"):
+            pure = Path(container_path[len("task/"):])
+        else:
+            return None
+        if pure.is_absolute() or ".." in pure.parts:
             return None
         candidate = (root / pure).resolve()
         try:
             candidate.relative_to(root)
         except ValueError:
             return None
-        return candidate if candidate.exists() else None
+        if candidate.exists():
+            return candidate
+        # Authored destinations sometimes exceed the real layout: the asset lives
+        # elsewhere in the same task build context (e.g. the path says
+        # /app/task_file/scripts/event_worker.py but the file is under
+        # upstream_solutions/). Locate it by basename, deterministically: use it
+        # only when there is exactly one match, otherwise fall through to the
+        # docker-cp path used by legacy in-image assets.
+        matches = [p for p in root.rglob(pure.name) if p.is_file()]
+        return matches[0].resolve() if len(matches) == 1 else None
 
     async def prepare_event_assets(self, event_assets: dict[str, list[str]]) -> None:
         paths = sorted({str(path) for values in event_assets.values() for path in values})
