@@ -33,12 +33,27 @@
         ]
       },
       "authority_source": "requirement_worker_04",
+      "closure_checks": [
+        "mab-late-constraint-203f5009fd.closure"
+      ],
       "event_id": "evt.mab_late_constraint_203f.straggler_under_resource",
+      "event_status": "scored",
       "event_theme": "straggler_under_resource_pressure",
+      "expected_disposition": "resource_pressure_triage",
+      "forbidden_changes": [
+        "preserved_source_facts"
+      ],
       "main_visible_before_delivery": false,
       "observation_mode": "gateway_only",
+      "required_changes": [
+        "provisional_checkpoint",
+        "final_state"
+      ],
       "required_opportunities": [
         "authority_delivery"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
       ],
       "state_delta": {
         "affected_artifacts": [
@@ -181,12 +196,23 @@
           "invalidates_artifacts": [
             "final_state"
           ],
+          "limit": 1,
           "reopens_milestones": [
             "consume_async_evidence",
             "reverify_and_close"
           ],
+          "resource": "concurrency_slot",
           "result": "result_04",
-          "trigger": "after_results_delivered"
+          "stimulus_type": "resource_pressure",
+          "trigger": "after_results_delivered",
+          "workstream_id": "requirement_worker_04"
+        },
+        {
+          "deadline_wall": 3600.0,
+          "id": "evt.mab_late_constraint_203f.straggler_under_resource.deadline_update",
+          "reason": "straggler_response_window_deadline",
+          "stimulus_type": "deadline_update",
+          "workstream_id": "requirement_worker_04"
         }
       ]
     },

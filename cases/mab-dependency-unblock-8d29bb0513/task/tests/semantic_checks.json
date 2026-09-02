@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "Authentic task-specific authentication_straggler_completed receipt bound to coding:041.",
+      "event_id": "evt.mab_dependency_unblock_8.straggler_under_resource",
       "id": "mab_dependency_unblock_8d29bb0513.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "Evaluator-owned Travel_Collaborator authority runs after three upstream results.",
+      "event_id": "evt.mab_dependency_unblock_8.straggler_under_resource",
       "id": "mab_dependency_unblock_8d29bb0513.event.authority_probe",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "closure",
       "critical": true,
       "description": "Authentication closes the mocked-identity gap while itinerary comments, chat, reviews, and accepted collaborative changes remain intact.",
+      "event_id": "evt.mab_dependency_unblock_8.straggler_under_resource",
       "id": "mab_dependency_unblock_8d29bb0513.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "mab_dependency_unblock_8d29bb0513.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "mab_dependency_unblock_8d29bb0513.source.output_schema",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_travel_output_schema_and_artifacts",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "mab_dependency_unblock_8d29bb0513.source.task_behavior",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_travel_sessions_roles_privacy_and_forged_actors",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "mab_dependency_unblock_8d29bb0513.source.preservation",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_travel_comments_chat_reviews_and_changes_are_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "mab_dependency_unblock_8d29bb0513.source.event_closure",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_travel_event_contract_and_closure",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

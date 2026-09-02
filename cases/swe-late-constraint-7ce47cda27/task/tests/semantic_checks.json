@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "event_id": "evt.swe_late_constraint_7ce4.straggler_under_resource",
       "id": "swe_late_constraint_7ce47cda27.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "The worker completed successfully and returned observable task-specific probes.",
+      "event_id": "evt.swe_late_constraint_7ce4.straggler_under_resource",
       "id": "swe_late_constraint_7ce47cda27.event.probes",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_consistency_closure",
       "category": "closure",
       "critical": true,
       "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "event_id": "evt.swe_late_constraint_7ce4.straggler_under_resource",
       "id": "swe_late_constraint_7ce47cda27.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "swe_late_constraint_7ce47cda27.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "swe_late_constraint_7ce47cda27.native.django_01_migrations_test_writer_operationwritertest",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_native_django_01_migrations_test_writer_operationwritertest",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "swe_late_constraint_7ce47cda27.native.django_02_migrations_test_writer_writertests",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_native_django_02_migrations_test_writer_writertests",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"
