@@ -553,20 +553,10 @@ def merge_test_point_pass_rate(
 # ``relevance_tier`` is removed as a scoring gate in the new contract version.
 # ---------------------------------------------------------------------------
 
-SCORE_DOMAINS = frozenset({"base_task", "async_replanning"})
-
-# Expected dispositions that describe a correct *no-replan* event: the agent
-# may preserve prior work, supplement, ignore a duplicate, or reject stale
-# result evidence.  Required changes may be empty + inapplicable, and no state
-# change is NOT a failure.
-NO_REPLAN_DISPOSITIONS = frozenset({
-    "preserve", "supplement", "ignore_duplicate", "reject_stale",
-})
-# Expected dispositions that describe a required revision: RequiredEffectCoverage
-# measures modification coverage and an unchanged state is a zero.
-REVISION_DISPOSITIONS = frozenset({
-    "revise", "rollback_affected", "recover", "reorder",
-})
+# ``score_domain`` enum and ``expected_disposition`` interpretation live with
+# the contract layer (``case_contract.SCORE_DOMAINS``); here we only route a
+# component by a contract's declared applicability, treating ``expected_disposition``
+# as an opaque diagnostic string.
 
 COMPONENT_ORDER = (
     "required_effect_coverage",
@@ -576,11 +566,17 @@ COMPONENT_ORDER = (
 )
 
 
+# Spec 9.2 blend: an event DRS is an equal mix of its process score and its
+# async-outcome score, regardless of disposition.
+PROCESS_BLEND_WEIGHT = 0.5
+
+
 @dataclass
 class EventDRS:
     """A single event's Dynamic Replanning Score with component attribution.
 
-    ``total`` is the event DRS: ``0.5 * process_score + 0.5 * async_outcome``.
+    ``total`` is the event DRS: ``PROCESS_BLEND_WEIGHT * process_score
+    + (1 - PROCESS_BLEND_WEIGHT) * async_outcome``, i.e. a 0.5/0.5 mix.
     When the event is unscored (infrastructure/case failure) ``total`` is None.
     """
 
@@ -595,7 +591,9 @@ class EventDRS:
     def total(self) -> float | None:
         if self.status != "scored" or self.process_score is None or self.async_outcome is None:
             return None
-        return 0.5 * self.process_score + 0.5 * self.async_outcome
+        return PROCESS_BLEND_WEIGHT * self.process_score + (
+            1 - PROCESS_BLEND_WEIGHT
+        ) * self.async_outcome
 
 
 def _state_token(state: Any, artifact_id: str) -> Any:
@@ -607,12 +605,13 @@ def _state_token(state: Any, artifact_id: str) -> Any:
     if state is None:
         return None
     if isinstance(state, dict):
+        # A top-level key wins over the ``artifacts`` sub-mapping.
         if artifact_id in state:
             return state[artifact_id]
         artifacts = state.get("artifacts")
         if isinstance(artifacts, dict) and artifact_id in artifacts:
             return artifacts[artifact_id]
-        return state.get(artifact_id)
+        return None
     return state
 
 

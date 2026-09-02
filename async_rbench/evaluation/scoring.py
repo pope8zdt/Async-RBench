@@ -1053,6 +1053,11 @@ def score_trace(
             event_rejections = list(rejections_by_event.get(event_id) or [])
             boundary_events = [*event_deliveries, *event_rejections]
             if not boundary_events:
+                # Current semantics: a declared event the participant never
+                # reached (no evaluator-observed boundary) is excluded from the
+                # async_drs mean rather than scored 0 — treated as unscored, not
+                # as a model failure.  Pinned by a test; pending a final ruling
+                # from the spec owner (unreached -> unscored vs 0).
                 continue
             boundary_seq = min(int(item.get("seq", 0)) for item in boundary_events)
             delta = contract.get("state_delta") or {}
