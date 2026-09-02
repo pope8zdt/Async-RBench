@@ -1091,8 +1091,11 @@ class ReferenceScaffold:
                     tools=self.main_tools(),
                     seed=_role_seed(int(self.start["agent_seed"]), "main"),
                 )
-                # A real main-model request started; the prepared occurrence is now
-                # observably presented into it, opening its response window.
+                # The prepared occurrence was injected into the main request that
+                # has now actually started and returned (complete() succeeded), so
+                # it is observably presented into that request and its response
+                # window opens.  mark_presented is intentionally called here, after
+                # the await returns, not before the request was issued.
                 if prepared_occurrence_id is not None:
                     self.manager.mark_presented(
                         prepared_occurrence_id,
@@ -1318,8 +1321,19 @@ class ReferenceScaffold:
                 return result
             if call.name == "finish":
                 requested_status = str(args.get("status", "incomplete"))
+                # Finish guard (spec §5.1(6), §9.4): a finish — whether completed
+                # or incomplete — must not skip a required occurrence that is
+                # queued (adapter-received but unpresented) or an active, unclosed
+                # response window.  The guard deliberately does NOT depend on the
+                # declared status, so a participant cannot silently surrender past
+                # a queued delivery that never reached a main-model request.
+                pending_occs = self.manager.presentation_queue.has_pending()
+                open_window = (
+                    self.manager.presentation_queue.active_window is not None
+                    and self.manager.presentation_queue.active_window.active
+                )
+                missing: list[str] = []
                 if requested_status == "completed":
-                    missing: list[str] = []
                     if self._final_commit_revision != self._accepted_state_revision:
                         missing.append("a final artifact commit after the latest accepted completion")
                     if (
@@ -1327,24 +1341,16 @@ class ReferenceScaffold:
                         or not self._verification_passed
                     ):
                         missing.append("a successful verification after the latest accepted completion")
-                    # Finish guard: a completed finish must not skip a required
-                    # occurrence that is queued (adapter-received but unpresented)
-                    # or skip an active, unclosed response window.
-                    pending_occs = self.manager.presentation_queue.has_pending()
-                    open_window = (
-                        self.manager.presentation_queue.active_window is not None
-                        and self.manager.presentation_queue.active_window.active
+                if pending_occs or open_window:
+                    missing.append(
+                        "all delivered occurrences presented and response windows closed"
                     )
-                    if pending_occs or open_window:
-                        missing.append(
-                            "all delivered occurrences presented and response windows closed"
-                        )
-                    if missing:
-                        return {
-                            "error": "completion_preconditions_not_met",
-                            "missing": missing,
-                            "accepted_state_revision": self._accepted_state_revision,
-                        }
+                if missing:
+                    return {
+                        "error": "completion_preconditions_not_met",
+                        "missing": missing,
+                        "accepted_state_revision": self._accepted_state_revision,
+                    }
                 self.finished = True
                 self.finish_status = requested_status
                 self.final_summary = str(args.get("summary", ""))

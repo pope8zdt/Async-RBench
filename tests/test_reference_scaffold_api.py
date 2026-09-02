@@ -425,3 +425,50 @@ def test_finish_guard_rejects_queued_occurrence_and_open_window() -> None:
         assert finished == {"ending": True, "status": "completed"}
 
     asyncio.run(exercise())
+
+
+def test_finish_guard_rejects_incomplete_finish_while_occurrence_queued() -> None:
+    async def exercise() -> None:
+        scaffold = _scaffold(_start())
+        # A queued, adapter-received-but-unpresented occurrence also blocks an
+        # *incomplete* finish: the guard is deliberately status-agnostic (spec
+        # §5.1(6), §9.4), so a participant cannot quietly surrender past a
+        # delivery that never reached a main-model request.
+        _inject_delivery(scaffold, "child-inc", "compl-inc")
+        await scaffold.manager.handle_delivery(
+            {"completion_id": "compl-inc", "payload": {"id": 1}},
+        )
+        blocked = await scaffold._execute_main_tool(ToolCall(
+            "finish-inc-blocked", "finish", {"status": "incomplete", "summary": "s"},
+        ))
+        assert blocked["error"] == "completion_preconditions_not_met"
+        assert blocked["missing"] == [
+            "all delivered occurrences presented and response windows closed",
+        ]
+        assert scaffold.finished is False
+
+        # Presenting opens a window; an incomplete finish is still refused while
+        # the window is unclosed.
+        candidate = scaffold.manager.select_presentable()
+        assert candidate is not None
+        scaffold.manager.mark_presented(
+            candidate.occurrence_id, turn_id="t1", window_id="w1",
+        )
+        blocked_window = await scaffold._execute_main_tool(ToolCall(
+            "finish-inc-window", "finish", {"status": "incomplete", "summary": "s"},
+        ))
+        assert blocked_window["error"] == "completion_preconditions_not_met"
+        assert scaffold.finished is False
+
+        # Once the window closes deterministically, an incomplete finish is
+        # accepted (no commit/verify preconditions apply to incomplete).
+        for _ in range(4):
+            scaffold.manager.presentation_queue.record_turn()
+        assert scaffold.manager.presentation_queue.close_active_window() is True
+        finished = await scaffold._execute_main_tool(ToolCall(
+            "finish-inc-ok", "finish", {"status": "incomplete", "summary": "closed"},
+        ))
+        assert finished == {"ending": True, "status": "incomplete"}
+        assert scaffold.finished is True
+
+    asyncio.run(exercise())
