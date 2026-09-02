@@ -7,6 +7,7 @@ from .protocol import canonical_digest
 from .pytest_results import parse_pytest_summary
 from .event_store import _KERNEL_PRIVATE_FIELDS
 from .control_flow_gates import (
+    EventDRS,
     combine_dt_score,
     critical_dynamic_success,
     dynamic_control_score,
@@ -14,6 +15,9 @@ from .control_flow_gates import (
     dynamic_process_score,
     dynamic_success,
     evaluate_control_flow_checks,
+    score_async_drs,
+    score_base_task,
+    score_event_replanning,
     semantic_task_score,
 )
 from .weighting import (
@@ -116,6 +120,49 @@ def _weighted_semantic_counts(
         else:
             failed += weight
     return {"passed": passed, "failed": failed, "total": total}
+
+
+def _event_drs_to_dict(event_drs: Any) -> dict[str, Any]:
+    """Project an ``EventDRS`` to a JSON-serialisable diagnostic record."""
+    return {
+        "process_score": event_drs.process_score,
+        "async_outcome": event_drs.async_outcome,
+        "component_scores": dict(event_drs.component_scores),
+        "expected_disposition": event_drs.expected_disposition,
+        "applicability": dict(event_drs.applicability),
+        "status": event_drs.status,
+        "total": event_drs.total,
+    }
+
+
+def _contract_carries_scoring_fields(contract: dict[str, Any]) -> bool:
+    """True when an event contract declares the new observation-point scoring fields."""
+    return bool(
+        contract.get("required_changes") or contract.get("required_preservation")
+        or contract.get("forbidden_changes") or contract.get("closure_checks")
+        or contract.get("required_verification") or contract.get("expected_disposition")
+        or contract.get("applicable_components") or contract.get("requires_provisional")
+        or contract.get("event_status")
+    )
+
+
+def _event_state_snapshots(
+    artifact_commits: dict[str, list[dict[str, Any]]],
+    related_artifacts: set[str],
+    boundary_seq: int,
+) -> tuple[dict[str, str], dict[str, str]]:
+    """Build before/after digest snapshots around an event's boundary."""
+    before: dict[str, str] = {}
+    after: dict[str, str] = {}
+    for artifact_id in related_artifacts:
+        commits = artifact_commits.get(str(artifact_id), [])
+        pre = [item for item in commits if int(item.get("seq", 0)) < boundary_seq]
+        post = [item for item in commits if int(item.get("seq", 0)) >= boundary_seq]
+        if pre:
+            before[artifact_id] = str(max(pre, key=lambda item: int(item.get("seq", 0))).get("observed_digest", ""))
+        if post:
+            after[artifact_id] = str(max(post, key=lambda item: int(item.get("seq", 0))).get("observed_digest", ""))
+    return before, after
 
 
 def _weighted_control_flow_counts(
@@ -900,6 +947,9 @@ def score_trace(
     semantic_score = semantic_task_score(
         semantic_results, test_point_pass_rate, semantic_registry,
     )
+    # Base Task Score: only ``score_domain == base_task`` checks feed BTS, so
+    # async replanning evidence never leaks into the mode-neutral task score.
+    base_task_score = score_base_task(semantic_results)
     dynamic_dimension_rates = dynamic_dimension_scores(control_flow_results)
     dynamic_group_rates = dynamic_decision_group_scores(control_flow_results)
     process_dynamic_score = dynamic_process_score(control_flow_results)
@@ -914,6 +964,8 @@ def score_trace(
     dynamic_opportunity_errors: list[str] = []
     dynamic_event_exposure: dict[str, str] = {}
     contracts = list(event_contracts or [])
+    async_drs: float | None = None
+    async_event_drs: dict[str, Any] = {}
     if execution_mode == "async" and contracts:
         if not scenario_constructed:
             dynamic_scenario_errors.append("benchmark scenario construction failed")
@@ -989,6 +1041,35 @@ def score_trace(
             # Pre-event participant commits are scored decision preconditions,
             # not infrastructure qualification. Their absence fails the point;
             # it must never convert model inaction into an unscored episode.
+        # Observation-point DRS (spec 9): each declared event that carries the
+        # new scoring fields is scored independently of BTS; a final base-task
+        # failure never erases an already-measurable event DRS.
+        event_drs_scores: list[Any] = []
+        for contract in contracts:
+            event_id = str(contract.get("event_id") or "")
+            if not _contract_carries_scoring_fields(contract):
+                continue
+            event_deliveries = list(deliveries_by_event.get(event_id) or [])
+            event_rejections = list(rejections_by_event.get(event_id) or [])
+            boundary_events = [*event_deliveries, *event_rejections]
+            if not boundary_events:
+                continue
+            boundary_seq = min(int(item.get("seq", 0)) for item in boundary_events)
+            delta = contract.get("state_delta") or {}
+            related_artifacts = {str(item) for item in delta.get("affected_artifacts") or []}
+            related_artifacts |= {str(item) for item in delta.get("unaffected_artifacts") or []}
+            related_artifacts |= {str(item) for item in contract.get("required_changes") or []}
+            related_artifacts |= {str(item) for item in contract.get("required_preservation") or []}
+            related_artifacts |= {str(item) for item in contract.get("forbidden_changes") or []}
+            before, after = _event_state_snapshots(
+                artifact_commits, related_artifacts, boundary_seq,
+            )
+            event_drs = score_event_replanning(
+                contract, before, after, semantic_results,
+            )
+            event_drs_scores.append(event_drs)
+            async_event_drs[event_id] = _event_drs_to_dict(event_drs)
+        async_drs = score_async_drs(event_drs_scores)
     dynamic_scenario_qualified = not dynamic_scenario_errors
     dynamic_score = (
         dynamic_control_score(control_flow_results)
@@ -1147,6 +1228,9 @@ def score_trace(
         "test_point_pass_rate": test_point_pass_rate,
         "score_policy_version": SCORE_POLICY_VERSION,
         "semantic_task_score": semantic_score,
+        "base_task_score": base_task_score,
+        "async_drs": async_drs,
+        "async_event_drs": async_event_drs,
         "dynamic_control_score": dynamic_score,
         "dynamic_process_score": process_dynamic_score,
         "dynamic_scenario_qualified": dynamic_scenario_qualified,

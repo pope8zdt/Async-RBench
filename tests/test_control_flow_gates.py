@@ -5,7 +5,8 @@ import pytest
 from async_rbench.evaluation.control_flow_gates import (
     GATE_EXECUTION_MODES, dynamic_control_score, dynamic_dimension_scores,
     dynamic_decision_group_scores, evaluate_control_flow_checks,
-    merge_test_point_pass_rate, semantic_task_score,
+    merge_test_point_pass_rate, score_base_task, score_event_replanning,
+    semantic_task_score,
 )
 from async_rbench.evaluation.weighting import GATE_DYNAMIC_DIMENSIONS
 
@@ -294,3 +295,39 @@ def test_v7_semantic_score_macros_requirement_groups():
         {"id": "b1", "passed": False},
     ]
     assert semantic_task_score(results, None, registry) == 0.5
+
+
+def test_base_task_consumes_only_base_task_domain_ignoring_async_and_tier():
+    # Async replanning evidence and the legacy relevance_tier tag must never
+    # pollute the mode-neutral Base Task Score.
+    results = [
+        {"id": "task.a", "score_domain": "base_task", "passed": True},
+        {"id": "task.b", "score_domain": "base_task", "passed": False},
+        {"id": "event.a", "score_domain": "async_replanning", "event_id": "evt.a", "passed": True, "relevance_tier": "critical"},
+        {"id": "event.b", "score_domain": "async_replanning", "event_id": "evt.a", "passed": False, "relevance_tier": "direct"},
+    ]
+    assert score_base_task(results) == 0.5
+
+
+def test_no_replan_full_process_versus_required_revision_unchanged_zero():
+    no_replan = {
+        "event_id": "evt.a", "expected_disposition": "reject_stale",
+        "required_changes": [], "required_preservation": ["prior"],
+        "forbidden_changes": ["saved"], "closure_checks": ["evt.a.close"],
+    }
+    state = {"prior": "same", "saved": "provisional"}
+    passed = [
+        {"id": "evt.a.close", "score_domain": "async_replanning", "event_id": "evt.a", "passed": True},
+    ]
+    # Correct no-replan: an unchanged state is not a failure; full process score.
+    assert score_event_replanning(no_replan, state, state, passed).process_score == 1.0
+
+    revise = {
+        "event_id": "evt.b", "expected_disposition": "revise",
+        "required_changes": ["affected"], "required_preservation": ["prior"],
+        "forbidden_changes": ["stable"], "closure_checks": ["evt.a.close"],
+    }
+    # Required revision with unchanged state -> zero RequiredEffectCoverage.
+    score = score_event_replanning(revise, state, state, passed)
+    assert score.component_scores["required_effect_coverage"] == 0.0
+    assert score.process_score == 0.75

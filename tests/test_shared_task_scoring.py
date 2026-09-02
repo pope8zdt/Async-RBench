@@ -47,6 +47,32 @@ def test_capsule_outcome_oracle_is_full_score(tmp_path):
     assert score_with_event_as_action["score"] == 0.9
 
 
+def test_base_task_score_is_mode_neutral_and_unaffected_by_async_domain():
+    from async_rbench.evaluation.scoring import score_base_task, score_event_replanning
+
+    # BTS consumes only base_task semantic checks; a failing async replanning
+    # check must not drag down the mode-neutral task score.
+    results = [
+        {"id": "task.a", "score_domain": "base_task", "passed": True},
+        {"id": "task.b", "score_domain": "base_task", "passed": True},
+        {"id": "event.a", "score_domain": "async_replanning", "event_id": "evt.a", "passed": False},
+    ]
+    assert score_base_task(results) == 1.0
+
+    # A per-event DRS is scored independently of the base task outcome: the
+    # base-task checks passing does not manufacture event coverage that the
+    # trajectory did not produce.
+    contract = {
+        "event_id": "evt.a", "expected_disposition": "revise",
+        "required_changes": ["affected"], "required_preservation": ["prior"],
+        "forbidden_changes": ["stable"], "closure_checks": ["event.a"],
+    }
+    before = {"affected": "provisional", "prior": "same", "stable": "same"}
+    after = {"affected": "provisional", "prior": "same", "stable": "same"}
+    score = score_event_replanning(contract, before, after, results)
+    assert score.component_scores["required_effect_coverage"] == 0.0
+
+
 def test_react_outcome_uses_variable_required_action_points():
     public = {
         "case_id": "c2",

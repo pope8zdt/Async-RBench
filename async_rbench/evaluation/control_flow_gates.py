@@ -18,6 +18,7 @@ readable for reproducibility.
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from typing import Any
 
 from .weighting import (
@@ -539,3 +540,284 @@ def merge_test_point_pass_rate(
     )
     dynamic_score = dynamic_control_score(control_flow_results)
     return combine_dt_score(dynamic_score, semantic_score) if dynamic_score is not None else semantic_score
+
+
+# ---------------------------------------------------------------------------
+# Observation-point scoring (spec 9): separate Base Task Score from the
+# per-event Dynamic Replanning Score.
+#
+# A semantic check is tagged with exactly one ``score_domain``:
+#   ``base_task``          -> feeds Linear/Async BTS.
+#   ``async_replanning``   -> does NOT feed BTS; feeds only its event's
+#                             AsyncOutcome, and must bind a real ``event_id``.
+# ``relevance_tier`` is removed as a scoring gate in the new contract version.
+# ---------------------------------------------------------------------------
+
+SCORE_DOMAINS = frozenset({"base_task", "async_replanning"})
+
+# Expected dispositions that describe a correct *no-replan* event: the agent
+# may preserve prior work, supplement, ignore a duplicate, or reject stale
+# result evidence.  Required changes may be empty + inapplicable, and no state
+# change is NOT a failure.
+NO_REPLAN_DISPOSITIONS = frozenset({
+    "preserve", "supplement", "ignore_duplicate", "reject_stale",
+})
+# Expected dispositions that describe a required revision: RequiredEffectCoverage
+# measures modification coverage and an unchanged state is a zero.
+REVISION_DISPOSITIONS = frozenset({
+    "revise", "rollback_affected", "recover", "reorder",
+})
+
+COMPONENT_ORDER = (
+    "required_effect_coverage",
+    "preservation",
+    "forbidden_effect_compliance",
+    "closure",
+)
+
+
+@dataclass
+class EventDRS:
+    """A single event's Dynamic Replanning Score with component attribution.
+
+    ``total`` is the event DRS: ``0.5 * process_score + 0.5 * async_outcome``.
+    When the event is unscored (infrastructure/case failure) ``total`` is None.
+    """
+
+    process_score: float | None
+    async_outcome: float | None
+    component_scores: dict[str, float | None]
+    expected_disposition: str = ""
+    applicability: dict[str, bool] = field(default_factory=dict)
+    status: str = "scored"
+
+    @property
+    def total(self) -> float | None:
+        if self.status != "scored" or self.process_score is None or self.async_outcome is None:
+            return None
+        return 0.5 * self.process_score + 0.5 * self.async_outcome
+
+
+def _state_token(state: Any, artifact_id: str) -> Any:
+    """Return the comparable state token for an artifact in a before/after snapshot.
+
+    ``state`` may be a flat ``{artifact_id: digest}`` mapping, a mapping with an
+    ``artifacts`` sub-mapping, or a scalar (meaning every artifact shares it).
+    """
+    if state is None:
+        return None
+    if isinstance(state, dict):
+        if artifact_id in state:
+            return state[artifact_id]
+        artifacts = state.get("artifacts")
+        if isinstance(artifacts, dict) and artifact_id in artifacts:
+            return artifacts[artifact_id]
+        return state.get(artifact_id)
+    return state
+
+
+def _required_effect_coverage(
+    contract: dict[str, Any], before: Any, after: Any,
+) -> float | None:
+    required = [str(item) for item in (contract.get("required_changes") or [])]
+    if not required:
+        return None
+    changed = sum(
+        1 for artifact_id in required
+        if _state_token(before, artifact_id) != _state_token(after, artifact_id)
+    )
+    return changed / len(required)
+
+
+def _preservation_score(
+    contract: dict[str, Any], before: Any, after: Any,
+) -> float | None:
+    preserved = [str(item) for item in (contract.get("required_preservation") or [])]
+    if not preserved:
+        return None
+    consistent = sum(
+        1 for artifact_id in preserved
+        if _state_token(before, artifact_id) == _state_token(after, artifact_id)
+    )
+    return consistent / len(preserved)
+
+
+def _forbidden_effect_compliance(
+    contract: dict[str, Any], before: Any, after: Any,
+) -> float | None:
+    forbidden = [str(item) for item in (contract.get("forbidden_changes") or [])]
+    if not forbidden:
+        return None
+    compliant = sum(
+        1 for artifact_id in forbidden
+        # A forbidden artifact must remain unchanged: a change is a violation.
+        if _state_token(before, artifact_id) == _state_token(after, artifact_id)
+    )
+    return compliant / len(forbidden)
+
+
+def _closure_score(
+    contract: dict[str, Any], semantic_results: list[dict[str, Any]] | None,
+) -> float | None:
+    checks = [
+        str(item)
+        for item in (contract.get("closure_checks") or contract.get("required_verification") or [])
+    ]
+    if not checks:
+        return None
+    by_id = {str(item.get("id")): item for item in (semantic_results or [])}
+    passed = sum(1 for check_id in checks if by_id.get(check_id, {}).get("passed") is True)
+    return passed / len(checks)
+
+
+def _component_applicability(contract: dict[str, Any]) -> set[str]:
+    """Route components by the contract's declared applicability, not trajectory.
+
+    A contract may declare ``applicable_components`` explicitly; otherwise the
+    presence of a component's declared source list routes it.  An empty required
+    change set makes RequiredEffectCoverage inapplicable, so a participant cannot
+    dodge a denominator by inaction (and a no-replan event cannot be penalised).
+    """
+    declared = contract.get("applicable_components")
+    if declared is not None:
+        return set(str(item) for item in declared)
+    applicable = set()
+    if contract.get("required_changes"):
+        applicable.add("required_effect_coverage")
+    if contract.get("required_preservation"):
+        applicable.add("preservation")
+    if contract.get("forbidden_changes"):
+        applicable.add("forbidden_effect_compliance")
+    if contract.get("closure_checks") or contract.get("required_verification"):
+        applicable.add("closure")
+    return applicable
+
+
+def _event_async_outcome(
+    event_id: str | None, semantic_results: list[dict[str, Any]] | None,
+) -> float | None:
+    checks = [
+        item for item in (semantic_results or [])
+        if item.get("score_domain") == "async_replanning"
+        and str(item.get("event_id")) == str(event_id)
+    ]
+    if not checks:
+        return None
+    passed = sum(1 for item in checks if item.get("passed") is True)
+    return passed / len(checks)
+
+
+def _provisional_missing(contract: dict[str, Any], before: Any) -> bool:
+    """Spec 9.4: participant failed to create a required provisional state."""
+    if contract.get("requires_provisional") is not True:
+        return False
+    if before is None:
+        return True
+    artifact = contract.get("provisional_artifact")
+    if artifact is not None:
+        return _state_token(before, str(artifact)) is None
+    return False
+
+
+def _component_value(
+    name: str, contract: dict[str, Any], before: Any, after: Any,
+    semantic_results: list[dict[str, Any]] | None,
+) -> float | None:
+    if name == "required_effect_coverage":
+        return _required_effect_coverage(contract, before, after)
+    if name == "preservation":
+        return _preservation_score(contract, before, after)
+    if name == "forbidden_effect_compliance":
+        return _forbidden_effect_compliance(contract, before, after)
+    if name == "closure":
+        return _closure_score(contract, semantic_results)
+    return None
+
+
+def score_base_task(
+    semantic_results: list[dict[str, Any]] | None,
+) -> float | None:
+    """Base Task Score: fraction of ``score_domain == base_task`` checks passing."""
+    checks = [
+        item for item in (semantic_results or [])
+        if item.get("score_domain") == "base_task"
+    ]
+    if not checks:
+        return None
+    passed = sum(1 for item in checks if item.get("passed") is True)
+    return passed / len(checks)
+
+
+def score_event_replanning(
+    contract: dict[str, Any] | None,
+    before: Any,
+    after: Any,
+    semantic_results: list[dict[str, Any]] | None,
+) -> EventDRS:
+    """Score a single event's replanning (DRS).
+
+    ``before`` / ``after`` are state snapshots around the event boundary.  The
+    contract declares, in advance, the required/preserved/forbidden artifacts and
+    the event's closure checks; applicability is declared, never inferred from
+    the trajectory.
+    """
+    contract = dict(contract or {})
+    disposition = str(contract.get("expected_disposition") or "")
+    status = str(contract.get("event_status") or "scored")
+    empty_components = {name: None for name in COMPONENT_ORDER}
+
+    # Evaluator inability to produce/present the declared event is an
+    # infrastructure/case failure, not a model score (spec 9.4).
+    if status != "scored":
+        return EventDRS(
+            process_score=None,
+            async_outcome=None,
+            component_scores=empty_components,
+            expected_disposition=disposition,
+            applicability={name: False for name in COMPONENT_ORDER},
+            status=status,
+        )
+
+    applicability = _component_applicability(contract)
+    component_scores = {
+        name: _component_value(name, contract, before, after, semantic_results)
+        for name in COMPONENT_ORDER
+    }
+    applicable = {name: name in applicability for name in COMPONENT_ORDER}
+
+    # Spec 9.4: participant failure to create the required provisional within
+    # the full pre budget yields a related DRS of 0.
+    if _provisional_missing(contract, before):
+        return EventDRS(
+            process_score=0.0,
+            async_outcome=0.0,
+            component_scores=component_scores,
+            expected_disposition=disposition,
+            applicability=applicable,
+            status="scored",
+        )
+
+    applicable_values = [
+        component_scores[name] for name in COMPONENT_ORDER
+        if name in applicability and component_scores[name] is not None
+    ]
+    process_score = (
+        sum(applicable_values) / len(applicable_values) if applicable_values else None
+    )
+    async_outcome = _event_async_outcome(contract.get("event_id"), semantic_results)
+    return EventDRS(
+        process_score=process_score,
+        async_outcome=async_outcome,
+        component_scores=component_scores,
+        expected_disposition=disposition,
+        applicability=applicable,
+        status="scored",
+    )
+
+
+def score_async_drs(
+    event_scores: list[EventDRS] | None,
+) -> float | None:
+    """Aggregate per-event DRS: mean over scored events, ignoring unscored ones."""
+    totals = [item.total for item in (event_scores or []) if item.total is not None]
+    return sum(totals) / len(totals) if totals else None

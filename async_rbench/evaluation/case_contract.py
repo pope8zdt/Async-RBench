@@ -36,6 +36,44 @@ PUBLIC_RESULT_REJECTION_CODES = frozenset({
     "missing_required_files",
 })
 
+# New scoring contract version: every semantic check is tagged with exactly one
+# scoring domain so the Base Task Score and the per-event Dynamic Replanning
+# Score can consume disjoint semantic evidence.
+SCORE_DOMAINS = frozenset({"base_task", "async_replanning"})
+
+
+def validate_scoring_domains(
+    semantic_checks: list[Mapping[str, Any]] | None,
+) -> list[str]:
+    """Validate semantic-check scoring domains under the new contract version.
+
+    A check must carry exactly one ``score_domain``; ``async_replanning`` must
+    additionally bind a non-empty ``event_id``; ``relevance_tier`` is rejected
+    as a scoring gate in this contract version.  Returns a list of error
+    strings (empty when the checks are valid).
+    """
+    errors: list[str] = []
+    for check in semantic_checks or []:
+        check_id = str(check.get("id") or "")
+        domain = check.get("score_domain")
+        if domain not in SCORE_DOMAINS:
+            errors.append(
+                f"{check_id}: score_domain must be one of "
+                f"{sorted(SCORE_DOMAINS)}; got {domain!r}"
+            )
+        if domain == "async_replanning":
+            event_id = check.get("event_id")
+            if event_id is None or not str(event_id).strip():
+                errors.append(
+                    f"{check_id}: async_replanning requires a non-empty event_id"
+                )
+        if "relevance_tier" in check:
+            errors.append(
+                f"{check_id}: relevance_tier is rejected in the new scoring "
+                "contract version"
+            )
+    return errors
+
 
 class ContractError(ValueError):
     """Raised when public and private benchmark data cross their boundary."""
