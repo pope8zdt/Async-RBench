@@ -36,6 +36,16 @@
       "event_theme": "duplicate_or_replayed_completion",
       "main_visible_before_delivery": false,
       "observation_mode": "gateway_only",
+      "closure_checks": [
+        "mab_late_test_evidence_4c6c77884e.closure"
+      ],
+      "event_status": "scored",
+      "expected_disposition": "ignore_duplicate",
+      "required_changes": [],
+      "required_preservation": [
+        "preserved_source_facts"
+      ],
+      "forbidden_changes": [],
       "required_opportunities": [
         "authority_delivery"
       ],
@@ -186,6 +196,12 @@
           ],
           "result": "result_04",
           "trigger": "after_results_delivered"
+        },
+        {
+          "id": "evt.mab_late_test_evidence_4.challenge_test_evidence_replayed.replay",
+          "replay_of_result": "result_04",
+          "stimulus_type": "completion_replay",
+          "trigger": "after_consumed"
         }
       ]
     },
