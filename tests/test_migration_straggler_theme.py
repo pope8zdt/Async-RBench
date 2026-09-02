@@ -29,10 +29,15 @@ from pathlib import Path
 import yaml
 
 import async_rbench.evaluation.runner as runner_module
+from async_rbench.evaluation.control_flow_gates import (
+    _closure_score,
+    score_event_replanning,
+)
 from async_rbench.evaluation.event_taxonomy import validate_scenario_events
 from async_rbench.evaluation.runner import EpisodeConfig
 from async_rbench.evaluation.scheduler import DeliveryController
 from async_rbench.evaluation.workspace_runtime import DisabledWorkspaceRuntime
+from async_rbench.spec import discover_cases
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -452,3 +457,163 @@ def test_migrated_straggler_schedule_shape_validates() -> None:
     non_numeric[-1] = {**non_numeric[-1], "deadline_wall": "2026-09-03T00:00:00Z"}
     errors = validate_scenario_events(non_numeric, execution_mode="async", **common)
     assert any("deadline_wall must be numeric" in error for error in errors)
+
+
+# ---------------------------------------------------------------------------
+# Real-case migration data guards (the 10 registered straggler cases)
+# ---------------------------------------------------------------------------
+
+SCORE_DOMAINS = frozenset({"base_task", "async_replanning"})
+OBSERVATION_FIELDS = (
+    "required_changes",
+    "required_preservation",
+    "forbidden_changes",
+    "closure_checks",
+    "expected_disposition",
+    "event_status",
+)
+
+EXPECTED_STRAAGGLER_DIRS = frozenset({
+    "mab-dependency-unblock-0daa930906",
+    "mab-dependency-unblock-3005dbb57f",
+    "mab-dependency-unblock-8d29bb0513",
+    "mab-dependency-unblock-9739b40e89",
+    "mab-late-constraint-203f5009fd",
+    "swe-dependency-unblock-3361c7af50",
+    "swe-dependency-unblock-8902c7f431",
+    "swe-late-constraint-3950516755",
+    "swe-late-constraint-7ce47cda27",
+    "tbn-late-test-evidence-9685a54f22",
+})
+
+
+def _straggler_cases() -> list[Path]:
+    """The registered case dirs whose primary_event_theme is straggler."""
+    cases = []
+    for case in discover_cases(ROOT):
+        private = yaml.safe_load(
+            (case.case_dir / "private" / "private_case.yaml").read_text(encoding="utf-8")
+        )
+        theme = ((private.get("classification") or {}).get("primary_event_theme") or "")
+        if theme == "straggler_under_resource_pressure":
+            cases.append(case.case_dir)
+    return sorted(cases)
+
+
+def _load(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def test_lane_targets_the_ten_registered_straggler_cases() -> None:
+    assert {case_dir.name for case_dir in _straggler_cases()} == EXPECTED_STRAAGGLER_DIRS
+
+
+def test_every_straggler_case_check_has_exactly_one_scoring_domain() -> None:
+    """Each migrated semantic check carries exactly one resolvable score_domain."""
+    for case_dir in _straggler_cases():
+        semantic = _load(case_dir / "task" / "tests" / "semantic_checks.json")
+        control = _load(case_dir / "task" / "tests" / "control_flow_checks.json")
+        contract_event_ids = {
+            str(contract.get("event_id"))
+            for contract in (control.get("event_contracts") or [])
+            if contract.get("event_id")
+        }
+        assert contract_event_ids, case_dir.name
+        for check in semantic["checks"]:
+            check_id = str(check["id"])
+            domain = check.get("score_domain")
+            assert domain in SCORE_DOMAINS, (case_dir.name, check_id, domain)
+            assert "relevance_tier" in check, (case_dir.name, check_id)
+            if domain == "async_replanning":
+                event_id = str(check.get("event_id") or "")
+                assert event_id in contract_event_ids, (
+                    case_dir.name, check_id, event_id, contract_event_ids,
+                )
+            elif check.get("event_id") is not None:
+                raise AssertionError((case_dir.name, check_id, "base_task carried event_id"))
+
+
+def test_every_straggler_case_event_contract_carries_observation_fields(
+) -> None:
+    """The six observation fields are non-empty on all three mirrors and equal.
+
+    The private top-level ``event_contracts``, the control-flow evaluator
+    registry and the dynamic-point-plan ledger must agree, and every
+    ``closure_checks`` reference must resolve to an actual semantic check id --
+    the guard that caught the original dash-form (directory-name) reference,
+    which silently pinned the closure component at 0.0.
+    """
+    for case_dir in _straggler_cases():
+        semantic = _load(case_dir / "task" / "tests" / "semantic_checks.json")
+        control = _load(case_dir / "task" / "tests" / "control_flow_checks.json")
+        ledger = _load(case_dir / "private" / "dynamic_point_plan.json")
+        private = _load(case_dir / "private" / "private_case.yaml")
+        semantic_ids = {str(check["id"]) for check in semantic["checks"]}
+        assert semantic_ids
+
+        contracts = control.get("event_contracts") or []
+        assert contracts, case_dir.name
+        for contract in contracts:
+            missing = [field for field in OBSERVATION_FIELDS if field not in contract]
+            assert not missing, (case_dir.name, contract.get("event_id"), missing)
+            assert isinstance(contract.get("required_changes"), list) and contract["required_changes"]
+            assert isinstance(contract.get("required_preservation"), list) and contract["required_preservation"]
+            assert isinstance(contract.get("forbidden_changes"), list)
+            assert contract.get("closure_checks"), (case_dir.name, contract.get("event_id"))
+            assert str(contract.get("expected_disposition") or "").strip()
+            assert contract.get("event_status") == "scored"
+            # Every closure reference must resolve to a real semantic check id
+            # (the underscore-form `{case}.closure` in semantic_checks.json).
+            refs = {str(item) for item in contract.get("closure_checks")}
+            assert refs <= semantic_ids, (case_dir.name, refs - semantic_ids)
+            assert any(str(item).endswith(".closure") for item in refs)
+
+        # The three mirrors agree on the observation contract.
+        assert ledger == control, case_dir.name
+        assert private.get("event_contracts") == contracts, case_dir.name
+
+
+def test_real_straggler_case_closure_component_scores_full_value() -> None:
+    """The real underscore closure id yields a full closure score, not 0.0.
+
+    ``_closure_score`` joins semantic results by exact check id. The migrated
+    cases reference ``{underscore_case}.closure`` (the real semantic check); when
+    that check passes the closure component must be 1.0 and add its quarter to
+    the process score. A directory-name (dash-form) reference would silently
+    resolve to nothing and return 0.0 -- the regression this lane's first pass
+    shipped and the reviewer rejected.
+    """
+    case_dir = _straggler_cases()[0]
+    control = _load(case_dir / "task" / "tests" / "control_flow_checks.json")
+    semantic = _load(case_dir / "task" / "tests" / "semantic_checks.json")
+    contracts = control.get("event_contracts") or []
+    assert len(contracts) == 1
+    contract = contracts[0]
+
+    # A faithful "perfect episode" result set: every real semantic check passed.
+    perfect_results = [{**check, "passed": True} for check in semantic["checks"]]
+
+    closure = _closure_score(contract, perfect_results)
+    assert closure == 1.0, (case_dir.name, contract.get("closure_checks"), closure)
+
+    event_drs = score_event_replanning(
+        contract, before=None, after=None, semantic_results=perfect_results,
+    )
+    assert event_drs.component_scores["closure"] == 1.0
+    assert event_drs.async_outcome == 1.0
+    assert event_drs.process_score is not None
+
+    # Negative control: the dash-form reference the first pass wrote resolves to
+    # nothing (no semantic check has that id), so closure collapses to 0.0.
+    dash_contract = dict(contract)
+    dash_contract["closure_checks"] = [f"{case_dir.name}.closure"]
+    assert {str(item) for item in dash_contract["closure_checks"]} & {
+        str(check["id"]) for check in semantic["checks"]
+    } == set()
+    assert _closure_score(dash_contract, perfect_results) == 0.0
+    dash_drs = score_event_replanning(
+        dash_contract, before=None, after=None, semantic_results=perfect_results,
+    )
+    assert dash_drs.component_scores["closure"] == 0.0
+    assert event_drs.process_score == dash_drs.process_score + 0.25
+    assert event_drs.total == dash_drs.total + 0.125
