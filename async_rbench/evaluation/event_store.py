@@ -27,6 +27,11 @@ _ENVELOPE_FIELDS = frozenset({
 _KERNEL_PRIVATE_FIELDS = frozenset({
     "evaluator_stale", "evaluator_stale_measurable", "evaluator_stale_reason",
     "replayed", "replay_of_completion_id",
+    # Task 9 designed-terminal classification is scoring-only: the participant
+    # sees the observable ``terminal_outcome`` (which ``public_delivery``
+    # projects), never whether the failure was designed vs infrastructure nor the
+    # private reason.
+    "evaluator_designed_failure", "evaluator_terminal_reason",
 })
 
 # Event types whose default stream is not public. Used by ``classify_visibility``
