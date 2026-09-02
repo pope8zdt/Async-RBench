@@ -221,12 +221,24 @@
         ]
       },
       "authority_source": "requirement_worker_04",
+      "closure_checks": [
+        "swe_late_test_evidence_cb3e057923.closure"
+      ],
       "event_id": "evt.swe_late_test_evidence_cb3e.scope_dependency_change",
+      "event_status": "scored",
       "event_theme": "task_scope_or_dependency_change",
+      "expected_disposition": "revise",
+      "forbidden_changes": [],
       "main_visible_before_delivery": false,
       "observation_mode": "gateway_only",
+      "required_changes": [
+        "final_state"
+      ],
       "required_opportunities": [
         "authority_delivery"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
       ],
       "state_delta": {
         "affected_artifacts": [

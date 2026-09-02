@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "The independently produced event receipt is authentic and bound to this source task.",
+      "event_id": "evt.tbn_late_test_evidence_3.task_scope_or_dependency",
       "id": "tbn_late_test_evidence_30aa2ad8de.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "The worker completed successfully and returned observable task-specific probes.",
+      "event_id": "evt.tbn_late_test_evidence_3.task_scope_or_dependency",
       "id": "tbn_late_test_evidence_30aa2ad8de.event.probes",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_consistency_closure",
       "category": "closure",
       "critical": true,
       "description": "Final closure consumes the exact event and records source-semantic reverification.",
+      "event_id": "evt.tbn_late_test_evidence_3.task_scope_or_dependency",
       "id": "tbn_late_test_evidence_30aa2ad8de.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_installed",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_nginx_installed",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_running",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_nginx_running",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_index_page_content",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_index_page_content",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_custom_404_page",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_custom_404_page",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -88,7 +99,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_config_syntax",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_nginx_config_syntax",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -98,7 +110,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_nginx_config_settings",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_nginx_config_settings",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -108,7 +121,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_log_file_creation",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_log_file_creation",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -118,7 +132,8 @@
       "id": "tbn_late_test_evidence_30aa2ad8de.upstream.test_log_file_format",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_log_file_format",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

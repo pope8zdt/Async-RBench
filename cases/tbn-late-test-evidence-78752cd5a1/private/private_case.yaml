@@ -121,6 +121,10 @@
           "result": "result_01"
         },
         {
+          "after_artifacts": [
+            "provisional_checkpoint",
+            "preserved_source_facts"
+          ],
           "id": "evt.tbn_late_test_evidence_7.task_scope_or_dependency",
           "invalidates_artifacts": [
             "final_state"
@@ -131,10 +135,6 @@
           ],
           "result": "result_02",
           "stimulus_type": "task_scope_revision",
-          "after_artifacts": [
-            "provisional_checkpoint",
-            "preserved_source_facts"
-          ],
           "trigger": "after_artifacts_committed"
         }
       ]
