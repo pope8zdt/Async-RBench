@@ -23,6 +23,20 @@
     "resource_pressure",
     "deadline_update"
   ],
+  "manifest_freeze": {
+    "protocol_version": "1.0",
+    "description": "Frozen event-mechanism protocol revision recorded by Task 1 of the Async-RBench event-migration redesign. frozen_theme_distribution is the plan expectation; the manifest checks the registry-derived counts against it.",
+    "frozen_theme_distribution": {
+      "delayed_authoritative_result": 90,
+      "late_or_out_of_order_superseded_result": 22,
+      "partial_then_complete_result": 24,
+      "conflicting_valid_results": 6,
+      "duplicate_or_replayed_completion": 4,
+      "child_failure_or_implicit_error": 6,
+      "task_scope_or_dependency_change": 39,
+      "straggler_under_resource_pressure": 10
+    }
+  },
   "event_themes": [
     {
       "id": "delayed_authoritative_result",
