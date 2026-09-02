@@ -11,7 +11,9 @@ from async_rbench.evaluation.budget import BudgetLedger, BudgetPool, build_budge
 from async_rbench.profiles.conformance_mock.scripted_backend import ScriptedTestBackend
 from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 from async_rbench.profiles.reference_scaffold_api.gateway import DeliveryReader, ProtocolEmitter
-from async_rbench.profiles.reference_scaffold_api.runtime import ChildRecord, ReferenceScaffold
+from async_rbench.profiles.reference_scaffold_api.runtime import (
+    ChildAgent, ChildRecord, ReferenceScaffold,
+)
 from async_rbench.evaluation.workspace_runtime import DisabledWorkspaceRuntime
 from async_rbench.spec import load_case
 
@@ -45,7 +47,9 @@ def _scaffold(start: dict) -> ReferenceScaffold:
         backend=ScriptedTestBackend(),
         workspace=DisabledWorkspaceRuntime(),
         emitter=ProtocolEmitter(stdout=io.StringIO()),
-        delivery_reader=DeliveryReader(),
+        # An empty stdin lets a started DeliveryReader hit EOF and exit cleanly
+        # instead of reading pytest's captured stdin (which raises an OSError).
+        delivery_reader=DeliveryReader(stdin=io.StringIO()),
     )
 
 
@@ -126,6 +130,169 @@ def test_concurrent_child_reservations_are_atomic() -> None:
         return len(admitted), child.reserved
 
     assert asyncio.run(exercise()) == (10, 1_000_000)
+
+
+# --- Fix #1: failed calls release their reservation (no leak into ``reserved``) -
+
+
+def test_release_returns_provisional_charge_to_pool() -> None:
+    async def exercise() -> None:
+        pool = BudgetPool("child_shared", 1_000_000)
+        reservation = await pool.reserve(100, 200)
+        assert reservation is not None
+        assert pool.reserved == 300
+        assert reservation.released is False
+        await pool.release(reservation.reservation_id)
+        assert reservation.released is True
+        assert pool.reserved == 0
+        assert pool.remaining == 1_000_000
+        # A released reservation frees the room, so a later call fits again.
+        assert await pool.reserve(100, 200) is not None
+
+    asyncio.run(exercise())
+
+
+def test_release_marks_reservation_released_and_blocks_settle() -> None:
+    async def exercise() -> None:
+        pool = BudgetPool("child_shared", 1_000_000)
+        reservation = await pool.reserve(10, 20)
+        assert reservation is not None
+        await pool.release(reservation.reservation_id)
+        # Settling after a release is an error (guards against double bookkeeping).
+        with pytest.raises(ValueError):
+            await pool.settle(reservation.reservation_id, 30)
+
+    asyncio.run(exercise())
+
+
+def test_release_rejects_unknown_duplicate_and_settled() -> None:
+    async def exercise() -> None:
+        pool = BudgetPool("child_shared", 1_000_000)
+        with pytest.raises(ValueError):
+            await pool.release("no-such-reservation")
+        reservation = await pool.reserve(10, 20)
+        await pool.release(reservation.reservation_id)
+        with pytest.raises(ValueError):
+            await pool.release(reservation.reservation_id)
+        other = await pool.reserve(10, 20)
+        assert other is not None
+        await pool.settle(other.reservation_id, 30)
+        with pytest.raises(ValueError):
+            await pool.release(other.reservation_id)
+
+    asyncio.run(exercise())
+
+
+def test_child_agent_releases_open_reservation_on_failure_path() -> None:
+    async def exercise() -> None:
+        pool = BudgetPool("child_shared", 1_000_000)
+        agent = ChildAgent(
+            backend=ScriptedTestBackend(),
+            workspace=DisabledWorkspaceRuntime(),
+            config=_scaffold(_start()).config,
+            emitter=ProtocolEmitter(stdout=io.StringIO()),
+            token_budget=pool,
+        )
+        reservation = await pool.reserve(100, 200)
+        assert reservation is not None
+        agent._open_reservation = reservation
+        # A child timeout / backend raise runs this before the task is dropped.
+        await agent.release_open_reservation()
+        assert pool.reserved == 0
+        assert agent._open_reservation is None
+        # Releasing twice is a no-op (the second call finds nothing open).
+        await agent.release_open_reservation()
+
+    asyncio.run(exercise())
+
+
+def test_main_loop_releases_reservation_when_backend_raises() -> None:
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "async"))
+        main_pre = scaffold.budget_ledger.pool("main_pre")
+
+        async def boom(*args, **kwargs):
+            raise RuntimeError("simulated provider outage")
+
+        scaffold.backend.complete = boom
+        await scaffold.run()
+        await scaffold.shutdown()
+        # The failed main call released its provisional charge, so the pool is
+        # not left with a stuck reservation; the episode is an infrastructure
+        # failure, not a budget one.
+        assert main_pre.reserved == 0
+        assert scaffold.finish_status == "incomplete"
+
+    asyncio.run(exercise())
+
+
+# --- Fix #7: main loop reserves/settles from the correct phase pool ----------
+
+
+def test_main_loop_reserves_and_settles_from_correct_phase_pool() -> None:
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "async"))
+        ledger = scaffold.budget_ledger
+        # Pre-phase: the main loop reserves from main_pre.
+        assert ledger.main_pool() is ledger.pool("main_pre")
+        reservation = await ledger.main_pool().reserve(
+            100, 200, accounting_mode="conservative",
+        )
+        assert reservation is not None
+        await ledger.pool("main_pre").settle(reservation.reservation_id, 250)
+        assert ledger.pool("main_pre").settled == 250
+        assert ledger.pool("main_pre").remaining == 500_000 - 250
+
+        # A scored presentation flips the loop onto main_post for later calls.
+        _inject_delivery(scaffold, "c1", "comp-1")
+        await scaffold.manager.handle_delivery(
+            {"completion_id": "comp-1", "payload": {"id": 1}},
+        )
+        candidate = scaffold.manager.select_presentable()
+        assert candidate is not None and candidate.scored is True
+        scaffold.manager.mark_presented(
+            candidate.occurrence_id, turn_id="t1", window_id="w1",
+        )
+        scaffold._on_result_presented(candidate.occurrence_id)
+        assert ledger.main_pool() is ledger.pool("main_post")
+        reservation2 = await ledger.pool("main_post").reserve(
+            50, 100, accounting_mode="conservative",
+        )
+        assert reservation2 is not None
+        await ledger.pool("main_post").settle(reservation2.reservation_id, 120)
+        assert ledger.pool("main_post").remaining == 500_000 - 120
+
+    asyncio.run(exercise())
+
+
+def test_linear_main_loop_uses_single_main_total_pool() -> None:
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "linear"))
+        ledger = scaffold.budget_ledger
+        assert ledger.main_pool() is ledger.pool("main_total")
+        reservation = await ledger.main_pool().reserve(
+            10, 20, accounting_mode="conservative",
+        )
+        assert reservation is not None
+        await ledger.pool("main_total").settle(reservation.reservation_id, 30)
+        assert ledger.pool("main_total").remaining == 1_000_000 - 30
+
+    asyncio.run(exercise())
+
+
+def test_main_loop_budget_exhausted_when_main_reserve_refused() -> None:
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "async"))
+        # Force every main admission to be refused so the loop's first main
+        # reserve returns None, which must set finish_status=budget_exhausted and
+        # return from run().
+        scaffold.budget_ledger.pool("main_pre").maximum = 0
+        await scaffold.run()
+        await scaffold.shutdown()
+        assert scaffold.finish_status == "budget_exhausted"
+        assert scaffold.final_summary == "episode token budget exhausted"
+
+    asyncio.run(exercise())
 
 
 def test_async_phase_switch_on_first_scored_result_presented() -> None:

@@ -129,16 +129,26 @@ def test_estimate_without_tokenizer_is_conservative_upper_bound() -> None:
     assert estimate.input_tokens >= 1
 
 
-def test_estimate_with_tokenizer_is_exact_accounting() -> None:
+def test_estimate_with_tokenizer_is_heuristic_proxy_not_exact() -> None:
     backend = OpenAICompatibleBackend(_FakeProviderConfig(tokenizer="o200k"))
     estimate = backend.estimate_input_tokens(_MESSAGES, _TOOLS)
-    assert estimate.accounting_mode == "provider_exact"
+    # A configured tokenizer still reports a heuristic *proxy*, not an exact,
+    # guaranteed count (spec §7.3).  Only a real provider tokenizer would label
+    # "provider_exact"; the current proxy is charged "tokenizer_proxy" so Track A
+    # does not treat it as a guarantee.
+    assert estimate.accounting_mode == "tokenizer_proxy"
     assert estimate.input_tokens == exact_input_estimate(_MESSAGES, _TOOLS)
 
 
-def test_conservative_estimate_exceeds_exact_proxy() -> None:
-    # The conservative (no-tokenizer) branch must be >= the exact (tokenizer)
-    # branch so strict admission never under-reserves at admission time.
+def test_exact_proxy_is_not_claimed_as_an_upper_bound() -> None:
+    # The exact/compact proxy (``chars // 4``) is a heuristic, not a guaranteed
+    # upper bound: a tokenizer can emit more tokens than the proxy for a packed
+    # run of characters that maps to multiple tokens.  Strict admission therefore
+    # must not rely on this branch to be safe at admission time -- the pool still
+    # settles to true usage and halts on an overrun.  Here we assert only that the
+    # conservative branch stays above (never below) the proxy, which is the one
+    # direction the contract guarantees; we explicitly do NOT claim the proxy is
+    # a ceiling.
     assert conservative_input_estimate(_MESSAGES, _TOOLS) >= exact_input_estimate(
         _MESSAGES, _TOOLS
     )

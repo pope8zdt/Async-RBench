@@ -87,11 +87,12 @@ RUNTIME_PHASE_EVENT_TYPES = frozenset({
     # they bypass ``validate_adapter_event`` but remain recorded for replay.
     "result_available", "response_window_closed",
     "linear_bundle_ready", "linear_bundle_presented",
-    # Token budget accounting boundaries (spec §7): a reserve/settle/phase-switch
-    # is recorded as a runtime phase marker so replay/audit can reconstruct the
-    # per-pool tokens without the adapter-event registry validating them.
-    "budget_reserved", "budget_settled", "budget_exhausted",
-    "budget_phase_switch",
+    # Token budget accounting boundaries (spec §7): a reserve/settle/release/
+    # phase-switch is recorded as a runtime phase marker so replay/audit can
+    # reconstruct the per-pool tokens without the adapter-event registry
+    # validating them.
+    "budget_reserved", "budget_settled", "budget_released",
+    "budget_exhausted", "budget_phase_switch",
 })
 
 

@@ -47,10 +47,13 @@ class ToolCall:
 class TokenEstimate:
     """Pre-flight token count for conservative budget admission (spec §7.3).
 
-    ``input_tokens`` is an exact count when a provider tokenizer is configured,
-    otherwise a conservative upper bound.  ``accounting_mode`` is
-    ``"provider_exact"`` or ``"conservative"``; it is recorded on the pool so
-    Track A can report how each pool accounted for its admissions.
+    ``input_tokens`` is a tokenizer-backed count when a real provider tokenizer
+    is wired (``accounting_mode`` ``"provider_exact"``), otherwise a heuristic or
+    conservative bound recorded as ``"tokenizer_proxy"`` or ``"conservative"``.
+    Only the true ``"provider_exact"`` label is a guarantee; ``"tokenizer_proxy"``
+    is a deterministic heuristic proxy that is NOT a guaranteed upper bound (its
+    shortfall is only caught at settle time as an overrun).  The accounting mode
+    is recorded on the pool so Track A can report how each pool accounted.
     """
 
     input_tokens: int
@@ -87,11 +90,16 @@ def conservative_input_estimate(
 def exact_input_estimate(
     messages: list[dict[str, Any]], tools: list[dict[str, Any]],
 ) -> int:
-    """Compact exact-count proxy used only when an exact tokenizer is configured.
+    """Deterministic tokenizer *proxy*, not a guarantee (spec §7.3).
 
-    A real deployment substitutes a provider tokenizer here.  The deterministic
-    proxy compresses to roughly a token every few characters plus structural
-    overhead, so it is consistently below the conservative ceiling.
+    A real deployment substitutes a provider tokenizer here; until then this
+    deterministic heuristic compresses to roughly a token every few characters
+    plus structural overhead.  It is NOT a guaranteed upper bound: a tokenizer
+    can produce more tokens than ``chars // 4`` for a packed run of characters
+    that map to multiple tokens.  The caller charges ``"tokenizer_proxy"`` so
+    Track A does not mistake this for an exact count.  Because it may
+    under-estimate, the pool still settles to the true usage and halts on an
+    overrun; do not rely on this bound being safe the way ``conservative`` is.
     """
     chars = _message_content_chars(messages, tools)
     return max(1, -(-chars // 4)) + 4 * len(messages) + 8 * len(tools)
@@ -135,8 +143,11 @@ class OpenAICompatibleBackend:
         self, messages: list[dict[str, Any]], tools: list[dict[str, Any]],
     ) -> TokenEstimate:
         if self.config.tokenizer:
+            # A tokenizer is configured, but it is a *proxy* heuristic until a
+            # real provider tokenizer is wired; label accordingly so Track A does
+            # not mistake it for an exact, guaranteed count.
             return TokenEstimate(
-                exact_input_estimate(messages, tools), "provider_exact",
+                exact_input_estimate(messages, tools), "tokenizer_proxy",
             )
         return TokenEstimate(
             conservative_input_estimate(messages, tools), "conservative",
@@ -402,8 +413,10 @@ class CodexCLIBackend:
         self, messages: list[dict[str, Any]], tools: list[dict[str, Any]],
     ) -> TokenEstimate:
         if self.config.tokenizer:
+            # Tokenizer *proxy* heuristic, not an exact guaranteed count (see
+            # ``exact_input_estimate``); labelled so Track A reports honestly.
             return TokenEstimate(
-                exact_input_estimate(messages, tools), "provider_exact",
+                exact_input_estimate(messages, tools), "tokenizer_proxy",
             )
         return TokenEstimate(
             conservative_input_estimate(messages, tools), "conservative",

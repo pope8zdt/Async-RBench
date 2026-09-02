@@ -118,6 +118,10 @@ class ScaffoldConfig:
                 raise ValueError(f"{name} must be positive")
         if self.max_total_child_spawns < self.max_concurrent_children:
             raise ValueError("max_total_child_spawns must be at least max_concurrent_children")
+        if self.budget_main_total != self.budget_main_pre + self.budget_main_post:
+            raise ValueError(
+                "budget_main_total must equal budget_main_pre + budget_main_post"
+            )
 
     def public_metadata(self) -> dict[str, Any]:
         payload = {

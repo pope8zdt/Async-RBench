@@ -15,7 +15,7 @@ from ...evaluation.presentation import DeliveryOccurrence, PresentationQueue
 
 from .config import ScaffoldConfig
 from .gateway import DeliveryReader, ProtocolEmitter
-from ...evaluation.budget import BudgetLedger, BudgetPool, build_budget_ledger
+from ...evaluation.budget import BudgetLedger, BudgetPool, Reservation, build_budget_ledger
 from ...evaluation.model_backend import (
     ModelBackend, ModelTurn, ToolCall,
     conservative_input_estimate, function_tool,
@@ -152,6 +152,10 @@ class ChildAgent:
         self.config = config
         self.emitter = emitter
         self.token_budget = token_budget
+        # The reservation of the in-flight turn, so a failure or timeout between
+        # reserve and settle can release its provisional charge back to the pool
+        # instead of leaking it into ``reserved``.
+        self._open_reservation: Reservation | None = None
 
     @staticmethod
     def tools() -> list[dict[str, Any]]:
@@ -168,6 +172,29 @@ class ChildAgent:
                 "patch": {"type": "string"},
             }, ["summary", "result_kind_hint"]),
         ]
+
+    async def release_open_reservation(self) -> None:
+        """Release the in-flight reservation if a turn never reached ``settle``.
+
+        A reserved child turn is settled on the normal path.  If the backend call
+        raised, or ``asyncio.wait_for`` (child timeout) cancelled the turn before
+        settle, the provisional charge stays in ``reserved`` and silently
+        compresses every sibling's headroom.  ``_run_child`` calls this in a
+        ``finally`` so a failed child returns its estimate immediately.  It is a
+        no-op when no reservation is open (the normal case).
+        """
+        reservation = self._open_reservation
+        if reservation is None:
+            return
+        self._open_reservation = None
+        await self.token_budget.release(reservation.reservation_id)
+        self.emitter.emit(
+            "budget_released",
+            pool=self.token_budget.name,
+            reservation_id=reservation.reservation_id,
+            estimate=reservation.estimated_total,
+            remaining=self.token_budget.remaining,
+        )
 
     async def run(
         self, record: ChildRecord, model: str, seed: int,
@@ -204,6 +231,7 @@ class ChildAgent:
                 accounting_mode=accounting_mode,
             )
             if reservation is None:
+                self._open_reservation = None
                 self.emitter.emit(
                     "budget_exhausted", pool=self.token_budget.name,
                     role=role, turn=turn_index,
@@ -212,6 +240,9 @@ class ChildAgent:
                     "summary": "episode token budget exhausted before child completion",
                     "evidence": {"token_budget_exhausted": True}, "files": [],
                 }, record.expected_output, total_tokens
+            # Track the in-flight reservation so failure/timeout cleanup can
+            # release it (see ``release_open_reservation``).
+            self._open_reservation = reservation
             self.emitter.emit(
                 "budget_reserved",
                 pool=self.token_budget.name,
@@ -232,6 +263,7 @@ class ChildAgent:
             overrun = await self.token_budget.settle(
                 reservation.reservation_id, turn.total_tokens,
             )
+            self._open_reservation = None
             self.emitter.emit(
                 "budget_settled",
                 pool=self.token_budget.name,
@@ -804,12 +836,18 @@ class SubagentManager:
                 self.backend, self.workspace, self.config, self.emitter,
                 self.token_budget,
             )
-            payload, hint, tokens = await asyncio.wait_for(
-                agent.run(
-                    record, self.config.child_model, int(self.start["agent_seed"]),
-                ),
-                timeout=self.config.child_timeout_sec,
-            )
+            try:
+                payload, hint, tokens = await asyncio.wait_for(
+                    agent.run(
+                        record, self.config.child_model, int(self.start["agent_seed"]),
+                    ),
+                    timeout=self.config.child_timeout_sec,
+                )
+            finally:
+                # A child timeout or a raised backend call must release its
+                # provisional charge; a normal completion already settled, so
+                # this is a no-op on the success path.
+                await agent.release_open_reservation()
             self._completion_counter += 1
             completion_id = f"completion-{self._completion_counter}"
             record.status = "completed_hidden"
@@ -1309,6 +1347,12 @@ class ReferenceScaffold:
         idle_turns = 0
         for turn_index in range(self.next_turn_index, self.config.max_main_turns + 1):
             self.next_turn_index = turn_index
+            # Track the per-turn reservation so a backend failure (the call
+            # raised before settle) releases its provisional charge instead of
+            # leaking it into the pool's ``reserved``.
+            main_pool: BudgetPool | None = None
+            reservation: Reservation | None = None
+            settled = False
             try:
                 # Reserve the per-call ceiling before launching (under the budget
                 # lock), then settle to the true token count on completion.  This
@@ -1388,6 +1432,7 @@ class ReferenceScaffold:
                 overrun = await main_pool.settle(
                     reservation.reservation_id, turn.total_tokens,
                 )
+                settled = True
                 self.emitter.emit(
                     "budget_settled",
                     pool=main_pool.name,
@@ -1404,6 +1449,15 @@ class ReferenceScaffold:
                 )
                 emit_runtime_metadata_snapshot(self.backend, self.emitter)
             except Exception as exc:
+                if main_pool is not None and reservation is not None and not settled:
+                    await main_pool.release(reservation.reservation_id)
+                    self.emitter.emit(
+                        "budget_released",
+                        pool=main_pool.name,
+                        reservation_id=reservation.reservation_id,
+                        estimate=reservation.estimated_total,
+                        remaining=main_pool.remaining,
+                    )
                 LOGGER.exception("main model call failed")
                 # A raised model API request is benchmark tooling failing, not a
                 # decision the participant made (the participant did not choose to

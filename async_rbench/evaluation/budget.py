@@ -36,6 +36,7 @@ class Reservation:
     max_output: int
     accounting_mode: str
     settled: bool = False
+    released: bool = False
     actual_total: int | None = None
 
     @property
@@ -61,7 +62,7 @@ class BudgetPool:
         reserved: int = 0,
         settled: int = 0,
         overrun: int = 0,
-        accounting_mode: str = "provider_exact",
+        accounting_mode: str = "conservative",
     ) -> None:
         self.name = name
         self.maximum = maximum
@@ -98,13 +99,17 @@ class BudgetPool:
         input_upper_bound: int,
         max_output: int,
         *,
-        accounting_mode: str = "provider_exact",
+        accounting_mode: str = "conservative",
     ) -> Reservation | None:
         """Admit one call under strict conservative admission, or return None.
 
         The call starts only if ``input_upper_bound + max_output`` still fits in
         the pool remaining.  Returns a :class:`Reservation` on success and
         ``None`` when the pool is halted or the admission would overrun.
+
+        ``accounting_mode`` defaults to ``"conservative"`` (a safe upper bound).
+        A backend that is a heuristic proxy passes ``"tokenizer_proxy"``; only a
+        genuine provider tokenizer should pass ``"provider_exact"``.
         """
         input_upper_bound = max(0, int(input_upper_bound))
         max_output = max(0, int(max_output))
@@ -131,9 +136,11 @@ class BudgetPool:
     async def settle(self, reservation_id: str, actual_total_tokens: int) -> int:
         """Settle one reservation to the provider's true usage; return overrun.
 
-        Idempotence: a second settle of the same reservation id raises, as does a
-        settle for an unknown id.  An actual total above the reservation estimate
-        is recorded as overrun and halts the pool's future admissions.
+        Settle exactly once: settling a second time for the same id, settling an
+        unknown id, or settling a reservation that was already released all raise
+        ``ValueError`` (guarding against a double settle).  An actual total above
+        the reservation estimate is recorded as overrun and halts the pool's
+        future admissions.
         """
         actual_total_tokens = max(0, int(actual_total_tokens))
         async with self._lock:
@@ -142,6 +149,8 @@ class BudgetPool:
                 raise ValueError(f"unknown reservation {reservation_id!r}")
             if reservation.settled:
                 raise ValueError(f"reservation {reservation_id!r} is already settled")
+            if reservation.released:
+                raise ValueError(f"reservation {reservation_id!r} was already released")
             self.reserved -= reservation.estimated_total
             overrun = max(0, actual_total_tokens - reservation.estimated_total)
             if overrun > 0:
@@ -151,6 +160,26 @@ class BudgetPool:
             reservation.settled = True
             reservation.actual_total = actual_total_tokens
             return overrun
+
+    async def release(self, reservation_id: str) -> None:
+        """Return a reservation's provisional charge without settling it.
+
+        Called when a reserved call never reaches ``settle`` -- for example the
+        backend ``complete`` raised or a child timed out -- so the failed call's
+        estimated tokens are released back to the pool instead of leaking into
+        ``reserved`` and silently compressing every sibling's headroom.  Releasing
+        an unknown, already-settled, or already-released id raises ``ValueError``.
+        """
+        async with self._lock:
+            reservation = self._reservations.get(reservation_id)
+            if reservation is None:
+                raise ValueError(f"unknown reservation {reservation_id!r}")
+            if reservation.settled:
+                raise ValueError(f"reservation {reservation_id!r} is already settled")
+            if reservation.released:
+                raise ValueError(f"reservation {reservation_id!r} is already released")
+            self.reserved -= reservation.estimated_total
+            reservation.released = True
 
 
 class BudgetLedger:
@@ -186,6 +215,17 @@ class BudgetLedger:
         return self.for_role("main", self._main_phase)
 
     def switch_to_post(self) -> None:
+        """Flip the async main phase to ``main_post`` (spec §7.1).
+
+        Arguably the caller only ever reaches this for async episodes.  In linear
+        mode ``for_role`` routes every ``main`` read to the single ``main_total``
+        pool and ignores ``_main_phase``, so flipping it here is deliberately
+        harmless -- it changes no pool bound and only keeps the async boundary
+        reachable from one set of call sites.  A linear run never presents a
+        scored occurrence, so ``_on_result_presented`` is not invoked there and
+        this method is not called as a side effect; even if it were, the mute
+        outcome is just an unused phase marker.
+        """
         self._main_phase = "post"
 
     def all_snapshots(self) -> dict[str, dict[str, Any]]:
