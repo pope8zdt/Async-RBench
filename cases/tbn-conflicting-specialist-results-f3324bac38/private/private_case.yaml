@@ -49,7 +49,21 @@
           "preserved_source_facts"
         ]
       },
-      "track": "atomic_event"
+      "track": "atomic_event",
+      "required_changes": [
+        "final_state"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
+      ],
+      "forbidden_changes": [
+        "provisional_checkpoint"
+      ],
+      "closure_checks": [
+        "tbn_conflicting_specialist_results_f3324bac38.closure"
+      ],
+      "expected_disposition": "adopt_complete_authority_and_supersede_partial_result",
+      "event_status": "scored"
     }
   ],
   "format_version": 2,

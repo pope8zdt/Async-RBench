@@ -185,7 +185,22 @@
           "preserved_source_facts"
         ]
       },
-      "track": "atomic_event"
+      "track": "atomic_event",
+      "required_changes": [
+        "final_state"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
+      ],
+      "forbidden_changes": [
+        "provisional_checkpoint"
+      ],
+      "closure_checks": [
+        "mab_cross_app_artifact_7bfdfeaa3c.closure",
+        "mab_cross_app_artifact_7bfdfeaa3c.source.event_closure"
+      ],
+      "expected_disposition": "adopt_complete_authority_and_supersede_partial_result",
+      "event_status": "scored"
     }
   ],
   "version": "7"

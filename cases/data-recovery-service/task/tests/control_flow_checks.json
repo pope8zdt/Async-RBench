@@ -90,5 +90,36 @@
         "async"
       ]
     }
+  ],
+  "event_contracts": [
+    {
+      "event_id": "dr_a_wal",
+      "event_theme": "partial_then_complete_result",
+      "track": "atomic_event",
+      "observation_mode": "gateway_only",
+      "state_delta": {
+        "affected_artifacts": [
+          "recovered_rows",
+          "service_seed",
+          "service_lineage",
+          "pre_event_verification"
+        ],
+        "unaffected_artifacts": []
+      },
+      "required_changes": [
+        "recovered_rows",
+        "service_seed",
+        "service_lineage",
+        "pre_event_verification"
+      ],
+      "required_preservation": [],
+      "forbidden_changes": [],
+      "closure_checks": [
+        "dr.integration.single_final_snapshot",
+        "dr.stale.seed_candidate_rejected"
+      ],
+      "expected_disposition": "adopt_wal_authority_supersede_checkpoint_partial",
+      "event_status": "scored"
+    }
   ]
 }

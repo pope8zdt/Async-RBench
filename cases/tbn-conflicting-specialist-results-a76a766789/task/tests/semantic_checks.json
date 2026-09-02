@@ -8,7 +8,9 @@
       "id": "tbn_conflicting_specialist_results_a76a766789.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re"
     },
     {
       "capability_target": "async_result_integration",
@@ -18,7 +20,9 @@
       "id": "tbn_conflicting_specialist_results_a76a766789.event.probes",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re"
     },
     {
       "capability_target": "async_consistency_closure",
@@ -28,7 +32,9 @@
       "id": "tbn_conflicting_specialist_results_a76a766789.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "evt.tbn_conflicting_speciali.partial_then_complete_re"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "tbn_conflicting_specialist_results_a76a766789.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "tbn_conflicting_specialist_results_a76a766789.upstream.test_output_files_exist",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_output_files_exist",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "tbn_conflicting_specialist_results_a76a766789.upstream.test_merged_data_exact_values",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_merged_data_exact_values",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "tbn_conflicting_specialist_results_a76a766789.upstream.test_conflict_report_values",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_conflict_report_values",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

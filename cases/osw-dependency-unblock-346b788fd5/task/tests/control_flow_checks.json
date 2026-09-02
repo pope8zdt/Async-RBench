@@ -250,7 +250,21 @@
           "preserved_source_facts"
         ]
       },
-      "track": "dynamic_replanning"
+      "track": "dynamic_replanning",
+      "required_changes": [
+        "final_state"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
+      ],
+      "forbidden_changes": [
+        "provisional_checkpoint"
+      ],
+      "closure_checks": [
+        "osw_dependency_unblock_346b788fd5.closure"
+      ],
+      "expected_disposition": "adopt_complete_authority_and_supersede_partial_result",
+      "event_status": "scored"
     }
   ],
   "version": "7"

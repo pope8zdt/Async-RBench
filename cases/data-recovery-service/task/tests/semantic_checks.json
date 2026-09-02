@@ -9,7 +9,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.authority.wal_updates",
@@ -19,7 +21,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.authority.wal_inserts",
@@ -29,7 +33,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.authority.schema_order_types",
@@ -39,7 +45,8 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "dr.stale.recovered_candidate_rejected",
@@ -49,7 +56,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.stale.seed_candidate_rejected",
@@ -59,7 +68,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.stale.runtime_candidate_rejected",
@@ -69,7 +80,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.stale.lineage_candidate_rejected",
@@ -79,7 +92,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.integration.seed_item_namespace",
@@ -89,7 +104,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.integration.seed_user_namespace",
@@ -99,7 +116,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "supporting"
+      "relevance_tier": "supporting",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.integration.seed_exact_keyset",
@@ -109,7 +128,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.integration.seed_exact_values",
@@ -119,7 +140,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.integration.single_final_snapshot",
@@ -129,7 +152,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.runtime.proto_contract",
@@ -139,7 +164,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "dr.runtime.restart_loads_seed",
@@ -149,7 +175,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.runtime.hidden_gets",
@@ -159,7 +187,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.runtime.set_get_roundtrip",
@@ -169,7 +199,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "dr.lineage.exact_schema",
@@ -179,7 +210,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "dr.lineage.recovered_digest_count",
@@ -189,7 +221,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.lineage.merged_digest",
@@ -199,7 +233,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.lineage.seed_digest",
@@ -209,7 +245,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "dr_a_wal"
     },
     {
       "id": "dr.support.merge_exact_rows",
@@ -219,7 +257,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "dr.support.merge_priority_schema",
@@ -229,7 +268,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "dr.support.conflicts_exact",
@@ -239,7 +279,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ]
 }

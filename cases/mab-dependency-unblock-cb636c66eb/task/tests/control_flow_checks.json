@@ -187,7 +187,22 @@
           "preserved_source_facts"
         ]
       },
-      "track": "atomic_event"
+      "track": "atomic_event",
+      "required_changes": [
+        "final_state"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
+      ],
+      "forbidden_changes": [
+        "provisional_checkpoint"
+      ],
+      "closure_checks": [
+        "mab_dependency_unblock_cb636c66eb.closure",
+        "mab_dependency_unblock_cb636c66eb.source.event_closure"
+      ],
+      "expected_disposition": "adopt_complete_authority_and_supersede_partial_result",
+      "event_status": "scored"
     }
   ],
   "version": "7"

@@ -53,7 +53,21 @@
           "preserved_source_facts"
         ]
       },
-      "track": "dynamic_replanning"
+      "track": "dynamic_replanning",
+      "required_changes": [
+        "final_state"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
+      ],
+      "forbidden_changes": [
+        "provisional_checkpoint"
+      ],
+      "closure_checks": [
+        "osw_cross_app_artifact_8e188f4a86.closure"
+      ],
+      "expected_disposition": "adopt_complete_authority_and_supersede_partial_result",
+      "event_status": "scored"
     }
   ],
   "format_version": 2,

@@ -89,5 +89,33 @@
         "async"
       ]
     }
+  ],
+  "event_contracts": [
+    {
+      "event_id": "c5_a_b",
+      "event_theme": "partial_then_complete_result",
+      "track": "atomic_event",
+      "observation_mode": "gateway_only",
+      "state_delta": {
+        "affected_artifacts": [
+          "applied_fix",
+          "integrated_fix"
+        ],
+        "unaffected_artifacts": []
+      },
+      "required_changes": [
+        "applied_fix",
+        "integrated_fix"
+      ],
+      "required_preservation": [],
+      "forbidden_changes": [],
+      "closure_checks": [
+        "sp2.closure.all_groups_pass_final",
+        "sp2.closure.regression_passes",
+        "sp2.repair.repair_selective_single_file"
+      ],
+      "expected_disposition": "rederive_integration_from_authoritative_fix_revision",
+      "event_status": "scored"
+    }
   ]
 }

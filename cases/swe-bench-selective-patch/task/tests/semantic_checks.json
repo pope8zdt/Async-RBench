@@ -9,7 +9,8 @@
    "critical": false,
    "measurement_type": "semantic",
    "capability_target": "base_task_completion",
-   "relevance_tier": "base"
+   "relevance_tier": "base",
+   "score_domain": "base_task"
   },
   {
    "id": "sp2.base.fix_applied",
@@ -19,7 +20,9 @@
    "critical": false,
    "measurement_type": "semantic",
    "capability_target": "async_result_integration",
-   "relevance_tier": "direct"
+   "relevance_tier": "direct",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.base.reports_exist",
@@ -29,7 +32,8 @@
    "critical": false,
    "measurement_type": "semantic",
    "capability_target": "base_task_completion",
-   "relevance_tier": "base"
+   "relevance_tier": "base",
+   "score_domain": "base_task"
   },
   {
    "id": "sp2.base.manifest_valid",
@@ -39,7 +43,8 @@
    "critical": false,
    "measurement_type": "semantic",
    "capability_target": "base_task_completion",
-   "relevance_tier": "base"
+   "relevance_tier": "base",
+   "score_domain": "base_task"
   },
   {
    "id": "sp2.integ.a_group_passes",
@@ -49,7 +54,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_result_integration",
-   "relevance_tier": "supporting"
+   "relevance_tier": "supporting",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.integ.c_group_passes",
@@ -59,7 +66,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_result_integration",
-   "relevance_tier": "supporting"
+   "relevance_tier": "supporting",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.integ.a_run_revision_consistent",
@@ -69,7 +78,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_result_integration",
-   "relevance_tier": "supporting"
+   "relevance_tier": "supporting",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.integ.c_run_revision_consistent",
@@ -79,7 +90,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_result_integration",
-   "relevance_tier": "supporting"
+   "relevance_tier": "supporting",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.integ.a_branch_preserved",
@@ -89,7 +102,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_result_integration",
-   "relevance_tier": "supporting"
+   "relevance_tier": "supporting",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.integ.c_branch_preserved",
@@ -99,7 +114,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_result_integration",
-   "relevance_tier": "supporting"
+   "relevance_tier": "supporting",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.repair.b_first_failure_recorded",
@@ -109,7 +126,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_dynamic_replanning",
-   "relevance_tier": "direct"
+   "relevance_tier": "direct",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.repair.b_repair_applied",
@@ -119,7 +138,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_dynamic_replanning",
-   "relevance_tier": "direct"
+   "relevance_tier": "direct",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.repair.b_group_passes_final",
@@ -129,7 +150,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_dynamic_replanning",
-   "relevance_tier": "direct"
+   "relevance_tier": "direct",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.repair.repair_selective_single_file",
@@ -139,7 +162,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_dynamic_replanning",
-   "relevance_tier": "direct"
+   "relevance_tier": "direct",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.repair.passing_branches_preserved_recorded",
@@ -149,7 +174,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_dynamic_replanning",
-   "relevance_tier": "direct"
+   "relevance_tier": "direct",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.repair.b_run_revision_final",
@@ -159,7 +186,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_dynamic_replanning",
-   "relevance_tier": "direct"
+   "relevance_tier": "direct",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.closure.all_groups_pass_final",
@@ -169,7 +198,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_consistency_closure",
-   "relevance_tier": "critical"
+   "relevance_tier": "critical",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.closure.regression_passes",
@@ -179,7 +210,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_consistency_closure",
-   "relevance_tier": "critical"
+   "relevance_tier": "critical",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.closure.regression_covers_all_groups",
@@ -189,7 +222,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_consistency_closure",
-   "relevance_tier": "critical"
+   "relevance_tier": "critical",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.closure.manifest_matches_reports",
@@ -199,7 +234,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_consistency_closure",
-   "relevance_tier": "critical"
+   "relevance_tier": "critical",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.closure.waited_for_all_groups",
@@ -209,7 +246,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_consistency_closure",
-   "relevance_tier": "critical"
+   "relevance_tier": "critical",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.closure.regression_revision_final",
@@ -219,7 +258,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_consistency_closure",
-   "relevance_tier": "critical"
+   "relevance_tier": "critical",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.closure.no_gold_patch_material",
@@ -229,7 +270,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_consistency_closure",
-   "relevance_tier": "critical"
+   "relevance_tier": "critical",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   },
   {
    "id": "sp2.closure.manifest_case_id",
@@ -239,7 +282,9 @@
    "critical": true,
    "measurement_type": "semantic",
    "capability_target": "async_consistency_closure",
-   "relevance_tier": "critical"
+   "relevance_tier": "critical",
+   "score_domain": "async_replanning",
+   "event_id": "c5_a_b"
   }
  ]
 }
