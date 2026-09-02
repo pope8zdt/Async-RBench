@@ -9,6 +9,7 @@ from typing import Any
 
 from ...evaluation.case_contract import MAX_INITIAL_WORKSTREAMS, public_delivery
 from ...evaluation.result_contract import validate_payload_contract
+from ...evaluation.presentation import DeliveryOccurrence, PresentationQueue
 
 from .config import ScaffoldConfig
 from .gateway import DeliveryReader, ProtocolEmitter
@@ -309,6 +310,12 @@ class SubagentManager:
         self._start_condition = asyncio.Condition()
         self._started_child_ids: set[str] = set()
         self._initial_barrier_failed = False
+        # FIFO presentation queue (spec §5): released deliveries are enqueued in
+        # receive order and presented at most one per main-model request, each
+        # opening a response window that must settle (or hit max_response_turns)
+        # before the next occurrence unseals.
+        self.presentation_queue = PresentationQueue()
+        self._occurrence_counter = 0
 
     def unresolved_count(self) -> int:
         return sum(
@@ -707,6 +714,25 @@ class SubagentManager:
         record.delivery = delivery
         record.status = "delivered"
         record.presented = False
+        # Enqueue a single immutable occurrence in adapter receive order. The
+        # occurrence carries the public delivery projection so the main loop can
+        # present exactly this payload under exactly one main request.
+        self._occurrence_counter += 1
+        occurrence = DeliveryOccurrence(
+            occurrence_id=f"occ-{self._occurrence_counter}",
+            completion_id=completion_id,
+            payload=public_delivery(
+                delivery,
+                workstream_id=record.work_units[0] if record.work_units else None,
+            ),
+            receive_seq=self._occurrence_counter,
+        )
+        self.presentation_queue.enqueue(occurrence)
+        self.emitter.emit(
+            "adapter_queued",
+            delivery_occurrence_id=occurrence.occurrence_id,
+            completion_id=completion_id,
+        )
         self._delivery_event.set()
 
     async def handle_rejection(self, rejection: dict[str, Any]) -> None:
@@ -721,18 +747,38 @@ class SubagentManager:
         record.decision = "rejected_by_gateway"
         self._delivery_event.set()
 
-    def drain_presentable_deliveries(self) -> list[dict[str, Any]]:
-        result = []
-        for record in self.children.values():
-            if record.delivery is not None and not record.presented:
-                record.presented = True
-                result.append(public_delivery(
-                    record.delivery,
-                    workstream_id=record.work_units[0] if record.work_units else None,
-                ))
-        if not any(record.delivery is not None and not record.presented for record in self.children.values()):
-            self._delivery_event.clear()
-        return result
+    def select_presentable(self) -> DeliveryOccurrence | None:
+        """Select at most one queued occurrence that may be presented now.
+
+        ``peek_presentable`` enforces FIFO-by-receive-order while sealing the
+        head behind an active response window, so a running main request is never
+        handed more than one new occurrence.  Selection alone does NOT mark the
+        occurrence presented; the caller must call ``mark_presented`` once a real
+        main-model request has started.
+        """
+        return self.presentation_queue.peek_presentable()
+
+    def mark_presented(
+        self, occurrence_id: str, *, turn_id: str, window_id: str,
+    ) -> None:
+        """Bind a prepared occurrence to a real started main-model request.
+
+        Opens the response window and records the public ``result_presented``
+        boundary.  Must only be called after the request that carries the
+        occurrence has actually started.
+        """
+        self.presentation_queue.mark_presented(
+            occurrence_id, turn_id=turn_id, window_id=window_id,
+        )
+        occurrence = self.presentation_queue.presented_occurrence(occurrence_id)
+        assert occurrence is not None
+        self.emitter.emit(
+            "result_presented",
+            delivery_occurrence_id=occurrence.occurrence_id,
+            completion_id=occurrence.completion_id,
+            turn_id=turn_id,
+            window_id=window_id,
+        )
 
     def statuses(self) -> list[dict[str, Any]]:
         # Lifecycle + workstream identity only. Held completion payloads stay
@@ -1009,8 +1055,6 @@ class ReferenceScaffold:
         idle_turns = 0
         for turn_index in range(self.next_turn_index, self.config.max_main_turns + 1):
             self.next_turn_index = turn_index
-            for delivery in self.manager.drain_presentable_deliveries():
-                messages.append({"role": "user", "content": "ASYNC_RBENCH_DELIVERY " + json.dumps(delivery, ensure_ascii=False, sort_keys=True)})
             try:
                 # Reserve the per-call ceiling before launching (under the budget
                 # lock), then settle to the true token count on completion.  This
@@ -1021,6 +1065,21 @@ class ReferenceScaffold:
                     self.finish_status = "budget_exhausted"
                     self.final_summary = "episode token budget exhausted"
                     return
+                # Budget admission succeeded.  Presentation preparation: select at
+                # most one new occurrence in FIFO receive order, but only while no
+                # response window is open — never more than one new occurrence per
+                # main-model request.  The occurrence enters the request context
+                # but is NOT yet marked presented.
+                candidate = self.manager.select_presentable()
+                prepared_occurrence_id: str | None = None
+                if candidate is not None:
+                    prepared_occurrence_id = candidate.occurrence_id
+                    messages.append({
+                        "role": "user",
+                        "content": "ASYNC_RBENCH_DELIVERY " + json.dumps(
+                            candidate.payload, ensure_ascii=False, sort_keys=True,
+                        ),
+                    })
                 self.emitter.emit(
                     "agent_progress", phase="model_call_started", role="main",
                     turn=turn_index, model=self.config.main_model,
@@ -1032,6 +1091,14 @@ class ReferenceScaffold:
                     tools=self.main_tools(),
                     seed=_role_seed(int(self.start["agent_seed"]), "main"),
                 )
+                # A real main-model request started; the prepared occurrence is now
+                # observably presented into it, opening its response window.
+                if prepared_occurrence_id is not None:
+                    self.manager.mark_presented(
+                        prepared_occurrence_id,
+                        turn_id=f"t{turn_index}",
+                        window_id=f"w{turn_index}",
+                    )
                 await self.token_budget.settle(estimate, turn.total_tokens)
                 self.emitter.emit(
                     "agent_progress", phase="model_call_finished", role="main",
@@ -1055,6 +1122,19 @@ class ReferenceScaffold:
                 self.final_summary = f"main model failure: {exc}"
                 return
             messages.append(turn.assistant_message)
+            # The active response window, if any, has now received a main-model
+            # response.  Record it, then close the window once it settles (unknown
+            # to the adapter) or hits max_response_turns, so the next queued
+            # occurrence can unseal on a later request.
+            self.manager.presentation_queue.record_turn()
+            self.manager.presentation_queue.close_active_window()
+            if (
+                not self.manager.presentation_queue.has_pending()
+                and self.manager.presentation_queue.active_window is None
+            ):
+                # Nothing left to present and no window open: a later wait() for a
+                # still-running child must block until a fresh delivery arrives.
+                self.manager._delivery_event.clear()
             if not turn.tool_calls:
                 idle_turns += 1
                 if idle_turns >= 2:
@@ -1247,6 +1327,18 @@ class ReferenceScaffold:
                         or not self._verification_passed
                     ):
                         missing.append("a successful verification after the latest accepted completion")
+                    # Finish guard: a completed finish must not skip a required
+                    # occurrence that is queued (adapter-received but unpresented)
+                    # or skip an active, unclosed response window.
+                    pending_occs = self.manager.presentation_queue.has_pending()
+                    open_window = (
+                        self.manager.presentation_queue.active_window is not None
+                        and self.manager.presentation_queue.active_window.active
+                    )
+                    if pending_occs or open_window:
+                        missing.append(
+                            "all delivered occurrences presented and response windows closed"
+                        )
                     if missing:
                         return {
                             "error": "completion_preconditions_not_met",

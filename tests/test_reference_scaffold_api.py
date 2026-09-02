@@ -317,3 +317,111 @@ def test_initial_wave_asset_staging_failure_is_unscored(
     assert score["scenario_constructed"] is False
     infra = score.get("infrastructure_failures") or []
     assert any(failure.get("component") == "child_start" for failure in infra), infra
+
+
+def _inject_delivery(
+    scaffold: ReferenceScaffold, child_id: str, completion_id: str,
+) -> None:
+    """Register a child/completion pair and route one delivery through the adapter
+    queue so the FIFO presentation path is exercised."""
+    scaffold.manager.children[child_id] = ChildRecord(
+        child_id=child_id, task="work", work_units=["ws"], targets=[],
+        expected_output="out", priority="high", status="completed_hidden",
+        completion_id=completion_id,
+    )
+    scaffold.manager.completion_to_child[completion_id] = child_id
+
+
+def test_subagent_manager_enqueues_deliveries_in_fifo_receive_order() -> None:
+    async def exercise() -> None:
+        scaffold = _scaffold(_start())
+        _inject_delivery(scaffold, "child-2", "compl-2")
+        _inject_delivery(scaffold, "child-1", "compl-1")
+        await scaffold.manager.handle_delivery(
+            {"completion_id": "compl-2", "payload": {"id": 2}},
+        )
+        await scaffold.manager.handle_delivery(
+            {"completion_id": "compl-1", "payload": {"id": 1}},
+        )
+        # FIFO by adapter receive order (compl-2 arrived first).
+        first = scaffold.manager.select_presentable()
+        assert first is not None
+        assert first.completion_id == "compl-2"
+        scaffold.manager.mark_presented(first.occurrence_id, turn_id="t1", window_id="w1")
+        # A queued occurrence is sealed while the response window is open.
+        assert scaffold.manager.select_presentable() is None
+        # Once the window hits max_response_turns it closes and unseals next.
+        for _ in range(4):
+            scaffold.manager.presentation_queue.record_turn()
+        assert scaffold.manager.presentation_queue.close_active_window() is True
+        second = scaffold.manager.select_presentable()
+        assert second is not None
+        assert second.completion_id == "compl-1"
+        assert second.payload["completion_id"] == "compl-1"
+
+    asyncio.run(exercise())
+
+
+def test_finish_guard_rejects_queued_occurrence_and_open_window() -> None:
+    class PassingWorkspace(DisabledWorkspaceRuntime):
+        async def observe_artifact(self, artifact_id: str) -> dict[str, str]:
+            return {
+                "observed_digest": "a" * 64,
+                "observed_path": f"/app/output_data/{artifact_id}.json",
+            }
+
+        async def verify_current_state(
+            self, artifact_ids: list[str], lineage_completion_ids: list[str],
+        ) -> dict[str, object]:
+            return {"passed": True, "checks_total": 1, "checks_passed": 1}
+
+    async def exercise() -> None:
+        scaffold = _scaffold(_start())
+        scaffold.workspace = PassingWorkspace()
+        artifact_id = scaffold.start["allowed_artifacts"][0]
+        # Bring the commit + verification preconditions to satisfied so the only
+        # outstanding precondition is a queued occurrence / open response window.
+        await scaffold._execute_main_tool(ToolCall(
+            "commit-1", "commit_artifact", {
+                "artifact_id": artifact_id, "version": "v1",
+                "lineage_completion_ids": [], "evidence_paths": [], "final": True,
+            },
+        ))
+        await scaffold._execute_main_tool(ToolCall(
+            "verify-1", "verify_current_state", {
+                "artifact_ids": [artifact_id], "lineage_completion_ids": [],
+            },
+        ))
+
+        # A queued, adapter-received-but-unpresented occurrence blocks completion.
+        _inject_delivery(scaffold, "child-queue", "compl-queue")
+        await scaffold.manager.handle_delivery(
+            {"completion_id": "compl-queue", "payload": {"id": 1}},
+        )
+        blocked = await scaffold._execute_main_tool(ToolCall(
+            "finish-queued", "finish", {"status": "completed", "summary": "s"},
+        ))
+        assert blocked["error"] == "completion_preconditions_not_met"
+        assert blocked["missing"] == [
+            "all delivered occurrences presented and response windows closed",
+        ]
+
+        # Presenting it opens a response window, which still blocks completion.
+        candidate = scaffold.manager.select_presentable()
+        assert candidate is not None
+        scaffold.manager.mark_presented(candidate.occurrence_id, turn_id="t1", window_id="w1")
+        blocked_window = await scaffold._execute_main_tool(ToolCall(
+            "finish-window", "finish", {"status": "completed", "summary": "s"},
+        ))
+        assert blocked_window["error"] == "completion_preconditions_not_met"
+
+        # Once the window closes deterministically, completion is allowed.
+        for _ in range(4):
+            scaffold.manager.presentation_queue.record_turn()
+        assert scaffold.manager.presentation_queue.close_active_window() is True
+        finished = await scaffold._execute_main_tool(ToolCall(
+            "finish-ok", "finish", {"status": "completed", "summary": "closed"},
+        ))
+        assert finished == {"ending": True, "status": "completed"}
+
+    asyncio.run(exercise())
