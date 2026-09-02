@@ -246,17 +246,26 @@ def test_scripted_backend_runs_protocol3_end_to_end(
         runner_module, "build_workspace_runtime",
         lambda start, config, event_asset_source_root=None: TrackingWorkspace(),
     )
+    adapter_command = [
+        sys.executable,
+        str(ROOT / "adapters" / "reference_scaffold_api.py"),
+        "--backend", "scripted_test", "--workspace-mode", "disabled",
+    ]
+    if mode == "linear":
+        # The scripted conformance controller only parses ASYNC_RBENCH_DELIVERY
+        # messages, not the new ASYNC_RBENCH_LINEAR_BUNDLE. Linear presents ONE
+        # atomic bundle (spec §6) so the scripted main cannot act on it; cap the
+        # turn budget so the conformance run terminates quickly.
+        config_path = tmp_path / "linear_config.yaml"
+        config_path.write_text("max_main_turns: 5\n", encoding="utf-8")
+        adapter_command += ["--config", str(config_path)]
     config = EpisodeConfig(
         episode_id=f"reference-{mode}",
         case_id="data-recovery-service",
         execution_mode=mode,
         guidance="incentive",
         agent_seed=7,
-        adapter_command=[
-            sys.executable,
-            str(ROOT / "adapters" / "reference_scaffold_api.py"),
-            "--backend", "scripted_test", "--workspace-mode", "disabled",
-        ],
+        adapter_command=adapter_command,
         output_dir=tmp_path / mode,
         use_container=False,
         timeout_sec=60,
@@ -273,7 +282,14 @@ def test_scripted_backend_runs_protocol3_end_to_end(
     ):
         assert forbidden not in participant
     private_source = (tmp_path / mode / "event_source.jsonl").read_text(encoding="utf-8")
-    assert "verification_requested" in private_source
+    if mode == "async":
+        assert "verification_requested" in private_source
+    else:
+        # Linear presents one atomic bundle: the ready/presented boundaries are
+        # recorded and no per-result presentation boundary may appear.
+        assert "linear_bundle_ready" in private_source
+        assert "linear_bundle_presented" in private_source
+        assert "\"result_presented\"" not in private_source
     assert '"visibility": "kernel_private"' in private_source
 
 
@@ -470,5 +486,139 @@ def test_finish_guard_rejects_incomplete_finish_while_occurrence_queued() -> Non
         ))
         assert finished == {"ending": True, "status": "incomplete"}
         assert scaffold.finished is True
+
+    asyncio.run(exercise())
+
+
+# --- Task 5: Linear true-concurrency sync aggregation (spec §6) -------------
+#
+# Linear runs the benchmark-owned wave concurrently (same as async) but shows the
+# main model ONE atomic bundle at the end, sorted by workstream_id, carrying
+# success / contract rejection / designed failure / timeout / cancellation. It
+# emits no per-result result_presented and never computes DRS. These tests drive
+# the SubagentManager aggregation and the runtime presentation seam directly.
+
+
+def _register_linear_children(manager, pairs: list[tuple[str, str]]) -> None:
+    """Register one ChildRecord per (child_id, workstream_id) with a completion."""
+    for index, (child_id, workstream_id) in enumerate(pairs):
+        record = ChildRecord(
+            child_id=child_id, task="t", work_units=[workstream_id], targets=[],
+            expected_output="e", priority="normal", status="completed_hidden",
+            completion_id=f"comp-{child_id}",
+        )
+        manager.children[child_id] = record
+        manager.completion_to_child[f"comp-{child_id}"] = child_id
+
+
+def test_linear_bundle_is_atomic_mixed_and_participant_safe() -> None:
+    """Linear aggregates one terminal bundle; never a per-result presentation."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "linear"))
+        manager = scaffold.manager
+        _register_linear_children(manager, [
+            ("c-wal", "wal_recovery"),
+            ("c-check", "checkpoint_recovery"),
+            ("c-merge", "merge_support"),
+        ])
+        await manager.handle_delivery({
+            "completion_id": "comp-c-wal", "payload": {"i": 1},
+            "payload_sha256": "a" * 64, "child_id": "c-wal",
+        })
+        await manager.handle_delivery({
+            "completion_id": "comp-c-check", "payload": {"i": 2},
+            "payload_sha256": "b" * 64, "child_id": "c-check",
+        })
+        await manager.handle_rejection({
+            "completion_id": "comp-c-merge",
+            "reason_codes": ["missing_required_evidence"], "child_id": "c-merge",
+        })
+
+        # Linear never enqueues a per-result occurrence nor emits a per-result
+        # presentation boundary (individual_result_presentations == 0).
+        assert manager.presentation_queue.has_pending() is False
+        assert not any(
+            e.get("type") in {"result_presented", "adapter_queued", "result_available"}
+            for e in scaffold.emitter.events
+        )
+        assert manager.linear_bundle_ready() is True
+
+        bundle = manager.build_linear_bundle()
+        workstreams = bundle["workstreams"]
+        assert [item["workstream_id"] for item in workstreams] == sorted(
+            item["workstream_id"] for item in workstreams
+        )
+        statuses = {item["workstream_id"]: item["status"] for item in workstreams}
+        assert statuses == {
+            "checkpoint_recovery": "delivered",
+            "merge_support": "contract_rejected",
+            "wal_recovery": "delivered",
+        }
+        # No evaluator-private event role leaks into the bundle.
+        encoded = json.dumps(bundle).lower()
+        for forbidden in (
+            "result_kind", "authoritative_result_kind", "superseded_result_kind",
+            "invalidates_artifacts", "reopens_milestones", "evaluator_stale",
+            "controlled_order", "benchmark_event_id",
+        ):
+            assert forbidden not in encoded
+        wal = next(item for item in workstreams if item["workstream_id"] == "wal_recovery")
+        assert wal["result"]["type"] == "result_delivered"
+        assert wal["result"]["workstream_id"] == "wal_recovery"
+        merge = next(item for item in workstreams if item["workstream_id"] == "merge_support")
+        assert merge["rejection"]["type"] == "result_rejected"
+
+    asyncio.run(exercise())
+
+
+def test_linear_bundle_presented_once_and_message_injected() -> None:
+    """A terminal wave yields ONE linear_bundle_ready / linear_bundle_presented."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "linear"))
+        manager = scaffold.manager
+        _register_linear_children(manager, [("c-wal", "wal_recovery")])
+        await manager.handle_delivery({
+            "completion_id": "comp-c-wal", "payload": {"i": 1},
+            "payload_sha256": "a" * 64, "child_id": "c-wal",
+        })
+        assert await scaffold._maybe_present_linear_bundle() is True
+        types = [e.get("type") for e in scaffold.emitter.events]
+        assert types.count("linear_bundle_ready") == 1
+        assert types.count("linear_bundle_presented") == 1
+        assert any(
+            str(m.get("content", "")).startswith("ASYNC_RBENCH_LINEAR_BUNDLE")
+            for m in scaffold.messages
+        )
+        # No per-result presentation boundary was emitted for the bundle.
+        assert "result_presented" not in types
+
+    asyncio.run(exercise())
+
+
+def test_async_delivery_lifecycle_emits_available_then_queue_then_window_close() -> None:
+    """Async delivery order: result_available -> adapter_queued -> ... ->
+    response_window_closed (spec §3.2/§3.3 replay contract)."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "async"))
+        manager = scaffold.manager
+        _register_linear_children(manager, [("c1", "wal_recovery")])
+        await manager.handle_delivery({
+            "completion_id": "comp-c1", "payload": {"i": 1},
+            "payload_sha256": "a" * 64, "child_id": "c1",
+        })
+        candidate = manager.select_presentable()
+        assert candidate is not None
+        types = [e.get("type") for e in scaffold.emitter.events]
+        # The occurrence was made available before the adapter claimed it.
+        assert types.index("result_available") < types.index("adapter_queued")
+        # Present it, run the response window to max turns, then close: the
+        # closure boundary must be emitted.
+        manager.mark_presented(candidate.occurrence_id, turn_id="t1", window_id="w1")
+        assert manager.presentation_queue.active_window is not None
+        for _ in range(4):
+            manager.presentation_queue.record_turn()
+        scaffold._close_presentation_window()
+        assert any(e.get("type") == "response_window_closed" for e in scaffold.emitter.events)
+        assert manager.presentation_queue.active_window is None
 
     asyncio.run(exercise())

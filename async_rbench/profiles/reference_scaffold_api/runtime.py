@@ -7,7 +7,9 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any
 
-from ...evaluation.case_contract import MAX_INITIAL_WORKSTREAMS, public_delivery
+from ...evaluation.case_contract import (
+    MAX_INITIAL_WORKSTREAMS, public_delivery, public_rejection,
+)
 from ...evaluation.result_contract import validate_payload_contract
 from ...evaluation.presentation import DeliveryOccurrence, PresentationQueue
 
@@ -40,6 +42,16 @@ def _tool_result(call_id: str, value: Any) -> dict[str, Any]:
 # the participant-visible ``commit_artifact`` audit signal are deliberately
 # excluded so a commit cannot itself create the only scored opportunity (§4.3).
 OBSERVED_TOOLS = frozenset({"terminal", "promote_child_path"})
+
+# Child lifecycle states that close a Linear wave slot for the atomic sync
+# barrier. A child resolves when the benchmark wave releases a usable delivery,
+# the gateway contract-rejects its completion, it is cancelled (timeout, stale
+# redelegation), or the participant/delivery path marks it rejected. Anything
+# still in ``queued``/``spawned``/``starting``/``running`` is unresolved, so the
+# main model must keep waiting for the single terminal bundle.
+LINEAR_TERMINAL_STATUSES = frozenset({
+    "delivered", "contract_rejected", "cancelled", "rejected",
+})
 
 
 def emit_runtime_metadata_snapshot(backend: ModelBackend, emitter: ProtocolEmitter) -> None:
@@ -346,13 +358,14 @@ class SubagentManager:
         return max(0, self.config.max_total_child_spawns - self.recovery_spawn_count())
 
     def _concurrency_limit(self) -> int:
-        if self.start.get("execution_mode") == "linear":
-            return 1
         # The initial wave is benchmark-owned scenario construction, not a
         # participant delegation choice. Admit the complete bounded wave so a
         # case with more workstreams than the participant recovery limit still
-        # creates the declared async opportunity. Once it is admitted, later
+        # creates the declared concurrent opportunity. Once it is admitted, later
         # recovery/redelegation children use the participant profile limit.
+        # Linear runs the same benchmark-owned wave concurrently — the only
+        # difference from async is that the main model is shown ONE atomic bundle
+        # at the end instead of per-result asynchronous interruptions.
         initial_records = self._initial_records()
         if any(record.status == "queued" for record in initial_records):
             return max(self.config.max_concurrent_children, len(initial_records))
@@ -381,8 +394,6 @@ class SubagentManager:
         records = self._initial_records()
         if not records:
             return False
-        if self.start.get("execution_mode") == "linear":
-            return any(record.child_id in self._started_child_ids for record in records)
         # A case may declare more initial workstreams than the live concurrency
         # limit. Queued children cannot start until an active child completes,
         # so including them in the start barrier creates a circular wait. The
@@ -398,6 +409,76 @@ class SubagentManager:
             record.status == "cancelled" and record.child_id not in self._started_child_ids
             for record in self._initial_records()
         )
+
+    # --- Linear atomic sync barrier (spec §6 synchronous aggregation) ---------
+    #
+    # Linear runs the benchmark-owned wave concurrently but shows the main model
+    # exactly ONE immutable bundle at the end, sorted by workstream_id. The
+    # barrier counts *terminal* resolution, not successful completion, so a
+    # contract rejection, a designed cancellation, or a timeout still closes the
+    # slot and enters the bundle as a workstream that did not deliver.
+
+    def _linear_terminal(self, record: ChildRecord) -> bool:
+        return record.status in LINEAR_TERMINAL_STATUSES
+
+    def linear_bundle_ready(self) -> bool:
+        """True once every benchmark wave child has reached a terminal state."""
+        records = list(self.children.values())
+        return bool(records) and all(self._linear_terminal(record) for record in records)
+
+    async def _wait_for_linear_terminal(self) -> None:
+        while not self.linear_bundle_ready():
+            # Re-check after clearing so a terminal transition that fires between
+            # the re-check and the wait is never lost.
+            self._delivery_event.clear()
+            if self.linear_bundle_ready():
+                return
+            await self._delivery_event.wait()
+
+    async def wait_linear_bundle(self, timeout: float) -> bool:
+        """Wait until the whole benchmark wave is terminal (or timeout)."""
+        try:
+            await asyncio.wait_for(self._wait_for_linear_terminal(), timeout=timeout)
+        except asyncio.TimeoutError:
+            return self.linear_bundle_ready()
+        return self.linear_bundle_ready()
+
+    def build_linear_bundle(self) -> dict[str, Any]:
+        """Aggregate the terminal wave into ONE stable, participant-safe bundle.
+
+        The bundle is ordered by workstream_id (stable across runs), carries a
+        status per workstream (``delivered``, ``contract_rejected``, or the
+        terminal reason), and never exposes evaluator-private event roles — each
+        delivery/rejection is projected through ``public_delivery`` /
+        ``public_rejection``.
+        """
+        ordered = sorted(
+            list(self.children.values()),
+            key=lambda record: (record.work_units[0] if record.work_units else ""),
+        )
+        return {"workstreams": [self._linear_entry(record) for record in ordered]}
+
+    def _linear_entry(self, record: ChildRecord) -> dict[str, Any]:
+        workstream_id = record.work_units[0] if record.work_units else None
+        base: dict[str, Any] = {"workstream_id": workstream_id}
+        if record.delivery is not None:
+            base["status"] = "delivered"
+            base["result"] = public_delivery(record.delivery, workstream_id=workstream_id)
+        elif record.contract_rejection is not None:
+            base["status"] = "contract_rejected"
+            base["rejection"] = public_rejection(
+                record.contract_rejection, workstream_id=workstream_id,
+            )
+        elif record.status == "contract_rejected":
+            base["status"] = "contract_rejected"
+            base["rejection"] = public_rejection(
+                {"child_id": record.child_id, "completion_id": record.completion_id},
+                workstream_id=workstream_id,
+            )
+        else:
+            base["status"] = record.status
+            base["reason"] = record.decision or "no usable result delivered"
+        return base
 
     async def _wait_for_initial_wave_resolution(self) -> None:
         while not self._initial_wave_started() and not self._initial_wave_failed():
@@ -441,7 +522,7 @@ class SubagentManager:
         failure: the concurrent opportunity was not established, so the episode
         must be unscored rather than attributed to model behaviour.
         """
-        if not record.initial_wave or self.start.get("execution_mode") == "linear":
+        if not record.initial_wave:
             return
         async with self._start_condition:
             self._start_condition.notify_all()
@@ -721,9 +802,17 @@ class SubagentManager:
         record.delivery = delivery
         record.status = "delivered"
         record.presented = False
-        # Enqueue a single immutable occurrence in adapter receive order. The
-        # occurrence carries the public delivery projection so the main loop can
-        # present exactly this payload under exactly one main request.
+        if self.start.get("execution_mode") == "linear":
+            # Linear shows one atomic bundle at wave end. The result is recorded
+            # on the child and aggregated there; it is never presented as a
+            # per-result asynchronous interruption, so no occurrence is enqueued
+            # and no result_available/adapter_queued boundary is emitted.
+            self._delivery_event.set()
+            return
+        # Async: enqueue a single immutable occurrence in adapter receive order.
+        # The gateway-release boundary R_i (``result_available``) is emitted before
+        # A_i (``adapter_queued``) so EventStore replay sees the occurrence made
+        # available before the adapter claims it (spec §3.2/§3.3).
         self._occurrence_counter += 1
         occurrence = DeliveryOccurrence(
             occurrence_id=f"occ-{self._occurrence_counter}",
@@ -735,6 +824,11 @@ class SubagentManager:
             receive_seq=self._occurrence_counter,
         )
         self.presentation_queue.enqueue(occurrence)
+        self.emitter.emit(
+            "result_available",
+            delivery_occurrence_id=occurrence.occurrence_id,
+            completion_id=completion_id,
+        )
         self.emitter.emit(
             "adapter_queued",
             delivery_occurrence_id=occurrence.occurrence_id,
@@ -1024,6 +1118,56 @@ class ReferenceScaffold:
             f"Evaluation guidance: {self.start.get('guidance', '')}"
         )
 
+    async def _maybe_present_linear_bundle(self) -> bool:
+        """Linear: show one atomic terminal bundle to the main model (spec §6).
+
+        Waits until the whole benchmark wave resolves, builds one stable bundle
+        sorted by workstream_id, injects it as a single ASYNC_RBENCH_LINEAR_BUNDLE
+        message, and emits the ready/presented boundaries. Returns False when the
+        wave did not reach a terminal state in time (an infrastructure failure,
+        so the episode is unscored rather than presented to the model).
+        """
+        if not await self.manager.wait_linear_bundle(
+            timeout=self.config.child_terminal_timeout_sec,
+        ):
+            return False
+        bundle = self.manager.build_linear_bundle()
+        self.emitter.emit(
+            "linear_bundle_ready", wave_size=len(bundle["workstreams"]),
+        )
+        self.messages.append({
+            "role": "user",
+            "content": "ASYNC_RBENCH_LINEAR_BUNDLE " + json.dumps(
+                bundle, ensure_ascii=False, sort_keys=True,
+            ),
+        })
+        self.emitter.emit(
+            "linear_bundle_presented",
+            wave_size=len(bundle["workstreams"]),
+            workstream_ids=[item["workstream_id"] for item in bundle["workstreams"]],
+        )
+        return True
+
+    def _close_presentation_window(self) -> None:
+        """Close the active response window and emit the S_i^+ closure boundary.
+
+        A presented occurrence opens a ``ResponseWindow``; once it settles or
+        hits ``max_response_turns`` it closes, which must be recorded as the
+        ``response_window_closed`` boundary so EventStore replay can reconstruct
+        the closed window (spec §3.3). The ``delivery_occurrence_id`` links the
+        closure back to the occurrence that opened it.
+        """
+        window = self.manager.presentation_queue.active_window
+        if not self.manager.presentation_queue.close_active_window():
+            return
+        if window is not None:
+            self.emitter.emit(
+                "response_window_closed",
+                window_id=window.window_id,
+                delivery_occurrence_id=window.occurrence_id,
+                completed_turns=window.completed_turns,
+            )
+
     async def run(self) -> None:
         self.delivery_reader.start()
         self._delivery_task = asyncio.create_task(
@@ -1046,6 +1190,11 @@ class ReferenceScaffold:
                 {"role": "system", "content": self._system_prompt()},
                 {"role": "user", "content": str(self.start["instruction"])},
             ]
+            if self.start.get("execution_mode") == "linear":
+                if not await self._maybe_present_linear_bundle():
+                    self.finish_status = "incomplete"
+                    self.final_summary = "linear initial wave did not reach a terminal bundle"
+                    return
             # Environment snapshot: the benchmark-started wave is already running,
             # along with the concurrency limit and the spawn budget remaining for
             # recovery redelegation. This is the model's only initial state view.
@@ -1144,7 +1293,7 @@ class ReferenceScaffold:
             # to the adapter) or hits max_response_turns, so the next queued
             # occurrence can unseal on a later request.
             self.manager.presentation_queue.record_turn()
-            self.manager.presentation_queue.close_active_window()
+            self._close_presentation_window()
             if (
                 not self.manager.presentation_queue.has_pending()
                 and self.manager.presentation_queue.active_window is None

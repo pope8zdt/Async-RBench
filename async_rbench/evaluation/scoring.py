@@ -434,14 +434,15 @@ def score_trace(
         or authoritative_rejection is not None
         or bool(cancellation_opportunity_children & live_progress_children)
     )
-    concurrency_construction_valid = (
-        not initial_wave_overlap if execution_mode == "linear" else initial_wave_overlap
-    )
+    # Linear and async both run the benchmark-owned wave concurrently (spec §6).
+    # The initial wave must establish real child-child execution overlap; the
+    # only linear difference is that the main model sees ONE atomic bundle at the
+    # end rather than per-result interruptions, so overlap is no longer the
+    # thing linear avoids.
+    concurrency_construction_valid = bool(initial_wave_overlap)
     if not concurrency_construction_valid:
         scenario_construction_errors.append(
             "benchmark failed to establish the required initial-wave execution overlap"
-            if execution_mode != "linear"
-            else "benchmark linear initial wave overlapped unexpectedly"
         )
     scenario_exposure_errors: list[str] = []
     if not construction_order_valid:
@@ -460,8 +461,12 @@ def score_trace(
         and concurrency_construction_valid
     )
     if execution_mode == "linear":
+        # Linear must have a concurrent child-child wave (overlap) and the main
+        # agent must wait for its atomic bundle before acting, so it must NOT
+        # overlap a still-unresolved child (action_while_unresolved is False).
         scenario_entry = bool(
-            protocol_valid and gateway_control_valid and len(spawned) >= 2 and not overlap
+            protocol_valid and gateway_control_valid and len(spawned) >= 2
+            and overlap and not action_while_unresolved
         )
     else:
         scenario_entry = concurrent_scenario_entry and schedule_coverage_valid
@@ -1321,7 +1326,8 @@ def score_trace(
             "delivery_while_other_unresolved": delivery_while_unresolved,
             "main_action_while_unresolved": action_while_unresolved,
             "schedule_coverage_valid": schedule_coverage_valid,
-            "linear_execution_non_overlapping": execution_mode != "linear" or not overlap,
+            "child_child_overlap": overlap,
+            "main_child_overlap": action_while_unresolved,
             "inflight_cancellation_opportunity": (
                 bool(cancellation_opportunity_children)
                 if measures_inflight_cancellation else None

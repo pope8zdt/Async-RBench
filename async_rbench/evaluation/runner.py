@@ -81,6 +81,12 @@ CHILD_TERMINAL_AUDIT_TYPES = frozenset({
 # ``main_action`` (the legacy controller trigger) as the authoritative count.
 RUNTIME_PHASE_EVENT_TYPES = frozenset({
     "main_action_started", "main_action_finished", "main_turn_completed",
+    # The adapter records the adapter-side delivery-occurrence boundaries (spec
+    # §3.3) and the Linear atomic aggregation boundaries (spec §6). They are
+    # runtime phase markers rather than protocol-validated adapter events, so
+    # they bypass ``validate_adapter_event`` but remain recorded for replay.
+    "result_available", "response_window_closed",
+    "linear_bundle_ready", "linear_bundle_presented",
 })
 
 
