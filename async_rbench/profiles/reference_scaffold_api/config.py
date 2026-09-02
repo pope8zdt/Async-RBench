@@ -31,7 +31,19 @@ class ScaffoldConfig:
     # initial-wave children are tracked separately and do not consume this.
     max_total_child_spawns: int = 5
     max_api_concurrency: int = 4
+    # Legacy single-pool ceiling, retained only for non-official legacy profiles
+    # (spec §7.3).  Official Track A profiles declare the split pools below.
     max_total_tokens: int = 500000
+    # Split token budget pools (spec §7).  Async: main_pre / child_shared /
+    # main_post.  Linear: child_shared / main_total (the two 500k main pools
+    # merged to keep the same 1M main budget).
+    budget_child_shared: int = 1_000_000
+    budget_main_pre: int = 500_000
+    budget_main_post: int = 500_000
+    budget_main_total: int = 1_000_000
+    # Optional exact tokenizer identity; empty string opts into conservative
+    # input estimation with accounting_mode="conservative" (spec §7.3).
+    tokenizer: str = ""
     main_terminal_timeout_sec: int = 180
     child_terminal_timeout_sec: int = 180
     child_timeout_sec: int = 900
@@ -98,6 +110,8 @@ class ScaffoldConfig:
             "max_main_turns", "max_child_turns", "max_concurrent_children",
             "max_total_child_spawns", "max_api_concurrency",
             "max_total_tokens",
+            "budget_child_shared", "budget_main_pre", "budget_main_post",
+            "budget_main_total",
             "start_barrier_timeout_sec", "live_cancellation_grace_sec",
         ):
             if int(getattr(self, name)) <= 0:
@@ -122,6 +136,11 @@ class ScaffoldConfig:
             "max_total_child_spawns": self.max_total_child_spawns,
             "max_api_concurrency": self.max_api_concurrency,
             "max_total_tokens": self.max_total_tokens,
+            "budget_child_shared": self.budget_child_shared,
+            "budget_main_pre": self.budget_main_pre,
+            "budget_main_post": self.budget_main_post,
+            "budget_main_total": self.budget_main_total,
+            "tokenizer": self.tokenizer,
             "start_barrier_timeout_sec": self.start_barrier_timeout_sec,
             "live_cancellation_grace_sec": self.live_cancellation_grace_sec,
             "workspace_mode": self.workspace_mode,

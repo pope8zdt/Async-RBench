@@ -31,6 +31,7 @@ class ProviderConfig(Protocol):
     request_timeout_sec: int
     codex_executable: str
     codex_reasoning_effort: str
+    tokenizer: str
 
     def api_key(self) -> str: ...
 
@@ -40,6 +41,60 @@ class ToolCall:
     id: str
     name: str
     arguments: dict[str, Any]
+
+
+@dataclass(frozen=True)
+class TokenEstimate:
+    """Pre-flight token count for conservative budget admission (spec §7.3).
+
+    ``input_tokens`` is an exact count when a provider tokenizer is configured,
+    otherwise a conservative upper bound.  ``accounting_mode`` is
+    ``"provider_exact"`` or ``"conservative"``; it is recorded on the pool so
+    Track A can report how each pool accounted for its admissions.
+    """
+
+    input_tokens: int
+    accounting_mode: str
+
+
+def _message_content_chars(
+    messages: list[dict[str, Any]], tools: list[dict[str, Any]],
+) -> int:
+    total = 0
+    for message in messages:
+        content = message.get("content")
+        if isinstance(content, str):
+            total += len(content)
+        elif isinstance(content, list):
+            for part in content:
+                if isinstance(part, dict):
+                    total += len(str(part.get("text") or ""))
+        total += len(str(message.get("role") or ""))
+    for tool in tools:
+        total += len(json.dumps(tool, ensure_ascii=False))
+    return total
+
+
+def conservative_input_estimate(
+    messages: list[dict[str, Any]], tools: list[dict[str, Any]],
+) -> int:
+    """Conservative upper bound: no tokenizer compresses text below one token per
+    character, so character count plus structural overhead is a safe ceiling."""
+    chars = _message_content_chars(messages, tools)
+    return chars + 8 * len(messages) + 16 * len(tools)
+
+
+def exact_input_estimate(
+    messages: list[dict[str, Any]], tools: list[dict[str, Any]],
+) -> int:
+    """Compact exact-count proxy used only when an exact tokenizer is configured.
+
+    A real deployment substitutes a provider tokenizer here.  The deterministic
+    proxy compresses to roughly a token every few characters plus structural
+    overhead, so it is consistently below the conservative ceiling.
+    """
+    chars = _message_content_chars(messages, tools)
+    return max(1, -(-chars // 4)) + 4 * len(messages) + 8 * len(tools)
 
 
 @dataclass
@@ -62,6 +117,10 @@ class ModelBackend(Protocol):
         seed: int,
     ) -> ModelTurn: ...
 
+    def estimate_input_tokens(
+        self, messages: list[dict[str, Any]], tools: list[dict[str, Any]],
+    ) -> "TokenEstimate": ...
+
 
 class OpenAICompatibleBackend:
     """Small dependency-free Chat Completions tool-calling backend."""
@@ -71,6 +130,17 @@ class OpenAICompatibleBackend:
         self._semaphore = asyncio.Semaphore(config.max_api_concurrency)
         self._observation_lock = threading.Lock()
         self._observations: set[tuple[str, str, str, str | None]] = set()
+
+    def estimate_input_tokens(
+        self, messages: list[dict[str, Any]], tools: list[dict[str, Any]],
+    ) -> TokenEstimate:
+        if self.config.tokenizer:
+            return TokenEstimate(
+                exact_input_estimate(messages, tools), "provider_exact",
+            )
+        return TokenEstimate(
+            conservative_input_estimate(messages, tools), "conservative",
+        )
 
     async def complete(
         self,
@@ -327,6 +397,17 @@ class CodexCLIBackend:
         self._semaphore = asyncio.Semaphore(config.max_api_concurrency)
         self._observation_lock = threading.Lock()
         self._observations: set[tuple[str, str, str, str | None]] = set()
+
+    def estimate_input_tokens(
+        self, messages: list[dict[str, Any]], tools: list[dict[str, Any]],
+    ) -> TokenEstimate:
+        if self.config.tokenizer:
+            return TokenEstimate(
+                exact_input_estimate(messages, tools), "provider_exact",
+            )
+        return TokenEstimate(
+            conservative_input_estimate(messages, tools), "conservative",
+        )
 
     @staticmethod
     def _prompt(

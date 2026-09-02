@@ -15,7 +15,11 @@ from ...evaluation.presentation import DeliveryOccurrence, PresentationQueue
 
 from .config import ScaffoldConfig
 from .gateway import DeliveryReader, ProtocolEmitter
-from ...evaluation.model_backend import ModelBackend, ModelTurn, ToolCall, function_tool
+from ...evaluation.budget import BudgetLedger, BudgetPool, build_budget_ledger
+from ...evaluation.model_backend import (
+    ModelBackend, ModelTurn, ToolCall,
+    conservative_input_estimate, function_tool,
+)
 from ...evaluation.workspace_runtime import CommandResult, WorkspaceRuntime
 
 
@@ -35,6 +39,21 @@ def _trim(value: str, limit: int) -> str:
 
 def _tool_result(call_id: str, value: Any) -> dict[str, Any]:
     return {"role": "tool", "tool_call_id": call_id, "content": json.dumps(value, ensure_ascii=False, sort_keys=True)}
+
+
+def _estimate_input(backend: ModelBackend, messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> tuple[int, str]:
+    """Return ``(input_upper_bound, accounting_mode)`` for strict admission.
+
+    Uses the backend's exact tokenizer when available (``accounting_mode``
+    ``"provider_exact"``); otherwise falls back to a conservative upper bound
+    and ``"conservative"`` so Track A can report how the pool accounted
+    (spec §7.3).
+    """
+    estimator = getattr(backend, "estimate_input_tokens", None)
+    if estimator is not None:
+        estimate = estimator(messages=messages, tools=tools)
+        return estimate.input_tokens, estimate.accounting_mode
+    return conservative_input_estimate(messages, tools), "conservative"
 
 
 # Modifying tools whose *completion* can establish a provisional boundary. Only
@@ -126,7 +145,7 @@ class ChildAgent:
     def __init__(
         self, backend: ModelBackend, workspace: WorkspaceRuntime,
         config: ScaffoldConfig, emitter: ProtocolEmitter,
-        token_budget: EpisodeTokenBudget,
+        token_budget: BudgetPool,
     ) -> None:
         self.backend = backend
         self.workspace = workspace
@@ -175,14 +194,33 @@ class ChildAgent:
         ]
         total_tokens = 0
         unsealed_turns = 0
-        estimate = self.config.max_output_tokens
         for turn_index in range(1, self.config.max_child_turns + 1):
             role = f"child:{record.child_id}"
-            if not await self.token_budget.reserve(estimate):
+            input_bound, accounting_mode = _estimate_input(
+                self.backend, messages, self.tools(),
+            )
+            reservation = await self.token_budget.reserve(
+                input_bound, self.config.max_output_tokens,
+                accounting_mode=accounting_mode,
+            )
+            if reservation is None:
+                self.emitter.emit(
+                    "budget_exhausted", pool=self.token_budget.name,
+                    role=role, turn=turn_index,
+                )
                 return {
                     "summary": "episode token budget exhausted before child completion",
                     "evidence": {"token_budget_exhausted": True}, "files": [],
                 }, record.expected_output, total_tokens
+            self.emitter.emit(
+                "budget_reserved",
+                pool=self.token_budget.name,
+                reservation_id=reservation.reservation_id,
+                input_upper_bound=input_bound,
+                max_output=self.config.max_output_tokens,
+                accounting_mode=accounting_mode,
+                remaining=self.token_budget.remaining,
+            )
             self.emitter.emit(
                 "agent_progress", phase="model_call_started", role=role,
                 turn=turn_index, model=model,
@@ -191,7 +229,19 @@ class ChildAgent:
                 role=role, model=model, messages=messages,
                 tools=self.tools(), seed=_role_seed(seed, record.child_id),
             )
-            await self.token_budget.settle(estimate, turn.total_tokens)
+            overrun = await self.token_budget.settle(
+                reservation.reservation_id, turn.total_tokens,
+            )
+            self.emitter.emit(
+                "budget_settled",
+                pool=self.token_budget.name,
+                reservation_id=reservation.reservation_id,
+                estimate=reservation.estimated_total,
+                actual=turn.total_tokens,
+                overrun=overrun,
+                remaining=self.token_budget.remaining,
+                accounting_mode=self.token_budget.accounting_mode,
+            )
             self.emitter.emit(
                 "agent_progress", phase="model_call_finished", role=role,
                 turn=turn_index, tokens=turn.total_tokens,
@@ -313,7 +363,7 @@ class SubagentManager:
         workspace: WorkspaceRuntime,
         emitter: ProtocolEmitter,
         config: ScaffoldConfig,
-        token_budget: EpisodeTokenBudget,
+        token_budget: BudgetPool,
     ) -> None:
         self.start = start
         self.backend = backend
@@ -822,6 +872,10 @@ class SubagentManager:
                 workstream_id=record.work_units[0] if record.work_units else None,
             ),
             receive_seq=self._occurrence_counter,
+            # A benchmark-delivered completion is a scored observation: it ends
+            # the main_pre pool on first presentation (spec §7.1).  The reference
+            # scaffold reproduces every delivery as a scored occurrence.
+            scored=True,
         )
         self.presentation_queue.enqueue(occurrence)
         self.emitter.emit(
@@ -880,6 +934,17 @@ class SubagentManager:
             turn_id=turn_id,
             window_id=window_id,
         )
+
+    def presented_scored(self, occurrence_id: str) -> bool:
+        """Whether the presentation of ``occurrence_id`` opens a scored phase.
+
+        The first *scored* presentation ends ``main_pre`` (spec §7.1).  A
+        delivered result is scored by default (the reference scaffold presents
+        every benchmark-delivered completion); replay occurrences are ``scored``
+        only when the delivery itself was scored.
+        """
+        occurrence = self.presentation_queue.presented_occurrence(occurrence_id)
+        return bool(occurrence and occurrence.scored)
 
     def statuses(self) -> list[dict[str, Any]]:
         # Lifecycle + workstream identity only. Held completion payloads stay
@@ -1001,7 +1066,20 @@ class ReferenceScaffold:
         self.workspace = workspace
         self.emitter = emitter
         self.delivery_reader = delivery_reader
-        self.token_budget = EpisodeTokenBudget(config.max_total_tokens)
+        # Split token budget pools (spec §7).  Children share one account in
+        # every mode; the main side splits into main_pre / main_post for async
+        # (phase switch on the first scored presentation) or a single main_total
+        # for linear.  Official Track A profiles declare these pool values; the
+        # legacy ``max_total_tokens`` ceiling is only a non-official fallback.
+        scheme = "linear" if start.get("execution_mode") == "linear" else "async"
+        self.budget_ledger = build_budget_ledger(
+            scheme,
+            child_shared=config.budget_child_shared,
+            main_pre=config.budget_main_pre,
+            main_post=config.budget_main_post,
+            main_total=config.budget_main_total,
+        )
+        self.token_budget = self.budget_ledger.pool("child_shared")
         self.manager = SubagentManager(
             start=start, backend=backend, workspace=workspace, emitter=emitter,
             config=config, token_budget=self.token_budget,
@@ -1148,6 +1226,25 @@ class ReferenceScaffold:
         )
         return True
 
+    def _on_result_presented(self, occurrence_id: str) -> None:
+        """Flip the main pool to ``main_post`` on the first scored presentation.
+
+        Spec §7.1: the async main side has a ``main_pre`` account that is live
+        only until the first valid scored ``result_presented``; afterwards main
+        calls charge ``main_post``.  The switch is explicit and happens exactly
+        once.  A presentation whose occurrence is not scored (replay of an
+        unscored delivery) must not advance the phase.
+        """
+        if not self.manager.presented_scored(occurrence_id):
+            return
+        if self.budget_ledger.main_phase == "pre":
+            self.budget_ledger.switch_to_post()
+            self.emitter.emit(
+                "budget_phase_switch",
+                phase="main_post",
+                triggered_by_occurrence=occurrence_id,
+            )
+
     def _close_presentation_window(self) -> None:
         """Close the active response window and emit the S_i^+ closure boundary.
 
@@ -1216,12 +1313,32 @@ class ReferenceScaffold:
                 # Reserve the per-call ceiling before launching (under the budget
                 # lock), then settle to the true token count on completion.  This
                 # keeps the cap a hard ceiling that concurrent main/child calls
-                # cannot overrun at the boundary.
-                estimate = self.config.max_output_tokens
-                if not await self.token_budget.reserve(estimate):
+                # cannot overrun at the boundary.  Strict conservative admission:
+                # estimated_input_upper_bound + requested_max_output <= remaining
+                # (spec §7.3).  If the pool has not yet seen a scored presentation,
+                # this is the main_pre account; it flips to main_post on the first
+                # scored result_presented (spec §7.1).
+                main_pool = self.budget_ledger.main_pool()
+                input_bound, accounting_mode = _estimate_input(
+                    self.backend, messages, self.main_tools(),
+                )
+                reservation = await main_pool.reserve(
+                    input_bound, self.config.max_output_tokens,
+                    accounting_mode=accounting_mode,
+                )
+                if reservation is None:
                     self.finish_status = "budget_exhausted"
                     self.final_summary = "episode token budget exhausted"
                     return
+                self.emitter.emit(
+                    "budget_reserved",
+                    pool=main_pool.name,
+                    reservation_id=reservation.reservation_id,
+                    input_upper_bound=input_bound,
+                    max_output=self.config.max_output_tokens,
+                    accounting_mode=accounting_mode,
+                    remaining=main_pool.remaining,
+                )
                 # Budget admission succeeded.  Presentation preparation: select at
                 # most one new occurrence in FIFO receive order, but only while no
                 # response window is open — never more than one new occurrence per
@@ -1265,7 +1382,22 @@ class ReferenceScaffold:
                         turn_id=f"t{turn_index}",
                         window_id=f"w{turn_index}",
                     )
-                await self.token_budget.settle(estimate, turn.total_tokens)
+                    # A scored presentation ends main_pre (spec §7.1).  This must
+                    # run after the occurrence is presented into a real request.
+                    self._on_result_presented(prepared_occurrence_id)
+                overrun = await main_pool.settle(
+                    reservation.reservation_id, turn.total_tokens,
+                )
+                self.emitter.emit(
+                    "budget_settled",
+                    pool=main_pool.name,
+                    reservation_id=reservation.reservation_id,
+                    estimate=reservation.estimated_total,
+                    actual=turn.total_tokens,
+                    overrun=overrun,
+                    remaining=main_pool.remaining,
+                    accounting_mode=main_pool.accounting_mode,
+                )
                 self.emitter.emit(
                     "agent_progress", phase="model_call_finished", role="main",
                     turn=turn_index, tokens=turn.total_tokens,

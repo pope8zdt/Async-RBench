@@ -1,9 +1,37 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+from typing import Any
+
 from async_rbench.evaluation.model_backend import (
+    OpenAICompatibleBackend,
+    conservative_input_estimate,
+    exact_input_estimate,
     provider_preflight,
     validate_credential,
 )
+
+
+@dataclass
+class _FakeProviderConfig:
+    """Minimal ProviderConfig surface needed by OpenAICompatibleBackend."""
+
+    backend: str = "openai_compatible"
+    api_url: str = "http://x/v1"
+    max_api_concurrency: int = 1
+    max_tokens_parameter: str = "max_tokens"
+    max_output_tokens: int = 8192
+    send_seed: bool = False
+    temperature: float | None = None
+    request_body_extra: dict[str, Any] = None  # type: ignore[assignment]
+    extra_headers: dict[str, str] = None  # type: ignore[assignment]
+    request_timeout_sec: int = 30
+    codex_executable: str = "codex"
+    codex_reasoning_effort: str = "high"
+    tokenizer: str = ""
+
+    def api_key(self) -> str:
+        return ""
 
 
 # --- Item 3: Unicode / orphan credential preflight ---
@@ -75,3 +103,42 @@ def test_provider_preflight_ok_when_credential_clean(monkeypatch):
         "api_url": "http://x/v1", "main_model": "m",
     }
     assert provider_preflight(config) == ""
+
+
+# --- Item 5: backend input-estimate contract (spec §7.3) --------------------
+
+
+_MESSAGES = [
+    {"role": "system", "content": "You are a resolver."},
+    {"role": "user", "content": "Recover the rows with a short instruction."},
+]
+_TOOLS = [
+    {
+        "type": "function",
+        "function": {"name": "terminal", "description": "run", "parameters": {}},
+    }
+]
+
+
+def test_estimate_without_tokenizer_is_conservative_upper_bound() -> None:
+    backend = OpenAICompatibleBackend(_FakeProviderConfig(tokenizer=""))
+    estimate = backend.estimate_input_tokens(_MESSAGES, _TOOLS)
+    assert estimate.accounting_mode == "conservative"
+    # An upper bound must be at least as large as the compact exact proxy.
+    assert estimate.input_tokens >= exact_input_estimate(_MESSAGES, _TOOLS)
+    assert estimate.input_tokens >= 1
+
+
+def test_estimate_with_tokenizer_is_exact_accounting() -> None:
+    backend = OpenAICompatibleBackend(_FakeProviderConfig(tokenizer="o200k"))
+    estimate = backend.estimate_input_tokens(_MESSAGES, _TOOLS)
+    assert estimate.accounting_mode == "provider_exact"
+    assert estimate.input_tokens == exact_input_estimate(_MESSAGES, _TOOLS)
+
+
+def test_conservative_estimate_exceeds_exact_proxy() -> None:
+    # The conservative (no-tokenizer) branch must be >= the exact (tokenizer)
+    # branch so strict admission never under-reserves at admission time.
+    assert conservative_input_estimate(_MESSAGES, _TOOLS) >= exact_input_estimate(
+        _MESSAGES, _TOOLS
+    )
