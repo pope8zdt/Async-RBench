@@ -37,9 +37,13 @@ def _error_provider(tmp_path: Path):
     return provide
 
 
-def _observer(tmp_path: Path, provider=None) -> ProvisionalObserver:
+def _observer(tmp_path: Path, provider=None, points=None) -> ProvisionalObserver:
+    if points is None:
+        points = [ObservationPoint(
+            point_id="state", kind="file", path=str(tmp_path / "state.marker"),
+        )]
     return ProvisionalObserver(
-        snapshot_provider=provider or _marker_provider(tmp_path),
+        points, snapshot_provider=provider or _marker_provider(tmp_path),
     )
 
 
@@ -208,3 +212,38 @@ def test_snapshot_command_for_file_and_json_are_bounded() -> None:
     assert "json.loads" in json_cmd
     # The path is never interpolated into a shell the caller does not own.
     assert "main.db" in file_cmd
+
+
+def test_empty_observation_points_cannot_establish_provisional(tmp_path: Path) -> None:
+    """§4.1(5): no decision-bearing observation point means no provisional, even
+    on a complete snapshot. A case that declares no observation point has no
+    evaluator-observable state to watch change or stay."""
+    async def exercise() -> None:
+        observer = ProvisionalObserver([], snapshot_provider=_marker_provider(tmp_path))
+        (tmp_path / "state.marker").write_text("state=v1", encoding="utf-8")
+        await observer.on_event(
+            _event("main_action_started", action_id="n1", kind="terminal"),
+        )
+        obs = await observer.on_event(
+            _event("main_action_finished", action_id="n1", success=True),
+        )
+        assert obs.provisional_established is False
+        assert obs.reason == "no_decision_bearing_points"
+        assert observer.established is False
+
+    asyncio.run(exercise())
+
+
+def test_provisional_requires_a_decision_bearing_point(tmp_path: Path) -> None:
+    """§4.1(5) happy path: an explicit observation point plus a complete snapshot
+    establishes provisional; the same complete snapshot without a declared point
+    does not."""
+    async def exercise() -> None:
+        (tmp_path / "state.marker").write_text("answer=42", encoding="utf-8")
+        # With a declared point the boundary establishes.
+        with_point = _observer(tmp_path)
+        obs = await with_point.observe(action_id="a1")
+        assert obs.provisional_established is True
+        assert obs.points == {"state": "answer=42"}
+
+    asyncio.run(exercise())

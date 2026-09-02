@@ -327,7 +327,10 @@ def test_dispatch_prepare_result_presentation_fails_on_incomplete_snapshot():
     assert process.messages[0]["result"]["error"] == "incomplete_snapshot"
 
 
-def test_dispatch_observe_main_state_records_kernel_private_provisional_fact():
+def test_dispatch_observe_main_state_without_point_records_false_provisional_fact():
+    """§4.1(5): a case with no decision-bearing observation point cannot establish
+    provisional, but the kernel-private fact is still recorded (with
+    ``provisional_established`` false) so the event survives replay."""
     class Workspace:
         async def main_terminal(self, command, timeout):
             raise AssertionError("no observation points expected for an empty case")
@@ -364,14 +367,65 @@ def test_dispatch_observe_main_state_records_kernel_private_provisional_fact():
     ))
 
     assert process.messages[0]["ok"] is True
+    assert process.messages[0]["result"]["provisional_observed"] is False
+    fact, = recorder.events
+    assert fact["type"] == "provisional_observed"
+    assert fact["provisional_established"] is False
+    assert fact["reason"] == "no_decision_bearing_points"
+    assert fact["action_id"] == "a1"
+    assert fact["turn_id"] == "t1"
+    assert fact["provisional_digest"] is None
+    source = EventStore.from_records(recorder.events, "observe-audit")
+    assert {event["visibility"] for event in source.events} == {"kernel_private"}
+
+
+def test_dispatch_observe_main_state_with_point_establishes_provisional_fact():
+    """§4.1(5) happy path: a declared observation point + an observed snapshot
+    establishes provisional through the kernel capability dispatch."""
+    class Workspace:
+        async def main_terminal(self, command, timeout):
+            return CommandResult(0, "answer=42\n")
+
+    class Process:
+        def __init__(self):
+            self.messages = []
+
+    process = Process()
+
+    class Stdin:
+        def write(self, data):
+            process.messages.append(json.loads(data.decode()))
+
+        async def drain(self):
+            return None
+
+    process.stdin = Stdin()
+    recorder = TraceRecorder("observe-audit")
+    asyncio.run(_dispatch_capability(
+        Workspace(),
+        {
+            "type": "capability_request", "request_id": "obs-r2",
+            "capability": "observe_main_state",
+            "args": {
+                "reason": "tool_completed:terminal",
+                "action_id": "a2", "turn_id": "t2",
+            },
+        },
+        process,
+        asyncio.Lock(),
+        recorder,
+        case_spec={"observation_points": [
+            {"point_id": "state", "kind": "file", "path": "/app/state"},
+        ]},
+    ))
+
+    assert process.messages[0]["ok"] is True
     assert process.messages[0]["result"]["provisional_observed"] is True
     fact, = recorder.events
     assert fact["type"] == "provisional_observed"
     assert fact["provisional_established"] is True
-    assert fact["action_id"] == "a1"
-    assert fact["turn_id"] == "t1"
     assert fact["provisional_digest"]
-    assert "observed_points" in fact
+    assert fact["observed_points"] == {"state": "answer=42"}
     source = EventStore.from_records(recorder.events, "observe-audit")
     assert {event["visibility"] for event in source.events} == {"kernel_private"}
 

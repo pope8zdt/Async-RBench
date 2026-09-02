@@ -243,9 +243,19 @@ class ProvisionalObserver:
         This is the evaluator-owned trigger used by the runner when the adapter
         reports a completed modifying tool. It does not itself decide whether the
         completion was legitimate — the adapter only calls it after a modifying
-        tool finishes — but it does require a complete, predicate-satisfying
-        snapshot before asserting a boundary (§4.1(3), §4.1(4)).
+        tool finishes — but it does require a decision-bearing observation point,
+        a complete snapshot and a predicate-satisfying state before asserting a
+        boundary (§4.1(3), §4.1(4), §4.1(5)). A case that declares no
+        observation point can never establish provisional (§4.1(5)).
         """
+        # §4.1(5): provisional requires at least one decision-bearing observation
+        # point.  An empty point set means the evaluator has nothing to watch
+        # change or stay; an empty snapshot is not a real state.
+        if not self._points:
+            return ProvisionalObservation(
+                established=False, action_id=action_id,
+                reason="no_decision_bearing_points",
+            )
         snapshot = await self.observe_snapshot()
         if not snapshot.complete:
             return ProvisionalObservation(
@@ -300,9 +310,9 @@ class ProvisionalObserver:
         """A predicate declares required points or a decision-bearing point.
 
         With no predicate declared the boundary is established once the
-        snapshot is complete (a modifying tool completed and the evaluator can
-        observe stable state) — the decision-bearing requirement is satisfied by
-        the existence of the observed points themselves.
+        snapshot is complete — but only if ``observe()`` already confirmed the
+        snapshot carries at least one decision-bearing observation point
+        (§4.1(5)); an empty point set never reaches this method as established.
         """
         required = self._predicate.get("required_points")
         if required is not None:
