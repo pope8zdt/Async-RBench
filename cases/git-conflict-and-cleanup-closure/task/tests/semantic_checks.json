@@ -3,6 +3,7 @@
   "checks": [
     {
       "id": "gc.base.scan_reports_exist",
+      "score_domain": "base_task",
       "pytest_node": "test_case_outcomes.py::test_scan_reports_exist",
       "category": "base_task_completion",
       "description": "All three scan reports exist under output_data/scan_reports",
@@ -13,6 +14,7 @@
     },
     {
       "id": "gc.base.secret_file_recovered",
+      "score_domain": "base_task",
       "pytest_node": "test_case_outcomes.py::test_secret_file_recovered",
       "category": "base_task_completion",
       "description": "The recovered secret file exists at /app/secret.txt and holds a secret token",
@@ -23,6 +25,7 @@
     },
     {
       "id": "gc.base.decision_manifest_valid",
+      "score_domain": "base_task",
       "pytest_node": "test_case_outcomes.py::test_decision_manifest_valid",
       "category": "base_task_completion",
       "description": "Decision manifest exists and carries every required process field",
@@ -33,6 +36,7 @@
     },
     {
       "id": "gc.base.repo_reachable_state_preserved",
+      "score_domain": "base_task",
       "pytest_node": "test_case_outcomes.py::test_repo_reachable_state_preserved",
       "category": "base_task_completion",
       "description": "The repository is still a valid git repo with its good history reachable",
@@ -43,6 +47,8 @@
     },
     {
       "id": "gc.rec.recovery_source_object_db",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_recovery_source_object_db",
       "category": "authority_integration",
       "description": "Recovery is anchored on the object-database authority, not a negative scan",
@@ -53,6 +59,8 @@
     },
     {
       "id": "gc.rec.authority_hash_consistent",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_authority_hash_consistent",
       "category": "authority_integration",
       "description": "The authority-only receipt and secret sha256 agree across the authority scan, manifest, recovery report and recovered file",
@@ -63,6 +71,8 @@
     },
     {
       "id": "gc.rec.recovery_report_consistent",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_recovery_report_consistent",
       "category": "authority_integration",
       "description": "Recovery report paths and object ids are consistent with the authority scan and manifest",
@@ -73,6 +83,8 @@
     },
     {
       "id": "gc.excl.negative_scans_excluded",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_negative_scans_excluded",
       "category": "selective_replanning",
       "description": "Negative scan results are explicitly excluded from the recovery decision",
@@ -83,6 +95,8 @@
     },
     {
       "id": "gc.excl.scan_set_preserved",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_scan_set_preserved",
       "category": "selective_replanning",
       "description": "All scan reports are preserved even though only the authority drives recovery",
@@ -93,6 +107,8 @@
     },
     {
       "id": "gc.excl.negative_scan_reports_negative",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_negative_scan_reports_negative",
       "category": "selective_replanning",
       "description": "Ref/history and pack scans genuinely report no secret in reachable history",
@@ -103,6 +119,8 @@
     },
     {
       "id": "gc.excl.authority_scan_positive",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_authority_scan_positive",
       "category": "selective_replanning",
       "description": "The object-database authority scan positively locates the secret object",
@@ -113,6 +131,8 @@
     },
     {
       "id": "gc.excl.wait_for_authority_recorded",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_wait_for_authority_recorded",
       "category": "selective_replanning",
       "description": "Filesystem evidence shows the selected positive scan existed before recovery",
@@ -123,6 +143,8 @@
     },
     {
       "id": "gc.closure.cleanup_attempts_recorded",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_cleanup_attempts_recorded",
       "category": "consistency_closure",
       "description": "Every cleanup attempt is recorded with its command and verification stamp",
@@ -133,6 +155,8 @@
     },
     {
       "id": "gc.closure.cleanup_failure_recorded",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_cleanup_failure_recorded",
       "category": "consistency_closure",
       "description": "The naive cleanup attempt that failed closure verification is recorded as failed",
@@ -143,6 +167,8 @@
     },
     {
       "id": "gc.closure.cleanup_redelegated",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_cleanup_redelegated",
       "category": "consistency_closure",
       "description": "Cleanup was redelegated after the failure instead of being declared done",
@@ -153,6 +179,8 @@
     },
     {
       "id": "gc.closure.recovery_before_cleanup",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_recovery_before_cleanup",
       "category": "consistency_closure",
       "description": "Filesystem evidence shows recovery completed before cleanup reports were created",
@@ -163,6 +191,8 @@
     },
     {
       "id": "gc.closure.closure_verified",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_closure_verified",
       "category": "consistency_closure",
       "description": "Manifest and closure report agree that repo-wide closure was verified",
@@ -173,6 +203,8 @@
     },
     {
       "id": "gc.closure.closure_report_closed",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_closure_report_closed",
       "category": "consistency_closure",
       "description": "The final closure report declares the repository closed",
@@ -183,6 +215,8 @@
     },
     {
       "id": "gc.closure.all_closure_checks_clean",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_all_closure_checks_clean",
       "category": "consistency_closure",
       "description": "Every closure check (reachable, unreachable, object store, working tree) is clean",
@@ -193,6 +227,8 @@
     },
     {
       "id": "gc.closure.cleanup_reports_consistent",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_cleanup_reports_consistent",
       "category": "consistency_closure",
       "description": "Cleanup reports' verification stamps match the manifest's failure/redelegation record",
@@ -203,6 +239,8 @@
     },
     {
       "id": "gc.closure.secret_absent_reachable",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_secret_absent_reachable",
       "category": "consistency_closure",
       "description": "The secret is absent from reachable history, content diffs and the working tree",
@@ -213,6 +251,8 @@
     },
     {
       "id": "gc.closure.secret_absent_object_store",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_secret_absent_object_store",
       "category": "consistency_closure",
       "description": "The full object database holds no blob containing the secret",
@@ -223,6 +263,8 @@
     },
     {
       "id": "gc.closure.unrelated_files_preserved",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_unrelated_files_preserved",
       "category": "consistency_closure",
       "description": "Unrelated scaffold files survive the cleanup with their content intact",
@@ -233,6 +275,8 @@
     },
     {
       "id": "gc.closure.reachable_history_preserved",
+      "score_domain": "async_replanning",
+      "event_id": "gc_a_authority",
       "pytest_node": "test_case_outcomes.py::test_reachable_history_preserved",
       "category": "consistency_closure",
       "description": "Good reachable commits stay reachable and the rewritten-away leak commit does not",

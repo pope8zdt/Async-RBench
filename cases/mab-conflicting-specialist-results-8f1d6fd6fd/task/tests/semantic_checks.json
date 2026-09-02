@@ -6,6 +6,8 @@
       "critical": true,
       "description": "The independent receipt is authentic and case/source bound.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.event.receipt",
+      "score_domain": "async_replanning",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
       "relevance_tier": "critical"
@@ -16,6 +18,8 @@
       "critical": true,
       "description": "The independent database authority worker completed with a host checkpoint probe.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.event.probes",
+      "score_domain": "async_replanning",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
       "relevance_tier": "critical"
@@ -26,6 +30,8 @@
       "critical": true,
       "description": "The final closure consumes the exact authority receipt and re-verifies source semantics.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.closure",
+      "score_domain": "async_replanning",
+      "event_id": "evt.mab_conflicting_speciali.conflicting_valid_result",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
       "relevance_tier": "critical"
@@ -36,6 +42,7 @@
       "critical": true,
       "description": "The submitted diagnosis remains bound to the selected native MAB source task.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.source.pin",
+      "score_domain": "base_task",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
       "relevance_tier": "base"
@@ -46,6 +53,7 @@
       "critical": true,
       "description": "The evaluator-owned MARBLE report is bound to this exact database task and passed its native evaluator.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.native.binding",
+      "score_domain": "base_task",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_native_evaluator_binding_is_exact",
       "relevance_tier": "base"
@@ -56,6 +64,7 @@
       "critical": true,
       "description": "The final selected cause exactly matches the task-specific native root cause.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.diagnosis.exact",
+      "score_domain": "base_task",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_selected_database_cause_is_exact",
       "relevance_tier": "base"
@@ -66,6 +75,7 @@
       "critical": true,
       "description": "The competing provisional diagnosis is explicitly superseded rather than merged into the answer.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.conflict.reconciled",
+      "score_domain": "base_task",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_competing_diagnosis_is_reconciled",
       "relevance_tier": "base"
@@ -76,6 +86,7 @@
       "critical": true,
       "description": "The diagnosis cites the exact evaluator-owned native evidence and host checkpoint digests.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.authority.evidence",
+      "score_domain": "base_task",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_native_authority_evidence_is_consumed",
       "relevance_tier": "base"
@@ -86,6 +97,7 @@
       "critical": false,
       "description": "The final database diagnosis obeys the case-specific output schema and preservation contract.",
       "id": "mab_conflicting_specialist_results_8f1d6fd6fd.output.schema",
+      "score_domain": "base_task",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_database_diagnosis_schema_and_preservation",
       "relevance_tier": "base"

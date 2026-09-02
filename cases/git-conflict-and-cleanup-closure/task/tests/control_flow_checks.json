@@ -89,5 +89,36 @@
         "async"
       ]
     }
+  ],
+  "event_contracts": [
+    {
+      "event_id": "gc_a_authority",
+      "event_theme": "conflicting_valid_results",
+      "track": "atomic_event",
+      "observation_mode": "gateway_only",
+      "state_delta": {
+        "affected_artifacts": [
+          "recovery_report",
+          "recovered_secret"
+        ],
+        "unaffected_artifacts": [
+          "scan_reports"
+        ]
+      },
+      "required_changes": [
+        "recovery_report",
+        "recovered_secret"
+      ],
+      "required_preservation": [
+        "scan_reports"
+      ],
+      "forbidden_changes": [],
+      "closure_checks": [
+        "gc.closure.closure_verified",
+        "gc.excl.negative_scans_excluded"
+      ],
+      "expected_disposition": "adopt_object_db_authority_supersede_negative_scan",
+      "event_status": "scored"
+    }
   ]
 }

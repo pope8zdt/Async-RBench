@@ -88,5 +88,38 @@
         "async"
       ]
     }
+  ],
+  "event_contracts": [
+    {
+      "event_id": "sc_a_b2",
+      "event_theme": "conflicting_valid_results",
+      "track": "atomic_event",
+      "observation_mode": "gateway_only",
+      "state_delta": {
+        "affected_artifacts": [
+          "global_shape_plan",
+          "combined_config_artifact"
+        ],
+        "unaffected_artifacts": [
+          "plan_b1",
+          "first_pass_snapshots"
+        ]
+      },
+      "required_changes": [
+        "global_shape_plan",
+        "combined_config_artifact"
+      ],
+      "required_preservation": [
+        "plan_b1",
+        "first_pass_snapshots"
+      ],
+      "forbidden_changes": [],
+      "closure_checks": [
+        "sc.closure.closure_verified",
+        "sc.preserve.final_matches_snapshot"
+      ],
+      "expected_disposition": "selective_replan_authority_preserve_valid_bucket",
+      "event_status": "scored"
+    }
   ]
 }

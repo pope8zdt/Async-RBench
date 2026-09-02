@@ -3,6 +3,7 @@
   "checks": [
     {
       "id": "sc.base.plan_files_exist",
+      "score_domain": "base_task",
       "pytest_node": "test_case_outcomes.py::test_plan_files_exist",
       "category": "base_task_completion",
       "description": "Both per-bucket plan files exist under output_data",
@@ -13,6 +14,7 @@
     },
     {
       "id": "sc.base.plan_jsonl_valid",
+      "score_domain": "base_task",
       "pytest_node": "test_case_outcomes.py::test_plan_jsonl_valid",
       "category": "base_task_completion",
       "description": "Plan files are well-formed JSONL with request_id/batch_id/shape",
@@ -23,6 +25,7 @@
     },
     {
       "id": "sc.base.all_requests_covered_exactly",
+      "score_domain": "base_task",
       "pytest_node": "test_case_outcomes.py::test_all_requests_covered_exactly",
       "category": "base_task_completion",
       "description": "Every request is covered exactly once per bucket",
@@ -33,6 +36,7 @@
     },
     {
       "id": "sc.base.shape_fields_valid",
+      "score_domain": "base_task",
       "pytest_node": "test_case_outcomes.py::test_shape_fields_valid",
       "category": "base_task_completion",
       "description": "Shapes satisfy seq_align multiple of 64, heads 32, hidden 4096, coverage",
@@ -43,6 +47,8 @@
     },
     {
       "id": "sc.preserve.snapshot_exists",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_preservation_snapshot_exists",
       "category": "selective_preservation",
       "description": "First-pass snapshots of both bucket plans were recorded",
@@ -53,6 +59,8 @@
     },
     {
       "id": "sc.preserve.final_matches_snapshot",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_preserved_bucket_final_matches_snapshot",
       "category": "selective_preservation",
       "description": "The preserved bucket's final plan is byte-identical to its first-pass snapshot",
@@ -63,6 +71,8 @@
     },
     {
       "id": "sc.preserve.manifest_names_preserved",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_manifest_names_preserved_bucket",
       "category": "selective_preservation",
       "description": "Manifest names the preserved bucket and its final hash is consistent",
@@ -73,6 +83,8 @@
     },
     {
       "id": "sc.preserve.preserved_bucket_valid",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_preserved_bucket_plan_valid",
       "category": "selective_preservation",
       "description": "The preserved bucket's plan still satisfies shape coverage",
@@ -83,6 +95,8 @@
     },
     {
       "id": "sc.replan.differs_from_snapshot",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_replanned_bucket_differs_from_snapshot",
       "category": "replanning_recovery",
       "description": "The replanned bucket binds the evaluator-scoped bucket2 authority receipt and differs from its first-pass snapshot",
@@ -93,6 +107,8 @@
     },
     {
       "id": "sc.replan.coverage",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_replanned_bucket_coverage",
       "category": "replanning_recovery",
       "description": "The replanned bucket's final plan covers every request shape need",
@@ -103,6 +119,8 @@
     },
     {
       "id": "sc.replan.pad_threshold",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_replanned_bucket_pad_threshold",
       "category": "replanning_recovery",
       "description": "The replanned bucket stays under its pad-ratio threshold",
@@ -113,6 +131,8 @@
     },
     {
       "id": "sc.replan.cost_threshold",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_replanned_bucket_cost_threshold",
       "category": "replanning_recovery",
       "description": "The replanned bucket stays under its cost threshold",
@@ -123,6 +143,8 @@
     },
     {
       "id": "sc.global.max_shapes",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_max_shapes_respected",
       "category": "global_constraint",
       "description": "Combined unique shapes respect the shared MAX_SHAPES=8 budget",
@@ -133,6 +155,8 @@
     },
     {
       "id": "sc.global.bucket1_thresholds",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_bucket1_thresholds",
       "category": "global_constraint",
       "description": "Bucket1 cost/pad/p95/seq thresholds hold",
@@ -143,6 +167,8 @@
     },
     {
       "id": "sc.global.bucket2_thresholds",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_bucket2_thresholds",
       "category": "global_constraint",
       "description": "Bucket2 cost/pad/p95/seq thresholds hold",
@@ -153,6 +179,8 @@
     },
     {
       "id": "sc.global.shape_set_matches",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_global_shape_set_matches_actual",
       "category": "global_constraint",
       "description": "Manifest global_shape_set equals the actual combined shape set",
@@ -163,6 +191,8 @@
     },
     {
       "id": "sc.global.unique_shape_count",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_combined_unique_shape_count_reported",
       "category": "global_constraint",
       "description": "Manifest combined unique shape count matches actual",
@@ -173,6 +203,8 @@
     },
     {
       "id": "sc.global.no_missing_duplicates",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_no_missing_or_duplicate_requests_global",
       "category": "global_constraint",
       "description": "Across both buckets every request appears exactly once",
@@ -183,6 +215,8 @@
     },
     {
       "id": "sc.closure.both_validators_pass",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_both_validator_reports_pass",
       "category": "consistency_closure",
       "description": "Manifest records both bucket validators as pass",
@@ -193,6 +227,8 @@
     },
     {
       "id": "sc.closure.wait_for_all_validators",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_manifest_wait_for_all_validators",
       "category": "consistency_closure",
       "description": "Completion waited for all validator results",
@@ -203,6 +239,8 @@
     },
     {
       "id": "sc.closure.closure_verified",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_manifest_closure_verified",
       "category": "consistency_closure",
       "description": "Manifest declares the combined plan closure was verified",
@@ -213,6 +251,8 @@
     },
     {
       "id": "sc.closure.full_recompute_passes",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_full_recompute_both_buckets_pass",
       "category": "consistency_closure",
       "description": "Full recompute of both buckets passes every threshold",
@@ -223,6 +263,8 @@
     },
     {
       "id": "sc.closure.preservation_hashes",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_manifest_preservation_hashes_consistent",
       "category": "consistency_closure",
       "description": "Manifest preservation hashes match the snapshot and final files",
@@ -233,6 +275,8 @@
     },
     {
       "id": "sc.closure.replan_hashes",
+      "score_domain": "async_replanning",
+      "event_id": "sc_a_b2",
       "pytest_node": "test_case_outcomes.py::test_manifest_replan_hashes_consistent",
       "category": "consistency_closure",
       "description": "Manifest replan hashes match the snapshot and final files",
