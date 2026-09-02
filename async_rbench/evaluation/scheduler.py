@@ -40,6 +40,9 @@ class DeliveryController:
     _response_window_active: bool = False
     _occurrence_ordinal: int = 0
     _delivery_occurrence_of_completion: dict[str, str] = field(default_factory=dict)
+    # Designed-terminal stimuli declared in the case schedule that have already
+    # been fired, so a child_started event can never double-fire a stimulus.
+    _fired_stimulus_event_ids: set[str] = field(default_factory=set)
     # Kernel-private audit trails the runner materialises as private facts.
     revision_audits: list[dict[str, Any]] = field(default_factory=list)
     pressure_audits: list[dict[str, Any]] = field(default_factory=list)
@@ -189,6 +192,52 @@ class DeliveryController:
             "detail": detail,
         })
         return [delivery]
+
+    def consume_declared_stimuli(
+        self, event: dict[str, Any],
+    ) -> list[dict[str, Any]]:
+        """Emit the designed-terminal stimuli a case declares in its schedule.
+
+        This is the consumption seam the runner drives from ``run_episode``: a
+        case declaration (a ``child_timeout`` / ``child_crash`` schedule event)
+        reaches the corresponding ``apply_*`` producer once the declared child
+        has actually started (spec §6.2 in-flight proof).  A stimulus fires at
+        most once per child, so repeated ``child_started`` events are idempotent.
+        """
+        if self.execution_mode != "async" or event.get("type") != "child_started":
+            return []
+        child_id = str(event.get("child_id") or "")
+        deliveries: list[dict[str, Any]] = []
+        for schedule_event in self.schedule:
+            event_type = str(schedule_event.get("type") or "")
+            if event_type not in {"child_timeout", "child_crash"}:
+                continue
+            event_id = str(schedule_event.get("id") or "")
+            if event_id in self._fired_stimulus_event_ids:
+                continue
+            if str(schedule_event.get("child_id") or "") != child_id:
+                continue
+            self._fired_stimulus_event_ids.add(event_id)
+            completion_id = str(schedule_event.get(
+                "completion_id", f"terminal:{event_id}",
+            ))
+            result_kind = str(schedule_event.get("result") or schedule_event.get("result_kind") or "")
+            payload = schedule_event.get("payload") or {}
+            detail = str(schedule_event.get("outcome_detail") or "designed child terminal")
+            if event_type == "child_timeout":
+                deliveries.extend(self.apply_child_terminal_outcome(
+                    child_id=child_id, completion_id=completion_id,
+                    result_kind=result_kind, payload=payload, outcome="timeout",
+                    detail=detail, designed=True, benchmark_event_id=event_id,
+                ))
+            else:
+                deliveries.extend(self.apply_child_crash(
+                    child_id=child_id, completion_id=completion_id,
+                    result_kind=result_kind, payload=payload,
+                    crash_source=str(schedule_event.get("crash_source") or "case_designed"),
+                    detail=detail, benchmark_event_id=event_id,
+                ))
+        return deliveries
 
     def apply_child_crash(
         self, *, child_id: str, completion_id: str, result_kind: str,

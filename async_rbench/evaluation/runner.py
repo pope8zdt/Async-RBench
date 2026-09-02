@@ -1467,8 +1467,12 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
             elif event["type"] == "child_started":
                 # The gateway records this so it can *prove* a child was in
                 # flight before a designed terminal outcome or resource-pressure
-                # boundary fires (spec §6.2).
+                # boundary fires (spec §6.2).  It then consumes any designed
+                # terminal the case declares in its schedule for this child, so a
+                # declared `child_timeout`/`child_crash` reaches the corresponding
+                # apply_* producer and the designed failure is delivered to main.
                 deliveries = controller.on_child_started(recorded)
+                deliveries += controller.consume_declared_stimuli(recorded)
             elif event["type"] == "child_completed":
                 deliveries = controller.on_complete(controller_recorded, contract_validation)
                 if controller_recorded["completion_id"] not in controller.delivered:

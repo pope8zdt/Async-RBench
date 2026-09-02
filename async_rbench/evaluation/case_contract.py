@@ -226,6 +226,12 @@ def public_delivery(
         "payload": delivery.get("payload"),
         "payload_sha256": str(delivery.get("payload_sha256", "")),
     }
+    # A designed child terminal (timeout/crash) is the observable replanning
+    # stimulus: the participant sees that the child ended in this terminal state,
+    # but the designed/infrastructure classification and the design reason stay
+    # kernel-private evaluator facts.  Only the terminal outcome itself is public.
+    if delivery.get("terminal_outcome"):
+        result["terminal_outcome"] = str(delivery["terminal_outcome"])
     assert_participant_safe(result, surface="public delivery")
     return result
 

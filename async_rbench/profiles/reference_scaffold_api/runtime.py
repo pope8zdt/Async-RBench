@@ -893,8 +893,17 @@ class SubagentManager:
         completion_id = str(delivery.get("completion_id", ""))
         child_id = self.completion_to_child.get(completion_id)
         if not child_id:
-            LOGGER.error("gateway delivered unknown completion %s", completion_id)
-            return
+            # A gateway-owned designed child terminal (timeout/crash) carries a
+            # synthetic completion_id the adapter never saw as a real child
+            # completion.  Bind it to the delivered child_id when it is a known
+            # in-flight child, so the designed failure reaches main instead of
+            # being dropped as "unknown completion" (spec §6.2).
+            fallback_child_id = str(delivery.get("child_id", ""))
+            if delivery.get("terminal_outcome") and fallback_child_id in self.children:
+                child_id = fallback_child_id
+            else:
+                LOGGER.error("gateway delivered unknown completion %s", completion_id)
+                return
         record = self.children[child_id]
         record.delivery = delivery
         record.status = "delivered"

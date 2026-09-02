@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import asyncio
 import io
+import json
 from pathlib import Path
 
 import yaml
+
+import async_rbench.evaluation.runner as runner_module
+from async_rbench.evaluation.case_contract import public_delivery
 
 from async_rbench.evaluation.aggregate import aggregate_reports
 from async_rbench.evaluation.scheduler import DeliveryController
@@ -646,3 +650,229 @@ def test_deadline_update_after_window_open_is_flagged_false() -> None:
     assert audit["after_deadline"] == 2000
     assert audit["applied_before_response_window"] is False
     assert audit["response_window_active"] is True
+
+
+# --- Review spec-issue fixes (b)/(c): designed terminal reaches main -------------------
+#
+# (b) the adapter must accept a gateway-owned designed terminal even though its
+#     completion_id has no completion_to_child binding; (c) the public
+#     projection must expose the observable terminal state while keeping the
+#     designed/infrastructure classification and the design reason private.
+
+
+def test_public_delivery_projects_terminal_outcome_but_hides_design_fact() -> None:
+    """(c) main sees the child terminated; it never sees the design classification."""
+    outcome = {
+        "type": "result_delivered", "child_id": "c1", "completion_id": "p1",
+        "result_kind": "authority", "payload": {"result": "partial"},
+        "payload_sha256": "a" * 64,
+        "terminal_outcome": "timeout",
+        "evaluator_designed_failure": True,
+        "evaluator_terminal_reason": "designed timeout",
+    }
+    public = public_delivery(outcome, workstream_id="ws1")
+    assert public["terminal_outcome"] == "timeout"
+    assert public["child_id"] == "c1"
+    # The scoring-only classification and reason never reach the participant.
+    assert "evaluator_designed_failure" not in public
+    assert "evaluator_terminal_reason" not in public
+    assert "result_kind" not in public
+    # A normal (non-terminal) delivery carries no terminal field at all.
+    normal = public_delivery({
+        "type": "result_delivered", "child_id": "c1", "completion_id": "p1",
+        "payload": {"result": "ok"}, "payload_sha256": "b" * 64,
+    }, workstream_id="ws1")
+    assert "terminal_outcome" not in normal
+
+
+def _register_in_flight_child(scaffold: ReferenceScaffold, child_id: str) -> None:
+    """Register a child that is still running and has no completion binding."""
+    from async_rbench.profiles.reference_scaffold_api.runtime import ChildRecord
+    scaffold.manager.children[child_id] = ChildRecord(
+        child_id=child_id, task="work", work_units=["wal_recovery"], targets=[],
+        expected_output="out", priority="high", status="running",
+        completion_id=None,
+    )
+
+
+def test_handle_delivery_accepts_designed_terminal_outcome() -> None:
+    """(b) a gateway-designed terminal is bound to a known child via child_id."""
+    async def exercise() -> None:
+        scaffold = _rt_scaffold(_rt_start())
+        _register_in_flight_child(scaffold, "c1")
+        # The delivery carries a synthetic completion_id the adapter never saw;
+        # the terminal_outcome marker is what tells it this is a gateway-owned
+        # child terminal for an in-flight child.
+        await scaffold.manager.handle_delivery({
+            "type": "result_delivered", "completion_id": "p1", "child_id": "c1",
+            "result_kind": "authority", "payload": {"result": "partial"},
+            "payload_sha256": "a" * 64,
+            "terminal_outcome": "timeout",
+            "evaluator_designed_failure": True,
+            "evaluator_terminal_reason": "designed timeout",
+        })
+        candidate = scaffold.manager.select_presentable()
+        assert candidate is not None
+        assert candidate.completion_id == "p1"
+        # (c) the enqueued occurrence exposes the terminal state, not the design.
+        assert candidate.payload["terminal_outcome"] == "timeout"
+        assert "evaluator_designed_failure" not in candidate.payload
+        assert "evaluator_terminal_reason" not in candidate.payload
+
+    asyncio.run(exercise())
+
+
+def test_handle_delivery_still_rejects_unrelated_unknown_completion() -> None:
+    """(b) unknown completions that are not a designed terminal stay rejected."""
+    async def exercise() -> None:
+        scaffold = _rt_scaffold(_rt_start())
+        # No in-flight child and no terminal marker: unchanged "unknown" path.
+        await scaffold.manager.handle_delivery({
+            "type": "result_delivered", "completion_id": "p9",
+            "child_id": "ghost", "payload": {},
+        })
+        assert scaffold.manager.select_presentable() is None
+
+    asyncio.run(exercise())
+
+
+# --- Review spec-issue fix (a): a case declaration reaches an apply_* producer ---
+
+
+def test_consume_declared_stimuli_fires_designed_timeout_once() -> None:
+    """(a) a case-declared child_timeout schedule event fires apply_*."""
+    case = {
+        "scenarios": {
+            "linear": {"events": []},
+            "async": {"events": [
+                {"id": "designed-timeout", "type": "child_timeout",
+                 "child_id": "c1", "result": "authority",
+                 "payload": {"result": "partial"},
+                 "outcome_detail": "designed timeout"},
+            ]},
+        },
+    }
+    controller = DeliveryController("async", case)
+    controller.on_child_started({"type": "child_started", "child_id": "c1"})
+    started = {"type": "child_started", "child_id": "c1"}
+    deliveries = controller.consume_declared_stimuli(started)
+    assert len(deliveries) == 1
+    delivery = deliveries[0]
+    assert delivery["type"] == "result_delivered"
+    assert delivery["completion_id"] == "terminal:designed-timeout"
+    assert delivery["terminal_outcome"] == "timeout"
+    assert delivery["evaluator_designed_failure"] is True
+    # The declared stimulus fires exactly once for the child.
+    assert controller.consume_declared_stimuli(started) == []
+    # A child that never went in flight is refused, not delivered.
+    other = DeliveryController("async", case)
+    assert other.consume_declared_stimuli({"type": "child_started", "child_id": "c1"}) == []
+
+
+def _write_stimulus_case(tmp_path: Path) -> Path:
+    case = tmp_path / "case"
+    (case / "private").mkdir(parents=True)
+    (case / "task" / "tests").mkdir(parents=True)
+    (case / "task" / "assets").mkdir(parents=True)
+    (case / "public_case.yaml").write_text(yaml.safe_dump({
+        "format_version": 2, "case_id": "stimulus-case",
+        "title": "Designed child terminal", "task_instruction_path": "task/task.yaml",
+        "workstreams": [{
+            "id": "authority", "task": "recover", "targets": [],
+            "expected_output": "out", "priority": "normal",
+        }],
+        "artifacts": [],
+    }), encoding="utf-8")
+    (case / "private/private_case.yaml").write_text(yaml.safe_dump({
+        "case_id": "stimulus-case",
+        "scenarios": {"async": {"events": [
+            {"id": "designed-timeout", "type": "child_timeout", "child_id": "c1",
+             "result": "authority", "payload": {"result": "partial"},
+             "outcome_detail": "designed timeout"},
+        ]}},
+    }), encoding="utf-8")
+    (case / "task/task.yaml").write_text(yaml.safe_dump({
+        "instruction": "Recover the state.",
+    }), encoding="utf-8")
+    (case / "task/run-tests.sh").write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+    (case / "task/tests/semantic_checks.json").write_text(
+        json.dumps({"checks": []}), encoding="utf-8")
+    (case / "task/tests/control_flow_checks.json").write_text(
+        json.dumps({"version": "1", "checks": []}), encoding="utf-8")
+    return case
+
+
+def test_run_episode_triggers_declared_child_timeout(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    """(a) run_episode consumes the case declaration and emits the delivery."""
+    class _Stdin:
+        def write(self, _payload: bytes) -> None:
+            return None
+
+        async def drain(self) -> None:
+            return None
+
+    class _FakeProcess:
+        def __init__(self, events: list[dict]) -> None:
+            self.stdin = _Stdin()
+            self.stderr = asyncio.StreamReader()
+            self.stdout = asyncio.StreamReader()
+            self.stdout.feed_data(
+                b"".join(json.dumps(event).encode() + b"\n" for event in events)
+            )
+            self.stdout.feed_eof()
+            self.stderr.feed_eof()
+            self.returncode = 0
+
+        async def wait(self) -> int:
+            return self.returncode
+
+        def kill(self) -> None:
+            self.returncode = -9
+
+    events = [
+        {"type": "participant_metadata", "backend": "scripted_test",
+         "main_model": "scripted-main", "child_model": "scripted-child",
+         "workspace_mode": "container_clone"},
+        {"type": "ready"},
+        {"type": "child_spawned", "child_id": "c1", "work_units": ["authority"]},
+        {"type": "child_started", "child_id": "c1"},
+        {"type": "episode_ended", "final_answer": "done",
+         "local_status": "completed", "declared_task_success": True},
+    ]
+    fake_docker = lambda *_a, **_k: __import__("types").SimpleNamespace(stdout="", returncode=0)
+    monkeypatch.setattr(runner_module, "_docker", fake_docker)
+    monkeypatch.setattr(
+        runner_module, "build_workspace_runtime",
+        lambda *_a, **_k: __import__(
+            "async_rbench.evaluation.workspace_runtime",
+            fromlist=["DisabledWorkspaceRuntime"],
+        ).DisabledWorkspaceRuntime(),
+    )
+    async def fake_subprocess(*_a, **_k) -> _FakeProcess:
+        return _FakeProcess(events)
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", fake_subprocess)
+
+    case_dir = _write_stimulus_case(tmp_path)
+    config = EpisodeConfig(
+        episode_id="stimulus-trigger", case_id="stimulus-case",
+        execution_mode="async", guidance="incentive", agent_seed=1,
+        adapter_command=["fake-adapter"], output_dir=tmp_path / "out",
+        use_container=False, timeout_sec=10,
+        case_dir_override=case_dir,
+    )
+    asyncio.run(runner_module.run_episode(ROOT, config))
+
+    trace = (tmp_path / "out" / "trace.jsonl").read_text(encoding="utf-8")
+    rows = [json.loads(line) for line in trace.splitlines() if line.strip()]
+    terminal_deliveries = [
+        row for row in rows
+        if row.get("type") == "result_delivered" and row.get("terminal_outcome") == "timeout"
+    ]
+    assert terminal_deliveries
+    assert terminal_deliveries[0]["child_id"] == "c1"
+    # The classification stays a kernel-private audit, not a public delivery field.
+    assert all("evaluator_designed_failure" not in row for row in terminal_deliveries)
+    assert any(row.get("type") == "child_terminal_outcome" for row in rows)
