@@ -15,6 +15,32 @@ request_body_extra:
     type: enabled
   reasoning_effort: high
 
+# Role-separated provider bindings (spec §8). Official Track A must explicitly
+# declare and bind BOTH the main agent and the fixed child pool. The child pool
+# is a stable identity shared across every compared main model, so the runner
+# can verify the child model/provider/prompt/budget is constant for a group.
+main_provider:
+  backend: openai_compatible
+  api_url: https://api.deepseek.com/chat/completions
+  api_key_env: ASYNC_RBENCH_DEEPSEEK_KEY
+  max_api_concurrency: 4
+  max_tokens_parameter: max_tokens
+  request_body_extra:
+    thinking:
+      type: enabled
+    reasoning_effort: high
+child_provider:
+  backend: openai_compatible
+  api_url: https://api.deepseek.com/chat/completions
+  api_key_env: ASYNC_RBENCH_DEEPSEEK_KEY
+  max_api_concurrency: 4
+  max_tokens_parameter: max_tokens
+  request_body_extra:
+    thinking:
+      type: enabled
+    reasoning_effort: high
+child_pool_id: deepseek-v4-pro-pool
+
 max_main_turns: 100
 max_child_turns: 40
 max_concurrent_children: 3

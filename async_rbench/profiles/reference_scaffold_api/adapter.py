@@ -5,10 +5,10 @@ import asyncio
 import logging
 import sys
 from pathlib import Path
+from typing import Any
 
-from .config import ScaffoldConfig
+from .config import ScaffoldConfig, build_backends
 from .gateway import DeliveryReader, ProtocolEmitter
-from ...evaluation.model_backend import build_backend
 from ..conformance_mock.scripted_backend import ScriptedTestBackend
 from .runtime import ReferenceScaffold
 from ...protocol_sdk.capability import CapabilityRuntimeProxy
@@ -34,11 +34,14 @@ async def run_adapter(args: argparse.Namespace) -> int:
 
     emitter = ProtocolEmitter()
     reader = DeliveryReader()
-    backend = (
-        ScriptedTestBackend()
-        if config.backend == "scripted_test"
-        else build_backend(config)
-    )
+    if config.backend == "scripted_test":
+        main_backend = ScriptedTestBackend()
+        child_backend = ScriptedTestBackend()
+    else:
+        # Dual provider backends (spec §8): the main agent and the fixed child
+        # pool each get a role-scoped backend with provider identity, concurrency
+        # semaphore and child_pool_id recorded separately.
+        main_backend, child_backend = build_backends(config)
     workspace = CapabilityRuntimeProxy(emitter.write)
     reader.set_capability_handler(workspace.handle_response)
     # ReferenceScaffold.run() calls start() again — idempotent.
@@ -46,7 +49,8 @@ async def run_adapter(args: argparse.Namespace) -> int:
     scaffold = ReferenceScaffold(
         start=start,
         config=config,
-        backend=backend,
+        main_backend=main_backend,
+        child_backend=child_backend,
         workspace=workspace,
         emitter=emitter,
         delivery_reader=reader,
@@ -65,8 +69,15 @@ async def run_adapter(args: argparse.Namespace) -> int:
         scaffold.final_summary = f"scaffold failure: {exc}"
     finally:
         await scaffold.shutdown()
-    runtime_metadata = getattr(backend, "runtime_metadata", lambda: {"model_observations": []})()
-    emitter.emit("participant_runtime_metadata", **runtime_metadata)
+    combined_observations: list[dict[str, Any]] = []
+    for runtime_backend in (main_backend, child_backend):
+        metadata = getattr(runtime_backend, "runtime_metadata", lambda: {"model_observations": []})()
+        combined_observations.extend((metadata or {}).get("model_observations") or [])
+    emitter.emit(
+        "participant_runtime_metadata",
+        model_observations=combined_observations,
+        child_pool_id=config.child_pool_id,
+    )
     emitter.emit(
         "episode_ended",
         final_answer=scaffold.final_summary,

@@ -10,6 +10,26 @@ temperature: null
 max_output_tokens: 16384
 max_tokens_parameter: max_completion_tokens
 send_seed: true
+
+# Role-separated provider bindings (spec §8). The main agent and the fixed
+# child pool resolve provider fields from these mappings; any key omitted from
+# a role mapping falls back to the legacy top-level single-provider field above.
+# The official Track A profile (deepseek-v4-pro.yaml) declares both explicitly;
+# set child_pool_id to one stable id shared across every compared main model.
+main_provider:
+  backend: openai_compatible
+  api_url: https://api.openai.com/v1/chat/completions
+  api_key_env: OPENAI_API_KEY
+  max_api_concurrency: 4
+  max_tokens_parameter: max_completion_tokens
+child_provider:
+  backend: openai_compatible
+  api_url: https://api.openai.com/v1/chat/completions
+  api_key_env: OPENAI_API_KEY
+  max_api_concurrency: 4
+  max_tokens_parameter: max_completion_tokens
+child_pool_id: replace-with-stable-child-pool-id
+
 max_main_turns: 100
 max_child_turns: 40
 max_concurrent_children: 3

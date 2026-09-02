@@ -391,14 +391,23 @@ class SubagentManager:
         self,
         *,
         start: dict[str, Any],
-        backend: ModelBackend,
+        child_backend: ModelBackend,
         workspace: WorkspaceRuntime,
         emitter: ProtocolEmitter,
         config: ScaffoldConfig,
         token_budget: BudgetPool,
+        backend: ModelBackend | None = None,
     ) -> None:
         self.start = start
-        self.backend = backend
+        # Every child turn routes through the fixed child pool backend (spec §8).
+        # ``backend`` is retained as a backward-compatible alias for callers that
+        # pass a single backend (e.g. the conformance mock); it is treated as the
+        # child backend when no explicit ``child_backend`` is supplied.
+        resolved_child = child_backend if child_backend is not None else backend
+        if resolved_child is None:
+            raise ValueError("SubagentManager requires a child_backend (or backend)")
+        self.backend = resolved_child
+        self.child_backend = resolved_child
         self.workspace = workspace
         self.emitter = emitter
         self.config = config
@@ -1093,14 +1102,27 @@ class ReferenceScaffold:
         *,
         start: dict[str, Any],
         config: ScaffoldConfig,
-        backend: ModelBackend,
+        main_backend: ModelBackend | None = None,
+        child_backend: ModelBackend | None = None,
+        backend: ModelBackend | None = None,
         workspace: WorkspaceRuntime,
         emitter: ProtocolEmitter,
         delivery_reader: DeliveryReader,
     ) -> None:
         self.start = start
         self.config = config
-        self.backend = backend
+        # Dual provider roles (spec §8): the main agent routes through
+        # ``main_backend`` and every child routes through ``child_backend``.
+        # ``backend`` is retained as a backward-compatible alias for callers
+        # that pass a single backend (e.g. the conformance mock); it is treated
+        # as the main backend and, when no child backend is supplied, the child
+        # backend too.
+        resolved_main = main_backend if main_backend is not None else backend
+        if resolved_main is None:
+            raise ValueError("ReferenceScaffold requires a main_backend (or backend)")
+        self.main_backend = resolved_main
+        self.child_backend = child_backend if child_backend is not None else resolved_main
+        self.backend = self.main_backend
         self.workspace = workspace
         self.emitter = emitter
         self.delivery_reader = delivery_reader
@@ -1119,8 +1141,8 @@ class ReferenceScaffold:
         )
         self.token_budget = self.budget_ledger.pool("child_shared")
         self.manager = SubagentManager(
-            start=start, backend=backend, workspace=workspace, emitter=emitter,
-            config=config, token_budget=self.token_budget,
+            start=start, child_backend=self.child_backend, workspace=workspace,
+            emitter=emitter, config=config, token_budget=self.token_budget,
         )
         self._action_counter = 0
         self._delivery_task: asyncio.Task | None = None
@@ -1303,6 +1325,72 @@ class ReferenceScaffold:
                 completed_turns=window.completed_turns,
             )
 
+    def _emit_runtime_metadata_snapshot(self) -> None:
+        """Persist provider-resolved identity for both roles before a timeout.
+
+        Merges the main- and child-backend observations into one
+        ``participant_runtime_metadata`` event so the runner sees the resolved
+        model and child-pool identity for every role (spec §8).  No event is
+        emitted when neither backend has yet observed a model response.
+        """
+        observations: list[dict[str, Any]] = []
+        roles: dict[str, dict[str, Any]] = {}
+        for backend in (self.main_backend, self.child_backend):
+            metadata = getattr(backend, "runtime_metadata", lambda: {"model_observations": []})()
+            metadata = metadata or {}
+            for obs in metadata.get("model_observations") or []:
+                observations.append(obs)
+            role = metadata.get("role")
+            if role:
+                roles[str(role)] = {
+                    key: value for key, value in metadata.items()
+                    if key not in {"model_observations"}
+                }
+        if not observations and not roles:
+            return
+        payload: dict[str, Any] = {"model_observations": observations}
+        if roles:
+            payload["roles"] = roles
+        if self.config.child_pool_id:
+            payload["child_pool_id"] = self.config.child_pool_id
+        self.emitter.emit("participant_runtime_metadata", **payload)
+
+    async def run_one_main_and_one_child_turn(self) -> None:
+        """Test driver: route one main turn and one child turn through their roles.
+
+        Exercises the dual-backend wiring directly: the main call uses
+        ``main_backend``, the child turn uses ``child_backend`` (spec §8).  The
+        child record is a benchmark-owned initial-wave workstream so the child's
+        single ``submit_result`` seals it on the first model turn.
+        """
+        if not self.messages:
+            self.messages = [
+                {"role": "system", "content": self._system_prompt()},
+                {"role": "user", "content": str(self.start["instruction"])},
+            ]
+        main_turn = await self.main_backend.complete(
+            role="main",
+            model=self.config.main_model,
+            messages=self.messages,
+            tools=self.main_tools(),
+            seed=_role_seed(int(self.start["agent_seed"]), "main"),
+        )
+        self.messages.append(main_turn.assistant_message)
+        record = ChildRecord(
+            child_id="child-1",
+            task="delegated workstream",
+            work_units=["wal_recovery"],
+            targets=[],
+            expected_output="out",
+            priority="normal",
+            initial_wave=True,
+        )
+        agent = ChildAgent(
+            self.child_backend, self.workspace, self.config, self.emitter,
+            self.token_budget,
+        )
+        await agent.run(record, self.config.child_model, int(self.start["agent_seed"]))
+
     async def run(self) -> None:
         self.delivery_reader.start()
         self._delivery_task = asyncio.create_task(
@@ -1364,7 +1452,7 @@ class ReferenceScaffold:
                 # scored result_presented (spec §7.1).
                 main_pool = self.budget_ledger.main_pool()
                 input_bound, accounting_mode = _estimate_input(
-                    self.backend, messages, self.main_tools(),
+                    self.main_backend, messages, self.main_tools(),
                 )
                 reservation = await main_pool.reserve(
                     input_bound, self.config.max_output_tokens,
@@ -1408,7 +1496,7 @@ class ReferenceScaffold:
                     "agent_progress", phase="model_call_started", role="main",
                     turn=turn_index, model=self.config.main_model,
                 )
-                turn = await self.backend.complete(
+                turn = await self.main_backend.complete(
                     role="main",
                     model=self.config.main_model,
                     messages=messages,
@@ -1447,7 +1535,7 @@ class ReferenceScaffold:
                     "agent_progress", phase="model_call_finished", role="main",
                     turn=turn_index, tokens=turn.total_tokens,
                 )
-                emit_runtime_metadata_snapshot(self.backend, self.emitter)
+                self._emit_runtime_metadata_snapshot()
             except Exception as exc:
                 if main_pool is not None and reservation is not None and not settled:
                     await main_pool.release(reservation.reservation_id)

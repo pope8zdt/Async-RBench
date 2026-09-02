@@ -9,7 +9,12 @@ import yaml
 
 from async_rbench.eval_cli import _append_config, _command_entrypoint
 from async_rbench.evaluation.manifest import create_manifest
-from async_rbench.evaluation.runner import _case_digest
+from async_rbench.evaluation.runner import (
+    _case_digest,
+    _metadata_audit,
+    child_pool_identity,
+    verify_child_pool_constancy,
+)
 from async_rbench.evaluation.version import EVALUATION_CONTRACT_VERSION
 from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 from async_rbench.spec import CaseSpec, load_case, validate_case
@@ -129,6 +134,60 @@ def test_scaffold_config_validates_known_modes_and_rejects_unknown() -> None:
             backend="openai_compatible", main_model="m", child_model="m",
             workspace_mode="unknown_workspace",
         ).validate()
+
+
+def test_metadata_audit_extracts_fixed_child_pool_identity() -> None:
+    metadata = {
+        "main_model": "main-x", "child_model": "child-y",
+        "child_pool_id": "pool-7",
+        "child_provider": {"backend": "openai_compatible", "model": "child-y"},
+    }
+    audit = _metadata_audit(metadata, None)
+    assert audit["child_pool_id"] == "pool-7"
+    assert audit["child_provider_backend"] == "openai_compatible"
+    assert audit["child_provider_model"] == "child-y"
+    assert not any("child_pool_id is empty" in note for note in audit["notes"])
+    assert child_pool_identity(metadata) == "pool-7:openai_compatible:child-y"
+
+
+def test_metadata_audit_notes_missing_child_pool_identity() -> None:
+    metadata = {"main_model": "main-x", "child_model": "child-y"}
+    audit = _metadata_audit(metadata, None)
+    assert audit["child_pool_id"] is None
+    assert any("child_pool_id is empty" in note for note in audit["notes"])
+    assert child_pool_identity(metadata) is None
+
+
+def test_verify_child_pool_constancy_accepts_identical_pool() -> None:
+    metadata = {
+        "main_model": "main-x", "child_model": "child-y",
+        "child_pool_id": "pool-7",
+        "child_provider": {"backend": "openai_compatible", "model": "child-y"},
+    }
+    ok, reason = verify_child_pool_constancy([metadata, metadata])
+    assert ok is True
+    assert reason is None
+
+
+def test_verify_child_pool_constancy_rejects_mixed_model_group() -> None:
+    ok, reason = verify_child_pool_constancy([
+        {"child_pool_id": "pool-7", "child_model": "child-y",
+         "child_provider": {"backend": "openai_compatible"}},
+        {"child_pool_id": "pool-8", "child_model": "child-z",
+         "child_provider": {"backend": "openai_compatible"}},
+    ])
+    assert ok is False
+    assert "model group mixes child-pool identities" in reason
+
+
+def test_verify_child_pool_constancy_rejects_unstated_identity() -> None:
+    ok, reason = verify_child_pool_constancy([
+        {"child_pool_id": "pool-7", "child_model": "child-y",
+         "child_provider": {"backend": "openai_compatible"}},
+        {"child_model": "child-y", "child_provider": {"backend": "codex_cli"}},
+    ])
+    assert ok is False
+    assert "does not declare a child_pool_id" in reason
 
 
 def test_adapter_profile_binding_compares_entrypoint_and_appends_config(tmp_path: Path) -> None:

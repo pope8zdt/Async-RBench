@@ -258,6 +258,13 @@ class OpenAICompatibleBackend:
         with self._observation_lock:
             observations = sorted(self._observations, key=lambda item: tuple(str(x) for x in item))
         return {
+            "role": getattr(self.config, "role", "main"),
+            "child_pool_id": getattr(self.config, "child_pool_id", ""),
+            "backend": self.config.backend,
+            "api_url": self.config.api_url,
+            "max_api_concurrency": self.config.max_api_concurrency,
+            "concurrency": self.config.max_api_concurrency,
+            "transport": "openai_compatible",
             "model_observations": [
                 {
                     "role": role,
@@ -573,6 +580,12 @@ class CodexCLIBackend:
         with self._observation_lock:
             observations = sorted(self._observations)
         return {
+            "role": getattr(self.config, "role", "main"),
+            "child_pool_id": getattr(self.config, "child_pool_id", ""),
+            "backend": self.config.backend,
+            "api_url": self.config.api_url,
+            "max_api_concurrency": self.config.max_api_concurrency,
+            "concurrency": self.config.max_api_concurrency,
             "transport": "codex_cli_logged_in",
             "model_observations": [
                 {

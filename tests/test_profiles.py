@@ -13,6 +13,7 @@ from async_rbench.profiles import (
     PROFILE_TYPES,
     load_profile,
 )
+from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -74,6 +75,71 @@ def test_load_profile_from_yaml_path(tmp_path: Path):
 def test_unknown_profile_raises():
     with pytest.raises(ValueError):
         load_profile("does_not_exist")
+
+
+def test_scaffold_config_migrates_legacy_single_provider_to_dual_roles() -> None:
+    config = ScaffoldConfig(
+        backend="openai_compatible",
+        api_url="https://shared.example/v1/chat/completions",
+        api_key_env="SHARED_KEY",
+        main_model="main-x",
+        child_model="child-y",
+        child_pool_id="pool-7",
+    )
+    main = config.provider_role_config("main")
+    child = config.provider_role_config("child")
+    assert main.role == "main"
+    assert child.role == "child"
+    assert main.model == "main-x"
+    assert child.model == "child-y"
+    assert main.child_pool_id == child.child_pool_id == "pool-7"
+    # Legacy top-level fields are the migration fallback for every role.
+    assert main.backend == child.backend == "openai_compatible"
+    assert main.api_url == child.api_url == "https://shared.example/v1/chat/completions"
+    assert main.api_key_env == child.api_key_env == "SHARED_KEY"
+
+
+def test_scaffold_config_nested_provider_overrides_are_role_scoped() -> None:
+    config = ScaffoldConfig(
+        backend="openai_compatible",
+        api_url="https://shared.example/v1/chat/completions",
+        api_key_env="SHARED_KEY",
+        main_model="main-x",
+        child_model="child-y",
+        child_pool_id="pool-7",
+        main_provider={
+            "backend": "codex_cli",
+            "api_url": "https://main.example/v1/chat/completions",
+            "api_key_env": "MAIN_KEY",
+        },
+        child_provider={"max_api_concurrency": 2},
+    )
+    main = config.provider_role_config("main")
+    child = config.provider_role_config("child")
+    # main role adopts the nested main_provider backend/url/env override.
+    assert main.backend == "codex_cli"
+    assert main.api_url == "https://main.example/v1/chat/completions"
+    assert main.api_key_env == "MAIN_KEY"
+    # child role keeps the legacy fallback except for its own override.
+    assert child.backend == "openai_compatible"
+    assert child.api_url == "https://shared.example/v1/chat/completions"
+    assert child.max_api_concurrency == 2
+
+
+def test_scaffold_config_public_metadata_stamps_child_pool_and_provider_identity() -> None:
+    config = ScaffoldConfig(
+        backend="openai_compatible",
+        main_model="main-x",
+        child_model="child-y",
+        child_pool_id="pool-7",
+    )
+    metadata = config.public_metadata()
+    assert metadata["child_pool_id"] == "pool-7"
+    assert metadata["main_provider"]["model"] == "main-x"
+    assert metadata["child_provider"]["model"] == "child-y"
+    assert metadata["main_provider"]["backend"] == "openai_compatible"
+    assert metadata["child_provider"]["backend"] == "openai_compatible"
+    assert len(metadata["config_sha256"]) == 64
 
 
 @pytest.mark.parametrize("runtime_mode", list(RUNTIME_MODE_SMOKE))

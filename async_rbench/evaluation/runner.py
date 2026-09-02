@@ -334,6 +334,9 @@ def _metadata_audit(
             "metadata_present": False,
             "requested_model": None,
             "resolved_model": None,
+            "child_pool_id": None,
+            "child_provider_backend": None,
+            "child_provider_model": None,
             "notes": ["adapter did not emit participant_metadata"],
         }
     requested_main = str(metadata.get("main_model", "")).strip() or None
@@ -345,6 +348,16 @@ def _metadata_audit(
             value = str((item or {}).get("resolved_model", "")).strip()
             if value:
                 resolved_model = value
+    # Fixed child pool identity (spec §8): every compared main model must run the
+    # same child model/provider/prompt/budget.  The runner exposes the declared
+    # ``child_pool_id`` and the child provider backend so a model group's
+    # constancy can be verified at aggregation without reading secrets.
+    child_pool_id = str(metadata.get("child_pool_id", "")).strip() or None
+    child_provider = metadata.get("child_provider") or {}
+    child_provider_backend = (
+        str(child_provider.get("backend", "")).strip() if isinstance(child_provider, dict) else ""
+    ) or None
+    child_provider_model = str(child_provider.get("model", "")).strip() or requested_child
     notes: list[str] = []
     if resolved_model is None:
         notes.append("model API returned no resolved model fingerprint; recorded as null")
@@ -355,12 +368,58 @@ def _metadata_audit(
     for key in ("main_model", "child_model"):
         if not str(metadata.get(key, "")).strip():
             notes.append(f"{key} is empty")
+    if child_pool_id is None:
+        notes.append("child_pool_id is empty (fixed child-pool identity is not declared)")
+    if child_provider_backend is None:
+        notes.append("child_provider has no explicit backend identity")
     return {
         "metadata_present": True,
         "requested_model": requested_main,
         "resolved_model": resolved_model,
+        "child_pool_id": child_pool_id,
+        "child_provider_backend": child_provider_backend,
+        "child_provider_model": child_provider_model,
         "notes": notes,
     }
+
+
+def child_pool_identity(metadata: dict[str, Any] | None) -> str | None:
+    """A canonical fixed child-pool identity from participant metadata (spec §8).
+
+    Returns ``None`` when the metadata does not declare a stable child-pool id.
+    The identity combines the pool id with the child provider backend and model
+    so a compared model group is comparable only when all share the same
+    ``child_pool_id`` AND child provider/model.
+    """
+    if not metadata:
+        return None
+    child_pool_id = str(metadata.get("child_pool_id", "")).strip() or None
+    if child_pool_id is None:
+        return None
+    child_provider = metadata.get("child_provider") or {}
+    backend = (
+        str(child_provider.get("backend", "")).strip()
+        if isinstance(child_provider, dict) else ""
+    )
+    child_model = str(metadata.get("child_model", "")).strip()
+    return f"{child_pool_id}:{backend}:{child_model}"
+
+
+def verify_child_pool_constancy(episode_metadata: list[dict[str, Any] | None]) -> tuple[bool, str | None]:
+    """Verify one compared model group shares a single fixed child-pool identity.
+
+    A fixed child pool means different main models use the same child
+    model/provider/prompt/budget/workstream config (spec §8).  The runner
+    integrity check therefore refuses a group whose episodes declare different
+    ``child_pool_id`` / child provider / child model, or where one episode
+    omits the identity entirely.
+    """
+    identities = {child_pool_identity(item) for item in episode_metadata}
+    if None in identities:
+        return False, "an episode in the model group does not declare a child_pool_id"
+    if len(identities) > 1:
+        return False, f"model group mixes child-pool identities: {sorted(identities)}"
+    return True, None
 
 
 def _infrastructure_error_notes(events: list[dict[str, Any]]) -> list[str]:
@@ -1543,6 +1602,11 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         "requested_model": metadata_audit["requested_model"],
         "resolved_model": metadata_audit["resolved_model"],
         "metadata_audit_notes": metadata_audit["notes"],
+        # Fixed child-pool identity (spec §8): stamped evaluator-side so a model
+        # group's aggregation can reject a headline whose episodes used
+        # different child models/providers/pools.
+        "child_pool_id": metadata_audit["child_pool_id"],
+        "child_provider_identity": child_pool_identity(metadata_events[-1] if metadata_events else None),
         "conformance_passed": config.conformance_passed,
         "conformance_binding_sha256": config.conformance_binding_sha256,
         "adapter_profile": config.adapter_profile,
