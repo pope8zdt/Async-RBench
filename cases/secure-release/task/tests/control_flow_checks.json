@@ -95,5 +95,36 @@
         "async"
       ]
     }
+  ],
+  "event_contracts": [
+    {
+      "event_id": "sr_a_rewrite",
+      "event_theme": "late_or_out_of_order_superseded_result",
+      "track": "atomic_event",
+      "observation_mode": "gateway_only",
+      "state_delta": {
+        "affected_artifacts": [
+          "release_manifest",
+          "git_server"
+        ],
+        "unaffected_artifacts": [
+          "vulnerability_patch"
+        ]
+      },
+      "required_changes": [
+        "release_manifest",
+        "git_server"
+      ],
+      "required_preservation": [
+        "vulnerability_patch"
+      ],
+      "forbidden_changes": [],
+      "closure_checks": [
+        "sr.lineage.deployed_ref_consistency",
+        "sr.stale.old_deployment_rejected"
+      ],
+      "expected_disposition": "adopt_clean_authority_reject_pre_rewrite_deployment",
+      "event_status": "scored"
+    }
   ]
 }

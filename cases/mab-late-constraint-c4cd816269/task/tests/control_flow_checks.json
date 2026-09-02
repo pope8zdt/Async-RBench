@@ -197,7 +197,21 @@
           "preserved_source_facts"
         ]
       },
-      "track": "atomic_event"
+      "track": "atomic_event",
+      "required_changes": [
+        "final_state"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
+      ],
+      "forbidden_changes": [
+        "provisional_checkpoint"
+      ],
+      "closure_checks": [
+        "mab_late_constraint_c4cd816269.closure"
+      ],
+      "expected_disposition": "adopt_authority_and_reject_late_superseded_result",
+      "event_status": "scored"
     }
   ],
   "version": "7"
