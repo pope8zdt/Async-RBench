@@ -376,3 +376,273 @@ def test_presentation_prepared_snapshot_is_then_marked_presented() -> None:
         assert presented is not None
 
     asyncio.run(exercise())
+
+
+# --- Real specialised-event stimuli (Task 9) --------------------------------
+#
+# Each of the 8 stimulus mechanisms is tested at the DeliveryController seam —
+# the gateway is the only actor that can produce a designed timeout/crash, an
+# implicit-error marker, a live scope/dependency revision, a resource-pressure
+# boundary, or an applied deadline update, so these tests assert the mechanism
+# invariants the controller owns (occurrence identity, in-flight proof,
+# designed-vs-infra classification, before/after digests, pressure proof).
+
+
+def test_completion_replay_same_completion_new_occurrence() -> None:
+    """A replay is a fresh gateway occurrence, not a clone of the completion."""
+    case = {
+        "authoritative_result_kind": "authority",
+        "superseded_result_kind": "provisional",
+        "scenarios": {
+            "linear": {"events": []},
+            "async": {"events": [
+                {"id": "authority", "result": "authority"},
+                {
+                    "id": "replay", "type": "completion_replay",
+                    "replay_of_result": "authority", "trigger": "after_consumed",
+                },
+            ]},
+        },
+    }
+    controller = DeliveryController("async", case)
+    controller.spawned = {"c1": {}, "c2": {}}
+    original = controller.on_complete({
+        "child_id": "c1", "completion_id": "p1", "result_kind": "authority",
+        "payload": {"revision": "v2"},
+    })[0]
+    replay = controller.on_consumed({"completion_id": "p1"})[0]
+    # Same completion, new delivery occurrence (spec §3.3): the occurrence id is
+    # what distinguishes one delivery of the same completion from another.
+    assert replay["completion_id"] == original["completion_id"]
+    assert replay["replay_of_completion_id"] == original["completion_id"]
+    assert replay["delivery_occurrence_id"] != original["delivery_occurrence_id"]
+    assert replay["replay_of_occurrence_id"] == original["delivery_occurrence_id"]
+    assert replay["replayed"] is True
+    assert replay["payload_sha256"] == original["payload_sha256"]
+
+
+def test_designed_child_timeout_is_model_visible_and_scored() -> None:
+    """A designed timeout requires the child to have been running and is delivered."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    # The gateway must have observed the child in flight before it can design a
+    # terminal outcome for it (spec §6.2).
+    assert controller.on_child_started({
+        "type": "child_started", "child_id": "c1",
+    }) == []
+    delivery = controller.apply_child_terminal_outcome(
+        child_id="c1", completion_id="p1", result_kind="authority",
+        payload={"result": "partial"}, outcome="timeout",
+        detail="designed timeout", designed=True,
+    )[0]
+    assert delivery["type"] == "result_delivered"
+    assert delivery["completion_id"] == "p1"
+    assert delivery["terminal_outcome"] == "timeout"
+    assert delivery["evaluator_designed_failure"] is True
+    assert delivery["evaluator_terminal_reason"] == "designed timeout"
+    assert "delivery_occurrence_id" in delivery
+    audit = controller.terminal_outcomes[-1]
+    assert audit["designed"] is True
+    assert audit["was_in_flight"] is True
+    assert audit["outcome"] == "timeout"
+
+
+def test_designed_child_timeout_refused_when_child_not_in_flight() -> None:
+    """A design cannot attach a terminal outcome to a child that never ran."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    assert controller.apply_child_terminal_outcome(
+        child_id="ghost", completion_id="p9", result_kind="authority",
+        payload={"result": "partial"}, outcome="timeout",
+        detail="designed timeout", designed=True,
+    ) == []
+    assert controller.infrastructure_failures == []
+    assert controller.terminal_outcomes[-1]["was_in_flight"] is False
+
+
+def test_designed_child_crash_is_scored_infra_crash_is_unscored() -> None:
+    """A case-designed crash is scored; a provider/workspace crash is unscored."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    controller.on_child_started({"type": "child_started", "child_id": "c1"})
+    # Case-designed crash source -> scored, model-visible terminal outcome.
+    designed = controller.apply_child_crash(
+        child_id="c1", completion_id="p1", result_kind="authority",
+        payload={"result": "boom"}, crash_source="case_designed",
+        detail="case-designed crash",
+    )[0]
+    assert designed["type"] == "result_delivered"
+    assert designed["terminal_outcome"] == "crash"
+    assert designed["evaluator_designed_failure"] is True
+    assert controller.infrastructure_failures == []
+    # Provider/workspace outage -> parked as an unscored infrastructure failure.
+    controller.on_child_started({"type": "child_started", "child_id": "c2"})
+    assert controller.apply_child_crash(
+        child_id="c2", completion_id="p2", result_kind="authority",
+        payload={"result": "boom"}, crash_source="provider_outage",
+        detail="provider outage",
+    ) == []
+    assert controller.infrastructure_failures[-1]["component"] == "child_terminal"
+    assert controller.infrastructure_failures[-1]["outcome"] == "crash"
+    assert all(
+        audit["outcome"] != "crash" or (audit.get("designed") and audit["child_id"] != "c2")
+        for audit in controller.terminal_outcomes
+    )
+
+
+def test_implicit_error_passes_structure_but_marks_private_failure() -> None:
+    """An implicit-error delivery is structurally valid yet privately a failure."""
+    case = {
+        "implicit_error_predicate": {
+            "type": "evidence_marker", "evidence_field": "injected", "marker": True,
+        },
+        "scenarios": {"linear": {"events": []}, "async": {"events": [
+            {"id": "implicit-error", "type": "implicit_error_result", "result": "authority"},
+        ]}},
+    }
+    controller = DeliveryController("async", case, min_initial_children=0)
+    delivery = controller.on_complete({
+        "type": "child_completed", "child_id": "c1", "completion_id": "p1",
+        "result_kind": "authority",
+        "payload": {"evidence": {"injected": True}, "result": 42},
+    })[0]
+    assert delivery["type"] == "result_delivered"
+    assert delivery["evaluator_implicit_error"] is True
+    assert delivery["evaluator_implicit_error_measurable"] is True
+    assert delivery["evaluator_implicit_error_reason"] == "evidence injected is truthy"
+
+
+def test_implicit_error_schedule_event_type_is_its_own_truth() -> None:
+    """Without a predicate, the private signal is the schedule-event type itself."""
+    case = {
+        "scenarios": {"linear": {"events": []}, "async": {"events": [
+            {"id": "implicit-error", "type": "implicit_error_result", "result": "authority"},
+        ]}},
+    }
+    controller = DeliveryController("async", case, min_initial_children=0)
+    delivery = controller.on_complete({
+        "type": "child_completed", "child_id": "c1", "completion_id": "p1",
+        "result_kind": "authority", "payload": {"result": 42},
+    })[0]
+    assert delivery["evaluator_implicit_error"] is True
+    assert delivery["evaluator_implicit_error_measurable"] is True
+    assert delivery["evaluator_implicit_error_reason"] == "implicit_error_result schedule event"
+
+
+def test_task_scope_revision_records_digests_and_keeps_expected_response_private() -> None:
+    """A live scope revision records before/after digests and hides the truth."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    assert controller.apply_task_scope_revision(
+        revision_id="r1", new_scope={"ownership": "claimed"},
+        participant_visible_fields={"notice": "scope changed"},
+        expected_response={"ownership": "claimed"},
+    ) == []
+    audit = controller.revision_audits[-1]
+    assert audit["type"] == "task_scope_revision"
+    assert audit["changed"] is True
+    for key in ("before_digest", "after_digest"):
+        digest = audit[key]
+        assert len(digest) == 64 and all(ch in "0123456789abcdef" for ch in digest)
+    assert audit["participant_visible"] == {"notice": "scope changed"}
+    assert audit["expected_response_preserved"] is True
+    assert audit["private_expected_response_hidden"] is True
+
+
+def test_dependency_graph_revision_records_per_edge_digests() -> None:
+    """An affected dependency edge carries before/after digests on the audit."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    controller.dependency_graph_edges = {"db": ("migrate", "seed")}
+    assert controller.apply_dependency_graph_revision(
+        revision_id="dg1", new_edges={"db": ("migrate", "backfill")},
+        participant_visible_fields={"graph_notice": "edge 1 revised"},
+        expected_response={"db": ("migrate", "backfill")},
+    ) == []
+    audit = controller.revision_audits[-1]
+    assert audit["type"] == "dependency_graph_revision"
+    edge = audit["affected_edges"]["db"]
+    for key in ("before_digest", "after_digest"):
+        digest = edge[key]
+        assert len(digest) == 64 and all(ch in "0123456789abcdef" for ch in digest)
+    assert edge["changed"] is True
+    assert audit["participant_visible"] == {"graph_notice": "edge 1 revised"}
+    assert audit["expected_response_preserved"] is True
+
+
+def test_resource_pressure_requires_designated_straggler_in_flight() -> None:
+    """Pressure only activates for a straggler the gateway proved is running."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    controller.concurrency_limit = 4
+    controller.child_pool_remaining = 2
+    controller.on_child_started({"type": "child_started", "child_id": "c1"})
+    controller.on_child_started({"type": "child_started", "child_id": "c2"})
+    assert controller.apply_resource_pressure(
+        straggler_child_id="c1", limit=2, pool_remaining=1,
+    ) == []
+    audit = controller.pressure_audits[-1]
+    assert audit["applied"] is True
+    assert audit["straggler_in_flight"] is True
+    assert audit["active_count"] == 2
+    assert audit["active_children"] == ["c1", "c2"]
+    assert audit["before_concurrency_limit"] == 4
+    assert audit["after_concurrency_limit"] == 2
+    assert audit["before_pool_remaining"] == 2
+    assert audit["after_pool_remaining"] == 1
+
+
+def test_resource_pressure_refused_when_straggler_no_longer_in_flight() -> None:
+    """Pressure is refused once the designated straggler has already resolved."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    controller.on_child_started({"type": "child_started", "child_id": "c1"})
+    controller.on_complete({
+        "type": "child_completed", "child_id": "c1", "completion_id": "p1",
+        "result_kind": "authority", "payload": {},
+    })
+    assert controller.apply_resource_pressure(
+        straggler_child_id="c1", limit=2, pool_remaining=1,
+    ) == []
+    audit = controller.pressure_audits[-1]
+    assert audit["applied"] is False
+    assert audit["straggler_in_flight"] is False
+    assert audit["reason"] == "straggler was not in flight"
+
+
+def test_deadline_update_applied_and_recorded_before_response_window() -> None:
+    """A new deadline is recorded before a response window opens."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    assert controller.apply_deadline_update(
+        deadline_wall=1234.5, reason="initial sla",
+    ) == []
+    audit = controller.deadline_audits[-1]
+    assert audit["before_deadline"] is None
+    assert audit["after_deadline"] == 1234.5
+    assert audit["applied_before_response_window"] is True
+    assert audit["response_window_active"] is False
+
+
+def test_deadline_update_after_window_open_is_flagged_false() -> None:
+    """A window already open means the participant saw the prior deadline."""
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    controller.on_response_window(True)
+    assert controller.apply_deadline_update(
+        deadline_wall=2000, reason="renewed sla",
+    ) == []
+    audit = controller.deadline_audits[-1]
+    assert audit["before_deadline"] is None
+    assert audit["after_deadline"] == 2000
+    assert audit["applied_before_response_window"] is False
+    assert audit["response_window_active"] is True

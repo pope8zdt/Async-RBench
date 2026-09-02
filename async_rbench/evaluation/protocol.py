@@ -53,6 +53,37 @@ delivery_occurrence_identity_fields = (
     "delivery_occurrence_id", "completion_id", "turn_id", "window_id",
 )
 
+# Gateway-produced specialised-stimulus event types (Task 9). These are
+# benchmark-owned audit facts: the gateway (not the adapter) decides when and how
+# a designed timeout/crash, an implicit error, a live scope/dependency revision,
+# a resource-pressure boundary, or a deadline update is produced and recorded.
+# They are never adapter-emitted, so ``validate_adapter_event`` never sees them;
+# ``validate_gateway_event`` checks their private evaluator structure before the
+# kernel persists them as kernel_private facts.
+GATEWAY_STIMULUS_EVENT_REQUIREMENTS: dict[str, tuple[str, ...]] = {
+    "task_scope_revision": (
+        "revision_id", "before_digest", "after_digest", "changed",
+        "participant_visible", "expected_response_preserved",
+    ),
+    "dependency_graph_revision": (
+        "revision_id", "before_digest", "after_digest", "changed",
+        "affected_edges", "participant_visible", "expected_response_preserved",
+    ),
+    "resource_pressure": (
+        "straggler_child_id", "applied", "active_children", "active_count",
+        "resource", "concurrency_limit", "pool_remaining",
+    ),
+    "deadline_update": (
+        "before_deadline", "after_deadline", "applied_before_response_window",
+        "response_window_active", "reason",
+    ),
+    "child_terminal_outcome": (
+        "child_id", "completion_id", "outcome", "designed", "was_in_flight",
+        "detail",
+    ),
+}
+
+
 # Capability RPC wire message types. These are *transport*, not adapter events:
 # the adapter requests a kernel capability on stdout and the kernel answers on
 # stdin. Raw transport messages never enter the event source and are never
@@ -184,6 +215,41 @@ def validate_adapter_event(event: dict[str, Any]) -> None:
         declared_success = event.get("declared_task_success")
         if declared_success is not None and not isinstance(declared_success, bool):
             raise ProtocolError("episode_ended.declared_task_success must be boolean")
+
+
+def validate_gateway_event(event: dict[str, Any]) -> list[str]:
+    """Validate a gateway-produced specialised-stimulus audit fact.
+
+    Returns a list of error strings (empty when valid).  The gateway audit facts
+    are kernel-private and never reach the participant, but their structure is
+    protocol-checked so scoring/audit can rely on the before/after digests and
+    in-flight proofs being present.
+    """
+    event_type = event.get("type")
+    requirements = GATEWAY_STIMULUS_EVENT_REQUIREMENTS.get(str(event_type))
+    if requirements is None:
+        return []
+    errors: list[str] = []
+    missing = [key for key in requirements if key not in event]
+    if missing:
+        errors.append(f"{event_type}: missing required fields {missing}")
+    if event_type == "dependency_graph_revision":
+        edges = event.get("affected_edges")
+        if not isinstance(edges, dict) or not edges:
+            errors.append("dependency_graph_revision.affected_edges must be a non-empty dict")
+        else:
+            for edge_id, entry in edges.items():
+                if not isinstance(entry, dict):
+                    errors.append(f"dependency_graph_revision affected edge {edge_id!r} is not an object")
+                    continue
+                for key in ("before_digest", "after_digest"):
+                    digest = str(entry.get(key, ""))
+                    if len(digest) != 64 or any(ch not in "0123456789abcdef" for ch in digest):
+                        errors.append(f"dependency_graph_revision edge {edge_id!r} {key} must be SHA-256")
+    if event_type == "resource_pressure" and event.get("applied") is True:
+        if event.get("straggler_child_id") not in event.get("active_children", []):
+            errors.append("resource_pressure.straggler_child_id is not in active_children")
+    return errors
 
 
 @dataclass

@@ -11,8 +11,54 @@ from async_rbench.evaluation.event_taxonomy import (
     validate_event_taxonomy,
     validate_event_theme_fixtures,
 )
+from async_rbench.evaluation.protocol import (
+    GATEWAY_STIMULUS_EVENT_REQUIREMENTS,
+    validate_gateway_event,
+)
 from async_rbench.evaluation.scheduler import DeliveryController
 from async_rbench.spec import CaseSpec, discover_cases, load_case, validate_case
+
+
+def _well_formed_stimulus(event_type: str) -> dict:
+    """A minimal protocol-valid gateway stimulus audit fact of the given type."""
+    if event_type == "task_scope_revision":
+        return {
+            "type": event_type, "revision_id": "r1",
+            "before_digest": "a" * 64, "after_digest": "b" * 64,
+            "changed": True, "participant_visible": {},
+            "expected_response_preserved": True,
+        }
+    if event_type == "dependency_graph_revision":
+        return {
+            "type": event_type, "revision_id": "dg1",
+            "before_digest": "a" * 64, "after_digest": "b" * 64,
+            "changed": True,
+            "affected_edges": {"db": {
+                "before_digest": "c" * 64, "after_digest": "d" * 64,
+            }},
+            "participant_visible": {},
+            "expected_response_preserved": True,
+        }
+    if event_type == "resource_pressure":
+        return {
+            "type": event_type, "straggler_child_id": "c1", "applied": True,
+            "active_children": ["c1", "c2"], "active_count": 2,
+            "resource": "concurrency_slot", "concurrency_limit": 2,
+            "pool_remaining": 1,
+        }
+    if event_type == "deadline_update":
+        return {
+            "type": event_type, "before_deadline": None, "after_deadline": 100,
+            "applied_before_response_window": True,
+            "response_window_active": False, "reason": "sla",
+        }
+    if event_type == "child_terminal_outcome":
+        return {
+            "type": event_type, "child_id": "c1", "completion_id": "p1",
+            "outcome": "timeout", "designed": True, "was_in_flight": True,
+            "detail": "designed timeout",
+        }
+    raise AssertionError(f"unknown stimulus event type {event_type!r}")
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -93,3 +139,36 @@ def test_replay_preserves_completion_identity_and_fires_once() -> None:
     assert replay[0]["payload_sha256"] == original["payload_sha256"]
     assert replay[0]["replayed"] is True
     assert controller.on_consumed({"completion_id": "p1"}) == []
+
+
+def test_specialized_gateway_stimulus_audits_validate_cleanly() -> None:
+    """Every gateway-owned stimulus audit fact is protocol-valid when well formed."""
+    assert GATEWAY_STIMULUS_EVENT_REQUIREMENTS
+    for event_type in GATEWAY_STIMULUS_EVENT_REQUIREMENTS:
+        fact = _well_formed_stimulus(event_type)
+        assert validate_gateway_event(fact) == [], event_type
+
+
+def test_resource_pressure_audit_rejects_straggler_outside_active_children() -> None:
+    """A pressure activation must name a straggler that is demonstrably active."""
+    fact = _well_formed_stimulus("resource_pressure")
+    fact["active_children"] = ["c2"]
+    errors = validate_gateway_event(fact)
+    assert any("straggler_child_id" in error for error in errors)
+
+
+def test_dependency_graph_revision_audit_rejects_non_sha_digests() -> None:
+    """Affected-edge digests must be real SHA-256 hex strings."""
+    fact = _well_formed_stimulus("dependency_graph_revision")
+    fact["affected_edges"]["db"]["after_digest"] = "not-a-digest"
+    errors = validate_gateway_event(fact)
+    assert any("after_digest" in error for error in errors)
+
+
+def test_specialized_stimulus_types_form_the_five_gateway_audit_families() -> None:
+    """The gateway audit registry names every evaluator-owned stimulus producer."""
+    assert set(GATEWAY_STIMULUS_EVENT_REQUIREMENTS) == {
+        "task_scope_revision", "dependency_graph_revision",
+        "resource_pressure", "deadline_update",
+        "child_terminal_outcome",
+    }

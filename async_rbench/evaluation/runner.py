@@ -276,6 +276,17 @@ def _record_gateway_outcome(
             "reopens_milestones": list(outcome.get("reopens_milestones") or []),
             "replayed": outcome.get("replayed") is True,
             "replay_of_completion_id": outcome.get("replay_of_completion_id"),
+            # Task 9 specialised-stimulus private facts: gateway-owned occurrence
+            # identity and the implicit/designed-failure markers that are never
+            # participant-visible but score the stimulus truthfully.
+            "delivery_occurrence_id": outcome.get("delivery_occurrence_id"),
+            "replay_of_occurrence_id": outcome.get("replay_of_occurrence_id"),
+            "implicit_error": outcome.get("evaluator_implicit_error"),
+            "implicit_error_measurable": outcome.get("evaluator_implicit_error_measurable"),
+            "implicit_error_reason": outcome.get("evaluator_implicit_error_reason"),
+            "designed_failure": outcome.get("evaluator_designed_failure"),
+            "terminal_outcome": outcome.get("terminal_outcome"),
+            "terminal_reason": outcome.get("evaluator_terminal_reason"),
         }, "kernel")
         return recorder.record(
             public_delivery(outcome, workstream_id=workstream_id), "gateway"
@@ -292,6 +303,29 @@ def _record_gateway_outcome(
     return recorder.record(
         public_rejection(outcome, workstream_id=workstream_id), "gateway"
     )
+
+
+def _record_controller_stimulus_audits(
+    controller: DeliveryController,
+    recorder: TraceRecorder,
+) -> None:
+    """Persist the gateway classifier's specialised-stimulus private facts.
+
+    The ``DeliveryController`` is the only actor that decides designed vs
+    infrastructure, computes the before/after digests, and proves in-flight
+    stragglers.  The kernel persists those decisions verbatim as
+    ``kernel_private`` facts so score/audit can reconstruct the stimulus without
+    exposing the designed truth to the participant.
+    """
+    for audit in (
+        *controller.revision_audits,
+        *controller.pressure_audits,
+        *controller.deadline_audits,
+        *controller.terminal_outcomes,
+    ):
+        recorder.record({**audit, "visibility": "kernel_private"}, "kernel")
+    for item in controller.infrastructure_failures:
+        recorder.record({**item, "visibility": "kernel_private"}, "kernel")
 
 
 def _evaluation_contract_identity(root: Path) -> tuple[str, str]:
@@ -1010,6 +1044,9 @@ def _make_start(
 # started correctly before, say, the model API call crashed mid-episode.
 UNSCORED_INFRASTRUCTURE_COMPONENTS = frozenset({
     "model_request", "child_start", "adapter_crash",
+    # A child crash from a provider/workspace outage (not a designed case crash)
+    # is benchmark tooling failing mid-run, so it makes the episode unscored.
+    "child_terminal",
 })
 
 
@@ -1427,6 +1464,11 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
             deliveries = []
             if event["type"] == "child_spawned":
                 deliveries = controller.on_spawn(recorded)
+            elif event["type"] == "child_started":
+                # The gateway records this so it can *prove* a child was in
+                # flight before a designed terminal outcome or resource-pressure
+                # boundary fires (spec §6.2).
+                deliveries = controller.on_child_started(recorded)
             elif event["type"] == "child_completed":
                 deliveries = controller.on_complete(controller_recorded, contract_validation)
                 if controller_recorded["completion_id"] not in controller.delivered:
@@ -1493,6 +1535,11 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     stderr = (await stderr_task).decode(errors="replace")
     if stderr:
         recorder.record({"type": "adapter_stderr", "text": stderr[-20000:]}, "benchmark")
+
+    # Persist the gateway classifier's specialised-stimulus private facts before
+    # the metadata/infrastructure audit, so an infrastructure child crash is seen
+    # by ``_score_status_decision`` and a designed outcome is auditable.
+    _record_controller_stimulus_audits(controller, recorder)
 
     metadata_events = [event for event in recorder.events if event.get("type") == "participant_metadata"]
     runtime_metadata_events = [event for event in recorder.events if event.get("type") == "participant_runtime_metadata"]

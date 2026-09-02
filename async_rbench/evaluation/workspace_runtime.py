@@ -6,7 +6,9 @@ import tempfile
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
+
+from .protocol import canonical_digest
 
 
 class WorkspaceConfig(Protocol):
@@ -36,6 +38,21 @@ async def _command(*args: str, timeout: float | None = None) -> CommandResult:
         output, _ = await process.communicate()
         return CommandResult(124, output.decode(errors="replace") + "\ncommand timed out")
     return CommandResult(int(process.returncode or 0), output.decode(errors="replace"))
+
+
+def state_snapshot_digest(value: Any) -> str:
+    """Canonical digest of an evaluator-observable state snapshot.
+
+    Used by the live revision mechanisms to record the before/after digest of a
+    frozen scope or dependency-graph primitive.  The value is wrapped so a
+    snapshot digest is never confused with a raw payload digest in the trace.
+    """
+    return canonical_digest({"state_snapshot": value})
+
+
+def state_snapshot_digest_for(observations: dict[str, Any]) -> str:
+    """Digest of a named primitive observation set (order-independent)."""
+    return state_snapshot_digest({key: observations[key] for key in sorted(observations)})
 
 
 def _safe_name(value: str, limit: int = 48) -> str:

@@ -4,6 +4,8 @@ from pathlib import Path
 import yaml
 
 from async_rbench.dynamic_pilot import _causal_interruption_evidence
+from async_rbench.evaluation.runner import _record_controller_stimulus_audits
+from async_rbench.evaluation.scheduler import DeliveryController
 
 
 def _write_case(tmp_path: Path, *, with_contract: bool) -> Path:
@@ -72,3 +74,55 @@ def test_missing_model_recommit_does_not_invalidate_real_intervention(tmp_path: 
     assert evidence["passed"] is True
     assert evidence["model_missing_post_authority_recommits"] == ["runtime_state"]
     assert evidence["live_intervention_evidence"]["passed"] is True
+
+
+def test_stimulus_audits_persist_as_kernel_private_evaluator_facts() -> None:
+    """Revision/pressure/deadline/terminal audits flush as private, never public."""
+    class Recorder:
+        def __init__(self) -> None:
+            self.rows = []
+
+        def record(self, row, source):
+            value = {**row, "source": source}
+            self.rows.append(value)
+            return value
+
+    controller = DeliveryController("async", {
+        "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+    })
+    # Live revision + dependency revision + applied pressure + deadline update.
+    controller.apply_task_scope_revision(
+        revision_id="r1", new_scope={"seq": 2},
+        participant_visible_fields={"notice": "revised"},
+        expected_response={"seq": 2},
+    )
+    controller.apply_dependency_graph_revision(
+        revision_id="dg1", new_edges={"db": ("migrate", "backfill")},
+        participant_visible_fields={"graph_notice": "edge 1 revised"},
+        expected_response={"db": ("migrate", "backfill")},
+    )
+    controller.on_child_started({"type": "child_started", "child_id": "c1"})
+    controller.apply_resource_pressure(straggler_child_id="c1", limit=2, pool_remaining=1)
+    controller.apply_deadline_update(deadline_wall=1000, reason="sla")
+    controller.apply_child_terminal_outcome(
+        child_id="c1", completion_id="p1", result_kind="authority",
+        payload={"result": "partial"}, outcome="timeout", detail="t", designed=True,
+    )
+
+    recorder = Recorder()
+    _record_controller_stimulus_audits(controller, recorder)
+
+    types_persisted = {row["type"] for row in recorder.rows}
+    assert {"task_scope_revision", "dependency_graph_revision",
+            "resource_pressure", "deadline_update",
+            "child_terminal_outcome"} <= types_persisted
+    assert all(row["source"] == "kernel" for row in recorder.rows)
+    # The classifier's private facts never reach the public/participant stream.
+    assert all(row.get("visibility") == "kernel_private" for row in recorder.rows)
+    # The in-flight proof and before/after boundaries survive the flush.
+    pressure = next(row for row in recorder.rows if row["type"] == "resource_pressure")
+    assert pressure["applied"] is True
+    assert pressure["straggler_in_flight"] is True
+    terminal = next(row for row in recorder.rows if row["type"] == "child_terminal_outcome")
+    assert terminal["designed"] is True
+    assert terminal["was_in_flight"] is True

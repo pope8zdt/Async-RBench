@@ -5,6 +5,7 @@ import time
 from typing import Any
 
 from .protocol import canonical_digest
+from .workspace_runtime import state_snapshot_digest
 
 
 @dataclass
@@ -23,6 +24,28 @@ class DeliveryController:
     completion_action_ordinals: dict[str, int] = field(default_factory=dict)
     completion_held_at_monotonic: dict[str, float] = field(default_factory=dict)
     protocol_notes: list[str] = field(default_factory=list)
+    # --- Real specialized-event mechanism state (Task 9) -------------------
+    # Child lifecycle tracking so the gateway can *prove* a child was in flight
+    # when a designed timeout/crash or resource-pressure boundary fires.
+    running_children: set[str] = field(default_factory=set)
+    # Pool/concurrency accounting observed at pressure boundaries.
+    concurrency_limit: int | None = None
+    child_pool_remaining: int | None = None
+    # Evaluator-owned live-revision state (frozen scope + dependency graph).
+    scope_snapshot: dict[str, Any] = field(default_factory=dict)
+    dependency_graph_edges: dict[str, tuple[str, ...]] = field(default_factory=dict)
+    # Effective benchmark-owned deadline (absolute wall clock) applied to a
+    # response window, plus a public edge counter used for gateway occurrence ids.
+    _effective_deadline_wall: float | None = None
+    _response_window_active: bool = False
+    _occurrence_ordinal: int = 0
+    _delivery_occurrence_of_completion: dict[str, str] = field(default_factory=dict)
+    # Kernel-private audit trails the runner materialises as private facts.
+    revision_audits: list[dict[str, Any]] = field(default_factory=list)
+    pressure_audits: list[dict[str, Any]] = field(default_factory=list)
+    deadline_audits: list[dict[str, Any]] = field(default_factory=list)
+    terminal_outcomes: list[dict[str, Any]] = field(default_factory=list)
+    infrastructure_failures: list[dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if self.execution_mode not in {"linear", "async"}:
@@ -42,6 +65,19 @@ class DeliveryController:
         self.spawned[event["child_id"]] = event
         return self._drain()
 
+    def on_child_started(self, event: dict[str, Any]) -> list[dict[str, Any]]:
+        """Record that an isolated child workspace is live and in flight.
+
+        The gateway uses this proof to gate designed terminal outcomes and
+        resource-pressure activation: a designed ``child_timeout`` /
+        ``child_crash`` / ``resource_pressure`` stimulus is only valid for a
+        child that actually left ``starting`` into ``running``.
+        """
+        child_id = str(event.get("child_id") or "")
+        if child_id:
+            self.running_children.add(child_id)
+        return []
+
     def on_complete(
         self, event: dict[str, Any], contract_validation: Any | None = None,
     ) -> list[dict[str, Any]]:
@@ -56,6 +92,9 @@ class DeliveryController:
         self.completions[event["completion_id"]] = event
         self.completion_action_ordinals[event["completion_id"]] = self.main_actions
         self.completion_held_at_monotonic[event["completion_id"]] = time.monotonic()
+        # A completion is no longer a running child; a later designed terminal
+        # outcome must not be attached to an already-resolved child.
+        self.running_children.discard(str(event.get("child_id") or ""))
         return self._drain()
 
     def inject_evaluator_result(
@@ -76,6 +115,231 @@ class DeliveryController:
             "result_kind": result_kind,
             "payload": payload,
         })
+
+    # --- Real specialized-event mechanisms (Task 9) -------------------------
+    #
+    # These are the gateway-owned interfaces that *produce* the specialised
+    # stimuli.  The gateway is the only actor allowed to classify a child
+    # outcome as designed vs infrastructure, to own live scope/dependency state,
+    # and to prove a child is in flight before applying pressure.
+
+    def apply_child_terminal_outcome(
+        self, *, child_id: str, completion_id: str, result_kind: str,
+        payload: Any, outcome: str, detail: str, designed: bool,
+        benchmark_event_id: str | None = None,
+    ) -> list[dict[str, Any]]:
+        """Produce a model-visible terminal outcome for an in-flight child.
+
+        ``outcome`` is ``"timeout"`` or ``"crash"``.  A *designed* termination is
+        a scored, model-visible stimulus: the child was running, the terminal
+        outcome is benchmark-owned, and it is delivered to the main model.  An
+        infrastructure termination (provider outage / workspace start failure) is
+        recorded as an unscored ``infrastructure_failure`` and never delivered —
+        the benchmark failed, not the model.  A designed outcome additionally
+        requires the gateway to have observed the child in flight (spec §6.2).
+        """
+        child_id = str(child_id)
+        was_in_flight = child_id in self.running_children
+        if not designed:
+            self.running_children.discard(child_id)
+            self.infrastructure_failures.append({
+                "type": "infrastructure_failure",
+                "component": "child_terminal",
+                "child_id": child_id,
+                "outcome": outcome,
+                "detail": detail,
+            })
+            return []
+        if not was_in_flight:
+            self.protocol_notes.append(
+                f"designed {outcome} refused: child {child_id!r} was not in flight"
+            )
+            self.terminal_outcomes.append({
+                "type": "child_terminal_outcome",
+                "child_id": child_id, "completion_id": completion_id,
+                "outcome": outcome, "designed": True, "was_in_flight": False,
+                "detail": detail,
+            })
+            return []
+        self.running_children.discard(child_id)
+        completion = {
+            "type": "child_completed",
+            "child_id": child_id,
+            "completion_id": completion_id,
+            "result_kind": result_kind,
+            "payload": payload,
+            "payload_sha256": canonical_digest(payload),
+            "_contract_valid": True,
+            "_contract_reason_codes": (),
+        }
+        self.completions[completion_id] = completion
+        self.completion_action_ordinals[completion_id] = self.main_actions
+        self.completion_held_at_monotonic[completion_id] = time.monotonic()
+        schedule_event = {"type": "result_delivery", "result": result_kind}
+        if benchmark_event_id:
+            schedule_event["id"] = benchmark_event_id
+        delivery = self._delivery(completion, schedule_event, False)
+        delivery["evaluator_designed_failure"] = True
+        delivery["terminal_outcome"] = outcome
+        delivery["evaluator_terminal_reason"] = detail
+        self.terminal_outcomes.append({
+            "type": "child_terminal_outcome",
+            "child_id": child_id, "completion_id": completion_id,
+            "outcome": outcome, "designed": True, "was_in_flight": True,
+            "detail": detail,
+        })
+        return [delivery]
+
+    def apply_child_crash(
+        self, *, child_id: str, completion_id: str, result_kind: str,
+        payload: Any, crash_source: str, detail: str,
+        benchmark_event_id: str | None = None,
+    ) -> list[dict[str, Any]]:
+        """Produce a designed child-crash stimulus, or park an infra crash.
+
+        ``crash_source == "case_designed"`` means the crash is part of the case
+        scenario: it is scored and delivered.  Any provider/workspace/infrastructure
+        crash is converted to an unscored infrastructure failure instead.
+        """
+        return self.apply_child_terminal_outcome(
+            child_id=child_id, completion_id=completion_id,
+            result_kind=result_kind, payload=payload, outcome="crash",
+            detail=detail, designed=str(crash_source) == "case_designed",
+            benchmark_event_id=benchmark_event_id,
+        )
+
+    def apply_task_scope_revision(
+        self, *, revision_id: str, new_scope: dict[str, Any],
+        participant_visible_fields: dict[str, Any],
+        expected_response: Any,
+    ) -> list[dict[str, Any]]:
+        """Revise the frozen scope state while work is in flight.
+
+        Records the before/after scope digest, exposes only the participant-visible
+        revised information, and preserves the private expected response untouched.
+        """
+        before_digest = state_snapshot_digest(self.scope_snapshot)
+        self.scope_snapshot = dict(new_scope)
+        after_digest = state_snapshot_digest(self.scope_snapshot)
+        self.revision_audits.append({
+            "type": "task_scope_revision",
+            "revision_id": revision_id,
+            "before_digest": before_digest,
+            "after_digest": after_digest,
+            "changed": before_digest != after_digest,
+            "participant_visible": dict(participant_visible_fields),
+            "expected_response_digest": canonical_digest(expected_response),
+            "expected_response_preserved": True,
+            "private_expected_response_hidden": not any(
+                str(expected_response) in str(value)
+                for value in participant_visible_fields.values()
+            ),
+        })
+        return []
+
+    def apply_dependency_graph_revision(
+        self, *, revision_id: str, new_edges: dict[str, tuple[str, ...]],
+        participant_visible_fields: dict[str, Any],
+        expected_response: Any,
+    ) -> list[dict[str, Any]]:
+        """Revise the dependency graph and record per-edge before/after digests.
+
+        Only the affected edges are reported with a before/after digest; untouched
+        edges are omitted so the revision surfaces exactly what changed.
+        """
+        before_digest = canonical_digest(self.dependency_graph_edges)
+        affected: dict[str, dict[str, str]] = {}
+        for edge_id, new_value in dict(new_edges).items():
+            old_value = self.dependency_graph_edges.get(edge_id, ())
+            affected[edge_id] = {
+                "before_digest": canonical_digest(old_value),
+                "after_digest": canonical_digest(new_value),
+                "changed": canonical_digest(old_value) != canonical_digest(new_value),
+            }
+        self.dependency_graph_edges = dict(new_edges)
+        after_digest = canonical_digest(self.dependency_graph_edges)
+        self.revision_audits.append({
+            "type": "dependency_graph_revision",
+            "revision_id": revision_id,
+            "before_digest": before_digest,
+            "after_digest": after_digest,
+            "changed": before_digest != after_digest,
+            "affected_edges": affected,
+            "new_edges": {edge: list(value) for edge, value in dict(new_edges).items()},
+            "participant_visible": dict(participant_visible_fields),
+            "expected_response_digest": canonical_digest(expected_response),
+            "expected_response_preserved": True,
+        })
+        return []
+
+    def apply_resource_pressure(
+        self, *, straggler_child_id: str, resource: str = "concurrency_slot",
+        limit: int | None = None, pool_remaining: int | None = None,
+    ) -> list[dict[str, Any]]:
+        """Activate resource pressure only when the designated straggler is live.
+
+        The gateway must prove the straggler is still in flight (spec §6.2).
+        Records active children, the pool remaining, the concurrency limit, and
+        the before/after pressure values.  A straggler that already resolved
+        cannot be under pressure, so the activation is refused.
+        """
+        straggler = str(straggler_child_id)
+        active = sorted(self.running_children)
+        if straggler not in self.running_children:
+            self.pressure_audits.append({
+                "type": "resource_pressure", "applied": False,
+                "straggler_child_id": straggler, "straggler_in_flight": False,
+                "active_children": active, "active_count": len(active),
+                "resource": resource, "concurrency_limit": limit,
+                "pool_remaining": pool_remaining,
+                "before_concurrency_limit": self.concurrency_limit,
+                "before_pool_remaining": self.child_pool_remaining,
+                "reason": "straggler was not in flight",
+            })
+            return []
+        before_limit, before_pool = self.concurrency_limit, self.child_pool_remaining
+        self.concurrency_limit = limit
+        self.child_pool_remaining = pool_remaining
+        self.pressure_audits.append({
+            "type": "resource_pressure", "applied": True,
+            "straggler_child_id": straggler, "straggler_in_flight": True,
+            "active_children": active, "active_count": len(active),
+            "resource": resource, "concurrency_limit": limit,
+            "pool_remaining": pool_remaining,
+            "before_concurrency_limit": before_limit,
+            "after_concurrency_limit": limit,
+            "before_pool_remaining": before_pool,
+            "after_pool_remaining": pool_remaining,
+        })
+        return []
+
+    def apply_deadline_update(
+        self, *, deadline_wall: float, reason: str,
+    ) -> list[dict[str, Any]]:
+        """Apply a new benchmark-owned deadline before a response window.
+
+        Records the before/after deadline and whether the update was applied
+        before any response window opened.  A deadline update that fires after a
+        response window is already open is still recorded but carries the
+        ``applied_before_response_window`` flag as False, exposing that the
+        participant saw the previous deadline for the open window.
+        """
+        before = self._effective_deadline_wall
+        self._effective_deadline_wall = float(deadline_wall)
+        self.deadline_audits.append({
+            "type": "deadline_update",
+            "before_deadline": before,
+            "after_deadline": self._effective_deadline_wall,
+            "applied_before_response_window": self._response_window_active is False,
+            "response_window_active": self._response_window_active,
+            "reason": reason,
+        })
+        return []
+
+    def on_response_window(self, active: bool) -> list[dict[str, Any]]:
+        """Track response-window liveness for the deadline-update boundary."""
+        self._response_window_active = bool(active)
+        return []
 
     def on_main_action(self, _: dict[str, Any]) -> list[dict[str, Any]]:
         self.main_actions += 1
@@ -172,6 +436,44 @@ class DeliveryController:
             return left.startswith(right) or right.startswith(left)
         return False
 
+    @staticmethod
+    def _evidence_value(completion: dict[str, Any], field_name: str) -> Any:
+        payload = completion.get("payload")
+        if not isinstance(payload, dict):
+            return None
+        evidence = payload.get("evidence")
+        if not isinstance(evidence, dict):
+            return None
+        return evidence.get(field_name)
+
+    def _implicit_error_truth(
+        self, completion: dict[str, Any], schedule_event: dict[str, Any],
+    ) -> tuple[bool | None, str]:
+        """Decide whether an ``implicit_error_result`` delivery hides a failure.
+
+        The payload is structurally valid (it already passed the completion
+        contract; ``_contract_valid`` is true), so the delivery is model-visible.
+        The *private* signal that the reported result is actually a failure comes
+        either from the case's ``implicit_error_predicate`` or, when no predicate
+        is declared, from the schedule event type itself being the private signal.
+        """
+        if str(schedule_event.get("type") or "result_delivery") != "implicit_error_result":
+            return None, "not an implicit error schedule event"
+        spec = self.case_spec.get("implicit_error_predicate") or {}
+        field_name = str(spec.get("evidence_field") or "")
+        if spec.get("type") != "evidence_marker" or not field_name:
+            return True, "implicit_error_result schedule event"
+        value = self._evidence_value(completion, field_name)
+        if value is None:
+            return None, f"missing implicit failure evidence field {field_name!r}"
+        marker = spec.get("marker")
+        if marker is True:
+            return value is True, f"evidence {field_name} is truthy"
+        if isinstance(marker, (int, float)) and not isinstance(marker, bool):
+            numeric = isinstance(value, (int, float)) and not isinstance(value, bool)
+            return bool(numeric and value == marker), f"evidence {field_name} == {marker}"
+        return str(value) == str(marker), f"evidence {field_name} == {marker!r}"
+
     def _dynamic_stale_truth(
         self, completion: dict[str, Any], schedule_event: dict[str, Any],
     ) -> tuple[bool | None, str]:
@@ -262,6 +564,19 @@ class DeliveryController:
         }
         if fallback_reason:
             delivered["delivery_fallback_reason"] = fallback_reason
+        # Gateway-owned occurrence identity (spec §3.3): one delivery occurrence
+        # per released delivery. Replay creates a *new* occurrence under the same
+        # completion, so the gateway occurrence id is the join key for replay.
+        self._occurrence_ordinal += 1
+        delivered["delivery_occurrence_id"] = f"gateway-occ-{self._occurrence_ordinal}"
+        self._delivery_occurrence_of_completion[completion_id] = delivered["delivery_occurrence_id"]
+        if str(schedule_event.get("type") or "result_delivery") == "implicit_error_result":
+            implicit_error, implicit_reason = self._implicit_error_truth(
+                completion, schedule_event,
+            )
+            delivered["evaluator_implicit_error"] = implicit_error
+            delivered["evaluator_implicit_error_measurable"] = implicit_error is not None
+            delivered["evaluator_implicit_error_reason"] = implicit_reason
         return delivered
 
     def _replay_delivery(
@@ -283,6 +598,10 @@ class DeliveryController:
         )
         stale_truth, stale_reason = self._dynamic_stale_truth(completion, original_event)
         stale_visibility = str(original_event.get("stale_visibility", "explicit"))
+        # A replay is a *new* gateway occurrence, not a cloned completion. It
+        # keeps the originating completion_id but receives a fresh occurrence id
+        # and records the original occurrence it replays (spec §3.3 / Task 9).
+        self._occurrence_ordinal += 1
         return {
             "type": "result_delivered",
             "child_id": completion["child_id"],
@@ -300,6 +619,10 @@ class DeliveryController:
             "reopens_milestones": [],
             "controlled_order": True,
             "replayed": True,
+            "delivery_occurrence_id": f"gateway-occ-{self._occurrence_ordinal}",
+            "replay_of_occurrence_id": self._delivery_occurrence_of_completion.get(
+                str(completion["completion_id"])
+            ),
             "replay_of_completion_id": completion["completion_id"],
         }
 
