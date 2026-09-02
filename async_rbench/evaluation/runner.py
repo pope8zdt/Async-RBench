@@ -12,7 +12,7 @@ import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any
+from typing import Any, Awaitable, Callable, Sequence
 
 import yaml
 
@@ -28,6 +28,10 @@ from .result_contract import ResultContractValidation, validate_completion_contr
 from .scheduler import DeliveryController
 from .scoring import score_trace
 from .event_store import EventStore, strip_for_adapter
+from .observation import (
+    ObservationPoint, ProvisionalObserver, WorkspaceSnapshot,
+    parse_observation_output, snapshot_observation_command,
+)
 from .case_contract import assert_participant_safe
 from .case_contract import public_delivery, public_rejection
 from .case_bundle import case_bundle_sha256
@@ -49,6 +53,10 @@ CAPABILITY_METHODS = frozenset({
     # Evaluator-mediated operations.  Their implementation is special-cased
     # in the dispatcher because private commands must never be adapter args.
     "observe_artifact", "verify_current_state",
+    # Evaluator-owned presentation handshake and post-tool provisional observer.
+    # Both are funnelled through the kernel so the S^- snapshot and the observed
+    # workspace state stay kernel-private (spec §3.3, §4.2).
+    "prepare_result_presentation", "observe_main_state",
 })
 
 # asyncio's subprocess StreamReader defaults to 64 KiB per line. Async-RBench uses
@@ -63,6 +71,16 @@ ADAPTER_PROTOCOL_STREAM_LIMIT_BYTES = 16 * 1024 * 1024
 # audit stream back to the participant adapter.
 CHILD_TERMINAL_AUDIT_TYPES = frozenset({
     "child_terminal_started", "child_terminal_finished",
+})
+
+# Main runtime phase events (spec §3.2) emitted by the reference scaffold after a
+# tool *has actually run*. They are not yet in the off-limits protocol module's
+# adapter-event registry, so the kernel accepts them as runtime phase boundaries
+# without calling ``validate_adapter_event`` (which would otherwise reject them).
+# They are recorded as adapter events for replay/audit; the framework treats
+# ``main_action`` (the legacy controller trigger) as the authoritative count.
+RUNTIME_PHASE_EVENT_TYPES = frozenset({
+    "main_action_started", "main_action_finished", "main_turn_completed",
 })
 
 
@@ -545,6 +563,138 @@ async def _verify_current_state_private(
     }
 
 
+def _observation_points_for_case(case_spec: dict[str, Any]) -> list[ObservationPoint]:
+    """Materialise the case's evaluator-observable observation points."""
+    points: list[ObservationPoint] = []
+    for spec in case_spec.get("observation_points") or []:
+        if not isinstance(spec, dict):
+            continue
+        point = ObservationPoint.from_spec(spec)
+        if point.point_id:
+            points.append(point)
+    return points
+
+
+def _provisional_predicate_for_case(case_spec: dict[str, Any]) -> dict[str, Any]:
+    return dict(case_spec.get("provisional_predicate") or {})
+
+
+def _build_snapshot_provider(
+    workspace: WorkspaceRuntime,
+) -> Callable[[Sequence[ObservationPoint]], Awaitable[WorkspaceSnapshot]]:
+    """Build an async snapshot provider that observes points via the workspace.
+
+    Each point is observed through the kernel-owned ``main_terminal`` executing
+    the synthesised evaluator command; the output is canonicalised and any point
+    the workspace cannot observe (missing file, non-zero exit) is reported as
+    missing so the snapshot is incomplete and can never establish a boundary.
+    """
+    async def provide(points: Sequence[ObservationPoint]) -> WorkspaceSnapshot:
+        values: dict[str, str] = {}
+        missing: list[str] = []
+        for point in points:
+            command = snapshot_observation_command(point)
+            result = await workspace.main_terminal(command, 900)
+            if result.exit_code != 0:
+                missing.append(point.point_id)
+                continue
+            value = parse_observation_output(point, result.output)
+            if not value:
+                missing.append(point.point_id)
+                continue
+            values[point.point_id] = value
+        return WorkspaceSnapshot(
+            points=values,
+            missing_points=tuple(sorted(missing)),
+        )
+
+    return provide
+
+
+async def _prepare_result_presentation_private(
+    workspace: WorkspaceRuntime,
+    *,
+    delivery_occurrence_id: str,
+    turn_id: str,
+    recorder: TraceRecorder,
+    case_spec: dict[str, Any],
+) -> dict[str, Any]:
+    """Authorize presenting one delivery occurrence with an evaluator-owned S^-.
+
+    The evaluator captures the before-presentation snapshot ``S_i^-`` and, only
+    if it is complete, records the kernel-private ``presentation_prepared``
+    boundary and reports ``prepared`` true. A failed snapshot leaves the
+    occurrence queued & un-presented (spec §5.1(4)).
+    """
+    points = _observation_points_for_case(case_spec)
+    provider = _build_snapshot_provider(workspace)
+    snapshot = await provider(points)
+    if not snapshot.complete:
+        return {
+            "prepared": False,
+            "error": snapshot.error or "incomplete_snapshot",
+        }
+    recorder.record({
+        "type": "presentation_prepared",
+        "delivery_occurrence_id": delivery_occurrence_id,
+        "turn_id": turn_id,
+        "snapshot_digest": snapshot.digest,
+    }, "kernel")
+    return {
+        "prepared": True,
+        "snapshot_digest": snapshot.digest,
+        "observed_points": dict(snapshot.points),
+    }
+
+
+async def _observe_main_state_private(
+    workspace: WorkspaceRuntime,
+    *,
+    reason: str,
+    action_id: str,
+    turn_id: str,
+    recorder: TraceRecorder,
+    case_spec: dict[str, Any],
+) -> dict[str, Any]:
+    """Run the post-tool provisional observer and record a kernel-private fact.
+
+    The adapter fires this only after a modifying tool has finished. The
+    observer captures the evaluator-observable workspace state and records a
+    ``provisional_observed`` fact whose digest and observed points are
+    evaluator-private (spec §4.2).
+    """
+    points = _observation_points_for_case(case_spec)
+    predicate = _provisional_predicate_for_case(case_spec)
+    provider = _build_snapshot_provider(workspace)
+    observer = ProvisionalObserver(
+        points, predicate=predicate, snapshot_provider=provider,
+    )
+    try:
+        observation = await observer.observe(action_id=action_id)
+    except Exception as exc:  # noqa: BLE001
+        recorder.record({
+            "type": "provisional_observed",
+            "visibility": "kernel_private",
+            "provisional_established": False,
+            "action_id": action_id,
+            "turn_id": turn_id,
+            "reason": f"observer_failure: {exc}",
+            "provisional_digest": None,
+        }, "kernel")
+        return {"provisional_observed": False}
+    recorder.record({
+        "type": "provisional_observed",
+        "visibility": "kernel_private",
+        "provisional_established": observation.established,
+        "provisional_digest": observation.digest,
+        "action_id": action_id,
+        "turn_id": turn_id,
+        "reason": observation.reason,
+        "observed_points": dict(observation.points),
+    }, "kernel")
+    return {"provisional_observed": observation.established}
+
+
 async def _dispatch_capability(
     workspace: WorkspaceRuntime,
     message: dict[str, Any],
@@ -556,6 +706,7 @@ async def _dispatch_capability(
     private_artifacts: dict[str, dict[str, Any]] | None = None,
     private_checks: dict[str, str] | None = None,
     consumed_completions: set[str] | None = None,
+    case_spec: dict[str, Any] | None = None,
 ) -> None:
     """Resolve one adapter capability request against the kernel-owned workspace.
 
@@ -602,6 +753,27 @@ async def _dispatch_capability(
                 private_checks=private_checks or {},
                 consumed_completions=consumed_completions or set(),
                 recorder=recorder,
+            )
+        elif capability == "prepare_result_presentation":
+            if recorder is None:
+                raise ValueError("prepare_result_presentation requires a recorder")
+            result = await _prepare_result_presentation_private(
+                workspace,
+                delivery_occurrence_id=str(args.get("delivery_occurrence_id", "")),
+                turn_id=str(args.get("turn_id", "")),
+                recorder=recorder,
+                case_spec=case_spec or {},
+            )
+        elif capability == "observe_main_state":
+            if recorder is None:
+                raise ValueError("observe_main_state requires a recorder")
+            result = await _observe_main_state_private(
+                workspace,
+                reason=str(args.get("reason", "")),
+                action_id=str(args.get("action_id", "")),
+                turn_id=str(args.get("turn_id", "")),
+                recorder=recorder,
+                case_spec=case_spec or {},
             )
         else:
             method = getattr(workspace, capability)
@@ -1028,14 +1200,16 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
                         },
                         private_checks=case_spec.get("hidden_reverification_commands", {}),
                         consumed_completions=consumed_completions,
+                        case_spec=case_spec,
                     )
                 ))
                 continue
-            try:
-                validate_adapter_event(event)
-            except ProtocolError as exc:
-                recorder.record({"type": "protocol_violation", "detail": str(exc), "raw": raw.decode(errors="replace")}, "benchmark")
-                continue
+            if event.get("type") not in RUNTIME_PHASE_EVENT_TYPES:
+                try:
+                    validate_adapter_event(event)
+                except ProtocolError as exc:
+                    recorder.record({"type": "protocol_violation", "detail": str(exc), "raw": raw.decode(errors="replace")}, "benchmark")
+                    continue
             recorded = recorder.record(event, "adapter")
             controller_recorded = recorded
             violation = None

@@ -35,6 +35,13 @@ def _tool_result(call_id: str, value: Any) -> dict[str, Any]:
     return {"role": "tool", "tool_call_id": call_id, "content": json.dumps(value, ensure_ascii=False, sort_keys=True)}
 
 
+# Modifying tools whose *completion* can establish a provisional boundary. Only
+# these are handed to the post-tool observer (spec §4.1(1)); read/query tools and
+# the participant-visible ``commit_artifact`` audit signal are deliberately
+# excluded so a commit cannot itself create the only scored opportunity (§4.3).
+OBSERVED_TOOLS = frozenset({"terminal", "promote_child_path"})
+
+
 def emit_runtime_metadata_snapshot(backend: ModelBackend, emitter: ProtocolEmitter) -> None:
     """Persist provider-resolved identity before a later agent timeout can occur."""
     metadata = getattr(backend, "runtime_metadata", lambda: {"model_observations": []})()
@@ -912,6 +919,7 @@ class ReferenceScaffold:
         self.final_summary = ""
         self.messages: list[dict[str, Any]] = []
         self.next_turn_index = 1
+        self._current_turn_id = ""
         # A newly accepted completion changes the state that the controller is
         # responsible for closing.  Track that logical revision so a commit or
         # verification performed before the acceptance cannot be reused to
@@ -1069,17 +1077,23 @@ class ReferenceScaffold:
                 # most one new occurrence in FIFO receive order, but only while no
                 # response window is open — never more than one new occurrence per
                 # main-model request.  The occurrence enters the request context
-                # but is NOT yet marked presented.
+                # but is NOT yet marked presented.  It is only appended after the
+                # evaluator prepares the before-presentation snapshot S_i^- and
+                # authorizes presenting it (spec §3.3, §5.1(4)); on a failed
+                # snapshot the occurrence stays queued for a later request.
                 candidate = self.manager.select_presentable()
                 prepared_occurrence_id: str | None = None
                 if candidate is not None:
-                    prepared_occurrence_id = candidate.occurrence_id
-                    messages.append({
-                        "role": "user",
-                        "content": "ASYNC_RBENCH_DELIVERY " + json.dumps(
-                            candidate.payload, ensure_ascii=False, sort_keys=True,
-                        ),
-                    })
+                    prepared_occurrence_id = await self._prepare_presentation(
+                        candidate, f"t{turn_index}",
+                    )
+                    if prepared_occurrence_id is not None:
+                        messages.append({
+                            "role": "user",
+                            "content": "ASYNC_RBENCH_DELIVERY " + json.dumps(
+                                candidate.payload, ensure_ascii=False, sort_keys=True,
+                            ),
+                        })
                 self.emitter.emit(
                     "agent_progress", phase="model_call_started", role="main",
                     turn=turn_index, model=self.config.main_model,
@@ -1147,9 +1161,19 @@ class ReferenceScaffold:
                 messages.append({"role": "user", "content": "Use a tool to continue, or call finish explicitly."})
                 continue
             idle_turns = 0
+            self._current_turn_id = f"t{turn_index}"
             for call in turn.tool_calls:
                 result = await self._execute_main_tool(call)
                 messages.append(_tool_result(call.id, result))
+            # The runtime signals that every tool in this assistant response has
+            # finished (spec §3.3).  It is a *completion* boundary — not a
+            # submission boundary — so the evaluator can observe the state after
+            # the whole batch, not after a single isolated tool.
+            self.emitter.emit(
+                "main_turn_completed",
+                turn_id=f"t{turn_index}",
+                tool_count=len(turn.tool_calls),
+            )
             await asyncio.sleep(0)
             self.next_turn_index = turn_index + 1
             if self.finished:
@@ -1198,167 +1222,270 @@ class ReferenceScaffold:
                         str(item) for item in args.get("lineage_completion_ids") or []
                     ],
                 })
+            self.emitter.emit(
+                "main_action_started", action_id=action_id, kind=call.name,
+                turn_id=self._current_turn_id,
+            )
+            await asyncio.sleep(0)
             self.emitter.emit("main_action", action_id=action_id, kind=call.name, **metadata)
             await asyncio.sleep(0)
         try:
-            if call.name == "terminal":
-                result = await self.workspace.main_terminal(
-                    str(args.get("command", "")),
-                    int(args.get("timeout_seconds") or self.config.main_terminal_timeout_sec),
+            result = await self._dispatch_main_tool(call, args, action_id)
+        except Exception as exc:
+            LOGGER.exception("main tool %s failed", call.name)
+            # ``main_action_finished`` is emitted in a finally-safe error path so
+            # an exception still closes the boundary begun by ``main_action_started``.
+            await self._finish_main_tool(
+                action_id, call.name, success=False, error=str(exc),
+            )
+            return {"error": str(exc), "tool": call.name}
+        await self._finish_main_tool(action_id, call.name, success=True, result=result)
+        return result
+
+    async def _dispatch_main_tool(
+        self, call: ToolCall, args: dict[str, Any], action_id: str | None,
+    ) -> dict[str, Any]:
+        """Execute one main tool call and return its result dict.
+
+        Every branch returns from this helper; ``_execute_main_tool`` wraps it so
+        ``main_action_started``/``main_action_finished`` bracket exactly one tool
+        execution and the post-tool observer sees only the finished boundary.
+        """
+        if call.name == "terminal":
+            result = await self.workspace.main_terminal(
+                str(args.get("command", "")),
+                int(args.get("timeout_seconds") or self.config.main_terminal_timeout_sec),
+            )
+            return self._command_payload(result)
+        if call.name == "spawn_subagent":
+            return await self.manager.spawn(
+                str(args.get("workstream_id", "")),
+                str(args.get("task", "")),
+                [str(item) for item in args.get("targets") or []],
+                str(args.get("expected_output", "")),
+                str(args.get("priority", "normal")),
+            )
+        if call.name == "list_subagents":
+            return {"children": self.manager.statuses()}
+        if call.name == "wait_for_results":
+            return await self.manager.wait(
+                [str(item) for item in args.get("child_ids") or []],
+                float(args.get("timeout_seconds") or 0),
+                str(args.get("return_when", "any")),
+            )
+        if call.name == "cancel_subagent":
+            return await self.manager.cancel(str(args.get("child_id", "")), str(args.get("reason", "")))
+        if call.name == "acknowledge_result":
+            assert action_id is not None
+            decision = str(args.get("decision", "defer"))
+            if decision not in {"use", "reject", "defer"}:
+                return {"error": f"invalid decision {decision}"}
+            completion_id = str(args.get("completion_id", ""))
+            was_accepted = self.manager.accepted(completion_id)
+            result = self.manager.acknowledge(
+                completion_id, decision, str(args.get("reason", "")), action_id
+            )
+            if not result.get("error") and decision == "use" and not was_accepted:
+                self._accepted_state_revision += 1
+                self._verification_passed = False
+            return result
+        if call.name == "promote_child_path":
+            completion_id = str(args.get("completion_id", ""))
+            source_path = str(args.get("source_path", ""))
+            destination_path = str(args.get("destination_path", ""))
+            assert action_id is not None
+            if not self.manager.accepted(completion_id):
+                self.emitter.emit(
+                    "child_path_promotion_result",
+                    action_id=action_id, completion_id=completion_id, child_id=None,
+                    source_path=source_path, destination_path=destination_path,
+                    success=False, exit_code=None,
+                    failure_detail=(
+                        "completion must be delivered and acknowledged with decision=use"
+                    ),
                 )
-                return self._command_payload(result)
-            if call.name == "spawn_subagent":
-                return await self.manager.spawn(
-                    str(args.get("workstream_id", "")),
-                    str(args.get("task", "")),
-                    [str(item) for item in args.get("targets") or []],
-                    str(args.get("expected_output", "")),
-                    str(args.get("priority", "normal")),
+                return {"error": "completion must be delivered and acknowledged with decision=use before promotion"}
+            child_id = self.manager.child_for_completion(completion_id)
+            assert child_id is not None
+            try:
+                result = await self.workspace.promote(
+                    child_id, source_path, destination_path
                 )
-            if call.name == "list_subagents":
-                return {"children": self.manager.statuses()}
-            if call.name == "wait_for_results":
-                return await self.manager.wait(
-                    [str(item) for item in args.get("child_ids") or []],
-                    float(args.get("timeout_seconds") or 0),
-                    str(args.get("return_when", "any")),
-                )
-            if call.name == "cancel_subagent":
-                return await self.manager.cancel(str(args.get("child_id", "")), str(args.get("reason", "")))
-            if call.name == "acknowledge_result":
-                assert action_id is not None
-                decision = str(args.get("decision", "defer"))
-                if decision not in {"use", "reject", "defer"}:
-                    return {"error": f"invalid decision {decision}"}
-                completion_id = str(args.get("completion_id", ""))
-                was_accepted = self.manager.accepted(completion_id)
-                result = self.manager.acknowledge(
-                    completion_id, decision, str(args.get("reason", "")), action_id
-                )
-                if not result.get("error") and decision == "use" and not was_accepted:
-                    self._accepted_state_revision += 1
-                    self._verification_passed = False
-                return result
-            if call.name == "promote_child_path":
-                completion_id = str(args.get("completion_id", ""))
-                source_path = str(args.get("source_path", ""))
-                destination_path = str(args.get("destination_path", ""))
-                assert action_id is not None
-                if not self.manager.accepted(completion_id):
-                    self.emitter.emit(
-                        "child_path_promotion_result",
-                        action_id=action_id, completion_id=completion_id, child_id=None,
-                        source_path=source_path, destination_path=destination_path,
-                        success=False, exit_code=None,
-                        failure_detail=(
-                            "completion must be delivered and acknowledged with decision=use"
-                        ),
-                    )
-                    return {"error": "completion must be delivered and acknowledged with decision=use before promotion"}
-                child_id = self.manager.child_for_completion(completion_id)
-                assert child_id is not None
-                try:
-                    result = await self.workspace.promote(
-                        child_id, source_path, destination_path
-                    )
-                except Exception as exc:
-                    self.emitter.emit(
-                        "child_path_promotion_result",
-                        action_id=action_id, completion_id=completion_id, child_id=child_id,
-                        source_path=source_path, destination_path=destination_path,
-                        success=False, exit_code=None, failure_detail=str(exc)[:1000],
-                    )
-                    raise
+            except Exception as exc:
                 self.emitter.emit(
                     "child_path_promotion_result",
                     action_id=action_id, completion_id=completion_id, child_id=child_id,
                     source_path=source_path, destination_path=destination_path,
-                    success=result.exit_code == 0, exit_code=result.exit_code,
-                    failure_detail=(
-                        "" if result.exit_code == 0 else _trim(result.output, 1000)
-                    ),
+                    success=False, exit_code=None, failure_detail=str(exc)[:1000],
                 )
-                return self._command_payload(result)
-            if call.name == "commit_artifact":
-                lineage = [str(item) for item in args.get("lineage_completion_ids") or []]
-                lineage_error = self.manager.validate_accepted_lineage(lineage)
-                if lineage_error:
-                    return {"error": "artifact " + lineage_error}
-                artifact_id = str(args.get("artifact_id", ""))
-                if artifact_id not in self.start.get("allowed_artifacts", []):
-                    return {"error": f"unknown artifact {artifact_id}"}
-                observation = await self._observe_artifact(artifact_id)
-                if observation.get("error"):
-                    return observation
-                self.emitter.emit(
-                    "artifact_committed",
-                    artifact_id=artifact_id,
-                    version=str(args.get("version", "")),
-                    lineage_completion_ids=lineage,
-                    evidence_paths=[str(item) for item in args.get("evidence_paths") or []],
-                    final=bool(args.get("final", False)),
-                    observed_digest=observation["observed_digest"],
-                    observed_path=observation["observed_path"],
-                    evaluator_observed=True,
+                raise
+            self.emitter.emit(
+                "child_path_promotion_result",
+                action_id=action_id, completion_id=completion_id, child_id=child_id,
+                source_path=source_path, destination_path=destination_path,
+                success=result.exit_code == 0, exit_code=result.exit_code,
+                failure_detail=(
+                    "" if result.exit_code == 0 else _trim(result.output, 1000)
+                ),
+            )
+            return self._command_payload(result)
+        if call.name == "commit_artifact":
+            lineage = [str(item) for item in args.get("lineage_completion_ids") or []]
+            lineage_error = self.manager.validate_accepted_lineage(lineage)
+            if lineage_error:
+                return {"error": "artifact " + lineage_error}
+            artifact_id = str(args.get("artifact_id", ""))
+            if artifact_id not in self.start.get("allowed_artifacts", []):
+                return {"error": f"unknown artifact {artifact_id}"}
+            observation = await self._observe_artifact(artifact_id)
+            if observation.get("error"):
+                return observation
+            self.emitter.emit(
+                "artifact_committed",
+                artifact_id=artifact_id,
+                version=str(args.get("version", "")),
+                lineage_completion_ids=lineage,
+                evidence_paths=[str(item) for item in args.get("evidence_paths") or []],
+                final=bool(args.get("final", False)),
+                observed_digest=observation["observed_digest"],
+                observed_path=observation["observed_path"],
+                evaluator_observed=True,
+            )
+            if bool(args.get("final", False)):
+                self._final_commit_revision = self._accepted_state_revision
+            return {
+                "committed": True, "artifact_id": artifact_id,
+                "observed_digest": observation["observed_digest"],
+            }
+        if call.name == "verify_current_state":
+            lineage = [str(item) for item in args.get("lineage_completion_ids") or []]
+            lineage_error = self.manager.validate_accepted_lineage(lineage)
+            if lineage_error:
+                return {"error": "verification " + lineage_error}
+            artifact_ids = [str(item) for item in args.get("artifact_ids") or []]
+            if not set(artifact_ids).issubset(self.start.get("allowed_artifacts", [])):
+                return {"error": "verification references an unknown artifact"}
+            result = await self.workspace.verify_current_state(artifact_ids, lineage)
+            self._verification_revision = self._accepted_state_revision
+            self._verification_passed = bool(result.get("passed", False))
+            return result
+        if call.name == "finish":
+            requested_status = str(args.get("status", "incomplete"))
+            # Finish guard (spec §5.1(6), §9.4): a finish — whether completed
+            # or incomplete — must not skip a required occurrence that is
+            # queued (adapter-received but unpresented) or an active, unclosed
+            # response window.  The guard deliberately does NOT depend on the
+            # declared status, so a participant cannot silently surrender past
+            # a queued delivery that never reached a main-model request.
+            pending_occs = self.manager.presentation_queue.has_pending()
+            open_window = (
+                self.manager.presentation_queue.active_window is not None
+                and self.manager.presentation_queue.active_window.active
+            )
+            missing: list[str] = []
+            if requested_status == "completed":
+                if self._final_commit_revision != self._accepted_state_revision:
+                    missing.append("a final artifact commit after the latest accepted completion")
+                if (
+                    self._verification_revision != self._accepted_state_revision
+                    or not self._verification_passed
+                ):
+                    missing.append("a successful verification after the latest accepted completion")
+            if pending_occs or open_window:
+                missing.append(
+                    "all delivered occurrences presented and response windows closed"
                 )
-                if bool(args.get("final", False)):
-                    self._final_commit_revision = self._accepted_state_revision
+            if missing:
                 return {
-                    "committed": True, "artifact_id": artifact_id,
-                    "observed_digest": observation["observed_digest"],
+                    "error": "completion_preconditions_not_met",
+                    "missing": missing,
+                    "accepted_state_revision": self._accepted_state_revision,
                 }
-            if call.name == "verify_current_state":
-                lineage = [str(item) for item in args.get("lineage_completion_ids") or []]
-                lineage_error = self.manager.validate_accepted_lineage(lineage)
-                if lineage_error:
-                    return {"error": "verification " + lineage_error}
-                artifact_ids = [str(item) for item in args.get("artifact_ids") or []]
-                if not set(artifact_ids).issubset(self.start.get("allowed_artifacts", [])):
-                    return {"error": "verification references an unknown artifact"}
-                result = await self.workspace.verify_current_state(artifact_ids, lineage)
-                self._verification_revision = self._accepted_state_revision
-                self._verification_passed = bool(result.get("passed", False))
-                return result
-            if call.name == "finish":
-                requested_status = str(args.get("status", "incomplete"))
-                # Finish guard (spec §5.1(6), §9.4): a finish — whether completed
-                # or incomplete — must not skip a required occurrence that is
-                # queued (adapter-received but unpresented) or an active, unclosed
-                # response window.  The guard deliberately does NOT depend on the
-                # declared status, so a participant cannot silently surrender past
-                # a queued delivery that never reached a main-model request.
-                pending_occs = self.manager.presentation_queue.has_pending()
-                open_window = (
-                    self.manager.presentation_queue.active_window is not None
-                    and self.manager.presentation_queue.active_window.active
-                )
-                missing: list[str] = []
-                if requested_status == "completed":
-                    if self._final_commit_revision != self._accepted_state_revision:
-                        missing.append("a final artifact commit after the latest accepted completion")
-                    if (
-                        self._verification_revision != self._accepted_state_revision
-                        or not self._verification_passed
-                    ):
-                        missing.append("a successful verification after the latest accepted completion")
-                if pending_occs or open_window:
-                    missing.append(
-                        "all delivered occurrences presented and response windows closed"
-                    )
-                if missing:
-                    return {
-                        "error": "completion_preconditions_not_met",
-                        "missing": missing,
-                        "accepted_state_revision": self._accepted_state_revision,
-                    }
-                self.finished = True
-                self.finish_status = requested_status
-                self.final_summary = str(args.get("summary", ""))
-                return {"ending": True, "status": self.finish_status}
-            return {"error": f"unknown main tool {call.name}"}
-        except Exception as exc:
-            LOGGER.exception("main tool %s failed", call.name)
-            return {"error": str(exc), "tool": call.name}
+            self.finished = True
+            self.finish_status = requested_status
+            self.final_summary = str(args.get("summary", ""))
+            return {"ending": True, "status": self.finish_status}
+        return {"error": f"unknown main tool {call.name}"}
+
+    async def _finish_main_tool(
+        self, action_id: str | None, kind: str, *, success: bool,
+        result: dict[str, Any] | None = None, error: str | None = None,
+    ) -> None:
+        """Close the ``main_action`` boundary begun before a tool ran.
+
+        Emits ``main_action_finished`` (success/error category + result digest)
+        and, for the modifying tools whose completion can establish a
+        provisional boundary, hands the finished action to the post-tool observer.
+        """
+        if action_id is None:
+            return
+        self.emitter.emit(
+            "main_action_finished",
+            action_id=action_id, kind=kind, success=success,
+            error_category="exception" if not success else None,
+            result_digest=self._tool_result_digest(result),
+            exit_code=self._tool_exit_code(result),
+        )
+        await asyncio.sleep(0)
+        if success and kind in OBSERVED_TOOLS:
+            await self._observe_main_state(kind, action_id)
+
+    @staticmethod
+    def _tool_result_digest(result: dict[str, Any] | None) -> str | None:
+        if result is None:
+            return None
+        try:
+            return hashlib.sha256(
+                json.dumps(result, sort_keys=True, ensure_ascii=False).encode()
+            ).hexdigest()
+        except (TypeError, ValueError):
+            return None
+
+    @staticmethod
+    def _tool_exit_code(result: dict[str, Any] | None) -> int | None:
+        if not isinstance(result, dict):
+            return None
+        code = result.get("exit_code")
+        if isinstance(code, bool) or not isinstance(code, (int, float)):
+            return None
+        return int(code)
+
+    async def _observe_main_state(self, kind: str, action_id: str) -> None:
+        """Ask the kernel to observe the main workspace for the finished tool."""
+        try:
+            await self.workspace.observe_main_state(
+                reason=f"tool_completed:{kind}",
+                action_id=action_id,
+                turn_id=self._current_turn_id,
+            )
+        except Exception as exc:  # noqa: BLE001
+            LOGGER.exception("observe_main_state failed for %s", action_id)
+
+    async def _prepare_presentation(
+        self, occurrence: DeliveryOccurrence, turn_id: str,
+    ) -> str | None:
+        """Authorize presenting one occurrence via the evaluator's S^- snapshot.
+
+        Returns the occurrence id when the kernel prepared the before-snapshot
+        and authorized presenting it. Returns None when the snapshot failed, in
+        which case the occurrence stays queued and is never marked presented
+        (spec §3.3, §5.1(4)).
+        """
+        try:
+            prepared = await self.workspace.prepare_result_presentation(
+                occurrence.occurrence_id, turn_id=turn_id,
+            )
+        except Exception as exc:  # noqa: BLE001
+            LOGGER.exception(
+                "presentation preparation failed for %s", occurrence.occurrence_id,
+            )
+            return None
+        if not (prepared or {}).get("prepared"):
+            LOGGER.error(
+                "presentation preparation rejected for %s", occurrence.occurrence_id,
+            )
+            return None
+        return occurrence.occurrence_id
 
     def _command_payload(self, result: CommandResult) -> dict[str, Any]:
         return {"exit_code": result.exit_code, "output": _trim(result.output, self.config.max_tool_output_chars)}

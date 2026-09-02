@@ -93,6 +93,38 @@ class CapabilityRuntimeProxy(WorkspaceRuntime):
             lineage_completion_ids=lineage_completion_ids,
         )
 
+    async def prepare_result_presentation(
+        self, delivery_occurrence_id: str, *, turn_id: str,
+    ) -> dict[str, object]:
+        """Ask the kernel to authorize presenting one delivery occurrence.
+
+        The evaluator generates the before-presentation snapshot ``S_i^-`` and
+        records the kernel-private ``presentation_prepared`` boundary. The
+        adapter must only mark the occurrence presented after this returns
+        ``prepared`` true (spec §3.3, §5.1(4)).
+        """
+        return await self._request(
+            "prepare_result_presentation",
+            delivery_occurrence_id=delivery_occurrence_id,
+            turn_id=turn_id,
+        )
+
+    async def observe_main_state(
+        self, reason: str, *, action_id: str, turn_id: str,
+    ) -> dict[str, object]:
+        """Ask the kernel to observe the main workspace after a tool completes.
+
+        The kernel runs the post-tool provisional observer and records the
+        kernel-private ``provisional_observed`` fact (spec §4.2). The adapter
+        fires this after a modifying tool has *finished*, never before it runs.
+        """
+        return await self._request(
+            "observe_main_state",
+            reason=reason,
+            action_id=action_id,
+            turn_id=turn_id,
+        )
+
     async def cleanup_child(self, child_id: str) -> None:
         await self._request("cleanup_child", child_id=child_id)
 

@@ -1,12 +1,22 @@
 from __future__ import annotations
 
+import asyncio
+import io
 from pathlib import Path
+
+import yaml
 
 from async_rbench.evaluation.aggregate import aggregate_reports
 from async_rbench.evaluation.scheduler import DeliveryController
 from async_rbench.evaluation.runner import (
-    _apply_delivery_intervention, _record_gateway_outcome,
+    _apply_delivery_intervention, _make_start, _record_gateway_outcome,
+    EpisodeConfig,
 )
+from async_rbench.evaluation.workspace_runtime import DisabledWorkspaceRuntime
+from async_rbench.profiles.conformance_mock.scripted_backend import ScriptedTestBackend
+from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
+from async_rbench.profiles.reference_scaffold_api.gateway import DeliveryReader, ProtocolEmitter
+from async_rbench.profiles.reference_scaffold_api.runtime import ReferenceScaffold
 from async_rbench.spec import load_case
 
 
@@ -261,3 +271,108 @@ def test_primary_effect_is_paired_linear_minus_async() -> None:
         {**common, "episode_id": "a", "execution_mode": "async", "test_point_pass_rate": 0.6},
     ], bootstrap_iterations=5)
     assert round(report["development_summary"]["paired_async_replanning_drop"], 6) == 0.3
+
+
+# --- Presentation handshake (Task 4 §3.3 / §5.1(4)) -----------------------
+#
+# The runtime prepares the evaluator-owned before-snapshot S_i^- and only
+# authorizes presenting a delivery occurrence once the snapshot is complete.
+# A failed snapshot must leave the occurrence queued and un-presented (spec
+# §5.1(4)).  Order (spec §3.3, §5.1(2)): budget admitted -> presentation
+# prepared -> delivery message appended -> main API request started ->
+# result_presented.  These tests drive that handshake at the runtime seam.
+
+
+def _rt_start() -> dict:
+    case_path = ROOT / "cases" / "data-recovery-service" / "public_case.yaml"
+    case = load_case(case_path).raw
+    task = yaml.safe_load((case_path.parent / "task" / "task.yaml").read_text(encoding="utf-8"))
+    config = EpisodeConfig(
+        episode_id="test-presentation", case_id="data-recovery-service",
+        execution_mode="async", guidance="incentive", agent_seed=1,
+        adapter_command=[], output_dir=ROOT / "artifacts" / "test-unused",
+        use_container=False,
+    )
+    return _make_start(config, case, task, None, "0123456789ab")
+
+
+def _rt_scaffold(start: dict) -> ReferenceScaffold:
+    config = ScaffoldConfig.from_file(
+        None, {"backend": "scripted_test", "workspace_mode": "disabled"},
+    )
+    return ReferenceScaffold(
+        start=start,
+        config=config,
+        backend=ScriptedTestBackend(),
+        workspace=DisabledWorkspaceRuntime(),
+        emitter=ProtocolEmitter(stdout=io.StringIO()),
+        delivery_reader=DeliveryReader(),
+    )
+
+
+def _inject_delivery(scaffold: ReferenceScaffold, child_id: str, completion_id: str) -> None:
+    from async_rbench.profiles.reference_scaffold_api.runtime import ChildRecord
+    scaffold.manager.children[child_id] = ChildRecord(
+        child_id=child_id, task="work", work_units=["wal_recovery"], targets=[],
+        expected_output="out", priority="high", status="completed_hidden",
+        completion_id=completion_id,
+    )
+    scaffold.manager.completion_to_child[completion_id] = child_id
+
+
+def test_presentation_failed_snapshot_leaves_occurrence_queued() -> None:
+    """A rejected before-snapshot never marks the occurrence presented (spec §5.1(4))."""
+    class RejectingWorkspace(DisabledWorkspaceRuntime):
+        async def prepare_result_presentation(self, delivery_occurrence_id, *, turn_id):
+            return {"prepared": False, "error": "incomplete_snapshot"}
+
+    async def exercise() -> None:
+        scaffold = _rt_scaffold(_rt_start())
+        scaffold.workspace = RejectingWorkspace()
+        _inject_delivery(scaffold, "child-1", "compl-1")
+        await scaffold.manager.handle_delivery(
+            {"completion_id": "compl-1", "payload": {"id": 1}},
+        )
+        candidate = scaffold.manager.select_presentable()
+        assert candidate is not None
+        prepared_id = await scaffold._prepare_presentation(candidate, "t1")
+        assert prepared_id is None
+        # The occurrence stays queued (still selectable) and was never presented.
+        again = scaffold.manager.select_presentable()
+        assert again is not None and again.completion_id == "compl-1"
+        assert scaffold.manager.presentation_queue.presented_occurrence(
+            candidate.occurrence_id
+        ) is None
+
+    asyncio.run(exercise())
+
+
+def test_presentation_prepared_snapshot_is_then_marked_presented() -> None:
+    """Order: prepare S^- -> append delivery -> start request -> result_presented."""
+    class AcceptingWorkspace(DisabledWorkspaceRuntime):
+        async def prepare_result_presentation(self, delivery_occurrence_id, *, turn_id):
+            return {"prepared": True, "snapshot_digest": "d" * 64}
+
+    async def exercise() -> None:
+        scaffold = _rt_scaffold(_rt_start())
+        scaffold.workspace = AcceptingWorkspace()
+        _inject_delivery(scaffold, "child-1", "compl-1")
+        await scaffold.manager.handle_delivery(
+            {"completion_id": "compl-1", "payload": {"id": 1}},
+        )
+        candidate = scaffold.manager.select_presentable()
+        assert candidate is not None
+        # Handshake authorizes presenting: the before-snapshot is prepared first.
+        prepared_id = await scaffold._prepare_presentation(candidate, "t1")
+        assert prepared_id == candidate.occurrence_id
+        # Only after the request that carries it starts is it marked presented,
+        # which emits the public result_presented boundary.
+        scaffold.manager.mark_presented(
+            candidate.occurrence_id, turn_id="t1", window_id="w1",
+        )
+        presented = scaffold.manager.presentation_queue.presented_occurrence(
+            candidate.occurrence_id,
+        )
+        assert presented is not None
+
+    asyncio.run(exercise())

@@ -203,3 +203,179 @@ def test_child_terminal_capability_records_exact_private_command_and_result():
     assert finished["output_truncated"] is False
     source = EventStore.from_records(recorder.events, "terminal-audit")
     assert {event["visibility"] for event in source.events} == {"kernel_private"}
+
+
+def test_proxy_encodes_prepare_result_presentation_and_observe_main_state():
+    captured: list[dict] = []
+    proxy = CapabilityRuntimeProxy(captured.append)
+
+    async def exercise():
+        prep_task = asyncio.create_task(
+            proxy.prepare_result_presentation("occ-1", turn_id="t1")
+        )
+        await asyncio.sleep(0)
+        assert captured[0]["capability"] == "prepare_result_presentation"
+        assert captured[0]["args"] == {
+            "delivery_occurrence_id": "occ-1", "turn_id": "t1",
+        }
+        proxy.handle_response({
+            "type": "capability_response", "request_id": captured[0]["request_id"],
+            "ok": True, "result": {"prepared": True, "snapshot_digest": "d" * 64},
+        })
+        prepared = await prep_task
+
+        observe_task = asyncio.create_task(
+            proxy.observe_main_state("tool_completed:terminal", action_id="a1", turn_id="t1")
+        )
+        await asyncio.sleep(0)
+        assert captured[1]["capability"] == "observe_main_state"
+        assert captured[1]["args"] == {
+            "reason": "tool_completed:terminal", "action_id": "a1", "turn_id": "t1",
+        }
+        proxy.handle_response({
+            "type": "capability_response", "request_id": captured[1]["request_id"],
+            "ok": True, "result": {"provisional_observed": True},
+        })
+        observed = await observe_task
+        return prepared, observed
+
+    prepared, observed = asyncio.run(exercise())
+    assert prepared == {"prepared": True, "snapshot_digest": "d" * 64}
+    assert observed == {"provisional_observed": True}
+
+
+def test_dispatch_prepare_result_presentation_records_kernel_private_boundary():
+    class Workspace:
+        async def main_terminal(self, command, timeout):
+            raise AssertionError("no observation points expected for an empty case")
+
+    class Process:
+        def __init__(self):
+            self.messages = []
+
+    process = Process()
+
+    class Stdin:
+        def write(self, data):
+            process.messages.append(json.loads(data.decode()))
+
+        async def drain(self):
+            return None
+
+    process.stdin = Stdin()
+    recorder = TraceRecorder("presentation-audit")
+    asyncio.run(_dispatch_capability(
+        Workspace(),
+        {
+            "type": "capability_request", "request_id": "prep-r1",
+            "capability": "prepare_result_presentation",
+            "args": {"delivery_occurrence_id": "occ-1", "turn_id": "t1"},
+        },
+        process,
+        asyncio.Lock(),
+        recorder,
+        case_spec={},
+    ))
+
+    assert process.messages[0]["ok"] is True
+    assert process.messages[0]["result"]["prepared"] is True
+    assert process.messages[0]["result"]["snapshot_digest"]
+    prepared, = recorder.events
+    assert prepared["type"] == "presentation_prepared"
+    assert prepared["delivery_occurrence_id"] == "occ-1"
+    assert prepared["turn_id"] == "t1"
+    source = EventStore.from_records(recorder.events, "presentation-audit")
+    assert {event["visibility"] for event in source.events} == {"kernel_private"}
+
+
+def test_dispatch_prepare_result_presentation_fails_on_incomplete_snapshot():
+    class Workspace:
+        async def main_terminal(self, command, timeout):
+            return CommandResult(1, "")
+
+    class Process:
+        def __init__(self):
+            self.messages = []
+
+    process = Process()
+
+    class Stdin:
+        def write(self, data):
+            process.messages.append(json.loads(data.decode()))
+
+        async def drain(self):
+            return None
+
+    process.stdin = Stdin()
+    asyncio.run(_dispatch_capability(
+        Workspace(),
+        {
+            "type": "capability_request", "request_id": "prep-fail",
+            "capability": "prepare_result_presentation",
+            "args": {"delivery_occurrence_id": "occ-2", "turn_id": "t2"},
+        },
+        process,
+        asyncio.Lock(),
+        TraceRecorder("presentation-fail-audit"),
+        case_spec={"observation_points": [
+            {"point_id": "p1", "kind": "file", "path": "/app/nonexistent"},
+        ]},
+    ))
+
+    assert process.messages[0]["ok"] is True
+    assert process.messages[0]["result"]["prepared"] is False
+    assert process.messages[0]["result"]["error"] == "incomplete_snapshot"
+
+
+def test_dispatch_observe_main_state_records_kernel_private_provisional_fact():
+    class Workspace:
+        async def main_terminal(self, command, timeout):
+            raise AssertionError("no observation points expected for an empty case")
+
+    class Process:
+        def __init__(self):
+            self.messages = []
+
+    process = Process()
+
+    class Stdin:
+        def write(self, data):
+            process.messages.append(json.loads(data.decode()))
+
+        async def drain(self):
+            return None
+
+    process.stdin = Stdin()
+    recorder = TraceRecorder("observe-audit")
+    asyncio.run(_dispatch_capability(
+        Workspace(),
+        {
+            "type": "capability_request", "request_id": "obs-r1",
+            "capability": "observe_main_state",
+            "args": {
+                "reason": "tool_completed:terminal",
+                "action_id": "a1", "turn_id": "t1",
+            },
+        },
+        process,
+        asyncio.Lock(),
+        recorder,
+        case_spec={},
+    ))
+
+    assert process.messages[0]["ok"] is True
+    assert process.messages[0]["result"]["provisional_observed"] is True
+    fact, = recorder.events
+    assert fact["type"] == "provisional_observed"
+    assert fact["provisional_established"] is True
+    assert fact["action_id"] == "a1"
+    assert fact["turn_id"] == "t1"
+    assert fact["provisional_digest"]
+    assert "observed_points" in fact
+    source = EventStore.from_records(recorder.events, "observe-audit")
+    assert {event["visibility"] for event in source.events} == {"kernel_private"}
+
+
+def test_dispatch_require_listed_for_both_new_capabilities():
+    assert "prepare_result_presentation" in CAPABILITY_METHODS
+    assert "observe_main_state" in CAPABILITY_METHODS
