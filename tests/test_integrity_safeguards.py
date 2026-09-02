@@ -136,6 +136,26 @@ def test_scaffold_config_validates_known_modes_and_rejects_unknown() -> None:
         ).validate()
 
 
+def test_scaffold_config_rejects_role_level_scripted_test_backend() -> None:
+    """A role-provider override may not select ``scripted_test``.
+
+    ``build_backend`` only builds ``codex_cli`` / ``openai_compatible``. A nested
+    ``child_provider.backend="scripted_test"`` under a top-level
+    ``openai_compatible`` would pass the old role allow-set but crash in
+    ``build_backends``, so it must be rejected at validation (F1).
+    """
+    with pytest.raises(ValueError, match="child_provider has unsupported backend 'scripted_test'"):
+        ScaffoldConfig(
+            backend="openai_compatible",
+            main_model="main-x",
+            child_model="child-y",
+            child_provider={"backend": "scripted_test"},
+        ).validate()
+    # A top-level ``scripted_test`` dev config must still validate: the role loop
+    # only rejects an explicit role override, never the inherited top-level backend.
+    ScaffoldConfig(backend="scripted_test", main_model="scripted-test", child_model="scripted-test").validate()
+
+
 def test_metadata_audit_extracts_fixed_child_pool_identity() -> None:
     metadata = {
         "main_model": "main-x", "child_model": "child-y",
@@ -156,6 +176,33 @@ def test_metadata_audit_notes_missing_child_pool_identity() -> None:
     assert audit["child_pool_id"] is None
     assert any("child_pool_id is empty" in note for note in audit["notes"])
     assert child_pool_identity(metadata) is None
+
+
+def test_metadata_audit_uses_main_resolved_when_child_differs() -> None:
+    """The audit scopes `resolved_model` to the main role.
+
+    With dual-main/child backends the merged observations are ordered main→child,
+    so taking the last non-empty value would read the *child's* resolved model.
+    That would report a spurious requested/resolved mismatch note and stamp the
+    child identity as resolved_model (F2).
+    """
+    metadata = {
+        "main_model": "main-x",
+        "child_model": "child-y",
+        "child_pool_id": "pool-7",
+        "child_provider": {"backend": "openai_compatible", "model": "child-y"},
+    }
+    runtime_metadata = {
+        "model_observations": [
+            {"role": "main", "requested_model": "main-x", "resolved_model": "main-x"},
+            {"role": "child", "requested_model": "child-y", "resolved_model": "child-resolved"},
+        ]
+    }
+    audit = _metadata_audit(metadata, runtime_metadata)
+    # The resolved identity is the main role's, not the child's.
+    assert audit["resolved_model"] == "main-x"
+    # No spurious requested/resolved mismatch note despite the differing child model.
+    assert not any("differs from resolved" in note for note in audit["notes"])
 
 
 def test_verify_child_pool_constancy_accepts_identical_pool() -> None:

@@ -315,9 +315,15 @@ class ScaffoldConfig:
             override = self.main_provider if role == "main" else self.child_provider
             if not isinstance(override, dict):
                 raise ValueError(f"{role}_provider must be a mapping")
-            provider_backend = override.get("backend", self.backend)
-            if provider_backend not in {"openai_compatible", "codex_cli", "scripted_test"}:
-                raise ValueError(f"{role}_provider has unsupported backend {provider_backend!r}")
+            # A role-provider override may only select a backend the kernel factory
+            # can build (codex_cli / openai_compatible). ``scripted_test`` remains a
+            # top-level dev backend: a nested role override of it would pass the old
+            # allow-set but crash in build_backends (F1).
+            override_backend = override.get("backend")
+            if override_backend is not None and override_backend not in {
+                "openai_compatible", "codex_cli"
+            }:
+                raise ValueError(f"{role}_provider has unsupported backend {override_backend!r}")
             if override.get("max_api_concurrency") is not None and int(override["max_api_concurrency"]) <= 0:
                 raise ValueError(f"{role}_provider max_api_concurrency must be positive")
             if override.get("max_tokens_parameter") is not None and override["max_tokens_parameter"] not in {

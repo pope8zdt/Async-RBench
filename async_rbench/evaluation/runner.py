@@ -344,7 +344,17 @@ def _metadata_audit(
     resolved_model: str | None = None
     observations = (runtime_metadata or {}).get("model_observations")
     if isinstance(observations, list):
+        # Only the main role's observation resolves the identity that
+        # _metadata_audit compares against ``requested_main``.  Dual-provider
+        # backends merge main→child observations, so the last non-empty value is
+        # the child's resolved_model; scoping to the main role keeps the audit from
+        # reporting a spurious main/child mismatch note or stamping the child's
+        # identity as the resolved model (F2).  Untagged observations are legacy
+        # single-provider main emissions and remain accepted.
         for item in observations:
+            role = str((item or {}).get("role", "")).strip()
+            if role not in {"", "main"}:
+                continue
             value = str((item or {}).get("resolved_model", "")).strip()
             if value:
                 resolved_model = value
