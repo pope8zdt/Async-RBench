@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "Authentic task-specific detection_signature_bundle_completed receipt bound to coding:026.",
+      "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
       "id": "mab_dependency_unblock_ce10d55597.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "Evaluator-owned NetGuard authority runs after three upstream results.",
+      "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
       "id": "mab_dependency_unblock_ce10d55597.event.authority_probe",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "closure",
       "critical": true,
       "description": "A delayed signature bundle unblocks deterministic malware, phishing, unauthorized-access, secure-source, and encrypted-traffic decisions while preserving the audit log.",
+      "event_id": "evt.mab_dependency_unblock_ce10.detection_signature_bundle_completed",
       "id": "mab_dependency_unblock_ce10d55597.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "mab_dependency_unblock_ce10d55597.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "mab_dependency_unblock_ce10d55597.source.output_schema",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_netguard_output_schema_dashboard_and_closure",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "mab_dependency_unblock_ce10d55597.source.task_behavior",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_netguard_malware_phishing_unauthorized_and_benign_accuracy",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "mab_dependency_unblock_ce10d55597.source.preservation",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_netguard_secure_and_encrypted_edges_logs_and_actions_are_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "mab_dependency_unblock_ce10d55597.source.event_closure",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_netguard_signature_event_heavy_batch_and_final_reverification",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

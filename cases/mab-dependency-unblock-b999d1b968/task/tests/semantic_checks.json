@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "Authentic task-specific performance_metric_contract_completed receipt bound to coding:008.",
+      "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
       "id": "mab_dependency_unblock_b999d1b968.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "Evaluator-owned Team_Collaboration_Manager authority runs after three upstream results.",
+      "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
       "id": "mab_dependency_unblock_b999d1b968.event.authority_probe",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "closure",
       "critical": true,
       "description": "A delayed performance-metric contract fixes completion-rate, duration, and unique-assignment semantics after project, task, and communication state already exist.",
+      "event_id": "evt.mab_dependency_unblock_b999.performance_metric_contract_completed",
       "id": "mab_dependency_unblock_b999d1b968.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "mab_dependency_unblock_b999d1b968.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "mab_dependency_unblock_b999d1b968.source.output_schema",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_team_output_schema_projects_tasks_and_closure",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "mab_dependency_unblock_b999d1b968.source.task_behavior",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_team_task_transitions_concurrent_assignment_and_metrics",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "mab_dependency_unblock_b999d1b968.source.preservation",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_team_messages_attachments_feedback_and_reports_are_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "mab_dependency_unblock_b999d1b968.source.event_closure",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_team_event_metric_contract_and_final_reverification",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

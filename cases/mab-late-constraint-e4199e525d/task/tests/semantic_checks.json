@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "Delayed research receipt is authentic and case/source bound.",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
       "id": "mab_late_constraint_e4199e525d.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "Receipt carries the table-tennis-specific authoritative method and evaluation plan.",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
       "id": "mab_late_constraint_e4199e525d.event.evidence",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_authority_is_table_tennis_specific",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_consistency_closure",
       "category": "closure",
       "critical": true,
       "description": "Closure consumes the exact receipt and re-verifies the revised proposal.",
+      "event_id": "evt.res064_pingpong.delayed_authoritative_result",
       "id": "mab_late_constraint_e4199e525d.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_closure_consumes_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "mab_late_constraint_e4199e525d.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_source_pin",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "mab_late_constraint_e4199e525d.native.binding",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_native_binding",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "mab_late_constraint_e4199e525d.fiveq.exact",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_exact_fiveq",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "mab_late_constraint_e4199e525d.problem.anchor",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_problem_anchor",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "mab_late_constraint_e4199e525d.method.anchor",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_method_anchor",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -88,7 +99,8 @@
       "id": "mab_late_constraint_e4199e525d.evaluation.plan",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_evaluation_plan",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -98,7 +110,8 @@
       "id": "mab_late_constraint_e4199e525d.output.schema",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_schema_and_preservation",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

@@ -92,5 +92,44 @@
         "async"
       ]
     }
+  ],
+  "event_contracts": [
+    {
+      "event_id": "dm_a_profile",
+      "event_theme": "delayed_authoritative_result",
+      "track": "atomic_event",
+      "observation_mode": "gateway_only",
+      "state_delta": {
+        "affected_artifacts": [
+          "batch_plan_1",
+          "batch_plan_2",
+          "deployment",
+          "batch_lineage"
+        ],
+        "unaffected_artifacts": [
+          "recovered_model",
+          "pp_candidate"
+        ]
+      },
+      "required_changes": [
+        "batch_plan_1",
+        "batch_plan_2",
+        "deployment",
+        "batch_lineage"
+      ],
+      "required_preservation": [
+        "recovered_model",
+        "pp_candidate"
+      ],
+      "forbidden_changes": [
+        "tp_candidate"
+      ],
+      "closure_checks": [
+        "dm.lineage.batch_lineage_exact",
+        "dm.stale.tensor_candidate_rejected"
+      ],
+      "expected_disposition": "adopt_delayed_authority_and_replan_downstream",
+      "event_status": "scored"
+    }
   ]
 }

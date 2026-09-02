@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "Authentic case-bound delayed receipt.",
+      "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
       "id": "osw_cross_app_artifact_133984c167.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "Independent worker completed with probes.",
+      "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
       "id": "osw_cross_app_artifact_133984c167.event.probes",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_consistency_closure",
       "category": "closure",
       "critical": true,
       "description": "Closure consumes receipt and reverifies semantics.",
+      "event_id": "evt.osw_cross_app_artifact_13398.delayed_authoritative_result",
       "id": "osw_cross_app_artifact_133984c167.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "osw_cross_app_artifact_133984c167.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "osw_cross_app_artifact_133984c167.osworld.identity",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "osw_cross_app_artifact_133984c167.osworld.official_score",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "osw_cross_app_artifact_133984c167.osworld.native_evidence",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "osw_cross_app_artifact_133984c167.osworld.task_assertion",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -88,7 +99,8 @@
       "id": "osw_cross_app_artifact_133984c167.osworld.output_path",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_bibtex_output_path",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -98,7 +110,8 @@
       "id": "osw_cross_app_artifact_133984c167.osworld.bibtex_coverage",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_six_dblp_records",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -108,7 +121,8 @@
       "id": "osw_cross_app_artifact_133984c167.osworld.published_preference",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_published_records_not_arxiv",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -118,7 +132,8 @@
       "id": "osw_cross_app_artifact_133984c167.osworld.bibtex_format",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_bibtex_format",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

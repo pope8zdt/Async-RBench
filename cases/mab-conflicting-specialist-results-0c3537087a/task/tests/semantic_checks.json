@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "The independent receipt is authentic and case/source bound.",
+      "event_id": "evt.mab_healthcare_0c35.delayed_authoritative_result",
       "id": "mab_conflicting_specialist_results_0c3537087a.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "The independent database authority worker completed with a host checkpoint probe.",
+      "event_id": "evt.mab_healthcare_0c35.delayed_authoritative_result",
       "id": "mab_conflicting_specialist_results_0c3537087a.event.probes",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_consistency_closure",
       "category": "closure",
       "critical": true,
       "description": "The final closure consumes the exact authority receipt and re-verifies source semantics.",
+      "event_id": "evt.mab_healthcare_0c35.delayed_authoritative_result",
       "id": "mab_conflicting_specialist_results_0c3537087a.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "mab_conflicting_specialist_results_0c3537087a.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "mab_conflicting_specialist_results_0c3537087a.native.binding",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_native_evaluator_binding_is_exact",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "mab_conflicting_specialist_results_0c3537087a.diagnosis.exact",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_selected_database_cause_is_exact",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "mab_conflicting_specialist_results_0c3537087a.conflict.reconciled",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_competing_diagnosis_is_reconciled",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "mab_conflicting_specialist_results_0c3537087a.authority.evidence",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_native_authority_evidence_is_consumed",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -88,7 +99,8 @@
       "id": "mab_conflicting_specialist_results_0c3537087a.output.schema",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_database_diagnosis_schema_and_preservation",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"
