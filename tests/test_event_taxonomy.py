@@ -10,6 +10,7 @@ from async_rbench.evaluation.event_taxonomy import (
     EVENT_THEME_IDS,
     validate_event_taxonomy,
     validate_event_theme_fixtures,
+    validate_scenario_events,
 )
 from async_rbench.evaluation.protocol import (
     GATEWAY_STIMULUS_EVENT_REQUIREMENTS,
@@ -79,6 +80,40 @@ def test_current_cases_have_private_event_classification() -> None:
         )
         assert "classification" not in public
         assert private["classification"]["primary_event_theme"] in EVENT_THEME_IDS
+
+
+def test_validate_requires_numeric_deadline_wall_on_deadline_update() -> None:
+    """A live deadline_update row must carry a numeric deadline_wall.
+
+    The seam reads it through float(), so validate rejects a missing, empty, or
+    non-numeric declaration up front (deadline_update rows also require a valid
+    workstream_id, as they are workstream-scoped stimulus kinds).
+    """
+    kwargs = {
+        "execution_mode": "async",
+        "allowed_results": {"authority", "provisional"},
+        "workstream_ids": {"provisional_stream", "authority_stream"},
+        "known_artifacts": {"final"},
+        "known_milestones": {"integrate"},
+    }
+    valid = validate_scenario_events(
+        [{"id": "d1", "stimulus_type": "deadline_update", "deadline_wall": 3600.0,
+          "workstream_id": "provisional_stream"}],
+        **kwargs,
+    )
+    assert valid == []
+    missing = validate_scenario_events(
+        [{"id": "d2", "stimulus_type": "deadline_update",
+          "workstream_id": "provisional_stream"}],
+        **kwargs,
+    )
+    assert any("must declare a numeric deadline_wall" in error for error in missing)
+    non_numeric = validate_scenario_events(
+        [{"id": "d3", "stimulus_type": "deadline_update",
+          "deadline_wall": "2026-09-03T00:00:00Z", "workstream_id": "provisional_stream"}],
+        **kwargs,
+    )
+    assert any("deadline_wall must be numeric" in error for error in non_numeric)
 
 
 def test_current_coverage_counts_events_and_capabilities_independently() -> None:

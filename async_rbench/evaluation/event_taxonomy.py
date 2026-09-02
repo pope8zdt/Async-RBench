@@ -234,6 +234,21 @@ def validate_scenario_events(
         unknown_milestones = set(event.get("reopens_milestones") or []) - milestones
         if unknown_milestones:
             errors.append(f"{prefix} reopens unknown milestones {sorted(unknown_milestones)!r}")
+        if event_type == "deadline_update":
+            # A live deadline_update row must carry a numeric wall-clock target;
+            # the seam reads it through float(), so reject empty / non-numeric
+            # declarations here rather than letting the episode crash mid-run.
+            deadline_wall = event.get("deadline_wall")
+            if deadline_wall is None:
+                errors.append(f"{prefix} deadline_update must declare a numeric deadline_wall")
+            else:
+                try:
+                    float(deadline_wall)
+                except (TypeError, ValueError):
+                    errors.append(
+                        f"{prefix} deadline_update deadline_wall must be numeric, "
+                        f"not {deadline_wall!r}"
+                    )
     duplicates = sorted(
         result for result, count in Counter(result_events).items() if count > 1
     )

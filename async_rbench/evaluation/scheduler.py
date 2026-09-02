@@ -227,7 +227,11 @@ class DeliveryController:
           first child boundary (there is no later live boundary in this seam).
 
         Every declared row fires at most once, keyed by its ``id``; repeated
-        ``child_started`` events are therefore idempotent.
+        ``child_started`` events are therefore idempotent.  A malformed
+        ``deadline_update`` (missing or non-numeric ``deadline_wall``) is
+        consumed once under its id and recorded as a protocol note rather than
+        crashing the episode (see ``validate_scenario_events`` for the
+        taxonomy-side numeric requirement).
         """
         if self.execution_mode != "async" or event.get("type") != "child_started":
             return []
@@ -252,9 +256,30 @@ class DeliveryController:
             elif event_type == "resource_pressure":
                 if str(schedule_event.get("straggler_child_id") or "") != child_id:
                     continue
-            if event_type == "deadline_update" and schedule_event.get("deadline_wall") is None:
-                self.protocol_notes.append(
-                    f"declared deadline_update {event_id!r} ignored: missing deadline_wall"
+            if event_type == "deadline_update":
+                # A deadline_update row is consumed at most once under its declared
+                # id.  A malformed declaration degrades to a single protocol note
+                # (recorded under the id so it is not re-evaluated on every child
+                # boundary) instead of crashing the episode with a bare float().
+                if event_id:
+                    self._fired_stimulus_event_ids.add(event_id)
+                deadline_wall_raw = schedule_event.get("deadline_wall")
+                if deadline_wall_raw is None:
+                    self.protocol_notes.append(
+                        f"declared deadline_update {event_id!r} ignored: missing deadline_wall"
+                    )
+                    continue
+                try:
+                    deadline_wall = float(deadline_wall_raw)
+                except (TypeError, ValueError):
+                    self.protocol_notes.append(
+                        f"declared deadline_update {event_id!r} ignored: "
+                        f"deadline_wall {deadline_wall_raw!r} is not numeric"
+                    )
+                    continue
+                self.apply_deadline_update(
+                    deadline_wall=deadline_wall,
+                    reason=str(schedule_event.get("reason") or "case_declared"),
                 )
                 continue
             self._fired_stimulus_event_ids.add(event_id)
@@ -283,11 +308,6 @@ class DeliveryController:
                     resource=str(schedule_event.get("resource") or "concurrency_slot"),
                     limit=schedule_event.get("limit"),
                     pool_remaining=schedule_event.get("pool_remaining"),
-                )
-            elif event_type == "deadline_update":
-                self.apply_deadline_update(
-                    deadline_wall=float(schedule_event["deadline_wall"]),
-                    reason=str(schedule_event.get("reason") or "case_declared"),
                 )
             elif event_type == "task_scope_revision":
                 self.apply_task_scope_revision(

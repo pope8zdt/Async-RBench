@@ -1040,6 +1040,49 @@ def test_consume_declared_stimuli_dispatches_every_live_kind_once() -> None:
     assert len(controller.revision_audits) == 2
 
 
+def test_consume_declared_deadline_update_missing_wall_notes_once() -> None:
+    """A deadline_update row without deadline_wall degrades to a single note.
+
+    It is consumed once under its declared id, so later child boundaries neither
+    re-append the note nor emit a deadline audit.
+    """
+    case = {"scenarios": {"linear": {"events": []}, "async": {"events": [
+        {"id": "deadline", "stimulus_type": "deadline_update", "reason": "sla"},
+    ]}}}
+    controller = DeliveryController("async", case)
+    for child in ("c1", "c2", "c3"):
+        controller.on_child_started({"type": "child_started", "child_id": child})
+        assert controller.consume_declared_stimuli({
+            "type": "child_started", "child_id": child,
+        }) == []
+    assert controller.deadline_audits == []
+    notes = [n for n in controller.protocol_notes if "deadline_update" in n]
+    assert len(notes) == 1
+    assert "missing deadline_wall" in notes[0]
+
+
+def test_consume_declared_deadline_update_malformed_wall_does_not_crash() -> None:
+    """A non-numeric deadline_wall degrades to a note instead of a float() crash.
+
+    The row is recorded under its declared id, so the note is appended once and
+    no deadline audit is produced.
+    """
+    case = {"scenarios": {"linear": {"events": []}, "async": {"events": [
+        {"id": "deadline", "stimulus_type": "deadline_update",
+         "deadline_wall": "2026-09-03T00:00:00Z", "reason": "iso-wall"},
+    ]}}}
+    controller = DeliveryController("async", case)
+    for child in ("c1", "c2"):
+        controller.on_child_started({"type": "child_started", "child_id": child})
+        assert controller.consume_declared_stimuli({
+            "type": "child_started", "child_id": child,
+        }) == []
+    assert controller.deadline_audits == []
+    notes = [n for n in controller.protocol_notes if "deadline_update" in n]
+    assert len(notes) == 1
+    assert "not numeric" in notes[0]
+
+
 def test_run_episode_consumes_declared_resource_pressure(
     tmp_path: Path, monkeypatch,
 ) -> None:
