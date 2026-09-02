@@ -167,12 +167,26 @@
         ]
       },
       "authority_source": "requirement_worker_02",
+      "closure_checks": [
+        "swe_dependency_unblock_50946f0528.closure"
+      ],
       "event_id": "evt.swe_dependency_unblock_50946f0528.json_script_api_authority_result",
+      "event_status": "scored",
       "event_theme": "delayed_authoritative_result",
+      "expected_disposition": "adopt_delayed_authority_and_replan_downstream",
+      "forbidden_changes": [
+        "provisional_checkpoint"
+      ],
       "main_visible_before_delivery": false,
       "observation_mode": "gateway_only",
+      "required_changes": [
+        "final_state"
+      ],
       "required_opportunities": [
         "authority_delivery"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
       ],
       "state_delta": {
         "affected_artifacts": [

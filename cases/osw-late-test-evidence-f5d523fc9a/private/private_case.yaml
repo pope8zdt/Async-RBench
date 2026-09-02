@@ -34,12 +34,26 @@
       },
       "authority_source": "upstream_worker_03",
       "before_state": "sysstat availability and a report target are established, but the 30 one-second samples and the two official file checks are not yet complete.",
+      "closure_checks": [
+        "osw_late_test_evidence_f5d523fc9a.closure"
+      ],
       "event_id": "evt.osw_late_test_evidence_f5d523fc9a.delayed_authoritative_result",
+      "event_status": "scored",
       "event_theme": "delayed_authoritative_result",
+      "expected_disposition": "adopt_delayed_authority_and_replan_downstream",
+      "forbidden_changes": [
+        "provisional_checkpoint"
+      ],
       "main_visible_before_delivery": false,
       "observation_mode": "gateway_only",
+      "required_changes": [
+        "final_state"
+      ],
       "required_opportunities": [
         "authority_delivery"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
       ],
       "state_delta": {
         "affected_artifacts": [

@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "Authentic case-bound delayed authoritative receipt.",
+      "event_id": "evt.osw_dependency_unblock_201b3549f3.delayed_authoritative_result",
       "id": "osw_dependency_unblock_201b3549f3.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "All three task-specific upstream workers completed with observable probes.",
+      "event_id": "evt.osw_dependency_unblock_201b3549f3.delayed_authoritative_result",
       "id": "osw_dependency_unblock_201b3549f3.event.probes",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_consistency_closure",
       "category": "closure",
       "critical": true,
       "description": "Closure consumes the exact receipt and reverifies source semantics.",
+      "event_id": "evt.osw_dependency_unblock_201b3549f3.delayed_authoritative_result",
       "id": "osw_dependency_unblock_201b3549f3.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "osw_dependency_unblock_201b3549f3.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.identity",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.official_score",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.native_evidence",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.task_assertion",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -88,7 +99,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.project_identity",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_project_identity",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -98,7 +110,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.distribution_identity",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_distribution_identity",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -108,7 +121,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.dependency_lock",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_dependency_lock",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -118,7 +132,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.import_command",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_import_command",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -128,7 +143,8 @@
       "id": "osw_dependency_unblock_201b3549f3.osworld.import_smoke",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_import_smoke",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

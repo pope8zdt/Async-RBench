@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "The event receipt is authentic and bound to the real OSWorld task.",
+      "event_id": "evt.osw_dependency_unblock_5.delayed_authoritative_re",
       "id": "osw_dependency_unblock_5c3a1789cf.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "The delayed OSWorld evidence producer completed with observable probes.",
+      "event_id": "evt.osw_dependency_unblock_5.delayed_authoritative_re",
       "id": "osw_dependency_unblock_5c3a1789cf.event.probes",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_consistency_closure",
       "category": "closure",
       "critical": true,
       "description": "Closure consumes the exact receipt and records source-semantic reverification.",
+      "event_id": "evt.osw_dependency_unblock_5.delayed_authoritative_re",
       "id": "osw_dependency_unblock_5c3a1789cf.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "osw_dependency_unblock_5c3a1789cf.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "osw_dependency_unblock_5c3a1789cf.osworld.identity",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_osworld_result_identity",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "osw_dependency_unblock_5c3a1789cf.osworld.official_score",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_official_score_is_one",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "osw_dependency_unblock_5c3a1789cf.osworld.native_evidence",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_native_evidence_sha256_matches_fixture",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "osw_dependency_unblock_5c3a1789cf.osworld.task_assertion",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_task_assertion_is_case_specific",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -88,7 +99,8 @@
       "id": "osw_dependency_unblock_5c3a1789cf.osworld.state",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_zurich_relative_date_interval",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"
