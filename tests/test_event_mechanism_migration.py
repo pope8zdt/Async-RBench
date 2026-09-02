@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from scripts.audit_event_mechanisms import (
@@ -9,6 +10,8 @@ from scripts.audit_event_mechanisms import (
 
 ROOT = Path(__file__).resolve().parents[1]
 
+SHA256_RE = re.compile(r"[0-9a-f]{64}")
+
 
 def test_event_migration_manifest_covers_every_registered_instance() -> None:
     report = build_event_migration_manifest(ROOT)
@@ -16,6 +19,7 @@ def test_event_migration_manifest_covers_every_registered_instance() -> None:
     assert len(report["rows"]) == 201
     assert len({(r["case_id"], r["instance_id"]) for r in report["rows"]}) == 201
     assert all(r["required_stimulus_type"] for r in report["rows"])
+    assert all(SHA256_RE.fullmatch(r["row_digest"]) for r in report["rows"])
 
 
 def test_event_migration_manifest_matches_frozen_theme_distribution() -> None:

@@ -118,13 +118,13 @@ def _derive_row(
 
     Field-name mapping (existing contract data -> plan field name):
 
-      required_behavior          -> required_changes
-      forbidden_behavior          -> forbidden_changes
-      before_state                -> provisional_predicate
-      after_state / unaffected    -> required_preservation
-      affected_closure (+ nodes)  -> closure_checks
-      mutation_family             -> migration_class
-      event_id (contract)         -> event_id
+      required_behavior / after_state          -> required_changes
+      forbidden_behavior / forbidden_shortcut  -> forbidden_changes
+      before_state                             -> provisional_predicate
+      unaffected_nodes / must_still_pass       -> required_preservation
+      affected_closure (+ affected/unaffected nodes) -> closure_checks
+      mutation_family                          -> migration_class
+      event_id (contract)                      -> event_id
 
     Missing data is reported with the SENTINEL instead of being fabricated so
     the migration status reflects real coverage gaps.
@@ -143,8 +143,11 @@ def _derive_row(
     decision_contracts = [d for d in (case_ir.get("decision_contracts") or []) if isinstance(d, dict)]
 
     primary_theme = str((raw.get("classification") or {}).get("primary_event_theme") or SENTINEL)
+    theme_def = EVENT_THEMES.get(primary_theme) or {}
 
-    required_stimulus = _join(EVENT_THEMES[primary_theme]["stimulus_event_types"])
+    # An unrecognized theme still yields a row (coverage gap must be reported),
+    # with the required stimulus left as the SENTINEL rather than raising.
+    required_stimulus = _join(theme_def.get("stimulus_event_types") or [])
 
     current_types = _current_stimulus_types(raw)
     current_stimulus = _join(current_types) if current_types else SENTINEL
@@ -198,9 +201,10 @@ def _derive_row(
     migration_class = mutation_family
 
     # Migration status: a case whose current stimulus already sits inside the
-    # theme's frozen stimulus set needs no stimulus migration.
+    # theme's frozen stimulus set needs no stimulus migration. An unknown theme
+    # has no declared stimulus set, so it is never confirmed as matching.
     if current_stimulus != SENTINEL and set(current_types) <= set(
-        EVENT_THEMES[primary_theme]["stimulus_event_types"]
+        theme_def.get("stimulus_event_types") or []
     ):
         migration_status = "matches_frozen_stimulus"
     else:
@@ -224,7 +228,7 @@ def _derive_row(
         "migration_class": _join(migration_class),
         "migration_status": migration_status,
     }
-    row["row_digest"] = _row_digest({k: v for k, v in row.items() if k != "row_digest"})
+    row["row_digest"] = _row_digest(row)
     return row
 
 
@@ -273,10 +277,13 @@ def build_event_migration_manifest(root: Path) -> dict[str, Any]:
 
     rows.sort(key=lambda r: (r["case_id"], r["instance_id"]))
 
-    theme_ids = sorted(EVENT_THEMES)
+    # Count every actual theme present in the rows (including any theme that is
+    # not in the taxonomy), so an unknown theme surfaces as a discrepancy rather
+    # than being silently dropped from the inventory.
+    themed = {row["primary_event_theme"] for row in rows}
     theme_counts = {
         theme_id: sum(1 for row in rows if row["primary_event_theme"] == theme_id)
-        for theme_id in theme_ids
+        for theme_id in sorted(themed)
     }
     status_counts = {
         status: sum(1 for row in rows if row["migration_status"] == status)
