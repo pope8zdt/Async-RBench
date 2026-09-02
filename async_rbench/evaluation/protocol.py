@@ -33,6 +33,26 @@ new_core_event_types = (
     "episode_ended", "fork_bundle_captured", "fork_bundle_replayed",
 )
 
+# Delivery-occurrence and main-observation event types (spec §3.3). These split
+# the single legacy ``result_delivered`` fact into three distinct causal
+# boundaries: R_i gateway release (``result_available``), A_i adapter queue
+# (``adapter_queued``), and O_i main-model presentation (``result_presented``).
+# ``result_delivered`` remains a documented compatibility alias only; the events
+# below are first-class.
+delivery_occurrence_event_types = (
+    "result_available", "adapter_queued", "presentation_prepared",
+    "result_presented", "main_action_started", "main_action_finished",
+    "main_turn_completed", "response_window_closed",
+)
+
+# Identity fields carried by delivery-occurrence events. ``delivery_occurrence_id``
+# distinguishes one delivery (an occurrence may be presented into several turns);
+# ``completion_id`` is the originating child completion; ``turn_id``/``window_id``
+# bind a presentation to the real started main-model request that observed it.
+delivery_occurrence_identity_fields = (
+    "delivery_occurrence_id", "completion_id", "turn_id", "window_id",
+)
+
 # Capability RPC wire message types. These are *transport*, not adapter events:
 # the adapter requests a kernel capability on stdout and the kernel answers on
 # stdin. Raw transport messages never enter the event source and are never
@@ -97,6 +117,14 @@ ADAPTER_EVENT_REQUIREMENTS: dict[str, tuple[str, ...]] = {
         "destination_path", "success", "exit_code",
     ),
     "result_consumed": ("completion_id", "action_id"),
+    # Adapter-observed delivery-occurrence boundary (spec §3.3): the adapter
+    # records a delivery once it has enqueued the occurrence and again once the
+    # result is bound to a real started main-model request. Both carry the
+    # occurrence/completion identity; presentation additionally binds turn/window.
+    "adapter_queued": ("delivery_occurrence_id", "completion_id"),
+    "result_presented": (
+        "delivery_occurrence_id", "completion_id", "turn_id", "window_id",
+    ),
     "artifact_committed": (
         "artifact_id", "version", "lineage_completion_ids", "observed_digest",
         "observed_path", "evaluator_observed",

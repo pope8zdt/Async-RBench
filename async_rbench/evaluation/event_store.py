@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import time
+from dataclasses import dataclass
 from typing import Any
 
 from .protocol import (
@@ -8,9 +9,10 @@ from .protocol import (
     VISIBILITY_KERNEL_PRIVATE,
     VISIBILITY_PUBLIC,
     VISIBILITY_REPLAY,
+    ProtocolError,
     canonical_digest,
 )
-from .case_contract import public_delivery, public_rejection
+from .case_contract import assert_participant_safe, public_delivery, public_rejection
 
 
 # Fields that belong to the envelope (identity/timing/membership) or the legacy
@@ -37,8 +39,36 @@ _KERNEL_PRIVATE_TYPES = frozenset({
     "verification_requested", "verification_passed", "verification_failed",
     "result_delivery_evaluator_fact", "result_rejection_evaluator_fact",
     "intervention_applied",
+    # The evaluator prepares a before-snapshot and authorizes a presentation; the
+    # snapshot digest and source case event id are evaluator-private, so this
+    # event never reaches a model, and may carry them without leaking.
+    "presentation_prepared",
 })
 _REPLAY_TYPES = frozenset({"event_source_integrity"})
+
+
+@dataclass
+class DeliveryOccurrence:
+    """Reconstructed state of one delivery occurrence (spec §3.3).
+
+    Each delivery uses a unique ``delivery_occurrence_id``; the originating child
+    completion keeps its own ``completion_id``. A single completion may feed many
+    occurrences (delivered into several turns/windows), so occurrences are keyed by
+    ``delivery_occurrence_id`` and never share their identity with a completion.
+    """
+
+    occurrence_id: str
+    completion_id: str | None = None
+    available: bool = False
+    queued: bool = False
+    prepared: bool = False
+    presented: bool = False
+    presented_turn_id: str | None = None
+    presented_window_id: str | None = None
+    main_action_started: bool = False
+    main_action_finished: bool = False
+    main_turn_completed: bool = False
+    window_closed: bool = False
 
 
 class EventStore:
@@ -125,6 +155,28 @@ def classify_visibility(event_type: str, actor: str | None = None) -> str:
     return VISIBILITY_PUBLIC
 
 
+def public_presentation(event: dict[str, Any]) -> dict[str, Any]:
+    """Project a ``result_presented`` record to the auditable public surface.
+
+    Preserves the four identity fields plus the presented payload while dropping
+    every evaluator-private fact: result role, schedule/disposition, authority and
+    supersede labels, snapshot digests and source case event ids. The event is
+    public/auditable — an observer may confirm a result was bound to a real main
+    request — but its private expected effect stays hidden.
+    """
+    result = {
+        "type": "result_presented",
+        "delivery_occurrence_id": str(event.get("delivery_occurrence_id", "")),
+        "completion_id": str(event.get("completion_id", "")),
+        "turn_id": str(event.get("turn_id", "")),
+        "window_id": str(event.get("window_id", "")),
+        "payload": event.get("payload"),
+        "payload_sha256": str(event.get("payload_sha256", "")),
+    }
+    assert_participant_safe(result, surface="public result presentation")
+    return result
+
+
 def strip_for_adapter(event: dict[str, Any]) -> dict[str, Any]:
     """Project a recorded event down to what an adapter may see.
 
@@ -138,10 +190,101 @@ def strip_for_adapter(event: dict[str, Any]) -> dict[str, Any]:
         return public_delivery(event)
     if event_type == "result_rejected":
         return public_rejection(event)
+    if event_type == "result_presented":
+        return public_presentation(event)
     return {
         key: value for key, value in event.items()
         if key not in _ENVELOPE_FIELDS and key not in _KERNEL_PRIVATE_FIELDS
     }
+
+
+def _occurrence_of(state: dict[str, Any], event: dict[str, Any], *, create: bool) -> DeliveryOccurrence:
+    """Fetch the delivery occurrence for an event, creating it only if allowed."""
+    occurrence_id = event.get("delivery_occurrence_id")
+    event_type = event.get("type")
+    if occurrence_id is None:
+        raise ProtocolError(f"{event_type}: missing delivery_occurrence_id")
+    existing = state["occurrences"].get(occurrence_id)
+    if existing is not None:
+        return existing
+    if not create:
+        raise ProtocolError(
+            f"{event_type}: delivery_occurrence_id {occurrence_id!r} was never made available"
+        )
+    occurrence = DeliveryOccurrence(occurrence_id)
+    state["occurrences"][occurrence_id] = occurrence
+    return occurrence
+
+
+def _apply_result_available(state: dict[str, Any], event: dict[str, Any]) -> None:
+    occurrence = _occurrence_of(state, event, create=True)
+    if occurrence.available:
+        raise ProtocolError(f"duplicate delivery_occurrence_id: {occurrence.occurrence_id!r}")
+    completion_id = event.get("completion_id")
+    if completion_id is None:
+        raise ProtocolError("result_available: missing completion_id")
+    occurrence.completion_id = completion_id
+    occurrence.available = True
+    state["held"].discard(completion_id)
+
+
+def _apply_adapter_queued(state: dict[str, Any], event: dict[str, Any]) -> None:
+    occurrence = _occurrence_of(state, event, create=False)
+    if not occurrence.available:
+        raise ProtocolError(f"{event['type']} before result_available")
+    occurrence.queued = True
+
+
+def _apply_presentation_prepared(state: dict[str, Any], event: dict[str, Any]) -> None:
+    occurrence = _occurrence_of(state, event, create=False)
+    occurrence.prepared = True
+
+
+def _apply_result_presented(state: dict[str, Any], event: dict[str, Any]) -> None:
+    occurrence = _occurrence_of(state, event, create=False)
+    if not occurrence.queued:
+        raise ProtocolError("result_presented before adapter_queued")
+    turn_id = event.get("turn_id")
+    window_id = event.get("window_id")
+    if turn_id is None:
+        raise ProtocolError("result_presented: missing turn_id")
+    if window_id is None:
+        raise ProtocolError("result_presented: missing window_id")
+    occurrence.presented = True
+    occurrence.presented_turn_id = turn_id
+    occurrence.presented_window_id = window_id
+    state["open_windows"].add(window_id)
+
+
+def _apply_main_action(state: dict[str, Any], event: dict[str, Any], *, started: bool) -> None:
+    occurrence_id = event.get("delivery_occurrence_id")
+    occurrence = state["occurrences"].get(occurrence_id) if occurrence_id is not None else None
+    if occurrence is None:
+        return
+    if started:
+        occurrence.main_action_started = True
+    else:
+        occurrence.main_action_finished = True
+
+
+def _apply_main_turn_completed(state: dict[str, Any], event: dict[str, Any]) -> None:
+    occurrence_id = event.get("delivery_occurrence_id")
+    occurrence = state["occurrences"].get(occurrence_id) if occurrence_id is not None else None
+    if occurrence is not None:
+        occurrence.main_turn_completed = True
+
+
+def _apply_response_window_closed(state: dict[str, Any], event: dict[str, Any]) -> None:
+    window_id = event.get("window_id")
+    if window_id is None:
+        raise ProtocolError("response_window_closed: missing window_id")
+    if window_id not in state["open_windows"]:
+        raise ProtocolError(f"closing unknown window: {window_id!r}")
+    state["open_windows"].discard(window_id)
+    occurrence_id = event.get("delivery_occurrence_id")
+    occurrence = state["occurrences"].get(occurrence_id) if occurrence_id is not None else None
+    if occurrence is not None:
+        occurrence.window_closed = True
 
 
 def replay_events(events: list[dict[str, Any]]) -> dict[str, Any]:
@@ -149,6 +292,10 @@ def replay_events(events: list[dict[str, Any]]) -> dict[str, Any]:
 
     Purely functional over the ordered event list — the reconstruction must not
     depend on any live gateway object, so a stored source can be audited later.
+
+    Also reconstructs the delivery-occurrence lifecycle (spec §3.3) and rejects
+    impossible transitions: presenting before an occurrence was queued, a duplicate
+    ``delivery_occurrence_id``, or closing a window that was never opened.
     """
     state: dict[str, Any] = {
         "spawned": set(),
@@ -159,6 +306,8 @@ def replay_events(events: list[dict[str, Any]]) -> dict[str, Any]:
         "artifacts": [],
         "verifications": [],
         "violations": [],
+        "occurrences": {},
+        "open_windows": set(),
     }
     for event in events:
         event_type = event.get("type")
@@ -181,6 +330,22 @@ def replay_events(events: list[dict[str, Any]]) -> dict[str, Any]:
             state["verifications"].append(event)
         elif event_type == "protocol_violation":
             state["violations"].append(event)
+        elif event_type == "result_available":
+            _apply_result_available(state, event)
+        elif event_type == "adapter_queued":
+            _apply_adapter_queued(state, event)
+        elif event_type == "presentation_prepared":
+            _apply_presentation_prepared(state, event)
+        elif event_type == "result_presented":
+            _apply_result_presented(state, event)
+        elif event_type == "main_action_started":
+            _apply_main_action(state, event, started=True)
+        elif event_type == "main_action_finished":
+            _apply_main_action(state, event, started=False)
+        elif event_type == "main_turn_completed":
+            _apply_main_turn_completed(state, event)
+        elif event_type == "response_window_closed":
+            _apply_response_window_closed(state, event)
     return state
 
 

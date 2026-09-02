@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from async_rbench.evaluation.event_store import (
     EventStore,
     classify_visibility,
@@ -11,6 +13,7 @@ from async_rbench.evaluation.protocol import (
     VISIBILITY_KERNEL_PRIVATE,
     VISIBILITY_PUBLIC,
     VISIBILITY_REPLAY,
+    ProtocolError,
 )
 
 
@@ -146,3 +149,73 @@ def test_from_records_infers_actor_and_visibility():
     assert store.events[0]["visibility"] == VISIBILITY_PUBLIC
     assert store.events[1]["actor"] == "benchmark"
     assert store.events[1]["visibility"] == VISIBILITY_KERNEL_PRIVATE
+
+
+def test_delivery_occurrence_events_preserve_distinct_causal_boundaries():
+    records = replay_events([
+        {"type": "result_available", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+        {"type": "adapter_queued", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+        {"type": "result_presented", "delivery_occurrence_id": "o1", "completion_id": "c1",
+         "turn_id": "t2", "window_id": "w1"},
+    ])
+    occ = records["occurrences"]["o1"]
+    assert occ.available
+    assert occ.queued
+    assert occ.presented_turn_id == "t2"
+
+
+def test_second_occurrence_can_share_completion_id_without_overwriting():
+    records = replay_events([
+        {"type": "result_available", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+        {"type": "adapter_queued", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+        {"type": "result_available", "delivery_occurrence_id": "o2", "completion_id": "c1"},
+        {"type": "adapter_queued", "delivery_occurrence_id": "o2", "completion_id": "c1"},
+    ])
+    assert set(records["occurrences"]) == {"o1", "o2"}
+    assert records["occurrences"]["o1"].available
+    assert records["occurrences"]["o2"].available
+    assert records["occurrences"]["o1"].presented_turn_id is None
+
+
+def test_replay_full_delivery_occurrence_lifecycle():
+    records = replay_events([
+        {"type": "result_available", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+        {"type": "adapter_queued", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+        {"type": "presentation_prepared", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+        {"type": "result_presented", "delivery_occurrence_id": "o1", "completion_id": "c1",
+         "turn_id": "t1", "window_id": "w1"},
+        {"type": "main_action_started", "delivery_occurrence_id": "o1", "turn_id": "t1"},
+        {"type": "main_action_finished", "delivery_occurrence_id": "o1", "turn_id": "t1"},
+        {"type": "main_turn_completed", "delivery_occurrence_id": "o1", "turn_id": "t1"},
+        {"type": "response_window_closed", "delivery_occurrence_id": "o1", "window_id": "w1"},
+    ])
+    occ = records["occurrences"]["o1"]
+    assert occ.available and occ.queued and occ.prepared and occ.presented
+    assert occ.presented_turn_id == "t1"
+    assert occ.presented_window_id == "w1"
+    assert occ.main_action_started and occ.main_action_finished
+    assert occ.main_turn_completed and occ.window_closed
+
+
+def test_replay_rejects_result_presented_before_queued():
+    with pytest.raises(ProtocolError):
+        replay_events([
+            {"type": "result_available", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+            {"type": "result_presented", "delivery_occurrence_id": "o1", "completion_id": "c1",
+             "turn_id": "t1", "window_id": "w1"},
+        ])
+
+
+def test_replay_rejects_duplicate_delivery_occurrence_id():
+    with pytest.raises(ProtocolError):
+        replay_events([
+            {"type": "result_available", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+            {"type": "result_available", "delivery_occurrence_id": "o1", "completion_id": "c1"},
+        ])
+
+
+def test_replay_rejects_closing_unknown_window():
+    with pytest.raises(ProtocolError):
+        replay_events([
+            {"type": "response_window_closed", "delivery_occurrence_id": "o1", "window_id": "w999"},
+        ])
