@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "Authentic task-specific versioned_maze_transition_dependency_added receipt bound to coding:017.",
+      "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
       "id": "mab_dependency_unblock_107bc4fe3f.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "Evaluator-owned MultiAgentMaze authority runs after three upstream results.",
+      "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
       "id": "mab_dependency_unblock_107bc4fe3f.event.authority_probe",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "closure",
       "critical": true,
       "description": "A newly authoritative role-and-version transition dependency governs collaborative block movement while maze layout, communication, saved progress, tutorial state, and achievements remain intact.",
+      "event_id": "evt.mab_dependency_unblock_107b.versioned_maze_transition_added",
       "id": "mab_dependency_unblock_107bc4fe3f.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "mab_dependency_unblock_107bc4fe3f.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "mab_dependency_unblock_107bc4fe3f.source.output_schema",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_maze_output_schema_layout_and_artifacts",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "mab_dependency_unblock_107bc4fe3f.source.task_behavior",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_maze_role_version_collision_block_move_and_path_behavior",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "mab_dependency_unblock_107bc4fe3f.source.preservation",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_maze_messages_progress_tutorial_and_achievements_are_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "mab_dependency_unblock_107bc4fe3f.source.event_closure",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_maze_event_contract_and_closure",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

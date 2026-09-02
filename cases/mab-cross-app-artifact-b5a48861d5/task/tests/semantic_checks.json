@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "The git_adapter_contract_delivered receipt is authentic and bound to coding:063 and mab-cross-app-artifact-b5a48861d5.",
+      "event_id": "evt.mab_cross_app_artifact_b5a48861d5.task_scope_or_dependency_change",
       "id": "mab_cross_app_artifact_b5a48861d5.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "The evaluator-owned CodeSquad event worker completes and records observable post-baseline probes.",
+      "event_id": "evt.mab_cross_app_artifact_b5a48861d5.task_scope_or_dependency_change",
       "id": "mab_cross_app_artifact_b5a48861d5.event.authority_probe",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "closure",
       "critical": true,
       "description": "The Git adapter receipt is consumed without losing accepted review, chat, annotation, or access-control state.",
+      "event_id": "evt.mab_cross_app_artifact_b5a48861d5.task_scope_or_dependency_change",
       "id": "mab_cross_app_artifact_b5a48861d5.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "mab_cross_app_artifact_b5a48861d5.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "mab_cross_app_artifact_b5a48861d5.source.output_schema",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_codesquad_output_schema_and_artifacts",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "mab_cross_app_artifact_b5a48861d5.source.task_behavior",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_codesquad_review_git_and_conflict_functionality",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "mab_cross_app_artifact_b5a48861d5.source.preservation",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_codesquad_preserves_auth_chat_transitions_and_dashboard",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "mab_cross_app_artifact_b5a48861d5.source.event_closure",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_codesquad_event_receipt_and_post_event_closure",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"
