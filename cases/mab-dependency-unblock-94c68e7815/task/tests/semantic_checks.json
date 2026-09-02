@@ -5,30 +5,36 @@
       "category": "event_integration",
       "critical": true,
       "description": "Authentic task-specific balance_worker_recovered receipt bound to coding:020.",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
       "id": "mab_dependency_unblock_94c68e7815.event.receipt",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_event_receipt_is_authentic_and_case_bound",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "event_integration",
       "critical": true,
       "description": "Evaluator-owned Multi-Agent_Quest_Creator authority runs after three upstream results.",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
       "id": "mab_dependency_unblock_94c68e7815.event.authority_probe",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_independent_worker_completed_with_observable_probes",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "async_result_integration",
       "category": "closure",
       "critical": true,
       "description": "Recovered structured balance replaces scalar placeholders while quest history, revert points, simulations, and community ratings remain intact.",
+      "event_id": "evt.mab_dependency_unblock_9.child_failure_or_implici",
       "id": "mab_dependency_unblock_94c68e7815.closure",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_final_closure_consumes_exact_event_receipt",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning"
     },
     {
       "capability_target": "base_task_completion",
@@ -38,7 +44,8 @@
       "id": "mab_dependency_unblock_94c68e7815.source.pin",
       "measurement_type": "semantic",
       "pytest_node": "test_case_outcomes.py::test_pinned_source_revision_is_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -48,7 +55,8 @@
       "id": "mab_dependency_unblock_94c68e7815.source.output_schema",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_quest_output_schema_and_artifacts",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -58,7 +66,8 @@
       "id": "mab_dependency_unblock_94c68e7815.source.task_behavior",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_quest_structured_balance_enemy_strength_rewards_and_versioned_adjustments",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -68,7 +77,8 @@
       "id": "mab_dependency_unblock_94c68e7815.source.preservation",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_quest_history_revert_simulations_and_ratings_are_preserved",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "capability_target": "base_task_completion",
@@ -78,7 +88,8 @@
       "id": "mab_dependency_unblock_94c68e7815.source.event_closure",
       "measurement_type": "semantic",
       "pytest_node": "upstream_tests/test_outputs.py::test_quest_event_contract_and_closure",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ],
   "version": "4"

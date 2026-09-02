@@ -33,12 +33,27 @@
         ]
       },
       "authority_source": "requirement_worker_04",
+      "closure_checks": [
+        "mab_dependency_unblock_2cf6576816.closure"
+      ],
       "event_id": "evt.mab-dependency-unblock-2cf6576816.delivery_agent_declined_suborder",
+      "event_status": "scored",
       "event_theme": "child_failure_or_implicit_error",
+      "expected_disposition": "classify_implicit_failure_and_recover",
+      "forbidden_changes": [
+        "preserved_source_facts"
+      ],
       "main_visible_before_delivery": false,
       "observation_mode": "gateway_only",
+      "required_changes": [
+        "provisional_checkpoint",
+        "final_state"
+      ],
       "required_opportunities": [
         "authority_delivery"
+      ],
+      "required_preservation": [
+        "preserved_source_facts"
       ],
       "state_delta": {
         "affected_artifacts": [
@@ -186,6 +201,7 @@
             "reverify_and_close"
           ],
           "result": "result_04",
+          "stimulus_type": "implicit_error_result",
           "trigger": "after_results_delivered"
         }
       ]
