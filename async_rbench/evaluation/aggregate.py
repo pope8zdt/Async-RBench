@@ -93,6 +93,27 @@ def _dt(item: dict[str, Any]) -> float | None:
     return _named_score(item, "dt_score")
 
 
+def _base_task(item: dict[str, Any]) -> float | None:
+    """Base Task Score (BTS) for an episode's own execution mode.
+
+    ``base_task_score`` is the mode-neutral ``score_domain == base_task`` fraction
+    computed by the scorer, so a linear episode carries Linear BTS and an async
+    episode carries Async BTS.  Reading the field directly rather than inferring
+    it from a blended measure keeps Linear BTS and Async BTS independent (spec 2.2).
+    """
+    return _named_score(item, "base_task_score")
+
+
+def _async_drs(item: dict[str, Any]) -> float | None:
+    """Per-episode Async Dynamic Replanning Score (Async DRS).
+
+    Only async episodes carry an ``async_drs``; linear episodes never do.
+    """
+    if _mode(item) != "async":
+        return None
+    return _named_score(item, "async_drs")
+
+
 def _tokens(item: dict[str, Any]) -> float | None:
     value = item.get("total_tokens")
     return float(value) if value is not None else None
@@ -108,6 +129,12 @@ def _pair_key(item: dict[str, Any]) -> tuple[Any, ...]:
     Must be unique per (case, instance, repeat) *and* per model / seed / config,
     otherwise merging two models or two seeds would pair episodes that never
     shared a counterfactual and report a spurious effect.
+
+    The fixed benchmark-owned factors are part of the key too (spec 8): a
+    linear/async pair must share the same task bundle, child pool identity, child
+    budget and child provider.  Two runs built against a different child pool
+    never share a counterfactual even when they agree on case/instance/model, so
+    they must not be paired.
     """
     return (
         item.get("case_id"), item.get("instance_id", "seed-1"),
@@ -116,7 +143,94 @@ def _pair_key(item: dict[str, Any]) -> tuple[Any, ...]:
         item.get("split", "unassigned"),
         item.get("agent_seed"), item.get("counterfactual_pair_id"),
         _model_key(item), _config_key(item),
+        # Fixed child-pool identity factors: absent (None) on both sides matches
+        # trivially, present and differing forces separate pairs.
+        item.get("task_bundle_sha256"), item.get("child_pool_id"),
+        item.get("child_budget"), item.get("child_provider"),
+        item.get("child_model"), item.get("child_backend"),
     )
+
+
+# Fixed benchmark-owned factors that a linear/async counterfactual pair must
+# share (spec 8).  The main model/provider is deliberately excluded: different
+# main models legitimately use the same fixed child pool.
+_PAIR_FIXED_FACTORS = (
+    ("case_id", "case"), ("instance_id", "instance"), ("agent_seed", "seed"),
+    ("counterfactual_pair_id", "counterfactual_pair_id"),
+    ("task_bundle_sha256", "task_bundle"),
+    ("child_pool_id", "child_pool"),
+    ("child_budget", "child_budget"),
+    ("child_provider", "child_provider"),
+    ("child_model", "child_model"),
+    ("child_backend", "child_backend"),
+)
+
+
+def pair_identity_errors(
+    left: dict[str, Any], right: dict[str, Any],
+) -> list[str]:
+    """Return strict pairing errors for a linear/async counterfactual pair.
+
+    A valid pair must share the fixed benchmark-owned factors above (case /
+    instance / seed / task bundle / child pool id / child budget / child provider
+    / child model / child backend).  The main model and main provider are the
+    participant factor and are allowed to differ.  Linear must satisfy the
+    synchronous-aggregation invariant (spec 6) and Async the per-result
+    presentation invariant (spec 5.1); both are benchmark-owned topology facts
+    that disqualify a pair when violated.
+    """
+    errors: list[str] = []
+    for field, label in _PAIR_FIXED_FACTORS:
+        left_value = left.get(field)
+        right_value = right.get(field)
+        if (
+            left_value is not None and right_value is not None
+            and left_value != right_value
+        ):
+            errors.append(f"pair.{label} mismatch: {left_value!r} != {right_value!r}")
+    # Linear synchronous-aggregation invariants (spec 6): children overlap, but
+    # main never overlaps a child, no individual result is presented, and exactly
+    # one atomic bundle is presented per wave.
+    if str(left.get("execution_mode")) == "linear":
+        if left.get("child_child_overlap") is False:
+            errors.append("linear.child_child_overlap!=true")
+        if left.get("main_child_overlap") is True:
+            errors.append("linear.main_child_overlap!=false")
+        if left.get("individual_result_presentations", 0) != 0:
+            errors.append("linear.individual_result_presentations!=0")
+        if left.get("atomic_bundle_presentations") not in (None, 1):
+            errors.append("linear.atomic_bundle_presentations!=1")
+    # Async per-result presentation invariant (spec 5.1): a scored async episode
+    # must have presented at least one real result into a started main request.
+    if str(right.get("execution_mode")) == "async":
+        presented = right.get("individual_result_presentations")
+        if (
+            isinstance(presented, int)
+            and presented < 1
+            and right.get("score_status") == "scored"
+        ):
+            errors.append("async.individual_result_presentations<1")
+    return errors
+
+
+def _pair_quality_errors(records: list[dict[str, Any]]) -> list[str]:
+    """Aggregate-level pair qualification errors for every matched linear/async pair.
+
+    Pairs are formed per (case, instance, repeat, model, seed, config, fixed child
+    factors); within each pair the linear and async records must share the fixed
+    benchmark-owned factors and satisfy their mode topology invariants.  Duplicate
+    errors are collapsed so the audit is a stable set.
+    """
+    by_family: dict[str, dict[tuple[Any, ...], dict[str, dict[str, Any]]]] = defaultdict(dict)
+    for item in records:
+        family = _family_key(item)
+        by_family[family].setdefault(_pair_key(item), {})[_mode(item)] = item
+    errors: list[str] = []
+    for _, pairs in sorted(by_family.items()):
+        for pair in pairs.values():
+            if "linear" in pair and "async" in pair:
+                errors.extend(pair_identity_errors(pair["linear"], pair["async"]))
+    return sorted(set(errors))
 
 
 def _family_key(item: dict[str, Any]) -> str:
@@ -633,6 +747,30 @@ def _aggregate_rows(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return rows
 
 
+# Per-episode delivery-opportunity stages summed across the run (spec 3.3 / 9.4).
+# The scorer stamps these on each record so aggregation can report how many
+# declared events reached each stage and how failures split between participant
+# and infrastructure causes.
+_OPPORTUNITY_COUNT_FIELDS = (
+    "declared_events", "provisional_established", "result_available",
+    "adapter_queued", "result_presented", "response_window_closed",
+    "participant_provisional_failure", "infrastructure_delivery_failure",
+)
+
+
+def _opportunity_summary(records: list[dict[str, Any]]) -> dict[str, int]:
+    counts = {field: 0 for field in _OPPORTUNITY_COUNT_FIELDS}
+    for item in records:
+        per_episode = item.get("event_opportunity_counts")
+        if not isinstance(per_episode, dict):
+            continue
+        for field in _OPPORTUNITY_COUNT_FIELDS:
+            value = per_episode.get(field)
+            if isinstance(value, int) and not isinstance(value, bool):
+                counts[field] += value
+    return counts
+
+
 def _summary(
     records: list[dict[str, Any]], bootstrap_iterations: int,
     theme_by_case: dict[str, str] | None = None,
@@ -667,8 +805,57 @@ def _summary(
     )
     scored_async = [item for item in records if _dynamic(item) is not None]
     theme_counts = theme_dynamic["theme_instance_counts"]
+    # Base Task Score and Async DRS are independent headlines (spec 2.2): BTS
+    # reads the mode-specific ``base_task_score``, DRS reads the per-episode
+    # ``async_drs``.  Neither is derived from the blended semantic/dynamic mix.
+    linear_bts, linear_bts_cases = _case_macro(records, "linear", _base_task)
+    async_bts, async_bts_cases = _case_macro(records, "async", _base_task)
+    async_drs_value, async_drs_cases = _case_macro(records, "async", _async_drs)
+    theme_linear_bts = _theme_macro(
+        records, "linear", _base_task, theme_by_case, minimum_theme_test_instances,
+    )
+    theme_async_bts = _theme_macro(
+        records, "async", _base_task, theme_by_case, minimum_theme_test_instances,
+    )
+    theme_async_drs = _theme_macro(
+        records, "async", _async_drs, theme_by_case, minimum_theme_test_instances,
+    )
+    bts_complete = bool(observed_cases) and all(
+        case_id in linear_bts_cases and case_id in async_bts_cases
+        for case_id in observed_cases
+    )
+    drs_complete = bool(observed_cases) and all(
+        case_id in async_drs_cases for case_id in observed_cases
+    )
+    async_drs_theme_counts = theme_async_drs["theme_instance_counts"]
     return {
-        "primary_metric": "dynamic_control_score",
+        # The three new headlines are the only primary metrics of the new Track
+        # A protocol (spec 2.2).  The old blended metrics are reported as legacy
+        # diagnostics below and are never selected as ``primary_metric``.
+        "primary_metric": [
+            "linear_base_task_score",
+            "async_base_task_score",
+            "async_dynamic_replanning_score",
+        ],
+        "linear_base_task_score": theme_linear_bts["mean"],
+        "async_base_task_score": theme_async_bts["mean"] if bts_complete else None,
+        "observed_async_base_task_score": theme_async_bts["mean"],
+        "async_dynamic_replanning_score": theme_async_drs["mean"] if drs_complete else None,
+        "observed_async_dynamic_replanning_score": theme_async_drs["mean"],
+        "paired_bts_delta": _matched_mode_effect(records, "linear", "async", _base_task),
+        "theme_linear_base_task_scores": theme_linear_bts["kept_scores"],
+        "theme_async_base_task_scores": theme_async_bts["kept_scores"],
+        "theme_async_drs_scores": theme_async_drs["kept_scores"],
+        "dropped_async_drs_themes": theme_async_drs["dropped_scores"],
+        "async_drs_theme_instance_counts": async_drs_theme_counts,
+        "async_drs_theme_coverage": (
+            len(theme_async_drs["kept_scores"]) / len(async_drs_theme_counts)
+            if async_drs_theme_counts else None
+        ),
+        "case_linear_base_task_scores": linear_bts_cases,
+        "case_async_base_task_scores": async_bts_cases if bts_complete else {},
+        "case_async_drs_scores": async_drs_cases if drs_complete else {},
+        "event_opportunity": _opportunity_summary(records),
         "dynamic_control_score": theme_dynamic["mean"] if complete else None,
         "observed_dynamic_control_score": theme_dynamic["mean"],
         "semantic_task_score": theme_semantic["mean"] if complete else None,
@@ -697,6 +884,14 @@ def _summary(
             bootstrap_iterations,
             pre_aggregate=lambda sample: _matched_mode_effect(
                 sample, "linear", "async", _semantic, return_family_values=True,
+            )[1],
+        ),
+        "paired_bts_delta_ci95": bootstrap_ci(
+            records,
+            lambda sample: _matched_mode_effect(sample, "linear", "async", _base_task),
+            bootstrap_iterations,
+            pre_aggregate=lambda sample: _matched_mode_effect(
+                sample, "linear", "async", _base_task, return_family_values=True,
             )[1],
         ),
         "paired_async_token_delta": token_delta,
@@ -871,6 +1066,8 @@ def aggregate_reports(
                 float(item.get("scenario_exposure_complete") is True) for item in records
             ]),
             "deprecated_minimum_counterfactual_coverage": minimum_counterfactual_coverage,
+            "opportunity_counts": _opportunity_summary(records),
+            "pair_quality_errors": _pair_quality_errors(records),
         },
     }
 

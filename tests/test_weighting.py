@@ -5,7 +5,9 @@ from pathlib import Path
 import pytest
 
 from async_rbench.evaluation.calibration import _frozen_point_ids
-from async_rbench.evaluation.control_flow_gates import merge_test_point_pass_rate
+from async_rbench.evaluation.control_flow_gates import (
+    merge_test_point_pass_rate, score_base_task, score_async_drs,
+)
 from async_rbench.evaluation.scoring import _weighted_control_flow_counts, _weighted_semantic_counts
 from async_rbench.evaluation.weighting import (
     control_flow_weight, point_weight, semantic_weight, semantic_weight_map,
@@ -65,3 +67,33 @@ def test_calibration_snapshot_uses_registry_relevance_tiers():
     assert async_weights["sr.lineage.manifest_schema"] == 1
     assert async_weights["sr.cf.reject_pre_rewrite_deployment"] == 4
     assert async_weights["sr.cf.redeploy_from_clean_baseline"] == 4
+
+
+# ---------------------------------------------------------------------------
+# Task 11: the new BTS / DRS headlines are unweighted fractions of base_task
+# and per-event declared checks — relevance_tier no longer gates them.
+# ---------------------------------------------------------------------------
+
+
+def test_base_task_score_is_unweighted_by_relevance_tier() -> None:
+    results = [
+        {"id": "a", "score_domain": "base_task", "passed": True, "relevance_tier": "critical"},
+        {"id": "b", "score_domain": "base_task", "passed": True, "relevance_tier": "base"},
+    ]
+    # A plain fraction over base_task checks, ignoring relevance weights.
+    assert score_base_task(results) == 1.0
+    results[1]["passed"] = False
+    assert score_base_task(results) == 0.5
+
+
+def test_async_drs_ignores_relevance_tiers_of_event_checks() -> None:
+    scored = [
+        {"id": "c1", "score_domain": "async_replanning", "event_id": "e1", "passed": True, "relevance_tier": "critical"},
+        {"id": "c2", "score_domain": "async_replanning", "event_id": "e1", "passed": False, "relevance_tier": "base"},
+    ]
+    results = [
+        {"id": "a", "score_domain": "base_task", "passed": True},
+        {"id": "b", "score_domain": "base_task", "passed": True},
+    ]
+    assert score_base_task(results) == 1.0
+    assert score_async_drs([]) is None

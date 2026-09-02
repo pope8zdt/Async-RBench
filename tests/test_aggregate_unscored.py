@@ -113,3 +113,39 @@ def test_clean_run_does_not_hard_fail() -> None:
     audit = aggregate_reports(records, bootstrap_iterations=5)["audit"]
     assert audit["hard_fail"] is False
     assert audit["hard_fail_reasons"] == []
+
+
+def test_opportunity_counts_are_reported() -> None:
+    rec = _record("case-a", "async", 0.75)
+    rec["base_task_score"] = 0.8
+    rec["async_drs"] = 0.5
+    rec["event_opportunity_counts"] = {
+        "declared_events": 2, "provisional_established": 1,
+        "result_available": 2, "adapter_queued": 2, "result_presented": 2,
+        "response_window_closed": 2, "participant_provisional_failure": 0,
+        "infrastructure_delivery_failure": 0,
+    }
+    report = aggregate_reports([rec], bootstrap_iterations=5)
+    dev_opp = report["development_summary"]["event_opportunity"]
+    assert dev_opp["declared_events"] == 2
+    assert dev_opp["provisional_established"] == 1
+    assert dev_opp["result_presented"] == 2
+    assert dev_opp["response_window_closed"] == 2
+    assert report["audit"]["opportunity_counts"]["adapter_queued"] == 2
+    assert report["audit"]["opportunity_counts"]["declared_events"] == 2
+
+
+def test_opportunity_counts_account_for_participant_and_infrastructure_failures() -> None:
+    # A participant provisional failure and an infrastructure delivery failure
+    # are counted separately so neither is silently absorbed into the mean.
+    rec = _record("case-a", "linear", 1.0)
+    rec["event_opportunity_counts"] = {
+        "declared_events": 1, "provisional_established": 0,
+        "result_available": 1, "adapter_queued": 1, "result_presented": 1,
+        "response_window_closed": 1, "participant_provisional_failure": 1,
+        "infrastructure_delivery_failure": 1,
+    }
+    summary = aggregate_reports([rec], bootstrap_iterations=5)["development_summary"]
+    opp = summary["event_opportunity"]
+    assert opp["participant_provisional_failure"] == 1
+    assert opp["infrastructure_delivery_failure"] == 1

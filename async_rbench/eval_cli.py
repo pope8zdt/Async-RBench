@@ -133,12 +133,25 @@ def cmd_score(args) -> int:
             key: source_score[key] for key in metadata_fields if key in source_score
         }
     report.update(source_metadata)
+    # Scored status is benchmark-owned: the scenario must have been constructed
+    # for a measurement to exist.  Under the Task-11 protocol the headline
+    # evidence is the Base Task Score (and, for async, the Async DRS); the legacy
+    # semantic / dynamic_control fields remain as fallbacks so offline rescoring
+    # of pre-rollover records still classifies them.
+    has_base_evidence = (
+        report.get("base_task_score") is not None
+        or report.get("semantic_task_score") is not None
+    )
+    async_evidence = (
+        report.get("async_drs") is not None
+        or report.get("dynamic_control_score") is not None
+    )
     report.update({
         "score_status": (
             "scored"
             if report.get("scenario_constructed") is True
-            and report.get("semantic_task_score") is not None
-            and (args.execution_mode != "async" or report.get("dynamic_control_score") is not None)
+            and has_base_evidence
+            and (args.execution_mode != "async" or async_evidence)
             else "unscored"
         ),
         "score_status_reason": (
@@ -496,6 +509,9 @@ async def _run_manifest(args) -> int:
         print(json.dumps({
             "episode": config.episode_id,
             "score_status": scores[-1]["score_status"],
+            "base_task_score": scores[-1].get("base_task_score"),
+            "async_drs": scores[-1].get("async_drs"),
+            # legacy fields, retained so pre-rollover progress lines stay comparable
             "dynamic_control_score": scores[-1].get("dynamic_control_score"),
             "semantic_task_score": scores[-1].get("semantic_task_score"),
             "dt_score": scores[-1].get("dt_score"),

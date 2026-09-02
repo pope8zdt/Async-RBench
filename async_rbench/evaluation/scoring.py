@@ -8,6 +8,7 @@ from .pytest_results import parse_pytest_summary
 from .event_store import _KERNEL_PRIVATE_FIELDS
 from .control_flow_gates import (
     EventDRS,
+    _provisional_missing,
     combine_dt_score,
     critical_dynamic_success,
     dynamic_control_score,
@@ -966,6 +967,8 @@ def score_trace(
     contracts = list(event_contracts or [])
     async_drs: float | None = None
     async_event_drs: dict[str, Any] = {}
+    provisional_established = 0
+    participant_provisional_failure = 0
     if execution_mode == "async" and contracts:
         if not scenario_constructed:
             dynamic_scenario_errors.append("benchmark scenario construction failed")
@@ -1072,6 +1075,11 @@ def score_trace(
             event_drs = score_event_replanning(
                 contract, before, after, semantic_results,
             )
+            if contract.get("requires_provisional") is True:
+                if _provisional_missing(contract, before):
+                    participant_provisional_failure += 1
+                else:
+                    provisional_established += 1
             event_drs_scores.append(event_drs)
             async_event_drs[event_id] = _event_drs_to_dict(event_drs)
         async_drs = score_async_drs(event_drs_scores)
@@ -1236,6 +1244,31 @@ def score_trace(
         "base_task_score": base_task_score,
         "async_drs": async_drs,
         "async_event_drs": async_event_drs,
+        # Delivery-opportunity accounting (spec 3.3 / 9.4): how many declared
+        # events reached each lifecycle stage, and how failures split between
+        # participant provisional failures and evaluator infrastructure failures.
+        "event_opportunity_counts": {
+            "declared_events": len(contracts),
+            "provisional_established": provisional_established,
+            "result_available": sum(
+                1 for event in events if event.get("type") == "result_available"
+            ),
+            "adapter_queued": sum(
+                1 for event in events if event.get("type") == "adapter_queued"
+            ),
+            "result_presented": sum(
+                1 for event in events if event.get("type") == "result_presented"
+            ),
+            "response_window_closed": sum(
+                1 for event in events if event.get("type") == "response_window_closed"
+            ),
+            "participant_provisional_failure": participant_provisional_failure,
+            "infrastructure_delivery_failure": sum(
+                1 for event in events
+                if event.get("type") == "infrastructure_failure"
+                and event.get("component") == "delivery_intervention"
+            ),
+        },
         "dynamic_control_score": dynamic_score,
         "dynamic_process_score": process_dynamic_score,
         "dynamic_scenario_qualified": dynamic_scenario_qualified,

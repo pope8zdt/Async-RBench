@@ -110,6 +110,11 @@
     "capability_breakdown": "macro_mean_async_dynamic_control_across_cases_tagged_with_each_capability"
   },
   "primary_metrics": [
+    "linear_base_task_score",
+    "async_base_task_score",
+    "async_dynamic_replanning_score"
+  ],
+  "legacy_primary_metrics": [
     "dynamic_control_score",
     "dynamic_success_rate",
     "critical_dynamic_success_rate",
@@ -146,7 +151,10 @@
     "minimum_critical_mutation_kill_rate": 1.0
   },
   "metric_definitions": {
-    "dynamic_control_score": "Primary metric. Equal-mass macro over the case-specific causal decision groups compiled from the task graph and event policy. Lifecycle stages are diagnostic tags, not fixed score mass.",
+    "linear_base_task_score": "Primary metric (linear). Equal-vote theme macro over the base_task subset of programmatic checks, computed separately for linear execution mode.",
+    "async_base_task_score": "Primary metric (async). Equal-vote theme macro over the base_task subset of programmatic checks for async execution mode; computed independently of the replanning score.",
+    "async_dynamic_replanning_score": "Primary metric (async). Mean per-event async dynamic replanning score, each equal to 0.5*process_score + 0.5*async_outcome; measured only where declared scored events were reached.",
+    "dynamic_control_score": "Legacy primary metric. Equal-mass macro over the case-specific causal decision groups compiled from the task graph and event policy. Lifecycle stages are diagnostic tags, not fixed score mass.",
     "semantic_task_score": "Unchanged weighted result of the frozen programmatic semantic verifier, reported for both execution modes.",
     "dt_score": "Secondary summary equal to 0.80 Dynamic Control Score plus 0.20 Semantic Task Score for async episodes.",
     "dynamic_success_rate": "Fraction of async episodes with Dynamic Control Score >= 0.75 and every critical dynamic point passing.",
