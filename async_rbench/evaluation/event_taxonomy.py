@@ -27,6 +27,16 @@ STIMULUS_EVENT_TYPES = frozenset(
     str(item) for item in EVENT_TAXONOMY.get("stimulus_event_types", [])
 )
 RESULT_BEARING_EVENT_TYPES = frozenset({"result_delivery", "implicit_error_result"})
+# Schedule-row kinds that may declare a ``result`` role.  The role names the real
+# completion that row governs (delivery rows must carry one); revision / pressure
+# / terminal rows carry one when the specialised stimulus is attached to a result
+# (the in-tree swe/tbn cases tag their after_artifacts authority rows), and may
+# omit it when the row is a pure live mechanism with no delivery of its own.
+# ``completion_replay`` (replay_of_result) and ``deadline_update`` (no result)
+# never declare a plain ``result`` role.
+RESULT_CAPABLE_EVENT_TYPES = STIMULUS_EVENT_TYPES - {
+    "completion_replay", "deadline_update",
+}
 WORKSTREAM_EVENT_TYPES = frozenset({
     "child_timeout", "child_crash", "resource_pressure", "deadline_update",
 })
@@ -104,7 +114,19 @@ def validate_case_classification(value: Any) -> list[str]:
 
 
 def scenario_event_type(event: Mapping[str, Any]) -> str:
-    return str(event.get("type") or "result_delivery")
+    """Return the stimulus kind a scenario/schedule event declares.
+
+    The shared contract field is ``stimulus_type`` (Task 10 swimlane 0a); the
+    legacy ``type`` reads treated every row that did not carry ``type`` as
+    ``result_delivery`` and silently ignored the declared ``stimulus_type`` tag.
+    A declared kind that is not a frozen ``stimulus_event_types`` member is read
+    as ``result_delivery`` (the plain scheduled-delivery row), so pre-migration
+    contracts that stamped a theme name as the tag keep their delivery semantics.
+    """
+    kind = str(event.get("stimulus_type") or "")
+    if kind in STIMULUS_EVENT_TYPES:
+        return kind
+    return "result_delivery"
 
 
 def validate_scenario_events(
@@ -143,10 +165,20 @@ def validate_scenario_events(
             errors.append("linear scenario must not inject evaluator events")
         result = event.get("result")
         if event_type in RESULT_BEARING_EVENT_TYPES:
+            # Pure delivery rows: a result role is mandatory.
             if str(result or "") not in allowed:
                 errors.append(f"{prefix} result is missing from result_contract")
             else:
                 result_events.append(str(result))
+        elif event_type in RESULT_CAPABLE_EVENT_TYPES:
+            # Optional result role: when present it is a delivery row for that
+            # result kind (and is scheduled like any other delivery); when absent
+            # the row is a pure live mechanism fired at a child boundary.
+            if result is not None:
+                if str(result) not in allowed:
+                    errors.append(f"{prefix} result is missing from result_contract")
+                else:
+                    result_events.append(str(result))
         elif result is not None:
             errors.append(f"{prefix} type {event_type!r} must not declare result")
         if event_type == "completion_replay":
@@ -156,7 +188,7 @@ def validate_scenario_events(
             if event.get("trigger") != "after_consumed":
                 errors.append(f"{prefix} completion replay trigger must be 'after_consumed'")
             replay_events.append((event_id, replay_of))
-        elif event_type in RESULT_BEARING_EVENT_TYPES:
+        elif event_type in RESULT_CAPABLE_EVENT_TYPES and result is not None:
             trigger = event.get("trigger")
             if trigger not in {
                 None, "after_artifacts_committed", "after_results_delivered",
@@ -242,19 +274,19 @@ def build_event_theme_fixtures() -> dict[str, dict[str, Any]]:
         },
         "duplicate_or_replayed_completion": {
             "classification": {"primary_event_theme": "duplicate_or_replayed_completion", "secondary_event_themes": [], "async_scenario_class": "result_eventful"},
-            "events": [{"id": "original", "result": "authority", **common}, {"id": "replay", "type": "completion_replay", "replay_of_result": "authority", "trigger": "after_consumed"}],
+            "events": [{"id": "original", "result": "authority", **common}, {"id": "replay", "stimulus_type": "completion_replay", "replay_of_result": "authority", "trigger": "after_consumed"}],
         },
         "child_failure_or_implicit_error": {
             "classification": {"primary_event_theme": "child_failure_or_implicit_error", "secondary_event_themes": [], "async_scenario_class": "resource_eventful"},
-            "events": [{"id": "timeout", "type": "child_timeout", "workstream_id": "provisional_stream"}],
+            "events": [{"id": "timeout", "stimulus_type": "child_timeout", "workstream_id": "provisional_stream"}],
         },
         "task_scope_or_dependency_change": {
             "classification": {"primary_event_theme": "task_scope_or_dependency_change", "secondary_event_themes": [], "async_scenario_class": "live_eventful"},
-            "events": [{"id": "scope", "type": "task_scope_revision", "invalidates_artifacts": ["final"], "reopens_milestones": ["integrate"]}],
+            "events": [{"id": "scope", "stimulus_type": "task_scope_revision", "invalidates_artifacts": ["final"], "reopens_milestones": ["integrate"]}],
         },
         "straggler_under_resource_pressure": {
             "classification": {"primary_event_theme": "straggler_under_resource_pressure", "secondary_event_themes": [], "async_scenario_class": "resource_eventful"},
-            "events": [{"id": "pressure", "type": "resource_pressure", "workstream_id": "provisional_stream", "resource": "concurrency_slot", "limit": 1}],
+            "events": [{"id": "pressure", "stimulus_type": "resource_pressure", "workstream_id": "provisional_stream", "resource": "concurrency_slot", "limit": 1}],
         },
     }
 

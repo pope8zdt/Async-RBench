@@ -402,7 +402,7 @@ def test_completion_replay_same_completion_new_occurrence() -> None:
             "async": {"events": [
                 {"id": "authority", "result": "authority"},
                 {
-                    "id": "replay", "type": "completion_replay",
+                    "id": "replay", "stimulus_type": "completion_replay",
                     "replay_of_result": "authority", "trigger": "after_consumed",
                 },
             ]},
@@ -504,7 +504,7 @@ def test_implicit_error_passes_structure_but_marks_private_failure() -> None:
             "type": "evidence_marker", "evidence_field": "injected", "marker": True,
         },
         "scenarios": {"linear": {"events": []}, "async": {"events": [
-            {"id": "implicit-error", "type": "implicit_error_result", "result": "authority"},
+            {"id": "implicit-error", "stimulus_type": "implicit_error_result", "result": "authority"},
         ]}},
     }
     controller = DeliveryController("async", case, min_initial_children=0)
@@ -523,7 +523,7 @@ def test_implicit_error_schedule_event_type_is_its_own_truth() -> None:
     """Without a predicate, the private signal is the schedule-event type itself."""
     case = {
         "scenarios": {"linear": {"events": []}, "async": {"events": [
-            {"id": "implicit-error", "type": "implicit_error_result", "result": "authority"},
+            {"id": "implicit-error", "stimulus_type": "implicit_error_result", "result": "authority"},
         ]}},
     }
     controller = DeliveryController("async", case, min_initial_children=0)
@@ -745,7 +745,7 @@ def test_consume_declared_stimuli_fires_designed_timeout_once() -> None:
         "scenarios": {
             "linear": {"events": []},
             "async": {"events": [
-                {"id": "designed-timeout", "type": "child_timeout",
+                {"id": "designed-timeout", "stimulus_type": "child_timeout",
                  "child_id": "c1", "result": "authority",
                  "payload": {"result": "partial"},
                  "outcome_detail": "designed timeout"},
@@ -786,7 +786,7 @@ def _write_stimulus_case(tmp_path: Path) -> Path:
     (case / "private/private_case.yaml").write_text(yaml.safe_dump({
         "case_id": "stimulus-case",
         "scenarios": {"async": {"events": [
-            {"id": "designed-timeout", "type": "child_timeout", "child_id": "c1",
+            {"id": "designed-timeout", "stimulus_type": "child_timeout", "child_id": "c1",
              "result": "authority", "payload": {"result": "partial"},
              "outcome_detail": "designed timeout"},
         ]}},
@@ -876,3 +876,239 @@ def test_run_episode_triggers_declared_child_timeout(
     # The classification stays a kernel-private audit, not a public delivery field.
     assert all("evaluator_designed_failure" not in row for row in terminal_deliveries)
     assert any(row.get("type") == "child_terminal_outcome" for row in rows)
+
+
+# --- Task 10 swimlane 0a: shared stimulus_type contract, remaining producers --
+#
+# The scenario/schedule field that names a stimulus kind is ``stimulus_type``
+# (never ``type``, which is reserved for runtime EventStore facts).  The
+# consumption seam dispatches every declared live stimulus to its producer
+# exactly once, and the four remaining producers (resource_pressure /
+# deadline_update / task_scope_revision / dependency_graph_revision) are
+# asserted end-to-end through ``run_episode``.
+
+
+def _write_live_case(tmp_path: Path, *, events: list[dict], case_id: str = "live-stimulus-case") -> Path:
+    """Write a minimal runnable async case whose schedule declares ``events``."""
+    case = tmp_path / case_id
+    (case / "private").mkdir(parents=True)
+    (case / "task" / "tests").mkdir(parents=True)
+    (case / "task" / "assets").mkdir(parents=True)
+    (case / "public_case.yaml").write_text(yaml.safe_dump({
+        "format_version": 2, "case_id": case_id,
+        "title": "Declared live stimulus", "task_instruction_path": "task/task.yaml",
+        "workstreams": [{
+            "id": "authority", "task": "recover", "targets": [],
+            "expected_output": "out", "priority": "normal",
+        }],
+        "artifacts": [],
+    }), encoding="utf-8")
+    (case / "private/private_case.yaml").write_text(yaml.safe_dump({
+        "case_id": case_id,
+        "scenarios": {"async": {"events": events}},
+    }), encoding="utf-8")
+    (case / "task/task.yaml").write_text(yaml.safe_dump({
+        "instruction": "Recover the state.",
+    }), encoding="utf-8")
+    (case / "task/run-tests.sh").write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+    (case / "task/tests/semantic_checks.json").write_text(
+        json.dumps({"checks": []}), encoding="utf-8")
+    (case / "task/tests/control_flow_checks.json").write_text(
+        json.dumps({"version": "1", "checks": []}), encoding="utf-8")
+    return case
+
+
+async def _noop_drain(self: object) -> None:
+    """Coroutine no-op bound to ``_FakeLiveAdapter.stdin.drain``."""
+
+
+class _FakeLiveAdapter:
+    """A scripted adapter process that replays ``events`` then finishes cleanly."""
+
+    def __init__(self, events: list[dict]) -> None:
+        self.events = events
+        self.stdin = type("_StdIn", (), {
+            "write": lambda self, _payload: None,
+            "drain": _noop_drain,
+        })()
+        self.stderr = asyncio.StreamReader()
+        self.stdout = asyncio.StreamReader()
+        self.stdout.feed_data(
+            b"".join(json.dumps(event).encode() + b"\n" for event in events)
+        )
+        self.stdout.feed_eof()
+        self.stderr.feed_eof()
+        self.returncode = 0
+
+    async def wait(self) -> int:
+        return self.returncode
+
+    def kill(self) -> None:
+        self.returncode = -9
+
+
+def _patch_live_adapter(monkeypatch, events: list[dict]) -> None:
+    monkeypatch.setattr(
+        runner_module, "_docker",
+        lambda *_a, **_k: __import__("types").SimpleNamespace(stdout="", returncode=0),
+    )
+    monkeypatch.setattr(
+        runner_module, "build_workspace_runtime",
+        lambda *_a, **_k: DisabledWorkspaceRuntime(),
+    )
+    async def _spawn(*_a, **_k) -> _FakeLiveAdapter:
+        return _FakeLiveAdapter(events)
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", _spawn)
+
+
+def _adapter_events(child_id: str = "c1") -> list[dict]:
+    """The adapter-visible event script that drives one child to ``child_started``."""
+    return [
+        {"type": "participant_metadata", "backend": "scripted_test",
+         "main_model": "scripted-main", "child_model": "scripted-child",
+         "workspace_mode": "container_clone"},
+        {"type": "ready"},
+        {"type": "child_spawned", "child_id": child_id, "work_units": ["authority"]},
+        {"type": "child_started", "child_id": child_id},
+        {"type": "episode_ended", "final_answer": "done",
+         "local_status": "completed", "declared_task_success": True},
+    ]
+
+
+def _live_episode_config(tmp_path: Path, case_dir: Path, episode_id: str) -> EpisodeConfig:
+    return EpisodeConfig(
+        episode_id=episode_id, case_id=case_dir.name,
+        execution_mode="async", guidance="incentive", agent_seed=1,
+        adapter_command=["fake-adapter"], output_dir=tmp_path / "out",
+        use_container=False, timeout_sec=10,
+        case_dir_override=case_dir,
+    )
+
+
+def _trace_rows(tmp_path: Path) -> list[dict]:
+    trace = (tmp_path / "out" / "trace.jsonl").read_text(encoding="utf-8")
+    return [json.loads(line) for line in trace.splitlines() if line.strip()]
+
+
+def test_consume_declared_stimuli_dispatches_every_live_kind_once() -> None:
+    """The seam fires each declared live stimulus at most once and skips delivery rows."""
+    case = {
+        "scenarios": {
+            "linear": {"events": []},
+            "async": {"events": [
+                # Live rows (no result role) consumed by the seam.
+                {"id": "pres", "stimulus_type": "resource_pressure",
+                 "straggler_child_id": "c1", "resource": "concurrency_slot", "limit": 2},
+                {"id": "deadline", "stimulus_type": "deadline_update",
+                 "deadline_wall": 3600.0, "reason": "sla"},
+                {"id": "scope", "stimulus_type": "task_scope_revision",
+                 "revision_id": "r1", "new_scope": {"a": 1},
+                 "participant_visible_fields": {"scope": "b"}},
+                {"id": "graph", "stimulus_type": "dependency_graph_revision",
+                 "revision_id": "g1", "new_edges": {"db": ["a", "b"]},
+                 "participant_visible_fields": {"edges": ["a", "b"]}},
+                # A result-bearing revision row is a delivery row: the seam must
+                # not consume it (it is governed by _drain / _delivery instead).
+                {"id": "auth-scope", "stimulus_type": "task_scope_revision",
+                 "result": "authority", "invalidates_artifacts": ["final"]},
+            ]},
+        },
+    }
+    controller = DeliveryController("async", case)
+    # The runner records the child in flight before the seam consumes it.
+    controller.on_child_started({"type": "child_started", "child_id": "c1"})
+    # First child boundary fires deadline + both live revisions and the pressure
+    # targeted at c1; the result-bearing revision row stays untouched.
+    deliveries = controller.consume_declared_stimuli({
+        "type": "child_started", "child_id": "c1",
+    })
+    assert deliveries == []
+    assert len(controller.pressure_audits) == 1
+    assert controller.pressure_audits[0]["applied"] is True
+    assert len(controller.deadline_audits) == 1
+    assert controller.deadline_audits[0]["after_deadline"] == 3600.0
+    assert len(controller.revision_audits) == 2
+    assert {a["revision_id"] for a in controller.revision_audits} == {"r1", "g1"}
+    # The seam is idempotent: further child boundaries fire nothing.
+    controller.on_child_started({"type": "child_started", "child_id": "c2"})
+    assert controller.consume_declared_stimuli({
+        "type": "child_started", "child_id": "c2",
+    }) == []
+    assert len(controller.pressure_audits) == 1
+    assert len(controller.deadline_audits) == 1
+    assert len(controller.revision_audits) == 2
+
+
+def test_run_episode_consumes_declared_resource_pressure(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    """A declared resource_pressure stimulus is consumed and audited end-to-end."""
+    case = _write_live_case(tmp_path, events=[
+        {"id": "pressure", "stimulus_type": "resource_pressure",
+         "straggler_child_id": "c1", "resource": "concurrency_slot", "limit": 2,
+         "pool_remaining": 1},
+    ])
+    _patch_live_adapter(monkeypatch, _adapter_events())
+    config = _live_episode_config(tmp_path, case, "live-pressure")
+    asyncio.run(runner_module.run_episode(ROOT, config))
+    facts = [r for r in _trace_rows(tmp_path) if r.get("type") == "resource_pressure"]
+    assert facts, "resource_pressure audit never reached the trace"
+    assert facts[0]["applied"] is True
+    assert facts[0]["straggler_child_id"] == "c1"
+    assert facts[0]["visibility"] == "kernel_private"
+
+
+def test_run_episode_consumes_declared_deadline_update(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    """A declared deadline_update stimulus is consumed and audited end-to-end."""
+    case = _write_live_case(tmp_path, events=[
+        {"id": "deadline", "stimulus_type": "deadline_update",
+         "deadline_wall": 7200.0, "reason": "sla"},
+    ])
+    _patch_live_adapter(monkeypatch, _adapter_events())
+    config = _live_episode_config(tmp_path, case, "live-deadline")
+    asyncio.run(runner_module.run_episode(ROOT, config))
+    facts = [r for r in _trace_rows(tmp_path) if r.get("type") == "deadline_update"]
+    assert facts, "deadline_update audit never reached the trace"
+    assert facts[0]["after_deadline"] == 7200.0
+    assert facts[0]["visibility"] == "kernel_private"
+
+
+def test_run_episode_consumes_declared_task_scope_revision(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    """A declared task_scope_revision stimulus is consumed and audited end-to-end."""
+    case = _write_live_case(tmp_path, events=[
+        {"id": "scope", "stimulus_type": "task_scope_revision",
+         "revision_id": "r-live", "new_scope": {"phase": "frozen"},
+         "participant_visible_fields": {"scope": "frozen"}},
+    ])
+    _patch_live_adapter(monkeypatch, _adapter_events())
+    config = _live_episode_config(tmp_path, case, "live-scope")
+    asyncio.run(runner_module.run_episode(ROOT, config))
+    facts = [r for r in _trace_rows(tmp_path) if r.get("type") == "task_scope_revision"]
+    assert facts, "task_scope_revision audit never reached the trace"
+    assert facts[0]["revision_id"] == "r-live"
+    assert facts[0]["visibility"] == "kernel_private"
+
+
+def test_run_episode_consumes_declared_dependency_graph_revision(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    """A declared dependency_graph_revision stimulus is consumed end-to-end."""
+    case = _write_live_case(tmp_path, events=[
+        {"id": "graph", "stimulus_type": "dependency_graph_revision",
+         "revision_id": "g-live", "new_edges": {"db": ["reader", "writer"]},
+         "participant_visible_fields": {"edges": ["reader", "writer"]}},
+    ])
+    _patch_live_adapter(monkeypatch, _adapter_events())
+    config = _live_episode_config(tmp_path, case, "live-graph")
+    asyncio.run(runner_module.run_episode(ROOT, config))
+    facts = [
+        r for r in _trace_rows(tmp_path) if r.get("type") == "dependency_graph_revision"
+    ]
+    assert facts, "dependency_graph_revision audit never reached the trace"
+    assert facts[0]["revision_id"] == "g-live"
+    assert facts[0]["visibility"] == "kernel_private"

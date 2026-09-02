@@ -17,7 +17,10 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from async_rbench.evaluation.event_taxonomy import load_event_taxonomy
+from async_rbench.evaluation.event_taxonomy import (
+    STIMULUS_EVENT_TYPES,
+    load_event_taxonomy,
+)
 from async_rbench.spec import discover_case_instances
 
 # ---------------------------------------------------------------------------
@@ -86,15 +89,21 @@ def _join(values: Any) -> str:
 
 
 def _current_stimulus_types(raw: dict[str, Any]) -> list[str]:
-    """Distinct stimulus ``type``s scheduled by the case's async scenario.
+    """Distinct stimulus kinds scheduled by the case's async scenario.
 
-    A result-bearing event without an explicit ``type`` is treated as
-    ``result_delivery`` (the scenario default).
+    Reads the shared-contract ``stimulus_type`` field (Task 10 swimlane 0a) so the
+    manifest reflects the declared kind instead of the legacy ``result_delivery``
+    default that ignored the tag.  An event without a recognised ``stimulus_type``
+    is read as ``result_delivery``, matching ``event_taxonomy.scenario_event_type``.
     """
     events = (((raw.get("scenarios") or {}).get("async") or {}).get("events") or [])
-    return sorted({
-        str(event.get("type") or "result_delivery") for event in events if isinstance(event, dict)
-    })
+    kinds: set[str] = set()
+    for event in events:
+        if not isinstance(event, dict):
+            continue
+        kind = str(event.get("stimulus_type") or "")
+        kinds.add(kind if kind in STIMULUS_EVENT_TYPES else "result_delivery")
+    return sorted(kinds)
 
 
 def _current_triggers(raw: dict[str, Any]) -> list[str]:

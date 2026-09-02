@@ -96,7 +96,7 @@ def test_completion_replay_is_not_a_duplicate_result_schedule() -> None:
     original = raw["scenarios"]["async"]["events"][0]
     raw["scenarios"]["async"]["events"].append({
         "id": "replay-checkpoint",
-        "type": "completion_replay",
+        "stimulus_type": "completion_replay",
         "replay_of_result": original["result"],
         "trigger": "after_consumed",
     })
@@ -121,7 +121,7 @@ def test_replay_preserves_completion_identity_and_fires_once() -> None:
             "async": {"events": [
                 {"id": "authority", "result": "authority"},
                 {
-                    "id": "replay", "type": "completion_replay",
+                    "id": "replay", "stimulus_type": "completion_replay",
                     "replay_of_result": "authority", "trigger": "after_consumed",
                 },
             ]},

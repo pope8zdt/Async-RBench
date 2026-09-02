@@ -7,6 +7,19 @@ from typing import Any
 from .protocol import canonical_digest
 from .workspace_runtime import state_snapshot_digest
 
+# Schedule-row kinds that govern the delivery of a *real* completion: a real
+# ``child_completed`` whose ``result_kind`` matches a row of one of these kinds
+# is delivered only when that row's trigger boundary is met (``_drain``).
+# ``result_delivery`` / ``implicit_error_result`` are pure delivery rows;
+# revision / pressure kinds carry a ``result`` role when the specialised
+# stimulus is attached to a delivery (the in-tree after_artifacts authority
+# rows).  Terminal kinds (``child_timeout`` / ``child_crash``) fabricate their
+# own completion at the consumption seam and never govern a real completion.
+DELIVERY_ROW_KINDS = frozenset({
+    "result_delivery", "implicit_error_result",
+    "task_scope_revision", "dependency_graph_revision", "resource_pressure",
+})
+
 
 @dataclass
 class DeliveryController:
@@ -178,7 +191,7 @@ class DeliveryController:
         self.completions[completion_id] = completion
         self.completion_action_ordinals[completion_id] = self.main_actions
         self.completion_held_at_monotonic[completion_id] = time.monotonic()
-        schedule_event = {"type": "result_delivery", "result": result_kind}
+        schedule_event = {"stimulus_type": "result_delivery", "result": result_kind}
         if benchmark_event_id:
             schedule_event["id"] = benchmark_event_id
         delivery = self._delivery(completion, schedule_event, False)
@@ -196,26 +209,53 @@ class DeliveryController:
     def consume_declared_stimuli(
         self, event: dict[str, Any],
     ) -> list[dict[str, Any]]:
-        """Emit the designed-terminal stimuli a case declares in its schedule.
+        """Fire the live stimuli a case declares in its schedule (spec §6.2).
 
-        This is the consumption seam the runner drives from ``run_episode``: a
-        case declaration (a ``child_timeout`` / ``child_crash`` schedule event)
-        reaches the corresponding ``apply_*`` producer once the declared child
-        has actually started (spec §6.2 in-flight proof).  A stimulus fires at
-        most once per child, so repeated ``child_started`` events are idempotent.
+        This is the consumption seam the runner drives from ``run_episode`` on
+        each ``child_started``.  Two families of schedule row exist:
+
+        * **Delivery rows** — rows carrying a declared ``result`` role
+          (``result_delivery``, ``implicit_error_result``, and the revision /
+          pressure rows the swe/tbn cases stamp onto their after_artifacts
+          authority results) are governed by ``_drain``/``_delivery`` and are
+          ignored here.
+        * **Live rows** — rows with no result role — are consumed at the child
+          boundary: ``child_timeout`` / ``child_crash`` fire on the named
+          child's ``child_started``; ``resource_pressure`` fires when its
+          designated straggler starts; ``task_scope_revision`` /
+          ``dependency_graph_revision`` and ``deadline_update`` fire once at the
+          first child boundary (there is no later live boundary in this seam).
+
+        Every declared row fires at most once, keyed by its ``id``; repeated
+        ``child_started`` events are therefore idempotent.
         """
         if self.execution_mode != "async" or event.get("type") != "child_started":
             return []
         child_id = str(event.get("child_id") or "")
         deliveries: list[dict[str, Any]] = []
         for schedule_event in self.schedule:
-            event_type = str(schedule_event.get("type") or "")
-            if event_type not in {"child_timeout", "child_crash"}:
+            event_type = str(schedule_event.get("stimulus_type") or "")
+            if event_type not in {
+                "child_timeout", "child_crash", "resource_pressure",
+                "task_scope_revision", "dependency_graph_revision", "deadline_update",
+            }:
+                continue
+            # A result-bearing non-terminal row is a delivery row (see docstring).
+            if event_type in DELIVERY_ROW_KINDS and schedule_event.get("result") is not None:
                 continue
             event_id = str(schedule_event.get("id") or "")
             if event_id in self._fired_stimulus_event_ids:
                 continue
-            if str(schedule_event.get("child_id") or "") != child_id:
+            if event_type in {"child_timeout", "child_crash"}:
+                if str(schedule_event.get("child_id") or "") != child_id:
+                    continue
+            elif event_type == "resource_pressure":
+                if str(schedule_event.get("straggler_child_id") or "") != child_id:
+                    continue
+            if event_type == "deadline_update" and schedule_event.get("deadline_wall") is None:
+                self.protocol_notes.append(
+                    f"declared deadline_update {event_id!r} ignored: missing deadline_wall"
+                )
                 continue
             self._fired_stimulus_event_ids.add(event_id)
             completion_id = str(schedule_event.get(
@@ -230,13 +270,46 @@ class DeliveryController:
                     result_kind=result_kind, payload=payload, outcome="timeout",
                     detail=detail, designed=True, benchmark_event_id=event_id,
                 ))
-            else:
+            elif event_type == "child_crash":
                 deliveries.extend(self.apply_child_crash(
                     child_id=child_id, completion_id=completion_id,
                     result_kind=result_kind, payload=payload,
                     crash_source=str(schedule_event.get("crash_source") or "case_designed"),
                     detail=detail, benchmark_event_id=event_id,
                 ))
+            elif event_type == "resource_pressure":
+                self.apply_resource_pressure(
+                    straggler_child_id=child_id,
+                    resource=str(schedule_event.get("resource") or "concurrency_slot"),
+                    limit=schedule_event.get("limit"),
+                    pool_remaining=schedule_event.get("pool_remaining"),
+                )
+            elif event_type == "deadline_update":
+                self.apply_deadline_update(
+                    deadline_wall=float(schedule_event["deadline_wall"]),
+                    reason=str(schedule_event.get("reason") or "case_declared"),
+                )
+            elif event_type == "task_scope_revision":
+                self.apply_task_scope_revision(
+                    revision_id=str(schedule_event.get("revision_id") or event_id),
+                    new_scope=dict(schedule_event.get("new_scope") or {}),
+                    participant_visible_fields=dict(
+                        schedule_event.get("participant_visible_fields") or {}
+                    ),
+                    expected_response=schedule_event.get("expected_response"),
+                )
+            elif event_type == "dependency_graph_revision":
+                self.apply_dependency_graph_revision(
+                    revision_id=str(schedule_event.get("revision_id") or event_id),
+                    new_edges={
+                        str(edge): tuple(value)
+                        for edge, value in dict(schedule_event.get("new_edges") or {}).items()
+                    },
+                    participant_visible_fields=dict(
+                        schedule_event.get("participant_visible_fields") or {}
+                    ),
+                    expected_response=schedule_event.get("expected_response"),
+                )
         return deliveries
 
     def apply_child_crash(
@@ -425,7 +498,7 @@ class DeliveryController:
             return []
         deliveries: list[dict[str, Any]] = []
         for schedule_event in self.schedule:
-            if str(schedule_event.get("type") or "result_delivery") != "completion_replay":
+            if str(schedule_event.get("stimulus_type") or "result_delivery") != "completion_replay":
                 continue
             event_id = str(schedule_event.get("id") or "")
             if event_id in self.replayed_schedule_events:
@@ -504,9 +577,10 @@ class DeliveryController:
         contract; ``_contract_valid`` is true), so the delivery is model-visible.
         The *private* signal that the reported result is actually a failure comes
         either from the case's ``implicit_error_predicate`` or, when no predicate
-        is declared, from the schedule event type itself being the private signal.
+        is declared, from the schedule event's declared stimulus kind itself being
+        the private signal.
         """
-        if str(schedule_event.get("type") or "result_delivery") != "implicit_error_result":
+        if str(schedule_event.get("stimulus_type") or "result_delivery") != "implicit_error_result":
             return None, "not an implicit error schedule event"
         spec = self.case_spec.get("implicit_error_predicate") or {}
         field_name = str(spec.get("evidence_field") or "")
@@ -619,7 +693,7 @@ class DeliveryController:
         self._occurrence_ordinal += 1
         delivered["delivery_occurrence_id"] = f"gateway-occ-{self._occurrence_ordinal}"
         self._delivery_occurrence_of_completion[completion_id] = delivered["delivery_occurrence_id"]
-        if str(schedule_event.get("type") or "result_delivery") == "implicit_error_result":
+        if str(schedule_event.get("stimulus_type") or "result_delivery") == "implicit_error_result":
             implicit_error, implicit_reason = self._implicit_error_truth(
                 completion, schedule_event,
             )
@@ -640,7 +714,7 @@ class DeliveryController:
         original_event = next(
             (
                 event for event in self.schedule
-                if str(event.get("type") or "result_delivery") == "result_delivery"
+                if str(event.get("stimulus_type") or "result_delivery") == "result_delivery"
                 and str(event.get("result") or "") == str(completion.get("result_kind") or "")
             ),
             {},
@@ -699,9 +773,7 @@ class DeliveryController:
         if self.execution_mode == "async":
             by_result = {
                 str(event.get("result")): event for event in self.schedule
-                if str(event.get("type") or "result_delivery") in {
-                    "result_delivery", "implicit_error_result",
-                }
+                if str(event.get("stimulus_type") or "result_delivery") in DELIVERY_ROW_KINDS
                 and event.get("result") is not None
             }
             deliverable = []

@@ -330,7 +330,7 @@ def _check_event_theme_expressibility(
             "async": {"events": [
                 {"id": "original", "result": "authority"},
                 {
-                    "id": "replay", "type": "completion_replay",
+                    "id": "replay", "stimulus_type": "completion_replay",
                     "replay_of_result": "authority", "trigger": "after_consumed",
                 },
             ]},
