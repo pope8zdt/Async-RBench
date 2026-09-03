@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import re
+import sys
 from typing import Any
 
 from .case_contract import PUBLIC_RESULT_REJECTION_CODES
@@ -122,7 +125,11 @@ def structural_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
+def _private_fixture_result(
+    workstream: dict[str, Any],
+    *,
+    validator_timeout: float | None = None,
+) -> dict[str, Any]:
     """Execute the actual private validator on a positive + negative fixture.
 
     Unlike the transport-level fixture check (which only runs
@@ -157,6 +164,7 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
         stage_valid()
         positive_code, positive_marks = run_report_validator(
             workstream, workspace_root, positive["payload"],
+            timeout=validator_timeout,
         )
         positive_passed = positive_code == 0 and not positive_marks
 
@@ -183,6 +191,7 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
                 pass
             run_code, run_marks = run_report_validator(
                 workstream, workspace_root, negative_payload["payload"],
+                timeout=validator_timeout,
             )
             triggered = [mark[0] for mark in run_marks]
             negatives[code] = {
@@ -200,6 +209,7 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
             )
             run_code, run_marks = run_report_validator(
                 workstream, workspace_root, negative_payload["payload"],
+                timeout=validator_timeout,
             )
             triggered = [mark[0] for mark in run_marks]
             negatives[f"report_missing_required_field:{field}"] = {
@@ -213,6 +223,7 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
             stage_valid()
             run_code, run_marks = run_report_validator(
                 workstream, workspace_root, negative_payload["payload"],
+                timeout=validator_timeout,
             )
             triggered = [mark[0] for mark in run_marks]
             negatives[f"report_payload_field_mismatch:{field}"] = {
@@ -231,10 +242,134 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def audit_contract_fixtures(root: Path) -> dict[str, Any]:
-    rows: list[dict[str, Any]] = []
-    failures: list[str] = []
-    hidden_validator_count = 0
+def _audit_workstream(
+    case: Any,
+    instance: Any,
+    workstream: dict[str, Any],
+    sufficiency: dict[str, Any],
+    *,
+    validator_timeout: float | None = None,
+) -> tuple[dict[str, Any], bool, str, bool]:
+    """Evaluate one workstream's public/private contract fixtures + P0-4 drift.
+
+    Runs independently (its only side effects are its return values), so
+    ``audit_contract_fixtures`` can fan the subprocess-heavy private-validator
+    checks across threads.  Returns ``(row, passed, failure, hidden_submission
+    constraint)``.
+    """
+    stream_id = str(workstream.get("id"))
+    event = structural_fixture_result(workstream)
+    positive_codes, _ = validate_payload_contract(workstream, event)
+    required = list(workstream.get("required_evidence_fields") or [])
+    negative_event = json.loads(json.dumps(event))
+    expected_negative_code = "missing_required_evidence"
+    if required:
+        negative_event["payload"]["evidence"].pop(required[0])
+    else:
+        negative_event["payload"]["files"] = ["/not/allowed"]
+        expected_negative_code = "unexpected_files"
+    negative_codes, _ = validate_payload_contract(workstream, negative_event)
+    public_schema = dict(workstream.get("public_evidence_schema") or {})
+    private_schema = dict(workstream.get("evidence_schema") or {})
+    schema_names_match = set(public_schema) == set(private_schema) == set(required)
+    public_types_match = all(
+        public_schema.get(name, {}).get("type") == private_schema.get(name, {}).get("type")
+        for name in required
+    )
+    sufficiency_fields = set(
+        (sufficiency.get(stream_id) or {}).get("required_output_fields") or []
+    )
+    sufficiency_matches = sufficiency_fields == set(required)
+    # P0-4: the evaluator-private validator must be a faithful render of
+    # the participant-visible public contract — no hidden constraint.
+    contract_drift = report_contract_errors(workstream)
+    stage = str(workstream.get("validator_stage") or "")
+    public_kind = str(
+        (workstream.get("public_result_contract") or {}).get("kind") or ""
+    )
+    public_contract_declared = public_kind in {"payload_only", "report_file"}
+    validator_stage_valid = bool(
+        (stage == "semantic_evidence" and public_kind == "payload_only")
+        or (
+            stage == "submission_contract"
+            and public_kind == "report_file"
+            and not contract_drift
+        )
+    )
+    hidden_submission_constraint = bool(
+        has_hidden_validator(workstream)
+        or (stage == "submission_contract" and not validator_stage_valid)
+    )
+    # P0-5: actually execute the private validator on a positive + negative
+    # fixture (the audit previously ran only validate_payload_contract).
+    private_fixture = (
+        _private_fixture_result(workstream, validator_timeout=validator_timeout)
+        if stage == "submission_contract"
+        else {"supported": False, "reason": "semantic validator is diagnostic"}
+    )
+    private_fixture_passed = bool(
+        stage == "semantic_evidence"
+        or (
+            private_fixture["supported"]
+            and private_fixture["positive_passed"]
+            and all(item["passed"] for item in private_fixture["negatives"].values())
+        )
+    )
+    passed = bool(
+        not positive_codes
+        and expected_negative_code in negative_codes
+        and schema_names_match
+        and public_types_match
+        and sufficiency_matches
+        and public_contract_declared
+        and validator_stage_valid
+        and not hidden_submission_constraint
+        and not contract_drift
+        and private_fixture_passed
+    )
+    row = {
+        "case_id": case.case_id,
+        "instance_id": instance.instance_id,
+        "workstream_id": stream_id,
+        "positive_fixture_passed": not positive_codes,
+        "positive_reason_codes": positive_codes,
+        "negative_fixture_passed": expected_negative_code in negative_codes,
+        "negative_reason_codes": negative_codes,
+        "public_private_schema_names_match": schema_names_match,
+        "public_private_types_match": public_types_match,
+        "information_sufficiency_fields_match": sufficiency_matches,
+        "validator_stage_valid": validator_stage_valid,
+        "public_contract_declared": public_contract_declared,
+        "private_fixture_supported": bool(private_fixture["supported"]),
+        "hidden_submission_constraint": hidden_submission_constraint,
+        "private_validator_executed": bool(private_fixture["supported"]),
+        "private_positive_passed": private_fixture.get("positive_passed"),
+        "private_negatives": private_fixture.get("negatives", {}),
+        "contract_drift_errors": contract_drift,
+        "private_fixture_passed": private_fixture_passed,
+        "passed": passed,
+    }
+    failure = f"{case.case_id}/{instance.instance_id}/{stream_id}" if not passed else ""
+    return row, passed, failure, hidden_submission_constraint
+
+
+def audit_contract_fixtures(
+    root: Path,
+    *,
+    validator_timeout: float | None = 30.0,
+    progress: bool = False,
+) -> dict[str, Any]:
+    """Audit every case's workstream contract fixtures (public + private).
+
+    The submission-stage private-validator check shells out to the rendered
+    validator program, which is the dominant cost (hundreds of subprocess
+    launches).  Cases are loaded once, then the per-workstream evaluation is
+    fanned across a thread pool so the audit scales with available cores instead
+    of summing those launches serially.  ``validator_timeout`` bounds each
+    subprocess so a hung validator cannot stall the audit, and ``progress``
+    emits a running counter to stderr for long CLI runs.
+    """
+    jobs: list[tuple[Any, Any, dict[str, Any], dict[str, Any]]] = []
     for instance in discover_case_instances(root):
         case = instance.load()
         sufficiency = {
@@ -242,109 +377,44 @@ def audit_contract_fixtures(root: Path) -> dict[str, Any]:
             for item in case.raw.get("information_sufficiency") or []
         }
         for workstream in case.raw.get("delegation_workstreams") or []:
-            stream_id = str(workstream.get("id"))
-            event = structural_fixture_result(workstream)
-            positive_codes, _ = validate_payload_contract(workstream, event)
-            required = list(workstream.get("required_evidence_fields") or [])
-            negative_event = json.loads(json.dumps(event))
-            expected_negative_code = "missing_required_evidence"
-            if required:
-                negative_event["payload"]["evidence"].pop(required[0])
-            else:
-                negative_event["payload"]["files"] = ["/not/allowed"]
-                expected_negative_code = "unexpected_files"
-            negative_codes, _ = validate_payload_contract(workstream, negative_event)
-            public_schema = dict(workstream.get("public_evidence_schema") or {})
-            private_schema = dict(workstream.get("evidence_schema") or {})
-            schema_names_match = set(public_schema) == set(private_schema) == set(required)
-            public_types_match = all(
-                public_schema.get(name, {}).get("type") == private_schema.get(name, {}).get("type")
-                for name in required
-            )
-            sufficiency_fields = set(
-                (sufficiency.get(stream_id) or {}).get("required_output_fields") or []
-            )
-            sufficiency_matches = sufficiency_fields == set(required)
-            # P0-4: the evaluator-private validator must be a faithful render of
-            # the participant-visible public contract — no hidden constraint.
-            contract_drift = report_contract_errors(workstream)
-            stage = str(workstream.get("validator_stage") or "")
-            public_kind = str(
-                (workstream.get("public_result_contract") or {}).get("kind") or ""
-            )
-            public_contract_declared = public_kind in {"payload_only", "report_file"}
-            validator_stage_valid = bool(
-                (stage == "semantic_evidence" and public_kind == "payload_only")
-                or (
-                    stage == "submission_contract"
-                    and public_kind == "report_file"
-                    and not contract_drift
+            jobs.append((case, instance, workstream, sufficiency))
+
+    total = len(jobs)
+    workers = min(32, (os.cpu_count() or 1) * 4)
+    results: list[tuple[dict[str, Any], bool, str, bool]] = []
+    if total == 0:
+        results = []
+    elif workers <= 1 or total == 1:
+        results = [
+            _audit_workstream(case, instance, workstream, sufficiency, validator_timeout=validator_timeout)
+            for case, instance, workstream, sufficiency in jobs
+        ]
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = [
+                pool.submit(
+                    _audit_workstream, case, instance, workstream, sufficiency,
+                    validator_timeout=validator_timeout,
                 )
-            )
-            hidden_submission_constraint = bool(
-                has_hidden_validator(workstream)
-                or (stage == "submission_contract" and not validator_stage_valid)
-            )
-            if hidden_submission_constraint:
-                hidden_validator_count += 1
-            # P0-5: actually execute the private validator on a positive + negative
-            # fixture (the audit previously ran only validate_payload_contract).
-            private_fixture = (
-                _private_fixture_result(workstream)
-                if stage == "submission_contract"
-                else {"supported": False, "reason": "semantic validator is diagnostic"}
-            )
-            private_fixture_passed = bool(
-                stage == "semantic_evidence"
-                or (
-                    private_fixture["supported"]
-                    and private_fixture["positive_passed"]
-                    and all(item["passed"] for item in private_fixture["negatives"].values())
-                )
-            )
-            passed = bool(
-                not positive_codes
-                and expected_negative_code in negative_codes
-                and schema_names_match
-                and public_types_match
-                and sufficiency_matches
-                and public_contract_declared
-                and validator_stage_valid
-                and not hidden_submission_constraint
-                and not contract_drift
-                and private_fixture_passed
-            )
-            row = {
-                "case_id": case.case_id,
-                "instance_id": instance.instance_id,
-                "workstream_id": stream_id,
-                "positive_fixture_passed": not positive_codes,
-                "positive_reason_codes": positive_codes,
-                "negative_fixture_passed": expected_negative_code in negative_codes,
-                "negative_reason_codes": negative_codes,
-                "public_private_schema_names_match": schema_names_match,
-                "public_private_types_match": public_types_match,
-                "information_sufficiency_fields_match": sufficiency_matches,
-                "validator_stage_valid": validator_stage_valid,
-                "public_contract_declared": public_contract_declared,
-                "private_fixture_supported": bool(private_fixture["supported"]),
-                "hidden_submission_constraint": hidden_submission_constraint,
-                "private_validator_executed": bool(private_fixture["supported"]),
-                "private_positive_passed": private_fixture.get("positive_passed"),
-                "private_negatives": private_fixture.get("negatives", {}),
-                "contract_drift_errors": contract_drift,
-                "private_fixture_passed": private_fixture_passed,
-                "passed": passed,
-            }
-            rows.append(row)
-            if not passed:
-                failures.append(f"{case.case_id}/{instance.instance_id}/{stream_id}")
+                for case, instance, workstream, sufficiency in jobs
+            ]
+            for index, future in enumerate(futures):
+                results.append(future.result())
+                if progress and (index + 1) % 25 == 0:
+                    sys.stderr.write(f"\raudit fixtures {index + 1}/{total}")
+                    sys.stderr.flush()
+    if progress and total:
+        sys.stderr.write(f"\raudit fixtures {total}/{total}\n")
+        sys.stderr.flush()
+
+    rows = [item[0] for item in results]
+    failures = [item[2] for item in results if item[2]]
     return {
         "workstream_count": len(rows),
         "passed_count": sum(bool(row["passed"]) for row in rows),
         "failed_workstreams": failures,
         "passed": not failures,
-        "hidden_validator_workstream_count": hidden_validator_count,
+        "hidden_validator_workstream_count": sum(1 for item in results if item[3]),
         "note": "hidden submission constraints fail the contract audit closed",
         "workstreams": rows,
     }
@@ -513,7 +583,9 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
     return episode, outcomes
 
 
-def audit_run(root: Path, benchmark_root: Path) -> dict[str, Any]:
+def audit_run(
+    root: Path, benchmark_root: Path, *, contract_fixtures: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     # Imported lazily to keep the audit helpers usable without initializing the
     # episode runner during module import.
     from .runner import _case_digest, _source_digest
@@ -568,7 +640,12 @@ def audit_run(root: Path, benchmark_root: Path) -> dict[str, Any]:
     ]
     tokens = [float(item.get("total_tokens") or 0) for item in episodes]
     durations = [float(item.get("episode_duration_ms") or 0) for item in episodes]
-    fixtures = audit_contract_fixtures(benchmark_root)
+    # A caller (e.g. a session-scoped test fixture) may hand over a pre-computed
+    # full-corpus audit rather than pay the subprocess-heavy scan again.
+    fixtures = (
+        audit_contract_fixtures(benchmark_root)
+        if contract_fixtures is None else contract_fixtures
+    )
     current_source_digest = _source_digest(benchmark_root)
     current_contract_digest = hashlib.sha256(
         (benchmark_root / "evaluation_contract.json").read_bytes()

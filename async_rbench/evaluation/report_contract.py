@@ -194,12 +194,17 @@ def run_report_validator(
     payload: Mapping[str, Any],
     *,
     program: list[str] | None = None,
+    timeout: float | None = None,
 ) -> tuple[int, list[tuple[str, str | None]]]:
     """Execute the rendered report-rule program against a host-side fixture root.
 
     This is the same code the Docker child runs, so a fixture that passes here
     is a genuine positive: it exercises the *private validator*, not just the
     transport payload check that ``audit_contract_fixtures`` used to run.
+
+    ``timeout`` bounds the subprocess so a hung validator cannot stall an audit;
+    on expiry the audit treats the validator as failed (exit 124, a synthetic
+    ``validator_timeout`` mark) instead of blocking forever.
     """
     import base64
     import os
@@ -216,9 +221,13 @@ def run_report_validator(
     env = dict(os.environ)
     env["ASYNC_RBENCH_RESULT_PAYLOAD_B64"] = encoded
     env["ASYNC_RBENCH_RESULT_WORKSPACE_ROOT"] = str(workspace_root)
-    process = subprocess.run(
-        [sys.executable, "-c", code], env=env, capture_output=True, text=True,
-    )
+    try:
+        process = subprocess.run(
+            [sys.executable, "-c", code], env=env, capture_output=True, text=True,
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired:
+        return 124, [("validator_timeout", None)]
     return process.returncode, classify_validator_output(process.stdout + process.stderr)
 
 

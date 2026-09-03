@@ -3,15 +3,17 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from async_rbench.evaluation.audit import audit_contract_fixtures, audit_run
+from async_rbench.evaluation.audit import audit_run
 from async_rbench.spec import discover_cases, validate_case
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_all_workstreams_have_passing_positive_and_negative_contract_fixtures() -> None:
-    result = audit_contract_fixtures(ROOT)
+def test_all_workstreams_have_passing_positive_and_negative_contract_fixtures(
+    contract_fixtures: dict,
+) -> None:
+    result = contract_fixtures
     assert result["workstream_count"] > 0
     assert result["failed_workstreams"] == []
     assert result["passed_count"] == result["workstream_count"]
@@ -22,7 +24,9 @@ def test_case_validation_guards_public_private_evidence_sufficiency() -> None:
     assert errors == []
 
 
-def test_run_audit_separates_public_and_private_rejections(tmp_path: Path) -> None:
+def test_run_audit_separates_public_and_private_rejections(
+    tmp_path: Path, contract_fixtures: dict,
+) -> None:
     episode = tmp_path / "episode-1"
     episode.mkdir()
     score = {
@@ -61,7 +65,7 @@ def test_run_audit_separates_public_and_private_rejections(tmp_path: Path) -> No
         "".join(json.dumps(event) + "\n" for event in events), encoding="utf-8",
     )
 
-    report = audit_run(tmp_path, ROOT)
+    report = audit_run(tmp_path, ROOT, contract_fixtures=contract_fixtures)
     assert report["episode_count"] == 1
     assert report["rejections"]["private_reason_counts"] == {
         "missing_required_evidence": 1,
@@ -77,6 +81,6 @@ def test_run_audit_separates_public_and_private_rejections(tmp_path: Path) -> No
         "participant_structural_contract_violation": 1,
     }
     assert report["validator_observation_coverage"]["workstream_count"] == (
-        audit_contract_fixtures(ROOT)["workstream_count"]
+        contract_fixtures["workstream_count"]
     )
     assert report["artifact_compatibility"]["all_episodes_match_current"] is False
