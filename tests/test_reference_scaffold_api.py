@@ -824,17 +824,13 @@ def test_spawn_refuses_after_recovery_cap_and_when_exact_first_call_does_not_fit
             ("c-wal", "wal_recovery"), ("c-check", "checkpoint_recovery"),
             ("c-merge", "merge_support"),
         ])
-        await manager.handle_delivery({
-            "completion_id": "comp-c-check", "payload": {"i": 2},
-            "payload_sha256": "b" * 64, "child_id": "c-check",
-        })
-        await manager.handle_delivery({
-            "completion_id": "comp-c-merge", "payload": {"i": 3},
-            "payload_sha256": "c" * 64, "child_id": "c-merge",
-        })
         await manager.handle_rejection({
             "completion_id": "comp-c-wal",
             "reason_codes": ["report_payload_field_mismatch"], "child_id": "c-wal",
+        })
+        await manager.handle_rejection({
+            "completion_id": "comp-c-check",
+            "reason_codes": ["report_file_missing"], "child_id": "c-check",
         })
         manager.attempt_counts["wal_recovery"] = 1
         manager._launch_queued = lambda: None
@@ -853,7 +849,8 @@ def test_spawn_refuses_after_recovery_cap_and_when_exact_first_call_does_not_fit
 
         # Exact-first-call admission: once the remaining child budget cannot fit
         # the recovery child's real first call the spawn is refused (the old
-        # crude 2 * max_output floor is gone).
+        # crude 2 * max_output floor is gone).  checkpoint_recovery is rejected
+        # above (actionable) so it is a valid P0-9 recovery and reaches this gate.
         pool = manager.token_budget
         pool.settled += pool.maximum  # remaining == 0
         result = await manager.spawn("checkpoint_recovery", "try again", [], "", "high")

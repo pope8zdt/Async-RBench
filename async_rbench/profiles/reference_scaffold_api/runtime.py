@@ -984,13 +984,17 @@ class SubagentManager:
             )
             return result
         # P0-9: a replacement is admitted only when the previous attempt's
-        # failure was reported back with an actionable public code.
+        # failure was reported back with an actionable public code.  A workstream
+        # with no recorded rejection at all (its child cancelled, or it died
+        # without a public verdict) is equally non-actionable — the initial wave
+        # already covered every workstream, so any later spawn is a recovery and
+        # recovery requires a real public rejection to justify it.
         feedback = self.workstream_rejections.get(workstream_id)
-        if feedback is not None and not feedback.get("actionable"):
+        if feedback is None or not feedback.get("actionable"):
             result = {
                 "error": (
                     f"last rejection of {workstream_id!r} carried no actionable "
-                    f"public code ({feedback.get('reason_codes') or []}); "
+                    f"public code ({(feedback or {}).get('reason_codes') or []}); "
                     "re-delegation refused until the submission contract is repaired"
                 ),
                 "budget_consumed": False,

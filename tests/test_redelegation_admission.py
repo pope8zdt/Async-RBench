@@ -297,6 +297,28 @@ def test_accepted_recovery_prompt_keeps_prior_rejection_feedback_and_reserved_ca
     asyncio.run(exercise())
 
 
+def test_spawn_refused_without_any_recorded_rejection() -> None:
+    """P0-9: a workstream whose prior attempt recorded no rejection at all (its
+    child was cancelled or died without a public verdict) cannot be re-delegated.
+
+    The initial wave already covers every allowed workstream one-to-one, so any
+    later ``spawn`` is a recovery — and recovery is admitted only when the
+    previous attempt's failure was reported back with an actionable public code.
+    ``merge_support`` has a registered child but ``workstream_rejections`` holds
+    no entry for it, so ``feedback`` is ``None``; the old gate let that through.
+    """
+    async def exercise() -> None:
+        scaffold = _build_manager()
+        manager = scaffold.manager
+        manager._launch_queued = lambda: None  # keep any rejection un-run
+        result = await manager.spawn("merge_support", "retry the merge child", [], "", "high")
+        assert "error" in result
+        assert "no actionable" in result["error"]
+        assert result["budget_consumed"] is False
+
+    asyncio.run(exercise())
+
+
 def test_initial_reservation_field_defaults_to_none_on_benchmark_owned_children() -> None:
     """The new field is a recovery-only affordance; benchmark-owned children must
     not accidentally carry one (keeps the Linear/Async records comparable)."""
