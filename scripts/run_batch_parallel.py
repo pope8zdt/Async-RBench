@@ -29,11 +29,12 @@ REPO = Path(__file__).resolve().parent.parent
 POWERSHELL = "powershell.exe"
 RUN_CASE = REPO / "run_case.ps1"
 
-# Lane layout: key A = qwen, key B = gemini.  1 lane per key (gentler per-key
-# request pressure; concurrency does not change total budget, only wall-clock).
+# Lane layout: both lanes on the official DeepSeek key (the shared relay at
+# 47.109.111.28:3000 was down during the previous smoke; operator supplied a
+# direct API key).  Two lanes on one key = max wall-clock speed.
 LANES = [
-    {"name": "qwenA", "profile": "configs/model-profiles/qwen3.5-27b.yaml", "env_key": "QWEN35_27B_API_KEY"},
-    {"name": "geminiB", "profile": "configs/model-profiles/gemini-3-flash.yaml", "env_key": "GEMINI3_FLASH_API_KEY"},
+    {"name": "dsA", "profile": "configs/model-profiles/deepseek-v4-flash.yaml", "env_key": "ASYNC_RBENCH_DEEPSEEK_KEY"},
+    {"name": "dsB", "profile": "configs/model-profiles/deepseek-v4-flash.yaml", "env_key": "ASYNC_RBENCH_DEEPSEEK_KEY"},
 ]
 
 
