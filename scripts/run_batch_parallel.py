@@ -72,7 +72,12 @@ def run_one(inst: str, lane: dict, seq: int, out_dir: Path) -> dict:
     env[env_key] = key_val
     start = time.time()
     try:
-        proc = subprocess.run(cmd, cwd=str(REPO), env=env, capture_output=True, text=True, timeout=2 * 60 * 60)
+        # Lane output is UTF-8 (PowerShell + case JSON); the locale default
+        # (GBK on this host) raises UnicodeDecodeError and kills the reader
+        # thread.  The output is only diagnostic — decode leniently.
+        proc = subprocess.run(cmd, cwd=str(REPO), env=env, capture_output=True,
+                              text=True, encoding="utf-8", errors="replace",
+                              timeout=2 * 60 * 60)
         exit_code = proc.returncode
         detail = ""
         # Parse the aggregated result.
