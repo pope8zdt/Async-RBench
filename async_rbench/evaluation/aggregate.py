@@ -1193,6 +1193,44 @@ def aggregate_reports(
     if official_linear_zero_main:
         hard_fail_reasons.append("official_linear_zero_main_tokens")
 
+    # Task 10: per-attempt terminal integrity of the scorer-stamped
+    # ``child_terminal_classifications``.  A private-only rejection (a
+    # ``case_contract_failure`` row carrying rejection codes but no public code)
+    # and an in-flight row both mean a spawned child never reached a concrete,
+    # model-verdict terminal.  Development runs are reported in the audit counts
+    # but never block a certification of the official episodes.
+    def _terminal_rows(item: dict[str, Any]) -> list[dict[str, Any]]:
+        rows = item.get("child_terminal_classifications")
+        if not isinstance(rows, list):
+            return []
+        return [row for row in rows if isinstance(row, dict)]
+
+    def _private_only_rows(item: dict[str, Any]) -> list[dict[str, Any]]:
+        return [
+            row for row in _terminal_rows(item)
+            if str(row.get("terminal_class") or "") == "case_contract_failure"
+            and (row.get("reason_codes")) and not (row.get("public_codes"))
+        ]
+
+    def _in_flight_rows(item: dict[str, Any]) -> list[dict[str, Any]]:
+        return [
+            row for row in _terminal_rows(item)
+            if str(row.get("terminal_class") or "") == "in_flight"
+        ]
+
+    private_submission_rejection_ids = sorted({
+        str(item.get("episode_id"))
+        for item in records if _private_only_rows(item)
+    })
+    unknown_child_terminal_ids = sorted({
+        str(item.get("episode_id"))
+        for item in records if _in_flight_rows(item)
+    })
+    if any(_private_only_rows(item) for item in official):
+        hard_fail_reasons.append("private_submission_rejection")
+    if any(_in_flight_rows(item) for item in official):
+        hard_fail_reasons.append("unknown_child_terminal")
+
     return {
         "architecture_version": "8.0",
         "leaderboard": [
@@ -1253,6 +1291,10 @@ def aggregate_reports(
             "pair_quality_errors": _pair_quality_errors(records),
             "linear_abnormal_episode_count": len(linear_zero_main_ids),
             "linear_abnormal_episode_ids": linear_zero_main_ids,
+            "private_submission_rejection_count": len(private_submission_rejection_ids),
+            "private_submission_rejection_episode_ids": private_submission_rejection_ids,
+            "unknown_child_terminal_count": len(unknown_child_terminal_ids),
+            "unknown_child_terminal_episode_ids": unknown_child_terminal_ids,
         },
     }
 

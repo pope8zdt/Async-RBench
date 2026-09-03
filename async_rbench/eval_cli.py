@@ -279,11 +279,29 @@ def cmd_audit_run(args) -> int:
         }
     else:
         gates["manifest_complete"] = None  # no manifest bound to this run root
+    # Task 10: surface every audit hard-fail reason as an explicit pass-gate so
+    # audit-run exits nonzero when the contract fixtures fail, a submission-stage
+    # validator hides a private constraint, a private-only rejection reached the
+    # scorer, a spawned child was still in flight when its episode closed, or an
+    # official Linear run recorded zero main tokens.
+    for reason in (
+        "contract_fixture_failure",
+        "hidden_submission_constraint",
+        "private_submission_rejection",
+        "unknown_child_terminal",
+        "official_linear_zero_main_tokens",
+    ):
+        gates[f"no_{reason}"] = reason not in (report.get("hard_fail_reasons") or [])
     report["gates"] = gates
     output = Path(args.output).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
     print(json.dumps(report, indent=2, sort_keys=True))
+    if report.get("hard_fail"):
+        print(
+            "audit-run hard-fail: " + ", ".join(report.get("hard_fail_reasons") or []),
+            file=sys.stderr,
+        )
     hard_gates = [value for value in gates.values() if value is not None]
     return 0 if hard_gates and all(hard_gates) else 1
 

@@ -16,7 +16,52 @@ from .report_contract import (
     report_contract_errors,
 )
 from .result_contract import validate_payload_contract
+from .termination import classify_child_terminals
 from ..spec import case_instance_key, discover_case_instances
+
+
+#: Every hard-fail reason an ``audit_run`` report can carry.  ``audit-run`` maps
+#: each to a pass-gate (Task 10) so a certification cannot silently proceed when
+#: the benchmark fixtures fail, a submission-stage validator hides a constraint,
+#: a private-only rejection reached the scorer, a spawned child was still in
+#: flight when its episode closed, or an official Linear run recorded no main
+#: measurement.
+AUDIT_HARD_FAIL_REASONS = (
+    "contract_fixture_failure",
+    "hidden_submission_constraint",
+    "private_submission_rejection",
+    "unknown_child_terminal",
+    "official_linear_zero_main_tokens",
+)
+
+
+def child_terminal_integrity_violations(
+    rows: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Split per-attempt classification rows into mechanism defects.
+
+    Returns ``(private_only_rejections, unknown_terminals)``:
+
+    * a *private-only rejection* is a ``case_contract_failure`` row carrying
+      rejection reason codes but no actionable public code — a private check
+      leaked into the gateway verdict (Task 4);
+    * an *unknown terminal* is a row still classified ``in_flight`` after its
+      episode closed — the spawned child never reached a concrete runtime
+      terminal (Task 1/8).
+
+    Neither is ever a model submission verdict; both block a certification.
+    """
+    private_only: list[dict[str, Any]] = []
+    unknown: list[dict[str, Any]] = []
+    for row in rows:
+        terminal_class = str(row.get("terminal_class") or "")
+        if terminal_class == "case_contract_failure" and (
+            row.get("reason_codes")
+        ) and not (row.get("public_codes")):
+            private_only.append(row)
+        elif terminal_class == "in_flight":
+            unknown.append(row)
+    return private_only, unknown
 
 
 def _pattern_value(pattern: str) -> str:
@@ -410,6 +455,8 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
     metadata = score.get("participant_metadata") or {}
     ends = [event for event in events if event.get("type") == "episode_ended"]
     local_status = ends[-1].get("local_status") if ends else None
+    terminal_rows = classify_child_terminals(events)
+    episode_closed = bool(ends)
     main_turns = max(
         (int(event.get("turn", 0)) for event in finished if event.get("role") == "main"),
         default=0,
@@ -442,6 +489,9 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
         "episode_id": score.get("episode_id"),
         "score_status": score.get("score_status"),
         "local_status": local_status,
+        "episode_closed": episode_closed,
+        "leaderboard_eligible": bool(score.get("leaderboard_eligible")),
+        "child_terminal_classifications": terminal_rows,
         "budget_exhausted": local_status == "budget_exhausted",
         "main_model_calls": sum(event.get("role") == "main" for event in finished),
         "child_model_calls": sum(str(event.get("role", "")).startswith("child:") for event in finished),
@@ -542,6 +592,45 @@ def audit_run(root: Path, benchmark_root: Path) -> dict[str, Any]:
         episode["evaluation_contract_matches_current"] = (
             episode.get("recorded_evaluation_contract_sha256") == current_contract_digest
         )
+    # Task 10: audit-run hard gates.  A delivered run root must not certify when
+    # the benchmark fixtures fail, a submission-stage validator hides a private
+    # constraint, a private-only rejection reached the scorer, a spawned child
+    # was still in flight once its episode closed, or an official Linear run
+    # recorded zero main-side measurement.
+    private_only_episode_ids = sorted({
+        str(episode.get("episode_id"))
+        for episode in episodes
+        if child_terminal_integrity_violations(
+            episode.get("child_terminal_classifications") or [],
+        )[0]
+    })
+    unknown_terminal_episode_ids = sorted({
+        str(episode.get("episode_id"))
+        for episode in episodes
+        if episode.get("episode_closed") is True
+        and child_terminal_integrity_violations(
+            episode.get("child_terminal_classifications") or [],
+        )[1]
+    })
+    official_linear_zero_main_episode_ids = sorted({
+        str(episode.get("episode_id"))
+        for episode in episodes
+        if str(episode.get("execution_mode")) == "linear"
+        and episode.get("leaderboard_eligible") is True
+        and int(episode.get("main_tokens") or 0) == 0
+    })
+    hard_fail_reasons: list[str] = []
+    if fixtures["passed"] is not True:
+        hard_fail_reasons.append("contract_fixture_failure")
+    if int(fixtures.get("hidden_validator_workstream_count") or 0) > 0:
+        hard_fail_reasons.append("hidden_submission_constraint")
+    if private_only_episode_ids:
+        hard_fail_reasons.append("private_submission_rejection")
+    if unknown_terminal_episode_ids:
+        hard_fail_reasons.append("unknown_child_terminal")
+    if official_linear_zero_main_episode_ids:
+        hard_fail_reasons.append("official_linear_zero_main_tokens")
+
     all_workstream_keys = {
         (
             str(row["case_id"]), str(row.get("instance_id") or "seed-1"),
@@ -632,4 +721,16 @@ def audit_run(root: Path, benchmark_root: Path) -> dict[str, Any]:
                 "cannot certify the current benchmark revision."
             ),
         },
+        "child_terminal_integrity": {
+            "episodes_with_private_only_rejection": private_only_episode_ids,
+            "episodes_with_unknown_child_terminal": unknown_terminal_episode_ids,
+            "official_linear_zero_main_episode_ids": official_linear_zero_main_episode_ids,
+            "note": (
+                "Each spawned child must reach exactly one concrete terminal once "
+                "its episode closes; a private-only rejection and an in-flight "
+                "close are mechanism defects, never model submission verdicts."
+            ),
+        },
+        "hard_fail": bool(hard_fail_reasons),
+        "hard_fail_reasons": hard_fail_reasons,
     }
