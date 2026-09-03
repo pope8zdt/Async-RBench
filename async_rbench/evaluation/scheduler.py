@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 import time
 from typing import Any
 
+from .event_taxonomy import scenario_event_type
 from .protocol import canonical_digest
 from .workspace_runtime import state_snapshot_digest
 
@@ -245,7 +246,10 @@ class DeliveryController:
             }:
                 continue
             # A result-bearing non-terminal row is a delivery row (see docstring).
-            if event_type in DELIVERY_ROW_KINDS and schedule_event.get("result") is not None:
+            if (
+                scenario_event_type(schedule_event) in DELIVERY_ROW_KINDS
+                and schedule_event.get("result") is not None
+            ):
                 continue
             event_id = str(schedule_event.get("id") or "")
             if event_id in self._fired_stimulus_event_ids:
@@ -734,7 +738,7 @@ class DeliveryController:
         original_event = next(
             (
                 event for event in self.schedule
-                if str(event.get("stimulus_type") or "result_delivery") == "result_delivery"
+                if scenario_event_type(event) == "result_delivery"
                 and str(event.get("result") or "") == str(completion.get("result_kind") or "")
             ),
             {},
@@ -793,7 +797,7 @@ class DeliveryController:
         if self.execution_mode == "async":
             by_result = {
                 str(event.get("result")): event for event in self.schedule
-                if str(event.get("stimulus_type") or "result_delivery") in DELIVERY_ROW_KINDS
+                if scenario_event_type(event) in DELIVERY_ROW_KINDS
                 and event.get("result") is not None
             }
             deliverable = []

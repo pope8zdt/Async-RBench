@@ -5,6 +5,7 @@ import io
 import json
 from pathlib import Path
 
+import pytest
 import yaml
 
 import async_rbench.evaluation.runner as runner_module
@@ -1155,3 +1156,31 @@ def test_run_episode_consumes_declared_dependency_graph_revision(
     assert facts, "dependency_graph_revision audit never reached the trace"
     assert facts[0]["revision_id"] == "g-live"
     assert facts[0]["visibility"] == "kernel_private"
+
+
+def test_run_episode_rejects_semantic_registry_without_score_domain(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    """The runner ingestion hard gate rejects a registry whose checks lack
+    ``score_domain`` instead of silently feeding empty evidence to the
+    base_task_score / async_drs consumers."""
+    case = _write_live_case(tmp_path, events=[])
+    (case / "task/tests/semantic_checks.json").write_text(
+        json.dumps({"version": "1", "checks": [
+            {"id": "sem.a", "pytest_node": "test_case.py::test_a"},
+        ]}), encoding="utf-8")
+    _patch_live_adapter(monkeypatch, _adapter_events())
+    config = _live_episode_config(tmp_path, case, "malformed-domains")
+    with pytest.raises(ValueError, match="score_domain") as excinfo:
+        asyncio.run(runner_module.run_episode(ROOT, config))
+    # The pre-run abort names the offending registry so the operator can fix
+    # the case file directly.
+    assert "semantic_checks.json" in str(excinfo.value)
+
+    # The same registry with a declared domain ingests cleanly.
+    (case / "task/tests/semantic_checks.json").write_text(
+        json.dumps({"version": "1", "checks": [
+            {"id": "sem.a", "pytest_node": "test_case.py::test_a",
+             "score_domain": "base_task"},
+        ]}), encoding="utf-8")
+    asyncio.run(runner_module.run_episode(ROOT, config))

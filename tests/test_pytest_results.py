@@ -64,8 +64,10 @@ def test_semantic_registry_counts_each_frozen_point_once() -> None:
     registry = {
         "version": "7",
         "checks": [
-            {"id": "authority", "pytest_node": "test_case.py::test_authority", "category": "replanning"},
-            {"id": "integration", "pytest_node": "test_case.py::test_integration", "category": "integration"},
+            {"id": "authority", "pytest_node": "test_case.py::test_authority", "category": "replanning",
+             "score_domain": "base_task"},
+            {"id": "integration", "pytest_node": "test_case.py::test_integration", "category": "integration",
+             "score_domain": "async_replanning", "event_id": "evt.authority"},
             {"id": "lineage", "pytest_node": "test_case.py::test_lineage", "category": "lineage"},
         ],
     }
@@ -82,6 +84,15 @@ SKIPPED task/tests/test_case.py::test_lineage
     assert result["total"] == 3
     assert result["test_point_pass_rate"] == 1 / 3
     assert [item["status"] for item in result["results"]] == ["passed", "failed", "skipped"]
+    by_id = {item["id"]: item for item in result["results"]}
+    # The registry score_domain/event_id are copied through to every result row
+    # so the headline score consumers can filter on them.
+    assert by_id["authority"]["score_domain"] == "base_task"
+    assert by_id["authority"]["event_id"] == ""
+    assert by_id["integration"]["score_domain"] == "async_replanning"
+    assert by_id["integration"]["event_id"] == "evt.authority"
+    assert by_id["lineage"]["score_domain"] == ""
+    assert by_id["lineage"]["event_id"] == ""
 
 
 def test_missing_semantic_outcome_is_a_non_pass_not_a_smaller_denominator() -> None:

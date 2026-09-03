@@ -46,6 +46,21 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host ("[preflight] " + ($preflightOut | Select-Object -Last 1))
 
+# Single-model formal factor: the manifest carries one stable model stamped on
+# every episode (make-manifest --model), so async and linear episodes of the
+# same pair aggregate under the same _model_key instead of the divergent
+# resolved_model names the relay records per mode.
+# Runs after the provider preflight above, which already guarantees $configPath
+# is loadable with a non-blank main_model; keep this block after that check.
+$mainModelOut = & python -c "import sys, yaml; from pathlib import Path; print((yaml.safe_load(Path(sys.argv[1]).read_text(encoding='utf-8')) or {}).get('main_model', '') or '')" $configPath
+if ($LASTEXITCODE -ne 0) {
+    throw "Failed to read main_model from provider config: $configPath"
+}
+$mainModel = ($mainModelOut | Select-Object -Last 1).Trim()
+if ([string]::IsNullOrWhiteSpace($mainModel)) {
+    throw "Provider config has no main_model: $configPath"
+}
+
 if ($Resume -and [string]::IsNullOrWhiteSpace($ExperimentRoot)) {
     throw "-Resume requires -ExperimentRoot pointing to the existing experiment directory."
 }
@@ -96,7 +111,8 @@ if ($Resume) {
         --guidance $Guidance `
         --seed $Seed `
         --execution-modes linear async `
-        --instances $Instance
+        --instances $Instance `
+        --model $mainModel
     if ($LASTEXITCODE -ne 0) { throw "Manifest creation failed." }
 }
 

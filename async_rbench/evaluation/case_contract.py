@@ -48,9 +48,10 @@ def validate_scoring_domains(
     """Validate semantic-check scoring domains under the new contract version.
 
     A check must carry exactly one ``score_domain``; ``async_replanning`` must
-    additionally bind a non-empty ``event_id``; ``relevance_tier`` is rejected
-    as a scoring gate in this contract version.  Returns a list of error
-    strings (empty when the checks are valid).
+    additionally bind a non-empty ``event_id``.  ``relevance_tier`` is
+    tolerated as a transitional field — it is not part of the new scoring
+    domain gate.  Returns a list of error strings (empty when the checks are
+    valid).
     """
     errors: list[str] = []
     for check in semantic_checks or []:
@@ -67,11 +68,6 @@ def validate_scoring_domains(
                 errors.append(
                     f"{check_id}: async_replanning requires a non-empty event_id"
                 )
-        if "relevance_tier" in check:
-            errors.append(
-                f"{check_id}: relevance_tier is rejected in the new scoring "
-                "contract version"
-            )
     return errors
 
 

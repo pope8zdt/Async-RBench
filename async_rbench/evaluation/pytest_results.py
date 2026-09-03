@@ -132,6 +132,8 @@ def parse_semantic_check_results(
             "measurement_type": str(item.get("measurement_type", "semantic")),
             "capability_target": str(item.get("capability_target", "")),
             "relevance_tier": str(item.get("relevance_tier", "")),
+            "score_domain": str(item.get("score_domain") or ""),
+            "event_id": str(item.get("event_id") or ""),
             "pytest_node": str(item["pytest_node"]),
             "status": status,
             "passed": status == "passed",

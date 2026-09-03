@@ -993,7 +993,8 @@ def aggregate_reports(
     # manifest promised episodes that never ran, when the same case instance was
     # scored against more than one denominator digest (digest drift), when an
     # official headline mixes held-out test cases with calibration/development
-    # ones, or when distinct models were merged into one headline.
+    # ones, when distinct models were merged into one headline, or when a
+    # record's execution_mode is not in the contract's modes.
     hard_fail_reasons: list[str] = []
     if missing_episode_ids:
         hard_fail_reasons.append("missing_episodes")
@@ -1009,6 +1010,8 @@ def aggregate_reports(
         if item.get("split") not in DATASET_SPLITS:
             hard_fail_reasons.append("official_split_unset")
             break
+    if invalid_modes:
+        hard_fail_reasons.append("invalid_execution_modes")
 
     return {
         "architecture_version": "8.0",

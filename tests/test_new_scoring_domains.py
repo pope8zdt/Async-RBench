@@ -71,11 +71,13 @@ def test_async_replanning_requires_a_valid_event_id() -> None:
     ]) == []
 
 
-def test_relevance_tier_is_rejected_in_new_contract_version() -> None:
-    errors = validate_scoring_domains([
+def test_relevance_tier_is_tolerated_as_transitional() -> None:
+    # relevance_tier is still the live weighting knob (weighting.py) and a
+    # registry-audit/spec input; it is transitional, not part of the new
+    # scoring-domain gate, so its presence must not fail validation.
+    assert validate_scoring_domains([
         _check("b1", domain="base_task", relevance_tier="critical"),
-    ])
-    assert any("relevance_tier is rejected" in error for error in errors)
+    ]) == []
 
 
 # ---------------------------------------------------------------------------

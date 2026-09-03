@@ -65,7 +65,7 @@ def cmd_make_manifest(args) -> int:
     case_ids = args.cases or [case.case_id for case in discover_cases(ROOT)]
     manifest = create_manifest(
         case_ids, args.repetitions, args.guidance, args.seed, args.execution_modes,
-        args.instances,
+        args.instances, model=(args.model or None),
     )
     write_manifest(Path(args.output).resolve(), manifest)
     print(json.dumps({"episodes": len(manifest["episodes"]), "output": str(Path(args.output).resolve())}, indent=2))
@@ -536,6 +536,11 @@ def build_parser() -> argparse.ArgumentParser:
     manifest.add_argument(
         "--instances", nargs="*",
         help="Registered case_id::instance_id keys; cannot be combined with --cases",
+    )
+    manifest.add_argument(
+        "--model", default=None,
+        help="single formal model name stamped on every episode; use the provider config's "
+        "main_model (configs/model-profiles/*.yaml)",
     )
     manifest.set_defaults(func=cmd_make_manifest)
     guidance = sub.add_parser("show-guidance"); guidance.add_argument("mode", choices=GUIDANCE_MODES); guidance.set_defaults(func=cmd_guidance)

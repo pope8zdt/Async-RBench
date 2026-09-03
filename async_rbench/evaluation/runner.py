@@ -34,6 +34,7 @@ from .observation import (
 )
 from .case_contract import assert_participant_safe
 from .case_contract import public_delivery, public_rejection
+from .case_contract import validate_scoring_domains
 from .case_bundle import case_bundle_sha256
 from .version import EVALUATION_CONTRACT_STATUS, EVALUATION_CONTRACT_VERSION
 from .weighting import DYNAMIC_CONTROL_DIMENSIONS, SCORE_POLICY_VERSION
@@ -1149,6 +1150,24 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     )
     case_spec = load_case(case_path).raw
     task_yaml = yaml.safe_load((case_path.parent / "task/task.yaml").read_text(encoding="utf-8"))
+    semantic_registry_path = case_path.parent / "task" / "tests" / "semantic_checks.json"
+    semantic_registry = json.loads(semantic_registry_path.read_text(encoding="utf-8"))
+    # Hard gate (pre-run): every frozen semantic check must declare exactly one
+    # scoring domain (with a non-empty event_id for async_replanning).  A
+    # malformed registry would silently empty the base_task_score / async_drs
+    # headline consumers, so it fails deterministically before any participant
+    # container or model budget is spent — same fail-fast class as a failed
+    # conformance gate or an unknown execution mode.
+    domain_errors = validate_scoring_domains(
+        list(semantic_registry.get("checks") or []),
+    )
+    if domain_errors:
+        raise ValueError(
+            "semantic registry scoring domains are malformed "
+            f"({config.case_id}/{config.instance_id}): "
+            + "; ".join(domain_errors)
+            + f" [registry: {semantic_registry_path}]"
+        )
     evaluation_contract_version, evaluation_contract_sha256 = _evaluation_contract_identity(root)
     recorder = TraceRecorder(config.episode_id)
     controller = DeliveryController(config.execution_mode, case_spec)
@@ -1629,8 +1648,6 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         ),
         encoding="utf-8",
     )
-    semantic_registry_path = case_path.parent / "task" / "tests" / "semantic_checks.json"
-    semantic_registry = json.loads(semantic_registry_path.read_text(encoding="utf-8"))
     control_flow_registry_path = case_path.parent / "task" / "tests" / "control_flow_checks.json"
     control_flow_registry = json.loads(control_flow_registry_path.read_text(encoding="utf-8"))
     score = score_trace(
