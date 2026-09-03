@@ -21,10 +21,12 @@ import io
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
 from async_rbench.evaluation.budget import build_budget_ledger
+from async_rbench.evaluation.model_backend import ModelTurn, ToolCall
 from async_rbench.evaluation.report_contract import report_contract_errors
 from async_rbench.evaluation.runner import EpisodeConfig, _make_start
 from async_rbench.evaluation.workspace_runtime import DisabledWorkspaceRuntime
@@ -81,19 +83,6 @@ def _records_from_initial_wave(scaffold: ReferenceScaffold) -> list[ChildRecord]
     manager._launch_queued = lambda: None  # do not actually run the children
     manager.spawn_initial_wave()
     return list(manager.children.values())
-
-
-def _child_id_for(manager, workstream_id: str) -> str:
-    for child_id, record in manager.children.items():
-        if record.work_units and record.work_units[0] == workstream_id:
-            return child_id
-    raise AssertionError(f"no spawned record for workstream {workstream_id}")
-
-
-def _bind_completion(manager, child_id: str) -> str:
-    completion_id = f"comp-{child_id}"
-    manager.completion_to_child[completion_id] = child_id
-    return completion_id
 
 
 # --- Facet 1: the public start / contracts are mode-independent ---------------
@@ -153,8 +142,10 @@ def test_child_user_message_is_identical_across_modes(case_id: str) -> None:
     async_ = _records_from_initial_wave(_scaffold(_start(case_id, "async")))
     for left, right in zip(linear, async_):
         assert build_child_user_message(left) == build_child_user_message(right)
-    # First attempts must not carry a phantom prior_attempt block.
-    assert "prior_attempt" not in json.dumps(linear[0].task, sort_keys=True)
+    # First attempts must not carry a phantom prior_attempt block: the key is
+    # added to the participant-visible user message ONLY when real rejection
+    # feedback exists, so inspect the built message, never the raw task text.
+    assert "prior_attempt" not in build_child_user_message(linear[0])
 
 
 def test_child_system_prompt_is_a_single_mode_free_constant() -> None:
@@ -163,7 +154,17 @@ def test_child_system_prompt_is_a_single_mode_free_constant() -> None:
     # change), while keeping the public /app-exploration preference and the
     # self-check tool guidance.
     prompt = CHILD_SYSTEM_PROMPT.lower()
-    for token in ("linear", "async", "bundle", "leaderboard", "occurrence"):
+    for token in (
+        "linear",
+        "async",
+        "bundle",
+        "leaderboard",
+        "occurrence",
+        # Evaluator-private concepts must never surface in a participant-visible
+        # prompt: a hidden validator or a private rule set.
+        "hidden validator",
+        "private",
+    ):
         assert token not in prompt
     assert "prefer" in prompt
     assert "validate_result" in prompt
@@ -219,6 +220,63 @@ def test_budget_layout_is_identical_for_both_arms() -> None:
 
 
 # --- Facet 5: terminal classification is identical ----------------------------
+#
+# Each of the six terminal kinds is produced by going through the manager's OWN
+# handlers: ``_run_child`` runs a real (mock-backend) child agent to its
+# outcome, and a sealed/designed result is then routed through
+# ``handle_delivery`` / ``handle_rejection``.  The test never mutates
+# ``record.status`` / ``record.decision`` by hand.  Every scenario is run once
+# on a Linear scaffold and once on an Async scaffold (each trimmed to the same
+# single workstream), and the terminal classification, reason codes, attempt
+# number, tokens and public contract verdict must be IDENTICAL; only the result
+# presentation/arrival events may differ.
+
+
+class NoToolBackend:
+    """A child that never calls a tool.  With budget it ends ``no_submission``;
+    with an empty shared pool it ends ``token_budget_exhausted``."""
+
+    async def complete(self, **_: Any) -> ModelTurn:
+        return ModelTurn(
+            assistant_message={"role": "assistant", "content": "not submitted"},
+            tool_calls=[],
+            total_tokens=7,
+        )
+
+    def runtime_metadata(self) -> dict[str, Any]:
+        return {"model_observations": []}
+
+
+class NonSubmitToolBackend:
+    """A child that only calls the terminal tool (never submit_result): bounded
+    by ``max_child_turns`` the manager records ``turn_limit_exhausted``."""
+
+    def __init__(self) -> None:
+        self.turn = 0
+
+    async def complete(self, **_: Any) -> ModelTurn:
+        self.turn += 1
+        call_id = f"terminal-{self.turn}"
+        arguments = {"command": "echo still-working"}
+        return ModelTurn(
+            assistant_message={
+                "role": "assistant",
+                "content": None,
+                "tool_calls": [{
+                    "id": call_id,
+                    "type": "function",
+                    "function": {
+                        "name": "terminal",
+                        "arguments": json.dumps(arguments),
+                    },
+                }],
+            },
+            tool_calls=[ToolCall(call_id, "terminal", arguments)],
+            total_tokens=11,
+        )
+
+    def runtime_metadata(self) -> dict[str, Any]:
+        return {"model_observations": []}
 
 
 def _normalize_row(row: dict) -> tuple:
@@ -240,83 +298,231 @@ def _normalize_entry(entry: dict) -> tuple:
     )
 
 
-def _project_for(scaffold: ReferenceScaffold) -> dict:
-    if scaffold.start["execution_mode"] == "linear":
-        entries = scaffold.manager.build_linear_bundle()["workstreams"]
-        return {entry["workstream_id"]: _normalize_entry(entry) for entry in entries}
-    rows = scaffold.manager.statuses()
-    return {row["workstream_id"]: _normalize_row(row) for row in rows}
+def _single_worker_start(mode: str) -> dict:
+    """A data-recovery-service start trimmed to its single ``wal_recovery``
+    worker, so a fresh pair of scaffolds can be built for every scenario."""
+    start = _start("data-recovery-service", mode)
+    workstream_id = "wal_recovery"
+    wave_ids = [str(item.get("workstream_id")) for item in start["initial_wave"]]
+    assert workstream_id in wave_ids
+    start["initial_wave"] = [
+        item for item in start["initial_wave"]
+        if str(item.get("workstream_id")) == workstream_id
+    ]
+    start["allowed_work_units"] = [workstream_id]
+    start["workstream_contracts"] = {
+        workstream_id: start["workstream_contracts"][workstream_id]
+    }
+    return start
 
 
-def test_termination_classification_is_identical_across_modes() -> None:
-    """Same terminal inputs → same canonical verdicts in both modes; the ONLY
-    allowed differences are arrival timing / presentation (async enqueues
-    per-result occurrences, linear aggregates one atomic bundle).
+def _terminal_scaffold(
+    mode: str, backend: Any, *, max_child_turns: int = 40,
+) -> ReferenceScaffold:
+    config = ScaffoldConfig.from_file(None, {
+        "backend": "scripted_test",
+        "workspace_mode": "disabled",
+        "max_child_turns": max_child_turns,
+    })
+    return ReferenceScaffold(
+        start=_single_worker_start(mode),
+        config=config,
+        backend=backend,
+        workspace=DisabledWorkspaceRuntime(),
+        emitter=ProtocolEmitter(stdout=io.StringIO()),
+        delivery_reader=DeliveryReader(stdin=io.StringIO()),
+    )
+
+
+#: The presentation/arrival boundaries that ARE the allowed Linear/Async delta.
+_PRESENTATION_EVENT_TYPES = frozenset({
+    "result_available",
+    "adapter_queued",
+    "result_presented",
+})
+
+
+def _non_presentation_types(events: list[dict]) -> list[str]:
+    return [
+        event["type"] for event in events
+        if event["type"] not in _PRESENTATION_EVENT_TYPES
+    ]
+
+
+TERMINAL_SCENARIOS = (
+    "public_valid_submission",
+    "public_contract_rejection",
+    "token_budget_exhaustion",
+    "no_submission",
+    "turn_limit_exhaustion",
+    "designed_timeout",
+)
+
+#: The mock backend class that produces each scenario (fresh per arm).
+_SCENARIO_BACKEND = {
+    "public_valid_submission": ScriptedTestBackend,
+    "public_contract_rejection": ScriptedTestBackend,
+    "token_budget_exhaustion": NoToolBackend,
+    "no_submission": NoToolBackend,
+    "turn_limit_exhaustion": NonSubmitToolBackend,
+    "designed_timeout": NoToolBackend,
+}
+
+#: Scenarios that bound the child's turns instead of running to the default.
+_SCENARIO_MAX_CHILD_TURNS = {"turn_limit_exhaustion": 2}
+
+#: The manager-recorded terminal each scenario must reach (Task 8 keeps these
+#: runtime status strings; the deeper scorer taxonomy is guarded separately).
+_SCENARIO_TERMINAL_STATUS = {
+    "public_valid_submission": "delivered",
+    "public_contract_rejection": "contract_rejected",
+    "token_budget_exhaustion": "token_budget_exhausted",
+    "no_submission": "no_submission",
+    "turn_limit_exhaustion": "turn_limit_exhausted",
+    "designed_timeout": "delivered",
+}
+
+#: Token spend of each scenario's real child run.
+_SCENARIO_TOKENS = {
+    "public_valid_submission": 10,
+    "public_contract_rejection": 10,
+    "token_budget_exhaustion": 0,
+    "no_submission": 21,
+    "turn_limit_exhaustion": 22,
+    "designed_timeout": 0,
+}
+
+#: The canonical public projection tuple both surfaces must report per scenario.
+_SCENARIO_PROJECTION = {
+    "public_valid_submission": ("delivered", (), None, None),
+    "public_contract_rejection": (
+        "contract_rejected",
+        ("report_file_missing", "report_json_invalid"),
+        "report_file",
+        1,
+    ),
+    "token_budget_exhaustion": ("token_budget_exhausted", (), None, None),
+    "no_submission": ("no_submission", (), None, None),
+    "turn_limit_exhaustion": ("turn_limit_exhausted", (), None, None),
+    "designed_timeout": ("delivered", (), None, None),
+}
+
+#: Scenarios in which the async arm enqueues one presentation occurrence.
+_ASYNC_PRESENTS = frozenset({"public_valid_submission", "designed_timeout"})
+
+
+async def _drive_terminal(manager: Any, record: ChildRecord, scenario: str) -> None:
+    """Produce one terminal outcome exclusively through the manager's handlers."""
+    child_id = record.child_id
+    if scenario == "public_valid_submission":
+        await manager._run_child(record)
+        await manager.handle_delivery({
+            "completion_id": record.completion_id,
+            "payload": record.payload,
+            "payload_sha256": "a" * 64,
+            "child_id": child_id,
+        })
+    elif scenario == "public_contract_rejection":
+        await manager._run_child(record)
+        await manager.handle_rejection({
+            "completion_id": record.completion_id,
+            "reason_codes": ["report_file_missing", "report_json_invalid"],
+            "child_id": child_id,
+        })
+    elif scenario == "token_budget_exhaustion":
+        # The child's shared pool has no remaining budget: admission is refused,
+        # ending the attempt without a submission.
+        manager.token_budget.maximum = 0
+        await manager._run_child(record)
+    elif scenario == "no_submission":
+        await manager._run_child(record)
+    elif scenario == "turn_limit_exhaustion":
+        await manager._run_child(record)
+    elif scenario == "designed_timeout":
+        # A designed terminal is a gateway-owned delivery that names the running
+        # child (its synthetic completion was never a real child completion), so
+        # ``handle_delivery`` binds it through ``terminal_outcome`` + child_id.
+        await manager.handle_delivery({
+            "completion_id": "terminal:ev-1",
+            "terminal_outcome": "timeout",
+            "evaluator_terminal_reason": "designed child timeout",
+            "child_id": child_id,
+        })
+    else:
+        raise AssertionError(f"unknown terminal scenario {scenario!r}")
+
+
+@pytest.mark.parametrize("scenario", TERMINAL_SCENARIOS)
+def test_termination_classification_is_identical_across_modes(scenario: str) -> None:
+    """Six real terminal outcomes, each driven through the scaffold's own event
+    handlers once for a Linear scaffold and once for an Async scaffold.
+
+    The terminal class (the manager-recorded status + decision), reason codes,
+    attempt number, tokens and public contract verdict must be IDENTICAL across
+    modes; only the presentation/arrival boundary events may differ.
     """
     async def exercise() -> None:
-        linear = _scaffold(_start("mab-late-test-evidence-7d09ace3d3", "linear"))
-        async_ = _scaffold(_start("mab-late-test-evidence-7d09ace3d3", "async"))
-        manager = linear.manager
+        backend_cls = _SCENARIO_BACKEND[scenario]
+        max_turns = _SCENARIO_MAX_CHILD_TURNS.get(scenario, 40)
+        linear = _terminal_scaffold("linear", backend_cls(), max_child_turns=max_turns)
+        async_ = _terminal_scaffold("async", backend_cls(), max_child_turns=max_turns)
         for scaffold in (linear, async_):
-            scaffold.manager._launch_queued = lambda: None
-            scaffold.manager.spawn_initial_wave()  # seeds attempt_counts = 1
-        # Design one wave child per terminal kind.
-        states = {
-            "requirement_worker_01": "delivery",
-            "requirement_worker_02": "rejection",
-            "requirement_worker_03": "resource_exhausted",
-            "requirement_worker_04": "timeout",
-        }
-        for workstream_id, kind in states.items():
-            for scaffold in (linear, async_):
-                child_id = _child_id_for(scaffold.manager, workstream_id)
-                if kind == "delivery":
-                    completion_id = _bind_completion(scaffold.manager, child_id)
-                    await scaffold.manager.handle_delivery({
-                        "completion_id": completion_id, "payload": {"i": 1},
-                        "payload_sha256": "a" * 64, "child_id": child_id,
-                    })
-                elif kind == "rejection":
-                    completion_id = _bind_completion(scaffold.manager, child_id)
-                    await scaffold.manager.handle_rejection({
-                        "completion_id": completion_id,
-                        "reason_codes": ["report_file_missing", "report_json_invalid"],
-                        "child_id": child_id,
-                    })
-                elif kind == "resource_exhausted":
-                    scaffold.manager.children[child_id].status = "token_budget_exhausted"
-                    scaffold.manager.children[child_id].decision = "token_budget_exhausted"
-                else:  # timeout / cancellation path
-                    scaffold.manager.children[child_id].status = "cancelled"
-                    scaffold.manager.children[child_id].decision = "cancelled"
+            scaffold.manager._launch_queued = lambda: None  # drive children manually
+            scaffold.manager.spawn_initial_wave()
+            assert len(scaffold.manager.children) == 1
+            record = next(iter(scaffold.manager.children.values()))
+            await _drive_terminal(scaffold.manager, record, scenario)
 
-        linear_verdicts = _project_for(linear)
-        async_verdicts = _project_for(async_)
-        assert linear_verdicts == async_verdicts
-        assert linear_verdicts["requirement_worker_01"] == ("delivered", (), None, None)
-        assert linear_verdicts["requirement_worker_02"] == (
-            "contract_rejected",
-            ("report_file_missing", "report_json_invalid"),
-            "report_file",
-            1,
-        )
-        assert linear_verdicts["requirement_worker_03"] == (
-            "token_budget_exhausted", (), None, None,
-        )
-        assert linear_verdicts["requirement_worker_04"] == ("cancelled", (), None, None)
+        lin_record = next(iter(linear.manager.children.values()))
+        asy_record = next(iter(async_.manager.children.values()))
+
+        # First-attempt classification, identical across the arms.
+        assert lin_record.attempt_number == asy_record.attempt_number == 1
+        # Every scenario lands on the same canonical terminal class (status) and
+        # the same reason decision in both arms.
+        assert lin_record.status == asy_record.status == _SCENARIO_TERMINAL_STATUS[scenario]
+        assert lin_record.decision == asy_record.decision
+        # The tokens the child actually spent are identical across the arms.
+        assert lin_record.tokens == asy_record.tokens == _SCENARIO_TOKENS[scenario]
+
+        # The two surfaces project the SAME public contract verdict: the async
+        # status row and the linear bundle entry collapse to one tuple, and both
+        # arms' manager statuses() are byte-identical.
+        async_row = async_.manager.statuses()[0]
+        linear_entry = linear.manager.build_linear_bundle()["workstreams"][0]
+        assert _normalize_row(async_row) == _normalize_entry(linear_entry)
+        assert _normalize_entry(linear_entry) == _SCENARIO_PROJECTION[scenario]
+        assert linear.manager.statuses() == async_.manager.statuses()
+
+        # The designed timeout is a distinct terminal layered on top of the
+        # shared "delivered" state: its gateway delivery carries terminal_outcome.
+        if scenario == "designed_timeout":
+            for scaffold in (linear, async_):
+                record = next(iter(scaffold.manager.children.values()))
+                assert record.delivery is not None
+                assert record.delivery.get("terminal_outcome") == "timeout"
+                assert record.payload is None
+
+        # The whole wave resolves in both arms.
         assert linear.manager.unresolved_count() == 0
         assert async_.manager.unresolved_count() == 0
         assert linear.manager.linear_bundle_ready() is True
         assert async_.manager.linear_bundle_ready() is True
 
-        # The one allowed difference: async per-result presentation vs the
-        # linear atomic bundle.
-        assert async_.manager.presentation_queue.has_pending() is True
+        # ONLY presentation/arrival events may differ: async enqueues an
+        # occurrence exactly for delivery-bearing scenarios; linear never does.
+        assert async_.manager.presentation_queue.has_pending() is (
+            scenario in _ASYNC_PRESENTS
+        )
         assert linear.manager.presentation_queue.has_pending() is False
         assert not any(
-            event.get("type") in {"result_presented", "adapter_queued", "result_available"}
+            event["type"] in _PRESENTATION_EVENT_TYPES
             for event in linear.emitter.events
         )
+        assert _non_presentation_types(async_.emitter.events) == (
+            _non_presentation_types(linear.emitter.events)
+        )
+
         # Both surfaces stay participant-safe: no evaluator-private roles leak.
         encoded = json.dumps(linear.manager.build_linear_bundle(), sort_keys=True)
         for forbidden in ("result_kind", "validator_command", "hidden_checks"):

@@ -64,7 +64,7 @@ CHILD_SYSTEM_PROMPT = (
     "requires it. This is guidance, not a restriction: if the task can only be resolved by looking "
     "wider, do so. Only report files you actually produced at the declared paths. "
     "If your instructions declare a report artifact, write it as valid JSON at the declared path "
-    "containing exactly the listed fields equal to the evidence you submit, and run validate_result "
+    "containing at least the listed fields equal to the evidence you submit, and run validate_result "
     "before submit_result to dry-run the public accept rule."
 )
 
