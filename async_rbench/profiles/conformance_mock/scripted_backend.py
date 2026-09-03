@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 from ...evaluation.model_backend import ModelTurn, ToolCall
@@ -259,8 +260,9 @@ class ScriptedTestBackend:
 
     @staticmethod
     def _pattern_value(pattern: str) -> str:
-        if pattern.endswith("64}$") or pattern == "^[0-9a-f]{64}$":
-            return "0" * 64
+        hex_width = re.fullmatch(r"\^?\[0-9a-f\]\{(\d+)\}\$?", pattern)
+        if hex_width:
+            return "0" * int(hex_width.group(1))
         if ".json$" in pattern or ".json" in pattern:
             return "/app/output_data/workstreams/report.json"
         return "scripted-value"

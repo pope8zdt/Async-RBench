@@ -73,6 +73,26 @@ SUBMISSION_CLASSES = frozenset({ACCEPTED, PUBLIC_REJECTION, PRIVATE_REJECTION, S
 NON_SUBMISSION_CLASSES = frozenset(set(TERMINAL_CLASSES) - SUBMISSION_CLASSES)
 
 
+# Runtime lifecycle states are shared by the async wait surface, the Linear
+# bundle barrier, cancellation guards, and status projections.  A state belongs
+# here only when the child can no longer produce a submission in this attempt.
+RUNTIME_TERMINAL_STATUSES = frozenset({
+    "delivered",
+    "contract_rejected",
+    "rejected",
+    "cancelled",
+    "token_budget_exhausted",
+    "turn_limit_exhausted",
+    "no_submission",
+    "timed_out",
+    "infrastructure_failed",
+})
+
+
+def is_runtime_terminal(status: str) -> bool:
+    return status in RUNTIME_TERMINAL_STATUSES
+
+
 def _events_of(events: list[dict[str, Any]], event_type: str) -> list[dict[str, Any]]:
     return [event for event in events if event.get("type") == event_type]
 
@@ -93,7 +113,15 @@ def classify_child_terminals(
     spawns = _events_of(events, "child_spawned")
     completions = _events_of(events, "child_completed")
     cancelled = _events_of(events, "child_cancelled")
-    exhausted = _events_of(events, "child_resource_exhausted")
+    exhausted = [
+        event for event in events
+        if event.get("type") in {
+            "child_resource_exhausted",  # legacy artifact alias
+            "child_token_budget_exhausted",
+            "child_turn_limit_exhausted",
+            "child_no_submission",
+        }
+    ]
     deliveries = _events_of(events, "result_delivered")
     rejections = _events_of(events, "result_rejected")
     consumed = _events_of(events, "result_consumed")

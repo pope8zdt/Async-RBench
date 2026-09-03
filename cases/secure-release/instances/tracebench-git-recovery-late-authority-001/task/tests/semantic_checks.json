@@ -9,7 +9,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sr.authority.no_secret_objects",
@@ -19,7 +20,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.authority.final_main_baseline",
@@ -29,7 +32,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.authority.final_dev_baseline",
@@ -39,7 +44,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.stale.pre_rewrite_main_patch_rejected",
@@ -49,7 +56,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.stale.pre_rewrite_dev_patch_rejected",
@@ -59,7 +68,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.stale.old_deployment_rejected",
@@ -69,7 +80,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.stale.old_manifest_rejected",
@@ -79,7 +92,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.patch.main_header_controls",
@@ -89,7 +104,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.patch.dev_header_controls",
@@ -99,7 +116,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.patch.valid_header_regression",
@@ -109,7 +128,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "supporting"
+      "relevance_tier": "supporting",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.report.cwe93_exact",
@@ -119,7 +140,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sr.remote.final_refs",
@@ -129,7 +151,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.runtime.https_main",
@@ -139,7 +163,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.runtime.https_dev",
@@ -149,7 +175,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.runtime.push_deploy_main",
@@ -159,7 +187,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.runtime.push_deploy_dev",
@@ -169,7 +199,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.lineage.manifest_schema",
@@ -179,7 +211,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sr.lineage.sanitized_head_reachable",
@@ -189,7 +222,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.lineage.security_revision_final",
@@ -199,7 +234,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.lineage.deployed_ref_consistency",
@@ -209,7 +246,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "sr_a_rewrite"
     },
     {
       "id": "sr.support.nginx_content_404",
@@ -219,7 +258,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sr.support.nginx_logs",
@@ -229,7 +269,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sr.support.nginx_rate_limit",
@@ -239,7 +280,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     }
   ]
 }

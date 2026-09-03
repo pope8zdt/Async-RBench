@@ -284,8 +284,8 @@ def test_termination_classification_is_identical_across_modes() -> None:
                         "child_id": child_id,
                     })
                 elif kind == "resource_exhausted":
-                    scaffold.manager.children[child_id].status = "completed_hidden"
-                    scaffold.manager.children[child_id].decision = "resource_exhausted"
+                    scaffold.manager.children[child_id].status = "token_budget_exhausted"
+                    scaffold.manager.children[child_id].decision = "token_budget_exhausted"
                 else:  # timeout / cancellation path
                     scaffold.manager.children[child_id].status = "cancelled"
                     scaffold.manager.children[child_id].decision = "cancelled"
@@ -300,8 +300,14 @@ def test_termination_classification_is_identical_across_modes() -> None:
             "report_file",
             1,
         )
-        assert linear_verdicts["requirement_worker_03"] == ("completed_hidden", (), None, None)
+        assert linear_verdicts["requirement_worker_03"] == (
+            "token_budget_exhausted", (), None, None,
+        )
         assert linear_verdicts["requirement_worker_04"] == ("cancelled", (), None, None)
+        assert linear.manager.unresolved_count() == 0
+        assert async_.manager.unresolved_count() == 0
+        assert linear.manager.linear_bundle_ready() is True
+        assert async_.manager.linear_bundle_ready() is True
 
         # The one allowed difference: async per-result presentation vs the
         # linear atomic bundle.

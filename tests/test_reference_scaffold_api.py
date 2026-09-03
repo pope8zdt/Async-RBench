@@ -76,7 +76,9 @@ def _scaffold(start: dict) -> ReferenceScaffold:
         backend=ScriptedTestBackend(),
         workspace=DisabledWorkspaceRuntime(),
         emitter=ProtocolEmitter(stdout=io.StringIO()),
-        delivery_reader=DeliveryReader(),
+        # Unit tests inject an already-closed transport so any scaffold run can
+        # start its reader without touching pytest's captured process stdin.
+        delivery_reader=DeliveryReader(stdin=io.StringIO()),
     )
 
 
@@ -1037,7 +1039,7 @@ def test_pre_submit_validate_result_dry_runs_the_public_rule() -> None:
             ProtocolEmitter(stdout=io.StringIO()),
             BudgetPool("child_shared", maximum=500_000),
         )
-        payload, hint, tokens = await agent.run(record, "test-model", 1)
+        outcome = await agent.run(record, "test-model", 1)
         assert len(workspace.calls) == 1
         _, command, _ = workspace.calls[0]
         assert command.startswith("export ASYNC_RBENCH_RESULT_PAYLOAD_B64=")
@@ -1049,8 +1051,10 @@ def test_pre_submit_validate_result_dry_runs_the_public_rule() -> None:
         assert verdict["reason_codes"] == ["report_file_missing"]
         assert verdict["contract_part"] == "report_file"
         # The child used the verdict and sealed a corrected result.
-        assert payload["evidence"]["finding"] == "recovered"
-        assert hint == "recovered"
+        assert outcome.kind == "submitted"
+        assert outcome.payload is not None
+        assert outcome.payload["evidence"]["finding"] == "recovered"
+        assert outcome.hint == "recovered"
 
     asyncio.run(exercise())
 

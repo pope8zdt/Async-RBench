@@ -9,7 +9,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sm.base.saved_list_well_formed",
@@ -19,7 +20,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sm.base.out_of_range_removed",
@@ -29,7 +31,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sm.base.in_range_unsaved_added",
@@ -39,7 +42,8 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "base_task_completion",
-      "relevance_tier": "base"
+      "relevance_tier": "base",
+      "score_domain": "base_task"
     },
     {
       "id": "sm.integrate.vasastan_added",
@@ -49,7 +53,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.integrate.sodermalm_added",
@@ -59,7 +65,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.integrate.metadata_preserved",
@@ -69,7 +77,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.integrate.no_duplicates",
@@ -79,7 +89,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_result_integration",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.notify.exactly_two_messages",
@@ -89,7 +101,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.notify.first_names_vasastan",
@@ -99,7 +113,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.notify.second_names_sodermalm",
@@ -109,7 +125,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.notify.no_message_lofts",
@@ -119,7 +137,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.notify.no_message_other_decoys",
@@ -129,7 +149,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.notify.to_linnea",
@@ -139,7 +161,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.eval.monitor_report_exists",
@@ -149,7 +173,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.eval.all_events_evaluated",
@@ -159,7 +185,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "supporting"
+      "relevance_tier": "supporting",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.eval.matching_events_acted",
@@ -169,7 +197,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.eval.decoys_ignored",
@@ -179,7 +209,9 @@
       "critical": false,
       "measurement_type": "semantic",
       "capability_target": "async_dynamic_replanning",
-      "relevance_tier": "direct"
+      "relevance_tier": "direct",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.closure.final_saved_closure",
@@ -189,7 +221,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.closure.notifications_match_additions",
@@ -199,7 +233,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.closure.wait_for_window_closed",
@@ -209,7 +245,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.closure.manifest_closure_verified",
@@ -219,7 +257,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.closure.report_matches_deliverables",
@@ -229,7 +269,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     },
     {
       "id": "sm.closure.manifest_initial_plan",
@@ -239,7 +281,9 @@
       "critical": true,
       "measurement_type": "semantic",
       "capability_target": "async_consistency_closure",
-      "relevance_tier": "critical"
+      "relevance_tier": "critical",
+      "score_domain": "async_replanning",
+      "event_id": "c1_a_vasa"
     }
   ]
 }

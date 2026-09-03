@@ -96,10 +96,8 @@ RUNTIME_PHASE_EVENT_TYPES = frozenset({
     # emitted once per episode on every termination path.
     "budget_reserved", "budget_settled", "budget_released",
     "budget_exhausted", "budget_phase_switch", "budget_ledger_snapshot",
-    # A child cut off by budget/turn-budget exhaustion is a resource termination,
-    # not a model submission: it is recorded as a runtime phase marker (no
-    # adapter-event validation) so the episode can classify it as
-    # resource_exhausted_child rather than a rejected sealed submission.
+    # Legacy artifacts used one combined resource event. New typed child
+    # lifecycle events are protocol-validated adapter events below.
     "child_resource_exhausted",
     # P0-9: repeated evidence across attempts is a no-information retry. It is a
     # runtime-phase marker (no gateway/adapter validation) used to bound
@@ -1510,6 +1508,17 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
                     config, "subagent",
                     f"{event.get('child_id')} resource-exhausted "
                     f"(remaining={event.get('remaining')})",
+                )
+            elif event_type in {
+                "child_token_budget_exhausted",
+                "child_turn_limit_exhausted",
+                "child_no_submission",
+            }:
+                _progress(
+                    config,
+                    "subagent",
+                    f"{event.get('child_id')} {event_type.removeprefix('child_')}: "
+                    f"{event.get('reason', '')}",
                 )
             elif event_type == "main_action":
                 _progress(config, "main", f"action {event.get('action_id')} tool={event.get('kind')}")

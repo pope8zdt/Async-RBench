@@ -416,46 +416,6 @@ def test_settle_rejects_unknown_and_duplicate_reservation() -> None:
     asyncio.run(exercise())
 
 
-# --- P0-1: budget/turn-budget exhaustion is a resource termination, never a
-# sealed model submission (it must emit child_resource_exhausted, not a
-# child_completed that would feed validate_completion_contract and the
-# rejection pipeline) ------------------------------------------------
-
-
-def test_resource_exhaustion_emits_distinct_event_and_never_completes() -> None:
-    async def exercise() -> None:
-        pool = BudgetPool("child_shared", 0)
-        emitter = ProtocolEmitter(stdout=io.StringIO())
-        agent = ChildAgent(
-            backend=ScriptedTestBackend(),
-            workspace=DisabledWorkspaceRuntime(),
-            config=_scaffold(_start()).config,
-            emitter=emitter,
-            token_budget=pool,
-        )
-        record = ChildRecord(
-            child_id="child-resource", task="work", work_units=["requirement_worker_01"],
-            targets=["workspace_state"], expected_output="out", priority="high",
-            required_evidence_fields=["report_path", "revision_sha256", "finding"],
-            allowed_result_files=["/app/output_data/workstreams/requirement_worker_01.json"],
-            required_result_files=["/app/output_data/workstreams/requirement_worker_01.json"],
-        )
-        await agent.run(record, "scripted_test", 1)
-        # The child is flagged as a resource termination, not a submission.
-        assert record.decision == "resource_exhausted"
-        types = [e.get("type") for e in emitter.events]
-        assert "budget_exhausted" in types
-        # A distinct terminal event exists, and no child_completed is sealed.
-        assert "child_resource_exhausted" in types
-        assert "child_completed" not in types
-        # The resource-exhausted event carries the terminating pool state.
-        exhaust_event = next(e for e in emitter.events if e["type"] == "child_resource_exhausted")
-        assert exhaust_event["pool"] == "child_shared"
-        assert exhaust_event["remaining"] == 0
-
-    asyncio.run(exercise())
-
-
 # --- P0-6: rejection projection must preserve the already-public workstream_id
 # when strip_for_adapter re-projects an event that carries it -----------------
 

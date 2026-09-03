@@ -141,6 +141,9 @@ ADAPTER_EVENT_REQUIREMENTS: dict[str, tuple[str, ...]] = {
     # private workstream role from child_id; adapters cannot self-classify it.
     "child_completed": ("child_id", "completion_id", "payload"),
     "child_cancelled": ("child_id", "reason"),
+    "child_token_budget_exhausted": ("child_id", "reason", "pool"),
+    "child_turn_limit_exhausted": ("child_id", "reason", "pool"),
+    "child_no_submission": ("child_id", "reason"),
     "delegation_validation_error": ("requested_workstream", "reason", "budget_consumed"),
     "main_action": ("action_id", "kind"),
     "child_path_promotion_result": (

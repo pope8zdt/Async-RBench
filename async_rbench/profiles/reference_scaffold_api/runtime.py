@@ -8,7 +8,7 @@ import logging
 import shlex
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Literal
 
 from ...evaluation.case_contract import (
     MAX_INITIAL_WORKSTREAMS, PUBLIC_RESULT_REJECTION_CODES,
@@ -18,6 +18,7 @@ from ...evaluation.result_contract import validate_payload_contract
 from ...evaluation.report_contract import classify_validator_output, render_validator_command
 from ...evaluation.presentation import DeliveryOccurrence, PresentationQueue
 from ...evaluation.protocol import canonical_digest
+from ...evaluation.termination import is_runtime_terminal
 
 from .config import ScaffoldConfig
 from .gateway import DeliveryReader, ProtocolEmitter
@@ -89,17 +90,6 @@ def _estimate_input(backend: ModelBackend, messages: list[dict[str, Any]], tools
 # excluded so a commit cannot itself create the only scored opportunity (§4.3).
 OBSERVED_TOOLS = frozenset({"terminal", "promote_child_path"})
 
-# Child lifecycle states that close a Linear wave slot for the atomic sync
-# barrier. A child resolves when the benchmark wave releases a usable delivery,
-# the gateway contract-rejects its completion, it is cancelled (timeout, stale
-# redelegation), or the participant/delivery path marks it rejected. Anything
-# still in ``queued``/``spawned``/``starting``/``running`` is unresolved, so the
-# main model must keep waiting for the single terminal bundle.
-LINEAR_TERMINAL_STATUSES = frozenset({
-    "delivered", "contract_rejected", "cancelled", "rejected",
-})
-
-
 def emit_runtime_metadata_snapshot(backend: ModelBackend, emitter: ProtocolEmitter) -> None:
     """Persist provider-resolved identity before a later agent timeout can occur."""
     metadata = getattr(backend, "runtime_metadata", lambda: {"model_observations": []})()
@@ -135,6 +125,24 @@ class ChildRecord:
     # replacement child carries, so the new worker repairs the right part.
     attempt_number: int = 1
     prior_attempt_rejection: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True)
+class ChildRunOutcome:
+    kind: Literal[
+        "submitted",
+        "token_budget_exhausted",
+        "turn_limit_exhausted",
+        "no_submission",
+    ]
+    payload: dict[str, Any] | None
+    hint: str | None
+    tokens: int
+    reason: str | None = None
+
+
+class ChildBudgetAccountingError(RuntimeError):
+    """The child pool was halted because accounting already overran."""
 
 
 @dataclass
@@ -308,7 +316,7 @@ class ChildAgent:
 
     async def run(
         self, record: ChildRecord, model: str, seed: int,
-    ) -> tuple[dict[str, Any], str, int]:
+    ) -> ChildRunOutcome:
         messages: list[dict[str, Any]] = [
             {"role": "system", "content": CHILD_SYSTEM_PROMPT},
             {"role": "user", "content": json.dumps(
@@ -338,24 +346,17 @@ class ChildAgent:
                     required_estimate=input_bound + self.config.max_output_tokens,
                     remaining=self.token_budget.remaining,
                 )
-                # Budget exhaustion is a resource termination, not a model
-                # submission.  Mark the record so ``_run_child`` does NOT seal a
-                # child_completed (which would feed validate_completion_contract
-                # and the rejection pipeline) and emit a distinct terminal event.
-                record.decision = "resource_exhausted"
-                self.emitter.emit(
-                    "child_resource_exhausted",
-                    child_id=record.child_id,
-                    pool=self.token_budget.name,
-                    refusal_reason=self.token_budget.refusal_reason,
-                    halt_reason=self.token_budget.halt_reason,
-                    required_estimate=input_bound + self.config.max_output_tokens,
-                    remaining=self.token_budget.remaining,
+                if self.token_budget.refusal_reason == "halted_pool":
+                    raise ChildBudgetAccountingError(
+                        "child token pool halted after estimation overrun"
+                    )
+                return ChildRunOutcome(
+                    kind="token_budget_exhausted",
+                    payload=None,
+                    hint=None,
+                    tokens=total_tokens,
+                    reason="episode token budget exhausted before child submission",
                 )
-                return {
-                    "summary": "episode token budget exhausted before child completion",
-                    "evidence": {"token_budget_exhausted": True}, "files": [],
-                }, record.expected_output, total_tokens
             # Track the in-flight reservation so failure/timeout cleanup can
             # release it (see ``release_open_reservation``).
             self._open_reservation = reservation
@@ -421,12 +422,17 @@ class ChildAgent:
                         ),
                     })
                     continue
-                content = turn.assistant_message.get("content") or "child ended without a structured result"
-                return {
-                    "summary": str(content),
-                    "evidence": {"structured_submission": False, "unsealed_turns": unsealed_turns},
-                    "files": [],
-                }, record.expected_output, total_tokens
+                content = (
+                    turn.assistant_message.get("content")
+                    or "child ended without a structured result"
+                )
+                return ChildRunOutcome(
+                    kind="no_submission",
+                    payload=None,
+                    hint=None,
+                    tokens=total_tokens,
+                    reason=str(content),
+                )
             unsealed_turns = 0
             submitted: tuple[dict[str, Any], str] | None = None
             for call in turn.tool_calls:
@@ -591,23 +597,19 @@ class ChildAgent:
                 else:
                     messages.append(_tool_result(call.id, {"error": f"unknown child tool {call.name}"}))
             if submitted is not None:
-                return submitted[0], submitted[1], total_tokens
-        # A child that exhausted its turn budget without submitting a result is
-        # a resource termination, not a model submission: mark it so ``_run_child``
-        # does not seal a child_completed and emit the distinct terminal event.
-        record.decision = "resource_exhausted"
-        self.emitter.emit(
-            "child_resource_exhausted",
-            child_id=record.child_id,
-            pool=self.token_budget.name,
-            reason="child exhausted its turn budget without submit_result",
-            remaining=self.token_budget.remaining,
+                return ChildRunOutcome(
+                    kind="submitted",
+                    payload=submitted[0],
+                    hint=submitted[1],
+                    tokens=total_tokens,
+                )
+        return ChildRunOutcome(
+            kind="turn_limit_exhausted",
+            payload=None,
+            hint=None,
+            tokens=total_tokens,
+            reason="child exhausted its turn limit without submit_result",
         )
-        return {
-            "summary": "child exhausted its turn budget without submit_result",
-            "evidence": {"turn_budget_exhausted": True},
-            "files": [],
-        }, record.expected_output, total_tokens
 
 
 class SubagentManager:
@@ -660,7 +662,7 @@ class SubagentManager:
 
     def unresolved_count(self) -> int:
         return sum(
-            record.status not in {"delivered", "cancelled", "rejected", "contract_rejected"}
+            not is_runtime_terminal(record.status)
             for record in self.children.values()
         )
 
@@ -741,7 +743,7 @@ class SubagentManager:
     # slot and enters the bundle as a workstream that did not deliver.
 
     def _linear_terminal(self, record: ChildRecord) -> bool:
-        return record.status in LINEAR_TERMINAL_STATUSES
+        return is_runtime_terminal(record.status)
 
     def linear_bundle_ready(self) -> bool:
         """True once every benchmark wave child has reached a terminal state."""
@@ -1129,7 +1131,7 @@ class SubagentManager:
                 self.token_budget,
             )
             try:
-                payload, hint, tokens = await asyncio.wait_for(
+                outcome = await asyncio.wait_for(
                     agent.run(
                         record, self.config.child_model, int(self.start["agent_seed"]),
                     ),
@@ -1140,38 +1142,64 @@ class SubagentManager:
                 # provisional charge; a normal completion already settled, so
                 # this is a no-op on the success path.
                 await agent.release_open_reservation()
-            if record.decision == "resource_exhausted":
-                # Budget/turn-budget exhaustion is a resource termination, not a
-                # model submission: the agent already emitted child_resource_exhausted,
-                # and we must never seal a child_completed here -- otherwise the
-                # synthetic payload would be validated (result_contract_validated)
-                # and could be counted as a rejected submission.
-                record.status = "completed_hidden"
-                record.tokens = tokens
+            record.tokens = outcome.tokens
+            if outcome.kind != "submitted":
+                record.status = outcome.kind
+                record.decision = outcome.kind
+                event_type = {
+                    "token_budget_exhausted": "child_token_budget_exhausted",
+                    "turn_limit_exhausted": "child_turn_limit_exhausted",
+                    "no_submission": "child_no_submission",
+                }[outcome.kind]
+                fields: dict[str, Any] = {
+                    "child_id": record.child_id,
+                    "reason": outcome.reason or outcome.kind,
+                }
+                if outcome.kind != "no_submission":
+                    fields.update({
+                        "pool": self.token_budget.name,
+                        "remaining": self.token_budget.remaining,
+                    })
+                if outcome.kind == "token_budget_exhausted":
+                    fields.update({
+                        "refusal_reason": self.token_budget.refusal_reason,
+                        "halt_reason": self.token_budget.halt_reason,
+                    })
+                self.emitter.emit(event_type, **fields)
                 self._delivery_event.set()
                 return
+            assert outcome.payload is not None
             self._completion_counter += 1
             completion_id = f"completion-{self._completion_counter}"
             record.status = "completed_hidden"
             record.completion_id = completion_id
-            record.payload = payload
-            record.tokens = tokens
+            record.payload = outcome.payload
             # P0-9: track evidence increment across attempts.  A sealed submission
             # whose evidence bytes repeat an earlier attempt's contributes no new
             # information, and re-delegation on it is bounded to one retry.
             workstream_id = record.work_units[0] if record.work_units else None
             if workstream_id:
                 self._record_workstream_evidence(
-                    workstream_id, payload, record.child_id,
+                    workstream_id, outcome.payload, record.child_id,
                 )
             self.completion_to_child[completion_id] = record.child_id
             self.emitter.emit(
                 "child_completed",
                 child_id=record.child_id,
                 completion_id=completion_id,
-                payload=payload,
-                usage={"tokens": tokens},
+                payload=outcome.payload,
+                usage={"tokens": outcome.tokens},
             )
+        except ChildBudgetAccountingError as exc:
+            record.status = "infrastructure_failed"
+            record.decision = "infrastructure_failed"
+            self.emitter.emit(
+                "infrastructure_failure",
+                component="child_budget_accounting",
+                child_id=record.child_id,
+                detail=str(exc),
+            )
+            self._delivery_event.set()
         except asyncio.CancelledError:
             record.status = "cancelled"
             raise
@@ -1376,8 +1404,11 @@ class SubagentManager:
             states = [self.children[item].status for item in selected if item in self.children]
             if not states:
                 return False
-            terminal = {"delivered", "rejected", "contract_rejected", "cancelled"}
-            return all(state in terminal for state in states) if return_when == "all" else any(state in terminal for state in states)
+            return (
+                all(is_runtime_terminal(state) for state in states)
+                if return_when == "all"
+                else any(is_runtime_terminal(state) for state in states)
+            )
 
         if not ready():
             try:
@@ -1392,7 +1423,9 @@ class SubagentManager:
         record = self.children.get(child_id)
         if not record:
             return {"error": f"unknown child {child_id}"}
-        if record.status not in {"queued", "spawned", "starting", "running"}:
+        if is_runtime_terminal(record.status) or record.status not in {
+            "queued", "spawned", "starting", "running",
+        }:
             return {"error": f"child {child_id} is already {record.status}; reject its delivered result instead"}
         if record.asyncio_task:
             record.asyncio_task.cancel()

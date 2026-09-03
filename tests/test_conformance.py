@@ -1,13 +1,21 @@
 from __future__ import annotations
 
 import asyncio
+import re
 import sys
 from pathlib import Path
 
 from async_rbench.conformance import CONFORMANCE_TESTS, run_checks, run_conformance
+from async_rbench.profiles.conformance_mock.scripted_backend import ScriptedTestBackend
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_scripted_conformance_evidence_satisfies_sha_patterns() -> None:
+    for pattern in ("[0-9a-f]{40}", "^[0-9a-f]{64}$"):
+        value = ScriptedTestBackend._pattern_value(pattern)
+        assert re.fullmatch(pattern, value), (pattern, value)
 
 
 def test_registry_has_ten_protocol_tests():
