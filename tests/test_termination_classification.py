@@ -1,28 +1,36 @@
-"""P1-17: mutually exclusive per-attempt terminal classification.
+"""Task 8: mutually exclusive per-attempt terminal classification.
 
 Every spawned child attempt receives exactly one class from
 ``termination.TERMINAL_CLASSES``; first-attempt vs retry is a facet dimension
 (``attempt_number`` / ``retry``), not a duplicated counter.  The classifier is
 mode-free: it never reads ``execution_mode`` (P1-16), so both arms classify
 identically from the same child-level events.
+
+Contract acceptance is the gateway verdict (``gateway_accepted`` on delivery);
+``result_consumed`` only flips the ``consumed_by_main`` facet and never defines
+acceptance.  A sealed submission that reached no verdict is
+``sealed_pending_verdict`` and carries ``gateway_verdict=False``.
 """
 
 from __future__ import annotations
 
 from async_rbench.evaluation.case_contract import PUBLIC_RESULT_REJECTION_CODES
 from async_rbench.evaluation.termination import (
-    ACCEPTED,
     CANCEL,
+    CASE_CONTRACT_FAILURE,
     CRASH,
+    GATEWAY_ACCEPTED,
+    GATEWAY_VERDICT_CLASSES,
     INFRASTRUCTURE_FAILURE,
     IN_FLIGHT,
-    PRIVATE_REJECTION,
+    NO_SUBMISSION,
     PUBLIC_REJECTION,
-    RESOURCE_EXHAUSTED,
-    SEALED,
+    SEALED_PENDING_VERDICT,
     SUBMISSION_CLASSES,
     TERMINAL_CLASSES,
     TIMEOUT,
+    TOKEN_BUDGET_EXHAUSTED,
+    TURN_LIMIT_EXHAUSTED,
     classify_child_terminals,
 )
 
@@ -78,10 +86,14 @@ def _rows(events: list[dict]) -> dict[str, dict]:
 
 
 def test_every_class_maps_to_a_distinct_terminal() -> None:
-    assert len(TERMINAL_CLASSES) == 10
+    assert len(TERMINAL_CLASSES) == 12
     assert len(set(TERMINAL_CLASSES)) == len(TERMINAL_CLASSES)
-    assert TERMINAL_CLASSES.index(ACCEPTED) < TERMINAL_CLASSES.index(PUBLIC_REJECTION)
-    assert set(SUBMISSION_CLASSES) == {ACCEPTED, PUBLIC_REJECTION, PRIVATE_REJECTION, SEALED}
+    # Sealed submissions carry the sealed_submission facet; only verdict-bearing
+    # classes enter an acceptance/rejection denominator.
+    assert set(SUBMISSION_CLASSES) == {
+        GATEWAY_ACCEPTED, PUBLIC_REJECTION, SEALED_PENDING_VERDICT,
+    }
+    assert set(GATEWAY_VERDICT_CLASSES) == {GATEWAY_ACCEPTED, PUBLIC_REJECTION}
 
 
 def test_helper_events_are_valid_public_codes() -> None:
@@ -90,15 +102,50 @@ def test_helper_events_are_valid_public_codes() -> None:
     assert "validator_command_failed" not in PUBLIC_RESULT_REJECTION_CODES
 
 
-def test_accepted() -> None:
+def test_gateway_accepted() -> None:
+    # Delivered AND consumed is still just ``gateway_accepted``; consumption is
+    # a facet, not a second verdict.
     rows = _rows([
         _spawn("c1"), _completed("c1", "p1"),
         _delivered("c1", "p1"), _consumed("p1"),
     ])
-    assert rows["c1"]["terminal_class"] == ACCEPTED
+    assert rows["c1"]["terminal_class"] == GATEWAY_ACCEPTED
     assert rows["c1"]["sealed_submission"] is True
+    assert rows["c1"]["gateway_verdict"] is True
+    assert rows["c1"]["consumed_by_main"] is True
     assert rows["c1"]["attempt_number"] == 1
     assert rows["c1"]["retry"] is False
+
+
+def test_delivered_without_consumed_is_gateway_accepted() -> None:
+    rows = _rows([
+        _spawn("c1"), _completed("c1", "p1"), _delivered("c1", "p1"),
+    ])
+    assert rows["c1"]["terminal_class"] == GATEWAY_ACCEPTED
+    assert rows["c1"]["consumed_by_main"] is False
+    assert rows["c1"]["sealed_submission"] is True
+    assert rows["c1"]["gateway_verdict"] is True
+
+
+def test_result_consumed_changes_only_the_facet() -> None:
+    consumed = _rows([
+        _spawn("c1"), _completed("c1", "p1"),
+        _delivered("c1", "p1"), _consumed("p1"),
+    ])["c1"]
+    unconsumed = _rows([
+        _spawn("c2"), _completed("c2", "p2"), _delivered("c2", "p2"),
+    ])["c2"]
+    assert consumed["terminal_class"] == unconsumed["terminal_class"] == GATEWAY_ACCEPTED
+    assert consumed["consumed_by_main"] is True
+    assert unconsumed["consumed_by_main"] is False
+
+
+def test_sealed_never_delivered_is_sealed_pending_verdict() -> None:
+    # The child sealed, but the episode closed before the gateway processed it.
+    rows = _rows([_spawn("c1"), _completed("c1", "p1")])
+    assert rows["c1"]["terminal_class"] == SEALED_PENDING_VERDICT
+    assert rows["c1"]["sealed_submission"] is True
+    assert rows["c1"]["gateway_verdict"] is False
 
 
 def test_public_rejection_carries_actionable_codes() -> None:
@@ -108,46 +155,66 @@ def test_public_rejection_carries_actionable_codes() -> None:
     ])
     assert rows["c1"]["terminal_class"] == PUBLIC_REJECTION
     assert rows["c1"]["sealed_submission"] is True
+    assert rows["c1"]["gateway_verdict"] is True
     # The rejected attempt still sealed; both code sets are exposed separately.
     assert rows["c1"]["reason_codes"] == ["report_file_missing", "validator_command_failed"]
     assert rows["c1"]["public_codes"] == ["report_file_missing"]
     assert rows["c1"]["contract_part"] == "report_file"
 
 
-def test_private_rejection_has_no_public_feedback() -> None:
+def test_private_only_rejection_is_case_contract_failure() -> None:
+    # A gateway rejection with no actionable public code is a benchmark/case
+    # contract failure (legacy/private-only rejection reaching the scorer),
+    # never a model rejection verdict.
     rows = _rows([
         _spawn("c1"), _completed("c1", "p1"),
         _rejected("c1", "p1", ["validator_command_failed"]),
     ])
-    assert rows["c1"]["terminal_class"] == PRIVATE_REJECTION
-    assert rows["c1"]["sealed_submission"] is True
+    assert rows["c1"]["terminal_class"] == CASE_CONTRACT_FAILURE
+    assert rows["c1"]["sealed_submission"] is False
+    assert rows["c1"]["gateway_verdict"] is False
     assert rows["c1"]["public_codes"] == []
     assert rows["c1"]["contract_part"] == "submission"
 
 
-def test_sealed_never_delivered() -> None:
-    # The child sealed, but the episode closed before the gateway processed it.
-    rows = _rows([_spawn("c1"), _completed("c1", "p1")])
-    assert rows["c1"]["terminal_class"] == SEALED
-    assert rows["c1"]["sealed_submission"] is True
-
-
-def test_sealed_delivered_but_never_accepted() -> None:
-    # The gateway accepted the contract (delivered), but the participant never
-    # acknowledged a use decision: no verdict, so still "sealed", not "accepted".
+def test_case_contract_infrastructure_event_is_contract_failure() -> None:
     rows = _rows([
-        _spawn("c1"), _completed("c1", "p1"), _delivered("c1", "p1"),
+        _spawn("c1"),
+        {"type": "infrastructure_failure", "event_id": "ep:2", "seq": 2,
+         "child_id": "c1", "component": "case_contract", "detail": "bad spec"},
     ])
-    assert rows["c1"]["terminal_class"] == SEALED
+    assert rows["c1"]["terminal_class"] == CASE_CONTRACT_FAILURE
+    assert rows["c1"]["sealed_submission"] is False
+    assert rows["c1"]["gateway_verdict"] is False
 
 
-def test_resource_exhausted_is_not_a_submission() -> None:
+def test_token_turn_no_submission_are_non_submission_classes() -> None:
+    rows = _rows([
+        _spawn("c1"),
+        {"type": "child_token_budget_exhausted", "event_id": "ep:2", "seq": 2,
+         "child_id": "c1", "pool": "episode", "remaining": 0},
+        _spawn("c2"),
+        {"type": "child_turn_limit_exhausted", "event_id": "ep:4", "seq": 4,
+         "child_id": "c2"},
+        _spawn("c3"),
+        {"type": "child_no_submission", "event_id": "ep:6", "seq": 6,
+         "child_id": "c3", "reason": "no tool calls"},
+    ])
+    assert rows["c1"]["terminal_class"] == TOKEN_BUDGET_EXHAUSTED
+    assert rows["c2"]["terminal_class"] == TURN_LIMIT_EXHAUSTED
+    assert rows["c3"]["terminal_class"] == NO_SUBMISSION
+    for child in ("c1", "c2", "c3"):
+        assert rows[child]["sealed_submission"] is False
+        assert rows[child]["gateway_verdict"] is False
+
+
+def test_legacy_resource_exhausted_aliases_token_budget() -> None:
     rows = _rows([
         _spawn("c1"),
         {"type": "child_resource_exhausted", "event_id": "ep:2", "seq": 2,
          "child_id": "c1", "pool": "episode", "remaining": 0},
     ])
-    assert rows["c1"]["terminal_class"] == RESOURCE_EXHAUSTED
+    assert rows["c1"]["terminal_class"] == TOKEN_BUDGET_EXHAUSTED
     assert rows["c1"]["sealed_submission"] is False
 
 
@@ -240,7 +307,7 @@ def test_rejection_reenforces_attempt_order() -> None:
     rows = _rows(events)
     assert rows["c1"]["terminal_class"] == PUBLIC_REJECTION
     assert rows["c1"]["attempt_number"] == 1
-    assert rows["c2"]["terminal_class"] == ACCEPTED
+    assert rows["c2"]["terminal_class"] == GATEWAY_ACCEPTED
     assert rows["c2"]["attempt_number"] == 2
 
 
@@ -289,7 +356,7 @@ def test_single_class_per_child_on_a_mixed_trace() -> None:
         _spawn("c2", "ws-a", seq=5), _completed("c2", "p2"),
         _delivered("c2", "p2"), _consumed("p2"),
         _spawn("c3", "ws-b", seq=9),
-        {"type": "child_resource_exhausted", "event_id": "ep:10", "seq": 10,
+        {"type": "child_token_budget_exhausted", "event_id": "ep:10", "seq": 10,
          "child_id": "c3", "pool": "episode", "remaining": 0},
         _spawn("c4", "ws-b", seq=11),
         _delivered("c4", "terminal:ev-3", terminal_outcome="timeout"),
@@ -298,7 +365,7 @@ def test_single_class_per_child_on_a_mixed_trace() -> None:
     ]
     rows = _rows(events)
     assert {row["child_id"]: row["terminal_class"] for row in rows.values()} == {
-        "c1": PUBLIC_REJECTION, "c2": ACCEPTED, "c3": RESOURCE_EXHAUSTED,
+        "c1": PUBLIC_REJECTION, "c2": GATEWAY_ACCEPTED, "c3": TOKEN_BUDGET_EXHAUSTED,
         "c4": TIMEOUT, "c5": CANCEL,
     }
     assert all(row["terminal_class"] in TERMINAL_CLASSES for row in rows.values())

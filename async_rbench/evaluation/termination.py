@@ -1,25 +1,44 @@
-"""P1-17: mutually exclusive per-attempt terminal classification.
+"""Task 8: mutually exclusive per-attempt terminal classification.
 
-A workstream attempt is one child spawn (``child_spawned``); a redelegation is
-a later spawn for the same workstream.  Every attempt terminates in exactly one
-terminal class (the taxonomy below is exhaustive and mutually exclusive), and
-the *attempt number* ("first attempt" vs "retry") is a facet dimension of each
-row, never a duplicated set of counters.
+A workstream attempt is one child spawn (``child_spawned``); a retry is a later
+spawn for the same workstream.  Every attempt terminates in exactly one terminal
+class (the taxonomy below is exhaustive and mutually exclusive), and the
+*attempt number* ("first attempt" vs "retry") is a facet dimension of each row,
+never a duplicated set of counters.
+
+Contract acceptance is the *gateway verdict*, not the main agent's later use: a
+``result_delivered`` means the gateway accepted and released the submission, so
+the attempt is ``gateway_accepted`` whether or not the main agent ever consumed
+it.  ``result_consumed`` only records whether the main agent later used the
+delivered result (``consumed_by_main`` facet) and never changes the terminal
+class.  A child that sealed (``child_completed``) but reached no gateway
+delivery/rejection before the episode closed is ``sealed_pending_verdict``: it
+is a sealed submission but carries no gateway verdict, so it never enters a
+verdict acceptance/rejection denominator.
 
 Taxonomy::
 
-    accepted              sealed submission consumed by the main agent
-    public_rejection      gateway rejection carrying >=1 actionable public code
-    private_rejection     gateway rejection whose public feedback was empty
-                          (private validator reason only)
-    sealed                sealed submission (``child_completed``) that reached no
-                          verdict before the episode closed
-    resource_exhausted    budget/turn exhaustion cut the child off (no submission)
-    timeout               designed child-timeout terminal, delivered to main
-    crash                 designed child-crash terminal, delivered to main
-    cancel                explicit main-agent cancellation (``initiated_by=main``)
+    gateway_accepted       gateway delivered the sealed submission (accepted)
+    public_rejection       gateway rejected with >=1 actionable public code
+    sealed_pending_verdict sealed submission (``child_completed``) that reached
+                           no gateway verdict before the episode closed
+    token_budget_exhausted episode token budget cut the child off (no submission)
+    turn_limit_exhausted   child turn limit cut the child off (no submission)
+    no_submission          child ended without sealing any submission
+    timeout                designed child-timeout terminal, delivered to main
+    crash                  designed child-crash terminal, delivered to main
+    cancel                 explicit main-agent cancellation (``initiated_by=main``)
+    case_contract_failure  benchmark/gateway contract failure (a ``case_contract``
+                           infrastructure event, or a private-only rejection
+                           reaching the scorer); never a model verdict
     infrastructure_failure benchmark/provider failure (workspace, backend, ...)
-    in_flight             child still queued/running when the episode closed
+    in_flight              child still queued/running when the episode closed
+
+Each row carries facets beyond ``terminal_class``:
+
+* ``sealed_submission``: the attempt physically sealed a child submission.
+* ``gateway_verdict``: the gateway reached accept/reject on the submission.
+* ``consumed_by_main``: the main agent later consumed the delivered result.
 
 Pipeline independence (P1-16): the classifier never reads ``execution_mode``
 and only depends on child-level events, which Linear and Async record
@@ -39,37 +58,47 @@ from .case_contract import (
     contract_part_for_codes,
 )
 
-ACCEPTED = "accepted"
+GATEWAY_ACCEPTED = "gateway_accepted"
 PUBLIC_REJECTION = "public_rejection"
-PRIVATE_REJECTION = "private_rejection"
-SEALED = "sealed"
-RESOURCE_EXHAUSTED = "resource_exhausted"
+SEALED_PENDING_VERDICT = "sealed_pending_verdict"
+TOKEN_BUDGET_EXHAUSTED = "token_budget_exhausted"
+TURN_LIMIT_EXHAUSTED = "turn_limit_exhausted"
+NO_SUBMISSION = "no_submission"
 TIMEOUT = "timeout"
 CRASH = "crash"
 CANCEL = "cancel"
+CASE_CONTRACT_FAILURE = "case_contract_failure"
 INFRASTRUCTURE_FAILURE = "infrastructure_failure"
 IN_FLIGHT = "in_flight"
 
 TERMINAL_CLASSES = (
-    ACCEPTED,
+    GATEWAY_ACCEPTED,
     PUBLIC_REJECTION,
-    PRIVATE_REJECTION,
-    SEALED,
-    RESOURCE_EXHAUSTED,
+    SEALED_PENDING_VERDICT,
+    TOKEN_BUDGET_EXHAUSTED,
+    TURN_LIMIT_EXHAUSTED,
+    NO_SUBMISSION,
     TIMEOUT,
     CRASH,
     CANCEL,
+    CASE_CONTRACT_FAILURE,
     INFRASTRUCTURE_FAILURE,
     IN_FLIGHT,
 )
 
-#: Classes in which the child actually sealed a submission.  Only these enter
-#: a submission-verdict denominator (P1-18): budget exits, designed terminals,
-#: cancels, infrastructure failures and in-flight closes never submitted.
-SUBMISSION_CLASSES = frozenset({ACCEPTED, PUBLIC_REJECTION, PRIVATE_REJECTION, SEALED})
+#: Classes in which the child actually sealed a submission.  These carry the
+#: ``sealed_submission`` facet and feed the descriptive sealed-submission count.
+SUBMISSION_CLASSES = frozenset({
+    GATEWAY_ACCEPTED, PUBLIC_REJECTION, SEALED_PENDING_VERDICT,
+})
 
-#: Benchmark/resource endpoints rather than model submission verdicts; the
-#: P1-18 rejection rate must exclude them.
+#: Classes that reached a gateway accept/reject verdict on the sealed
+#: submission.  Only these enter a verdict acceptance/rejection denominator
+#: (Task 8): budget exits, turn/no-submission ends, designed terminals, cancels,
+#: case-contract and infrastructure failures and in-flight closes never did.
+GATEWAY_VERDICT_CLASSES = frozenset({GATEWAY_ACCEPTED, PUBLIC_REJECTION})
+
+#: Benchmark/resource endpoints rather than model submission verdicts.
 NON_SUBMISSION_CLASSES = frozenset(set(TERMINAL_CLASSES) - SUBMISSION_CLASSES)
 
 
@@ -101,14 +130,41 @@ def _by_child(events: list[dict[str, Any]], child_id: str) -> list[dict[str, Any
     return [event for event in events if str(event.get("child_id") or "") == child_id]
 
 
+#: Runtime events that end an attempt without sealing a submission, mapped to
+#: their terminal class.  ``child_resource_exhausted`` is a legacy artifact
+#: alias for a token-budget exhaustion emitted before Task 1 split the three
+#: non-submission outcomes.
+_EXHAUST_EVENT_TO_CLASS = {
+    "child_token_budget_exhausted": TOKEN_BUDGET_EXHAUSTED,
+    "child_resource_exhausted": TOKEN_BUDGET_EXHAUSTED,
+    "child_turn_limit_exhausted": TURN_LIMIT_EXHAUSTED,
+    "child_no_submission": NO_SUBMISSION,
+}
+
+
 def classify_child_terminals(
     events: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     """Classify every spawned child attempt, one row per child.
 
     Deterministic by event order; each row carries exactly one ``terminal_class``
-    plus the attempt facet (``attempt_number`` / ``retry``) so consumers never
-    need second-guess the taxonomy.
+    plus the attempt facet (``attempt_number`` / ``retry``) and the
+    ``sealed_submission`` / ``gateway_verdict`` / ``consumed_by_main`` facets so
+    consumers never need second-guess the taxonomy.
+
+    Precedence per attempt (Task 8 Step 3):
+    1. case-contract / infrastructure failure
+    2. designed timeout/crash terminal
+    3. explicit cancellation (``initiated_by=main``)
+    4. token/turn/no-submission terminal event
+    5. public ``result_rejected`` (a private-only rejection is a
+       ``case_contract_failure``)
+    6. ``result_delivered`` => ``gateway_accepted``
+    7. ``child_completed`` => ``sealed_pending_verdict``
+    8. otherwise ``in_flight``
+
+    ``consumed_by_main`` is joined through completion id independently of the
+    terminal class.
     """
     spawns = _events_of(events, "child_spawned")
     completions = _events_of(events, "child_completed")
@@ -150,12 +206,16 @@ def classify_child_terminals(
         attempt_counter[str(work_units[0] if work_units else "")] += 1
         attempt_by_child[child_id] = attempt_counter[str(work_units[0] if work_units else "")]
 
-    # Benchmark/provider severance: infrastructure failures plus any child
-    # cancellation initiated by infrastructure (workspace/backend failures).
+    # Benchmark/provider severance, split into contract-level and infrastructure.
+    case_contract_child_ids = {
+        str(event.get("child_id"))
+        for event in infra_events
+        if event.get("child_id") and str(event.get("component") or "") == "case_contract"
+    }
     infra_child_ids = {
         str(event.get("child_id"))
         for event in infra_events
-        if event.get("child_id")
+        if event.get("child_id") and str(event.get("component") or "") != "case_contract"
     }
     infra_child_ids |= {
         str(event.get("child_id"))
@@ -177,7 +237,17 @@ def classify_child_terminals(
         terminal_outcome: str | None = None
         detail: str | None = None
 
-        if child_id in infra_child_ids:
+        if child_id in case_contract_child_ids:
+            terminal_class = CASE_CONTRACT_FAILURE
+            case_contract_event = next(
+                (event for event in infra_events
+                 if str(event.get("child_id") or "") == child_id
+                 and str(event.get("component") or "") == "case_contract"),
+                {},
+            )
+            completion_id = str(case_contract_event.get("completion_id") or "") or None
+            detail = str(case_contract_event.get("detail") or "") or None
+        elif child_id in infra_child_ids:
             terminal_class = INFRASTRUCTURE_FAILURE
             detail = str(
                 next(
@@ -204,39 +274,57 @@ def classify_child_terminals(
                 terminal_class = CANCEL
                 cancel_event = _by_child(cancelled, child_id)[0]
                 detail = str(cancel_event.get("reason") or "") or None
-            elif _by_child(exhausted, child_id):
-                terminal_class = RESOURCE_EXHAUSTED
             else:
-                rejection = _by_child(rejections, child_id)
-                if rejection:
-                    rejection = rejection[0]
-                    completion_id = str(rejection.get("completion_id") or "") or None
-                    reason_codes = [str(code) for code in (rejection.get("reason_codes") or [])]
-                    public_codes = [
-                        code for code in reason_codes
-                        if code in PUBLIC_RESULT_REJECTION_CODES
-                    ]
-                    terminal_class = PUBLIC_REJECTION if public_codes else PRIVATE_REJECTION
-                    contract_part = contract_part_for_codes(public_codes)
-                else:
-                    bound_consumed = next(
-                        (event for event in consumed
-                         if completion_to_child.get(str(event.get("completion_id") or ""))
-                         == child_id),
-                        None,
+                exhausted_events = _by_child(exhausted, child_id)
+                if exhausted_events:
+                    terminal_class = _EXHAUST_EVENT_TO_CLASS.get(
+                        str(exhausted_events[0].get("type")), TOKEN_BUDGET_EXHAUSTED,
                     )
-                    if bound_consumed is not None:
-                        terminal_class = ACCEPTED
-                        completion_id = str(bound_consumed.get("completion_id") or "") or None
-                    elif _by_child(completions, child_id):
-                        terminal_class = SEALED
+                else:
+                    rejection = _by_child(rejections, child_id)
+                    if rejection:
+                        rejection = rejection[0]
+                        completion_id = str(rejection.get("completion_id") or "") or None
+                        reason_codes = [str(code) for code in (rejection.get("reason_codes") or [])]
+                        public_codes = [
+                            code for code in reason_codes
+                            if code in PUBLIC_RESULT_REJECTION_CODES
+                        ]
+                        contract_part = contract_part_for_codes(public_codes)
+                        if public_codes:
+                            terminal_class = PUBLIC_REJECTION
+                        else:
+                            # A private-only rejection reaching the scorer is a
+                            # gateway/case-contract failure, never a model verdict.
+                            terminal_class = CASE_CONTRACT_FAILURE
                     else:
-                        terminal_class = IN_FLIGHT
-                        cancel_event = _by_child(cancelled, child_id)
-                        detail = (
-                            str(cancel_event[0].get("reason") or "")
-                            if cancel_event else None
+                        accepted_delivery = next(
+                            (event for event in _by_child(deliveries, child_id)
+                             if not event.get("terminal_outcome")),
+                            None,
                         )
+                        if accepted_delivery is not None:
+                            terminal_class = GATEWAY_ACCEPTED
+                            completion_id = str(
+                                accepted_delivery.get("completion_id") or ""
+                            ) or None
+                        elif _by_child(completions, child_id):
+                            terminal_class = SEALED_PENDING_VERDICT
+                            completion_id = str(
+                                _by_child(completions, child_id)[0].get("completion_id") or ""
+                            ) or None
+                        else:
+                            terminal_class = IN_FLIGHT
+                            cancel_event = _by_child(cancelled, child_id)
+                            detail = (
+                                str(cancel_event[0].get("reason") or "")
+                                if cancel_event else None
+                            )
+
+        consumed_by_main = any(
+            completion_to_child.get(str(event.get("completion_id") or "")) == child_id
+            for event in consumed
+        )
 
         rows.append({
             "child_id": child_id,
@@ -246,6 +334,8 @@ def classify_child_terminals(
             "terminal_class": terminal_class,
             "completion_id": completion_id,
             "sealed_submission": terminal_class in SUBMISSION_CLASSES,
+            "gateway_verdict": terminal_class in GATEWAY_VERDICT_CLASSES,
+            "consumed_by_main": consumed_by_main,
             "tokens": int(child_tokens.get(child_id, 0)),
             "reason_codes": reason_codes,
             "public_codes": public_codes,

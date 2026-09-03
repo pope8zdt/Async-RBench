@@ -771,27 +771,68 @@ def _opportunity_summary(records: list[dict[str, Any]]) -> dict[str, int]:
     return counts
 
 
-# P1-19 paper metrics, aggregated over the per-attempt terminal classifications
-# the scorer stamps on each episode record (P1-17).  Null rates and null token
+# Task 8 paper metrics, aggregated over the per-attempt terminal classifications
+# the scorer stamps on each episode record.  Contract acceptance is the gateway
+# verdict; verdict acceptance/rejection denominators cover only verdict-bearing
+# submissions (gateway_accepted + public_rejection).  Null rates and null token
 # means mean "no qualifying attempt in this factor", never zero.
 _PAPER_TERMINAL_COUNT_FIELDS = (
-    "accepted", "public_rejection", "private_rejection", "sealed",
-    "resource_exhausted", "timeout", "crash", "cancel",
+    "gateway_accepted", "public_rejection", "sealed_pending_verdict",
+    "token_budget_exhausted", "turn_limit_exhausted", "no_submission",
+    "timeout", "crash", "cancel", "case_contract_failure",
     "infrastructure_failure", "in_flight",
 )
 
 
+def _extra_tokens_from_public_rejections(
+    rows: list[dict[str, Any]],
+) -> int:
+    """Per-episode tokens spent on public rejections beyond the accepted one.
+
+    Per workstream within one episode, public-rejected attempts before the
+    gateway-accepted attempt (or all public-rejected attempts when none was
+    accepted) are the rejection cost.
+    """
+    attempt_rows_by_workstream: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        attempt_rows_by_workstream[
+            str(row.get("workstream_id") or "no_workstream")
+        ].append(row)
+    extra = 0
+    for attempt_rows in attempt_rows_by_workstream.values():
+        ordered = sorted(attempt_rows, key=lambda row: int(row["attempt_number"]))
+        accepted_index = next(
+            (index for index, row in enumerate(ordered)
+             if str(row.get("terminal_class") or "") == "gateway_accepted"), None,
+        )
+        rejected_up_to = (
+            [row for row in ordered[:accepted_index]
+             if str(row.get("terminal_class") or "") == "public_rejection"]
+            if accepted_index is not None
+            else [row for row in ordered
+                  if str(row.get("terminal_class") or "") == "public_rejection"]
+        )
+        extra += sum(int(row.get("tokens") or 0) for row in rejected_up_to)
+    return extra
+
+
 def _paper_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
     terminal_counts = {field: 0 for field in _PAPER_TERMINAL_COUNT_FIELDS}
+    total_attempts = 0
     sealed_submissions = 0
-    accepted = 0
-    rejected = 0
-    first_attempt_submissions = 0
+    gateway_verdict = 0
+    gateway_accepted = 0
+    public_rejected = 0
+    sealed_pending = 0
+    first_attempt_verdict = 0
     first_attempt_accepted = 0
-    retry_submissions = 0
+    retry_verdict = 0
     retry_accepted = 0
     accepted_tokens = 0
-    extra_rejection_tokens = 0
+    extra_public_rejection_tokens = 0
+    token_exhausted_attempts = 0
+    turn_limit_exhausted_attempts = 0
+    no_submission_attempts = 0
     redelegation_attempts = 0
     invalid_redelegations = 0
     for item in records:
@@ -800,67 +841,89 @@ def _paper_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
             continue
         for row in rows:
             cls = str(row.get("terminal_class") or "")
+            total_attempts += 1
             if cls in terminal_counts:
                 terminal_counts[cls] += 1
             retry = bool(row.get("retry") or int(row.get("attempt_number") or 1) >= 2)
             if retry:
                 redelegation_attempts += 1
-            if not row.get("sealed_submission"):
-                continue
-            sealed_submissions += 1
+            if cls == "token_budget_exhausted":
+                token_exhausted_attempts += 1
+            elif cls == "turn_limit_exhausted":
+                turn_limit_exhausted_attempts += 1
+            elif cls == "no_submission":
+                no_submission_attempts += 1
+            if row.get("sealed_submission"):
+                sealed_submissions += 1
             tokens = int(row.get("tokens") or 0)
-            if cls == "accepted":
-                accepted += 1
+            if cls == "gateway_accepted":
+                gateway_accepted += 1
+                gateway_verdict += 1
                 accepted_tokens += tokens
-            elif cls in {"public_rejection", "private_rejection"}:
-                rejected += 1
-            if retry:
-                retry_submissions += 1
-                if cls == "accepted":
+                if retry:
                     retry_accepted += 1
-            else:
-                first_attempt_submissions += 1
-                if cls == "accepted":
+                    retry_verdict += 1
+                else:
                     first_attempt_accepted += 1
-        extra_rejection_tokens += int(item.get("extra_rejection_tokens") or 0)
+                    first_attempt_verdict += 1
+            elif cls == "public_rejection":
+                public_rejected += 1
+                gateway_verdict += 1
+                if retry:
+                    retry_verdict += 1
+                else:
+                    first_attempt_verdict += 1
+            elif cls == "sealed_pending_verdict":
+                sealed_pending += 1
+        extra_public_rejection_tokens += _extra_tokens_from_public_rejections(rows)
         invalid_redelegations += int(item.get("invalid_redelegation_count") or 0)
+
+    def _rate(numerator: int, denominator: int) -> float | None:
+        return numerator / denominator if denominator else None
+
     return {
-        # P1-17: per-attempt terminal histogram (attempt dimension included).
+        # Task 8: per-attempt terminal histogram (attempt dimension included).
         "terminal_class_counts": terminal_counts,
-        # P1-18: rejection rate over sealed submissions only.  Budget exits,
-        # designed terminals, cancels, infrastructure failures and in-flight
-        # closes never submitted and are excluded from the denominator.
+        # Verdict acceptance/rejection rates run over verdict-bearing
+        # submissions only; sealed-without-verdict closes, budget/turn/no-
+        # submission ends, designed terminals, cancels, case-contract and
+        # infrastructure failures never enter these denominators.
         "sealed_submission_count": sealed_submissions,
-        "submission_acceptance_rate": (
-            accepted / sealed_submissions if sealed_submissions else None
-        ),
-        "submission_rejection_rate": (
-            rejected / sealed_submissions if sealed_submissions else None
-        ),
-        # P1-19: first-attempt vs retry acceptance as one dimension.
-        "first_attempt_submission_count": first_attempt_submissions,
+        "gateway_verdict_count": gateway_verdict,
+        "gateway_accepted_count": gateway_accepted,
+        "public_rejected_count": public_rejected,
+        "sealed_pending_verdict_count": sealed_pending,
+        "submission_acceptance_rate": _rate(gateway_accepted, gateway_verdict),
+        "submission_rejection_rate": _rate(public_rejected, gateway_verdict),
+        # First-attempt vs retry acceptance over verdict-bearing submissions.
+        "first_attempt_verdict_count": first_attempt_verdict,
         "first_attempt_accepted_count": first_attempt_accepted,
-        "first_attempt_acceptance_rate": (
-            first_attempt_accepted / first_attempt_submissions
-            if first_attempt_submissions else None
+        "first_attempt_acceptance_rate": _rate(
+            first_attempt_accepted, first_attempt_verdict,
         ),
-        "retry_submission_count": retry_submissions,
+        "retry_verdict_count": retry_verdict,
         "retry_accepted_count": retry_accepted,
-        "retry_acceptance_rate": (
-            retry_accepted / retry_submissions if retry_submissions else None
+        "retry_acceptance_rate": _rate(retry_accepted, retry_verdict),
+        # Cost metrics over gateway-accepted attempts and public rejections.
+        "avg_child_tokens_per_gateway_accepted": _rate(
+            accepted_tokens, gateway_accepted,
         ),
-        # P1-19: cost of rejection in tokens.
-        "avg_tokens_per_accepted": (
-            accepted_tokens / accepted if accepted else None
+        "extra_child_tokens_from_public_rejections": extra_public_rejection_tokens,
+        # Model/runtime outcome rates per attempt (never rejection rates).
+        "token_budget_exhaustion_rate_per_attempt": _rate(
+            token_exhausted_attempts, total_attempts,
         ),
-        "extra_tokens_from_rejections": extra_rejection_tokens,
-        # P1-19: an invalid redelegation contributes no new evidence (P0-9).
+        "turn_limit_exhaustion_rate_per_attempt": _rate(
+            turn_limit_exhausted_attempts, total_attempts,
+        ),
+        "no_submission_rate_per_attempt": _rate(
+            no_submission_attempts, total_attempts,
+        ),
+        # A redelegation contributing no new evidence is a duplicate evidence
+        # retry (P0-9 / Task 7 diagnostic).
         "redelegation_attempt_count": redelegation_attempts,
         "invalid_redelegation_count": invalid_redelegations,
-        "invalid_redelegation_rate": (
-            invalid_redelegations / redelegation_attempts
-            if redelegation_attempts else None
-        ),
+        "invalid_redelegation_rate": _rate(invalid_redelegations, redelegation_attempts),
     }
 
 
@@ -1021,7 +1084,15 @@ def _summary(
         ),
         "theme_instance_count_minimum": minimum_theme_test_instances,
         "paired_mode_coverage_complete": complete,
-        "paper_metrics": _paper_metrics(records),
+        # Task 8: paper metrics are mode-separated.  The paper-facing Async
+        # claim must read the Async subgroup of ``paper_metrics_by_mode``; no
+        # combined value may be read as an Async claim.  The all-modes rollup is
+        # kept under an explicit descriptive name.
+        "paper_metrics_by_mode": {
+            mode: _paper_metrics([item for item in records if _mode(item) == mode])
+            for mode in EXECUTION_MODES
+        },
+        "paper_metrics_all_modes_descriptive": _paper_metrics(records),
     }
 
 
