@@ -275,6 +275,12 @@ def test_scripted_backend_runs_protocol3_end_to_end(
     assert score["execution_mode"] == mode
     assert score["scenario_constructed"] is True
     assert score["leaderboard_eligible"] is False
+    # The runtime's final per-pool snapshot must survive to the score record:
+    # settled / remaining / overrun / halt reason per pool (spec §7).
+    assert score["budget_report"] is not None
+    assert set(score["budget_report"]) == {
+        "child_shared", "main_pre", "main_post", "main_total",
+    }
     participant = (tmp_path / mode / "participant_trace.jsonl").read_text(encoding="utf-8").lower()
     for forbidden in (
         "result_kind", "event_assets", "observer_command", "validator_command",
@@ -290,6 +296,16 @@ def test_scripted_backend_runs_protocol3_end_to_end(
         assert "linear_bundle_ready" in private_source
         assert "linear_bundle_presented" in private_source
         assert "\"result_presented\"" not in private_source
+        # Item-5 regression: Linear must actually call Main after the bundle.
+        # The pre-fix barrier fired at the 180s terminal-command cap while the
+        # scripted children were completing, so these episodes ended with
+        # main_tokens=0 and were still reported scored.  A fixed (scripted)
+        # child must yield a contract-acceptable result, the bundle must be
+        # presented, and Main must then be called at least once.
+        assert score["main_tokens"] > 0
+        assert score["child_tokens"] > 0
+        # The fixed child's result reached the wave as a delivered bundle entry.
+        assert "\"result_delivered\"" in private_source
     assert '"visibility": "kernel_private"' in private_source
 
 
@@ -591,6 +607,73 @@ def test_linear_bundle_presented_once_and_message_injected() -> None:
         )
         # No per-result presentation boundary was emitted for the bundle.
         assert "result_presented" not in types
+
+    asyncio.run(exercise())
+
+
+def test_linear_bundle_wait_cap_is_the_child_lifecycle_not_the_terminal_cap() -> None:
+    """Regression: the barrier used to wait only ``child_terminal_timeout_sec``
+    (180s) while a child's lifecycle runs to ``child_timeout_sec`` (900s+), so a
+    healthy wave was declared "did not reach a terminal bundle" and the episode
+    ended with main_tokens=0 yet reported scored.  The wait cap must be the full
+    benchmark-owned child lifecycle (start barrier + child timeout), and a
+    genuine timeout must be recorded as an infrastructure failure."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "linear"))
+        config = scaffold.config
+        recorded: list[float] = []
+
+        async def fake_wait(timeout: float) -> bool:
+            recorded.append(timeout)
+            return False
+
+        scaffold.manager.wait_linear_bundle = fake_wait
+        result = await scaffold._maybe_present_linear_bundle()
+        assert result is False
+        assert recorded == [config.start_barrier_timeout_sec + config.child_timeout_sec]
+        # The failure must be an infrastructure failure, not a silent
+        # ``incomplete`` that the scorer keeps as ``scored`` with main_tokens=0.
+        failures = [
+            event for event in scaffold.emitter.events
+            if event.get("type") == "infrastructure_failure"
+        ]
+        assert len(failures) == 1
+        assert failures[0]["component"] == "linear_bundle_barrier"
+
+    asyncio.run(exercise())
+
+
+def test_main_budget_refusal_emits_distinguishing_event_and_snapshot() -> None:
+    """A refused main admission records why (insufficient vs halted) and the
+    final per-pool snapshot is persisted on the same termination path."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "async"))
+        scaffold.budget_ledger.pool("main_pre").maximum = 0
+        await scaffold.run()
+        await scaffold.shutdown()
+        assert scaffold.finish_status == "budget_exhausted"
+        exhaustions = [
+            event for event in scaffold.emitter.events
+            if event.get("type") == "budget_exhausted"
+        ]
+        assert len(exhaustions) == 1
+        assert exhaustions[0]["pool"] == "main_pre"
+        assert exhaustions[0]["refusal_reason"] == "insufficient_remaining"
+        assert exhaustions[0]["halt_reason"] is None
+        snapshots = [
+            event.get("pools", {}) for event in scaffold.emitter.events
+            if event.get("type") == "budget_ledger_snapshot"
+        ]
+        assert len(snapshots) == 1
+        assert set(snapshots[0]) == {
+            "child_shared", "main_pre", "main_post", "main_total",
+        }
+        for pool_name in ("main_pre", "main_post", "child_shared"):
+            pool = snapshots[0][pool_name]
+            assert "settled" in pool and "remaining" in pool
+            assert "overrun" in pool and "halt_reason" in pool
+            assert "refusal_reason" in pool and "accounting_mode" in pool
+        assert snapshots[0]["main_pre"]["remaining"] == 0
 
     asyncio.run(exercise())
 

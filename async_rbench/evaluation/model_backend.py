@@ -60,31 +60,44 @@ class TokenEstimate:
     accounting_mode: str
 
 
-def _message_content_chars(
+def _serialized_conversation(
     messages: list[dict[str, Any]], tools: list[dict[str, Any]],
-) -> int:
-    total = 0
-    for message in messages:
-        content = message.get("content")
-        if isinstance(content, str):
-            total += len(content)
-        elif isinstance(content, list):
-            for part in content:
-                if isinstance(part, dict):
-                    total += len(str(part.get("text") or ""))
-        total += len(str(message.get("role") or ""))
-    for tool in tools:
-        total += len(json.dumps(tool, ensure_ascii=False))
-    return total
+) -> str:
+    """The conversation as tokenized: the full message dicts plus tool schemas.
+
+    The provider counts tokens over the *whole* message object, not just the
+    ``content`` string.  A DeepSeek-style backend echoes ``reasoning_content``
+    on assistant messages and emits ``tool_calls`` (whose ``arguments`` carry
+    long serialized JSON, e.g. a terminal command).  Both are persisted into the
+    history and re-submitted on the next call, so the estimation must serialize
+    every field the wire payload carries: ``role``, ``name``, ``content``,
+    ``reasoning_content``, ``tool_call_id`` and the full ``tool_calls`` array.
+    ``default=str`` keeps a non-serializable value (never expected in practice)
+    from crashing the estimate instead of being under-counted.
+    """
+    return json.dumps(
+        {"messages": messages, "tools": tools},
+        ensure_ascii=False, default=str,
+    )
 
 
 def conservative_input_estimate(
     messages: list[dict[str, Any]], tools: list[dict[str, Any]],
 ) -> int:
-    """Conservative upper bound: no tokenizer compresses text below one token per
-    character, so character count plus structural overhead is a safe ceiling."""
-    chars = _message_content_chars(messages, tools)
-    return chars + 8 * len(messages) + 16 * len(tools)
+    """Conservative upper bound over the *serialized* conversation (spec §7.3).
+
+    The bound is the UTF-8 byte length of the exact message/tool payload the
+    provider receives, plus per-message and per-tool structural overhead.  A
+    byte-level BPE tokenizer can never produce more tokens than bytes (every
+    token spans at least one byte), so ``serialized_bytes`` is a safe ceiling;
+    the overhead terms additionally cover provider-side per-message role
+    markers.  Because the whole serialized payload is counted, fields that were
+    previously ignored -- ``reasoning_content``, ``tool_calls``, ``name``,
+    ``tool_call_id`` -- can no longer make the estimate under-count (a message
+    with 10K reasoning + 10K tool-call arguments serializes to ~20K, not 17).
+    """
+    wire_bytes = len(_serialized_conversation(messages, tools).encode("utf-8"))
+    return wire_bytes + 8 * len(messages) + 16 * len(tools)
 
 
 def exact_input_estimate(
@@ -93,15 +106,16 @@ def exact_input_estimate(
     """Deterministic tokenizer *proxy*, not a guarantee (spec §7.3).
 
     A real deployment substitutes a provider tokenizer here; until then this
-    deterministic heuristic compresses to roughly a token every few characters
-    plus structural overhead.  It is NOT a guaranteed upper bound: a tokenizer
-    can produce more tokens than ``chars // 4`` for a packed run of characters
-    that map to multiple tokens.  The caller charges ``"tokenizer_proxy"`` so
-    Track A does not mistake this for an exact count.  Because it may
-    under-estimate, the pool still settles to the true usage and halts on an
-    overrun; do not rely on this bound being safe the way ``conservative`` is.
+    deterministic heuristic compresses the *serialized* conversation to roughly
+    a token every four characters plus structural overhead.  It is NOT a
+    guaranteed upper bound: a tokenizer can produce more tokens than
+    ``chars // 4`` for a packed run of characters that map to multiple tokens.
+    The caller charges ``"tokenizer_proxy"`` so Track A does not mistake this
+    for an exact count.  Because it may under-estimate, the pool still settles
+    to the true usage and halts on an overrun; do not rely on this bound being
+    safe the way ``conservative`` is.
     """
-    chars = _message_content_chars(messages, tools)
+    chars = len(_serialized_conversation(messages, tools))
     return max(1, -(-chars // 4)) + 4 * len(messages) + 8 * len(tools)
 
 

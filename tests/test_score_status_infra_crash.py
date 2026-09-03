@@ -55,11 +55,16 @@ def test_no_crash_keeps_participant_outcomes_scored() -> None:
     assert reason is None
 
 
-def test_crash_components_are_the_four_tooling_ones() -> None:
+def test_crash_components_are_the_tooling_ones() -> None:
     # A child crash from a provider/workspace outage (not a designed case crash)
-    # is benchmark tooling failing mid-run, so it must also be unscored.
+    # is benchmark tooling failing mid-run, so it must also be unscored.  The
+    # Linear bundle barrier is the same class: if the benchmark-owned wave never
+    # reached a terminal bundle inside its own lifecycle cap, no designed
+    # measurement took place, so the episode must not be reported ``scored``
+    # with main_tokens=0.
     assert UNSCORED_INFRASTRUCTURE_COMPONENTS == {
         "model_request", "child_start", "adapter_crash", "child_terminal",
+        "linear_bundle_barrier",
     }
 
 

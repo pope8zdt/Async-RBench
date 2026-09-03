@@ -91,9 +91,11 @@ RUNTIME_PHASE_EVENT_TYPES = frozenset({
     # Token budget accounting boundaries (spec §7): a reserve/settle/release/
     # phase-switch is recorded as a runtime phase marker so replay/audit can
     # reconstruct the per-pool tokens without the adapter-event registry
-    # validating them.
+    # validating them.  ``budget_ledger_snapshot`` is the runtime's own final
+    # per-pool accounting view (settled / remaining / overrun / halt reason),
+    # emitted once per episode on every termination path.
     "budget_reserved", "budget_settled", "budget_released",
-    "budget_exhausted", "budget_phase_switch",
+    "budget_exhausted", "budget_phase_switch", "budget_ledger_snapshot",
 })
 
 
@@ -1048,6 +1050,12 @@ UNSCORED_INFRASTRUCTURE_COMPONENTS = frozenset({
     # A child crash from a provider/workspace outage (not a designed case crash)
     # is benchmark tooling failing mid-run, so it makes the episode unscored.
     "child_terminal",
+    # The Linear wave never reached a terminal bundle within the benchmark's own
+    # child lifecycle cap.  The scenario may have constructed fine, but the
+    # benchmark never handed the main model its atomic bundle, so no designed
+    # measurement took place -- scoring it as an empty X=0 (or worse, scored
+    # with main_tokens=0) would misreport the run.
+    "linear_bundle_barrier",
 })
 
 
@@ -1662,6 +1670,42 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     episode_local_status = (
         episode_end_events[-1].get("local_status") if episode_end_events else None
     )
+    # Per-pool budget report (spec §7): the runtime persists one final ledger
+    # snapshot on every termination path.  The snapshots carry each pool's
+    # settled / remaining / overrun / halt reason, so ``budget_exhausted``
+    # episodes can be separated into genuine admission shortfalls vs the pool
+    # halted by an estimation overrun (a benchmark defect, never a model
+    # outcome).  The last ``budget_exhausted`` event additionally records the
+    # exact refusal cause (``refusal_reason`` / ``halt_reason``) and the
+    # required estimate at the moment the terminal refusal happened.
+    budget_snapshot_events = [
+        event for event in store.events if event.get("type") == "budget_ledger_snapshot"
+    ]
+    budget_exhausted_events = [
+        event for event in store.events if event.get("type") == "budget_exhausted"
+    ]
+    budget_report = (
+        dict((budget_snapshot_events[-1].get("pools") or {}))
+        if budget_snapshot_events else None
+    )
+    budget_termination = None
+    if budget_exhausted_events:
+        last_exhaustion = budget_exhausted_events[-1]
+        refusal_reason = str(last_exhaustion.get("refusal_reason") or "")
+        pool_name = str(last_exhaustion.get("pool") or "")
+        budget_termination = {
+            "pool": pool_name,
+            "refusal_reason": refusal_reason or None,
+            "halt_reason": last_exhaustion.get("halt_reason"),
+            "kind": (
+                "estimation_overrun_halt"
+                if refusal_reason == "halted_pool"
+                and last_exhaustion.get("halt_reason") == "estimation_overrun"
+                else "insufficient_remaining"
+            ),
+            "required_estimate": last_exhaustion.get("required_estimate"),
+            "remaining_at_refusal": last_exhaustion.get("remaining"),
+        }
     score.update({
         "episode_id": config.episode_id, "case_id": config.case_id, "instance_id": config.instance_id,
         "execution_mode": config.execution_mode, "guidance": config.guidance, "agent_seed": config.agent_seed,
@@ -1676,6 +1720,8 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         "timed_out": timed_out, "gateway_notes": controller.protocol_notes,
         "episode_local_status": episode_local_status,
         "budget_exhausted": episode_local_status == "budget_exhausted",
+        "budget_report": budget_report,
+        "budget_termination": budget_termination,
         "gateway_result_bundle_digest": controller.result_bundle_digest(),
         "requested_model": metadata_audit["requested_model"],
         "resolved_model": metadata_audit["resolved_model"],

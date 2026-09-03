@@ -366,6 +366,41 @@ def test_budget_overrun_records_overrun_and_stops_pool() -> None:
     asyncio.run(exercise())
 
 
+def test_refusal_reason_distinguishes_halt_from_insufficient_remaining() -> None:
+    """Two termination causes must never be conflated: the pool halting after an
+    estimation overrun (a benchmark defect) vs a genuine admission shortfall
+    (the model consumed its bounded budget)."""
+    async def exercise() -> None:
+        # Genuine shortfall: the admission does not fit the remaining balance.
+        # The pool is NOT halted; the refusal is an admission refusal.
+        exhausted = BudgetPool("main_pre", 1000)
+        assert await exhausted.reserve(800, 200) is not None
+        assert exhausted.refusal_reason is None
+        assert await exhausted.reserve(10, 20) is None
+        assert exhausted.refusal_reason == "insufficient_remaining"
+        assert exhausted.halted is False
+        assert exhausted.halt_reason is None
+
+        # Estimation-error halt: a settled call exceeds its reservation.
+        halted = BudgetPool("main_pre", 1000)
+        reservation = await halted.reserve(10, 20)
+        assert reservation is not None
+        await halted.settle(reservation.reservation_id, 1_000_000)
+        assert halted.halted is True
+        assert halted.halt_reason == "estimation_overrun"
+        # After the halt, a future admission is refused as ``halted_pool`` --
+        # distinct from the "insufficient_remaining" refusal above.
+        assert await halted.reserve(1, 1) is None
+        assert halted.refusal_reason == "halted_pool"
+        # Snapshot carries both causes for the per-pool report.
+        snapshot = halted.snapshot
+        assert snapshot["halt_reason"] == "estimation_overrun"
+        assert snapshot["refusal_reason"] == "halted_pool"
+        assert snapshot["remaining"] == 0
+
+    asyncio.run(exercise())
+
+
 def test_settle_rejects_unknown_and_duplicate_reservation() -> None:
     async def exercise() -> None:
         pool = BudgetPool("child_shared", 1_000_000)

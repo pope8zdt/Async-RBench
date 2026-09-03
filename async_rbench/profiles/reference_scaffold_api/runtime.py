@@ -233,8 +233,13 @@ class ChildAgent:
             if reservation is None:
                 self._open_reservation = None
                 self.emitter.emit(
-                    "budget_exhausted", pool=self.token_budget.name,
+                    "budget_exhausted",
+                    pool=self.token_budget.name,
                     role=role, turn=turn_index,
+                    refusal_reason=self.token_budget.refusal_reason,
+                    halt_reason=self.token_budget.halt_reason,
+                    required_estimate=input_bound + self.config.max_output_tokens,
+                    remaining=self.token_budget.remaining,
                 )
                 return {
                     "summary": "episode token budget exhausted before child completion",
@@ -1271,12 +1276,29 @@ class ReferenceScaffold:
         Waits until the whole benchmark wave resolves, builds one stable bundle
         sorted by workstream_id, injects it as a single ASYNC_RBENCH_LINEAR_BUNDLE
         message, and emits the ready/presented boundaries. Returns False when the
-        wave did not reach a terminal state in time (an infrastructure failure,
-        so the episode is unscored rather than presented to the model).
+        wave did not reach a terminal state in time: an infrastructure
+        failure, recorded so the episode is unscored rather than presented to
+        the model (or silently marked scored with ``main_tokens=0``).
+
+        The wait bound is the benchmark-owned child lifecycle cap
+        (start barrier + ``child_timeout_sec``), not the much shorter
+        per-terminal-command timeout.  A child may legitimately keep running its
+        model turns up to ``child_timeout_sec`` after the wave barrier; cutting
+        the bundle wait at the terminal-command cap fires while a healthy wave
+        is still in its allowed lifecycle and produces a scored-but-empty Linear
+        episode.
         """
-        if not await self.manager.wait_linear_bundle(
-            timeout=self.config.child_terminal_timeout_sec,
-        ):
+        wait_cap = self.config.start_barrier_timeout_sec + self.config.child_timeout_sec
+        if not await self.manager.wait_linear_bundle(timeout=wait_cap):
+            self.emitter.emit(
+                "infrastructure_failure", component="linear_bundle_barrier",
+                detail=(
+                    "initial wave did not reach a terminal bundle within the child "
+                    f"lifecycle cap ({wait_cap}s = start_barrier "
+                    f"{self.config.start_barrier_timeout_sec}s + child_timeout "
+                    f"{self.config.child_timeout_sec}s)"
+                ),
+            )
             return False
         bundle = self.manager.build_linear_bundle()
         self.emitter.emit(
@@ -1400,7 +1422,29 @@ class ReferenceScaffold:
         )
         await agent.run(record, self.config.child_model, int(self.start["agent_seed"]))
 
+    def _emit_budget_ledger_snapshot(self) -> None:
+        """Persist the final per-pool accounting as one kernel-visible event.
+
+        The runner reports settled / remaining / overrun / halt reason per pool
+        (spec §7); emitting the ledger's own snapshot keeps a single source of
+        truth instead of replaying reserve/settle arithmetic.  It runs in a
+        ``finally`` so every termination path -- including an early barrier
+        failure before any model call -- reports the real state.
+        """
+        self.emitter.emit(
+            "budget_ledger_snapshot",
+            mode=str(self.start.get("execution_mode") or ""),
+            main_phase=self.budget_ledger.main_phase,
+            pools=self.budget_ledger.all_snapshots(),
+        )
+
     async def run(self) -> None:
+        try:
+            await self._run()
+        finally:
+            self._emit_budget_ledger_snapshot()
+
+    async def _run(self) -> None:
         self.delivery_reader.start()
         self._delivery_task = asyncio.create_task(
             self._listen_for_deliveries(), name="async_rbench-delivery-listener",
@@ -1468,8 +1512,27 @@ class ReferenceScaffold:
                     accounting_mode=accounting_mode,
                 )
                 if reservation is None:
+                    # Two very different terminations carry the same local
+                    # status: the pool was halted by an estimation overrun
+                    # (benchmark defect) vs a genuine admission shortfall
+                    # (the model consumed its bounded budget).  Record which so
+                    # the runner's budget report never conflates them.
+                    self.emitter.emit(
+                        "budget_exhausted",
+                        pool=main_pool.name,
+                        role="main",
+                        turn=turn_index,
+                        refusal_reason=main_pool.refusal_reason,
+                        halt_reason=main_pool.halt_reason,
+                        required_estimate=input_bound + self.config.max_output_tokens,
+                        remaining=main_pool.remaining,
+                    )
                     self.finish_status = "budget_exhausted"
-                    self.final_summary = "episode token budget exhausted"
+                    self.final_summary = (
+                        "main budget pool halted after estimation overrun"
+                        if main_pool.halt_reason == "estimation_overrun"
+                        else "episode token budget exhausted"
+                    )
                     return
                 self.emitter.emit(
                     "budget_reserved",

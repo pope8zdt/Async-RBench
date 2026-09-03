@@ -52,6 +52,17 @@ class BudgetPool:
     reservation records ``overrun`` and halts the pool: subsequent admissions are
     refused so a single too-conservative estimate cannot silently push past the
     cap (spec §7.3).
+
+    Two distinct termination causes are reported separately (they must never be
+    conflated in the analysis):
+
+    * ``halt_reason == "estimation_overrun"`` -- a *completed* call settled to a
+      true usage above its reservation, so the pool was halted as a safeguard.
+      This is a benchmarking defect (the estimator under-counted), not the model
+      consuming a legitimately bounded budget.
+    * ``refusal_reason == "insufficient_remaining"`` -- a *pending* call was
+      refused because ``reserved + settled + estimate`` no longer fits in the
+      cap.  This is a genuine budget-exhaustion termination.
     """
 
     def __init__(
@@ -71,6 +82,8 @@ class BudgetPool:
         self.overrun = overrun
         self.accounting_mode = accounting_mode
         self.halted = False
+        self.halt_reason: str | None = None
+        self.refusal_reason: str | None = None
         self._lock = asyncio.Lock()
         self._reservations: dict[str, Reservation] = {}
         self._sequence = 0
@@ -92,6 +105,8 @@ class BudgetPool:
             "overrun": self.overrun,
             "accounting_mode": self.accounting_mode,
             "halted": self.halted,
+            "halt_reason": self.halt_reason,
+            "refusal_reason": self.refusal_reason,
         }
 
     async def reserve(
@@ -105,7 +120,11 @@ class BudgetPool:
 
         The call starts only if ``input_upper_bound + max_output`` still fits in
         the pool remaining.  Returns a :class:`Reservation` on success and
-        ``None`` when the pool is halted or the admission would overrun.
+        ``None`` when the pool is halted or the admission would overrun.  The
+        refusal cause is recorded on ``refusal_reason`` (``"halted_pool"`` vs
+        ``"insufficient_remaining"``) so the caller can distinguish an
+        estimation-error halt from a genuine balance shortfall; a successful
+        admission clears it.
 
         ``accounting_mode`` defaults to ``"conservative"`` (a safe upper bound).
         A backend that is a heuristic proxy passes ``"tokenizer_proxy"``; only a
@@ -116,9 +135,12 @@ class BudgetPool:
         estimate = input_upper_bound + max_output
         async with self._lock:
             if self.halted:
+                self.refusal_reason = "halted_pool"
                 return None
             if self.reserved + self.settled + estimate > self.maximum:
+                self.refusal_reason = "insufficient_remaining"
                 return None
+            self.refusal_reason = None
             self._sequence += 1
             reservation = Reservation(
                 reservation_id=f"{self.name}#r{self._sequence}",
@@ -156,6 +178,7 @@ class BudgetPool:
             if overrun > 0:
                 self.overrun += overrun
                 self.halted = True
+                self.halt_reason = "estimation_overrun"
             self.settled += actual_total_tokens
             reservation.settled = True
             reservation.actual_total = actual_total_tokens
