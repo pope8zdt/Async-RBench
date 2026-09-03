@@ -771,6 +771,99 @@ def _opportunity_summary(records: list[dict[str, Any]]) -> dict[str, int]:
     return counts
 
 
+# P1-19 paper metrics, aggregated over the per-attempt terminal classifications
+# the scorer stamps on each episode record (P1-17).  Null rates and null token
+# means mean "no qualifying attempt in this factor", never zero.
+_PAPER_TERMINAL_COUNT_FIELDS = (
+    "accepted", "public_rejection", "private_rejection", "sealed",
+    "resource_exhausted", "timeout", "crash", "cancel",
+    "infrastructure_failure", "in_flight",
+)
+
+
+def _paper_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
+    terminal_counts = {field: 0 for field in _PAPER_TERMINAL_COUNT_FIELDS}
+    sealed_submissions = 0
+    accepted = 0
+    rejected = 0
+    first_attempt_submissions = 0
+    first_attempt_accepted = 0
+    retry_submissions = 0
+    retry_accepted = 0
+    accepted_tokens = 0
+    extra_rejection_tokens = 0
+    redelegation_attempts = 0
+    invalid_redelegations = 0
+    for item in records:
+        rows = item.get("child_terminal_classifications")
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            cls = str(row.get("terminal_class") or "")
+            if cls in terminal_counts:
+                terminal_counts[cls] += 1
+            retry = bool(row.get("retry") or int(row.get("attempt_number") or 1) >= 2)
+            if retry:
+                redelegation_attempts += 1
+            if not row.get("sealed_submission"):
+                continue
+            sealed_submissions += 1
+            tokens = int(row.get("tokens") or 0)
+            if cls == "accepted":
+                accepted += 1
+                accepted_tokens += tokens
+            elif cls in {"public_rejection", "private_rejection"}:
+                rejected += 1
+            if retry:
+                retry_submissions += 1
+                if cls == "accepted":
+                    retry_accepted += 1
+            else:
+                first_attempt_submissions += 1
+                if cls == "accepted":
+                    first_attempt_accepted += 1
+        extra_rejection_tokens += int(item.get("extra_rejection_tokens") or 0)
+        invalid_redelegations += int(item.get("invalid_redelegation_count") or 0)
+    return {
+        # P1-17: per-attempt terminal histogram (attempt dimension included).
+        "terminal_class_counts": terminal_counts,
+        # P1-18: rejection rate over sealed submissions only.  Budget exits,
+        # designed terminals, cancels, infrastructure failures and in-flight
+        # closes never submitted and are excluded from the denominator.
+        "sealed_submission_count": sealed_submissions,
+        "submission_acceptance_rate": (
+            accepted / sealed_submissions if sealed_submissions else None
+        ),
+        "submission_rejection_rate": (
+            rejected / sealed_submissions if sealed_submissions else None
+        ),
+        # P1-19: first-attempt vs retry acceptance as one dimension.
+        "first_attempt_submission_count": first_attempt_submissions,
+        "first_attempt_accepted_count": first_attempt_accepted,
+        "first_attempt_acceptance_rate": (
+            first_attempt_accepted / first_attempt_submissions
+            if first_attempt_submissions else None
+        ),
+        "retry_submission_count": retry_submissions,
+        "retry_accepted_count": retry_accepted,
+        "retry_acceptance_rate": (
+            retry_accepted / retry_submissions if retry_submissions else None
+        ),
+        # P1-19: cost of rejection in tokens.
+        "avg_tokens_per_accepted": (
+            accepted_tokens / accepted if accepted else None
+        ),
+        "extra_tokens_from_rejections": extra_rejection_tokens,
+        # P1-19: an invalid redelegation contributes no new evidence (P0-9).
+        "redelegation_attempt_count": redelegation_attempts,
+        "invalid_redelegation_count": invalid_redelegations,
+        "invalid_redelegation_rate": (
+            invalid_redelegations / redelegation_attempts
+            if redelegation_attempts else None
+        ),
+    }
+
+
 def _summary(
     records: list[dict[str, Any]], bootstrap_iterations: int,
     theme_by_case: dict[str, str] | None = None,
@@ -928,6 +1021,7 @@ def _summary(
         ),
         "theme_instance_count_minimum": minimum_theme_test_instances,
         "paired_mode_coverage_complete": complete,
+        "paper_metrics": _paper_metrics(records),
     }
 
 
@@ -1012,6 +1106,21 @@ def aggregate_reports(
             break
     if invalid_modes:
         hard_fail_reasons.append("invalid_execution_modes")
+    # P1-15: an abnormal Linear episode (zero main-side measurement) must never
+    # certify a leaderboard.  Checked from the raw record rather than the
+    # runner-stamped flags, so a stale pre-gate score file cannot slip an empty
+    # Linear measurement into an official headline.
+    linear_zero_main_ids = sorted({
+        str(item.get("episode_id"))
+        for item in records
+        if _mode(item) == "linear" and int(item.get("main_tokens") or 0) == 0
+    })
+    official_linear_zero_main = [
+        str(item.get("episode_id")) for item in official
+        if _mode(item) == "linear" and int(item.get("main_tokens") or 0) == 0
+    ]
+    if official_linear_zero_main:
+        hard_fail_reasons.append("official_linear_zero_main_tokens")
 
     return {
         "architecture_version": "8.0",
@@ -1071,6 +1180,8 @@ def aggregate_reports(
             "deprecated_minimum_counterfactual_coverage": minimum_counterfactual_coverage,
             "opportunity_counts": _opportunity_summary(records),
             "pair_quality_errors": _pair_quality_errors(records),
+            "linear_abnormal_episode_count": len(linear_zero_main_ids),
+            "linear_abnormal_episode_ids": linear_zero_main_ids,
         },
     }
 

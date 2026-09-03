@@ -33,15 +33,25 @@ class ScriptedTestBackend:
         if role.startswith("child:"):
             task = next((str(m.get("content", "")) for m in messages if m.get("role") == "user"), "")
             hint = self._result_hint(task)
-            evidence: dict[str, Any] = {"scripted": True, "hint": hint}
-            if hint == "checkpoint recovery 5 rows":
-                evidence["recovered_row_count"] = 5
-            elif hint == "wal recovery 11 rows":
-                evidence["recovered_row_count"] = 11
+            # The child must produce evidence that actually satisfies the
+            # participant-visible contract (required evidence fields + their
+            # schema + required files); otherwise submit_result is not sealed and
+            # the child exhausts its turn budget, which is a *resource
+            # termination*, not a submission.  The conformance controller should
+            # exercise the delivery/presentation protocol on a genuine sealed
+            # result, so synthesise values that satisfy the embedded contract.
+            embedded = self._contract_embedded(task)
+            evidence = self._synthesize_evidence(
+                embedded.get("required_observed_evidence_fields"),
+                embedded.get("observed_evidence_schema"),
+                hint,
+            )
+            files = [str(p) for p in embedded.get("required_reported_result_files") or []]
             return self._turn([("submit_result", {
                 "summary": f"scripted isolated result for: {task[-300:]}",
                 "result_kind_hint": hint,
                 "evidence": evidence,
+                "files": files,
             })])
 
         # The benchmark owns the initial concurrent wave; the evaluated model is
@@ -205,6 +215,55 @@ class ScriptedTestBackend:
         if "sanitized" in lower or "history rewrite" in lower:
             return "sanitize_history"
         return "release_infrastructure"
+
+    @staticmethod
+    def _contract_embedded(task: str) -> dict[str, Any]:
+        """The child's user message is the contract JSON; return it as a dict."""
+        try:
+            parsed = json.loads(task)
+            return parsed if isinstance(parsed, dict) else {}
+        except (json.JSONDecodeError, TypeError):
+            return {}
+
+    @staticmethod
+    def _synthesize_evidence(
+        required_fields: list[str] | None,
+        schema: dict[str, Any] | None,
+        hint: str,
+    ) -> dict[str, Any]:
+        """Produce evidence values that satisfy the participant-visible contract,
+        so the conformance child genuinely seals its submission instead of
+        exhausting its turn budget on a contract mismatch."""
+        schema = schema or {}
+        evidence: dict[str, Any] = {}
+        for field in required_fields or []:
+            spec = schema.get(field) or {}
+            etype = spec.get("type")
+            if etype == "integer":
+                evidence[field] = 5
+            elif etype == "boolean":
+                evidence[field] = True
+            elif etype == "array":
+                evidence[field] = list(range(int(spec.get("min_items", 5))))
+            elif etype == "number":
+                evidence[field] = 1.5
+            else:
+                pattern = spec.get("pattern")
+                evidence[field] = (
+                    ScriptedTestBackend._pattern_value(pattern) if pattern else f"scripted-{field}"
+                )
+        # Keep the scripted hint so the main-side conformance logic (which peers
+        # at evidence["hint"]) still branches the same way.
+        evidence["hint"] = hint
+        return evidence
+
+    @staticmethod
+    def _pattern_value(pattern: str) -> str:
+        if pattern.endswith("64}$") or pattern == "^[0-9a-f]{64}$":
+            return "0" * 64
+        if ".json$" in pattern or ".json" in pattern:
+            return "/app/output_data/workstreams/report.json"
+        return "scripted-value"
 
     @staticmethod
     def _result_hint(task: str) -> str:

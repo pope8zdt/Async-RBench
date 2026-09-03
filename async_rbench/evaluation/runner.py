@@ -96,6 +96,15 @@ RUNTIME_PHASE_EVENT_TYPES = frozenset({
     # emitted once per episode on every termination path.
     "budget_reserved", "budget_settled", "budget_released",
     "budget_exhausted", "budget_phase_switch", "budget_ledger_snapshot",
+    # A child cut off by budget/turn-budget exhaustion is a resource termination,
+    # not a model submission: it is recorded as a runtime phase marker (no
+    # adapter-event validation) so the episode can classify it as
+    # resource_exhausted_child rather than a rejected sealed submission.
+    "child_resource_exhausted",
+    # P0-9: repeated evidence across attempts is a no-information retry. It is a
+    # runtime-phase marker (no gateway/adapter validation) used to bound
+    # re-delegation and report the no-new-evidence retry rate.
+    "no_information_retry_detected",
 })
 
 
@@ -1122,6 +1131,22 @@ def _track_a_eligibility(
     return not reasons, reasons
 
 
+# P1-15: a Linear episode in which the main model never performed a single
+# successful main call measures nothing for the paper head-to-head.  The atomic
+# bundle is the only thing Linear shows the model, so "never shown" (barrier
+# failure) or "never answered" both mean zero main-side behaviour was recorded.
+# Such runs are forbidden from the leaderboard: the runner marks them unscored
+# and leaderboard-ineligible, and a certification containing one is hard-failed
+# at aggregation time (a second, flag-independent defense).
+LINEAR_ZERO_MAIN_REASON = "linear_zero_main_tokens"
+LINEAR_ABNORMAL_STATUS_REASON = "linear_no_main_measurement"
+
+
+def _linear_main_measurement_abnormal(execution_mode: str, main_tokens: Any) -> bool:
+    """P1-15 abnormal-Linear signature: zero main-side tokens measured."""
+    return execution_mode == "linear" and int(main_tokens or 0) == 0
+
+
 def _primary_event_theme(case_path: Path, public_spec: dict[str, Any]) -> str:
     """An episode's single primary event theme, evaluator-side only.
 
@@ -1480,6 +1505,12 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
                 _progress(config, "subagent", f"{event['child_id']} completed; result held by gateway")
             elif event_type == "child_cancelled":
                 _progress(config, "subagent", f"{event['child_id']} cancelled: {event.get('reason', '')}")
+            elif event_type == "child_resource_exhausted":
+                _progress(
+                    config, "subagent",
+                    f"{event.get('child_id')} resource-exhausted "
+                    f"(remaining={event.get('remaining')})",
+                )
             elif event_type == "main_action":
                 _progress(config, "main", f"action {event.get('action_id')} tool={event.get('kind')}")
             elif event_type == "artifact_committed":
@@ -1766,10 +1797,20 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     leaderboard_eligible, eligibility_reasons = _track_a_eligibility(
         config, metadata_events[-1] if metadata_events else None,
     )
+    # P1-15: a zero-main-measurement Linear run is never leaderboard-eligible,
+    # even when every formal Track-A gate passed (the run measured nothing in
+    # the arm the pairing design exists to compare).
+    linear_abnormal = _linear_main_measurement_abnormal(
+        config.execution_mode, score.get("main_tokens"),
+    )
+    if linear_abnormal:
+        eligibility_reasons.append(LINEAR_ZERO_MAIN_REASON)
+        leaderboard_eligible = False
     score.update({
         "execution_tier": "official_track_a" if config.official_track else "development",
         "leaderboard_eligible": leaderboard_eligible,
         "leaderboard_ineligibility_reasons": eligibility_reasons,
+        "linear_main_measurement_abnormal": linear_abnormal,
     })
     semantic_counts = score.get("semantic_check_counts") or {}
     semantic_results = score.get("semantic_check_results") or []
@@ -1827,6 +1868,11 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         score.get("scenario_constructed"), score_integrity_ok, integrity_reason,
         dynamic_scenario_qualified, infrastructure_crash,
     )
+    if linear_abnormal and score["score_status"] == "scored":
+        # The main arm measured nothing: score as unscored rather than an
+        # artificial empty X=0 that would look like a model failing to act.
+        score["score_status"] = "unscored"
+        score["score_status_reason"] = LINEAR_ABNORMAL_STATUS_REASON
     if score["score_status"] != "scored":
         score["test_point_pass_rate"] = None
         score["dynamic_control_score"] = None

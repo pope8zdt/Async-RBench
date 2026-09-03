@@ -1,17 +1,23 @@
 from __future__ import annotations
 
 import asyncio
+import base64
 import hashlib
 import json
 import logging
+import shlex
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from typing import Any
 
 from ...evaluation.case_contract import (
-    MAX_INITIAL_WORKSTREAMS, public_delivery, public_rejection,
+    MAX_INITIAL_WORKSTREAMS, PUBLIC_RESULT_REJECTION_CODES,
+    contract_part_for_codes, public_delivery, public_rejection,
 )
 from ...evaluation.result_contract import validate_payload_contract
+from ...evaluation.report_contract import classify_validator_output, render_validator_command
 from ...evaluation.presentation import DeliveryOccurrence, PresentationQueue
+from ...evaluation.protocol import canonical_digest
 
 from .config import ScaffoldConfig
 from .gateway import DeliveryReader, ProtocolEmitter
@@ -39,6 +45,27 @@ def _trim(value: str, limit: int) -> str:
 
 def _tool_result(call_id: str, value: Any) -> dict[str, Any]:
     return {"role": "tool", "tool_call_id": call_id, "content": json.dumps(value, ensure_ascii=False, sort_keys=True)}
+
+
+# Child system prompt. A single mode-free constant: the Linear/Async pairing
+# must expose an identical child to both arms (P1-16), so this prompt may not
+# reference either arm's execution vocabulary --- only the /app-preference
+# exploration guidance and the public self-check tool.
+CHILD_SYSTEM_PROMPT = (
+    "You are a subagent created by one main agent. Work only on the delegated task in your isolated "
+    "container. You cannot communicate with other children and must not assume your changes are visible "
+    "to the main agent. Use submit_result with a concise semantic hint, evidence, and any paths that the "
+    "main agent may later promote. Before installing tools or assuming an external service is missing, "
+    "inspect the delegated workspace for evaluator-staged evidence, scripts, and workstream assets. "
+    "Do not claim that files were applied to the main workspace. "
+    "Exploration discipline: prefer inspecting the delegated workspace and the files listed in your "
+    "instructions (typically /app) --- only broaden to the whole container when the task genuinely "
+    "requires it. This is guidance, not a restriction: if the task can only be resolved by looking "
+    "wider, do so. Only report files you actually produced at the declared paths. "
+    "If your instructions declare a report artifact, write it as valid JSON at the declared path "
+    "containing exactly the listed fields equal to the evidence you submit, and run validate_result "
+    "before submit_result to dry-run the public accept rule."
+)
 
 
 def _estimate_input(backend: ModelBackend, messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> tuple[int, str]:
@@ -104,6 +131,10 @@ class ChildRecord:
     required_result_files: list[str] = field(default_factory=list)
     public_result_contract: dict[str, Any] = field(default_factory=dict)
     result_file_contract_enforced: bool = False
+    # P0-8: the attempt ordinal (1 = first) and the last rejection feedback a
+    # replacement child carries, so the new worker repairs the right part.
+    attempt_number: int = 1
+    prior_attempt_rejection: dict[str, Any] | None = None
 
 
 @dataclass
@@ -141,6 +172,47 @@ class EpisodeTokenBudget:
             self.used += max(0, int(actual))
 
 
+def build_child_user_message(record: ChildRecord) -> dict[str, Any]:
+    """The participant-visible child instruction block.
+
+    P0-8: a replacement child carries the failed-attempt count and the last
+    public rejection feedback (reason codes + the contract part to repair), so
+    the new worker fixes the right part instead of repeating the defect.
+    """
+    message: dict[str, Any] = {
+        "delegated_task": record.task,
+        "targets": record.targets,
+        "expected_output": record.expected_output,
+        "required_observed_evidence_fields": record.required_evidence_fields,
+        "observed_evidence_schema": record.evidence_schema,
+        "allowed_reported_result_files": record.allowed_result_files,
+        "required_reported_result_files": record.required_result_files,
+        "participant_visible_result_contract": record.public_result_contract,
+    }
+    if record.prior_attempt_rejection is not None:
+        message["prior_attempt"] = {
+            "failed_attempt_count": record.attempt_number - 1,
+            "last_rejection": {
+                "reason_codes": list(
+                    record.prior_attempt_rejection.get("reason_codes") or []
+                ),
+                "contract_part": record.prior_attempt_rejection.get("contract_part"),
+            },
+        }
+    # P1-11: the report output template is derived from the public accept rule,
+    # so the child knows the exact artifact shape without any hidden constraint.
+    report_contract = record.public_result_contract or {}
+    report_config = dict(report_contract.get("report_file") or {})
+    if report_contract.get("kind") == "report_file" and report_config:
+        message["report_artifact_template"] = {
+            "path": report_config.get("path"),
+            "must_exist": bool(report_config.get("must_exist", True)),
+            "must_be_valid_json": bool(report_config.get("must_be_valid_json", True)),
+            "fields_equal_evidence": list(report_config.get("fields_equal_evidence") or []),
+        }
+    return message
+
+
 class ChildAgent:
     def __init__(
         self, backend: ModelBackend, workspace: WorkspaceRuntime,
@@ -171,7 +243,45 @@ class ChildAgent:
                 "files": {"type": "array", "items": {"type": "string"}},
                 "patch": {"type": "string"},
             }, ["summary", "result_kind_hint"]),
+            function_tool("validate_result", "Dry-run the participant-visible accept rule (report path, JSON structure, field equality) against the *current* evidence/files in this child container, WITHOUT sealing a submission. Run it before submit_result once your report artifact and evidence are ready; the reason_codes/contract_part tell you exactly what to repair. It does not substitute for doing the work.", {
+                "summary": {"type": "string"},
+                "evidence": {"type": "object", "description": "The exact evidence object you would pass to submit_result."},
+                "files": {"type": "array", "items": {"type": "string"}, "description": "The exact files list you would pass to submit_result."},
+            }, ["summary", "evidence", "files"]),
         ]
+
+    @staticmethod
+    def _compress_messages(
+        messages: list[dict[str, Any]],
+        *,
+        context_budget_chars: int,
+        keep_recent: int,
+        max_old_tool_content_chars: int,
+    ) -> list[dict[str, Any]]:
+        """Bound the child context (P1-13): past tool outputs are the big
+        uncontrolled growth (each up to ``max_tool_output_chars``).  When the
+        history exceeds the budget, the oldest tool results are replaced by a
+        short excerpt with a marker; recent turns stay verbatim so the provider
+        sees a coherent conversation.  Returns the (possibly new) list.
+        """
+        if sum(
+            len(str(message.get("content") or "")) for message in messages
+        ) <= context_budget_chars:
+            return messages
+        compressed = list(messages)
+        oldest_kept = max(0, len(compressed) - keep_recent)
+        for index in range(oldest_kept):
+            message = compressed[index]
+            if message.get("role") != "tool":
+                continue
+            text = str(message.get("content") or "")
+            if len(text) > max_old_tool_content_chars:
+                compressed[index] = dict(message)
+                compressed[index]["content"] = (
+                    text[:max_old_tool_content_chars]
+                    + f"\n...[older tool output compressed: {len(text) - max_old_tool_content_chars} chars dropped]"
+                )
+        return compressed
 
     async def release_open_reservation(self) -> None:
         """Release the in-flight reservation if a turn never reached ``settle``.
@@ -200,24 +310,11 @@ class ChildAgent:
         self, record: ChildRecord, model: str, seed: int,
     ) -> tuple[dict[str, Any], str, int]:
         messages: list[dict[str, Any]] = [
-            {"role": "system", "content": (
-                "You are a subagent created by one main agent. Work only on the delegated task in your isolated "
-                "container. You cannot communicate with other children and must not assume your changes are visible "
-                "to the main agent. Use submit_result with a concise semantic hint, evidence, and any paths that the "
-                "main agent may later promote. Before installing tools or assuming an external service is missing, "
-                "inspect the delegated workspace for evaluator-staged evidence, scripts, and workstream assets. "
-                "Do not claim that files were applied to the main workspace."
+            {"role": "system", "content": CHILD_SYSTEM_PROMPT},
+            {"role": "user", "content": json.dumps(
+                build_child_user_message(record),
+                ensure_ascii=False, sort_keys=True,
             )},
-            {"role": "user", "content": json.dumps({
-                "delegated_task": record.task,
-                "targets": record.targets,
-                "expected_output": record.expected_output,
-                "required_observed_evidence_fields": record.required_evidence_fields,
-                "observed_evidence_schema": record.evidence_schema,
-                "allowed_reported_result_files": record.allowed_result_files,
-                "required_reported_result_files": record.required_result_files,
-                "participant_visible_result_contract": record.public_result_contract,
-            }, ensure_ascii=False, sort_keys=True)},
         ]
         total_tokens = 0
         unsealed_turns = 0
@@ -236,6 +333,20 @@ class ChildAgent:
                     "budget_exhausted",
                     pool=self.token_budget.name,
                     role=role, turn=turn_index,
+                    refusal_reason=self.token_budget.refusal_reason,
+                    halt_reason=self.token_budget.halt_reason,
+                    required_estimate=input_bound + self.config.max_output_tokens,
+                    remaining=self.token_budget.remaining,
+                )
+                # Budget exhaustion is a resource termination, not a model
+                # submission.  Mark the record so ``_run_child`` does NOT seal a
+                # child_completed (which would feed validate_completion_contract
+                # and the rejection pipeline) and emit a distinct terminal event.
+                record.decision = "resource_exhausted"
+                self.emitter.emit(
+                    "child_resource_exhausted",
+                    child_id=record.child_id,
+                    pool=self.token_budget.name,
                     refusal_reason=self.token_budget.refusal_reason,
                     halt_reason=self.token_budget.halt_reason,
                     required_estimate=input_bound + self.config.max_output_tokens,
@@ -260,6 +371,13 @@ class ChildAgent:
             self.emitter.emit(
                 "agent_progress", phase="model_call_started", role=role,
                 turn=turn_index, model=model,
+            )
+            # P1-13: bound the growing child history before each call.
+            messages = self._compress_messages(
+                messages,
+                context_budget_chars=self.config.child_context_budget_chars,
+                keep_recent=self.config.child_keep_recent_turns,
+                max_old_tool_content_chars=self.config.child_old_tool_excerpt_chars,
             )
             turn = await self.backend.complete(
                 role=role, model=model, messages=messages,
@@ -380,10 +498,111 @@ class ChildAgent:
                     hint = str(call.arguments.get("result_kind_hint", ""))
                     messages.append(_tool_result(call.id, {"sealed": True}))
                     submitted = payload, hint
+                elif call.name == "validate_result":
+                    # P1-11/P1-12: public pre-submit dry-run. The child executes
+                    # the SAME accept rule the gateway will run (the deterministic
+                    # render of participant_visible_result_contract) against its
+                    # on-disk artifact in this container, so it can repair the
+                    # report before burning a sealed submission. The child never
+                    # sees the evaluator-private validator_command path.
+                    evidence = call.arguments.get("evidence") or {}
+                    files = list(call.arguments.get("files") or [])
+                    payload = {
+                        "summary": str(call.arguments.get("summary", "")),
+                        "evidence": evidence,
+                        "files": files,
+                    }
+                    transport_codes, transport_details = validate_payload_contract(
+                        {
+                            "required_evidence_fields": record.required_evidence_fields,
+                            "evidence_schema": record.evidence_schema,
+                            "allowed_files": (
+                                record.allowed_result_files
+                                if record.result_file_contract_enforced else files
+                            ),
+                            "required_files": (
+                                record.required_result_files
+                                if record.result_file_contract_enforced else []
+                            ),
+                        },
+                        {"payload": payload},
+                    )
+                    if not transport_codes:
+                        report_contract = record.public_result_contract or {}
+                        report_config = dict(report_contract.get("report_file") or {})
+                        if (
+                            report_contract.get("kind") == "report_file"
+                            and report_config
+                            and len(record.required_result_files) == 1
+                        ):
+                            command = render_validator_command(
+                                report_contract, record.required_result_files[0],
+                            )
+                            encoded = base64.b64encode(
+                                json.dumps(
+                                    payload, ensure_ascii=False, sort_keys=True,
+                                    separators=(",", ":"),
+                                ).encode("utf-8"),
+                            ).decode("ascii")
+                            bound_command = (
+                                f"export ASYNC_RBENCH_RESULT_PAYLOAD_B64={shlex.quote(encoded)}\n"
+                                f"{command}"
+                            )
+                            validation = await self.workspace.child_terminal(
+                                record.child_id, bound_command,
+                                self.config.child_terminal_timeout_sec,
+                            )
+                            if validation.exit_code != 0:
+                                granular = classify_validator_output(
+                                    validation.output[-4000:]
+                                )
+                                codes = [
+                                    item[0] for item in granular
+                                ] or ["reported_file_contract_failed"]
+                                messages.append(_tool_result(call.id, {
+                                    "valid": False,
+                                    "reason_codes": codes,
+                                    "fields": [item[1] for item in granular],
+                                    "contract_part": contract_part_for_codes(codes),
+                                    "validator_output": _trim(
+                                        validation.output, 1500,
+                                    ),
+                                }))
+                                continue
+                    if transport_codes:
+                        messages.append(_tool_result(call.id, {
+                            "valid": False,
+                            "reason_codes": transport_codes,
+                            "details": transport_details,
+                            "contract_part": contract_part_for_codes(transport_codes),
+                        }))
+                        continue
+                    messages.append(_tool_result(call.id, {
+                        "valid": True,
+                        "note": (
+                            "submit_result with these evidence/files would satisfy "
+                            "the public accept rule"
+                            if (record.public_result_contract or {}).get("kind")
+                            == "report_file"
+                            else "checked the declarative payload contract only "
+                            "(no report-file accept rule is declared)"
+                        ),
+                    }))
                 else:
                     messages.append(_tool_result(call.id, {"error": f"unknown child tool {call.name}"}))
             if submitted is not None:
                 return submitted[0], submitted[1], total_tokens
+        # A child that exhausted its turn budget without submitting a result is
+        # a resource termination, not a model submission: mark it so ``_run_child``
+        # does not seal a child_completed and emit the distinct terminal event.
+        record.decision = "resource_exhausted"
+        self.emitter.emit(
+            "child_resource_exhausted",
+            child_id=record.child_id,
+            pool=self.token_budget.name,
+            reason="child exhausted its turn budget without submit_result",
+            remaining=self.token_budget.remaining,
+        )
         return {
             "summary": "child exhausted its turn budget without submit_result",
             "evidence": {"turn_budget_exhausted": True},
@@ -431,6 +650,13 @@ class SubagentManager:
         # before the next occurrence unseals.
         self.presentation_queue = PresentationQueue()
         self._occurrence_counter = 0
+        # P0-8/P0-9: per-workstream delegation history — the last rejection
+        # feedback (codes + attempt + contract part), attempt counts, and the
+        # evidence digests that bound no-information re-delegation.
+        self.attempt_counts: Counter[str] = Counter()
+        self.workstream_rejections: dict[str, dict[str, Any]] = {}
+        self.workstream_evidence_digests: dict[str, list[str]] = defaultdict(list)
+        self.no_new_evidence_retries: Counter[str] = Counter()
 
     def unresolved_count(self) -> int:
         return sum(
@@ -677,6 +903,55 @@ class SubagentManager:
                 reason=result["error"], budget_consumed=False,
             )
             return result
+        # P0-9: bounded no-information-increment re-delegation.  A replacement
+        # child is admitted only when the previous attempt's failure was reported
+        # back with an actionable public code, the one no-new-evidence retry is
+        # not exhausted, and the remaining budget covers at least one full child
+        # call (conservative input floor + maximum output).
+        feedback = self.workstream_rejections.get(workstream_id)
+        if feedback is not None and not feedback.get("actionable"):
+            result = {
+                "error": (
+                    f"last rejection of {workstream_id!r} carried no actionable "
+                    f"public code ({feedback.get('reason_codes') or []}); "
+                    "re-delegation refused until the submission contract is repaired"
+                ),
+                "budget_consumed": False,
+            }
+            self.emitter.emit(
+                "delegation_validation_error", requested_workstream=workstream_id,
+                reason=result["error"], budget_consumed=False,
+            )
+            return result
+        if self.no_new_evidence_retries[workstream_id] >= 1:
+            result = {
+                "error": (
+                    f"workstream {workstream_id!r} already retried once with no "
+                    "new evidence; further re-delegation is refused"
+                ),
+                "budget_consumed": False,
+            }
+            self.emitter.emit(
+                "delegation_validation_error", requested_workstream=workstream_id,
+                reason=result["error"], budget_consumed=False,
+            )
+            return result
+        min_child_call_budget = 2 * self.config.max_output_tokens
+        if self.token_budget.remaining < min_child_call_budget:
+            result = {
+                "error": (
+                    f"remaining child budget ({self.token_budget.remaining} tokens) "
+                    f"is below one full child call ({min_child_call_budget}); "
+                    "re-delegation refused"
+                ),
+                "budget_consumed": False,
+            }
+            self.emitter.emit(
+                "delegation_validation_error", requested_workstream=workstream_id,
+                reason=result["error"], budget_consumed=False,
+            )
+            return result
+        self.attempt_counts[workstream_id] += 1
         self._counter += 1
         child_id = f"child-{self._counter}"
         work_units = [workstream_id]
@@ -717,6 +992,8 @@ class SubagentManager:
                 )
             ),
             result_file_contract_enforced=bool(self.start.get("result_contract_enforced")),
+            attempt_number=self.attempt_counts[workstream_id],
+            prior_attempt_rejection=self.workstream_rejections.get(workstream_id),
         )
         self.children[child_id] = record
         self.emitter.emit(
@@ -768,6 +1045,7 @@ class SubagentManager:
         spawned: list[dict[str, Any]] = []
         for item in wave:
             workstream_id = str(item.get("workstream_id"))
+            self.attempt_counts[workstream_id] += 1
             self._counter += 1
             child_id = f"child-{self._counter}"
             record = ChildRecord(
@@ -862,12 +1140,30 @@ class SubagentManager:
                 # provisional charge; a normal completion already settled, so
                 # this is a no-op on the success path.
                 await agent.release_open_reservation()
+            if record.decision == "resource_exhausted":
+                # Budget/turn-budget exhaustion is a resource termination, not a
+                # model submission: the agent already emitted child_resource_exhausted,
+                # and we must never seal a child_completed here -- otherwise the
+                # synthetic payload would be validated (result_contract_validated)
+                # and could be counted as a rejected submission.
+                record.status = "completed_hidden"
+                record.tokens = tokens
+                self._delivery_event.set()
+                return
             self._completion_counter += 1
             completion_id = f"completion-{self._completion_counter}"
             record.status = "completed_hidden"
             record.completion_id = completion_id
             record.payload = payload
             record.tokens = tokens
+            # P0-9: track evidence increment across attempts.  A sealed submission
+            # whose evidence bytes repeat an earlier attempt's contributes no new
+            # information, and re-delegation on it is bounded to one retry.
+            workstream_id = record.work_units[0] if record.work_units else None
+            if workstream_id:
+                self._record_workstream_evidence(
+                    workstream_id, payload, record.child_id,
+                )
             self.completion_to_child[completion_id] = record.child_id
             self.emitter.emit(
                 "child_completed",
@@ -958,7 +1254,22 @@ class SubagentManager:
             LOGGER.error("gateway rejected unknown completion %s", completion_id)
             return
         record = self.children[child_id]
-        record.contract_rejection = rejection
+        workstream_id = record.work_units[0] if record.work_units else None
+        # P0-8: every rejection event carries the failed-workstream attempt count
+        # and the contract part to repair, and the runtime remembers the last
+        # public feedback so a replacement delegation carries it (P0-9 gating).
+        reason_codes = [str(item) for item in rejection.get("reason_codes") or []]
+        public_codes = [code for code in reason_codes if code in PUBLIC_RESULT_REJECTION_CODES]
+        feedback = {
+            "reason_codes": public_codes,
+            "actionable": bool(public_codes),
+            "contract_part": contract_part_for_codes(public_codes),
+            "attempt_count": self.attempt_counts.get(workstream_id or "", 0),
+        }
+        if workstream_id:
+            self.workstream_rejections[workstream_id] = feedback
+        record.contract_rejection = dict(rejection)
+        record.contract_rejection["attempt_count"] = feedback["attempt_count"]
         record.status = "contract_rejected"
         record.decision = "rejected_by_gateway"
         self._delivery_event.set()
@@ -1007,20 +1318,56 @@ class SubagentManager:
         occurrence = self.presentation_queue.presented_occurrence(occurrence_id)
         return bool(occurrence and occurrence.scored)
 
+    def _record_workstream_evidence(
+        self, workstream_id: str, payload: Any, child_id: str,
+    ) -> None:
+        """Record the sealed payload's evidence digest against prior attempts.
+
+        A payload whose evidence bytes repeat an earlier attempt's contributes no
+        new information: the attempt is a no-information retry (P0-9).  The
+        runtime bounds re-delegation for such a workstream to one retry.
+        """
+        digest = canonical_digest((payload or {}).get("evidence") or {})
+        if digest in self.workstream_evidence_digests[workstream_id]:
+            self.no_new_evidence_retries[workstream_id] += 1
+            self.emitter.emit(
+                "no_information_retry_detected",
+                child_id=child_id,
+                workstream_id=workstream_id,
+                evidence_digest=digest,
+                no_new_evidence_retries=self.no_new_evidence_retries[workstream_id],
+            )
+        else:
+            self.workstream_evidence_digests[workstream_id].append(digest)
+
     def statuses(self) -> list[dict[str, Any]]:
         # Lifecycle + workstream identity only. Held completion payloads stay
         # hidden until the main model explicitly waits for and acknowledges them.
-        return [{
-            "child_id": record.child_id,
-            "workstream_id": record.work_units[0] if record.work_units else None,
-            "status": record.status,
-            "targets": record.targets,
-            "task": record.task[:400],
-            "decision": record.decision,
-            "contract_rejection_reason_codes": list(
-                (record.contract_rejection or {}).get("reason_codes") or []
-            ),
-        } for record in self.children.values()]
+        # Rejections are projected through ``public_rejection`` so every surface
+        # (async statuses, linear bundle) carries the same public reason codes,
+        # the contract part to repair, and the failed-attempt count.
+        rows: list[dict[str, Any]] = []
+        for record in self.children.values():
+            workstream_id = record.work_units[0] if record.work_units else None
+            rejection = None
+            if record.contract_rejection is not None:
+                rejection = public_rejection(
+                    record.contract_rejection, workstream_id=workstream_id,
+                )
+            rows.append({
+                "child_id": record.child_id,
+                "workstream_id": workstream_id,
+                "status": record.status,
+                "targets": record.targets,
+                "task": record.task[:400],
+                "decision": record.decision,
+                "contract_rejection_reason_codes": (
+                    list(rejection.get("reason_codes") or []) if rejection else []
+                ),
+                "contract_part": rejection.get("contract_part") if rejection else None,
+                "attempt_count": rejection.get("attempt_count") if rejection else None,
+            })
+        return rows
 
     async def wait(self, child_ids: list[str], timeout: float, return_when: str) -> dict[str, Any]:
         selected = child_ids or list(self.children)

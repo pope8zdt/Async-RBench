@@ -22,10 +22,14 @@ def test_public_rejection_drops_private_role() -> None:
     }, workstream_id="ws")
     assert set(public) == {
         "type", "child_id", "completion_id", "workstream_id", "reason_codes",
+        # P0-8: the rejection feedback carries which contract part to fix; it is
+        # derived from the public codes, so it is public-safe.
+        "contract_part",
     }
     assert public["reason_codes"] == [
         "missing_required_evidence", "result_contract_rejected",
     ]
+    assert public["contract_part"] == "evidence"
 
 
 def test_scorer_recovers_exact_private_rejection_reason() -> None:

@@ -4,6 +4,7 @@ import asyncio
 import base64
 import json
 import shlex
+from collections import Counter
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -162,6 +163,9 @@ def test_gateway_rejection_is_terminal_and_unconsumable() -> None:
         )}
         manager.completion_to_child = {"completion-1": "child-1"}
         manager._delivery_event = asyncio.Event()
+        # P0-8/9 rejection-feedback state, set as __init__ would on a real manager.
+        manager.attempt_counts = Counter()
+        manager.workstream_rejections = {}
         await manager.handle_rejection({
             "type": "result_rejected", "child_id": "child-1",
             "completion_id": "completion-1", "reason_codes": ["validator_command_failed"],

@@ -27,6 +27,7 @@ CAPABILITY_CATEGORIES = frozenset({
 })
 
 PUBLIC_RESULT_REJECTION_CODES = frozenset({
+    # Transport / payload-shape codes: the submission itself is malformed.
     "payload_not_object",
     "evidence_not_object",
     "missing_required_evidence",
@@ -34,7 +35,42 @@ PUBLIC_RESULT_REJECTION_CODES = frozenset({
     "duplicate_files",
     "unexpected_files",
     "missing_required_files",
+    # Report-file contract codes: the participant points at a report artifact and
+    # that artifact violates the accept rule declared in public_result_contract.
+    "report_path_not_required_file",
+    "report_file_missing",
+    "report_json_invalid",
+    "report_missing_required_field",
+    "report_payload_field_mismatch",
+    "reported_file_contract_failed",
 })
+
+# Maps a rejection code to the participant-visible *contract part* it concerns, so
+# a rejection event can tell the model which part of the submission to repair.
+CONTRACT_PART_FOR_CODE = {
+    "report_path_not_required_file": "report_file",
+    "report_file_missing": "report_file",
+    "report_json_invalid": "report_file",
+    "report_missing_required_field": "report_file",
+    "report_payload_field_mismatch": "report_file",
+    "reported_file_contract_failed": "report_file",
+    "missing_required_evidence": "evidence",
+    "evidence_not_object": "evidence",
+    "evidence_constraint_failed": "evidence",
+    "payload_not_object": "payload",
+    "files_not_string_list": "reported_files",
+    "duplicate_files": "reported_files",
+    "unexpected_files": "reported_files",
+    "missing_required_files": "reported_files",
+}
+
+
+def contract_part_for_codes(reason_codes: list[str]) -> str:
+    for code in reason_codes:
+        part = CONTRACT_PART_FOR_CODE.get(str(code))
+        if part:
+            return part
+    return "submission"
 
 # New scoring contract version: every semantic check is tagged with exactly one
 # scoring domain so the Base Task Score and the per-event Dynamic Replanning
@@ -214,6 +250,8 @@ def public_delivery(
     delivery: Mapping[str, Any], *, workstream_id: str | None = None,
 ) -> dict[str, Any]:
     """Construct the only result-delivery shape that may reach a model."""
+    if workstream_id is None:
+        workstream_id = delivery.get("workstream_id")
     result = {
         "type": "result_delivered",
         "child_id": str(delivery.get("child_id", "")),
@@ -236,6 +274,8 @@ def public_rejection(
     rejection: Mapping[str, Any], *, workstream_id: str | None = None,
 ) -> dict[str, Any]:
     """Project a result-contract rejection without exposing semantic roles."""
+    if workstream_id is None:
+        workstream_id = rejection.get("workstream_id")
     private_codes = [str(item) for item in rejection.get("reason_codes") or []]
     reason_codes = [code for code in private_codes if code in PUBLIC_RESULT_REJECTION_CODES]
     if any(code not in PUBLIC_RESULT_REJECTION_CODES for code in private_codes):
@@ -246,6 +286,12 @@ def public_rejection(
         "completion_id": str(rejection.get("completion_id", "")),
         "workstream_id": workstream_id,
         "reason_codes": reason_codes,
+        # P0-8: the rejection feedback carries which contract part to fix so a
+        # replacement delegation can act on it (e.g. redo the report artifact).
+        "contract_part": contract_part_for_codes(reason_codes),
     }
+    attempt_count = rejection.get("attempt_count")
+    if attempt_count is not None:
+        result["attempt_count"] = int(attempt_count)
     assert_participant_safe(result, surface="public rejection")
     return result

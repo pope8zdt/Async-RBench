@@ -244,6 +244,23 @@ Get-FileHash "manual-<case>-<timestamp>.zip" -Algorithm SHA256
 
 绝不能发送 API Key，也不要只发送人工整理后的分数表而丢弃原始证据。
 
+### 11.1 每条提交记录的终止分类与论文指标（P1-17/18/19）
+
+每条 episode 得分记录（JSONL 的 `score` 记录）带有：
+
+- `child_terminal_classifications`：每个子任务尝试恰有一类互斥终止
+  （`accepted` / `public_rejection` / `private_rejection` / `sealed` /
+  `resource_exhausted` / `timeout` / `crash` / `cancel` /
+  `infrastructure_failure` / `in_flight`）。`attempt_number` / `retry` 把
+  "首次 vs 重试" 作为维度写在每一行上，不另建一套计数器。
+- `submission_rejection_rate`：拒绝率；分母只含真正提交过的尝试
+  （sealed 提交；预算耗尽、设计超时/崩溃、取消、基础设施失败、未跑完均不计入）。
+- `extra_rejection_tokens` / `invalid_redelegation_rate` 等成本指标。
+
+聚合报告（`aggregate` 输出）的每条 leaderboard 项和 `development_summary`
+还带有 `paper_metrics`：首次/重试提交数与接受率、平均每个接受提交的 token、
+拒绝导致的额外 token、无效再委托率。要引用这些指标请使用聚合输出而非单条记录。
+
 ## 12. 常见问题
 
 **`validate --release` 失败是否表示框架不能运行？**

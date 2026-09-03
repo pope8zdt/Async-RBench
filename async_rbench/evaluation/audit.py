@@ -10,6 +10,11 @@ from typing import Any
 
 from .case_contract import PUBLIC_RESULT_REJECTION_CODES
 from .protocol import load_trace
+from .report_contract import (
+    REPORT_CONTRACT_CODES,
+    has_hidden_validator,
+    report_contract_errors,
+)
 from .result_contract import validate_payload_contract
 from ..spec import case_instance_key, discover_case_instances
 
@@ -55,6 +60,13 @@ def structural_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
         field_name: synthesize_evidence_value(dict(schema[field_name]))
         for field_name in workstream.get("required_evidence_fields") or []
     }
+    required_files = [str(path) for path in workstream.get("required_files") or []]
+    # report_path names the artifact the evaluator inspects; when the contract
+    # pins it to exactly one required file, the fixture must point there (P0-3)
+    # rather than at the schema-pattern placeholder, or the positive fixture would
+    # fail the report-path alignment check for a reason unrelated to the rule.
+    if "report_path" in evidence and len(required_files) == 1:
+        evidence["report_path"] = required_files[0]
     return {
         "type": "child_completed",
         "payload": {
@@ -65,9 +77,95 @@ def structural_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
+    """Execute the actual private validator on a positive + negative fixture.
+
+    Unlike the transport-level fixture check (which only runs
+    ``validate_payload_contract``), this stages a real report artifact on a local
+    workspace root and runs the same rendered validator program the Docker child
+    would run.  A workstream passes only when its positive fixture is accepted
+    and every negative fixture trips exactly the intended granular code.
+    """
+    import tempfile
+
+    from .report_contract import build_report_fixture, locate_fixture_report_file, run_report_validator
+
+    fixture = build_report_fixture(workstream)
+    if not fixture:
+        return {"supported": False, "reason": "no single-report-file contract"}
+    positive = fixture["positive"]
+    evidence = positive["payload"]["evidence"]
+    negative_payloads = fixture["negatives"]
+
+    with tempfile.TemporaryDirectory(prefix="async_rbench-fixture-") as td:
+        workspace_root = Path(td)
+        report_file = locate_fixture_report_file(fixture, workspace_root)
+        report_file.parent.mkdir(parents=True, exist_ok=True)
+
+        def stage_valid() -> None:
+            report_file.write_text(
+                json.dumps({
+                    "finding": evidence["finding"],
+                    "revision_sha256": evidence["revision_sha256"],
+                }, ensure_ascii=False),
+                encoding="utf-8",
+            )
+
+        stage_valid()
+        positive_code, positive_marks = run_report_validator(
+            workstream, workspace_root, positive["payload"],
+        )
+        positive_passed = positive_code == 0 and not positive_marks
+
+        negatives: dict[str, dict[str, Any]] = {}
+        for code, negative_payload in negative_payloads.items():
+            stage_valid()
+            if code == "report_file_missing":
+                report_file.unlink(missing_ok=True)
+            elif code == "report_json_invalid":
+                report_file.write_text("{not valid json", encoding="utf-8")
+            elif code == "report_missing_required_field":
+                report_file.write_text(
+                    json.dumps({"revision_sha256": evidence["revision_sha256"]}, ensure_ascii=False),
+                    encoding="utf-8",
+                )
+            elif code == "report_payload_field_mismatch":
+                # The evidence claims a differing finding; the artifact on disk
+                # still holds the honest baseline value, so the validator sees a
+                # real evidence/artifact disagreement.
+                report_file.write_text(
+                    json.dumps({
+                        "finding": evidence["finding"],
+                        "revision_sha256": evidence["revision_sha256"],
+                    }, ensure_ascii=False),
+                    encoding="utf-8",
+                )
+            elif code == "report_path_not_required_file":
+                # The payload tells the validator to look somewhere else; the file
+                # content is irrelevant because the alignment check fires first.
+                pass
+            run_code, run_marks = run_report_validator(
+                workstream, workspace_root, negative_payload["payload"],
+            )
+            triggered = [mark[0] for mark in run_marks]
+            negatives[code] = {
+                "triggered_codes": triggered,
+                "expected_code": code,
+                "passed": bool(run_code != 0 and code in triggered),
+            }
+
+    return {
+        "supported": True,
+        "report_path": fixture["report_path"],
+        "positive_passed": positive_passed,
+        "negatives": negatives,
+    }
+
+
 def audit_contract_fixtures(root: Path) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     failures: list[str] = []
+    hidden_validator_count = 0
     for instance in discover_case_instances(root):
         case = instance.load()
         sufficiency = {
@@ -98,12 +196,29 @@ def audit_contract_fixtures(root: Path) -> dict[str, Any]:
                 (sufficiency.get(stream_id) or {}).get("required_output_fields") or []
             )
             sufficiency_matches = sufficiency_fields == set(required)
+            # P0-4: the evaluator-private validator must be a faithful render of
+            # the participant-visible public contract — no hidden constraint.
+            contract_drift = report_contract_errors(workstream)
+            if has_hidden_validator(workstream):
+                hidden_validator_count += 1
+            # P0-5: actually execute the private validator on a positive + negative
+            # fixture (the audit previously ran only validate_payload_contract).
+            private_fixture = _private_fixture_result(workstream)
+            private_fixture_passed = bool(
+                not private_fixture["supported"]
+                or (
+                    private_fixture["positive_passed"]
+                    and all(item["passed"] for item in private_fixture["negatives"].values())
+                )
+            )
             passed = bool(
                 not positive_codes
                 and expected_negative_code in negative_codes
                 and schema_names_match
                 and public_types_match
                 and sufficiency_matches
+                and not contract_drift
+                and private_fixture_passed
             )
             row = {
                 "case_id": case.case_id,
@@ -116,6 +231,11 @@ def audit_contract_fixtures(root: Path) -> dict[str, Any]:
                 "public_private_schema_names_match": schema_names_match,
                 "public_private_types_match": public_types_match,
                 "information_sufficiency_fields_match": sufficiency_matches,
+                "private_validator_executed": bool(private_fixture["supported"]),
+                "private_positive_passed": private_fixture.get("positive_passed"),
+                "private_negatives": private_fixture.get("negatives", {}),
+                "contract_drift_errors": contract_drift,
+                "private_fixture_passed": private_fixture_passed,
                 "passed": passed,
             }
             rows.append(row)
@@ -126,6 +246,13 @@ def audit_contract_fixtures(root: Path) -> dict[str, Any]:
         "passed_count": sum(bool(row["passed"]) for row in rows),
         "failed_workstreams": failures,
         "passed": not failures,
+        "hidden_validator_workstream_count": hidden_validator_count,
+        "note": (
+            "hidden_validator_workstream_count counts workstreams whose private "
+            "validator has no declared participant-visible report file rule; these "
+            "are flagged as a contract-transparency gap, not folded into "
+            "failed_workstreams (which tests the declared-contract fixture gate)."
+        ),
         "workstreams": rows,
     }
 
@@ -176,6 +303,10 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
             root_cause = "accepted"
         elif child_budget_exhausted:
             root_cause = "child_budget_exhausted"
+        elif "report_path_not_required_file" in private_codes:
+            root_cause = "participant_structural_contract_violation"
+        elif any(code in REPORT_CONTRACT_CODES for code in private_codes):
+            root_cause = "participant_report_artifact_failed"
         elif any(code in PUBLIC_RESULT_REJECTION_CODES for code in private_codes):
             root_cause = "participant_structural_contract_violation"
         elif "evidence_constraint_failed" in private_codes:

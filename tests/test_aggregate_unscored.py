@@ -15,6 +15,7 @@ def _record(
         "runtime_mode": "api_only", "score_status": "scored" if x is not None else "unscored",
         "test_point_pass_rate": x, "scenario_constructed": x is not None,
         "denominator_digest": f"digest-{case}-{mode}", "total_tokens": 100,
+        "main_tokens": 100,
         "leaderboard_eligible": official, "conformance_passed": official,
         "capability_categories": ["stale_result_rejection"],
         # Formal experiment factors now required on every record: the dataset

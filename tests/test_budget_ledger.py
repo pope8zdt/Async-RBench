@@ -8,6 +8,8 @@ from pathlib import Path
 import pytest
 
 from async_rbench.evaluation.budget import BudgetLedger, BudgetPool, build_budget_ledger
+from async_rbench.evaluation.case_contract import public_rejection
+from async_rbench.evaluation.event_store import strip_for_adapter
 from async_rbench.profiles.conformance_mock.scripted_backend import ScriptedTestBackend
 from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 from async_rbench.profiles.reference_scaffold_api.gateway import DeliveryReader, ProtocolEmitter
@@ -412,6 +414,67 @@ def test_settle_rejects_unknown_and_duplicate_reservation() -> None:
             await pool.settle(reservation.reservation_id, 31)
 
     asyncio.run(exercise())
+
+
+# --- P0-1: budget/turn-budget exhaustion is a resource termination, never a
+# sealed model submission (it must emit child_resource_exhausted, not a
+# child_completed that would feed validate_completion_contract and the
+# rejection pipeline) ------------------------------------------------
+
+
+def test_resource_exhaustion_emits_distinct_event_and_never_completes() -> None:
+    async def exercise() -> None:
+        pool = BudgetPool("child_shared", 0)
+        emitter = ProtocolEmitter(stdout=io.StringIO())
+        agent = ChildAgent(
+            backend=ScriptedTestBackend(),
+            workspace=DisabledWorkspaceRuntime(),
+            config=_scaffold(_start()).config,
+            emitter=emitter,
+            token_budget=pool,
+        )
+        record = ChildRecord(
+            child_id="child-resource", task="work", work_units=["requirement_worker_01"],
+            targets=["workspace_state"], expected_output="out", priority="high",
+            required_evidence_fields=["report_path", "revision_sha256", "finding"],
+            allowed_result_files=["/app/output_data/workstreams/requirement_worker_01.json"],
+            required_result_files=["/app/output_data/workstreams/requirement_worker_01.json"],
+        )
+        await agent.run(record, "scripted_test", 1)
+        # The child is flagged as a resource termination, not a submission.
+        assert record.decision == "resource_exhausted"
+        types = [e.get("type") for e in emitter.events]
+        assert "budget_exhausted" in types
+        # A distinct terminal event exists, and no child_completed is sealed.
+        assert "child_resource_exhausted" in types
+        assert "child_completed" not in types
+        # The resource-exhausted event carries the terminating pool state.
+        exhaust_event = next(e for e in emitter.events if e["type"] == "child_resource_exhausted")
+        assert exhaust_event["pool"] == "child_shared"
+        assert exhaust_event["remaining"] == 0
+
+    asyncio.run(exercise())
+
+
+# --- P0-6: rejection projection must preserve the already-public workstream_id
+# when strip_for_adapter re-projects an event that carries it -----------------
+
+
+def test_public_rejection_preserves_workstream_id_from_event() -> None:
+    # _record_gateway_outcome stamps workstream_id onto the event; strip_for_adapter
+    # re-projects it WITHOUT the keyword, so the projection must fall back to the
+    # event field instead of nulling it.
+    rejection = {
+        "type": "result_rejected", "child_id": "c1", "completion_id": "comp-1",
+        "workstream_id": "requirement_worker_01",
+        "reason_codes": ["missing_required_files"],
+    }
+    plain = public_rejection(rejection)
+    assert plain["workstream_id"] == "requirement_worker_01"
+    # strip_for_adapter is the adapter-facing projection and must keep it too.
+    stripped = strip_for_adapter(rejection)
+    assert stripped["type"] == "result_rejected"
+    assert stripped["workstream_id"] == "requirement_worker_01"
 
 
 def test_strict_admission_is_input_upper_bound_plus_max_output() -> None:

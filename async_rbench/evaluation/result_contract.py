@@ -7,6 +7,7 @@ import re
 import shlex
 from typing import Any
 
+from .report_contract import classify_validator_output
 from .workspace_runtime import WorkspaceRuntime
 
 
@@ -131,7 +132,20 @@ def validate_payload_contract(
         _append_failure(codes, details, "duplicate_files", "payload.files contains duplicate paths")
 
     allowed_files = set(str(path) for path in workstream.get("allowed_files") or [])
-    required_files = set(str(path) for path in workstream.get("required_files") or [])
+    required_list = [str(path) for path in workstream.get("required_files") or []]
+    required_files = set(required_list)
+    # A single-required-file workstream binds the reported artifact unambiguously:
+    # evidence.report_path must name that one required file, so the report the
+    # participant points at IS the report the evaluator inspects (no two-file
+    # ambiguity).
+    report_path = evidence.get("report_path")
+    if isinstance(report_path, str) and len(required_list) == 1:
+        if report_path != required_list[0]:
+            codes.append("report_path_not_required_file")
+            details.append(
+                f"evidence.report_path {report_path!r} must equal required_files[0] "
+                f"{required_list[0]!r}"
+            )
     unexpected = sorted(set(files) - allowed_files)
     missing = sorted(required_files - set(files))
     if unexpected:
@@ -184,10 +198,18 @@ async def validate_completion_contract(
         exit_code = result.exit_code
         output = result.output[-4000:]
         if result.exit_code != 0:
-            _append_failure(
-                codes, details, "validator_command_failed",
-                f"evaluator-owned child validator exited with code {result.exit_code}",
-            )
+            granular = classify_validator_output(output)
+            if granular:
+                for code, field in granular:
+                    detail = f"report contract failed: {code}"
+                    if field:
+                        detail += f" (field {field})"
+                    _append_failure(codes, details, code, detail)
+            else:
+                _append_failure(
+                    codes, details, "reported_file_contract_failed",
+                    f"evaluator-owned child validator exited with code {result.exit_code}",
+                )
 
     return ResultContractValidation(
         valid=not codes,

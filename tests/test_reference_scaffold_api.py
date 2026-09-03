@@ -9,15 +9,17 @@ from pathlib import Path
 import pytest
 
 import async_rbench.evaluation.runner as runner_module
+from async_rbench.evaluation.budget import BudgetPool
 from async_rbench.evaluation.case_contract import find_private_fields
-from async_rbench.evaluation.model_backend import ToolCall
+from async_rbench.evaluation.model_backend import ModelTurn, ToolCall
 from async_rbench.evaluation.runner import EpisodeConfig, _make_start, run_episode
-from async_rbench.evaluation.workspace_runtime import DisabledWorkspaceRuntime, _safe_name
+from async_rbench.evaluation.workspace_runtime import CommandResult, DisabledWorkspaceRuntime, _safe_name
 from async_rbench.profiles.conformance_mock.scripted_backend import ScriptedTestBackend
 from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 from async_rbench.profiles.reference_scaffold_api.gateway import DeliveryReader, ProtocolEmitter
 from async_rbench.profiles.reference_scaffold_api.runtime import (
-    ChildRecord, EpisodeTokenBudget, ReferenceScaffold,
+    ChildAgent, ChildRecord, EpisodeTokenBudget, ReferenceScaffold,
+    build_child_user_message,
 )
 from async_rbench.spec import load_case
 
@@ -705,3 +707,384 @@ def test_async_delivery_lifecycle_emits_available_then_queue_then_window_close()
         assert manager.presentation_queue.active_window is None
 
     asyncio.run(exercise())
+
+
+# --- P0-8 / P0-9: rejection feedback on re-delegation and its bounds ---------
+
+
+def test_rejection_events_carry_attempt_count_and_contract_part() -> None:
+    """A contract rejection records the failed-attempt count and the contract
+    part to repair, and the async status surface (the way the main model learns
+    of the rejection) exposes the same public feedback."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "async"))
+        manager = scaffold.manager
+        _register_linear_children(manager, [("c-1", "wal_recovery")])
+        manager.attempt_counts["wal_recovery"] = 1
+        await manager.handle_rejection({
+            "completion_id": "comp-c-1",
+            "reason_codes": ["missing_required_evidence"],
+            "child_id": "c-1",
+        })
+        rejection = manager.children["c-1"].contract_rejection
+        assert rejection["attempt_count"] == 1
+        status = manager.statuses()[0]
+        assert status["status"] == "contract_rejected"
+        assert status["contract_rejection_reason_codes"] == ["missing_required_evidence"]
+        assert status["contract_part"] == "evidence"
+        assert status["attempt_count"] == 1
+        stored = manager.workstream_rejections["wal_recovery"]
+        assert stored["contract_part"] == "evidence"
+        assert stored["actionable"] is True
+
+    asyncio.run(exercise())
+
+
+def test_replacement_spawn_carries_prior_rejection_feedback() -> None:
+    """A replacement child for a rejected workstream carries the original
+    workstream id, the last public error code, the failed attempt count and the
+    contract part to fix."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "linear"))
+        manager = scaffold.manager
+        _register_linear_children(manager, [
+            ("c-wal", "wal_recovery"), ("c-check", "checkpoint_recovery"),
+            ("c-merge", "merge_support"),
+        ])
+        await manager.handle_delivery({
+            "completion_id": "comp-c-check", "payload": {"i": 2},
+            "payload_sha256": "b" * 64, "child_id": "c-check",
+        })
+        await manager.handle_delivery({
+            "completion_id": "comp-c-merge", "payload": {"i": 3},
+            "payload_sha256": "c" * 64, "child_id": "c-merge",
+        })
+        # The initial wave counted one attempt for wal_recovery (as a real
+        # spawn_initial_wave would) before its child got rejected.
+        manager.attempt_counts["wal_recovery"] = 1
+        await manager.handle_rejection({
+            "completion_id": "comp-c-wal",
+            "reason_codes": ["report_file_missing"], "child_id": "c-wal",
+        })
+        manager._launch_queued = lambda: None  # keep the replacement un-run
+        result = await manager.spawn(
+            "wal_recovery", "retry with a complete report artifact", [], "", "high",
+        )
+        assert "child_id" in result
+        record = manager.children[result["child_id"]]
+        assert record.work_units == ["wal_recovery"]
+        assert record.attempt_number == 2
+        assert record.prior_attempt_rejection["reason_codes"] == ["report_file_missing"]
+        assert record.prior_attempt_rejection["contract_part"] == "report_file"
+
+    asyncio.run(exercise())
+
+
+def test_spawn_refuses_without_actionable_feedback() -> None:
+    """P0-9: a workstream whose last rejection carried no public code cannot be
+    blindly re-delegated."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "linear"))
+        manager = scaffold.manager
+        _register_linear_children(manager, [
+            ("c-wal", "wal_recovery"), ("c-check", "checkpoint_recovery"),
+            ("c-merge", "merge_support"),
+        ])
+        await manager.handle_delivery({
+            "completion_id": "comp-c-check", "payload": {"i": 2},
+            "payload_sha256": "b" * 64, "child_id": "c-check",
+        })
+        await manager.handle_delivery({
+            "completion_id": "comp-c-merge", "payload": {"i": 3},
+            "payload_sha256": "c" * 64, "child_id": "c-merge",
+        })
+        await manager.handle_rejection({
+            "completion_id": "comp-c-wal",
+            "reason_codes": ["validator_command_failed"], "child_id": "c-wal",
+        })
+        manager._launch_queued = lambda: None
+        result = await manager.spawn("wal_recovery", "try again", [], "", "high")
+        assert "no actionable" in result["error"]
+
+    asyncio.run(exercise())
+
+
+def test_spawn_refuses_without_new_evidence_and_below_one_call_budget() -> None:
+    """P0-9: re-delegation is bounded to one no-new-evidence retry and refused
+    once the remaining child budget cannot cover one full child call."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start("data-recovery-service", "linear"))
+        manager = scaffold.manager
+        _register_linear_children(manager, [
+            ("c-wal", "wal_recovery"), ("c-check", "checkpoint_recovery"),
+            ("c-merge", "merge_support"),
+        ])
+        await manager.handle_delivery({
+            "completion_id": "comp-c-check", "payload": {"i": 2},
+            "payload_sha256": "b" * 64, "child_id": "c-check",
+        })
+        await manager.handle_delivery({
+            "completion_id": "comp-c-merge", "payload": {"i": 3},
+            "payload_sha256": "c" * 64, "child_id": "c-merge",
+        })
+        await manager.handle_rejection({
+            "completion_id": "comp-c-wal",
+            "reason_codes": ["report_payload_field_mismatch"], "child_id": "c-wal",
+        })
+        manager._launch_queued = lambda: None
+
+        manager.no_new_evidence_retries["wal_recovery"] = 1
+        result = await manager.spawn("wal_recovery", "try again", [], "", "high")
+        assert "no new evidence" in result["error"]
+
+        manager.no_new_evidence_retries["wal_recovery"] = 0
+        pool = manager.token_budget
+        pool.settled += pool.maximum  # remaining == 0
+        result = await manager.spawn("wal_recovery", "try again", [], "", "high")
+        assert "below one full child call" in result["error"]
+
+    asyncio.run(exercise())
+
+
+def test_no_new_evidence_retry_is_recorded_and_emitted() -> None:
+    """A sealed submission repeating a prior attempt's evidence marks a
+    no-information retry; different evidence does not."""
+    async def exercise() -> None:
+        scaffold = _scaffold(_start())
+        manager = scaffold.manager
+        payload = {"summary": "s", "evidence": {"finding": "x"}, "files": []}
+        manager._record_workstream_evidence("wal_recovery", payload, "c-1")
+        assert manager.no_new_evidence_retries["wal_recovery"] == 0
+        manager._record_workstream_evidence("wal_recovery", payload, "c-2")
+        assert manager.no_new_evidence_retries["wal_recovery"] == 1
+        events = [
+            event for event in scaffold.emitter.events
+            if event.get("type") == "no_information_retry_detected"
+        ]
+        assert len(events) == 1
+        assert events[0]["workstream_id"] == "wal_recovery"
+        assert events[0]["no_new_evidence_retries"] == 1
+        manager._record_workstream_evidence(
+            "wal_recovery",
+            {"summary": "s", "evidence": {"finding": "y"}, "files": []},
+            "c-3",
+        )
+        assert manager.no_new_evidence_retries["wal_recovery"] == 1
+
+    asyncio.run(exercise())
+
+
+def test_replacement_child_message_carries_prior_attempt_feedback() -> None:
+    """P0-8: the child instruction block for a replacement carries the failed
+    attempt count and the last rejection feedback to repair."""
+    from async_rbench.profiles.reference_scaffold_api.runtime import (
+        build_child_user_message,
+    )
+    record = ChildRecord(
+        child_id="c", task="t", work_units=["ws"], targets=[],
+        expected_output="e", priority="high", attempt_number=2,
+        prior_attempt_rejection={
+            "reason_codes": ["report_file_missing"],
+            "contract_part": "report_file",
+        },
+    )
+    message = build_child_user_message(record)
+    assert message["prior_attempt"] == {
+        "failed_attempt_count": 1,
+        "last_rejection": {
+            "reason_codes": ["report_file_missing"],
+            "contract_part": "report_file",
+        },
+    }
+    fresh = build_child_user_message(ChildRecord(
+        child_id="c", task="t", work_units=["ws"], targets=[],
+        expected_output="e", priority="high",
+    ))
+    assert "prior_attempt" not in fresh
+
+
+# --- P1-11 / P1-12: bounded child exploration + public pre-submit validator ---
+
+
+def test_child_tools_expose_pre_submit_validator() -> None:
+    names = {item["function"]["name"] for item in ChildAgent.tools()}
+    assert {"terminal", "submit_result", "validate_result"} <= names
+
+
+def test_child_message_carries_report_artifact_template() -> None:
+    record = ChildRecord(
+        child_id="c", task="t", work_units=["ws"], targets=[],
+        expected_output="e", priority="high",
+        public_result_contract={
+            "kind": "report_file",
+            "report_file": {
+                "path": "/app/out.json", "must_exist": True,
+                "must_be_valid_json": True,
+                "fields_equal_evidence": ["finding", "revision_sha256"],
+            },
+        },
+    )
+    message = build_child_user_message(record)
+    assert message["report_artifact_template"] == {
+        "path": "/app/out.json",
+        "must_exist": True,
+        "must_be_valid_json": True,
+        "fields_equal_evidence": ["finding", "revision_sha256"],
+    }
+    plain = build_child_user_message(ChildRecord(
+        child_id="c", task="t", work_units=["ws"], targets=[],
+        expected_output="e", priority="high",
+    ))
+    assert "report_artifact_template" not in plain
+
+
+class _ValidateThenSubmitBackend:
+    """Turn 1 calls validate_result; on seeing the dry-run verdict it submits a
+    (nominally corrected) result.  Records every tool message it was shown."""
+
+    def __init__(self) -> None:
+        self.seen_tool_results: list[str] = []
+
+    def runtime_metadata(self) -> dict:
+        return {"model_observations": []}
+
+    @staticmethod
+    def _tool_call(call_id: str, name: str, arguments: dict) -> ModelTurn:
+        raw = [{"id": call_id, "type": "function", "function": {
+            "name": name, "arguments": json.dumps(arguments, sort_keys=True),
+        }}]
+        return ModelTurn(
+            assistant_message={"role": "assistant", "content": None, "tool_calls": raw},
+            tool_calls=[ToolCall(call_id, name, arguments)],
+            total_tokens=7,
+        )
+
+    async def complete(self, *, role, model, messages, tools, seed) -> ModelTurn:
+        self.seen_tool_results.extend(
+            str(m.get("content", "")) for m in messages if m.get("role") == "tool"
+        )
+        used = {
+            call.get("function", {}).get("name")
+            for m in messages
+            for call in m.get("tool_calls") or []
+            if m.get("role") == "assistant"
+        }
+        if "validate_result" in used:
+            return self._tool_call("c-submit", "submit_result", {
+                "summary": "result",
+                "result_kind_hint": "recovered",
+                "evidence": {
+                    "report_path": "/app/out.json",
+                    "finding": "recovered",
+                    "revision_sha256": "0" * 64,
+                },
+                "files": ["/app/out.json"],
+            })
+        return self._tool_call("c-validate", "validate_result", {
+            "summary": "result",
+            "evidence": {
+                "report_path": "/app/out.json",
+                "finding": "recovered",
+                "revision_sha256": "0" * 64,
+            },
+            "files": ["/app/out.json"],
+        })
+
+
+class _FixtureWorkspace:
+    """The report artifact does not exist, so the dry-run fails the public rule."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, str, int]] = []
+
+    async def child_terminal(self, child_id: str, command: str, timeout: int) -> CommandResult:
+        self.calls.append((child_id, command, timeout))
+        return CommandResult(1, "ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing\n")
+
+
+def test_pre_submit_validate_result_dry_runs_the_public_rule() -> None:
+    """validate_result executes the deterministic render of the *public* accept
+    rule (never a private validator) and reports the granular public code."""
+    async def exercise() -> None:
+        workspace = _FixtureWorkspace()
+        backend = _ValidateThenSubmitBackend()
+        config = ScaffoldConfig.from_file(
+            None, {"backend": "scripted_test", "workspace_mode": "disabled"},
+        )
+        record = ChildRecord(
+            child_id="child-1", task="produce report", work_units=["ws"],
+            targets=[], expected_output="report", priority="high",
+            required_evidence_fields=["report_path", "finding", "revision_sha256"],
+            evidence_schema={
+                "report_path": {"type": "string"},
+                "finding": {"type": "string"},
+                "revision_sha256": {"type": "string"},
+            },
+            allowed_result_files=["/app/out.json"],
+            required_result_files=["/app/out.json"],
+            public_result_contract={
+                "kind": "report_file",
+                "report_file": {
+                    "path": "/app/out.json", "must_exist": True,
+                    "must_be_valid_json": True,
+                    "fields_equal_evidence": ["finding", "revision_sha256"],
+                },
+            },
+            result_file_contract_enforced=True,
+        )
+        agent = ChildAgent(
+            backend, workspace, config,
+            ProtocolEmitter(stdout=io.StringIO()),
+            BudgetPool("child_shared", maximum=500_000),
+        )
+        payload, hint, tokens = await agent.run(record, "test-model", 1)
+        assert len(workspace.calls) == 1
+        _, command, _ = workspace.calls[0]
+        assert command.startswith("export ASYNC_RBENCH_RESULT_PAYLOAD_B64=")
+        assert "ASYNC_RBENCH_CONTRACT_FAIL" in command
+        verdicts = [c for c in backend.seen_tool_results if '"valid"' in c]
+        assert len(verdicts) == 1
+        verdict = json.loads(verdicts[0])
+        assert verdict["valid"] is False
+        assert verdict["reason_codes"] == ["report_file_missing"]
+        assert verdict["contract_part"] == "report_file"
+        # The child used the verdict and sealed a corrected result.
+        assert payload["evidence"]["finding"] == "recovered"
+        assert hint == "recovered"
+
+    asyncio.run(exercise())
+
+
+# --- P1-13: child context length control ------------------------------------
+
+
+def test_child_context_is_compressed_within_budget() -> None:
+    messages = [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "user"},
+        {"role": "assistant", "content": None, "tool_calls": []},
+        {"role": "tool", "content": "a" * 5000},
+        {"role": "assistant", "content": None, "tool_calls": []},
+        {"role": "tool", "content": "b" * 5000},
+        {"role": "assistant", "content": None, "tool_calls": []},
+        {"role": "tool", "content": "c" * 5000},
+    ]
+    compressed = ChildAgent._compress_messages(
+        messages,
+        context_budget_chars=1000,
+        keep_recent=4,
+        max_old_tool_content_chars=100,
+    )
+    # The recent window is untouched; the oldest tool output is an excerpt.
+    assert compressed[-4:] == messages[-4:]
+    assert compressed[3]["content"].startswith("a" * 100)
+    assert "older tool output compressed: 4900 chars dropped" in compressed[3]["content"]
+    # Growth is bounded: old excerpts + the recent window verbatim (2 × 5000 here).
+    assert sum(len(str(m.get("content") or "")) for m in compressed) < 11_000
+
+    # A history within budget is returned verbatim.
+    small = messages[:1] + messages[-2:]
+    assert ChildAgent._compress_messages(
+        small, context_budget_chars=100_000, keep_recent=8,
+        max_old_tool_content_chars=100,
+    ) is small

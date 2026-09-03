@@ -172,6 +172,13 @@ class ScaffoldConfig:
     workspace_mode: str = "container_clone"
     keep_child_workspaces: bool = False
     max_tool_output_chars: int = 20000
+    # P1-13: child-context length control.  Past tool outputs are the big
+    # uncontrolled growth (each up to max_tool_output_chars); when the child
+    # history exceeds the budget, the oldest tool results are compressed to a
+    # short excerpt while recent turns stay verbatim.
+    child_context_budget_chars: int = 120_000
+    child_keep_recent_turns: int = 8
+    child_old_tool_excerpt_chars: int = 800
     request_timeout_sec: int = 300
     codex_executable: str = "codex"
     codex_reasoning_effort: str = "high"
@@ -302,6 +309,8 @@ class ScaffoldConfig:
             "budget_child_shared", "budget_main_pre", "budget_main_post",
             "budget_main_total",
             "start_barrier_timeout_sec", "live_cancellation_grace_sec",
+            "child_context_budget_chars", "child_keep_recent_turns",
+            "child_old_tool_excerpt_chars",
         ):
             if int(getattr(self, name)) <= 0:
                 raise ValueError(f"{name} must be positive")

@@ -6,6 +6,10 @@ from typing import Any
 from .protocol import canonical_digest
 from .pytest_results import parse_pytest_summary
 from .event_store import _KERNEL_PRIVATE_FIELDS
+from .termination import (
+    ACCEPTED, PRIVATE_REJECTION, PUBLIC_REJECTION, SEALED, TERMINAL_CLASSES,
+    classify_child_terminals,
+)
 from .control_flow_gates import (
     EventDRS,
     _provisional_missing,
@@ -77,6 +81,15 @@ def _materialize_private_delivery_facts(
                 "reopens_milestones": list(fact.get("reopens_milestones") or []),
                 "replayed": fact.get("replayed") is True,
                 "replay_of_completion_id": fact.get("replay_of_completion_id"),
+                # Task 9 designed-terminal private facts: the public record already
+                # carries the observable ``terminal_outcome``; the design
+                # classification and reason stay kernel-private and are re-joined
+                # here for the P1-17 terminal classifier (never for the participant).
+                "evaluator_designed_failure": fact.get("designed_failure"),
+                "evaluator_terminal_reason": fact.get("terminal_reason"),
+                "terminal_outcome": (
+                    event.get("terminal_outcome") or fact.get("terminal_outcome")
+                ),
             })
         else:
             merged["reason_codes"] = list(fact.get("reason_codes") or [])
@@ -1242,6 +1255,69 @@ def score_trace(
         for reason_code in rejection.get("reason_codes") or []:
             contract_rejection_reason_counts[str(reason_code)] += 1
 
+    # P1-17: mutually exclusive per-attempt terminal classification.  Every
+    # spawned child attempt gets exactly one terminal class; first attempt vs
+    # retry is the ``attempt_number`` facet, not a separate counter.
+    child_terminals = classify_child_terminals(events)
+    terminal_counts = {cls: 0 for cls in TERMINAL_CLASSES}
+    for row in child_terminals:
+        terminal_counts[row["terminal_class"]] += 1
+    submission_rows = [row for row in child_terminals if row["sealed_submission"]]
+    accepted_ids = {row["child_id"] for row in child_terminals if row["terminal_class"] == ACCEPTED}
+    rejected_ids = {
+        row["child_id"] for row in child_terminals
+        if row["terminal_class"] in {PUBLIC_REJECTION, PRIVATE_REJECTION}
+    }
+    unresolved_ids = {
+        row["child_id"] for row in child_terminals if row["terminal_class"] == SEALED
+    }
+    sealed_submission_count = len(submission_rows)
+    # P1-18: the paper-facing rejection rate is over sealed submissions only.
+    # Budget exits, designed terminals, cancels, infrastructure failures and
+    # in-flight closes never submitted, so they cannot be in the denominator
+    # (they would otherwise look like rejected submissions).
+    submission_rejection_rate = (
+        len(rejected_ids) / sealed_submission_count if sealed_submission_count else 0.0
+    )
+    first_attempt_rows = [row for row in child_terminals if not row["retry"]]
+    retry_rows = [row for row in child_terminals if row["retry"]]
+    first_attempt_submission_count = sum(
+        1 for row in first_attempt_rows if row["sealed_submission"]
+    )
+    first_attempt_accepted_count = sum(
+        1 for row in first_attempt_rows if row["terminal_class"] == ACCEPTED
+    )
+    retry_submission_count = sum(
+        1 for row in retry_rows if row["sealed_submission"]
+    )
+    retry_accepted_count = sum(
+        1 for row in retry_rows if row["terminal_class"] == ACCEPTED
+    )
+    # P1-19 cost-of-rejection: extra tokens are what a workstream spent on
+    # sealed attempts *beyond* the accepted one.  Per workstream, the accepted
+    # attempt is the last one that matters; all sealed attempts before it (and
+    # every sealed attempt when none was accepted) are the rejection cost.
+    attempt_rows_by_workstream: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in child_terminals:
+        attempt_rows_by_workstream[str(row.get("workstream_id") or "no_workstream")].append(row)
+    extra_rejection_tokens = 0
+    for rows in attempt_rows_by_workstream.values():
+        ordered = sorted(rows, key=lambda row: int(row["attempt_number"]))
+        accepted_index = next(
+            (index for index, row in enumerate(ordered)
+             if row["terminal_class"] == ACCEPTED), None,
+        )
+        sealed_up_to = (
+            [row for row in ordered[:accepted_index] if row["sealed_submission"]]
+            if accepted_index is not None
+            else [row for row in ordered if row["sealed_submission"]]
+        )
+        extra_rejection_tokens += sum(int(row["tokens"]) for row in sealed_up_to)
+    # P0-9: a redelegation that contributes no new evidence is an invalid
+    # redelegation (bounded to one); the runtime marker records each instance.
+    invalid_redelegation_count = len(_events_of(events, "no_information_retry_detected"))
+    redelegation_attempt_count = len(retry_rows)
+
     return {
         "test_point_pass_rate": test_point_pass_rate,
         "score_policy_version": SCORE_POLICY_VERSION,
@@ -1310,10 +1386,34 @@ def score_trace(
         "gateway_violation_count": gateway_violation_count,
         "result_contract_validation_count": len(contract_validations),
         "result_contract_rejected_count": len(contract_rejections),
+        # Raw per-completion gateway diagnostic (P1-18): the paper-facing
+        # rejection rate is ``submission_rejection_rate`` below, which excludes
+        # budget exits, designed terminals, cancels, infrastructure failures and
+        # in-flight closes from the denominator.
         "result_contract_rejection_rate": (
             len(contract_rejections) / len(completion_by_id) if completion_by_id else 0.0
         ),
         "result_contract_rejection_reason_counts": dict(contract_rejection_reason_counts),
+        # P1-17: mutually exclusive per-attempt terminal classification (one row
+        # per spawned child; retry is the attempt_number facet) and P1-18 rates.
+        "child_terminal_classifications": child_terminals,
+        "child_terminal_counts": terminal_counts,
+        "sealed_submission_count": sealed_submission_count,
+        "accepted_submission_count": len(accepted_ids),
+        "rejected_submission_count": len(rejected_ids),
+        "unresolved_submission_count": len(unresolved_ids),
+        "submission_rejection_rate": submission_rejection_rate,
+        "first_attempt_submission_count": first_attempt_submission_count,
+        "first_attempt_accepted_count": first_attempt_accepted_count,
+        "retry_submission_count": retry_submission_count,
+        "retry_accepted_count": retry_accepted_count,
+        "extra_rejection_tokens": extra_rejection_tokens,
+        "redelegation_attempt_count": redelegation_attempt_count,
+        "invalid_redelegation_count": invalid_redelegation_count,
+        "invalid_redelegation_rate": (
+            invalid_redelegation_count / redelegation_attempt_count
+            if redelegation_attempt_count else None
+        ),
         "completion_replay_count": len(replayed_deliveries),
         "replayed_completion_ids": sorted({
             str(event.get("completion_id")) for event in replayed_deliveries
