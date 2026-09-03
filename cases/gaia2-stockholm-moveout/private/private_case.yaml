@@ -12,10 +12,7 @@ capabilities:
 workstream_bindings:
   app_state_reader_A:
     result_kind: result_01
-    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/task_file/app/raf_saved_list.json';
-      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); assert int(e['listing_count'])==len(d['saved']);
-      assert e['saved_list_revision']==hashlib.sha256(open(p,'rb').read()).hexdigest()"
+    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/task_file/app/raf_saved_list.json'; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); assert int(e['listing_count'])==len(d['saved']); assert e['saved_list_revision']==hashlib.sha256(open(p,'rb').read()).hexdigest()"
     validator_timeout_sec: 120
     private_evidence_schema:
       saved_list_path:
@@ -26,12 +23,10 @@ workstream_bindings:
         type: string
         pattern: '[0-9a-f]{64}'
     event_assets: []
+    validator_stage: semantic_evidence
   app_state_reader_B:
     result_kind: result_02
-    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/task_file/app/raf_catalog.json';
-      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); assert int(e['catalog_count'])==len(d['catalog']);
-      assert e['inventory_revision']==hashlib.sha256(open(p,'rb').read()).hexdigest()"
+    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/task_file/app/raf_catalog.json'; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); assert int(e['catalog_count'])==len(d['catalog']); assert e['inventory_revision']==hashlib.sha256(open(p,'rb').read()).hexdigest()"
     validator_timeout_sec: 120
     private_evidence_schema:
       catalog_path:
@@ -42,12 +37,10 @@ workstream_bindings:
         type: string
         pattern: '[0-9a-f]{64}'
     event_assets: []
+    validator_stage: semantic_evidence
   contact_budget_reader:
     result_kind: result_03
-    validator_command: python3 -c "import base64,json,os; p='/app/task_file/app/contacts.json';
-      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); c=[x for x
-      in d['contacts'] if x['id']==e['contact_id']]; assert c and int(e['budget_sek'])==int(c[0]['budget_sek'])"
+    validator_command: python3 -c "import base64,json,os; p='/app/task_file/app/contacts.json'; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); c=[x for x in d['contacts'] if x['id']==e['contact_id']]; assert c and int(e['budget_sek'])==int(c[0]['budget_sek'])"
     validator_timeout_sec: 120
     private_evidence_schema:
       contact_path:
@@ -57,13 +50,10 @@ workstream_bindings:
       budget_sek:
         type: integer
     event_assets: []
+    validator_stage: semantic_evidence
   event_monitor:
     result_kind: result_04
-    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/task_file/event_feed/feed.jsonl';
-      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(p); rows=[l for l in open(p,encoding='utf-8') if l.strip()];
-      assert int(e['events_seen'])>=1; assert 1<=int(e['stream_sequence'])<=max(json.loads(l)['seq']
-      for l in rows); assert e['stream_revision']==hashlib.sha256(open(p,'rb').read()).hexdigest()"
+    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/task_file/event_feed/feed.jsonl'; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; assert os.path.isfile(p); rows=[l for l in open(p,encoding='utf-8') if l.strip()]; assert int(e['events_seen'])>=1; assert 1<=int(e['stream_sequence'])<=max(json.loads(l)['seq'] for l in rows); assert e['stream_revision']==hashlib.sha256(open(p,'rb').read()).hexdigest()"
     validator_timeout_sec: 120
     private_evidence_schema:
       feed_path:
@@ -78,12 +68,10 @@ workstream_bindings:
     event_assets:
     - /app/task_file/event_feed/feed.jsonl
     - /app/task_file/event_feed/feed_meta.json
+    validator_stage: semantic_evidence
   action_planner:
     result_kind: result_05
-    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/output_data/planned_ops.json';
-      e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); assert int(e['ops_count'])>=1;
-      assert e['plan_revision']==hashlib.sha256(open(p,'rb').read()).hexdigest()"
+    validator_command: python3 -c "import base64,hashlib,json,os; p='/app/output_data/planned_ops.json'; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; assert os.path.isfile(p); d=json.load(open(p,encoding='utf-8')); assert int(e['ops_count'])>=1; assert e['plan_revision']==hashlib.sha256(open(p,'rb').read()).hexdigest()"
     validator_timeout_sec: 120
     private_evidence_schema:
       plan_path:
@@ -94,13 +82,10 @@ workstream_bindings:
       ops_count:
         type: integer
     event_assets: []
+    validator_stage: semantic_evidence
   world_state_validator:
     result_kind: result_06
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      p='/app/output_data/saved_list_final.json'; n='/app/output_data/notifications.jsonl';
-      assert e['verification_passed'] in (True,False); assert isinstance(e['notifications_count'],int)
-      and e['notifications_count']>=0; assert len(e['final_revision'])==64; assert
-      not e['verification_passed'] or (os.path.isfile(p) and os.path.isfile(n))"
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p='/app/output_data/saved_list_final.json'; n='/app/output_data/notifications.jsonl'; assert e['verification_passed'] in (True,False); assert isinstance(e['notifications_count'],int) and e['notifications_count']>=0; assert len(e['final_revision'])==64; assert not e['verification_passed'] or (os.path.isfile(p) and os.path.isfile(n))"
     validator_timeout_sec: 120
     private_evidence_schema:
       verification_passed:
@@ -111,6 +96,7 @@ workstream_bindings:
       notifications_count:
         type: integer
     event_assets: []
+    validator_stage: semantic_evidence
 result_contract:
   allowed_result_kinds:
   - result_01
@@ -119,8 +105,7 @@ result_contract:
   - result_04
   - result_05
   - result_06
-  rule: At child spawn assign semantic work_units; at completion tag the result with
-    the matching kind. The gateway, not the main agent, receives completion first.
+  rule: At child spawn assign semantic work_units; at completion tag the result with the matching kind. The gateway, not the main agent, receives completion first.
 authoritative_result_kind: result_04
 superseded_result_kind: result_05
 scenarios:
@@ -144,27 +129,9 @@ scenarios:
       reopens_milestones: []
 artifact_observers: {}
 hidden_checks:
-  saved_list_closure: 'python3 -c "import json; a=json.load(open(''/app/task_file/app/raf_saved_list.json'',encoding=''utf-8''));
-    prefs=a[''search_preferences'']; saved=a[''saved'']; cat=json.load(open(''/app/task_file/app/raf_catalog.json'',encoding=''utf-8''))[''catalog''];
-    feed=[json.loads(l) for l in open(''/app/task_file/event_feed/feed.jsonl'',encoding=''utf-8'')
-    if l.strip()]; ok=lambda c,p: c==prefs[''city''] and prefs[''min_rent_sek'']<=p<=prefs[''max_rent_sek''];
-    exp={e[''id''] for e in saved if not (e[''city'']==prefs[''city''] and not ok(e[''city''],e[''price_sek'']))};
-    ids={e[''id''] for e in saved}; exp|={e[''id''] for e in cat if ok(e[''city''],e[''price_sek''])
-    and e[''id''] not in ids}; exp|={e[''listing''][''id''] for e in feed if ok(e[''listing''][''city''],e[''listing''][''price_sek''])};
-    fin={e[''id''] for e in json.load(open(''/app/output_data/saved_list_final.json'',encoding=''utf-8''))[''saved'']};
-    assert fin==exp"'
-  notification_closure: python3 -c "import json; prefs=json.load(open('/app/task_file/app/raf_saved_list.json',encoding='utf-8'))['search_preferences'];
-    feed=[json.loads(l) for l in open('/app/task_file/event_feed/feed.jsonl',encoding='utf-8')
-    if l.strip()]; feed.sort(key=lambda e:e['seq']); exp=[e['listing']['id'] for e
-    in feed if e['listing']['city']==prefs['city'] and prefs['min_rent_sek']<=e['listing']['price_sek']<=prefs['max_rent_sek']];
-    got=[json.loads(l)['listing_id'] for l in open('/app/output_data/notifications.jsonl',encoding='utf-8')
-    if l.strip()]; assert got==exp"
-  no_stale_in_final: python3 -c "import json; prefs=json.load(open('/app/task_file/app/raf_saved_list.json',encoding='utf-8'))['search_preferences'];
-    fin={e['id'] for e in json.load(open('/app/output_data/saved_list_final.json',encoding='utf-8'))['saved']};
-    feed=[json.loads(l) for l in open('/app/task_file/event_feed/feed.jsonl',encoding='utf-8')
-    if l.strip()]; decoys=[e['listing']['id'] for e in feed if not (e['listing']['city']==prefs['city']
-    and prefs['min_rent_sek']<=e['listing']['price_sek']<=prefs['max_rent_sek'])];
-    assert not (set(decoys)&fin)"
+  saved_list_closure: 'python3 -c "import json; a=json.load(open(''/app/task_file/app/raf_saved_list.json'',encoding=''utf-8'')); prefs=a[''search_preferences'']; saved=a[''saved'']; cat=json.load(open(''/app/task_file/app/raf_catalog.json'',encoding=''utf-8''))[''catalog'']; feed=[json.loads(l) for l in open(''/app/task_file/event_feed/feed.jsonl'',encoding=''utf-8'') if l.strip()]; ok=lambda c,p: c==prefs[''city''] and prefs[''min_rent_sek'']<=p<=prefs[''max_rent_sek'']; exp={e[''id''] for e in saved if not (e[''city'']==prefs[''city''] and not ok(e[''city''],e[''price_sek'']))}; ids={e[''id''] for e in saved}; exp|={e[''id''] for e in cat if ok(e[''city''],e[''price_sek'']) and e[''id''] not in ids}; exp|={e[''listing''][''id''] for e in feed if ok(e[''listing''][''city''],e[''listing''][''price_sek''])}; fin={e[''id''] for e in json.load(open(''/app/output_data/saved_list_final.json'',encoding=''utf-8''))[''saved'']}; assert fin==exp"'
+  notification_closure: python3 -c "import json; prefs=json.load(open('/app/task_file/app/raf_saved_list.json',encoding='utf-8'))['search_preferences']; feed=[json.loads(l) for l in open('/app/task_file/event_feed/feed.jsonl',encoding='utf-8') if l.strip()]; feed.sort(key=lambda e:e['seq']); exp=[e['listing']['id'] for e in feed if e['listing']['city']==prefs['city'] and prefs['min_rent_sek']<=e['listing']['price_sek']<=prefs['max_rent_sek']]; got=[json.loads(l)['listing_id'] for l in open('/app/output_data/notifications.jsonl',encoding='utf-8') if l.strip()]; assert got==exp"
+  no_stale_in_final: python3 -c "import json; prefs=json.load(open('/app/task_file/app/raf_saved_list.json',encoding='utf-8'))['search_preferences']; fin={e['id'] for e in json.load(open('/app/output_data/saved_list_final.json',encoding='utf-8'))['saved']}; feed=[json.loads(l) for l in open('/app/task_file/event_feed/feed.jsonl',encoding='utf-8') if l.strip()]; decoys=[e['listing']['id'] for e in feed if not (e['listing']['city']==prefs['city'] and prefs['min_rent_sek']<=e['listing']['price_sek']<=prefs['max_rent_sek'])]; assert not (set(decoys)&fin)"
 reverification_anchors:
   saved_list_closure:
   - result_04
@@ -196,7 +163,8 @@ information_sufficiency:
   - listing_count
   - saved_list_revision
   review_status: reviewed
-  requirement_ids: [gaia2_stockholm_async_closure]
+  requirement_ids:
+  - gaia2_stockholm_async_closure
 - workstream_id: app_state_reader_B
   public_inputs:
   - /app/task_file/app/raf_catalog.json
@@ -205,7 +173,8 @@ information_sufficiency:
   - catalog_count
   - inventory_revision
   review_status: reviewed
-  requirement_ids: [gaia2_stockholm_async_closure]
+  requirement_ids:
+  - gaia2_stockholm_async_closure
 - workstream_id: contact_budget_reader
   public_inputs:
   - /app/task_file/app/contacts.json
@@ -214,7 +183,8 @@ information_sufficiency:
   - contact_id
   - budget_sek
   review_status: reviewed
-  requirement_ids: [gaia2_stockholm_async_closure]
+  requirement_ids:
+  - gaia2_stockholm_async_closure
 - workstream_id: event_monitor
   public_inputs:
   - /app/task_file/event_feed/feed.jsonl
@@ -225,7 +195,8 @@ information_sufficiency:
   - stream_sequence
   - events_seen
   review_status: reviewed
-  requirement_ids: [gaia2_stockholm_async_closure]
+  requirement_ids:
+  - gaia2_stockholm_async_closure
 - workstream_id: action_planner
   public_inputs:
   - /app/output_data/planned_ops.json
@@ -234,7 +205,8 @@ information_sufficiency:
   - plan_revision
   - ops_count
   review_status: reviewed
-  requirement_ids: [gaia2_stockholm_async_closure]
+  requirement_ids:
+  - gaia2_stockholm_async_closure
 - workstream_id: world_state_validator
   public_inputs:
   - /app/output_data/saved_list_final.json
@@ -244,7 +216,8 @@ information_sufficiency:
   - final_revision
   - notifications_count
   review_status: reviewed
-  requirement_ids: [gaia2_stockholm_async_closure]
+  requirement_ids:
+  - gaia2_stockholm_async_closure
 legacy_metadata:
   metrics:
     primary:

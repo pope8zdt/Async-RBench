@@ -93,7 +93,18 @@
       "expected_output": "Receipt-bound evidence for requirement 1: Move every reported per-recording state transition into VoiceBroadcastRecording.",
       "id": "requirement_worker_01",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_01.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -127,7 +138,18 @@
       "expected_output": "Receipt-bound evidence for requirement 2: Implement VoiceBroadcastRecordingsStore ownership and current-recording selection according to the graph.",
       "id": "requirement_worker_02",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_02.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -161,7 +183,18 @@
       "expected_output": "Receipt-bound evidence for requirement 3: Route startNewVoiceBroadcastRecording through the store.",
       "id": "requirement_worker_03",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_03.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -195,7 +228,18 @@
       "expected_output": "Receipt-bound evidence for requirement 4: Update each reported consumer to subscribe to model or store events instead of legacy state.",
       "id": "requirement_worker_04",
       "priority": "high",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_04.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",

@@ -87,7 +87,18 @@
       "expected_output": "Receipt-bound evidence for requirement 1: Update type-comment traversal to consume the reported root import names.",
       "id": "requirement_worker_01",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_01.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -121,7 +132,18 @@
       "expected_output": "Receipt-bound evidence for requirement 2: Verify both module and directly imported class references suppress W0611.",
       "id": "requirement_worker_02",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_02.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -155,7 +177,18 @@
       "expected_output": "Receipt-bound evidence for requirement 3: Add negative coverage showing genuinely unused imports are still reported and run focused functional tests.",
       "id": "requirement_worker_03",
       "priority": "high",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_03.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",

@@ -69,7 +69,8 @@ workstreams:
   - /app/task_file/app/raf_saved_list.json
   required_files:
   - /app/task_file/app/raf_saved_list.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: app_state_reader_B
   task: 'Read the RentAFlat catalog app under /app/task_file/app/raf_catalog.json
     and report the inventory: catalog_path, catalog_count (the number of catalog entries)
@@ -94,7 +95,8 @@ workstreams:
   - /app/task_file/app/raf_catalog.json
   required_files:
   - /app/task_file/app/raf_catalog.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: contact_budget_reader
   task: Read the Contacts app under /app/task_file/app/contacts.json, locate the record
     for the friend who is moving to Stockholm, and report contact_path, contact_id
@@ -119,7 +121,8 @@ workstreams:
   - /app/task_file/app/contacts.json
   required_files:
   - /app/task_file/app/contacts.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: event_monitor
   task: 'Monitor the deterministic listing event feed under /app/task_file/event_feed.
     Poll scripts/read_events.py with an increasing --tick to observe new listings
@@ -152,7 +155,8 @@ workstreams:
   - /app/task_file/event_feed/feed_meta.json
   required_files:
   - /app/task_file/event_feed/feed.jsonl
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: action_planner
   task: 'From the saved-list snapshot and the catalog inventory, compute the corrected
     saved-list operation plan: keep every non-matching-city listing untouched, drop
@@ -182,7 +186,8 @@ workstreams:
   - /app/output_data/planned_ops.json
   required_files:
   - /app/output_data/planned_ops.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: world_state_validator
   task: 'Verify the final world state once the main agent has produced it: /app/output_data/saved_list_final.json
     (the final saved list) and /app/output_data/notifications.jsonl (the Messages
@@ -212,5 +217,6 @@ workstreams:
   - /app/output_data/notifications.jsonl
   required_files:
   - /app/output_data/saved_list_final.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 public_checks: []

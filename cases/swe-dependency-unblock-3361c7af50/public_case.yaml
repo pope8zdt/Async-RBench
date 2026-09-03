@@ -93,7 +93,18 @@
       "expected_output": "Receipt-bound evidence for requirement 1: Update Figure serialization to omit the alignment-group state containing weak references.",
       "id": "requirement_worker_01",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_01.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -127,7 +138,18 @@
       "expected_output": "Receipt-bound evidence for requirement 2: Recreate fresh alignment Groupers when the figure is restored.",
       "id": "requirement_worker_02",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_02.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -161,7 +183,18 @@
       "expected_output": "Receipt-bound evidence for requirement 3: Verify pickle round-tripping after align_labels() and confirm the unpickled figure can perform alignment again.",
       "id": "requirement_worker_03",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_03.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -195,7 +228,18 @@
       "expected_output": "Receipt-bound evidence for requirement 4: Run the targeted figure and serialization tests, including a control figure that was never aligned.",
       "id": "requirement_worker_04",
       "priority": "high",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_04.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",

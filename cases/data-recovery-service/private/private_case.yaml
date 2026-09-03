@@ -12,12 +12,7 @@ capabilities:
 workstream_bindings:
   checkpoint_recovery:
     result_kind: result_01
-    validator_command: python3 -c "import base64,json,os,sqlite3; p=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']));
-      c=sqlite3.connect('/app/main.db'); raw=c.execute('select id,name,value from
-      items order by id').fetchall(); rows=[dict(zip(('id','name','value'),x)) for
-      x in raw]; assert len(rows)==5 and rows[0]=={'id':1,'name':'apple','value':100}
-      and rows[-1]=={'id':5,'name':'elderberry','value':500}; assert p['evidence']['row_count']==len(rows)
-      and p['evidence']['rows']==rows"
+    validator_command: python3 -c "import base64,json,os,sqlite3; p=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64'])); c=sqlite3.connect('/app/main.db'); raw=c.execute('select id,name,value from items order by id').fetchall(); rows=[dict(zip(('id','name','value'),x)) for x in raw]; assert len(rows)==5 and rows[0]=={'id':1,'name':'apple','value':100} and rows[-1]=={'id':5,'name':'elderberry','value':500}; assert p['evidence']['row_count']==len(rows) and p['evidence']['rows']==rows"
     validator_timeout_sec: 120
     private_evidence_schema:
       row_count:
@@ -30,12 +25,10 @@ workstream_bindings:
         type: string
         const: ok
     event_assets: []
+    validator_stage: semantic_evidence
   wal_recovery:
     result_kind: result_02
-    validator_command: python3 -c "import base64,json,os; p=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']));
-      r=json.load(open('/app/recovered.json')); assert [x['id'] for x in r]==list(range(1,12));
-      assert r[0]=={'id':1,'name':'apple','value':150}; assert r[1]=={'id':2,'name':'banana','value':250};
-      assert r[-1]=={'id':11,'name':'mango','value':1100}; assert p['evidence']['final_row_count']==len(r)"
+    validator_command: python3 -c "import base64,json,os; p=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64'])); r=json.load(open('/app/recovered.json')); assert [x['id'] for x in r]==list(range(1,12)); assert r[0]=={'id':1,'name':'apple','value':150}; assert r[1]=={'id':2,'name':'banana','value':250}; assert r[-1]=={'id':11,'name':'mango','value':1100}; assert p['evidence']['final_row_count']==len(r)"
     validator_timeout_sec: 120
     private_evidence_schema:
       final_row_count:
@@ -49,27 +42,11 @@ workstream_bindings:
         const: true
     event_assets:
     - /app/main.db-wal
+    validator_stage: semantic_evidence
   merge_support:
     result_kind: result_03
-    validator_command: python3 -c "import base64,json,os,pandas as pd; p=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']));
-      d=pd.read_parquet('/app/merged_users.parquet'); r=json.load(open('/app/conflicts.json'));
-      rows={int(x['user_id']):{k:str(x[k]) for k in ['name','email','created_date','status']}
-      for x in d.to_dict('records')}; expected_rows={101:{'name':'John Doe','email':'john@a.com','created_date':'2024-01-15','status':'active'},102:{'name':'Jane
-      Smith','email':'jane@a.com','created_date':'2024-02-20','status':'inactive'},103:{'name':'Bob
-      Wilson','email':'bob@b.com','created_date':'2024-03-01','status':'active'},104:{'name':'Alice
-      Brown','email':'alice@c.com','created_date':'2024-04-01','status':'active'}};
-      expected_conflicts={(101,'name'):{'values':{'source_a':'John Doe','source_b':'John
-      Doe','source_c':'John D.'},'selected':'John Doe'},(101,'email'):{'values':{'source_a':'john@a.com','source_b':'john@b.com','source_c':'john@c.com'},'selected':'john@a.com'},(101,'created_date'):{'values':{'source_a':'2024-01-15','source_b':'2024-01-10','source_c':'2024-01-20'},'selected':'2024-01-15'}};
-      assert isinstance(r,dict) and set(r)=={'total_conflicts','conflicts'} and isinstance(r['conflicts'],list),
-      'conflicts.json must have exactly total_conflicts and a conflicts list'; assert
-      all(isinstance(x,dict) and set(x)=={'user_id','field','values','selected'} and
-      isinstance(x['values'],dict) and set(x['values'])<= {'source_a','source_b','source_c'}
-      for x in r['conflicts']), 'each conflict must have exactly user_id, field, values,
-      selected; values must contain only source_a/source_b/source_c'; actual_conflicts={(int(x['user_id']),x['field']):{'values':x['values'],'selected':x['selected']}
-      for x in r['conflicts']}; assert len(d)==4 and set(d.columns)=={'user_id','name','email','created_date','status'}
-      and rows==expected_rows; assert r['total_conflicts']==3 and len(r['conflicts'])==3
-      and actual_conflicts==expected_conflicts; assert p['evidence']['merged_users_count']==4
-      and p['evidence']['conflict_count']==3"
+    validator_command: python3 -c "import base64,json,os,pandas as pd; p=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64'])); d=pd.read_parquet('/app/merged_users.parquet'); r=json.load(open('/app/conflicts.json')); rows={int(x['user_id']):{k:str(x[k]) for k in ['name','email','created_date','status']} for x in d.to_dict('records')}; expected_rows={101:{'name':'John Doe','email':'john@a.com','created_date':'2024-01-15','status':'active'},102:{'name':'Jane Smith','email':'jane@a.com','created_date':'2024-02-20','status':'inactive'},103:{'name':'Bob Wilson','email':'bob@b.com','created_date':'2024-03-01','status':'active'},104:{'name':'Alice Brown','email':'alice@c.com','created_date':'2024-04-01','status':'active'}}; expected_conflicts={(101,'name'):{'values':{'source_a':'John Doe','source_b':'John Doe','source_c':'John D.'},'selected':'John Doe'},(101,'email'):{'values':{'source_a':'john@a.com','source_b':'john@b.com','source_c':'john@c.com'},'selected':'john@a.com'},(101,'created_date'):{'values':{'source_a':'2024-01-15','source_b':'2024-01-10','source_c':'2024-01-20'},'selected':'2024-01-15'}};
+      assert isinstance(r,dict) and set(r)=={'total_conflicts','conflicts'} and isinstance(r['conflicts'],list), 'conflicts.json must have exactly total_conflicts and a conflicts list'; assert all(isinstance(x,dict) and set(x)=={'user_id','field','values','selected'} and isinstance(x['values'],dict) and set(x['values'])<= {'source_a','source_b','source_c'} for x in r['conflicts']), 'each conflict must have exactly user_id, field, values, selected; values must contain only source_a/source_b/source_c'; actual_conflicts={(int(x['user_id']),x['field']):{'values':x['values'],'selected':x['selected']} for x in r['conflicts']}; assert len(d)==4 and set(d.columns)=={'user_id','name','email','created_date','status'} and rows==expected_rows; assert r['total_conflicts']==3 and len(r['conflicts'])==3 and actual_conflicts==expected_conflicts; assert p['evidence']['merged_users_count']==4 and p['evidence']['conflict_count']==3"
     validator_timeout_sec: 120
     private_evidence_schema:
       merged_users_count:
@@ -79,13 +56,13 @@ workstream_bindings:
         type: integer
         const: 3
     event_assets: []
+    validator_stage: semantic_evidence
 result_contract:
   allowed_result_kinds:
   - result_01
   - result_02
   - result_03
-  rule: Tag checkpoint-only and WAL-applied recovery results distinctly; completion
-    is visible to the main agent only after gateway delivery.
+  rule: Tag checkpoint-only and WAL-applied recovery results distinctly; completion is visible to the main agent only after gateway delivery.
 authoritative_result_kind: result_02
 superseded_result_kind: result_01
 scenarios:
@@ -110,22 +87,11 @@ scenarios:
       - integrate_service_seed
       - final_qa
 artifact_observers:
-  pre_event_verification: >-
-    python -c "import grpc,hashlib,json,sys; sys.path.insert(0,'/app'); import
-    kv_store_pb2,kv_store_pb2_grpc; seed=json.load(open('/app/service_seed.json'));
-    key=next(iter(seed)); channel=grpc.insecure_channel('127.0.0.1:5328');
-    response=kv_store_pb2_grpc.KVStoreStub(channel).GetVal(kv_store_pb2.GetValRequest(key=key),timeout=3);
-    assert response.val==seed[key]; channel.close(); print(hashlib.sha256((key+'\0'+response.val).encode()).hexdigest())"
+  pre_event_verification: python -c "import grpc,hashlib,json,sys; sys.path.insert(0,'/app'); import kv_store_pb2,kv_store_pb2_grpc; seed=json.load(open('/app/service_seed.json')); key=next(iter(seed)); channel=grpc.insecure_channel('127.0.0.1:5328'); response=kv_store_pb2_grpc.KVStoreStub(channel).GetVal(kv_store_pb2.GetValRequest(key=key),timeout=3); assert response.val==seed[key]; channel.close(); print(hashlib.sha256((key+'\0'+response.val).encode()).hexdigest())"
 hidden_checks:
-  wal_row_count: python -c "import json; rows=json.load(open('/app/recovered.json'));
-    assert len(rows)==11"
-  service_seed: python -c "import json; seed=json.load(open('/app/service_seed.json'));
-    assert len([k for k in seed if k.startswith('item:')])==11; assert any(k.startswith('user:')
-    for k in seed)"
-  grpc_state: python -c "import sys,json,grpc; sys.path.insert(0,'/app'); import kv_store_pb2,kv_store_pb2_grpc;
-    seed=json.load(open('/app/service_seed.json')); key=next(iter(seed)); channel=grpc.insecure_channel('127.0.0.1:5328');
-    response=kv_store_pb2_grpc.KVStoreStub(channel).GetVal(kv_store_pb2.GetValRequest(key=key),timeout=3);
-    assert response.val==seed[key]; channel.close()"
+  wal_row_count: python -c "import json; rows=json.load(open('/app/recovered.json')); assert len(rows)==11"
+  service_seed: python -c "import json; seed=json.load(open('/app/service_seed.json')); assert len([k for k in seed if k.startswith('item:')])==11; assert any(k.startswith('user:') for k in seed)"
+  grpc_state: python -c "import sys,json,grpc; sys.path.insert(0,'/app'); import kv_store_pb2,kv_store_pb2_grpc; seed=json.load(open('/app/service_seed.json')); key=next(iter(seed)); channel=grpc.insecure_channel('127.0.0.1:5328'); response=kv_store_pb2_grpc.KVStoreStub(channel).GetVal(kv_store_pb2.GetValRequest(key=key),timeout=3); assert response.val==seed[key]; channel.close()"
 reverification_anchors: {}
 stale_predicate: null
 stale_revalidation: {}

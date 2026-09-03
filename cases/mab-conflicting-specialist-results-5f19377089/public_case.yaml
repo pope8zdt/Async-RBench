@@ -87,7 +87,18 @@
       "expected_output": "A provisional specialist comparison covering the maintenance pressure against its competing lock, vacuum, index, and fetch hypotheses.",
       "id": "requirement_worker_01",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_01.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -130,7 +141,9 @@
       "expected_output": "A promotable, receipt-bound authoritative PostgreSQL report identifying VACUUM, together with /app/output_data/event_receipt.json.",
       "id": "requirement_worker_02",
       "priority": "high",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "payload_only"
+      },
       "required_evidence_fields": [
         "report_path",
         "receipt_path",

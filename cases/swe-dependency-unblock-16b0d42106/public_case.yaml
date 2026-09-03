@@ -81,7 +81,18 @@
       "expected_output": "Receipt-bound evidence for requirement 1: Add or invoke a program-wide FFI signature consistency check before LLVM declaration reuse. Review together: Compare return, parameter, and variadic components and emit a source diagnostic on mismatch.",
       "id": "requirement_worker_01",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_01.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -115,7 +126,18 @@
       "expected_output": "Receipt-bound evidence for requirement 2: Retain successful reuse for identical declarations across packages. Review together: Add multi-package compiler tests for identical and independently varied incompatible signatures.",
       "id": "requirement_worker_02",
       "priority": "high",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_02.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",

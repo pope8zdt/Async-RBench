@@ -201,8 +201,9 @@
         }
       },
       "result_kind": "result_01",
-      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file()\"",
-      "validator_timeout_sec": 120
+      "validator_command": "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/workstreams/upstream_worker_01.json'\nfields=[]\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nr={}\"",
+      "validator_timeout_sec": 120,
+      "validator_stage": "submission_contract"
     },
     "upstream_worker_02": {
       "event_assets": [],
@@ -220,8 +221,9 @@
         }
       },
       "result_kind": "result_02",
-      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file()\"",
-      "validator_timeout_sec": 120
+      "validator_command": "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/workstreams/upstream_worker_02.json'\nfields=[]\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nr={}\"",
+      "validator_timeout_sec": 120,
+      "validator_stage": "submission_contract"
     },
     "upstream_worker_03": {
       "event_assets": [
@@ -241,8 +243,9 @@
         }
       },
       "result_kind": "result_03",
-      "validator_command": "python3 -c \"import base64,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file()\"",
-      "validator_timeout_sec": 120
+      "validator_command": "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/workstreams/upstream_worker_03.json'\nfields=[]\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nr={}\"",
+      "validator_timeout_sec": 120,
+      "validator_stage": "submission_contract"
     }
   }
 }

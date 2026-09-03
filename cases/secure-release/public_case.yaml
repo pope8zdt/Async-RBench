@@ -87,7 +87,8 @@ workstreams:
   required_files:
   - /app/deliverables/bottle_crlf_fix.patch
   - /app/deliverables/validation_test.py
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: sanitize_history
   task: Inspect and sanitize reachable and unreachable Git history in /app/repo. Recover
     the leaked secret, remove it from every Git object without losing legitimate history,
@@ -117,7 +118,8 @@ workstreams:
   - /tmp/sanitized.bundle
   required_files:
   - /tmp/sanitized.bundle
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: release_infrastructure
   task: 'Prepare the independent Git/nginx deployment infrastructure: synchronous
     post-receive deploys (main to https://localhost:8443/index.html, dev to https://localhost:8443/dev/index.html,
@@ -167,5 +169,6 @@ workstreams:
   - /tmp/nginx-git-infrastructure/ssh/sshd_config
   - /tmp/nginx-git-infrastructure/git/repositories/main.git/hooks/post-receive
   - /tmp/nginx-git-infrastructure/git/repositories/dev.git/hooks/post-receive
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 public_checks: []

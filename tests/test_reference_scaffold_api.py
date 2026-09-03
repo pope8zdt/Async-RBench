@@ -996,14 +996,16 @@ class _ValidateThenSubmitBackend:
 
 
 class _FixtureWorkspace:
-    """The report artifact does not exist, so the dry-run fails the public rule."""
+    """Dry-run sees a missing report; the subsequent submit sees it repaired."""
 
     def __init__(self) -> None:
         self.calls: list[tuple[str, str, int]] = []
 
     async def child_terminal(self, child_id: str, command: str, timeout: int) -> CommandResult:
         self.calls.append((child_id, command, timeout))
-        return CommandResult(1, "ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing\n")
+        if len(self.calls) == 1:
+            return CommandResult(1, "ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing\n")
+        return CommandResult(0, "")
 
 
 def test_pre_submit_validate_result_dry_runs_the_public_rule() -> None:
@@ -1042,7 +1044,7 @@ def test_pre_submit_validate_result_dry_runs_the_public_rule() -> None:
             BudgetPool("child_shared", maximum=500_000),
         )
         outcome = await agent.run(record, "test-model", 1)
-        assert len(workspace.calls) == 1
+        assert len(workspace.calls) == 2
         _, command, _ = workspace.calls[0]
         assert command.startswith("export ASYNC_RBENCH_RESULT_PAYLOAD_B64=")
         assert "ASYNC_RBENCH_CONTRACT_FAIL" in command
@@ -1052,6 +1054,9 @@ def test_pre_submit_validate_result_dry_runs_the_public_rule() -> None:
         assert verdict["valid"] is False
         assert verdict["reason_codes"] == ["report_file_missing"]
         assert verdict["contract_part"] == "report_file"
+        # submit_result re-runs the same public validator instead of trusting
+        # that the child called validate_result earlier.
+        assert workspace.calls[1][1] == workspace.calls[0][1]
         # The child used the verdict and sealed a corrected result.
         assert outcome.kind == "submitted"
         assert outcome.payload is not None

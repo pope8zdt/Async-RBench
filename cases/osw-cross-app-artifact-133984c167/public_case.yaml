@@ -82,7 +82,15 @@
           "pattern": "^[0-9a-f]{64}$"
         }
       },
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/upstream_worker_01.json",
+          "must_exist": true,
+          "must_be_valid_json": false,
+          "fields_equal_evidence": []
+        }
+      },
       "targets": [
         "workspace_state"
       ]
@@ -116,11 +124,18 @@
           "pattern": "^[0-9a-f]{64}$"
         }
       },
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/upstream_worker_02.json",
+          "must_exist": true,
+          "must_be_valid_json": false,
+          "fields_equal_evidence": []
+        }
+      },
       "targets": [
         "workspace_state"
       ]
     }
   ]
 }
-

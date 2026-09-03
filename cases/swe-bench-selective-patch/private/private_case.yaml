@@ -12,11 +12,7 @@ capabilities:
 workstream_bindings:
   core_patch_applier:
     result_kind: result_01
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      a=json.load(open('/app/task_file/authority/fix_authority.json',encoding='utf-8'));
-      assert r['fix_revision']==e['fix_revision']; assert r['authority_receipt']==e['source_receipt']==a['authority_receipt'];
-      assert r['patched_path']==e['patched_path']; assert os.path.isfile(r['patched_path'])"
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8')); a=json.load(open('/app/task_file/authority/fix_authority.json',encoding='utf-8')); assert r['fix_revision']==e['fix_revision']; assert r['authority_receipt']==e['source_receipt']==a['authority_receipt']; assert r['patched_path']==e['patched_path']; assert os.path.isfile(r['patched_path'])"
     validator_timeout_sec: 120
     private_evidence_schema:
       fix_revision:
@@ -31,12 +27,10 @@ workstream_bindings:
         pattern: sp2-fix-authority-[0-9a-f]{16}
     event_assets:
     - /app/task_file/authority/fix_authority.json
+    validator_stage: semantic_evidence
   test_module_A_runner:
     result_kind: result_02
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert r['group']=='A'; assert bool(r['passed'])==bool(e['passed']); assert
-      r['run_revision']==e['run_revision']"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/module_groups/A_result.json'\nfields=['run_revision']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'run_revision' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:run_revision');sys.exit(1)\nif r['run_revision']!=ev['run_revision']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:run_revision');sys.exit(1)\""
     validator_timeout_sec: 300
     private_evidence_schema:
       group:
@@ -51,12 +45,10 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: submission_contract
   test_module_B_runner:
     result_kind: result_03
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert r['group']=='B'; assert bool(r['passed'])==bool(e['passed']); assert
-      r['run_revision']==e['run_revision']"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/module_groups/B_result.json'\nfields=['run_revision']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'run_revision' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:run_revision');sys.exit(1)\nif r['run_revision']!=ev['run_revision']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:run_revision');sys.exit(1)\""
     validator_timeout_sec: 300
     private_evidence_schema:
       group:
@@ -71,12 +63,10 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: submission_contract
   test_module_C_runner:
     result_kind: result_04
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert r['group']=='C'; assert bool(r['passed'])==bool(e['passed']); assert
-      r['run_revision']==e['run_revision']"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/module_groups/C_result.json'\nfields=['run_revision']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'run_revision' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:run_revision');sys.exit(1)\nif r['run_revision']!=ev['run_revision']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:run_revision');sys.exit(1)\""
     validator_timeout_sec: 300
     private_evidence_schema:
       group:
@@ -91,11 +81,10 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: submission_contract
   patch_integrator:
     result_kind: result_05
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert r['fix_revision']==e['fix_revision']; assert set(r['integrated_groups'])>=set(['A','B','C'])"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/integrated_fix.json'\nfields=['fix_revision']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'fix_revision' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:fix_revision');sys.exit(1)\nif r['fix_revision']!=ev['fix_revision']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:fix_revision');sys.exit(1)\""
     validator_timeout_sec: 120
     private_evidence_schema:
       fix_revision:
@@ -107,11 +96,10 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: submission_contract
   regression_validator:
     result_kind: result_06
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert bool(r['passed'])==bool(e['passed']); assert r['regression_revision']==e['regression_revision']"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/regression_result.json'\nfields=['regression_revision']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'regression_revision' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:regression_revision');sys.exit(1)\nif r['regression_revision']!=ev['regression_revision']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:regression_revision');sys.exit(1)\""
     validator_timeout_sec: 300
     private_evidence_schema:
       passed:
@@ -122,6 +110,7 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: submission_contract
 result_contract:
   allowed_result_kinds:
   - result_01
@@ -130,11 +119,7 @@ result_contract:
   - result_04
   - result_05
   - result_06
-  rule: 'At child spawn assign a module-group runner (or the patch applier / integrator
-    / regression validator); at completion tag the result with the matching kind.
-    A passing result for one module group is not proof the other two pass: completion
-    requires every module-group result plus the full regression, and any result produced
-    against a superseded fix revision is stale.'
+  rule: 'At child spawn assign a module-group runner (or the patch applier / integrator / regression validator); at completion tag the result with the matching kind. A passing result for one module group is not proof the other two pass: completion requires every module-group result plus the full regression, and any result produced against a superseded fix revision is stale.'
 authoritative_result_kind: result_01
 superseded_result_kind: result_03
 scenarios:
@@ -162,20 +147,10 @@ scenarios:
       - repair_preprocessing_path
 artifact_observers: {}
 hidden_checks:
-  a_preserved: python3 -c "import json; a=json.load(open('/app/output_data/module_groups/A_result.json',encoding='utf-8'));
-    m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
-    assert a['passed'] is True; assert a['run_revision']==m['final_fix_revision']"
-  b_repaired: python3 -c "import json; b=json.load(open('/app/output_data/module_groups/B_result.json',encoding='utf-8'));
-    i=json.load(open('/app/output_data/module_groups/B_result_initial.json',encoding='utf-8'));
-    m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
-    assert b['passed'] is True; assert i['passed'] is False; assert m['repair_applied']
-    is True"
-  c_preserved: python3 -c "import json; c=json.load(open('/app/output_data/module_groups/C_result.json',encoding='utf-8'));
-    m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
-    assert c['passed'] is True; assert c['run_revision']==m['final_fix_revision']"
-  regression_green: python3 -c "import json; r=json.load(open('/app/output_data/regression_result.json',encoding='utf-8'));
-    m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
-    assert r['passed'] is True; assert r['regression_revision']==m['final_fix_revision']"
+  a_preserved: python3 -c "import json; a=json.load(open('/app/output_data/module_groups/A_result.json',encoding='utf-8')); m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8')); assert a['passed'] is True; assert a['run_revision']==m['final_fix_revision']"
+  b_repaired: python3 -c "import json; b=json.load(open('/app/output_data/module_groups/B_result.json',encoding='utf-8')); i=json.load(open('/app/output_data/module_groups/B_result_initial.json',encoding='utf-8')); m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8')); assert b['passed'] is True; assert i['passed'] is False; assert m['repair_applied'] is True"
+  c_preserved: python3 -c "import json; c=json.load(open('/app/output_data/module_groups/C_result.json',encoding='utf-8')); m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8')); assert c['passed'] is True; assert c['run_revision']==m['final_fix_revision']"
+  regression_green: python3 -c "import json; r=json.load(open('/app/output_data/regression_result.json',encoding='utf-8')); m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8')); assert r['passed'] is True; assert r['regression_revision']==m['final_fix_revision']"
 reverification_anchors:
   a_preserved:
   - result_02
@@ -204,7 +179,8 @@ stale_revalidation:
     - regression_green
 information_sufficiency:
 - workstream_id: core_patch_applier
-  requirement_ids: [source_and_async_closure_contract]
+  requirement_ids:
+  - source_and_async_closure_contract
   public_inputs:
   - /app/output_data/applied_fix.json
   - /app/task_file/src/sklearn/utils/multiclass.py
@@ -215,7 +191,8 @@ information_sufficiency:
   - report_path
   review_status: reviewed
 - workstream_id: test_module_A_runner
-  requirement_ids: [source_and_async_closure_contract]
+  requirement_ids:
+  - source_and_async_closure_contract
   public_inputs:
   - /app/output_data/module_groups/A_result.json
   required_output_fields:
@@ -225,7 +202,8 @@ information_sufficiency:
   - report_path
   review_status: reviewed
 - workstream_id: test_module_B_runner
-  requirement_ids: [source_and_async_closure_contract]
+  requirement_ids:
+  - source_and_async_closure_contract
   public_inputs:
   - /app/output_data/module_groups/B_result.json
   - /app/output_data/module_groups/B_result_initial.json
@@ -236,7 +214,8 @@ information_sufficiency:
   - report_path
   review_status: reviewed
 - workstream_id: test_module_C_runner
-  requirement_ids: [source_and_async_closure_contract]
+  requirement_ids:
+  - source_and_async_closure_contract
   public_inputs:
   - /app/output_data/module_groups/C_result.json
   required_output_fields:
@@ -246,7 +225,8 @@ information_sufficiency:
   - report_path
   review_status: reviewed
 - workstream_id: patch_integrator
-  requirement_ids: [source_and_async_closure_contract]
+  requirement_ids:
+  - source_and_async_closure_contract
   public_inputs:
   - /app/output_data/integrated_fix.json
   required_output_fields:
@@ -255,7 +235,8 @@ information_sufficiency:
   - report_path
   review_status: reviewed
 - workstream_id: regression_validator
-  requirement_ids: [source_and_async_closure_contract]
+  requirement_ids:
+  - source_and_async_closure_contract
   public_inputs:
   - /app/output_data/regression_result.json
   required_output_fields:

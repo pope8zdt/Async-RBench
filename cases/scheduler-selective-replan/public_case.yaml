@@ -71,7 +71,8 @@ workstreams:
   - /app/task_file/output_data/plan_b1.jsonl
   required_files:
   - /app/task_file/output_data/plan_b1.jsonl
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: bucket2_optimizer
   task: Optimize the batching plan for bucket 2. Under /app/task_file/input_data/requests_bucket_2.jsonl
     every request must be covered by exactly one batch whose shape's seq_align is
@@ -100,7 +101,8 @@ workstreams:
   - /app/task_file/output_data/plan_b2.jsonl
   required_files:
   - /app/task_file/output_data/plan_b2.jsonl
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: global_shape_allocator
   task: 'Commit the shared global shape set for the combined scheduler. The union
     of the two buckets'' batch shapes is budgeted by the shared MAX_SHAPES=8 ceiling:
@@ -125,7 +127,8 @@ workstreams:
   - /app/task_file/output_data/global_shape_plan.json
   required_files:
   - /app/task_file/output_data/global_shape_plan.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: bucket1_validator
   task: Validate an isolated baseline candidate for bucket 1 against the shared
     thresholds and shape budget. First run /app/task_file/scripts/baseline_packer.py
@@ -160,7 +163,8 @@ workstreams:
   - /app/task_file/output_data/validator_reports/bucket1.json
   required_files:
   - /app/task_file/output_data/validator_reports/bucket1.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: bucket2_validator
   task: Validate an isolated baseline candidate for bucket 2. First run
     /app/task_file/scripts/baseline_packer.py to create both baseline plans in this
@@ -199,5 +203,6 @@ workstreams:
   - /app/task_file/output_data/validator_reports/bucket2.json
   required_files:
   - /app/task_file/output_data/validator_reports/bucket2.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 public_checks: []

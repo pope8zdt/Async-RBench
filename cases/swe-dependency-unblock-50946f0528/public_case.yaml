@@ -81,7 +81,18 @@
       "expected_output": "Receipt-bound evidence for requirement 1: Default element_id to None on both exposed call paths. Review together: Omit the id attribute entirely when no ID is supplied.",
       "id": "requirement_worker_01",
       "priority": "normal",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_01.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",
@@ -115,7 +126,18 @@
       "expected_output": "Receipt-bound evidence for requirement 2: Preserve ID escaping and JSON escaping when an ID is supplied. Review together: Run direct utility and template-filter tests for both signatures.",
       "id": "requirement_worker_02",
       "priority": "high",
-      "public_result_contract": {},
+      "public_result_contract": {
+        "kind": "report_file",
+        "report_file": {
+          "path": "/app/output_data/workstreams/requirement_worker_02.json",
+          "must_exist": true,
+          "must_be_valid_json": true,
+          "fields_equal_evidence": [
+            "finding",
+            "revision_sha256"
+          ]
+        }
+      },
       "required_evidence_fields": [
         "report_path",
         "revision_sha256",

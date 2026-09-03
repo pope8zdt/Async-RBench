@@ -14,8 +14,8 @@ from ...evaluation.case_contract import (
     MAX_INITIAL_WORKSTREAMS, PUBLIC_RESULT_REJECTION_CODES,
     contract_part_for_codes, public_delivery, public_rejection,
 )
-from ...evaluation.result_contract import validate_payload_contract
-from ...evaluation.report_contract import classify_validator_output, render_validator_command
+from ...evaluation.public_result_validation import validate_public_submission
+from ...evaluation.result_contract import ResultContractValidation
 from ...evaluation.presentation import DeliveryOccurrence, PresentationQueue
 from ...evaluation.protocol import canonical_digest
 from ...evaluation.termination import is_runtime_terminal
@@ -147,6 +147,20 @@ class ChildBudgetAccountingError(RuntimeError):
 
 class ChildContextBudgetError(RuntimeError):
     """The protocol-preserving child history cannot fit the configured bound."""
+
+
+class ChildPublicContractDefinitionError(RuntimeError):
+    """An in-memory case bypassed strict loading with an invalid public rule."""
+
+
+def child_record_contract(record: ChildRecord) -> dict[str, Any]:
+    return {
+        "required_evidence_fields": list(record.required_evidence_fields),
+        "evidence_schema": dict(record.evidence_schema),
+        "allowed_files": list(record.allowed_result_files),
+        "required_files": list(record.required_result_files),
+        "public_result_contract": dict(record.public_result_contract),
+    }
 
 
 def compress_child_messages(
@@ -339,6 +353,22 @@ class ChildAgent:
             }, ["summary", "evidence", "files"]),
         ]
 
+    async def _validate_candidate(
+        self, record: ChildRecord, payload: dict[str, Any],
+    ) -> ResultContractValidation:
+        validation = await validate_public_submission(
+            child_record_contract(record),
+            {
+                "type": "child_completed",
+                "child_id": record.child_id,
+                "payload": payload,
+            },
+            self.workspace,
+        )
+        if "invalid_public_result_contract" in validation.reason_codes:
+            raise ChildPublicContractDefinitionError("; ".join(validation.details))
+        return validation
+
     @staticmethod
     def _compress_messages(
         messages: list[dict[str, Any]],
@@ -512,31 +542,7 @@ class ChildAgent:
                     }))
                 elif call.name == "submit_result":
                     evidence = call.arguments.get("evidence") or {}
-                    missing_evidence = [
-                        field_name for field_name in record.required_evidence_fields
-                        if not isinstance(evidence, dict)
-                        or evidence.get(field_name) is None
-                        or evidence.get(field_name) == ""
-                    ]
-                    if missing_evidence:
-                        messages.append(_tool_result(call.id, {
-                            "sealed": False,
-                            "error": "missing required observed evidence fields",
-                            "missing_evidence_fields": missing_evidence,
-                        }))
-                        continue
                     files = list(call.arguments.get("files") or [])
-                    missing_files = sorted(set(record.required_result_files) - set(files))
-                    unexpected_files = sorted(set(files) - set(record.allowed_result_files))
-                    if record.result_file_contract_enforced and (missing_files or unexpected_files):
-                        messages.append(_tool_result(call.id, {
-                            "sealed": False,
-                            "error": "reported result files violate the workstream contract",
-                            "missing_required_files": missing_files,
-                            "unexpected_files": unexpected_files,
-                            "allowed_files": record.allowed_result_files,
-                        }))
-                        continue
                     payload = {
                         "summary": str(call.arguments.get("summary", "")),
                         "evidence": evidence,
@@ -544,39 +550,22 @@ class ChildAgent:
                     }
                     if call.arguments.get("patch"):
                         payload["patch"] = str(call.arguments["patch"])
-                    public_codes, public_details = validate_payload_contract(
-                        {
-                            "required_evidence_fields": record.required_evidence_fields,
-                            "evidence_schema": record.evidence_schema,
-                            "allowed_files": (
-                                record.allowed_result_files
-                                if record.result_file_contract_enforced else files
-                            ),
-                            "required_files": (
-                                record.required_result_files
-                                if record.result_file_contract_enforced else []
-                            ),
-                        },
-                        {"payload": payload},
-                    )
-                    if public_codes:
+                    validation = await self._validate_candidate(record, payload)
+                    if not validation.valid:
                         messages.append(_tool_result(call.id, {
                             "sealed": False,
                             "error": "result does not satisfy the participant-visible contract",
-                            "reason_codes": public_codes,
-                            "details": public_details,
+                            "reason_codes": list(validation.reason_codes),
+                            "details": list(validation.details),
+                            "contract_part": contract_part_for_codes(
+                                list(validation.reason_codes)
+                            ),
                         }))
                         continue
                     hint = str(call.arguments.get("result_kind_hint", ""))
                     messages.append(_tool_result(call.id, {"sealed": True}))
                     submitted = payload, hint
                 elif call.name == "validate_result":
-                    # P1-11/P1-12: public pre-submit dry-run. The child executes
-                    # the SAME accept rule the gateway will run (the deterministic
-                    # render of participant_visible_result_contract) against its
-                    # on-disk artifact in this container, so it can repair the
-                    # report before burning a sealed submission. The child never
-                    # sees the evaluator-private validator_command path.
                     evidence = call.arguments.get("evidence") or {}
                     files = list(call.arguments.get("files") or [])
                     payload = {
@@ -584,69 +573,18 @@ class ChildAgent:
                         "evidence": evidence,
                         "files": files,
                     }
-                    transport_codes, transport_details = validate_payload_contract(
-                        {
-                            "required_evidence_fields": record.required_evidence_fields,
-                            "evidence_schema": record.evidence_schema,
-                            "allowed_files": (
-                                record.allowed_result_files
-                                if record.result_file_contract_enforced else files
-                            ),
-                            "required_files": (
-                                record.required_result_files
-                                if record.result_file_contract_enforced else []
-                            ),
-                        },
-                        {"payload": payload},
-                    )
-                    if not transport_codes:
-                        report_contract = record.public_result_contract or {}
-                        report_config = dict(report_contract.get("report_file") or {})
-                        if (
-                            report_contract.get("kind") == "report_file"
-                            and report_config
-                            and len(record.required_result_files) == 1
-                        ):
-                            command = render_validator_command(
-                                report_contract, record.required_result_files[0],
-                            )
-                            encoded = base64.b64encode(
-                                json.dumps(
-                                    payload, ensure_ascii=False, sort_keys=True,
-                                    separators=(",", ":"),
-                                ).encode("utf-8"),
-                            ).decode("ascii")
-                            bound_command = (
-                                f"export ASYNC_RBENCH_RESULT_PAYLOAD_B64={shlex.quote(encoded)}\n"
-                                f"{command}"
-                            )
-                            validation = await self.workspace.child_terminal(
-                                record.child_id, bound_command,
-                                self.config.child_terminal_timeout_sec,
-                            )
-                            if validation.exit_code != 0:
-                                granular = classify_validator_output(
-                                    validation.output[-4000:]
-                                )
-                                codes = [
-                                    item[0] for item in granular
-                                ] or ["reported_file_contract_failed"]
-                                messages.append(_tool_result(call.id, {
-                                    "valid": False,
-                                    "reason_codes": codes,
-                                    "fields": [item[1] for item in granular],
-                                    "contract_part": contract_part_for_codes(codes),
-                                    "validator_output": _trim(
-                                        validation.output, 1500,
-                                    ),
-                                }))
-                                continue
-                    if transport_codes:
+                    validation = await self._validate_candidate(record, payload)
+                    if not validation.valid:
                         messages.append(_tool_result(call.id, {
                             "valid": False,
-                            "reason_codes": transport_codes,
-                            "details": transport_details,
-                            "contract_part": contract_part_for_codes(transport_codes),
+                            "reason_codes": list(validation.reason_codes),
+                            "details": list(validation.details),
+                            "contract_part": contract_part_for_codes(
+                                list(validation.reason_codes)
+                            ),
+                            "validator_output": _trim(
+                                validation.validator_output, 1500,
+                            ),
                         }))
                         continue
                     messages.append(_tool_result(call.id, {
@@ -1256,6 +1194,16 @@ class SubagentManager:
                 payload=outcome.payload,
                 usage={"tokens": outcome.tokens},
             )
+        except ChildPublicContractDefinitionError as exc:
+            record.status = "infrastructure_failed"
+            record.decision = "infrastructure_failed"
+            self.emitter.emit(
+                "infrastructure_failure",
+                component="case_contract",
+                child_id=record.child_id,
+                detail=str(exc),
+            )
+            self._delivery_event.set()
         except ChildContextBudgetError as exc:
             record.status = "infrastructure_failed"
             record.decision = "infrastructure_failed"

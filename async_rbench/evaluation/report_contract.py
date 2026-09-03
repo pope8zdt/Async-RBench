@@ -50,7 +50,12 @@ def is_report_contract_workstream(workstream: Mapping[str, Any]) -> bool:
 
 def has_hidden_validator(workstream: Mapping[str, Any]) -> bool:
     """A private validator with no declared public accept rule (legacy gap)."""
-    return bool(str(workstream.get("validator_command") or "").strip()) and not is_report_contract_workstream(workstream)
+    stage = str(workstream.get("validator_stage") or "")
+    if stage == "semantic_evidence":
+        return False
+    return bool(str(workstream.get("validator_command") or "").strip()) and (
+        stage != "submission_contract" or not is_report_contract_workstream(workstream)
+    )
 
 
 def report_file_config(workstream: Mapping[str, Any]) -> dict[str, Any]:
@@ -77,11 +82,14 @@ def report_contract_errors(workstream: Mapping[str, Any]) -> list[str]:
     required_files = [str(path) for path in workstream.get("required_files") or []]
     if not command:
         return errors
+    stage = str(workstream.get("validator_stage") or "")
+    if stage == "semantic_evidence":
+        return errors
+    if stage != "submission_contract":
+        errors.append(f"unsupported validator_stage {stage!r}")
+        return errors
     if contract.get("kind") != REPORT_FILE_KIND:
-        # No declarative accept rule is authored for this validator.  This is a
-        # hidden-validator gap surfaced separately (see the audit summary), not a
-        # drift on an existing public rule: there is no rule yet to compare
-        # against.  Failures here would flag every legacy case wholesale.
+        errors.append("submission_contract requires public_result_contract.kind=report_file")
         return errors
 
     config = dict(contract.get("report_file") or {})
@@ -95,8 +103,6 @@ def report_contract_errors(workstream: Mapping[str, Any]) -> list[str]:
     allowed = [str(item) for item in workstream.get("allowed_files") or []]
     if allowed and path not in allowed:
         errors.append(f"report_file.path {path!r} is not in allowed_files {allowed!r}")
-    if not config.get("fields_equal_evidence"):
-        errors.append("report_file.fields_equal_evidence is empty")
     for name in config.get("fields_equal_evidence") or []:
         if str(name) not in (workstream.get("required_evidence_fields") or []):
             errors.append(
@@ -148,10 +154,13 @@ def validator_code_lines(
         ]
     if must_be_valid_json:
         lines += [
-            "try:",
-            " r=json.load(open(p))",
-            "except Exception:",
-            " print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)",
+            "if p.is_file():",
+            " try:",
+            "  r=json.load(open(p))",
+            " except Exception:",
+            "  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)",
+            "else:",
+            " r={}",
         ]
     else:
         lines.append("r={}")
@@ -227,6 +236,37 @@ def classify_validator_output(output: str) -> list[tuple[str, str | None]]:
     return found
 
 
+def fixture_value(
+    field_name: str, field_schema: Mapping[str, Any], report_path: str,
+) -> Any:
+    """Return one deterministic value satisfying the supported evidence schema."""
+    schema = dict(field_schema or {})
+    if "const" in schema:
+        return schema["const"]
+    if schema.get("enum"):
+        return list(schema["enum"])[0]
+    if field_name == "report_path":
+        return report_path
+    if schema.get("pattern") == "^[0-9a-f]{64}$":
+        return "0" * 64
+    expected_type = str(schema.get("type") or "")
+    if expected_type == "string":
+        return "fixture-value"
+    if expected_type == "integer":
+        return 1
+    if expected_type == "number":
+        return 1.0
+    if expected_type == "boolean":
+        return True
+    if expected_type == "array":
+        return ["fixture-value"] * int(schema.get("min_items") or 0)
+    if expected_type == "object":
+        return {}
+    raise ValueError(
+        f"cannot build fixture for evidence field {field_name!r} with schema {schema!r}"
+    )
+
+
 def build_report_fixture(
     workstream: Mapping[str, Any],
 ) -> dict[str, Any]:
@@ -244,25 +284,27 @@ def build_report_fixture(
         return {}
     report_path = str(config.get("path") or required_files[0])
     fields = [str(field) for field in config.get("fields_equal_evidence") or []]
-
-    def evidence_for(revision_sha256: str, finding: str) -> dict[str, Any]:
-        return {
-            "report_path": report_path,
-            "revision_sha256": revision_sha256,
-            "finding": finding,
+    schema = dict(workstream.get("evidence_schema") or {})
+    try:
+        evidence = {
+            str(field_name): fixture_value(
+                str(field_name), dict(schema.get(str(field_name)) or {}), report_path,
+            )
+            for field_name in workstream.get("required_evidence_fields") or []
         }
-
-    revision = "0" * 64
-    finding = "preserved MACAO baseline"
+    except ValueError:
+        return {}
     positive = {
         "type": "child_completed",
         "payload": {
             "summary": "report fixture positive",
-            "evidence": evidence_for(revision, finding),
+            "evidence": evidence,
             "files": [report_path],
         },
     }
     negatives: dict[str, dict[str, Any]] = {}
+    missing_field_negatives: dict[str, dict[str, Any]] = {}
+    mismatch_negatives: dict[str, dict[str, Any]] = {}
 
     def clone() -> dict[str, Any]:
         return json.loads(json.dumps(positive))
@@ -270,13 +312,25 @@ def build_report_fixture(
     # Workspace-state negatives: the payload is identical to the positive, but the
     # on-disk artifact is missing / malformed / incomplete.  The fixture staging
     # mutates the file system for these; the payload alone cannot express them.
-    negatives["report_file_missing"] = clone()
-    negatives["report_json_invalid"] = clone()
-    negatives["report_missing_required_field"] = clone()
-
-    mismatch = clone()
-    mismatch["payload"]["evidence"]["finding"] = "differing finding"
-    negatives["report_payload_field_mismatch"] = mismatch
+    if bool(config.get("must_exist", True)):
+        negatives["report_file_missing"] = clone()
+    if bool(config.get("must_be_valid_json", True)):
+        negatives["report_json_invalid"] = clone()
+    for field in fields:
+        missing_field_negatives[field] = clone()
+        mismatch = clone()
+        original = mismatch["payload"]["evidence"][field]
+        mismatch["payload"]["evidence"][field] = (
+            not original if isinstance(original, bool)
+            else original + 1 if isinstance(original, (int, float))
+            else [*original, "different"] if isinstance(original, list)
+            else {"different": True} if isinstance(original, dict)
+            else f"{original}-different"
+        )
+        mismatch_negatives[field] = mismatch
+    if fields:
+        negatives["report_missing_required_field"] = missing_field_negatives[fields[0]]
+        negatives["report_payload_field_mismatch"] = mismatch_negatives[fields[0]]
 
     wrong_path = clone()
     wrong_path["payload"]["evidence"]["report_path"] = "/app/output_data/workstreams/other.json"
@@ -287,6 +341,8 @@ def build_report_fixture(
         "fields_equal_evidence": fields,
         "positive": positive,
         "negatives": negatives,
+        "missing_field_negatives": missing_field_negatives,
+        "mismatch_negatives": mismatch_negatives,
     }
 
 
@@ -306,11 +362,9 @@ def prepare_report_fixture_workspace(
     target = workspace_root.joinpath(*[part for part in report_path.split("/") if part])
     target.parent.mkdir(parents=True, exist_ok=True)
     evidence = fixture["positive"]["payload"]["evidence"]
+    fields = list(fixture["fields_equal_evidence"])
     target.write_text(
-        json.dumps({
-            "finding": evidence["finding"],
-            "revision_sha256": evidence["revision_sha256"],
-        }, ensure_ascii=False),
+        json.dumps({field: evidence[field] for field in fields}, ensure_ascii=False),
         encoding="utf-8",
     )
     return {"positive": target}

@@ -12,16 +12,7 @@ capabilities:
 workstream_bindings:
   sanitize_history:
     result_kind: result_01
-    validator_command: test -s /tmp/sanitized.bundle && git -C /app/repo bundle verify
-      /tmp/sanitized.bundle >/dev/null && tmp=$(mktemp -d) && git init -q "$tmp" &&
-      git -C "$tmp" fetch -q /tmp/sanitized.bundle 'refs/heads/*:refs/heads/*' &&
-      test -z "$(git -C "$tmp" fsck --full --no-reflogs --unreachable 2>/dev/null)"
-      && for oid in $(git -C "$tmp" cat-file --batch-all-objects --batch-check='%(objectname)');
-      do git -C "$tmp" cat-file -p "$oid" 2>/dev/null | grep -Fq 'secret[' && exit
-      1; done; python3 -c "import base64,json,os,subprocess,sys; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      head=lambda b:subprocess.check_output(['git','-C',sys.argv[1],'rev-parse',b],text=True).strip();
-      assert e['main_head']==head('main') and e['dev_head']==head('dev')" "$tmp" &&
-      rm -rf "$tmp"
+    validator_command: test -s /tmp/sanitized.bundle && git -C /app/repo bundle verify /tmp/sanitized.bundle >/dev/null && tmp=$(mktemp -d) && git init -q "$tmp" && git -C "$tmp" fetch -q /tmp/sanitized.bundle 'refs/heads/*:refs/heads/*' && test -z "$(git -C "$tmp" fsck --full --no-reflogs --unreachable 2>/dev/null)" && for oid in $(git -C "$tmp" cat-file --batch-all-objects --batch-check='%(objectname)'); do git -C "$tmp" cat-file -p "$oid" 2>/dev/null | grep -Fq 'secret[' && exit 1; done; python3 -c "import base64,json,os,subprocess,sys; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; head=lambda b:subprocess.check_output(['git','-C',sys.argv[1],'rev-parse',b],text=True).strip(); assert e['main_head']==head('main') and e['dev_head']==head('dev')" "$tmp" && rm -rf "$tmp"
     validator_timeout_sec: 120
     private_evidence_schema:
       secret_blob_present_after_sanitize:
@@ -38,19 +29,10 @@ workstream_bindings:
         pattern: '[0-9a-f]{40}'
     event_assets:
     - /app/events/authoritative-release.bundle
+    validator_stage: semantic_evidence
   release_infrastructure:
     result_kind: result_02
-    validator_command: test -s /tmp/nginx-git-infrastructure/nginx/nginx.conf && test
-      "$(cat /tmp/nginx-git-infrastructure/nginx/index.html)" = 'Welcome to the benchmark
-      webserver' && test "$(cat /tmp/nginx-git-infrastructure/nginx/404.html)" = 'Page
-      not found - Please check your URL' && grep -Eq 'PasswordAuthentication[[:space:]]+yes'
-      /tmp/nginx-git-infrastructure/ssh/sshd_config && test -x /tmp/nginx-git-infrastructure/git/repositories/main.git/hooks/post-receive
-      && test -x /tmp/nginx-git-infrastructure/git/repositories/dev.git/hooks/post-receive
-      && grep -Eq 'limit_req_zone.*rate=10r/s' /tmp/nginx-git-infrastructure/nginx/nginx.conf
-      && grep -Eq 'limit_req.*burst=10' /tmp/nginx-git-infrastructure/nginx/nginx.conf
-      && grep -q 'benchmark-access.log' /tmp/nginx-git-infrastructure/nginx/nginx.conf
-      && grep -q 'benchmark-error.log' /tmp/nginx-git-infrastructure/nginx/nginx.conf
-      && grep -Eq 'error_page[[:space:]]+404[[:space:]]+/404.html' /tmp/nginx-git-infrastructure/nginx/nginx.conf
+    validator_command: test -s /tmp/nginx-git-infrastructure/nginx/nginx.conf && test "$(cat /tmp/nginx-git-infrastructure/nginx/index.html)" = 'Welcome to the benchmark webserver' && test "$(cat /tmp/nginx-git-infrastructure/nginx/404.html)" = 'Page not found - Please check your URL' && grep -Eq 'PasswordAuthentication[[:space:]]+yes' /tmp/nginx-git-infrastructure/ssh/sshd_config && test -x /tmp/nginx-git-infrastructure/git/repositories/main.git/hooks/post-receive && test -x /tmp/nginx-git-infrastructure/git/repositories/dev.git/hooks/post-receive && grep -Eq 'limit_req_zone.*rate=10r/s' /tmp/nginx-git-infrastructure/nginx/nginx.conf && grep -Eq 'limit_req.*burst=10' /tmp/nginx-git-infrastructure/nginx/nginx.conf && grep -q 'benchmark-access.log' /tmp/nginx-git-infrastructure/nginx/nginx.conf && grep -q 'benchmark-error.log' /tmp/nginx-git-infrastructure/nginx/nginx.conf && grep -Eq 'error_page[[:space:]]+404[[:space:]]+/404.html' /tmp/nginx-git-infrastructure/nginx/nginx.conf
     validator_timeout_sec: 120
     private_evidence_schema:
       git_repositories_created:
@@ -72,18 +54,10 @@ workstream_bindings:
         type: boolean
         const: true
     event_assets: []
+    validator_stage: semantic_evidence
   security_patch:
     result_kind: result_03
-    validator_command: test -s /app/deliverables/bottle_crlf_fix.patch && test -s
-      /app/deliverables/validation_test.py && python3 -m py_compile /app/deliverables/validation_test.py
-      && for branch in main dev; do tmp=$(mktemp -d); git -C /app/repo archive "$branch"
-      | tar -x -C "$tmp" && (cd "$tmp" && git apply /app/deliverables/bottle_crlf_fix.patch)
-      && python3 -c "import importlib.util,pytest,sys; s=importlib.util.spec_from_file_location('b',sys.argv[1]);
-      m=importlib.util.module_from_spec(s); s.loader.exec_module(m); assert all(pytest.raises(ValueError,f,'X'+c+'Y')
-      for c in ('\n','\r','\0') for f in (m._hkey,m._hval))" "$tmp/bottle.py" || exit
-      1; rm -rf "$tmp"; done && python3 -c "import base64,json,os,subprocess; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      head=lambda b:subprocess.check_output(['git','-C','/app/repo','rev-parse',b],text=True).strip();
-      assert e['tested_main_head']==head('main') and e['tested_dev_head']==head('dev')"
+    validator_command: test -s /app/deliverables/bottle_crlf_fix.patch && test -s /app/deliverables/validation_test.py && python3 -m py_compile /app/deliverables/validation_test.py && for branch in main dev; do tmp=$(mktemp -d); git -C /app/repo archive "$branch" | tar -x -C "$tmp" && (cd "$tmp" && git apply /app/deliverables/bottle_crlf_fix.patch) && python3 -c "import importlib.util,pytest,sys; s=importlib.util.spec_from_file_location('b',sys.argv[1]); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); assert all(pytest.raises(ValueError,f,'X'+c+'Y') for c in ('\n','\r','\0') for f in (m._hkey,m._hval))" "$tmp/bottle.py" || exit 1; rm -rf "$tmp"; done && python3 -c "import base64,json,os,subprocess; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; head=lambda b:subprocess.check_output(['git','-C','/app/repo','rev-parse',b],text=True).strip(); assert e['tested_main_head']==head('main') and e['tested_dev_head']==head('dev')"
     validator_timeout_sec: 120
     private_evidence_schema:
       tested_main_head:
@@ -99,13 +73,13 @@ workstream_bindings:
         type: string
         min_items: 1
     event_assets: []
+    validator_stage: semantic_evidence
 result_contract:
   allowed_result_kinds:
   - result_03
   - result_01
   - result_02
-  rule: At child spawn assign semantic work_units; at completion tag the result with
-    the matching kind. The gateway, not the main agent, receives completion first.
+  rule: At child spawn assign semantic work_units; at completion tag the result with the matching kind. The gateway, not the main agent, receives completion first.
 authoritative_result_kind: result_01
 superseded_result_kind: result_03
 scenarios:
@@ -132,31 +106,13 @@ scenarios:
       - deploy_clean_refs
       - final_qa
 artifact_observers:
-  vulnerability_patch: (git -C /app/repo show main:bottle.py; git -C /app/repo show
-    dev:bottle.py) | sha256sum | awk '{print $1}'
-  pre_event_verification: >-
-    (cat /app/release-manifest.json; curl -kfsS https://127.0.0.1:8443/index.html;
-    curl -kfsS https://127.0.0.1:8443/dev/index.html; curl -fsS http://127.0.0.1:8080/)
-    | sha256sum | awk '{print $1}'
+  vulnerability_patch: (git -C /app/repo show main:bottle.py; git -C /app/repo show dev:bottle.py) | sha256sum | awk '{print $1}'
+  pre_event_verification: (cat /app/release-manifest.json; curl -kfsS https://127.0.0.1:8443/index.html; curl -kfsS https://127.0.0.1:8443/dev/index.html; curl -fsS http://127.0.0.1:8080/) | sha256sum | awk '{print $1}'
 hidden_checks:
-  history_clean: test "$(cat /app/secret.txt)" = 'secret[lost_and_found_in_git]' &&
-    for oid in $(git -C /app/repo cat-file --batch-all-objects --batch-check='%(objectname)');
-    do git -C /app/repo cat-file -p "$oid" 2>/dev/null | grep -Fq 'secret[' && exit
-    1; done; exit 0
-  security_patch_all_refs: for branch in main dev; do git -C /app/repo show "$branch:bottle.py"
-    > "/tmp/dtb2-bottle-$branch.py" && DTB2_BRANCH="$branch" python3 -c "import os,importlib.util,pytest;
-    path='/tmp/dtb2-bottle-'+os.environ['DTB2_BRANCH']+'.py'; spec=importlib.util.spec_from_file_location('dtb2_bottle',path);
-    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module);
-    assert all(pytest.raises(ValueError,func,'X'+control+'Y') for control in ('\n','\r','\0')
-    for func in (module._hkey,module._hval)); assert module._hkey('content_type')=='Content-Type';
-    assert module._hval('ordinary value')=='ordinary value'" || exit 1; done
-  deployment_lineage: python3 -c "import json,subprocess; g=lambda *a:subprocess.check_output(['git',*a],text=True).strip();
-    m=json.load(open('/app/release-manifest.json')); assert m['deployed_main']==g('-C','/git/project.git','rev-parse','refs/heads/main')==g('-C','/app/repo','rev-parse','main');
-    assert m['deployed_dev']==g('-C','/git/project.git','rev-parse','refs/heads/dev')==g('-C','/app/repo','rev-parse','dev')"
-  nginx_runtime: nginx -t && test "$(curl -fsS http://127.0.0.1:8080/)" = 'Welcome
-    to the benchmark webserver' && test "$(curl -sS -o /tmp/dtb2-404.txt -w '%{http_code}'
-    http://127.0.0.1:8080/dtb2-missing)" = '404' && test "$(cat /tmp/dtb2-404.txt)"
-    = 'Page not found - Please check your URL' && test -s /var/log/nginx/benchmark-access.log
+  history_clean: test "$(cat /app/secret.txt)" = 'secret[lost_and_found_in_git]' && for oid in $(git -C /app/repo cat-file --batch-all-objects --batch-check='%(objectname)'); do git -C /app/repo cat-file -p "$oid" 2>/dev/null | grep -Fq 'secret[' && exit 1; done; exit 0
+  security_patch_all_refs: for branch in main dev; do git -C /app/repo show "$branch:bottle.py" > "/tmp/dtb2-bottle-$branch.py" && DTB2_BRANCH="$branch" python3 -c "import os,importlib.util,pytest; path='/tmp/dtb2-bottle-'+os.environ['DTB2_BRANCH']+'.py'; spec=importlib.util.spec_from_file_location('dtb2_bottle',path); module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module); assert all(pytest.raises(ValueError,func,'X'+control+'Y') for control in ('\n','\r','\0') for func in (module._hkey,module._hval)); assert module._hkey('content_type')=='Content-Type'; assert module._hval('ordinary value')=='ordinary value'" || exit 1; done
+  deployment_lineage: python3 -c "import json,subprocess; g=lambda *a:subprocess.check_output(['git',*a],text=True).strip(); m=json.load(open('/app/release-manifest.json')); assert m['deployed_main']==g('-C','/git/project.git','rev-parse','refs/heads/main')==g('-C','/app/repo','rev-parse','main'); assert m['deployed_dev']==g('-C','/git/project.git','rev-parse','refs/heads/dev')==g('-C','/app/repo','rev-parse','dev')"
+  nginx_runtime: nginx -t && test "$(curl -fsS http://127.0.0.1:8080/)" = 'Welcome to the benchmark webserver' && test "$(curl -sS -o /tmp/dtb2-404.txt -w '%{http_code}' http://127.0.0.1:8080/dtb2-missing)" = '404' && test "$(cat /tmp/dtb2-404.txt)" = 'Page not found - Please check your URL' && test -s /var/log/nginx/benchmark-access.log
 reverification_anchors:
   history_clean:
   - result_01

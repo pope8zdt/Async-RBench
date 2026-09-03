@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from pathlib import Path
 
@@ -12,8 +13,11 @@ from async_rbench.evaluation.report_contract import (
     report_contract_errors,
     run_report_validator,
     validator_code_lines,
+    fixture_value,
 )
 from async_rbench.evaluation.result_contract import validate_payload_contract
+from async_rbench.evaluation.public_result_validation import validate_public_submission
+from async_rbench.evaluation.workspace_runtime import CommandResult
 
 
 CONTRACT = {
@@ -69,8 +73,12 @@ def test_report_path_aligns_to_single_required_file() -> None:
             "files": [REQUIRED_FILE],
         },
     }
-    codes, _ = validate_payload_contract(WORKSTREAM, event)
-    assert "report_path_not_required_file" in codes
+    class Workspace:
+        async def child_terminal(self, child_id, command, timeout):
+            return CommandResult(0, "")
+
+    result = asyncio.run(validate_public_submission(WORKSTREAM, event, Workspace()))
+    assert "report_path_not_required_file" in result.reason_codes
 
 
 def test_private_validator_executes_on_fixtures() -> None:
@@ -141,3 +149,54 @@ def test_classify_validator_output_parses_granular_codes() -> None:
     assert classify_validator_output(output) == [("report_payload_field_mismatch", "finding")]
     assert classify_validator_output("") == []
     assert classify_validator_output("other log line") == []
+
+
+def test_fixture_value_is_schema_driven() -> None:
+    path = "/app/output_data/workstreams/worker.json"
+    assert fixture_value("fixed", {"type": "string", "const": "x"}, path) == "x"
+    assert fixture_value("choice", {"type": "string", "enum": ["a", "b"]}, path) == "a"
+    assert fixture_value("report_path", {"type": "string"}, path) == path
+    assert fixture_value("digest", {"type": "string", "pattern": "^[0-9a-f]{64}$"}, path) == "0" * 64
+    assert fixture_value("count", {"type": "integer"}, path) == 1
+    assert fixture_value("ratio", {"type": "number"}, path) == 1.0
+    assert fixture_value("passed", {"type": "boolean"}, path) is True
+    assert fixture_value("items", {"type": "array", "min_items": 2}, path) == [
+        "fixture-value", "fixture-value",
+    ]
+    assert fixture_value("metadata", {"type": "object"}, path) == {}
+
+
+def test_report_fixture_supports_arbitrary_declared_fields() -> None:
+    report_path = "/app/output_data/workstreams/generic.json"
+    workstream = {
+        "public_result_contract": {
+            "kind": "report_file",
+            "report_file": {
+                "path": report_path,
+                "must_exist": True,
+                "must_be_valid_json": True,
+                "fields_equal_evidence": ["count", "passed", "digest"],
+            },
+        },
+        "required_files": [report_path],
+        "allowed_files": [report_path],
+        "required_evidence_fields": ["report_path", "count", "passed", "digest"],
+        "evidence_schema": {
+            "report_path": {"type": "string"},
+            "count": {"type": "integer"},
+            "passed": {"type": "boolean"},
+            "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        },
+    }
+
+    fixture = build_report_fixture(workstream)
+
+    evidence = fixture["positive"]["payload"]["evidence"]
+    assert evidence == {
+        "report_path": report_path,
+        "count": 1,
+        "passed": True,
+        "digest": "0" * 64,
+    }
+    assert set(fixture["missing_field_negatives"]) == {"count", "passed", "digest"}
+    assert set(fixture["mismatch_negatives"]) == {"count", "passed", "digest"}

@@ -24,7 +24,11 @@ from .protocol import (
 from .workspace_runtime import (
     CommandResult, DisabledWorkspaceRuntime, WorkspaceRuntime, build_workspace_runtime,
 )
-from .result_contract import ResultContractValidation, validate_completion_contract
+from .result_contract import (
+    ResultContractValidation,
+    evaluate_private_semantics,
+    validate_completion_contract,
+)
 from .scheduler import DeliveryController
 from .scoring import score_trace
 from .event_store import EventStore, strip_for_adapter
@@ -1435,6 +1439,7 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
                     record["gateway"] = True
                 recorder.record(record, "benchmark")
             event_type = event["type"]
+            completion_case_contract_failure = False
             if event_type == "child_completed":
                 workstream_id = child_workstreams.get(str(event.get("child_id")))
                 workstream = workstream_specs.get(str(workstream_id))
@@ -1475,6 +1480,36 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
                     "workstream_id": workstream_id,
                     **contract_validation.private_event_fields(),
                 }, "gateway")
+                if "invalid_public_result_contract" in contract_validation.reason_codes:
+                    completion_case_contract_failure = True
+                    recorder.record({
+                        "type": "infrastructure_failure",
+                        "component": "case_contract",
+                        "child_id": recorded.get("child_id"),
+                        "completion_id": recorded.get("completion_id"),
+                        "detail": "; ".join(contract_validation.details),
+                    }, "benchmark")
+                elif (
+                    contract_validation.valid
+                    and workstream is not None
+                    and workstream.get("validator_stage") == "semantic_evidence"
+                    and start.get("result_contract_enforced") is True
+                ):
+                    semantic = await evaluate_private_semantics(
+                        workstream, recorded, workspace,
+                    )
+                    recorder.record({
+                        "type": "child_semantic_validated",
+                        "child_id": recorded.get("child_id"),
+                        "completion_id": recorded.get("completion_id"),
+                        "workstream_id": workstream_id,
+                        "passed": semantic.valid,
+                        "validator_exit_code": semantic.validator_exit_code,
+                        "details": list(semantic.details),
+                        "validator_output_sha256": canonical_digest(
+                            semantic.validator_output
+                        ),
+                    }, "gateway")
             if event_type == "participant_metadata":
                 _progress(
                     config, "adapter",
@@ -1540,7 +1575,7 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
                 # apply_* producer and the designed failure is delivered to main.
                 deliveries = controller.on_child_started(recorded)
                 deliveries += controller.consume_declared_stimuli(recorded)
-            elif event["type"] == "child_completed":
+            elif event["type"] == "child_completed" and not completion_case_contract_failure:
                 deliveries = controller.on_complete(controller_recorded, contract_validation)
                 if controller_recorded["completion_id"] not in controller.delivered:
                     recorder.record({

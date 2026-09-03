@@ -146,6 +146,9 @@ def _record() -> ChildRecord:
         targets=[],
         expected_output="out",
         priority="normal",
+        # Task 3 strict public-contract validation requires an explicit kind;
+        # this fixture exercises a payload-only submission (no report file).
+        public_result_contract={"kind": "payload_only"},
     )
 
 

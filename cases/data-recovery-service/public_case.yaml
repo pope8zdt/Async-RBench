@@ -63,7 +63,8 @@ workstreams:
       type: string
   allowed_files: []
   required_files: []
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: wal_recovery
   task: On copies, inspect the recovery inputs available in this isolated workspace,
     apply the WAL when present, and write the resulting rows to /app/recovered.json
@@ -87,7 +88,8 @@ workstreams:
   - /app/recovered.json
   required_files:
   - /app/recovered.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: merge_support
   task: 'Implement the exact three-source merge contract: map /data/source_a/users.json,
     /data/source_b/users.csv and /data/source_c/users.parquet to the canonical schema
@@ -122,6 +124,7 @@ workstreams:
   - /app/merged_users.parquet
   - /app/conflicts.json
   public_result_contract:
+    kind: payload_only
     merged_users_parquet:
       path: /app/merged_users.parquet
       columns_exactly:

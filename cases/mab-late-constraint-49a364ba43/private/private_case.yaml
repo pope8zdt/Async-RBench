@@ -174,8 +174,9 @@
         }
       },
       "result_kind": "result_01",
-      "validator_command": "python3 -c \"import base64,hashlib,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p,encoding='utf-8')); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']; assert len(e['revision_sha256'])==64\"",
-      "validator_timeout_sec": 120
+      "validator_command": "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/workstreams/requirement_worker_01.json'\nfields=['finding', 'revision_sha256']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'finding' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:finding');sys.exit(1)\nif r['finding']!=ev['finding']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:finding');sys.exit(1)\nif 'revision_sha256' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:revision_sha256');sys.exit(1)\nif r['revision_sha256']!=ev['revision_sha256']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:revision_sha256');sys.exit(1)\"",
+      "validator_timeout_sec": 120,
+      "validator_stage": "submission_contract"
     },
     "requirement_worker_02": {
       "event_assets": [
@@ -195,8 +196,9 @@
         }
       },
       "result_kind": "result_02",
-      "validator_command": "python3 -c \"import base64,hashlib,json,os,pathlib; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=pathlib.Path(e['report_path']); assert p.is_file(); r=json.load(open(p,encoding='utf-8')); assert r['finding']==e['finding']; assert r['revision_sha256']==e['revision_sha256']; assert len(e['revision_sha256'])==64\"",
-      "validator_timeout_sec": 120
+      "validator_command": "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/workstreams/requirement_worker_02.json'\nfields=['finding', 'revision_sha256']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'finding' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:finding');sys.exit(1)\nif r['finding']!=ev['finding']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:finding');sys.exit(1)\nif 'revision_sha256' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:revision_sha256');sys.exit(1)\nif r['revision_sha256']!=ev['revision_sha256']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:revision_sha256');sys.exit(1)\"",
+      "validator_timeout_sec": 120,
+      "validator_stage": "submission_contract"
     }
   }
 }

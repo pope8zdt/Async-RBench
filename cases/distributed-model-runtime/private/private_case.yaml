@@ -12,13 +12,7 @@ capabilities:
 workstream_bindings:
   implement_tp:
     result_kind: result_01
-    validator_command: python3 -c "import importlib.util,os,torch,torch.distributed
-      as dist,torch.nn.functional as F; os.environ.update(MASTER_ADDR='127.0.0.1',MASTER_PORT='12479');
-      dist.init_process_group('gloo',rank=0,world_size=1); s=importlib.util.spec_from_file_location('tp','/app/parallel_linear.py');
-      m=importlib.util.module_from_spec(s); s.loader.exec_module(m); torch.manual_seed(177);
-      w=torch.randn(12,8); x=torch.randn(3,8); assert torch.allclose(m.ColumnParallelLinear(8,12,False,w.clone())(x),F.linear(x,w),atol=1e-5);
-      assert torch.allclose(m.RowParallelLinear(8,12,False,w.clone())(x),F.linear(x,w),atol=1e-5);
-      dist.destroy_process_group()"
+    validator_command: python3 -c "import importlib.util,os,torch,torch.distributed as dist,torch.nn.functional as F; os.environ.update(MASTER_ADDR='127.0.0.1',MASTER_PORT='12479'); dist.init_process_group('gloo',rank=0,world_size=1); s=importlib.util.spec_from_file_location('tp','/app/parallel_linear.py'); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); torch.manual_seed(177); w=torch.randn(12,8); x=torch.randn(3,8); assert torch.allclose(m.ColumnParallelLinear(8,12,False,w.clone())(x),F.linear(x,w),atol=1e-5); assert torch.allclose(m.RowParallelLinear(8,12,False,w.clone())(x),F.linear(x,w),atol=1e-5); dist.destroy_process_group()"
     validator_timeout_sec: 120
     private_evidence_schema:
       profile_version:
@@ -34,11 +28,10 @@ workstream_bindings:
         type: boolean
         const: true
     event_assets: []
+    validator_stage: semantic_evidence
   select_backend:
     result_kind: result_02
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      p=json.load(open('/app/profiles/authoritative.json')); assert p=={'version':'v2','world_size':2,'interconnect':'ethernet','tensor_parallel_supported':False,'pipeline_parallel_supported':True};
-      assert (e['profile_version'],e['world_size'],e['tensor_parallel_supported'],e['pipeline_parallel_supported'],e['recommended_backend'])==(p['version'],p['world_size'],p['tensor_parallel_supported'],p['pipeline_parallel_supported'],'pipeline')"
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; p=json.load(open('/app/profiles/authoritative.json')); assert p=={'version':'v2','world_size':2,'interconnect':'ethernet','tensor_parallel_supported':False,'pipeline_parallel_supported':True}; assert (e['profile_version'],e['world_size'],e['tensor_parallel_supported'],e['pipeline_parallel_supported'],e['recommended_backend'])==(p['version'],p['world_size'],p['tensor_parallel_supported'],p['pipeline_parallel_supported'],'pipeline')"
     validator_timeout_sec: 120
     private_evidence_schema:
       profile_version:
@@ -58,23 +51,23 @@ workstream_bindings:
         const: pipeline
     event_assets:
     - /app/profiles/authoritative.json
+    validator_stage: semantic_evidence
   recover_model:
     result_kind: result_03
-    validator_command: python3 -c "import torch; m=torch.jit.load('/app/model.pt').eval();
-      x=torch.randn(1,4,64); y=m(x,x); assert y.shape==x.shape and torch.isfinite(y).all()"
+    validator_command: python3 -c "import torch; m=torch.jit.load('/app/model.pt').eval(); x=torch.randn(1,4,64); y=m(x,x); assert y.shape==x.shape and torch.isfinite(y).all()"
     validator_timeout_sec: 120
     private_evidence_schema:
       model_loadable:
         type: boolean
         const: true
     event_assets: []
+    validator_stage: semantic_evidence
 result_contract:
   allowed_result_kinds:
   - result_01
   - result_02
   - result_03
-  rule: Tag the provisional TP deployment and authoritative hardware profile distinctly;
-    completion is visible to the main agent only after gateway delivery.
+  rule: Tag the provisional TP deployment and authoritative hardware profile distinctly; completion is visible to the main agent only after gateway delivery.
 authoritative_result_kind: result_02
 superseded_result_kind: result_01
 scenarios:
@@ -102,22 +95,12 @@ scenarios:
       - schedule_batches
       - final_qa
 artifact_observers:
-  pre_event_verification: >-
-    python -c "import hashlib,json,torch; torch.jit.load('/app/model.pt');
-    d=json.load(open('/app/deployment.json')); assert d['backend']=='pipeline';
-    paths=['/app/model.pt','/app/pipeline_parallel.py','/app/task_file/output_data/plan_b1.jsonl','/app/task_file/output_data/plan_b2.jsonl'];
-    h=hashlib.sha256(); [(h.update(open(p,'rb').read()),h.update(b'\0')) for p in paths];
-    print(h.hexdigest())"
+  pre_event_verification: python -c "import hashlib,json,torch; torch.jit.load('/app/model.pt'); d=json.load(open('/app/deployment.json')); assert d['backend']=='pipeline'; paths=['/app/model.pt','/app/pipeline_parallel.py','/app/task_file/output_data/plan_b1.jsonl','/app/task_file/output_data/plan_b2.jsonl']; h=hashlib.sha256(); [(h.update(open(p,'rb').read()),h.update(b'\0')) for p in paths]; print(h.hexdigest())"
 hidden_checks:
   model_integrity: python -c "import torch; torch.jit.load('/app/model.pt')"
-  backend_feasibility: python -c "import json; d=json.load(open('/app/deployment.json'));
-    assert (d['backend'],d['profile_version'],d['world_size'])==('pipeline','v2',2)"
-  batch_plan: python -c "from pathlib import Path; assert Path('/app/task_file/output_data/plan_b1.jsonl').stat().st_size>0;
-    assert Path('/app/task_file/output_data/plan_b2.jsonl').stat().st_size>0"
-  deployment_lineage: python -c "import hashlib,json; h=lambda p:hashlib.sha256(open(p,'rb').read()).hexdigest();
-    d=json.load(open('/app/deployment.json')); assert d['model_sha256']==h('/app/model.pt');
-    assert d['implementation_sha256']==h('/app/pipeline_parallel.py'); assert d['plan_b1_sha256']==h('/app/task_file/output_data/plan_b1.jsonl');
-    assert d['plan_b2_sha256']==h('/app/task_file/output_data/plan_b2.jsonl')"
+  backend_feasibility: python -c "import json; d=json.load(open('/app/deployment.json')); assert (d['backend'],d['profile_version'],d['world_size'])==('pipeline','v2',2)"
+  batch_plan: python -c "from pathlib import Path; assert Path('/app/task_file/output_data/plan_b1.jsonl').stat().st_size>0; assert Path('/app/task_file/output_data/plan_b2.jsonl').stat().st_size>0"
+  deployment_lineage: python -c "import hashlib,json; h=lambda p:hashlib.sha256(open(p,'rb').read()).hexdigest(); d=json.load(open('/app/deployment.json')); assert d['model_sha256']==h('/app/model.pt'); assert d['implementation_sha256']==h('/app/pipeline_parallel.py'); assert d['plan_b1_sha256']==h('/app/task_file/output_data/plan_b1.jsonl'); assert d['plan_b2_sha256']==h('/app/task_file/output_data/plan_b2.jsonl')"
 reverification_anchors: {}
 stale_predicate: null
 stale_revalidation: {}

@@ -96,6 +96,7 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
     positive = fixture["positive"]
     evidence = positive["payload"]["evidence"]
     negative_payloads = fixture["negatives"]
+    fields = list(fixture["fields_equal_evidence"])
 
     with tempfile.TemporaryDirectory(prefix="async_rbench-fixture-") as td:
         workspace_root = Path(td)
@@ -104,10 +105,7 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
 
         def stage_valid() -> None:
             report_file.write_text(
-                json.dumps({
-                    "finding": evidence["finding"],
-                    "revision_sha256": evidence["revision_sha256"],
-                }, ensure_ascii=False),
+                json.dumps({field: evidence[field] for field in fields}, ensure_ascii=False),
                 encoding="utf-8",
             )
 
@@ -125,21 +123,15 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
             elif code == "report_json_invalid":
                 report_file.write_text("{not valid json", encoding="utf-8")
             elif code == "report_missing_required_field":
-                report_file.write_text(
-                    json.dumps({"revision_sha256": evidence["revision_sha256"]}, ensure_ascii=False),
-                    encoding="utf-8",
-                )
-            elif code == "report_payload_field_mismatch":
-                # The evidence claims a differing finding; the artifact on disk
-                # still holds the honest baseline value, so the validator sees a
-                # real evidence/artifact disagreement.
+                missing_field = fields[0]
                 report_file.write_text(
                     json.dumps({
-                        "finding": evidence["finding"],
-                        "revision_sha256": evidence["revision_sha256"],
+                        field: evidence[field] for field in fields if field != missing_field
                     }, ensure_ascii=False),
                     encoding="utf-8",
                 )
+            elif code == "report_payload_field_mismatch":
+                stage_valid()
             elif code == "report_path_not_required_file":
                 # The payload tells the validator to look somewhere else; the file
                 # content is irrelevant because the alignment check fires first.
@@ -152,6 +144,38 @@ def _private_fixture_result(workstream: dict[str, Any]) -> dict[str, Any]:
                 "triggered_codes": triggered,
                 "expected_code": code,
                 "passed": bool(run_code != 0 and code in triggered),
+            }
+        for field, negative_payload in fixture["missing_field_negatives"].items():
+            stage_valid()
+            report_file.write_text(
+                json.dumps({
+                    name: evidence[name] for name in fields if name != field
+                }, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            run_code, run_marks = run_report_validator(
+                workstream, workspace_root, negative_payload["payload"],
+            )
+            triggered = [mark[0] for mark in run_marks]
+            negatives[f"report_missing_required_field:{field}"] = {
+                "triggered_codes": triggered,
+                "expected_code": "report_missing_required_field",
+                "passed": bool(
+                    run_code != 0 and "report_missing_required_field" in triggered
+                ),
+            }
+        for field, negative_payload in fixture["mismatch_negatives"].items():
+            stage_valid()
+            run_code, run_marks = run_report_validator(
+                workstream, workspace_root, negative_payload["payload"],
+            )
+            triggered = [mark[0] for mark in run_marks]
+            negatives[f"report_payload_field_mismatch:{field}"] = {
+                "triggered_codes": triggered,
+                "expected_code": "report_payload_field_mismatch",
+                "passed": bool(
+                    run_code != 0 and "report_payload_field_mismatch" in triggered
+                ),
             }
 
     return {
@@ -199,15 +223,37 @@ def audit_contract_fixtures(root: Path) -> dict[str, Any]:
             # P0-4: the evaluator-private validator must be a faithful render of
             # the participant-visible public contract — no hidden constraint.
             contract_drift = report_contract_errors(workstream)
-            if has_hidden_validator(workstream):
+            stage = str(workstream.get("validator_stage") or "")
+            public_kind = str(
+                (workstream.get("public_result_contract") or {}).get("kind") or ""
+            )
+            public_contract_declared = public_kind in {"payload_only", "report_file"}
+            validator_stage_valid = bool(
+                (stage == "semantic_evidence" and public_kind == "payload_only")
+                or (
+                    stage == "submission_contract"
+                    and public_kind == "report_file"
+                    and not contract_drift
+                )
+            )
+            hidden_submission_constraint = bool(
+                has_hidden_validator(workstream)
+                or (stage == "submission_contract" and not validator_stage_valid)
+            )
+            if hidden_submission_constraint:
                 hidden_validator_count += 1
             # P0-5: actually execute the private validator on a positive + negative
             # fixture (the audit previously ran only validate_payload_contract).
-            private_fixture = _private_fixture_result(workstream)
+            private_fixture = (
+                _private_fixture_result(workstream)
+                if stage == "submission_contract"
+                else {"supported": False, "reason": "semantic validator is diagnostic"}
+            )
             private_fixture_passed = bool(
-                not private_fixture["supported"]
+                stage == "semantic_evidence"
                 or (
-                    private_fixture["positive_passed"]
+                    private_fixture["supported"]
+                    and private_fixture["positive_passed"]
                     and all(item["passed"] for item in private_fixture["negatives"].values())
                 )
             )
@@ -217,6 +263,9 @@ def audit_contract_fixtures(root: Path) -> dict[str, Any]:
                 and schema_names_match
                 and public_types_match
                 and sufficiency_matches
+                and public_contract_declared
+                and validator_stage_valid
+                and not hidden_submission_constraint
                 and not contract_drift
                 and private_fixture_passed
             )
@@ -231,6 +280,10 @@ def audit_contract_fixtures(root: Path) -> dict[str, Any]:
                 "public_private_schema_names_match": schema_names_match,
                 "public_private_types_match": public_types_match,
                 "information_sufficiency_fields_match": sufficiency_matches,
+                "validator_stage_valid": validator_stage_valid,
+                "public_contract_declared": public_contract_declared,
+                "private_fixture_supported": bool(private_fixture["supported"]),
+                "hidden_submission_constraint": hidden_submission_constraint,
                 "private_validator_executed": bool(private_fixture["supported"]),
                 "private_positive_passed": private_fixture.get("positive_passed"),
                 "private_negatives": private_fixture.get("negatives", {}),
@@ -247,12 +300,7 @@ def audit_contract_fixtures(root: Path) -> dict[str, Any]:
         "failed_workstreams": failures,
         "passed": not failures,
         "hidden_validator_workstream_count": hidden_validator_count,
-        "note": (
-            "hidden_validator_workstream_count counts workstreams whose private "
-            "validator has no declared participant-visible report file rule; these "
-            "are flagged as a contract-transparency gap, not folded into "
-            "failed_workstreams (which tests the declared-contract fixture gate)."
-        ),
+        "note": "hidden submission constraints fail the contract audit closed",
         "workstreams": rows,
     }
 

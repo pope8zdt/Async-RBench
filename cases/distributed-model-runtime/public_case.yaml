@@ -86,7 +86,8 @@ workstreams:
   - /app/simple_test.py
   required_files:
   - /app/parallel_linear.py
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: select_backend
   task: Inspect the hardware-profile inputs available in this isolated workspace and
     report the observed profile version, world size, supported parallel modes and
@@ -119,7 +120,8 @@ workstreams:
       - data
   allowed_files: []
   required_files: []
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: recover_model
   task: Reconstruct the model implied by /app/weights.pt and /app/dataset.pt, tune
     only output_layer, and save the improved TorchScript model as /app/model.pt. Verify
@@ -139,5 +141,6 @@ workstreams:
   - /app/model.pt
   required_files:
   - /app/model.pt
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 public_checks: []

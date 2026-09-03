@@ -50,14 +50,11 @@ artifacts:
   path: /app/task_file/src/sklearn/utils/multiclass.py
 workstreams:
 - id: core_patch_applier
-  task: Repair the sklearn package at /app/task_file/src/sklearn, changing only sklearn/utils/multiclass.py.
-    Run record_fix.py --stage final and report the observed fix revision, emitted
-    source receipt, patched path and report path.
+  task: Repair the sklearn package at /app/task_file/src/sklearn, changing only sklearn/utils/multiclass.py. Run record_fix.py --stage final and report the observed fix revision, emitted source receipt, patched path and report path.
   targets:
   - fix_source
   - applied_fix
-  expected_output: An applied_fix.json recording the final fix revision (sha256 of
-    sklearn/utils/multiclass.py) and the patched path.
+  expected_output: An applied_fix.json recording the final fix revision (sha256 of sklearn/utils/multiclass.py) and the patched path.
   priority: high
   required_evidence_fields:
   - fix_revision
@@ -74,23 +71,19 @@ workstreams:
       type: string
     source_receipt:
       type: string
-      pattern: 'sp2-fix-authority-[0-9a-f]{16}'
+      pattern: sp2-fix-authority-[0-9a-f]{16}
   allowed_files:
   - /app/output_data/applied_fix.json
   - /app/task_file/src/sklearn/utils/multiclass.py
   required_files:
   - /app/output_data/applied_fix.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: test_module_A_runner
-  task: Run module group A (sklearn.metrics) via /app/task_file/scripts/run_module_group_a.py
-    and record its result under /app/output_data/module_groups/A_result.json. If the
-    group fails on an earlier run, preserve the failing report as A_result_initial.json
-    before re-running. Report group, passed, run_revision and report_path as observations,
-    not goals.
+  task: Run module group A (sklearn.metrics) via /app/task_file/scripts/run_module_group_a.py and record its result under /app/output_data/module_groups/A_result.json. If the group fails on an earlier run, preserve the failing report as A_result_initial.json before re-running. Report group, passed, run_revision and report_path as observations, not goals.
   targets:
   - module_group_reports
-  expected_output: A module-group report for group A recording whether its tests passed
-    against the current fix revision.
+  expected_output: A module-group report for group A recording whether its tests passed against the current fix revision.
   priority: normal
   required_evidence_fields:
   - group
@@ -111,16 +104,19 @@ workstreams:
   - /app/output_data/module_groups/A_result.json
   required_files:
   - /app/output_data/module_groups/A_result.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/module_groups/A_result.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - run_revision
 - id: test_module_B_runner
-  task: Run module group B (sklearn.preprocessing) via /app/task_file/scripts/run_module_group_b.py
-    and record its result under /app/output_data/module_groups/B_result.json. If the
-    group is run more than once, archive the earlier report before replacing it. Report
-    group, passed, run_revision and report_path as observations, not goals.
+  task: Run module group B (sklearn.preprocessing) via /app/task_file/scripts/run_module_group_b.py and record its result under /app/output_data/module_groups/B_result.json. If the group is run more than once, archive the earlier report before replacing it. Report group, passed, run_revision and report_path as observations, not goals.
   targets:
   - module_group_reports
-  expected_output: A module-group report for group B recording whether its tests passed
-    against the current fix revision.
+  expected_output: A module-group report for group B recording whether its tests passed against the current fix revision.
   priority: normal
   required_evidence_fields:
   - group
@@ -142,17 +138,19 @@ workstreams:
   - /app/output_data/module_groups/B_result_initial.json
   required_files:
   - /app/output_data/module_groups/B_result.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/module_groups/B_result.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - run_revision
 - id: test_module_C_runner
-  task: Run module group C (sklearn.utils.multiclass) via /app/task_file/scripts/run_module_group_c.py
-    and record its result under /app/output_data/module_groups/C_result.json. If the
-    group fails on an earlier run, preserve the failing report as C_result_initial.json
-    before re-running. Report group, passed, run_revision and report_path as observations,
-    not goals.
+  task: Run module group C (sklearn.utils.multiclass) via /app/task_file/scripts/run_module_group_c.py and record its result under /app/output_data/module_groups/C_result.json. If the group fails on an earlier run, preserve the failing report as C_result_initial.json before re-running. Report group, passed, run_revision and report_path as observations, not goals.
   targets:
   - module_group_reports
-  expected_output: A module-group report for group C recording whether its tests passed
-    against the current fix revision.
+  expected_output: A module-group report for group C recording whether its tests passed against the current fix revision.
   priority: normal
   required_evidence_fields:
   - group
@@ -173,15 +171,19 @@ workstreams:
   - /app/output_data/module_groups/C_result.json
   required_files:
   - /app/output_data/module_groups/C_result.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/module_groups/C_result.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - run_revision
 - id: patch_integrator
-  task: Inspect the available module-group reports and run /app/task_file/scripts/record_integrated.py
-    to record the integration verdict. Report fix_revision, integrated_groups and
-    report_path as observations, not goals.
+  task: Inspect the available module-group reports and run /app/task_file/scripts/record_integrated.py to record the integration verdict. Report fix_revision, integrated_groups and report_path as observations, not goals.
   targets:
   - integrated_fix
-  expected_output: An integrated_fix.json naming the final fix revision and the integrated
-    module groups.
+  expected_output: An integrated_fix.json naming the final fix revision and the integrated module groups.
   priority: high
   required_evidence_fields:
   - fix_revision
@@ -200,15 +202,19 @@ workstreams:
   - /app/output_data/integrated_fix.json
   required_files:
   - /app/output_data/integrated_fix.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/integrated_fix.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - fix_revision
 - id: regression_validator
-  task: Run the full regression via /app/task_file/scripts/run_regression.py and write
-    /app/output_data/regression_result.json. Report passed, regression_revision and
-    report_path as observations, not goals.
+  task: Run the full regression via /app/task_file/scripts/run_regression.py and write /app/output_data/regression_result.json. Report passed, regression_revision and report_path as observations, not goals.
   targets:
   - full_regression
-  expected_output: A regression_result.json reporting whether the full regression
-    suite passed against the final fix revision.
+  expected_output: A regression_result.json reporting whether the full regression suite passed against the final fix revision.
   priority: high
   required_evidence_fields:
   - passed
@@ -226,5 +232,12 @@ workstreams:
   - /app/output_data/regression_result.json
   required_files:
   - /app/output_data/regression_result.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/regression_result.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - regression_revision
 public_checks: []

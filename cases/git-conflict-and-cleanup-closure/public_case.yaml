@@ -1,7 +1,6 @@
 format_version: 2
 case_id: git-conflict-and-cleanup-closure
-title: 'Git leak recovery closure: negative scans are not absence, and failed cleanup
-  must be redelegated and reverified'
+title: 'Git leak recovery closure: negative scans are not absence, and failed cleanup must be redelegated and reverified'
 task_instruction_path: task/task.yaml
 source_tasks:
 - id: git-leak-recovery
@@ -43,14 +42,10 @@ artifacts:
   path: /app/output_data/decision_manifest.json
 workstreams:
 - id: ref_history_scanner
-  task: Scan the git repository at /app/repo for traces of a leaked secret in history
-    reachable from refs (commit messages and content diffs). Run /app/task_file/scripts/scan_refs.py
-    and write its JSON report to /app/output_data/scan_reports/ref_history.json. Report
-    found, scanned_refs, scan_revision and report_path as observations, not goals.
+  task: Scan the git repository at /app/repo for traces of a leaked secret in history reachable from refs (commit messages and content diffs). Run /app/task_file/scripts/scan_refs.py and write its JSON report to /app/output_data/scan_reports/ref_history.json. Report found, scanned_refs, scan_revision and report_path as observations, not goals.
   targets:
   - scan_reports
-  expected_output: A ref/history scan report under scan_reports/, reporting found,
-    scanned_refs and scan_revision.
+  expected_output: A ref/history scan report under scan_reports/, reporting found, scanned_refs and scan_revision.
   priority: normal
   required_evidence_fields:
   - found
@@ -71,16 +66,19 @@ workstreams:
   - /app/output_data/scan_reports/ref_history.json
   required_files:
   - /app/output_data/scan_reports/ref_history.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/scan_reports/ref_history.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - scan_revision
 - id: pack_scanner
-  task: Scan the git repository at /app/repo for traces of a leaked secret in objects
-    reachable from refs and in the working tree. Run /app/task_file/scripts/scan_packs.py
-    and write its JSON report to /app/output_data/scan_reports/pack.json. Report found,
-    objects_scanned, scan_revision and report_path as observations, not goals.
+  task: Scan the git repository at /app/repo for traces of a leaked secret in objects reachable from refs and in the working tree. Run /app/task_file/scripts/scan_packs.py and write its JSON report to /app/output_data/scan_reports/pack.json. Report found, objects_scanned, scan_revision and report_path as observations, not goals.
   targets:
   - scan_reports
-  expected_output: A pack/working-tree scan report under scan_reports/, reporting
-    found, objects_scanned and scan_revision.
+  expected_output: A pack/working-tree scan report under scan_reports/, reporting found, objects_scanned and scan_revision.
   priority: normal
   required_evidence_fields:
   - found
@@ -101,17 +99,20 @@ workstreams:
   - /app/output_data/scan_reports/pack.json
   required_files:
   - /app/output_data/scan_reports/pack.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/scan_reports/pack.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - scan_revision
+      - objects_scanned
 - id: object_database_scanner
-  task: Run /app/task_file/scripts/scan_objects.py over /app/repo to perform the raw
-    object-database scan, including unreachable objects. Do not hand-author a replacement
-    report. Preserve its /app/output_data/scan_reports/object_db.json output and report
-    found, object_id, secret_hash, source_receipt (from authority_receipt), scan_revision
-    and report_path as observations.
+  task: Run /app/task_file/scripts/scan_objects.py over /app/repo to perform the raw object-database scan, including unreachable objects. Do not hand-author a replacement report. Preserve its /app/output_data/scan_reports/object_db.json output and report found, object_id, secret_hash, source_receipt (from authority_receipt), scan_revision and report_path as observations.
   targets:
   - scan_reports
-  expected_output: An object-database scan report under scan_reports/, reporting found,
-    object_id and secret_hash when the secret is located.
+  expected_output: An object-database scan report under scan_reports/, reporting found, object_id and secret_hash when the secret is located.
   priority: high
   required_evidence_fields:
   - found
@@ -135,23 +136,26 @@ workstreams:
       type: string
     source_receipt:
       type: string
-      pattern: 'gc-object-authority-[0-9a-f]{16}'
+      pattern: gc-object-authority-[0-9a-f]{16}
   allowed_files:
   - /app/output_data/scan_reports/object_db.json
   required_files:
   - /app/output_data/scan_reports/object_db.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/scan_reports/object_db.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - object_id
+      - secret_hash
 - id: secret_recovery
-  task: Inspect the available scan reports and run /app/task_file/scripts/recover_secret.py
-    --report with the positive report you select. This writes /app/secret.txt and
-    /app/output_data/recovery_report.json. Do not substitute a scan report for the
-    recovery report. Report source_scan, secret_sha256, secret_path and report_path from
-    those generated outputs as observations, not goals.
+  task: Inspect the available scan reports and run /app/task_file/scripts/recover_secret.py --report with the positive report you select. This writes /app/secret.txt and /app/output_data/recovery_report.json. Do not substitute a scan report for the recovery report. Report source_scan, secret_sha256, secret_path and report_path from those generated outputs as observations, not goals.
   targets:
   - recovered_secret
   - recovery_report
-  expected_output: The recovered secret at /app/secret.txt and a recovery_report.json
-    naming the source scan and secret sha256.
+  expected_output: The recovered secret at /app/secret.txt and a recovery_report.json naming the source scan and secret sha256.
   priority: high
   required_evidence_fields:
   - source_scan
@@ -178,17 +182,13 @@ workstreams:
   required_files:
   - /app/output_data/recovery_report.json
   - /app/secret.txt
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 - id: cleanup_worker
-  task: Remove the leaked secret repo-wide (reachable history, unreachable objects,
-    the whole object database and the working tree) without touching unrelated files
-    or history. Record each cleanup attempt (attempt number and the git command(s)
-    run) under /app/output_data/cleanup_reports/. Report attempt, command and report_path
-    as observations, not goals.
+  task: Remove the leaked secret repo-wide (reachable history, unreachable objects, the whole object database and the working tree) without touching unrelated files or history. Record each cleanup attempt (attempt number and the git command(s) run) under /app/output_data/cleanup_reports/. Report attempt, command and report_path as observations, not goals.
   targets:
   - cleanup_report
-  expected_output: At least one recorded cleanup attempt under cleanup_reports/ and
-    a repository left free of the secret.
+  expected_output: At least one recorded cleanup attempt under cleanup_reports/ and a repository left free of the secret.
   priority: high
   required_evidence_fields:
   - attempt
@@ -206,17 +206,21 @@ workstreams:
   - /app/output_data/cleanup_reports/2.json
   required_files:
   - /app/output_data/cleanup_reports/1.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: report_file
+    report_file:
+      path: /app/output_data/cleanup_reports/1.json
+      must_exist: true
+      must_be_valid_json: true
+      fields_equal_evidence:
+      - attempt
+      - command
 - id: cleanup_verifier
-  task: 'Verify repo-wide closure: the secret must be absent from reachable history,
-    unreachable objects, the full object database and the working tree. Run /app/task_file/scripts/verify_closure.py
-    and write its JSON report to /app/output_data/closure_report.json. Report closed
-    and report_path as observations, not goals.'
+  task: 'Verify repo-wide closure: the secret must be absent from reachable history, unreachable objects, the full object database and the working tree. Run /app/task_file/scripts/verify_closure.py and write its JSON report to /app/output_data/closure_report.json. Report closed and report_path as observations, not goals.'
   targets:
   - closure_report
   - decision_manifest
-  expected_output: A closure_report.json giving the repo-wide closure verdict, and
-    the final decision_manifest.json.
+  expected_output: A closure_report.json giving the repo-wide closure verdict, and the final decision_manifest.json.
   priority: high
   required_evidence_fields:
   - closed
@@ -230,5 +234,6 @@ workstreams:
   - /app/output_data/closure_report.json
   required_files:
   - /app/output_data/closure_report.json
-  public_result_contract: {}
+  public_result_contract:
+    kind: payload_only
 public_checks: []

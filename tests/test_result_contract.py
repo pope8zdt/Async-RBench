@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import asyncio
-import base64
 import json
-import shlex
 from collections import Counter
 from pathlib import Path
 from types import SimpleNamespace
 
-from async_rbench.evaluation.result_contract import validate_completion_contract
+from async_rbench.evaluation.result_contract import (
+    evaluate_private_semantics,
+    validate_completion_contract,
+)
 from async_rbench.evaluation.runner import _make_start
 from async_rbench.evaluation.scheduler import DeliveryController
 from async_rbench.evaluation.workspace_runtime import CommandResult
@@ -33,11 +34,12 @@ class _Workspace:
         return CommandResult(self.exit_code, "validator output")
 
 
-def test_completion_contract_checks_private_evidence_and_command() -> None:
+def test_completion_contract_ignores_private_command_after_public_payload_passes() -> None:
     workstream = {
         "required_evidence_fields": ["row_count"],
         "evidence_schema": {"row_count": {"type": "integer", "const": 11}},
         "allowed_files": ["/app/recovered.json"], "required_files": ["/app/recovered.json"],
+        "public_result_contract": {"kind": "payload_only"},
         "validator_command": "verify-result", "validator_timeout_sec": 17,
     }
     event = {"child_id": "child-1", "payload": {
@@ -46,12 +48,7 @@ def test_completion_contract_checks_private_evidence_and_command() -> None:
     workspace = _Workspace()
     result = asyncio.run(validate_completion_contract(workstream, event, workspace))
     assert result.valid is True
-    child_id, bound, timeout = workspace.calls[0]
-    assert (child_id, timeout) == ("child-1", 17)
-    binding, command = bound.split("\n", 1)
-    encoded = shlex.split(binding)[1].split("=", 1)[1]
-    assert json.loads(base64.b64decode(encoded)) == event["payload"]
-    assert command == "verify-result"
+    assert workspace.calls == []
 
 
 def test_completion_contract_fails_fast_before_private_validator() -> None:
@@ -59,6 +56,7 @@ def test_completion_contract_fails_fast_before_private_validator() -> None:
         "required_evidence_fields": ["row_count"],
         "evidence_schema": {"row_count": {"type": "integer", "const": 11}},
         "allowed_files": [], "required_files": [],
+        "public_result_contract": {"kind": "payload_only"},
         "validator_command": "must-not-run", "validator_timeout_sec": 17,
     }
     event = {"child_id": "child-1", "payload": {
@@ -72,7 +70,7 @@ def test_completion_contract_fails_fast_before_private_validator() -> None:
     assert workspace.calls == []
 
 
-def test_database_authority_contract_rejects_unverified_or_wrong_finding() -> None:
+def test_database_authority_private_finding_does_not_reject_public_submission() -> None:
     case = load_case(
         ROOT / "cases" / "mab-conflicting-specialist-results-5f19377089"
         / "public_case.yaml"
@@ -99,9 +97,10 @@ def test_database_authority_contract_rejects_unverified_or_wrong_finding() -> No
     }}
     workspace = _Workspace()
     result = asyncio.run(validate_completion_contract(workstream, event, workspace))
-    assert result.valid is False
-    assert result.reason_codes == ("evidence_constraint_failed",)
-    assert workspace.calls == []
+    assert result.valid is True
+    semantic = asyncio.run(evaluate_private_semantics(workstream, event, workspace))
+    assert semantic.valid is False
+    assert semantic.reason_codes == ("evidence_constraint_failed",)
 
 
 def test_episode_start_exposes_only_structural_constraints() -> None:

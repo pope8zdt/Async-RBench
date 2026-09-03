@@ -12,10 +12,7 @@ capabilities:
 workstream_bindings:
   ref_history_scanner:
     result_kind: result_01
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert r['scan_kind']=='ref_history'; assert bool(r['found'])==bool(e['found']);
-      assert r['scan_revision']==e['scan_revision']; assert r.get('scanned_refs')==e.get('scanned_refs')"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/scan_reports/ref_history.json'\nfields=['scan_revision']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'scan_revision' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:scan_revision');sys.exit(1)\nif r['scan_revision']!=ev['scan_revision']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:scan_revision');sys.exit(1)\""
     validator_timeout_sec: 120
     private_evidence_schema:
       found:
@@ -28,12 +25,11 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: submission_contract
   pack_scanner:
     result_kind: result_02
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert r['scan_kind']=='pack'; assert bool(r['found'])==bool(e['found']); assert
-      r['scan_revision']==e['scan_revision']; assert r['objects_scanned']==e['objects_scanned']"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/scan_reports/pack.json'\nfields=['scan_revision', 'objects_scanned']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'scan_revision' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:scan_revision');sys.exit(1)\nif r['scan_revision']!=ev['scan_revision']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:scan_revision');sys.exit(1)\n\
+      if 'objects_scanned' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:objects_scanned');sys.exit(1)\nif r['objects_scanned']!=ev['objects_scanned']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:objects_scanned');sys.exit(1)\""
     validator_timeout_sec: 120
     private_evidence_schema:
       found:
@@ -46,14 +42,11 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: submission_contract
   object_database_scanner:
     result_kind: result_03
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      a=json.load(open('/app/task_file/events/object_authority.json',encoding='utf-8'));
-      assert r['scan_kind']=='object_db'; assert bool(r['found']) is True; assert
-      r['object_id']==e['object_id']; assert r['secret_hash']==e['secret_hash']; assert
-      r['authority_receipt']==e['source_receipt']==a['authority_receipt']"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/scan_reports/object_db.json'\nfields=['object_id', 'secret_hash']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'object_id' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:object_id');sys.exit(1)\nif r['object_id']!=ev['object_id']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:object_id');sys.exit(1)\nif 'secret_hash'\
+      \ not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:secret_hash');sys.exit(1)\nif r['secret_hash']!=ev['secret_hash']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:secret_hash');sys.exit(1)\""
     validator_timeout_sec: 120
     private_evidence_schema:
       found:
@@ -75,12 +68,10 @@ workstream_bindings:
         pattern: gc-object-authority-[0-9a-f]{16}
     event_assets:
     - /app/task_file/events/object_authority.json
+    validator_stage: submission_contract
   secret_recovery:
     result_kind: result_04
-    validator_command: python3 -c "import base64,hashlib,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['secret_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert r['source_scan']=='object_db'; assert r['source_scan']==e['source_scan'];
-      assert hashlib.sha256(open(e['secret_path'],'rb').read().strip()).hexdigest()==e['secret_sha256']"
+    validator_command: python3 -c "import base64,hashlib,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; assert os.path.isfile(e['secret_path']); r=json.load(open(e['report_path'],encoding='utf-8')); assert r['source_scan']=='object_db'; assert r['source_scan']==e['source_scan']; assert hashlib.sha256(open(e['secret_path'],'rb').read().strip()).hexdigest()==e['secret_sha256']"
     validator_timeout_sec: 120
     private_evidence_schema:
       source_scan:
@@ -95,11 +86,11 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: semantic_evidence
   cleanup_worker:
     result_kind: result_05
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert r['attempt']==e['attempt']; assert r['command']==e['command']"
+    validator_command: "python3 -c \"import base64,json,os,pathlib,sys\nev=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']\nreq='/app/output_data/cleanup_reports/1.json'\nfields=['attempt', 'command']\nif ev.get('report_path')!=req:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_path_not_required_file');sys.exit(1)\nroot=pathlib.Path(os.environ.get('ASYNC_RBENCH_RESULT_WORKSPACE_ROOT') or '/')\np=root.joinpath(*[part for part in req.split('/') if part])\nif not p.is_file():\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_file_missing');sys.exit(1)\nif p.is_file():\n try:\n  r=json.load(open(p))\n except Exception:\n  print('ASYNC_RBENCH_CONTRACT_FAIL:report_json_invalid');sys.exit(1)\nelse:\n r={}\nif 'attempt' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:attempt');sys.exit(1)\nif r['attempt']!=ev['attempt']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:attempt');sys.exit(1)\nif 'command' not in r:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_missing_required_field:command');sys.exit(1)\n\
+      if r['command']!=ev['command']:\n print('ASYNC_RBENCH_CONTRACT_FAIL:report_payload_field_mismatch:command');sys.exit(1)\""
     validator_timeout_sec: 120
     private_evidence_schema:
       attempt:
@@ -109,11 +100,10 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: submission_contract
   cleanup_verifier:
     result_kind: result_06
-    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence'];
-      assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8'));
-      assert bool(r['closed'])==bool(e['closed'])"
+    validator_command: python3 -c "import base64,json,os; e=json.loads(base64.b64decode(os.environ['ASYNC_RBENCH_RESULT_PAYLOAD_B64']))['evidence']; assert os.path.isfile(e['report_path']); r=json.load(open(e['report_path'],encoding='utf-8')); assert bool(r['closed'])==bool(e['closed'])"
     validator_timeout_sec: 120
     private_evidence_schema:
       closed:
@@ -121,6 +111,7 @@ workstream_bindings:
       report_path:
         type: string
     event_assets: []
+    validator_stage: semantic_evidence
 result_contract:
   allowed_result_kinds:
   - result_01
@@ -129,8 +120,7 @@ result_contract:
   - result_04
   - result_05
   - result_06
-  rule: At child spawn assign semantic work_units; at completion tag the result with
-    the matching kind. The gateway, not the main agent, receives completion first.
+  rule: At child spawn assign semantic work_units; at completion tag the result with the matching kind. The gateway, not the main agent, receives completion first.
 authoritative_result_kind: result_03
 superseded_result_kind: result_01
 scenarios:
@@ -160,15 +150,9 @@ scenarios:
       - cleanup_run
 artifact_observers: {}
 hidden_checks:
-  authority_recovery: python3 -c "import hashlib,json,os; m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
-    a=json.load(open('/app/output_data/scan_reports/object_db.json',encoding='utf-8'));
-    assert m['recovery_source']=='object_db'; assert m['authority_object_id']==a['object_id'];
-    assert m['recovered_secret_sha256']==a['secret_hash']"
-  repo_closure: python3 -c "import json; c=json.load(open('/app/output_data/closure_report.json',encoding='utf-8'));
-    assert c['closed'] is True; assert all(c['checks'].values())"
-  cleanup_redelegated: python3 -c "import json; m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8'));
-    assert m['cleanup_attempts']>=2; assert m['cleanup_failures']==[1]; assert m['cleanup_redelegations']>=1;
-    assert m['closure_verified'] is True"
+  authority_recovery: python3 -c "import hashlib,json,os; m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8')); a=json.load(open('/app/output_data/scan_reports/object_db.json',encoding='utf-8')); assert m['recovery_source']=='object_db'; assert m['authority_object_id']==a['object_id']; assert m['recovered_secret_sha256']==a['secret_hash']"
+  repo_closure: python3 -c "import json; c=json.load(open('/app/output_data/closure_report.json',encoding='utf-8')); assert c['closed'] is True; assert all(c['checks'].values())"
+  cleanup_redelegated: python3 -c "import json; m=json.load(open('/app/output_data/decision_manifest.json',encoding='utf-8')); assert m['cleanup_attempts']>=2; assert m['cleanup_failures']==[1]; assert m['cleanup_redelegations']>=1; assert m['closure_verified'] is True"
 reverification_anchors:
   authority_recovery:
   - result_03
@@ -203,7 +187,8 @@ information_sufficiency:
   - scan_revision
   - report_path
   review_status: reviewed
-  requirement_ids: [git_leak_authority_cleanup_closure]
+  requirement_ids:
+  - git_leak_authority_cleanup_closure
 - workstream_id: pack_scanner
   public_inputs:
   - /app/output_data/scan_reports/pack.json
@@ -213,7 +198,8 @@ information_sufficiency:
   - scan_revision
   - report_path
   review_status: reviewed
-  requirement_ids: [git_leak_authority_cleanup_closure]
+  requirement_ids:
+  - git_leak_authority_cleanup_closure
 - workstream_id: object_database_scanner
   public_inputs:
   - /app/task_file/scripts/scan_objects.py
@@ -227,7 +213,8 @@ information_sufficiency:
   - scan_revision
   - report_path
   review_status: reviewed
-  requirement_ids: [git_leak_authority_cleanup_closure]
+  requirement_ids:
+  - git_leak_authority_cleanup_closure
 - workstream_id: secret_recovery
   public_inputs:
   - /app/task_file/scripts/recover_secret.py
@@ -238,7 +225,8 @@ information_sufficiency:
   - secret_path
   - report_path
   review_status: reviewed
-  requirement_ids: [git_leak_authority_cleanup_closure]
+  requirement_ids:
+  - git_leak_authority_cleanup_closure
 - workstream_id: cleanup_worker
   public_inputs:
   - /app/output_data/cleanup_reports/1.json
@@ -248,7 +236,8 @@ information_sufficiency:
   - command
   - report_path
   review_status: reviewed
-  requirement_ids: [git_leak_authority_cleanup_closure]
+  requirement_ids:
+  - git_leak_authority_cleanup_closure
 - workstream_id: cleanup_verifier
   public_inputs:
   - /app/output_data/closure_report.json
@@ -256,7 +245,8 @@ information_sufficiency:
   - closed
   - report_path
   review_status: reviewed
-  requirement_ids: [git_leak_authority_cleanup_closure]
+  requirement_ids:
+  - git_leak_authority_cleanup_closure
 legacy_metadata:
   metrics:
     primary:

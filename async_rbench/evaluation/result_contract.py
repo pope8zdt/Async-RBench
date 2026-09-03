@@ -6,8 +6,6 @@ import json
 import re
 import shlex
 from typing import Any
-
-from .report_contract import classify_validator_output
 from .workspace_runtime import WorkspaceRuntime
 
 
@@ -132,20 +130,7 @@ def validate_payload_contract(
         _append_failure(codes, details, "duplicate_files", "payload.files contains duplicate paths")
 
     allowed_files = set(str(path) for path in workstream.get("allowed_files") or [])
-    required_list = [str(path) for path in workstream.get("required_files") or []]
-    required_files = set(required_list)
-    # A single-required-file workstream binds the reported artifact unambiguously:
-    # evidence.report_path must name that one required file, so the report the
-    # participant points at IS the report the evaluator inspects (no two-file
-    # ambiguity).
-    report_path = evidence.get("report_path")
-    if isinstance(report_path, str) and len(required_list) == 1:
-        if report_path != required_list[0]:
-            codes.append("report_path_not_required_file")
-            details.append(
-                f"evidence.report_path {report_path!r} must equal required_files[0] "
-                f"{required_list[0]!r}"
-            )
+    required_files = set(str(path) for path in workstream.get("required_files") or [])
     unexpected = sorted(set(files) - allowed_files)
     missing = sorted(required_files - set(files))
     if unexpected:
@@ -165,23 +150,21 @@ def validate_payload_contract(
 async def validate_completion_contract(
     workstream: dict[str, Any], event: dict[str, Any], workspace: WorkspaceRuntime,
 ) -> ResultContractValidation:
-    """Validate payload claims and then run the private validator in the child workspace."""
+    """Compatibility entry point for the participant-visible validation engine."""
+    from .public_result_validation import validate_public_submission
 
+    return await validate_public_submission(workstream, event, workspace)
+
+
+async def evaluate_private_semantics(
+    workstream: dict[str, Any], event: dict[str, Any], workspace: WorkspaceRuntime,
+) -> ResultContractValidation:
+    """Evaluate hidden semantic evidence without influencing gateway delivery."""
     codes, details = validate_payload_contract(workstream, event)
     command = str(workstream.get("validator_command") or "").strip()
     exit_code: int | None = None
     output = ""
-    # Fail fast at the declarative boundary. Running a filesystem validator
-    # after the payload already violates its schema creates duplicate and often
-    # misleading errors (for example a KeyError caused only by a missing field).
-    # A replacement result should first repair the public/typed contract; only
-    # then does the evaluator inspect the claimed child artifacts.
     if command and not codes:
-        timeout = int(workstream.get("validator_timeout_sec") or 120)
-        # Bind private validation to the exact hidden payload that reached the
-        # gateway.  Base64 plus shell quoting keeps arbitrary model text out of
-        # the command grammar while allowing case validators to compare dynamic
-        # evidence (for example observed revisions) with the child artifacts.
         encoded_payload = base64.b64encode(
             json.dumps(
                 event.get("payload"), ensure_ascii=False, sort_keys=True,
@@ -193,24 +176,19 @@ async def validate_completion_contract(
             f"{command}"
         )
         result = await workspace.child_terminal(
-            str(event.get("child_id", "")), bound_command, timeout,
+            str(event.get("child_id") or ""),
+            bound_command,
+            int(workstream.get("validator_timeout_sec") or 120),
         )
         exit_code = result.exit_code
         output = result.output[-4000:]
-        if result.exit_code != 0:
-            granular = classify_validator_output(output)
-            if granular:
-                for code, field in granular:
-                    detail = f"report contract failed: {code}"
-                    if field:
-                        detail += f" (field {field})"
-                    _append_failure(codes, details, code, detail)
-            else:
-                _append_failure(
-                    codes, details, "reported_file_contract_failed",
-                    f"evaluator-owned child validator exited with code {result.exit_code}",
-                )
-
+        if exit_code != 0:
+            _append_failure(
+                codes,
+                details,
+                "semantic_validator_failed",
+                f"private semantic validator exited with code {exit_code}",
+            )
     return ResultContractValidation(
         valid=not codes,
         reason_codes=tuple(codes),

@@ -20,6 +20,8 @@ from .evaluation.event_taxonomy import (
     validate_case_classification,
     validate_scenario_events,
 )
+from .evaluation.public_result_validation import validate_public_contract_definition
+from .evaluation.report_contract import render_validator_command
 from .evaluation.weighting import CAPABILITY_TARGETS, RELEVANCE_WEIGHTS
 
 
@@ -98,7 +100,17 @@ def load_case(path: Path) -> CaseSpec:
         for item in public.get("workstreams") or []:
             stream_id = str(item["id"])
             binding = dict(bindings.get(stream_id) or {})
-            workstreams.append({
+            if "validator_stage" not in binding:
+                raise ValueError(
+                    f"{private_path}: workstream {stream_id!r}: validator_stage is required"
+                )
+            validator_stage = str(binding.get("validator_stage") or "")
+            if validator_stage not in {"submission_contract", "semantic_evidence"}:
+                raise ValueError(
+                    f"{private_path}: workstream {stream_id!r}: "
+                    f"unsupported validator_stage {validator_stage!r}"
+                )
+            workstream = {
                 "id": stream_id,
                 "result_kind": binding.get("result_kind", stream_id),
                 "required_evidence_fields": list(item.get("required_evidence_fields") or []),
@@ -109,7 +121,36 @@ def load_case(path: Path) -> CaseSpec:
                 "public_result_contract": dict(item.get("public_result_contract") or {}),
                 "validator_command": str(binding.get("validator_command") or "true"),
                 "validator_timeout_sec": int(binding.get("validator_timeout_sec") or 120),
-            })
+                "validator_stage": validator_stage,
+            }
+            definition_errors = validate_public_contract_definition(workstream)
+            if definition_errors:
+                raise ValueError(
+                    f"{path}: workstream {stream_id!r}: "
+                    + "; ".join(definition_errors)
+                )
+            public_kind = workstream["public_result_contract"].get("kind")
+            if validator_stage == "submission_contract":
+                if public_kind != "report_file":
+                    raise ValueError(
+                        f"{private_path}: workstream {stream_id!r}: submission_contract "
+                        "requires public_result_contract.kind=report_file"
+                    )
+                required_files = workstream["required_files"]
+                expected_command = render_validator_command(
+                    workstream["public_result_contract"], required_files[0],
+                )
+                if workstream["validator_command"] != expected_command:
+                    raise ValueError(
+                        f"{private_path}: workstream {stream_id!r}: submission_contract "
+                        "validator_command must equal the deterministic public render"
+                    )
+            elif public_kind != "payload_only":
+                raise ValueError(
+                    f"{private_path}: workstream {stream_id!r}: semantic_evidence "
+                    "requires public_result_contract.kind=payload_only"
+                )
+            workstreams.append(workstream)
             initial_wave.append({
                 "workstream_id": stream_id,
                 "result_kind": binding.get("result_kind", stream_id),
@@ -518,6 +559,10 @@ def validate_case(spec: CaseSpec) -> list[str]:
                     f"public required evidence for {item.get('workstream_id')!r}"
                 )
     for item in workstreams:
+        for error in validate_public_contract_definition(item):
+            errors.append(
+                f"{spec.path}: workstream {item.get('id')!r}: {error}"
+            )
         evidence_fields = item.get("required_evidence_fields", [])
         if (
             not isinstance(evidence_fields, list)
