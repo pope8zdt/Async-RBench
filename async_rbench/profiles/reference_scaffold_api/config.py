@@ -150,6 +150,10 @@ class ScaffoldConfig:
     # Bounded model-requested replacement/recovery spawns. Benchmark-owned
     # initial-wave children are tracked separately and do not consume this.
     max_total_child_spawns: int = 5
+    # Hard per-workstream recovery cap: an admitted replacement consumes one
+    # slot regardless of whether its free-text evidence digest changed, so the
+    # same workstream can be retried at most this many times (Task 7).
+    max_recovery_spawns_per_workstream: int = 1
     max_api_concurrency: int = 4
     # Legacy single-pool ceiling, retained only for non-official legacy profiles
     # (spec §7.3).  Official Track A profiles declare the split pools below.
@@ -310,7 +314,8 @@ class ScaffoldConfig:
             raise ValueError(f"request_body_extra cannot override protected fields: {sorted(overlap)}")
         for name in (
             "max_main_turns", "max_child_turns", "max_concurrent_children",
-            "max_total_child_spawns", "max_api_concurrency",
+            "max_total_child_spawns", "max_recovery_spawns_per_workstream",
+            "max_api_concurrency",
             "max_total_tokens",
             "budget_child_shared", "budget_main_pre", "budget_main_post",
             "budget_main_total",
@@ -378,6 +383,7 @@ class ScaffoldConfig:
             "max_child_turns": self.max_child_turns,
             "max_concurrent_children": self.max_concurrent_children,
             "max_total_child_spawns": self.max_total_child_spawns,
+            "max_recovery_spawns_per_workstream": self.max_recovery_spawns_per_workstream,
             "max_api_concurrency": self.max_api_concurrency,
             "max_total_tokens": self.max_total_tokens,
             "budget_child_shared": self.budget_child_shared,

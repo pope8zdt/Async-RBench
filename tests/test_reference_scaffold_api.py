@@ -813,9 +813,10 @@ def test_spawn_refuses_without_actionable_feedback() -> None:
     asyncio.run(exercise())
 
 
-def test_spawn_refuses_without_new_evidence_and_below_one_call_budget() -> None:
-    """P0-9: re-delegation is bounded to one no-new-evidence retry and refused
-    once the remaining child budget cannot cover one full child call."""
+def test_spawn_refuses_after_recovery_cap_and_when_exact_first_call_does_not_fit() -> None:
+    """Task 7: re-delegation is bounded by the hard per-workstream recovery cap
+    and by exact-first-call admission — a remaining budget that cannot fit the
+    recovery child's real first call refuses it."""
     async def exercise() -> None:
         scaffold = _scaffold(_start("data-recovery-service", "linear"))
         manager = scaffold.manager
@@ -835,45 +836,59 @@ def test_spawn_refuses_without_new_evidence_and_below_one_call_budget() -> None:
             "completion_id": "comp-c-wal",
             "reason_codes": ["report_payload_field_mismatch"], "child_id": "c-wal",
         })
+        manager.attempt_counts["wal_recovery"] = 1
         manager._launch_queued = lambda: None
 
-        manager.no_new_evidence_retries["wal_recovery"] = 1
-        result = await manager.spawn("wal_recovery", "try again", [], "", "high")
-        assert "no new evidence" in result["error"]
+        # Initial attempt + one recovery for the workstream is allowed.
+        first = await manager.spawn("wal_recovery", "try again", [], "", "high")
+        assert "child_id" in first
+        assert manager.recovery_spawn_counts["wal_recovery"] == 1
 
-        manager.no_new_evidence_retries["wal_recovery"] = 0
+        # A second recovery for the same workstream hits the hard per-workstream
+        # cap — Task 7 replaces the digest-based no-information bound.
+        result = await manager.spawn("wal_recovery", "try again", [], "", "high")
+        assert "maximum recovery attempts for workstream" in result["error"]
+        assert result["budget_consumed"] is False
+        assert len(manager.children) == 4
+
+        # Exact-first-call admission: once the remaining child budget cannot fit
+        # the recovery child's real first call the spawn is refused (the old
+        # crude 2 * max_output floor is gone).
         pool = manager.token_budget
         pool.settled += pool.maximum  # remaining == 0
-        result = await manager.spawn("wal_recovery", "try again", [], "", "high")
-        assert "below one full child call" in result["error"]
+        result = await manager.spawn("checkpoint_recovery", "try again", [], "", "high")
+        assert "exact first call" in result["error"]
+        assert result["budget_consumed"] is False
+        assert len(manager.children) == 4
 
     asyncio.run(exercise())
 
 
-def test_no_new_evidence_retry_is_recorded_and_emitted() -> None:
-    """A sealed submission repeating a prior attempt's evidence marks a
-    no-information retry; different evidence does not."""
+def test_duplicate_evidence_retry_is_recorded_and_emitted() -> None:
+    """A sealed submission repeating a prior attempt's evidence is reported as a
+    descriptive duplicate-evidence retry; different evidence is not.  The digest
+    comparison is descriptive only (Task 7) and no longer bounds re-delegation."""
     async def exercise() -> None:
         scaffold = _scaffold(_start())
         manager = scaffold.manager
         payload = {"summary": "s", "evidence": {"finding": "x"}, "files": []}
         manager._record_workstream_evidence("wal_recovery", payload, "c-1")
-        assert manager.no_new_evidence_retries["wal_recovery"] == 0
+        assert manager.duplicate_evidence_retries["wal_recovery"] == 0
         manager._record_workstream_evidence("wal_recovery", payload, "c-2")
-        assert manager.no_new_evidence_retries["wal_recovery"] == 1
+        assert manager.duplicate_evidence_retries["wal_recovery"] == 1
         events = [
             event for event in scaffold.emitter.events
-            if event.get("type") == "no_information_retry_detected"
+            if event.get("type") == "duplicate_evidence_retry_detected"
         ]
         assert len(events) == 1
         assert events[0]["workstream_id"] == "wal_recovery"
-        assert events[0]["no_new_evidence_retries"] == 1
+        assert events[0]["duplicate_evidence_retries"] == 1
         manager._record_workstream_evidence(
             "wal_recovery",
             {"summary": "s", "evidence": {"finding": "y"}, "files": []},
             "c-3",
         )
-        assert manager.no_new_evidence_retries["wal_recovery"] == 1
+        assert manager.duplicate_evidence_retries["wal_recovery"] == 1
 
     asyncio.run(exercise())
 

@@ -125,6 +125,11 @@ class ChildRecord:
     # replacement child carries, so the new worker repairs the right part.
     attempt_number: int = 1
     prior_attempt_rejection: dict[str, Any] | None = None
+    # Task 7: the reservation committed at spawn admission for the recovery
+    # child's exact first model call.  ``ChildAgent.run`` consumes it for turn 1
+    # instead of reserving again; a child that is cancelled or fails to start
+    # releases it.  ``None`` for benchmark-owned initial-wave children.
+    initial_reservation: Reservation | None = None
 
 
 @dataclass(frozen=True)
@@ -353,6 +358,23 @@ class ChildAgent:
             }, ["summary", "evidence", "files"]),
         ]
 
+    @staticmethod
+    def initial_messages(record: ChildRecord) -> list[dict[str, Any]]:
+        """The exact system + user payload of a child's first model call.
+
+        ``SubagentManager.spawn`` builds, compresses and estimates this exact
+        payload so it can reserve the recovery child's first call at admission
+        (Task 7); ``run`` replays the same payload on turn 1, so the messages a
+        queued recovery child was admitted for are the messages it sends.
+        """
+        return [
+            {"role": "system", "content": CHILD_SYSTEM_PROMPT},
+            {"role": "user", "content": json.dumps(
+                build_child_user_message(record),
+                ensure_ascii=False, sort_keys=True,
+            )},
+        ]
+
     async def _validate_candidate(
         self, record: ChildRecord, payload: dict[str, Any],
     ) -> ResultContractValidation:
@@ -412,13 +434,7 @@ class ChildAgent:
     async def run(
         self, record: ChildRecord, model: str, seed: int,
     ) -> ChildRunOutcome:
-        messages: list[dict[str, Any]] = [
-            {"role": "system", "content": CHILD_SYSTEM_PROMPT},
-            {"role": "user", "content": json.dumps(
-                build_child_user_message(record),
-                ensure_ascii=False, sort_keys=True,
-            )},
-        ]
+        messages: list[dict[str, Any]] = self.initial_messages(record)
         total_tokens = 0
         unsealed_turns = 0
         for turn_index in range(1, self.config.max_child_turns + 1):
@@ -431,47 +447,57 @@ class ChildAgent:
                 keep_recent_blocks=self.config.child_keep_recent_turns,
                 excerpt_chars=self.config.child_old_tool_excerpt_chars,
             )
-            input_bound, accounting_mode = _estimate_input(
-                self.backend, messages, tools,
-            )
-            reservation = await self.token_budget.reserve(
-                input_bound, self.config.max_output_tokens,
-                accounting_mode=accounting_mode,
-            )
-            if reservation is None:
-                self._open_reservation = None
+            if turn_index == 1 and record.initial_reservation is not None:
+                # Task 7: ``spawn`` already compressed, estimated and reserved
+                # this child's exact first call at admission.  Consume that
+                # reservation for turn 1 instead of reserving a second time; the
+                # matching ``budget_reserved`` boundary was emitted at spawn, so
+                # no duplicate reserve event is produced here.
+                reservation = record.initial_reservation
+                record.initial_reservation = None
+                self._open_reservation = reservation
+            else:
+                input_bound, accounting_mode = _estimate_input(
+                    self.backend, messages, tools,
+                )
+                reservation = await self.token_budget.reserve(
+                    input_bound, self.config.max_output_tokens,
+                    accounting_mode=accounting_mode,
+                )
+                if reservation is None:
+                    self._open_reservation = None
+                    self.emitter.emit(
+                        "budget_exhausted",
+                        pool=self.token_budget.name,
+                        role=role, turn=turn_index,
+                        refusal_reason=self.token_budget.refusal_reason,
+                        halt_reason=self.token_budget.halt_reason,
+                        required_estimate=input_bound + self.config.max_output_tokens,
+                        remaining=self.token_budget.remaining,
+                    )
+                    if self.token_budget.refusal_reason == "halted_pool":
+                        raise ChildBudgetAccountingError(
+                            "child token pool halted after estimation overrun"
+                        )
+                    return ChildRunOutcome(
+                        kind="token_budget_exhausted",
+                        payload=None,
+                        hint=None,
+                        tokens=total_tokens,
+                        reason="episode token budget exhausted before child submission",
+                    )
+                # Track the in-flight reservation so failure/timeout cleanup can
+                # release it (see ``release_open_reservation``).
+                self._open_reservation = reservation
                 self.emitter.emit(
-                    "budget_exhausted",
+                    "budget_reserved",
                     pool=self.token_budget.name,
-                    role=role, turn=turn_index,
-                    refusal_reason=self.token_budget.refusal_reason,
-                    halt_reason=self.token_budget.halt_reason,
-                    required_estimate=input_bound + self.config.max_output_tokens,
+                    reservation_id=reservation.reservation_id,
+                    input_upper_bound=input_bound,
+                    max_output=self.config.max_output_tokens,
+                    accounting_mode=accounting_mode,
                     remaining=self.token_budget.remaining,
                 )
-                if self.token_budget.refusal_reason == "halted_pool":
-                    raise ChildBudgetAccountingError(
-                        "child token pool halted after estimation overrun"
-                    )
-                return ChildRunOutcome(
-                    kind="token_budget_exhausted",
-                    payload=None,
-                    hint=None,
-                    tokens=total_tokens,
-                    reason="episode token budget exhausted before child submission",
-                )
-            # Track the in-flight reservation so failure/timeout cleanup can
-            # release it (see ``release_open_reservation``).
-            self._open_reservation = reservation
-            self.emitter.emit(
-                "budget_reserved",
-                pool=self.token_budget.name,
-                reservation_id=reservation.reservation_id,
-                input_upper_bound=input_bound,
-                max_output=self.config.max_output_tokens,
-                accounting_mode=accounting_mode,
-                remaining=self.token_budget.remaining,
-            )
             self.emitter.emit(
                 "agent_progress", phase="model_call_started", role=role,
                 turn=turn_index, model=model,
@@ -616,6 +642,29 @@ class ChildAgent:
         )
 
 
+def _recovery_first_call(
+    config: ScaffoldConfig, backend: ModelBackend, record: ChildRecord,
+) -> tuple[int, str]:
+    """Compress and estimate the recovery child's exact first model call.
+
+    Task 7 (Step 3) admission reserves exactly this payload -- never a crude
+    ``2 * max_output_tokens`` floor -- so the bound committed to the pool at
+    spawn is the bound the child actually consumes on turn 1
+    (``ChildAgent.run`` replays the same payload and consumes the stored
+    reservation).  Returns ``(input_upper_bound, accounting_mode)``.
+    """
+    messages = ChildAgent.initial_messages(record)
+    tools = ChildAgent.tools()
+    messages = compress_child_messages(
+        messages,
+        tools,
+        budget_bytes=config.child_context_budget_bytes,
+        keep_recent_blocks=config.child_keep_recent_turns,
+        excerpt_chars=config.child_old_tool_excerpt_chars,
+    )
+    return _estimate_input(backend, messages, tools)
+
+
 class SubagentManager:
     def __init__(
         self,
@@ -656,13 +705,15 @@ class SubagentManager:
         # before the next occurrence unseals.
         self.presentation_queue = PresentationQueue()
         self._occurrence_counter = 0
-        # P0-8/P0-9: per-workstream delegation history — the last rejection
-        # feedback (codes + attempt + contract part), attempt counts, and the
-        # evidence digests that bound no-information re-delegation.
+        # P0-8/P0-9 (Task 7): per-workstream delegation history — the last
+        # rejection feedback (codes + attempt + contract part), attempt counts,
+        # the hard recovery-spawn counter (Step 4 cap), and the evidence digests
+        # kept only as a descriptive duplicate-evidence metric (no longer gates).
         self.attempt_counts: Counter[str] = Counter()
         self.workstream_rejections: dict[str, dict[str, Any]] = {}
         self.workstream_evidence_digests: dict[str, list[str]] = defaultdict(list)
-        self.no_new_evidence_retries: Counter[str] = Counter()
+        self.recovery_spawn_counts: Counter[str] = Counter()
+        self.duplicate_evidence_retries: Counter[str] = Counter()
 
     def unresolved_count(self) -> int:
         return sum(
@@ -708,6 +759,29 @@ class SubagentManager:
             record.asyncio_task = asyncio.create_task(
                 self._run_child(record), name=f"async_rbench-{record.child_id}"
             )
+
+    async def _release_initial_reservation(self, record: ChildRecord) -> None:
+        """Release a recovery child's admission reservation if run never consumed it.
+
+        ``spawn`` stores the exact-first-call reservation on the record so
+        ``ChildAgent.run`` can consume it for turn 1.  A child that is cancelled,
+        fails to start its workspace, or exits before its first model turn never
+        consumes it; this returns the provisional charge to the pool.  No-op when
+        the reservation is already consumed or released (the record field is
+        cleared on the first release, so this cannot double-release).
+        """
+        reservation = record.initial_reservation
+        if reservation is None:
+            return
+        record.initial_reservation = None
+        await self.token_budget.release(reservation.reservation_id)
+        self.emitter.emit(
+            "budget_released",
+            pool=self.token_budget.name,
+            reservation_id=reservation.reservation_id,
+            estimate=reservation.estimated_total,
+            remaining=self.token_budget.remaining,
+        )
 
     async def _signal_start_progress(self) -> None:
         """Wake siblings blocked in ``_wave_start_barrier`` for a child that just
@@ -909,11 +983,8 @@ class SubagentManager:
                 reason=result["error"], budget_consumed=False,
             )
             return result
-        # P0-9: bounded no-information-increment re-delegation.  A replacement
-        # child is admitted only when the previous attempt's failure was reported
-        # back with an actionable public code, the one no-new-evidence retry is
-        # not exhausted, and the remaining budget covers at least one full child
-        # call (conservative input floor + maximum output).
+        # P0-9: a replacement is admitted only when the previous attempt's
+        # failure was reported back with an actionable public code.
         feedback = self.workstream_rejections.get(workstream_id)
         if feedback is not None and not feedback.get("actionable"):
             result = {
@@ -929,11 +1000,16 @@ class SubagentManager:
                 reason=result["error"], budget_consumed=False,
             )
             return result
-        if self.no_new_evidence_retries[workstream_id] >= 1:
+        # Task 7 (Step 4): a hard per-workstream recovery cap replaces the
+        # digest-based no-information bound.  An admitted replacement consumes
+        # one recovery slot regardless of whether its free-text evidence digest
+        # changed, so the same workstream can be retried at most
+        # ``max_recovery_spawns_per_workstream`` times.
+        if self.recovery_spawn_counts[workstream_id] >= self.config.max_recovery_spawns_per_workstream:
             result = {
                 "error": (
-                    f"workstream {workstream_id!r} already retried once with no "
-                    "new evidence; further re-delegation is refused"
+                    f"maximum recovery attempts for workstream "
+                    f"{workstream_id!r} reached"
                 ),
                 "budget_consumed": False,
             }
@@ -942,22 +1018,14 @@ class SubagentManager:
                 reason=result["error"], budget_consumed=False,
             )
             return result
-        min_child_call_budget = 2 * self.config.max_output_tokens
-        if self.token_budget.remaining < min_child_call_budget:
-            result = {
-                "error": (
-                    f"remaining child budget ({self.token_budget.remaining} tokens) "
-                    f"is below one full child call ({min_child_call_budget}); "
-                    "re-delegation refused"
-                ),
-                "budget_consumed": False,
-            }
-            self.emitter.emit(
-                "delegation_validation_error", requested_workstream=workstream_id,
-                reason=result["error"], budget_consumed=False,
-            )
-            return result
-        self.attempt_counts[workstream_id] += 1
+        # Task 7 (Step 3): admission reserves the recovery child's exact first
+        # model call instead of gating on a crude ``2 * max_output_tokens``
+        # floor.  Build the prospective record, compress/estimate the real first
+        # payload it would send on turn 1, and reserve atomically.  The
+        # reservation is committed to the pool *before* the child is added to
+        # ``self.children``, so two concurrent recovery spawns racing for one
+        # call of remaining budget admit exactly one.
+        attempt_number = self.attempt_counts[workstream_id] + 1
         self._counter += 1
         child_id = f"child-{self._counter}"
         work_units = [workstream_id]
@@ -998,10 +1066,74 @@ class SubagentManager:
                 )
             ),
             result_file_contract_enforced=bool(self.start.get("result_contract_enforced")),
-            attempt_number=self.attempt_counts[workstream_id],
+            attempt_number=attempt_number,
             prior_attempt_rejection=self.workstream_rejections.get(workstream_id),
         )
+        try:
+            input_bound, accounting_mode = _recovery_first_call(
+                self.config, self.backend, record,
+            )
+        except ChildContextBudgetError as exc:
+            result = {
+                "error": (
+                    f"recovery child first call exceeds the child context budget "
+                    f"({exc}); re-delegation refused"
+                ),
+                "budget_consumed": False,
+            }
+            self.emitter.emit(
+                "delegation_validation_error", requested_workstream=workstream_id,
+                reason=result["error"], budget_consumed=False,
+            )
+            return result
+        reservation = await self.token_budget.reserve(
+            input_bound, self.config.max_output_tokens,
+            accounting_mode=accounting_mode,
+        )
+        if reservation is None:
+            # Distinguish a pool halted by an estimation overrun (an
+            # infrastructure accounting failure) from a genuine participant
+            # budget shortfall.  Neither consumes budget nor a recovery slot.
+            if self.token_budget.refusal_reason == "halted_pool":
+                result = {
+                    "error": (
+                        f"child token pool {self.token_budget.name} is halted after "
+                        "an estimation overrun (infrastructure accounting failure); "
+                        "re-delegation refused"
+                    ),
+                    "budget_consumed": False,
+                }
+            else:
+                result = {
+                    "error": (
+                        f"remaining child budget ({self.token_budget.remaining} "
+                        "tokens) cannot admit this recovery child's exact first "
+                        "call; re-delegation refused"
+                    ),
+                    "budget_consumed": False,
+                }
+            self.emitter.emit(
+                "delegation_validation_error", requested_workstream=workstream_id,
+                reason=result["error"], budget_consumed=False,
+            )
+            return result
+        # The recovery child is admitted: commit the counters and store the
+        # reservation so ``ChildAgent.run`` consumes it for turn 1 instead of
+        # reserving a second time.  The ``budget_reserved`` boundary that run()
+        # would otherwise emit is recorded here at admission.
+        self.attempt_counts[workstream_id] += 1
+        self.recovery_spawn_counts[workstream_id] += 1
+        record.initial_reservation = reservation
         self.children[child_id] = record
+        self.emitter.emit(
+            "budget_reserved",
+            pool=self.token_budget.name,
+            reservation_id=reservation.reservation_id,
+            input_upper_bound=input_bound,
+            max_output=self.config.max_output_tokens,
+            accounting_mode=accounting_mode,
+            remaining=self.token_budget.remaining,
+        )
         self.emitter.emit(
             "child_spawned", child_id=child_id, parent_id="main",
             work_units=work_units, initial_wave=False,
@@ -1236,6 +1368,13 @@ class SubagentManager:
             self._delivery_event.set()
             LOGGER.exception("child %s failed", record.child_id)
         finally:
+            # A recovery child that never reached its first model turn
+            # (workspace-start failure, cancellation while blocked in the start
+            # barrier, or an infrastructure exit before ``ChildAgent.run``)
+            # must give back the admission reservation; a child whose run
+            # consumed/settled it has already cleared the field, so this is a
+            # no-op there.
+            await self._release_initial_reservation(record)
             # A child leaving the wave — however it exits (success, failure, or
             # cancellation while blocked in the start barrier) — must wake any
             # sibling that is waiting for this child to leave ``starting``.
@@ -1375,19 +1514,20 @@ class SubagentManager:
     ) -> None:
         """Record the sealed payload's evidence digest against prior attempts.
 
-        A payload whose evidence bytes repeat an earlier attempt's contributes no
-        new information: the attempt is a no-information retry (P0-9).  The
-        runtime bounds re-delegation for such a workstream to one retry.
+        Task 7: the digest comparison is a *descriptive* metric only — it no
+        longer bounds re-delegation (that is the hard per-workstream recovery cap
+        in ``spawn``).  A payload whose evidence bytes repeat an earlier
+        attempt's is reported as a duplicate-evidence retry.
         """
         digest = canonical_digest((payload or {}).get("evidence") or {})
         if digest in self.workstream_evidence_digests[workstream_id]:
-            self.no_new_evidence_retries[workstream_id] += 1
+            self.duplicate_evidence_retries[workstream_id] += 1
             self.emitter.emit(
-                "no_information_retry_detected",
+                "duplicate_evidence_retry_detected",
                 child_id=child_id,
                 workstream_id=workstream_id,
                 evidence_digest=digest,
-                no_new_evidence_retries=self.no_new_evidence_retries[workstream_id],
+                duplicate_evidence_retries=self.duplicate_evidence_retries[workstream_id],
             )
         else:
             self.workstream_evidence_digests[workstream_id].append(digest)
@@ -1457,6 +1597,10 @@ class SubagentManager:
                 await record.asyncio_task
             except asyncio.CancelledError:
                 pass
+        # A recovery child cancelled before its first model turn must give back
+        # the reservation ``spawn`` committed for it at admission.  If the task
+        # was cancelled above, ``_run_child`` already released it (no-op here).
+        await self._release_initial_reservation(record)
         record.status = "cancelled"
         record.decision = "cancelled"
         self.emitter.emit(
