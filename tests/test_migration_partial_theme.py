@@ -385,6 +385,7 @@ def _write_partial_case(tmp_path: Path, *, case_id: str, events: list[dict]) -> 
         "workstreams": [{
             "id": stream_id, "task": "recover", "targets": [],
             "expected_output": "out", "priority": "normal",
+            "public_result_contract": {"kind": "payload_only"},
         } for stream_id in ("partial", "complete")],
         "artifacts": [],
     }), encoding="utf-8")
@@ -393,9 +394,10 @@ def _write_partial_case(tmp_path: Path, *, case_id: str, events: list[dict]) -> 
         "authoritative_result_kind": "complete",
         "superseded_result_kind": "partial",
         "result_contract": {"allowed_result_kinds": ["partial", "complete"]},
+        # Task 4 fail-closed contract: every workstream declares a validator_stage.
         "workstream_bindings": {
-            "partial": {"result_kind": "partial"},
-            "complete": {"result_kind": "complete"},
+            "partial": {"result_kind": "partial", "validator_stage": "semantic_evidence"},
+            "complete": {"result_kind": "complete", "validator_stage": "semantic_evidence"},
         },
         "scenarios": {"linear": {"events": []}, "async": {"events": events}},
     }), encoding="utf-8")

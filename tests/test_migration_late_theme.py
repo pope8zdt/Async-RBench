@@ -404,7 +404,8 @@ def _write_late_case(tmp_path: Path, *, case_id: str) -> Path:
         "task_instruction_path": "task/task.yaml",
         "workstreams": [
             {"id": stream_id, "task": "recover", "targets": [],
-             "expected_output": "out", "priority": "normal"}
+             "expected_output": "out", "priority": "normal",
+             "public_result_contract": {"kind": "payload_only"}}
             for stream_id in ("requirement_worker_01", "requirement_worker_02")
         ],
         "artifacts": [],
@@ -413,8 +414,11 @@ def _write_late_case(tmp_path: Path, *, case_id: str) -> Path:
     private = {
         "case_id": case_id,
         "workstream_bindings": {
-            "requirement_worker_01": {"result_kind": "result_01"},
-            "requirement_worker_02": {"result_kind": "result_02"},
+            # Task 4 fail-closed contract: every workstream declares a validator_stage.
+            "requirement_worker_01": {
+                "result_kind": "result_01", "validator_stage": "semantic_evidence"},
+            "requirement_worker_02": {
+                "result_kind": "result_02", "validator_stage": "semantic_evidence"},
         },
         "authoritative_result_kind": "result_02",
         "superseded_result_kind": "result_01",

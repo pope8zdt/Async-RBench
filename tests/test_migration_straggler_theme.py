@@ -58,6 +58,10 @@ def _write_case(
 ) -> Path:
     workstream_ids = workstream_ids or ["authority"]
     bindings = dict(bindings or {})
+    # Task 4 fail-closed contract: every workstream must declare a validator_stage.
+    for stream_id in workstream_ids:
+        binding = bindings.setdefault(stream_id, {})
+        binding.setdefault("validator_stage", "semantic_evidence")
     case = tmp_path / case_id
     (case / "private").mkdir(parents=True)
     (case / "task" / "tests").mkdir(parents=True)
@@ -69,6 +73,7 @@ def _write_case(
         "workstreams": [{
             "id": stream_id, "task": "recover", "targets": [],
             "expected_output": "out", "priority": "normal",
+            "public_result_contract": {"kind": "payload_only"},
         } for stream_id in workstream_ids],
         "artifacts": [],
     }), encoding="utf-8")

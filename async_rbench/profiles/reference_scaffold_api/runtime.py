@@ -1963,6 +1963,13 @@ class ReferenceScaffold:
             expected_output="out",
             priority="normal",
             initial_wave=True,
+            # Task 4 fail-closed contract: carry the workstream's public result
+            # contract so the child submission is validated against a real `kind`.
+            public_result_contract=dict(
+                (self.start.get("workstream_contracts") or {}).get(
+                    "wal_recovery", {}
+                ).get("public_result_contract", {})
+            ),
         )
         agent = ChildAgent(
             self.child_backend, self.workspace, self.config, self.emitter,
