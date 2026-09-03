@@ -105,8 +105,11 @@ RUNTIME_PHASE_EVENT_TYPES = frozenset({
     "child_resource_exhausted",
     # P0-9: repeated evidence across attempts is a no-information retry. It is a
     # runtime-phase marker (no gateway/adapter validation) used to bound
-    # re-delegation and report the no-new-evidence retry rate.
+    # re-delegation and report the no-new-evidence retry rate. Task 7 renamed the
+    # emitted marker to ``duplicate_evidence_retry_detected``; keep the legacy
+    # ``no_information_retry_detected`` name so pre-rename artifacts replay.
     "no_information_retry_detected",
+    "duplicate_evidence_retry_detected",
 })
 
 
