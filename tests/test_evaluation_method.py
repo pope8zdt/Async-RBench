@@ -781,11 +781,15 @@ def _write_stimulus_case(tmp_path: Path) -> Path:
         "workstreams": [{
             "id": "authority", "task": "recover", "targets": [],
             "expected_output": "out", "priority": "normal",
+            "public_result_contract": {"kind": "payload_only"},
         }],
         "artifacts": [],
     }), encoding="utf-8")
     (case / "private/private_case.yaml").write_text(yaml.safe_dump({
         "case_id": "stimulus-case",
+        "workstream_bindings": {
+            "authority": {"validator_stage": "semantic_evidence"},
+        },
         "scenarios": {"async": {"events": [
             {"id": "designed-timeout", "stimulus_type": "child_timeout", "child_id": "c1",
              "result": "authority", "payload": {"result": "partial"},
@@ -901,11 +905,16 @@ def _write_live_case(tmp_path: Path, *, events: list[dict], case_id: str = "live
         "workstreams": [{
             "id": "authority", "task": "recover", "targets": [],
             "expected_output": "out", "priority": "normal",
+            "public_result_contract": {"kind": "payload_only"},
         }],
         "artifacts": [],
     }), encoding="utf-8")
     (case / "private/private_case.yaml").write_text(yaml.safe_dump({
         "case_id": case_id,
+        # Task 4 fail-closed contract: every workstream must declare a validator_stage.
+        "workstream_bindings": {
+            "authority": {"validator_stage": "semantic_evidence"},
+        },
         "scenarios": {"async": {"events": events}},
     }), encoding="utf-8")
     (case / "task/task.yaml").write_text(yaml.safe_dump({
