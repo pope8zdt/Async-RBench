@@ -213,7 +213,6 @@ artifacts/experiments/manual-<case>-<timestamp>/
 
 - OSWorld：`docs/osworld-environment-smoke.md`；
 - MARBLE：`docs/marble-native-environment.md`；
-- source-native 总体说明：`docs/source_native_v4_rebuild_report.md`；
 - OSWorld 资产工具：`scripts/fetch_osworld_assets.py`；
 - MARBLE 环境工具：`scripts/bootstrap_marble_runtime.py`。
 

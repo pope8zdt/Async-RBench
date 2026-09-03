@@ -885,7 +885,7 @@ def _validated_staging_manifest(upstream_root: Path) -> dict[str, Any] | None:
 
 
 def official_record_digest(value: Any) -> str:
-    """Match ``produce_source_native_v4.py``'s official-record digest."""
+    """Match the legacy source-native official-record digest (sha256 over sort_keys JSON)."""
 
     return _sha256_bytes(json.dumps(value, sort_keys=True).encode("utf-8"))
 
