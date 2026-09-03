@@ -18,6 +18,7 @@ from async_rbench.evaluation.budget import BudgetPool
 from async_rbench.evaluation.model_backend import (
     conservative_input_estimate,
     exact_input_estimate,
+    serialized_conversation_bytes,
 )
 
 
@@ -75,6 +76,7 @@ def test_conservative_estimate_is_at_least_serialized_wire_bytes() -> None:
     estimate = conservative_input_estimate(messages, _TOOL)
     assert estimate >= serialized
     assert estimate == serialized + 8 * len(messages) + 16 * len(_TOOL)
+    assert serialized_conversation_bytes(messages, _TOOL) == serialized
 
 
 def test_every_message_field_contributes_to_the_estimate() -> None:

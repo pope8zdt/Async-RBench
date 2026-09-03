@@ -11,7 +11,9 @@ import pytest
 import async_rbench.evaluation.runner as runner_module
 from async_rbench.evaluation.budget import BudgetPool
 from async_rbench.evaluation.case_contract import find_private_fields
-from async_rbench.evaluation.model_backend import ModelTurn, ToolCall
+from async_rbench.evaluation.model_backend import (
+    ModelTurn, ToolCall, serialized_conversation_bytes,
+)
 from async_rbench.evaluation.runner import EpisodeConfig, _make_start, run_episode
 from async_rbench.evaluation.workspace_runtime import CommandResult, DisabledWorkspaceRuntime, _safe_name
 from async_rbench.profiles.conformance_mock.scripted_backend import ScriptedTestBackend
@@ -1075,16 +1077,16 @@ def test_child_context_is_compressed_within_budget() -> None:
     ]
     compressed = ChildAgent._compress_messages(
         messages,
-        context_budget_chars=1000,
-        keep_recent=4,
+        context_budget_chars=8000,
+        keep_recent=1,
         max_old_tool_content_chars=100,
     )
-    # The recent window is untouched; the oldest tool output is an excerpt.
-    assert compressed[-4:] == messages[-4:]
+    # The newest complete assistant/tool block is untouched; older tool output
+    # is excerpted until the full serialized wire payload fits.
+    assert compressed[-2:] == messages[-2:]
     assert compressed[3]["content"].startswith("a" * 100)
-    assert "older tool output compressed: 4900 chars dropped" in compressed[3]["content"]
-    # Growth is bounded: old excerpts + the recent window verbatim (2 × 5000 here).
-    assert sum(len(str(m.get("content") or "")) for m in compressed) < 11_000
+    assert "compressed 4900 chars" in compressed[3]["content"]
+    assert serialized_conversation_bytes(compressed, ChildAgent.tools()) <= 8000
 
     # A history within budget is returned verbatim.
     small = messages[:1] + messages[-2:]

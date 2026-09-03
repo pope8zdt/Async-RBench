@@ -176,7 +176,10 @@ class ScaffoldConfig:
     # uncontrolled growth (each up to max_tool_output_chars); when the child
     # history exceeds the budget, the oldest tool results are compressed to a
     # short excerpt while recent turns stay verbatim.
-    child_context_budget_chars: int = 120_000
+    child_context_budget_bytes: int = 120_000
+    # Deprecated one-release alias. When supplied without the byte field,
+    # from_file maps it to child_context_budget_bytes.
+    child_context_budget_chars: int | None = None
     child_keep_recent_turns: int = 8
     child_old_tool_excerpt_chars: int = 800
     request_timeout_sec: int = 300
@@ -216,7 +219,10 @@ class ScaffoldConfig:
         }
         raw.update({key: value for key, value in env_overrides.items() if value is not None})
         raw.update({key: value for key, value in (overrides or {}).items() if value is not None})
+        byte_budget_declared = "child_context_budget_bytes" in raw
         config = cls(**raw)
+        if config.child_context_budget_chars is not None and not byte_budget_declared:
+            config.child_context_budget_bytes = int(config.child_context_budget_chars)
         if config.backend == "scripted_test" and not config.main_model:
             config.main_model = "scripted-test"
         if not config.child_model:
@@ -309,11 +315,16 @@ class ScaffoldConfig:
             "budget_child_shared", "budget_main_pre", "budget_main_post",
             "budget_main_total",
             "start_barrier_timeout_sec", "live_cancellation_grace_sec",
-            "child_context_budget_chars", "child_keep_recent_turns",
+            "child_context_budget_bytes", "child_keep_recent_turns",
             "child_old_tool_excerpt_chars",
         ):
             if int(getattr(self, name)) <= 0:
                 raise ValueError(f"{name} must be positive")
+        if (
+            self.child_context_budget_chars is not None
+            and int(self.child_context_budget_chars) <= 0
+        ):
+            raise ValueError("child_context_budget_chars must be positive")
         if self.max_total_child_spawns < self.max_concurrent_children:
             raise ValueError("max_total_child_spawns must be at least max_concurrent_children")
         if self.budget_main_total != self.budget_main_pre + self.budget_main_post:
@@ -376,6 +387,7 @@ class ScaffoldConfig:
             "tokenizer": self.tokenizer,
             "start_barrier_timeout_sec": self.start_barrier_timeout_sec,
             "live_cancellation_grace_sec": self.live_cancellation_grace_sec,
+            "child_context_budget_bytes": self.child_context_budget_bytes,
             "workspace_mode": self.workspace_mode,
             "request_body_extra": self.request_body_extra,
             "codex_reasoning_effort": self.codex_reasoning_effort,

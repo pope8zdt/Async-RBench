@@ -25,7 +25,7 @@ from .gateway import DeliveryReader, ProtocolEmitter
 from ...evaluation.budget import BudgetLedger, BudgetPool, Reservation, build_budget_ledger
 from ...evaluation.model_backend import (
     ModelBackend, ModelTurn, ToolCall,
-    conservative_input_estimate, function_tool,
+    conservative_input_estimate, function_tool, serialized_conversation_bytes,
 )
 from ...evaluation.workspace_runtime import CommandResult, WorkspaceRuntime
 
@@ -143,6 +143,87 @@ class ChildRunOutcome:
 
 class ChildBudgetAccountingError(RuntimeError):
     """The child pool was halted because accounting already overran."""
+
+
+class ChildContextBudgetError(RuntimeError):
+    """The protocol-preserving child history cannot fit the configured bound."""
+
+
+def compress_child_messages(
+    messages: list[dict[str, Any]],
+    tools: list[dict[str, Any]],
+    *,
+    budget_bytes: int,
+    keep_recent_blocks: int,
+    excerpt_chars: int,
+) -> list[dict[str, Any]]:
+    """Bound full serialized history without breaking tool-call pairing.
+
+    Only assistant reasoning and tool-result content are lossy. Tool call ids,
+    arguments, message order, and the initial system/user contract remain exact;
+    if those non-truncatable fields alone exceed the bound, the caller receives
+    a typed infrastructure error instead of sending a different payload from the
+    one admitted by the token estimator.
+    """
+    budget_bytes = int(budget_bytes)
+    keep_recent_blocks = max(0, int(keep_recent_blocks))
+    excerpt_chars = max(0, int(excerpt_chars))
+    if serialized_conversation_bytes(messages, tools) <= budget_bytes:
+        return messages
+
+    result = list(messages)
+    cloned: set[int] = set()
+    block = -1
+    fields: list[tuple[int, str, int]] = []
+    for index, message in enumerate(messages):
+        if message.get("role") == "assistant":
+            block += 1
+            if isinstance(message.get("reasoning_content"), str):
+                fields.append((index, "reasoning_content", block))
+        elif message.get("role") == "tool" and isinstance(message.get("content"), str):
+            fields.append((index, "content", max(block, 0)))
+
+    block_count = block + 1
+    recent_from = max(0, block_count - keep_recent_blocks)
+    old = [item for item in fields if item[2] < recent_from]
+    recent = [item for item in fields if item[2] >= recent_from]
+
+    def replace(index: int, field: str, value: str) -> None:
+        if index not in cloned:
+            result[index] = dict(result[index])
+            cloned.add(index)
+        result[index][field] = value
+
+    def excerpt_pass(targets: list[tuple[int, str, int]]) -> bool:
+        for index, field, _ in targets:
+            value = str(result[index].get(field) or "")
+            if len(value) <= excerpt_chars:
+                continue
+            dropped = len(value) - excerpt_chars
+            replace(
+                index,
+                field,
+                value[:excerpt_chars] + f"\n...[compressed {dropped} chars]",
+            )
+            if serialized_conversation_bytes(result, tools) <= budget_bytes:
+                return True
+        return False
+
+    if excerpt_pass(old) or excerpt_pass(recent):
+        return result
+
+    # If excerpts across many blocks still exceed the hard bound, remove those
+    # lossy fields from oldest to newest. Pair identity and arguments stay exact.
+    for index, field, _ in [*old, *recent]:
+        if result[index].get(field):
+            replace(index, field, "")
+            if serialized_conversation_bytes(result, tools) <= budget_bytes:
+                return result
+
+    raise ChildContextBudgetError(
+        "child system/user contract and tool-call history exceed "
+        f"the {budget_bytes}-byte context budget"
+    )
 
 
 @dataclass
@@ -266,30 +347,14 @@ class ChildAgent:
         keep_recent: int,
         max_old_tool_content_chars: int,
     ) -> list[dict[str, Any]]:
-        """Bound the child context (P1-13): past tool outputs are the big
-        uncontrolled growth (each up to ``max_tool_output_chars``).  When the
-        history exceeds the budget, the oldest tool results are replaced by a
-        short excerpt with a marker; recent turns stay verbatim so the provider
-        sees a coherent conversation.  Returns the (possibly new) list.
-        """
-        if sum(
-            len(str(message.get("content") or "")) for message in messages
-        ) <= context_budget_chars:
-            return messages
-        compressed = list(messages)
-        oldest_kept = max(0, len(compressed) - keep_recent)
-        for index in range(oldest_kept):
-            message = compressed[index]
-            if message.get("role") != "tool":
-                continue
-            text = str(message.get("content") or "")
-            if len(text) > max_old_tool_content_chars:
-                compressed[index] = dict(message)
-                compressed[index]["content"] = (
-                    text[:max_old_tool_content_chars]
-                    + f"\n...[older tool output compressed: {len(text) - max_old_tool_content_chars} chars dropped]"
-                )
-        return compressed
+        """Deprecated compatibility wrapper for the old character API."""
+        return compress_child_messages(
+            messages,
+            ChildAgent.tools(),
+            budget_bytes=context_budget_chars,
+            keep_recent_blocks=keep_recent,
+            excerpt_chars=max_old_tool_content_chars,
+        )
 
     async def release_open_reservation(self) -> None:
         """Release the in-flight reservation if a turn never reached ``settle``.
@@ -328,8 +393,16 @@ class ChildAgent:
         unsealed_turns = 0
         for turn_index in range(1, self.config.max_child_turns + 1):
             role = f"child:{record.child_id}"
+            tools = self.tools()
+            messages = compress_child_messages(
+                messages,
+                tools,
+                budget_bytes=self.config.child_context_budget_bytes,
+                keep_recent_blocks=self.config.child_keep_recent_turns,
+                excerpt_chars=self.config.child_old_tool_excerpt_chars,
+            )
             input_bound, accounting_mode = _estimate_input(
-                self.backend, messages, self.tools(),
+                self.backend, messages, tools,
             )
             reservation = await self.token_budget.reserve(
                 input_bound, self.config.max_output_tokens,
@@ -373,16 +446,9 @@ class ChildAgent:
                 "agent_progress", phase="model_call_started", role=role,
                 turn=turn_index, model=model,
             )
-            # P1-13: bound the growing child history before each call.
-            messages = self._compress_messages(
-                messages,
-                context_budget_chars=self.config.child_context_budget_chars,
-                keep_recent=self.config.child_keep_recent_turns,
-                max_old_tool_content_chars=self.config.child_old_tool_excerpt_chars,
-            )
             turn = await self.backend.complete(
                 role=role, model=model, messages=messages,
-                tools=self.tools(), seed=_role_seed(seed, record.child_id),
+                tools=tools, seed=_role_seed(seed, record.child_id),
             )
             overrun = await self.token_budget.settle(
                 reservation.reservation_id, turn.total_tokens,
@@ -1190,6 +1256,16 @@ class SubagentManager:
                 payload=outcome.payload,
                 usage={"tokens": outcome.tokens},
             )
+        except ChildContextBudgetError as exc:
+            record.status = "infrastructure_failed"
+            record.decision = "infrastructure_failed"
+            self.emitter.emit(
+                "infrastructure_failure",
+                component="child_context_budget",
+                child_id=record.child_id,
+                detail=str(exc),
+            )
+            self._delivery_event.set()
         except ChildBudgetAccountingError as exc:
             record.status = "infrastructure_failed"
             record.decision = "infrastructure_failed"

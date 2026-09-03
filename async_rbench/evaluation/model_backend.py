@@ -81,6 +81,13 @@ def _serialized_conversation(
     )
 
 
+def serialized_conversation_bytes(
+    messages: list[dict[str, Any]], tools: list[dict[str, Any]],
+) -> int:
+    """Exact UTF-8 byte size of the message/tool payload representation."""
+    return len(_serialized_conversation(messages, tools).encode("utf-8"))
+
+
 def conservative_input_estimate(
     messages: list[dict[str, Any]], tools: list[dict[str, Any]],
 ) -> int:
@@ -96,7 +103,7 @@ def conservative_input_estimate(
     ``tool_call_id`` -- can no longer make the estimate under-count (a message
     with 10K reasoning + 10K tool-call arguments serializes to ~20K, not 17).
     """
-    wire_bytes = len(_serialized_conversation(messages, tools).encode("utf-8"))
+    wire_bytes = serialized_conversation_bytes(messages, tools)
     return wire_bytes + 8 * len(messages) + 16 * len(tools)
 
 
