@@ -1,5 +1,7 @@
 # Configuration
 
-`calibration-plan.json` defines the current single-model small calibration. `model-profiles/deepseek-v4-pro.yaml` is the only paid model profile included in this distribution.
+`model-profiles/` contains versioned model and adapter settings. Each profile declares its provider endpoint, model identifier, credential environment variable, runtime mode, and resource limits.
 
-Credentials are read from `ASYNC_RBENCH_DEEPSEEK_KEY`; no credential file is supported.
+`calibration-plan.json` records the current development calibration protocol. Native-runtime dependency inputs and locks support the optional Marble and OSWorld source-native paths.
+
+Credentials are read only from the environment variable named by each profile's `api_key_env`. Never store credentials in this directory.

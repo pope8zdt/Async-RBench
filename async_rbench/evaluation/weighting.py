@@ -1,4 +1,4 @@
-"""Single source of truth for DTBench v9 component scoring.
+"""Single source of truth for Async-RBench component scoring.
 
 Semantic and dynamic-control points remain independently observable.  Relevance
 tiers weight points *inside* a component, while fixed component masses prevent

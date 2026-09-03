@@ -110,8 +110,8 @@ python -m pytest -q
 依赖这些资源的测试通过 `tests/author_local.py` 守卫：资源缺失时以明确原因跳过
 （`author-local resource is not part of the repository checkout: ...`），因此
 **干净克隆上 pytest 应当通过且只出现 skip，不出现 failed/error**；在作者机器上
-这些资源齐全，同一批测试全部正常执行。克隆基线：482 collected 左右，0 失败，
-skip 数为上述作者本地测试之和。若克隆上出现 failed/error，请报告 commit SHA。
+这些资源齐全，同一批测试会继续执行。测试数量会随作者本地资源是否存在而变化，
+因此不固定具体 collected/skip 数；若出现 failed/error，请报告 commit SHA。
 
 ## 6. 选择注册实例
 
@@ -249,17 +249,20 @@ Get-FileHash "manual-<case>-<timestamp>.zip" -Algorithm SHA256
 每条 episode 得分记录（JSONL 的 `score` 记录）带有：
 
 - `child_terminal_classifications`：每个子任务尝试恰有一类互斥终止
-  （`accepted` / `public_rejection` / `private_rejection` / `sealed` /
-  `resource_exhausted` / `timeout` / `crash` / `cancel` /
+  （`gateway_accepted` / `public_rejection` / `sealed_pending_verdict` /
+  `token_budget_exhausted` / `turn_limit_exhausted` / `no_submission` /
+  `timeout` / `crash` / `cancel` / `case_contract_failure` /
   `infrastructure_failure` / `in_flight`）。`attempt_number` / `retry` 把
   "首次 vs 重试" 作为维度写在每一行上，不另建一套计数器。
-- `submission_rejection_rate`：拒绝率；分母只含真正提交过的尝试
-  （sealed 提交；预算耗尽、设计超时/崩溃、取消、基础设施失败、未跑完均不计入）。
-- `extra_rejection_tokens` / `invalid_redelegation_rate` 等成本指标。
+- `submission_rejection_rate`：`public_rejected_count / gateway_verdict_count`；
+  分母只含 `gateway_accepted` 和 `public_rejection`，未取得 gateway verdict 的
+  sealed 提交、预算/轮次耗尽、无提交、取消、超时、崩溃及基础设施失败均不计入。
+- `extra_child_tokens_from_public_rejections` / `invalid_redelegation_rate` 等成本指标。
 
 聚合报告（`aggregate` 输出）的每条 leaderboard 项和 `development_summary`
-还带有 `paper_metrics`：首次/重试提交数与接受率、平均每个接受提交的 token、
-拒绝导致的额外 token、无效再委托率。要引用这些指标请使用聚合输出而非单条记录。
+按模式提供 `paper_metrics_by_mode`：首次/重试提交数与接受率、平均每个接受提交的
+token、公开拒绝导致的额外 token、无效再委托率。论文中的 Async 指标必须读取
+`paper_metrics_by_mode.async`，不要把 all-modes 描述性汇总当作 Async 结果。
 
 ## 12. 常见问题
 
