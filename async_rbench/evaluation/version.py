@@ -72,5 +72,10 @@ from __future__ import annotations
 # infrastructure qualification errors. Causal root events bind directly to the
 # authority-bearing gateway delivery. Semantic anchors remain diagnostic and no
 # longer double-penalise independently observable control-flow decisions.
-EVALUATION_CONTRACT_VERSION = "9.1.0-dev"
+# 10.0.0: release-branch version-number bump that unifies the package and
+# evaluation-contract axes. The contract remains a development contract (not
+# frozen) --- a frozen leaderboard still requires ``validate_frozen_release``
+# to pass, which it will not until both the contract status and the dataset
+# policy move to a frozen post-calibration state.
+EVALUATION_CONTRACT_VERSION = "10.0.0"
 EVALUATION_CONTRACT_STATUS = "development"
