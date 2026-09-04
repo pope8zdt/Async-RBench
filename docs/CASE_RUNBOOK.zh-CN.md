@@ -198,14 +198,15 @@ artifacts/experiments/manual-<case>-<timestamp>/
 
 恢复时必须使用原目录、原 manifest、原模型配置和原 commit。脚本不会生成新 manifest。
 
-### 直接运行冻结的 61 个现有 case
+### 运行正式的 61-case 实验
 
-`research/experiment-design/paper-eval-existing-61.csv` 固化了 61 个现有、已注册的
-`seed-1` 实例。该集合不包含 `gaia2-stockholm-moveout`，也不包含计划新增但尚未构造的
-19 个 case。拉取仓库并配置好模型密钥后，可直接运行：
+`experiments/formal-61/` 是 Async-RBench v10.1.0 的正式实验目录，其中的
+`paper-eval-existing-61.csv` 固化了 61 个现有、已注册的 `seed-1` 实例。case
+实现仍然唯一保存在顶层 `cases/`，实验目录只引用它们，不复制。该集合不包含
+`gaia2-stockholm-moveout`，也不包含计划新增但尚未构造的 19 个 case。拉取仓库并配置好模型密钥后，可直接运行：
 
 ```powershell
-.\run_paper_eval_61.ps1 `
+.\experiments\formal-61\run.ps1 `
   -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
   -Repetitions 1 `
   -Seed 2026

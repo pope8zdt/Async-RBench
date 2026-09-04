@@ -15,6 +15,18 @@ from async_rbench.paper_eval import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_formal_experiment_assets_have_one_canonical_location() -> None:
+    assert DEFAULT_EXISTING_SELECTION == Path(
+        "experiments/formal-61/paper-eval-existing-61.csv"
+    )
+    assert (ROOT / "experiments/formal-61/run.ps1").is_file()
+    assert (ROOT / "experiments/formal-61/README.md").is_file()
+    assert not (ROOT / "run_paper_eval_61.ps1").exists()
+    assert not (
+        ROOT / "research/experiment-design/paper-eval-existing-61.csv"
+    ).exists()
+
+
 def test_existing_selection_is_exactly_61_runnable_registered_instances() -> None:
     rows = load_existing_selection(ROOT / DEFAULT_EXISTING_SELECTION, root=ROOT)
 

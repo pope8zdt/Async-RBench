@@ -20,12 +20,13 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-Set-Location -LiteralPath $PSScriptRoot
+$RepositoryRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
+Set-Location -LiteralPath $RepositoryRoot
 
 if ([IO.Path]::IsPathRooted($Config)) {
     $configPath = [IO.Path]::GetFullPath($Config)
 } else {
-    $configPath = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot $Config))
+    $configPath = [IO.Path]::GetFullPath((Join-Path $RepositoryRoot $Config))
 }
 if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) {
     throw "Model config not found: $configPath"
@@ -53,7 +54,7 @@ if ($Resume -and [string]::IsNullOrWhiteSpace($ExperimentRoot)) {
 Write-Host "[preflight] Validating repository and frozen 61-case selection..."
 & python -m async_rbench.cli validate
 if ($LASTEXITCODE -ne 0) { throw "Repository validation failed." }
-& python -m async_rbench.paper_eval check --root $PSScriptRoot
+& python -m async_rbench.paper_eval check --root $RepositoryRoot
 if ($LASTEXITCODE -ne 0) { throw "Paper-Eval 61-case selection validation failed." }
 
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
@@ -72,7 +73,7 @@ if ([string]::IsNullOrWhiteSpace($ExperimentRoot)) {
 if ([IO.Path]::IsPathRooted($ExperimentRoot)) {
     $ExperimentRoot = [IO.Path]::GetFullPath($ExperimentRoot)
 } else {
-    $ExperimentRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot $ExperimentRoot))
+    $ExperimentRoot = [IO.Path]::GetFullPath((Join-Path $RepositoryRoot $ExperimentRoot))
 }
 
 $manifest = Join-Path $ExperimentRoot "manifest.json"
@@ -92,7 +93,7 @@ if ($Resume) {
     New-Item -ItemType Directory -Force -Path $ExperimentRoot | Out-Null
     Write-Host "[manifest] Cohort=paper-eval-existing-61; cases=61; repetitions=$Repetitions; seed=$Seed"
     & python -m async_rbench.paper_eval make-manifest `
-        --root $PSScriptRoot `
+        --root $RepositoryRoot `
         --output $manifest `
         --repetitions $Repetitions `
         --guidance $Guidance `

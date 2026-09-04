@@ -12,7 +12,7 @@ from .spec import resolve_case_instance
 
 
 DEFAULT_EXISTING_SELECTION = Path(
-    "research/experiment-design/paper-eval-existing-61.csv"
+    "experiments/formal-61/paper-eval-existing-61.csv"
 )
 COHORT_ID = "paper-eval-existing-61"
 ALLOWED_READINESS = {

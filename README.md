@@ -159,14 +159,16 @@ Never store credentials in the repository.
 
 The launcher validates the repository, checks the provider and Docker, creates an immutable manifest, runs paired Linear/Async episodes, aggregates scores, and audits the run.
 
-### Run the frozen 61-case cohort
+### Run the formal 61-case experiment
 
-The repository includes a runnable cohort of 61 existing, registered `seed-1`
-instances in `research/experiment-design/paper-eval-existing-61.csv`. It excludes
-`gaia2-stockholm-moveout` and does not include any of the 19 planned new cases.
+[`experiments/formal-61/`](experiments/formal-61/) is the authoritative formal
+experiment for Async-RBench v10.1.0. Its frozen CSV selects 61 existing,
+registered `seed-1` instances from the unique canonical implementations under
+top-level `cases/`. It excludes `gaia2-stockholm-moveout` and does not include
+any of the 19 planned new cases.
 
 ```powershell
-.\run_paper_eval_61.ps1 `
+.\experiments\formal-61\run.ps1 `
   -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
   -Repetitions 1 `
   -Seed 2026
@@ -186,7 +188,7 @@ python -m async_rbench.paper_eval check --root .
 Outputs are written to:
 
 ```text
-artifacts/experiments/manual-<case>-<timestamp>/
+artifacts/experiments/paper-eval-existing-61-<timestamp>/
 |-- manifest.json
 |-- runs/
 |-- results.json
