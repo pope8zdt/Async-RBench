@@ -182,16 +182,7 @@ To validate the selection without starting an experiment:
 python -m async_rbench.paper_eval check --root .
 ```
 
-Outputs are written to:
-
-```text
-artifacts/experiments/paper-eval-existing-61-<timestamp>/
-|-- manifest.json
-|-- runs/
-|-- results.json
-|-- run-audit.json
-`-- live.log
-```
+Outputs are written under `artifacts/experiments/paper-eval-existing-61-<timestamp>/`; the [formal experiment README](experiments/formal-61/README.md) documents the complete layout and resume procedure.
 
 ### 5. Resume an infrastructure-interrupted run
 

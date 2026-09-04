@@ -102,7 +102,9 @@ Expected: every command exits with status 0.
 - Rename: `research/experiment-design/paper-eval-existing-61.csv` to `experiments/formal-61/paper-eval-existing-61.csv`
 - Rename: `run_paper_eval_61.ps1` to `experiments/formal-61/run.ps1`
 - Modify: `async_rbench/paper_eval.py`
+- Modify: `async_rbench/eval_cli.py`
 - Modify: `tests/test_paper_eval_61.py`
+- Modify: `tests/test_run_manifest_conformance_gate.py`
 - Modify: `README.md`
 - Modify: `docs/CASE_RUNBOOK.zh-CN.md`
 
@@ -197,6 +199,25 @@ git commit -m "feat(eval): publish formal 61-case experiment directory"
 Expected: tests and cohort validation pass; the commit contains no duplicated
 case directories.
 
+- [ ] **Step 6: Pin formal execution factors and reject unsafe resume**
+
+Write failing tests in `tests/test_run_manifest_conformance_gate.py` proving
+that the run binding exists before the first episode, that configuration drift
+is rejected before any resumed episode starts, and that a retained score with
+a different adapter binding is rejected. Implement `runs/run-binding.json` in
+`async_rbench/eval_cli.py` with the manifest digest, adapter profile, runtime
+mode, configuration-derived conformance binding, resource-policy digest, and
+model. Compare all fields on resume and compare the same binding fields on each
+retained score.
+
+Run:
+
+```powershell
+& 'F:\DTbench\DTbench2\.venv\Scripts\python.exe' -m pytest tests/test_run_manifest_conformance_gate.py -q
+```
+
+Expected: all conformance-gate and resume-binding tests pass.
+
 ### Task 3: Verify the Integrated v10.1.0 Repository
 
 **Files:**
@@ -217,7 +238,7 @@ Run:
 
 ```powershell
 Select-String -Path pyproject.toml,async_rbench/__init__.py,async_rbench/evaluation/version.py,evaluation_contract.json,README.md -Pattern '10\.1\.0'
-git grep -n 'research/experiment-design/paper-eval-existing-61.csv\|run_paper_eval_61.ps1' -- ':!docs/superpowers/**'
+git grep -n 'research/experiment-design/paper-eval-existing-61.csv\|run_paper_eval_61.ps1' -- ':!docs/superpowers/**' ':!tests/test_paper_eval_61.py'
 $rows = Import-Csv experiments/formal-61/paper-eval-existing-61.csv
 if ($rows.Count -ne 61) { throw "Expected 61 cohort rows, found $($rows.Count)" }
 ```

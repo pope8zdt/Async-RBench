@@ -45,6 +45,7 @@ Outputs are written under:
 artifacts/experiments/paper-eval-existing-61-<timestamp>/
 |-- manifest.json
 |-- runs/
+|   `-- run-binding.json
 |-- results.json
 |-- run-audit.json
 `-- live.log
@@ -59,6 +60,10 @@ existing output directory:
   -ExperimentRoot "artifacts/experiments/paper-eval-existing-61-20260905-030000" `
   -Resume
 ```
+
+Resume is rejected if the manifest, model profile, configuration contents,
+runtime mode, resource policy, or retained score bindings differ from the
+original run.
 
 The calibration/development/test labels are preserved from the registered
 cases. This is a reproducible execution cohort; it does not claim all 61 cases

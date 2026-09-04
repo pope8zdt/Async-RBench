@@ -66,6 +66,11 @@ documents the cohort, prerequisites, validation-only command, execution
 command, expected outputs, and the fact that the case implementations remain
 canonical under top-level `cases/`.
 
+Every run output pins its manifest, model, adapter profile, runtime mode,
+configuration-content digest, and resource-policy digest in
+`runs/run-binding.json` before the first episode. Resume fails closed on any
+binding drift and rechecks the same fields on every retained score.
+
 Library code remains at `async_rbench/paper_eval.py` and its automated tests
 remain under `tests/`; these are framework code, not duplicated experiment
 assets. All defaults, launch commands, tests, and documentation must reference
