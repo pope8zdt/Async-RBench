@@ -56,7 +56,9 @@
 | TerminalBench | 10 | 5 | 15 |
 | GAIA2 | 0 | 0 | 0 |
 
-新增的第 19 个 gap 为 `TerminalBench / Hard / task_scope_or_dependency_change`，用于替代被移除的 GAIA2 样本。其 source task、trajectory 和最终 case ID 必须在构造前冻结，并通过与其他 79 个样本相同的去重和质量门槛。
+新增的第 19 个 gap 为 `TerminalBench / Hard / task_scope_or_dependency_change`，用于替代被移除的 GAIA2 样本。它固定使用将随 `data-recovery-service` 旧 case 一同退役、但未被 Paper-Eval 其他样本使用的 TerminalBench `kv-store-grpc` 原始任务；五个 TBN gap source 统一从官方 `harbor-framework/terminal-bench-1` 的 `d28711d0da2675d0bb1d56de45ae5df6082438a3` 提取，随后冻结 task tree digest 和最终 case ID，并通过与其他 79 个样本相同的去重和质量门槛。
+
+19 个新 case 在任何模型正式评测前冻结，并注册到 `test`；保留的 61 个 case 不改变原 split。最终全仓库 split 为 calibration 76、development 30、test 106，但论文主实验仍以独立的 Paper-Eval cohort 表达，不把其中已有的 calibration/development 样本改写成 held-out test。
 
 ### 3.2 现有 61 个的状态
 
@@ -141,6 +143,7 @@
 - 来源：TerminalBench
 - 难度：Hard
 - 暂定 ID：`tbn-task-scope-dependency-change-pe80-01`
+- source task：TerminalBench `kv-store-grpc`，从退役的 `data-recovery-service` 已锁定来源材料提取并重新冻结。
 - 约束：至少 3 个 workstream、2 条依赖边；事件必须在 provisional artifact 后改变任务范围或依赖图；保留不受影响的成果，只重规划受影响分支。
 
 暂定 ID 只用于设计定位。实施时必须先冻结唯一 source task、版本、资产和 trajectory digest，再生成最终 ID 与 provenance。
