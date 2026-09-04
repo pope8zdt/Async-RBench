@@ -42,6 +42,10 @@ from .case_contract import validate_scoring_domains
 from .case_bundle import case_bundle_sha256
 from .version import EVALUATION_CONTRACT_STATUS, EVALUATION_CONTRACT_VERSION
 from .weighting import DYNAMIC_CONTROL_DIMENSIONS, SCORE_POLICY_VERSION
+from .termination import (
+    UNSCORED_INFRASTRUCTURE_COMPONENTS,
+    score_status_decision,
+)
 from ..private_eval import (
     audit_participant_container, run_isolated_verifier, tree_sha256,
     verifier_bundle_sha256,
@@ -1041,26 +1045,13 @@ def _make_start(
 # decision the participant made.  A component here is distinct from a
 # scenario-construction failure: the scenario may have already constructed and
 # started correctly before, say, the model API call crashed mid-episode.
-UNSCORED_INFRASTRUCTURE_COMPONENTS = frozenset({
-    "model_request", "child_start", "adapter_crash",
-    # A child crash from a provider/workspace outage (not a designed case crash)
-    # is benchmark tooling failing mid-run, so it makes the episode unscored.
-    "child_terminal",
-    # The Linear wave never reached a terminal bundle within the benchmark's own
-    # child lifecycle cap.  The scenario may have constructed fine, but the
-    # benchmark never handed the main model its atomic bundle, so no designed
-    # measurement took place -- scoring it as an empty X=0 (or worse, scored
-    # with main_tokens=0) would misreport the run.
-    "linear_bundle_barrier",
-})
-
-
 def _score_status_decision(
     scenario_constructed: Any, score_integrity_ok: bool,
     integrity_reason: str | None = None,
     dynamic_scenario_qualified: Any = True,
     infrastructure_crash: bool = False,
     resource_safety_abort: bool = False,
+    trace_exclusion_reason: str | None = None,
 ) -> tuple[str, str | None]:
     """Decide an episode's score_status from construction and integrity.
 
@@ -1075,17 +1066,22 @@ def _score_status_decision(
     infrastructure (the benchmark tooling failed), not model behaviour, so it is
     unscored rather than converted to X=0.
     """
-    if not bool(scenario_constructed):
-        return "unscored", "scenario_construction_failed"
-    if infrastructure_crash:
-        return "unscored", "infrastructure_crash"
-    if resource_safety_abort:
-        return "unscored", "resource_safety_abort"
-    if dynamic_scenario_qualified is False:
-        return "unscored", "dynamic_scenario_qualification_failed"
-    if not score_integrity_ok:
-        return "unscored", integrity_reason or "semantic_registry_or_verifier_incomplete"
-    return "scored", None
+    if trace_exclusion_reason is None:
+        if infrastructure_crash:
+            trace_exclusion_reason = "infrastructure_crash"
+        elif resource_safety_abort:
+            trace_exclusion_reason = "resource_safety_abort"
+        elif dynamic_scenario_qualified is False:
+            trace_exclusion_reason = "dynamic_scenario_qualification_failed"
+    return score_status_decision(
+        scenario_constructed=scenario_constructed,
+        score_integrity_ok=score_integrity_ok,
+        integrity_reason=(
+            integrity_reason or "semantic_registry_or_verifier_incomplete"
+            if not score_integrity_ok else integrity_reason
+        ),
+        trace_exclusion_reason=trace_exclusion_reason,
+    )
 
 
 def _track_a_eligibility(
@@ -1908,6 +1904,7 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     score["score_status"], score["score_status_reason"] = _score_status_decision(
         score.get("scenario_constructed"), score_integrity_ok, integrity_reason,
         dynamic_scenario_qualified, infrastructure_crash, resource_safety_abort,
+        score.get("trace_score_status_reason"),
     )
     if linear_abnormal and score["score_status"] == "scored":
         # The main arm measured nothing: score as unscored rather than an

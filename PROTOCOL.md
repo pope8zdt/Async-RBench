@@ -46,7 +46,7 @@ with no tool call is `no_submission`. The framework adds no coaching retry.
 
 Actual provider-reported tokens are recorded for main, child, each actor, and
 the episode total. They do not participate in normal call admission. A shared
-20,000,000-token emergency fuse exists only for runaway protection; if crossed,
+5,000,000-token emergency fuse exists only for runaway protection; if crossed,
 no later model call starts and the episode ends as `resource_safety_abort`,
 unscored and leaderboard-ineligible.
 

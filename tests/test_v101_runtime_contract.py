@@ -254,3 +254,19 @@ def test_emergency_fuse_counts_actual_usage_and_aborts_after_crossing() -> None:
         if event.get("type") == "token_usage_snapshot"
     ]
     assert snapshots[-1]["total"] == 10
+
+
+def test_default_emergency_fuse_aborts_at_five_million_actual_tokens() -> None:
+    async def exercise() -> tuple[ReferenceScaffold, TerminalBackend]:
+        backend = TerminalBackend(tokens=2_500_000)
+        scaffold = _scaffold(backend, max_main_steps=10)
+        scaffold.start["initial_wave"] = []
+        scaffold.start["allowed_work_units"] = []
+        await scaffold.run()
+        await scaffold.shutdown()
+        return scaffold, backend
+
+    scaffold, backend = asyncio.run(exercise())
+    assert backend.calls == 2
+    assert scaffold.finish_status == "resource_safety_abort"
+    assert scaffold.token_usage.snapshot["total"] == 5_000_000

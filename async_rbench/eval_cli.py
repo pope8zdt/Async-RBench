@@ -19,6 +19,7 @@ from .evaluation.runner import (
 )
 from .evaluation.resource_policy import validate_official_resource_policy
 from .evaluation.scoring import score_trace
+from .evaluation.termination import score_status_decision
 from .evaluation.version import EVALUATION_CONTRACT_VERSION
 from .private_eval import verifier_bundle_sha256
 from .profiles import RUNTIME_MODES, load_profile
@@ -79,7 +80,7 @@ def cmd_guidance(args) -> int:
 def cmd_score(args) -> int:
     if getattr(args, "legacy", False):
         raise ValueError(
-            "legacy trace.jsonl (protocol 1.0) is not loadable by contract 10.1.0; "
+            "legacy trace.jsonl (protocol 1.0) is not loadable by contract 10.1.1; "
             "create and rerun a new manifest with the current repository"
         )
     trace_path = Path(args.trace).resolve()
@@ -146,20 +147,18 @@ def cmd_score(args) -> int:
         report.get("async_drs") is not None
         or report.get("dynamic_control_score") is not None
     )
-    report.update({
-        "score_status": (
-            "scored"
-            if report.get("scenario_constructed") is True
-            and has_base_evidence
+    score_status, score_status_reason = score_status_decision(
+        scenario_constructed=report.get("scenario_constructed"),
+        score_integrity_ok=(
+            has_base_evidence
             and (args.execution_mode != "async" or async_evidence)
-            else "unscored"
         ),
-        "score_status_reason": (
-            "dynamic_scenario_qualification_failed"
-            if args.execution_mode == "async"
-            and report.get("dynamic_scenario_qualified") is False
-            else None
-        ),
+        integrity_reason="score_evidence_incomplete",
+        trace_exclusion_reason=report.get("trace_score_status_reason"),
+    )
+    report.update({
+        "score_status": score_status,
+        "score_status_reason": score_status_reason,
         "case_id": args.case,
         "instance_id": args.instance,
         "execution_mode": args.execution_mode,
@@ -200,7 +199,7 @@ def cmd_conformance(args) -> int:
 def cmd_aggregate(args) -> int:
     if getattr(args, "legacy", False):
         raise ValueError(
-            "legacy score.json artifacts are not loadable by contract 10.1.0; "
+            "legacy score.json artifacts are not loadable by contract 10.1.1; "
             "create and rerun a new manifest with the current repository"
         )
     root = Path(args.root).resolve()
@@ -570,7 +569,7 @@ def build_parser() -> argparse.ArgumentParser:
     ); score.add_argument("--output", required=True)
     score.add_argument(
         "--legacy", action="store_true",
-        help="Report that protocol-1.0 traces are not loadable by contract 10.1.0",
+        help="Report that protocol-1.0 traces are not loadable by contract 10.1.1",
     )
     score.set_defaults(func=cmd_score)
     aggregate = sub.add_parser("aggregate")
@@ -586,7 +585,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     aggregate.add_argument(
         "--legacy", action="store_true",
-        help="Report that legacy scores are not loadable by contract 10.1.0",
+        help="Report that legacy scores are not loadable by contract 10.1.1",
     )
     aggregate.set_defaults(func=cmd_aggregate)
     audit = sub.add_parser("audit-run")

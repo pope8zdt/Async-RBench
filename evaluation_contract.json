@@ -1,5 +1,5 @@
 {
-  "version": "10.1.0",
+  "version": "10.1.1",
   "status": "development",
   "evaluation_object": "Measure whether a main agent integrates independently completing subagent results, detects changed assumptions, and dynamically replans to a verified final state.",
   "execution_modes": [
@@ -89,7 +89,7 @@
       "max_concurrent_children": 3,
       "max_total_child_spawns": 5,
       "max_api_concurrency": 4,
-      "emergency_total_token_cap": 20000000,
+      "emergency_total_token_cap": 5000000,
       "main_terminal_timeout_sec": 180,
       "child_terminal_timeout_sec": 180,
       "child_timeout_sec": 1200,
@@ -154,7 +154,7 @@
   "metric_definitions": {
     "linear_base_task_score": "Primary metric (linear). Equal-vote theme macro over the base_task subset of programmatic checks, computed separately for linear execution mode.",
     "async_base_task_score": "Primary metric (async). Equal-vote theme macro over the base_task subset of programmatic checks for async execution mode; computed independently of the replanning score.",
-    "async_dynamic_replanning_score": "Primary metric (async). Mean per-event async dynamic replanning score, each equal to 0.5*process_score + 0.5*async_outcome; measured only where declared scored events were reached.",
+    "async_dynamic_replanning_score": "Primary metric (async). Mean per-event async dynamic replanning score, each equal to 0.5*process_score + 0.5*async_outcome; participant-controlled unreached events contribute zero, while construction, infrastructure, and resource-safety failures remain unscored and excluded.",
     "dynamic_control_score": "Legacy primary metric. Equal-mass macro over the case-specific causal decision groups compiled from the task graph and event policy. Lifecycle stages are diagnostic tags, not fixed score mass.",
     "semantic_task_score": "Unchanged weighted result of the frozen programmatic semantic verifier, reported for both execution modes.",
     "dt_score": "Secondary summary equal to 0.80 Dynamic Control Score plus 0.20 Semantic Task Score for async episodes.",

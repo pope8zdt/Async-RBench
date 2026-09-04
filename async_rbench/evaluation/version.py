@@ -80,5 +80,8 @@ from __future__ import annotations
 # 10.1.0: fixed model-step horizons replace token-pool admission. Explicit
 # finish is immediately terminal, actual tokens are diagnostics, and only the
 # high shared emergency fuse produces an unscored resource_safety_abort.
-EVALUATION_CONTRACT_VERSION = "10.1.0"
+# 10.1.1: participant-controlled non-exposure contributes event DRS=0 instead
+# of shrinking the dynamic denominator. The shared emergency fuse is reduced
+# to 5,000,000 actual provider-reported tokens per episode.
+EVALUATION_CONTRACT_VERSION = "10.1.1"
 EVALUATION_CONTRACT_STATUS = "development"

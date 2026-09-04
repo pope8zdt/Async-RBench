@@ -1,7 +1,15 @@
+import json
 from pathlib import Path
+import tomllib
+
+import yaml
+
+from async_rbench import __version__
+from async_rbench.evaluation.version import EVALUATION_CONTRACT_VERSION
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RELEASE_VERSION = "10.1.1"
 
 
 STALE_RELEASE_PATHS = (
@@ -24,11 +32,34 @@ def test_v101_release_surface_excludes_superseded_material() -> None:
     assert present == []
 
 
+def test_release_version_is_synchronized_across_public_surfaces() -> None:
+    pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    contract = json.loads((ROOT / "evaluation_contract.json").read_text(encoding="utf-8"))
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    assert __version__ == RELEASE_VERSION
+    assert EVALUATION_CONTRACT_VERSION == RELEASE_VERSION
+    assert pyproject["project"]["version"] == RELEASE_VERSION
+    assert contract["version"] == RELEASE_VERSION
+    assert f"Version: {RELEASE_VERSION}" in readme
+
+
+def test_current_contract_surfaces_describe_five_million_fuse_and_zero_rule() -> None:
+    protocol = (ROOT / "PROTOCOL.md").read_text(encoding="utf-8")
+    contract = json.loads((ROOT / "evaluation_contract.json").read_text(encoding="utf-8"))
+    metric = contract["metric_definitions"]["async_dynamic_replanning_score"]
+
+    assert "5,000,000-token emergency fuse" in protocol
+    assert "20,000,000-token emergency fuse" not in protocol
+    assert "participant-controlled unreached events contribute zero" in metric
+    assert "construction, infrastructure, and resource-safety failures remain unscored" in metric
+
+
 def test_readme_is_concise_and_names_the_registered_release_contract() -> None:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
     assert len(readme.splitlines()) <= 220
-    assert "10.1.0" in readme
+    assert "10.1.1" in readme
     assert "200 case directories" in readme
     assert "201 registered instances" in readme
     assert "82 calibration / 30 development / 89 test" in readme
@@ -62,8 +93,10 @@ def test_v101_profiles_have_one_step_bounded_resource_schema() -> None:
     }
     for path in (ROOT / "configs" / "model-profiles").glob("*.yaml"):
         text = path.read_text(encoding="utf-8")
+        profile = yaml.safe_load(text)
         assert "max_main_steps:" in text, path
         assert "max_child_steps:" in text, path
         assert "emergency_total_token_cap:" in text, path
+        assert profile["emergency_total_token_cap"] == 5_000_000, path
         for key in removed:
             assert f"{key}:" not in text, (path, key)

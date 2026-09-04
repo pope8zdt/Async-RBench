@@ -58,7 +58,7 @@ def test_v101_runtime_diagnostic_events_are_protocol_validated() -> None:
     })
     validate_adapter_event({
         "type": "token_usage_snapshot",
-        "emergency_cap": 20_000_000,
+        "emergency_cap": 5_000_000,
         "total": 12,
         "main": 7,
         "child": 5,
@@ -68,7 +68,7 @@ def test_v101_runtime_diagnostic_events_are_protocol_validated() -> None:
     })
     validate_adapter_event({
         "type": "resource_safety_abort",
-        "emergency_cap": 20_000_000,
+        "emergency_cap": 5_000_000,
         "observed_total": 20_000_001,
         "trigger_role": "child:c1",
     })

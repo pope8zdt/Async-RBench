@@ -159,7 +159,7 @@ def test_provider_receives_compressed_history_without_admission_estimation() -> 
         DisabledWorkspaceRuntime(),
         config,
         ProtocolEmitter(stdout=io.StringIO()),
-        TokenUsageLedger(emergency_cap=20_000_000),
+        TokenUsageLedger(emergency_cap=5_000_000),
     )
 
     outcome = asyncio.run(agent.run(_record(), "scripted-test", 1))
@@ -199,7 +199,7 @@ def test_uncompressible_base_context_is_infrastructure_failure_without_provider_
         workspace=DisabledWorkspaceRuntime(),
         emitter=emitter,
         config=config,
-        token_usage=TokenUsageLedger(emergency_cap=20_000_000),
+        token_usage=TokenUsageLedger(emergency_cap=5_000_000),
     )
     manager._launch_queued = lambda: None
     manager.spawn_initial_wave()

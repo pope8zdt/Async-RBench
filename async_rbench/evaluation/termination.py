@@ -98,6 +98,68 @@ SUBMISSION_CLASSES = frozenset({
 #: case-contract and infrastructure failures and in-flight closes never did.
 GATEWAY_VERDICT_CLASSES = frozenset({GATEWAY_ACCEPTED, PUBLIC_REJECTION})
 
+# Episode-level benchmark failures that interrupt a fair main-agent
+# measurement. Child-local designed outcomes use the terminal taxonomy above;
+# these components instead make the whole episode unscored.
+UNSCORED_INFRASTRUCTURE_COMPONENTS = frozenset({
+    "model_request", "child_start", "adapter_crash", "child_terminal",
+    "linear_bundle_barrier",
+})
+
+
+def trace_score_exclusion_reason(
+    events: list[dict[str, Any]], *, scenario_constructed: bool,
+    dynamic_scenario_qualified: bool,
+) -> str | None:
+    """Classify whether a trace cannot be attributed to participant behavior.
+
+    A missing event may become DRS=0 only when the trace proves an explicit
+    finish, implicit main stop, or main step-limit termination. Benchmark-owned
+    construction/infrastructure/resource failures and truncated traces remain
+    unscored.
+    """
+    if not scenario_constructed:
+        return "scenario_construction_failed"
+    infrastructure = _events_of(events, "infrastructure_failure")
+    if any(
+        str(event.get("component") or "") in UNSCORED_INFRASTRUCTURE_COMPONENTS
+        for event in infrastructure
+    ):
+        return "infrastructure_crash"
+    local_statuses = {
+        str(event.get("local_status") or "")
+        for event in _events_of(events, "episode_ended")
+    }
+    if _events_of(events, "resource_safety_abort") or "resource_safety_abort" in local_statuses:
+        return "resource_safety_abort"
+    if not dynamic_scenario_qualified:
+        return "dynamic_scenario_qualification_failed"
+    participant_terminal = bool(
+        _events_of(events, "finish_invoked")
+        or _events_of(events, "main_implicit_stop")
+        or any(
+            str(event.get("role") or "") == "main"
+            for event in _events_of(events, "step_limit_reached")
+        )
+        or "step_limit_reached" in local_statuses
+    )
+    return None if participant_terminal else "indeterminate_termination"
+
+
+def score_status_decision(
+    scenario_constructed: Any, score_integrity_ok: bool,
+    integrity_reason: str | None = None,
+    trace_exclusion_reason: str | None = None,
+) -> tuple[str, str | None]:
+    """Apply one episode score-status policy to live and offline scoring."""
+    if not bool(scenario_constructed):
+        return "unscored", "scenario_construction_failed"
+    if trace_exclusion_reason is not None:
+        return "unscored", trace_exclusion_reason
+    if not score_integrity_ok:
+        return "unscored", integrity_reason
+    return "scored", None
+
 #: Benchmark/resource endpoints rather than model submission verdicts.
 NON_SUBMISSION_CLASSES = frozenset(set(TERMINAL_CLASSES) - SUBMISSION_CLASSES)
 

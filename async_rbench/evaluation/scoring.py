@@ -15,6 +15,7 @@ from .termination import (
     STEP_LIMIT_REACHED,
     TERMINAL_CLASSES,
     classify_child_terminals,
+    trace_score_exclusion_reason,
 )
 from .control_flow_gates import (
     EventDRS,
@@ -29,6 +30,7 @@ from .control_flow_gates import (
     score_async_drs,
     score_base_task,
     score_event_replanning,
+    score_unreached_event,
     semantic_task_score,
 )
 from .weighting import (
@@ -1103,6 +1105,12 @@ def score_trace(
             # Pre-event participant commits are scored decision preconditions,
             # not infrastructure qualification. Their absence fails the point;
             # it must never convert model inaction into an unscored episode.
+        dynamic_scenario_qualified = not dynamic_scenario_errors
+        trace_exclusion_reason = trace_score_exclusion_reason(
+            events,
+            scenario_constructed=scenario_constructed,
+            dynamic_scenario_qualified=dynamic_scenario_qualified,
+        )
         # Observation-point DRS (spec 9): each declared event that carries the
         # new scoring fields is scored independently of BTS; a final base-task
         # failure never erases an already-measurable event DRS.
@@ -1115,11 +1123,15 @@ def score_trace(
             event_rejections = list(rejections_by_event.get(event_id) or [])
             boundary_events = [*event_deliveries, *event_rejections]
             if not boundary_events:
-                # Current semantics: a declared event the participant never
-                # reached (no evaluator-observed boundary) is excluded from the
-                # async_drs mean rather than scored 0 — treated as unscored, not
-                # as a model failure.  Pinned by a test; pending a final ruling
-                # from the spec owner (unreached -> unscored vs 0).
+                # The participant had a declared opportunity but ended before
+                # its evaluator-observed boundary. Keep the event in the fixed
+                # DRS denominator as zero. True evaluator-owned unscored event
+                # statuses remain unscored inside score_unreached_event.
+                event_drs = score_unreached_event(
+                    contract, trace_exclusion_reason=trace_exclusion_reason,
+                )
+                event_drs_scores.append(event_drs)
+                async_event_drs[event_id] = _event_drs_to_dict(event_drs)
                 continue
             boundary_seq = min(int(item.get("seq", 0)) for item in boundary_events)
             delta = contract.get("state_delta") or {}
@@ -1141,8 +1153,17 @@ def score_trace(
                     provisional_established += 1
             event_drs_scores.append(event_drs)
             async_event_drs[event_id] = _event_drs_to_dict(event_drs)
-        async_drs = score_async_drs(event_drs_scores)
-    dynamic_scenario_qualified = not dynamic_scenario_errors
+        async_drs = (
+            None if trace_exclusion_reason is not None
+            else score_async_drs(event_drs_scores)
+        )
+    else:
+        dynamic_scenario_qualified = not dynamic_scenario_errors
+        trace_exclusion_reason = trace_score_exclusion_reason(
+            events,
+            scenario_constructed=scenario_constructed,
+            dynamic_scenario_qualified=dynamic_scenario_qualified,
+        )
     dynamic_score = (
         dynamic_control_score(control_flow_results)
         if execution_mode != "async" or dynamic_scenario_qualified
@@ -1420,6 +1441,7 @@ def score_trace(
         "dynamic_control_score": dynamic_score,
         "dynamic_process_score": process_dynamic_score,
         "dynamic_scenario_qualified": dynamic_scenario_qualified,
+        "trace_score_status_reason": trace_exclusion_reason,
         "dynamic_scenario_errors": dynamic_scenario_errors,
         "dynamic_opportunity_complete": not dynamic_opportunity_errors,
         "dynamic_opportunity_errors": dynamic_opportunity_errors,

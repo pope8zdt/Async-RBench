@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from async_rbench.evaluation.scoring import score_trace
 from async_rbench.spec import load_case
 
@@ -123,6 +125,8 @@ def _constructed_initial_wave() -> list[dict]:
 def _dynamic_contract() -> list[dict]:
     return [{
         "event_id": "evt.authority",
+        "expected_disposition": "revise",
+        "required_changes": ["final"],
         "state_delta": {
             "affected_artifacts": ["final"],
             "unaffected_artifacts": [],
@@ -131,19 +135,30 @@ def _dynamic_contract() -> list[dict]:
     }]
 
 
-def test_participant_failure_to_reach_event_is_scored_dynamic_zero() -> None:
-    score = score_trace(
-        _constructed_initial_wave(), _minimal_dynamic_case(), "async",
+def _score_stopped_before_event(
+    terminal_event: dict, *, local_status: str,
+) -> dict:
+    events = [
+        *_constructed_initial_wave(),
+        {**terminal_event, "seq": 6},
+        {"type": "episode_ended", "seq": 7, "local_status": local_status},
+    ]
+    return score_trace(
+        events, _minimal_dynamic_case(), "async",
         semantic_registry={"checks": [{"id": "sem"}]},
-        control_flow_checks=[{
-            "id": "case.cf.wait", "gate": "wait_for_authority",
-            "dimension": "event_intake", "gate_args": {"artifacts": ["final"]},
-            "execution_modes": ["async"], "outcome_anchors": ["sem"],
-            "critical": True, "measurement_type": "control",
-            "capability_target": "async_dynamic_replanning",
-            "relevance_tier": "critical", "decision_group": "consume-authority",
-        }],
-        event_contracts=_dynamic_contract(),
+        control_flow_checks=[], event_contracts=_dynamic_contract(),
+    )
+
+
+def test_immediate_finish_scores_unreached_declared_event_as_zero() -> None:
+    score = _score_stopped_before_event(
+        {
+            "type": "finish_invoked", "requested_status": "completed",
+            "pending_occurrence_count": 0, "active_response_window": False,
+            "final_commit_current": False, "verification_current": False,
+            "closure_complete": False,
+        },
+        local_status="completed",
     )
 
     assert score["scenario_constructed"] is True
@@ -152,8 +167,90 @@ def test_participant_failure_to_reach_event_is_scored_dynamic_zero() -> None:
     assert score["dynamic_scenario_errors"] == []
     assert score["dynamic_opportunity_complete"] is False
     assert score["dynamic_event_exposure"] == {"evt.authority": "not_observed"}
-    assert score["dynamic_control_score"] == 0.0
-    assert score["dt_score"] == 0.2
+    assert score["async_drs"] == 0.0
+    assert score["async_event_drs"]["evt.authority"]["total"] == 0.0
+
+
+def test_implicit_stop_scores_unreached_declared_event_as_zero() -> None:
+    score = _score_stopped_before_event(
+        {"type": "main_implicit_stop", "reason": "no_tool_call"},
+        local_status="incomplete",
+    )
+
+    assert score["async_drs"] == 0.0
+    assert score["async_event_drs"]["evt.authority"]["total"] == 0.0
+
+
+def test_step_limit_scores_unreached_declared_event_as_zero() -> None:
+    score = _score_stopped_before_event(
+        {"type": "step_limit_reached", "role": "main", "limit": 100},
+        local_status="step_limit_reached",
+    )
+
+    assert score["async_drs"] == 0.0
+    assert score["async_event_drs"]["evt.authority"]["total"] == 0.0
+
+
+def test_partial_finish_keeps_unreached_event_in_drs_denominator() -> None:
+    events = [
+        *_constructed_initial_wave(),
+        {
+            "type": "artifact_committed", "seq": 6,
+            "artifact_id": "final", "observed_digest": "before",
+        },
+        {
+            "type": "result_delivery_evaluator_fact", "seq": 7,
+            "completion_id": "observed", "result_kind": "authority_result",
+            "benchmark_event_id": "evt.observed", "controlled_order": True,
+            "stale": False,
+        },
+        {
+            "type": "result_delivered", "seq": 8,
+            "completion_id": "observed", "child_id": "authority-child",
+        },
+        {
+            "type": "artifact_committed", "seq": 9,
+            "artifact_id": "final", "observed_digest": "after",
+        },
+        {
+            "type": "verifier_result", "seq": 10,
+            "semantic_check_results": [{
+                "id": "evt.observed.closed", "measurement_type": "semantic",
+                "score_domain": "async_replanning", "event_id": "evt.observed",
+                "passed": True,
+            }],
+            "test_point_pass_rate": 1.0,
+        },
+        {
+            "type": "finish_invoked", "seq": 11,
+            "requested_status": "completed", "pending_occurrence_count": 0,
+            "active_response_window": False, "final_commit_current": True,
+            "verification_current": True, "closure_complete": False,
+        },
+        {"type": "episode_ended", "seq": 12, "local_status": "completed"},
+    ]
+    contracts = [
+        {
+            "event_id": "evt.observed", "expected_disposition": "revise",
+            "required_changes": ["final"],
+            "closure_checks": ["evt.observed.closed"],
+        },
+        {
+            "event_id": "evt.unreached", "expected_disposition": "revise",
+            "required_changes": ["second"],
+            "closure_checks": ["evt.unreached.closed"],
+        },
+    ]
+
+    score = score_trace(
+        events, _minimal_dynamic_case(), "async",
+        semantic_registry={"checks": [{"id": "evt.observed.closed"}]},
+        control_flow_checks=[], event_contracts=contracts,
+    )
+
+    assert score["async_event_drs"]["evt.observed"]["total"] == 0.75
+    assert score["async_event_drs"]["evt.unreached"]["total"] == 0.0
+    assert score["async_drs"] == 0.375
 
 
 def test_delivery_intervention_failure_remains_unscored_infrastructure() -> None:
@@ -172,7 +269,79 @@ def test_delivery_intervention_failure_remains_unscored_infrastructure() -> None
 
     assert score["dynamic_scenario_qualified"] is False
     assert score["dynamic_control_score"] is None
+    assert score["async_drs"] is None
+    assert score["trace_score_status_reason"] == "dynamic_scenario_qualification_failed"
+    assert score["async_event_drs"]["evt.authority"]["status"] == (
+        "dynamic_scenario_qualification_failed"
+    )
     assert "delivery intervention failed" in score["dynamic_scenario_errors"][0]
+
+
+@pytest.mark.parametrize(
+    "event, expected_reason",
+    [
+        *[
+            (
+                {
+                    "type": "infrastructure_failure", "seq": 6,
+                    "component": component, "detail": "benchmark failure",
+                },
+                "infrastructure_crash",
+            )
+            for component in (
+                "model_request", "child_start", "adapter_crash",
+                "child_terminal", "linear_bundle_barrier",
+            )
+        ],
+        (
+            {
+                "type": "resource_safety_abort", "seq": 6,
+                "emergency_cap": 5_000_000, "observed_total": 5_000_000,
+                "trigger_role": "main",
+            },
+            "resource_safety_abort",
+        ),
+    ],
+)
+def test_benchmark_owned_stop_keeps_unreached_event_unscored(
+    event: dict, expected_reason: str,
+) -> None:
+    score = score_trace(
+        [*_constructed_initial_wave(), event],
+        _minimal_dynamic_case(), "async",
+        semantic_registry={"checks": [{"id": "sem"}]},
+        control_flow_checks=[], event_contracts=_dynamic_contract(),
+    )
+
+    assert score["async_drs"] is None
+    assert score["trace_score_status_reason"] == expected_reason
+    assert score["async_event_drs"]["evt.authority"]["total"] is None
+    assert score["async_event_drs"]["evt.authority"]["status"] == expected_reason
+
+
+def test_scenario_construction_failure_does_not_score_unreached_event() -> None:
+    score = score_trace(
+        [], _minimal_dynamic_case(), "async",
+        semantic_registry={"checks": [{"id": "sem"}]},
+        control_flow_checks=[], event_contracts=_dynamic_contract(),
+    )
+
+    assert score["scenario_constructed"] is False
+    assert score["async_drs"] is None
+    assert score["trace_score_status_reason"] == "scenario_construction_failed"
+    assert score["async_event_drs"]["evt.authority"]["total"] is None
+
+
+def test_indeterminate_truncated_trace_does_not_score_unreached_event() -> None:
+    score = score_trace(
+        _constructed_initial_wave(), _minimal_dynamic_case(), "async",
+        semantic_registry={"checks": [{"id": "sem"}]},
+        control_flow_checks=[], event_contracts=_dynamic_contract(),
+    )
+
+    assert score["async_drs"] is None
+    assert score["trace_score_status_reason"] == "indeterminate_termination"
+    assert score["async_event_drs"]["evt.authority"]["total"] is None
 
 
 @_CANCELLATION_GATE

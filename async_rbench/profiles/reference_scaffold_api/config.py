@@ -154,7 +154,7 @@ class ScaffoldConfig:
     max_api_concurrency: int = 4
     # Actual token usage is diagnostic. This deliberately high episode-wide
     # cap is only a runaway-cost fuse and never a normal admission budget.
-    emergency_total_token_cap: int = 20_000_000
+    emergency_total_token_cap: int = 5_000_000
     # Optional exact tokenizer identity retained for provider metadata and
     # backend diagnostics; it does not gate model-call admission.
     tokenizer: str = ""

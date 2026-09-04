@@ -166,7 +166,7 @@ def _report_agent(workspace: Any, backend: Any) -> ChildAgent:
     return ChildAgent(
         backend, workspace, config,
         ProtocolEmitter(stdout=io.StringIO()),
-        TokenUsageLedger(emergency_cap=20_000_000),
+        TokenUsageLedger(emergency_cap=5_000_000),
     )
 
 

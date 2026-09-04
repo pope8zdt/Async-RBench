@@ -295,18 +295,12 @@ def test_async_drs_aggregates_scored_events_ignoring_base_task_failure() -> None
     assert score_async_drs([score]) == 1.0
 
 
-def test_unreached_event_is_excluded_from_async_drs_not_scored_as_zero() -> None:
-    # Pinned current semantics: when a contract carries scoring fields but the
-    # event has no evaluator-observed boundary (the participant never reached
-    # it), score_trace skips it, so it contributes NO EventDRS and is EXCLUDED
-    # from the async_drs mean -- treated as unscored, never as a model-0.
-    # Pending a final spec-owner ruling (unreached -> unscored vs 0).
+def test_unreached_event_zero_remains_in_async_drs_denominator() -> None:
     reached_a = EventDRS(process_score=1.0, async_outcome=1.0, component_scores={})
     reached_b = EventDRS(process_score=0.0, async_outcome=0.0, component_scores={})
-    # The unreached event would have scored 0, but it contributed no entry.
-    total = score_async_drs([reached_a, reached_b])
-    assert total == 0.5  # not (1.0 + 0.0 + 0.0) / 3 = 1/3
-    assert total == (reached_a.total + reached_b.total) / 2
+    unreached = EventDRS(process_score=0.0, async_outcome=0.0, component_scores={})
+    total = score_async_drs([reached_a, reached_b, unreached])
+    assert total == pytest.approx(1 / 3)
 
 
 # ---------------------------------------------------------------------------

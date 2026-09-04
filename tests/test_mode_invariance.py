@@ -301,7 +301,7 @@ def _single_worker_start(mode: str) -> dict:
 
 def _terminal_scaffold(
     mode: str, backend: Any, *, max_child_steps: int = 40,
-    emergency_total_token_cap: int = 20_000_000,
+    emergency_total_token_cap: int = 5_000_000,
 ) -> ReferenceScaffold:
     config = ScaffoldConfig.from_file(None, {
         "backend": "scripted_test",
@@ -446,7 +446,7 @@ def test_termination_classification_is_identical_across_modes(scenario: str) -> 
     async def exercise() -> None:
         backend_cls = _SCENARIO_BACKEND[scenario]
         max_steps = _SCENARIO_MAX_CHILD_STEPS.get(scenario, 40)
-        safety_cap = 1 if scenario == "resource_safety_abort" else 20_000_000
+        safety_cap = 1 if scenario == "resource_safety_abort" else 5_000_000
         linear = _terminal_scaffold(
             "linear", backend_cls(), max_child_steps=max_steps,
             emergency_total_token_cap=safety_cap,

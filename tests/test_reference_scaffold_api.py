@@ -826,7 +826,7 @@ def test_pre_submit_validate_result_dry_runs_the_public_rule() -> None:
         agent = ChildAgent(
             backend, workspace, config,
             ProtocolEmitter(stdout=io.StringIO()),
-            TokenUsageLedger(emergency_cap=20_000_000),
+            TokenUsageLedger(emergency_cap=5_000_000),
         )
         outcome = await agent.run(record, "test-model", 1)
         assert len(workspace.calls) == 2

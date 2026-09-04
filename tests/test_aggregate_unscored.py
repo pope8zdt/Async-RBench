@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from async_rbench.evaluation.aggregate import aggregate_reports
+from async_rbench.evaluation.scoring import score_trace
+from async_rbench.evaluation.termination import score_status_decision
 from async_rbench.evaluation.weighting import SCORE_POLICY_VERSION
 
 
@@ -150,3 +152,57 @@ def test_opportunity_counts_account_for_participant_and_infrastructure_failures(
     opp = summary["event_opportunity"]
     assert opp["participant_provisional_failure"] == 1
     assert opp["infrastructure_delivery_failure"] == 1
+
+
+def test_early_finish_zero_drs_is_retained_by_aggregate() -> None:
+    score = score_trace(
+        [
+            {
+                "type": "child_spawned", "seq": 1, "child_id": "left",
+                "parent_id": "main", "work_units": ["left"],
+                "initial_wave": True,
+            },
+            {
+                "type": "child_spawned", "seq": 2, "child_id": "right",
+                "parent_id": "main", "work_units": ["right"],
+                "initial_wave": True,
+            },
+            {"type": "child_started", "seq": 3, "child_id": "left"},
+            {"type": "child_started", "seq": 4, "child_id": "right"},
+            {
+                "type": "finish_invoked", "seq": 5,
+                "requested_status": "completed", "pending_occurrence_count": 0,
+                "active_response_window": False, "final_commit_current": False,
+                "verification_current": False, "closure_complete": False,
+            },
+            {"type": "episode_ended", "seq": 6, "local_status": "completed"},
+        ],
+        {
+            "initial_wave": [
+                {"workstream_id": "left"}, {"workstream_id": "right"},
+            ],
+            "scenarios": {"linear": {"events": []}, "async": {"events": []}},
+        },
+        "async",
+        semantic_registry={"checks": []},
+        control_flow_checks=[],
+        event_contracts=[{
+            "event_id": "evt.unreached", "expected_disposition": "revise",
+            "required_changes": ["final"],
+        }],
+    )
+    record = _record("early-finish", "async", 0.0)
+    record.update(score)
+    record["score_status"], record["score_status_reason"] = score_status_decision(
+        scenario_constructed=score["scenario_constructed"],
+        score_integrity_ok=True,
+        trace_exclusion_reason=score["trace_score_status_reason"],
+    )
+    record["termination_reason"] = "explicit_finish"
+
+    summary = aggregate_reports(
+        [record], bootstrap_iterations=5,
+    )["development_summary"]
+
+    assert summary["observed_async_dynamic_replanning_score"] == 0.0
+    assert summary["case_async_drs_scores"] == {"early-finish": 0.0}

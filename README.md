@@ -1,6 +1,6 @@
 # Async-RBench
 
-[![Version: 10.1.0](https://img.shields.io/badge/version-10.1.0-blue)](https://github.com/pope8zdt/Async-RBench)
+[![Version: 10.1.1](https://img.shields.io/badge/version-10.1.1-blue)](https://github.com/pope8zdt/Async-RBench)
 [![Contract: development](https://img.shields.io/badge/contract-development-orange)](evaluation_contract.json)
 
 Async-RBench evaluates whether a main agent can integrate independently completing subagent results and replan after delayed, stale, conflicting, partial, duplicated, failed, or resource-constrained events.
@@ -17,17 +17,19 @@ The fixed kernel owns scheduling, event delivery, private truth, workspace isola
 > [!IMPORTANT]
 > This private collaboration repository contains hidden verifiers, private event truth, and held-out test instances. Do not publish the repository, expose private case paths to evaluated agents, or use test instances for prompt, adapter, threshold, or verifier development.
 
-## Version 10.1.0
+## Version 10.1.1
 
 The current release surface is:
 
-- contract version: `10.1.0`;
+- contract version: `10.1.1`;
 - contract status: `development`;
 - dataset: 200 case directories and 201 registered instances;
 - split: 82 calibration / 30 development / 89 test;
 - execution modes: `linear` and `async`;
 - aggregation unit: equal macro-average across the eight event themes;
 - official scope: fixed-harness, containerized Track A runs only.
+- participant-controlled non-exposure keeps every declared Async DRS event in the denominator as score `0`;
+- the shared emergency token fuse is `5,000,000` actual provider-reported tokens per episode.
 
 The dataset composition is locked, but the evaluation contract is not yet a frozen leaderboard contract. Development and pilot runs are diagnostic. Do not use `validate --release` until the contract status is explicitly frozen.
 
@@ -52,7 +54,7 @@ The exact theme definitions and frozen counts are in [`event_taxonomy.json`](eve
 
 ### Primary metrics
 
-Async-RBench v10.1.0 reports three independent headline metrics:
+Async-RBench v10.1.1 reports three independent headline metrics:
 
 - `linear_base_task_score`: base-task correctness in Linear mode;
 - `async_base_task_score`: base-task correctness in Async mode;

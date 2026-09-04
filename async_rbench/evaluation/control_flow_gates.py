@@ -814,6 +814,45 @@ def score_event_replanning(
     )
 
 
+def score_unreached_event(
+    contract: dict[str, Any] | None, *,
+    trace_exclusion_reason: str | None = None,
+) -> EventDRS:
+    """Score a declared event that the participant never reached.
+
+    Participant-controlled non-exposure is a measured failure, so every
+    applicable component and the event total are zero. Evaluator-owned
+    unscored event statuses remain unscored and never become model failures.
+    """
+    contract = dict(contract or {})
+    disposition = str(contract.get("expected_disposition") or "")
+    status = str(contract.get("event_status") or "scored")
+    applicability = _component_applicability(contract)
+    applicable = {name: name in applicability for name in COMPONENT_ORDER}
+    if status != "scored" or trace_exclusion_reason is not None:
+        return EventDRS(
+            process_score=None,
+            async_outcome=None,
+            component_scores={name: None for name in COMPONENT_ORDER},
+            expected_disposition=disposition,
+            applicability=applicable,
+            status=(
+                status if status != "scored"
+                else str(trace_exclusion_reason)
+            ),
+        )
+    return EventDRS(
+        process_score=0.0,
+        async_outcome=0.0,
+        component_scores={
+            name: 0.0 if applicable[name] else None for name in COMPONENT_ORDER
+        },
+        expected_disposition=disposition,
+        applicability=applicable,
+        status="scored",
+    )
+
+
 def score_async_drs(
     event_scores: list[EventDRS] | None,
 ) -> float | None:
