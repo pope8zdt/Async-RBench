@@ -20,7 +20,7 @@
 
 ## 2. 当前问题
 
-远端基线包含 200 个 case 目录、201 个注册实例，历史 split 为 82 个 calibration、30 个 development、89 个 test 实例。迁移清单仍显示 20 个实例需要 stimulus migration，其中 16 个被选入论文候选集。
+远端基线包含 200 个 case 目录、201 个注册实例，历史 split 为 82 个 calibration、30 个 development、89 个 test 实例。已提交的迁移清单仍显示 20 个实例需要 stimulus migration，其中 16 个被选入论文候选集；但对当前 case 文件重新生成审计后会出现 31 个误报。根因是审计器把同一 async schedule 中的普通基线 `result_delivery` 也纳入主题 stimulus 集合，而不是只判断带事件契约的焦点事件及其配套控制事件。
 
 现有 Paper-Eval 草案使用 62+18，但存在三个问题：
 
@@ -63,7 +63,7 @@
 现有 61 个由原 62 个清单移除 `gaia2-stockholm-moveout` 得到，分为：
 
 - 41 个 `ready`：重新执行统一 release gate 后直接保留。
-- 16 个 `migration_required`：保留 case 身份，但必须将真实 stimulus、事件契约和 verifier 一起迁移。
+- 16 个 `migration_audit_false_positive`：真实 stimulus、事件契约、动态点计划和 verifier 已迁移；保留现有内容，修正审计器只分类焦点事件与配套控制事件，并重新执行主题级测试。
 - 4 个 `normalization_required`：事件语义已完整，只需把 v4 契约规范化为 v7 动态点计划与私有镜像，并由真实文件重新生成迁移状态。
 
 4 个规范化对象为：
@@ -108,9 +108,9 @@
 
 ## 5. 迁移与新建规则
 
-### 5.1 迁移 16 个选中旧 case
+### 5.1 复验 16 个已迁移 case
 
-必须迁移的 16 个 case 为：
+被旧清单误标、需要保留并复验的 16 个 case 为：
 
 - `mab-dependency-unblock-031ed6f5bc`
 - `mab-dependency-unblock-09f3ab60d7`
@@ -129,7 +129,7 @@
 - `swe-late-constraint-3950516755`
 - `tbn-late-test-evidence-9685a54f22`
 
-迁移不能只改 manifest 标签。每个 case 的事件注入、契约字段、动态点计划、私有镜像、verifier 和负向 mutation 必须对齐同一语义。
+这 16 个 case 不重新构造。审计器必须从 `control_flow_checks.json.event_contracts[*].event_id` 定位焦点事件，再把该焦点事件及显式关联的 replay/deadline/resource 控制事件作为主题 stimulus；普通 upstream/baseline delivery 不参与主题兼容性判断。复验仍必须证明事件注入、契约字段、动态点计划、私有镜像、verifier 和负向 mutation 对齐同一语义。
 
 ### 5.2 新建 19 个 gap case
 
@@ -209,7 +209,7 @@ sha256("async-rbench-paper-eval-80-run-order-v1|" + case_id)
 1. 增加仓库表面与 Paper-Eval 配额测试，使旧 62+18、GAIA2 引用和旧 migration 状态先失败。
 2. 全面删除 GAIA2、6 个未入选旧目录和 `secure-release` 的额外实例；同步注册表和引用。
 3. 规范化 4 个 v4 legacy case。
-4. 迁移 16 个选中旧 case。
+4. 修正迁移审计器的焦点事件分类，并复验 16 个已迁移 case，不重写其已通过的事件语义。
 5. 冻结并构造 19 个 gap case。
 6. 生成 61、19、80 和 migration 产物，冻结 digest。
 7. 对全部 case 运行静态完整性审计、source-native checks、负向 mutation、Docker oracle 和统一 release gate。
