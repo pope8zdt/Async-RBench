@@ -29,6 +29,8 @@ from .spec import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RUN_BINDING_VERSION = "1.0"
+RUN_BINDING_FILENAME = "run-binding.json"
 
 
 def _command_entrypoint(command: list[str]) -> tuple[str, ...]:
@@ -58,6 +60,49 @@ def _conformance_binding_digest(
         "adapter_profile": profile_name,
         "config_sha256": config_sha256,
     })
+
+
+def _ensure_run_binding(
+    output_root: Path,
+    *,
+    manifest_sha256: str,
+    adapter_profile: str | None,
+    runtime_mode: str | None,
+    conformance_binding_sha256: str,
+    resource_policy_sha256: str | None,
+    model: object,
+) -> None:
+    """Pin execution factors before an output directory can contain scores."""
+    binding_path = output_root / RUN_BINDING_FILENAME
+    expected = {
+        "binding_version": RUN_BINDING_VERSION,
+        "manifest_sha256": manifest_sha256,
+        "adapter_profile": adapter_profile,
+        "runtime_mode": runtime_mode,
+        "conformance_binding_sha256": conformance_binding_sha256,
+        "resource_policy_sha256": resource_policy_sha256,
+        "model": model,
+    }
+    if binding_path.is_file():
+        observed = json.loads(binding_path.read_text(encoding="utf-8"))
+        if not isinstance(observed, dict):
+            raise ValueError("run binding must be a JSON object")
+        mismatches = sorted(
+            key for key, value in expected.items() if observed.get(key) != value
+        )
+        if mismatches:
+            raise ValueError("run binding drift: " + ", ".join(mismatches))
+        return
+    existing_scores = list(output_root.glob("*/score.json")) if output_root.is_dir() else []
+    if existing_scores:
+        raise ValueError(
+            "run binding is missing for existing scores; use a fresh output directory"
+        )
+    output_root.mkdir(parents=True, exist_ok=True)
+    binding_path.write_text(
+        json.dumps(expected, indent=2, sort_keys=True),
+        encoding="utf-8",
+    )
 
 
 def cmd_make_manifest(args) -> int:
@@ -420,6 +465,15 @@ async def _run_manifest(args) -> int:
             episode_timeout_sec=int(args.timeout),
             gateway_grace_sec=int(args.gateway_grace),
         )
+    _ensure_run_binding(
+        output_root,
+        manifest_sha256=manifest_sha256,
+        adapter_profile=profile_name,
+        runtime_mode=runtime_mode,
+        conformance_binding_sha256=conformance_binding_sha256,
+        resource_policy_sha256=resource_policy_sha256,
+        model=manifest.get("model"),
+    )
     if profile is not None and _command_entrypoint(command) != _command_entrypoint(profile.adapter_command):
         raise ValueError("adapter command entrypoint does not match the selected profile")
     # Bind the conformance gate to the actual profile before running any
@@ -489,6 +543,22 @@ async def _run_manifest(args) -> int:
             if prior.get("case_sha256") != _case_digest(instance.case_dir):
                 raise ValueError(
                     f"resume rejected case instance drift for {episode['episode_id']}"
+                )
+            retained_binding = {
+                "conformance_binding_sha256": conformance_binding_sha256,
+                "adapter_profile": profile_name,
+                "runtime_mode": runtime_mode,
+                "resource_policy_sha256": resource_policy_sha256,
+                "model": episode.get("model"),
+            }
+            binding_mismatches = sorted(
+                key for key, value in retained_binding.items()
+                if prior.get(key) != value
+            )
+            if binding_mismatches:
+                raise ValueError(
+                    f"resume rejected adapter binding drift for {episode['episode_id']}: "
+                    + ", ".join(binding_mismatches)
                 )
             scores.append(prior)
             if not args.no_progress:

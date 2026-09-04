@@ -161,16 +161,30 @@ Never store credentials in the repository.
 
 The launcher validates the repository, checks the provider and Docker, creates an immutable manifest, runs paired Linear/Async episodes, aggregates scores, and audits the run.
 
-Outputs are written to:
+### Run the formal 61-case experiment
 
-```text
-artifacts/experiments/manual-<case>-<timestamp>/
-|-- manifest.json
-|-- runs/
-|-- results.json
-|-- run-audit.json
-`-- live.log
+The formal Async-RBench v10.1.0 experiment is defined in [`experiments/formal-61/`](experiments/formal-61/).
+Its frozen CSV selects 61 registered `seed-1` instances from canonical top-level `cases/`; implementations are not copied, and the retired GAIA2 plus 19 unconstructed cases are excluded.
+
+```powershell
+.\experiments\formal-61\run.ps1 `
+  -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
+  -Repetitions 1 `
+  -Seed 2026
 ```
+
+This validates the selection, creates one immutable manifest in the CSV's
+frozen order, and runs both Linear and Async for all 61 cases. The cohort keeps
+the original calibration/development/test labels; it is a reproducible
+execution cohort, not a claim that every case is held-out.
+
+To validate the selection without starting an experiment:
+
+```powershell
+python -m async_rbench.paper_eval check --root .
+```
+
+Outputs are written under `artifacts/experiments/paper-eval-existing-61-<timestamp>/`; the [formal experiment README](experiments/formal-61/README.md) documents the complete layout and resume procedure.
 
 ### 5. Resume an infrastructure-interrupted run
 
