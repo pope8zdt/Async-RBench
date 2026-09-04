@@ -27,6 +27,14 @@ def test_formal_experiment_assets_have_one_canonical_location() -> None:
     ).exists()
 
 
+def test_formal_experiment_is_pinned_to_frozen_v11_release() -> None:
+    readme = (ROOT / "experiments/formal-61/README.md").read_text(encoding="utf-8")
+    launcher = (ROOT / "experiments/formal-61/run.ps1").read_text(encoding="utf-8")
+
+    assert "Async-RBench v11.0.0" in readme
+    assert "validate --release" in launcher
+
+
 def test_existing_selection_is_exactly_61_runnable_registered_instances() -> None:
     rows = load_existing_selection(ROOT / DEFAULT_EXISTING_SELECTION, root=ROOT)
 

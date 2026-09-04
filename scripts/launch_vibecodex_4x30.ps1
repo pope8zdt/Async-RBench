@@ -1,4 +1,4 @@
-# Launch the four-model v10.1 relay batch. Every model receives the same first
+# Launch the four-model v11.0.0 relay batch. Every model receives the same first
 # N registered instances; lanes stride that set without overlap.
 # API-key values are read into environment variables and never written or shown.
 

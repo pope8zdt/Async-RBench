@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
+from async_rbench import cli
 from async_rbench.experiment_plan import validate_frozen_release
 from async_rbench.evaluation.calibration import audit_score_calibration, _case_split_map
 
@@ -17,44 +19,22 @@ def _write(path: Path, value: object) -> None:
 
 def _frozen_contract() -> dict:
     return {
-        "version": "9.1.0",
+        "version": "11.0.0",
         "status": "frozen",
-        "calibration_diagnostics": {
-            "minimum_pilot_models": 5,
-            "minimum_model_families": 3,
-        },
     }
 
 
 def _frozen_dataset() -> dict:
-    return {"schema_version": "1.0", "status": "post_calibration_locked"}
+    return {"schema_version": "1.0", "status": "publication_locked"}
 
 
-def _frozen_plan() -> dict:
-    return {
-        "schema_version": "1.0",
-        "calibration_audit": {"gaps": [], "total_gaps": 0},
-        "model_panel": [
-            {"model_id": f"m{i}", "model_family": f"f{i}", "profile": "configs/x.yaml"}
-            for i in range(5)
-        ],
-    }
-
-
-def test_freeze_refuses_pre_calibration_repo():
-    # The live repo is development/pre_calibration_locked with no calibration
-    # audit; the gate must fail closed rather than certify a headline.
-    errors = validate_frozen_release(ROOT)
-    assert errors, "expected the pre-calibration repo to be refused"
-    text = " ".join(errors)
-    assert "must be 'frozen'" in text
-    assert any("status" in error and "pre_calibration_locked" in error for error in errors)
+def test_live_v11_release_passes_freeze_gate():
+    assert validate_frozen_release(ROOT) == []
 
 
 def test_freeze_accepts_frozen_release(tmp_path: Path):
     _write(tmp_path / "evaluation_contract.json", _frozen_contract())
     _write(tmp_path / "dataset_policy.json", _frozen_dataset())
-    _write(tmp_path / "configs" / "calibration-plan.json", _frozen_plan())
     assert validate_frozen_release(tmp_path) == []
 
 
@@ -63,26 +43,62 @@ def test_freeze_rejects_dev_version(tmp_path: Path):
     contract["version"] = "9.1.0-dev"
     _write(tmp_path / "evaluation_contract.json", contract)
     _write(tmp_path / "dataset_policy.json", _frozen_dataset())
-    _write(tmp_path / "configs" / "calibration-plan.json", _frozen_plan())
     assert any("non-dev" in error for error in validate_frozen_release(tmp_path))
 
 
-def test_freeze_rejects_nonzero_audit_gaps(tmp_path: Path):
-    _write(tmp_path / "evaluation_contract.json", _frozen_contract())
+def test_freeze_rejects_non_frozen_contract(tmp_path: Path):
+    contract = _frozen_contract()
+    contract["status"] = "development"
+    _write(tmp_path / "evaluation_contract.json", contract)
     _write(tmp_path / "dataset_policy.json", _frozen_dataset())
-    plan = _frozen_plan()
-    plan["calibration_audit"] = {"gaps": ["x"], "total_gaps": 1}
-    _write(tmp_path / "configs" / "calibration-plan.json", plan)
-    assert any("not zero-gap" in error for error in validate_frozen_release(tmp_path))
+    assert any("must be 'frozen'" in error for error in validate_frozen_release(tmp_path))
 
 
-def test_freeze_rejects_undersized_panel(tmp_path: Path):
+def test_freeze_rejects_pre_calibration_dataset(tmp_path: Path):
+    _write(tmp_path / "evaluation_contract.json", _frozen_contract())
+    _write(tmp_path / "dataset_policy.json", {
+        "schema_version": "1.0",
+        "status": "pre_calibration_locked",
+    })
+    assert any("release-locked" in error for error in validate_frozen_release(tmp_path))
+
+
+def test_freeze_does_not_require_calibration_audit(tmp_path: Path):
     _write(tmp_path / "evaluation_contract.json", _frozen_contract())
     _write(tmp_path / "dataset_policy.json", _frozen_dataset())
-    plan = _frozen_plan()
-    plan["model_panel"] = [{"model_id": "m0", "model_family": "f0", "profile": "x.yaml"}]
-    _write(tmp_path / "configs" / "calibration-plan.json", plan)
-    assert any("minimum" in error for error in validate_frozen_release(tmp_path))
+    assert validate_frozen_release(tmp_path) == []
+
+
+def test_freeze_does_not_require_model_panel(tmp_path: Path):
+    _write(tmp_path / "evaluation_contract.json", _frozen_contract())
+    _write(tmp_path / "dataset_policy.json", _frozen_dataset())
+    _write(tmp_path / "configs" / "calibration-plan.json", {
+        "model_panel": [{"model_id": "m0", "model_family": "f0"}],
+    })
+    assert validate_frozen_release(tmp_path) == []
+
+
+def test_cli_release_mode_executes_frozen_release_gate(monkeypatch):
+    monkeypatch.setattr(cli, "discover_cases", lambda _root: [])
+    monkeypatch.setattr(cli, "discover_case_instances", lambda _root: [])
+    for name in (
+        "validate_sources",
+        "validate_evaluation_contract",
+        "validate_event_taxonomy",
+        "validate_event_theme_fixtures",
+        "validate_semantic_registries",
+        "validate_mutation_manifest",
+        "validate_dataset_policy",
+        "validate_calibration_plan",
+        "validate_release_security",
+        "validate_case_registry",
+    ):
+        monkeypatch.setattr(cli, name, lambda *_args, **_kwargs: [])
+    calls = []
+    monkeypatch.setattr(cli, "validate_frozen_release", lambda root: calls.append(root) or [])
+
+    assert cli.cmd_validate(SimpleNamespace(release=True)) == 0
+    assert calls == [cli.ROOT]
 
 
 def test_calibration_audit_rejects_test_split_leak(tmp_path: Path):

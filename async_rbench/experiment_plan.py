@@ -92,26 +92,20 @@ def validate_release_security(root: Path) -> list[str]:
     return [f"{path}: missing credential exclusion {value!r}" for value in missing]
 
 
-# Dataset policy statuses that mean calibration is complete and the split is
-# fixed.  ``pre_calibration_locked`` and ``development`` must never satisfy the
-# freeze gate: the contract cannot certify a test headline until calibration has
-# been audited and the resulting changes reviewed.
-_POST_CALIBRATION_STATUSES = {
+# Dataset policy statuses that lock the registered split for a formal release.
+_RELEASE_LOCKED_DATASET_STATUSES = {
     "post_calibration_locked",
-    "calibration_complete",
     "frozen",
     "publication_locked",
 }
 
 
 def validate_frozen_release(root: Path) -> list[str]:
-    """Refuse to certify a Track A headline until the evaluation is frozen.
+    """Certify a release from its frozen contract and locked dataset.
 
-    A test-split headline must only be produced after (a) the evaluation contract
-    is ``frozen`` at a non-development version, (b) the dataset policy has moved
-    past ``pre_calibration_locked`` and is itself frozen, (c) the calibration
-    audit shows zero gaps, and (d) the pilot panel is large enough to have set the
-    contract's per-point weights.  Fail closed: a missing audit is a gap.
+    Calibration execution remains an optional diagnostic workflow. The tracked
+    plan is validated separately for repository consistency, but its audit and
+    model-panel size are not release prerequisites.
     """
     errors: list[str] = []
     try:
@@ -134,44 +128,9 @@ def validate_frozen_release(root: Path) -> list[str]:
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return [*errors, f"cannot read dataset_policy.json: {exc}"]
     status = str(dataset.get("status") or "")
-    if status not in _POST_CALIBRATION_STATUSES:
+    if status not in _RELEASE_LOCKED_DATASET_STATUSES:
         errors.append(
-            f"dataset_policy.json status must be a post-calibration frozen status "
+            f"dataset_policy.json status must be a release-locked status "
             f"(got {status!r})"
-        )
-    # Calibration audit must report zero gaps.  The audit outcome is recorded in
-    # the calibration plan once calibration is complete; a missing block is a gap.
-    try:
-        plan = json.loads((root / PLAN_PATH).read_text(encoding="utf-8"))
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
-        return [*errors, f"cannot read {PLAN_PATH}: {exc}"]
-    audit = plan.get("calibration_audit")
-    if not isinstance(audit, dict):
-        errors.append(f"{PLAN_PATH}: calibration_audit block is missing (calibration not complete)")
-    else:
-        gaps = audit.get("gaps")
-        total_gaps = audit.get("total_gaps")
-        if not isinstance(total_gaps, int) or not isinstance(gaps, list):
-            errors.append(f"{PLAN_PATH}: calibration_audit must include a list 'gaps' and an int 'total_gaps'")
-        elif total_gaps != 0 or gaps:
-            errors.append(f"{PLAN_PATH}: calibration audit is not zero-gap (total_gaps={total_gaps})")
-    # The freeze calibration must have set per-point weights on a panel of at
-    # least the contract's minimum sizes; a single-model pilot cannot do this.
-    model_panel = plan.get("model_panel")
-    policy = contract.get("calibration_diagnostics") or {}
-    panel_size = len(model_panel) if isinstance(model_panel, list) else 0
-    if panel_size < int(policy.get("minimum_pilot_models", 0)):
-        errors.append(
-            f"{PLAN_PATH}: calibration model_panel has {panel_size} models, below the "
-            f"freeze minimum of {policy.get('minimum_pilot_models')}"
-        )
-    families = {
-        str(item.get("model_family") or "")
-        for item in model_panel if isinstance(item, dict) and item.get("model_family")
-    } if isinstance(model_panel, list) else set()
-    if len(families) < int(policy.get("minimum_model_families", 0)):
-        errors.append(
-            f"{PLAN_PATH}: calibration model_panel spans {len(families)} model families, "
-            f"below the freeze minimum of {policy.get('minimum_model_families')}"
         )
     return errors

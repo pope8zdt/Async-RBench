@@ -1,3 +1,3 @@
 """Async-RBench case construction and validation utilities."""
 
-__version__ = "10.1.1"
+__version__ = "11.0.0"

@@ -52,7 +52,7 @@ if ($Resume -and [string]::IsNullOrWhiteSpace($ExperimentRoot)) {
 }
 
 Write-Host "[preflight] Validating repository and frozen 61-case selection..."
-& python -m async_rbench.cli validate
+& python -m async_rbench.cli validate --release
 if ($LASTEXITCODE -ne 0) { throw "Repository validation failed." }
 & python -m async_rbench.paper_eval check --root $RepositoryRoot
 if ($LASTEXITCODE -ne 0) { throw "Paper-Eval 61-case selection validation failed." }

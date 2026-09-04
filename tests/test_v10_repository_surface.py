@@ -5,11 +5,14 @@ import tomllib
 import yaml
 
 from async_rbench import __version__
-from async_rbench.evaluation.version import EVALUATION_CONTRACT_VERSION
+from async_rbench.evaluation.version import (
+    EVALUATION_CONTRACT_STATUS,
+    EVALUATION_CONTRACT_VERSION,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE_VERSION = "10.1.1"
+RELEASE_VERSION = "11.0.0"
 
 
 STALE_RELEASE_PATHS = (
@@ -27,7 +30,7 @@ STALE_RELEASE_PATHS = (
 )
 
 
-def test_v101_release_surface_excludes_superseded_material() -> None:
+def test_v11_release_surface_excludes_superseded_material() -> None:
     present = [path for path in STALE_RELEASE_PATHS if (ROOT / path).exists()]
     assert present == []
 
@@ -41,7 +44,22 @@ def test_release_version_is_synchronized_across_public_surfaces() -> None:
     assert EVALUATION_CONTRACT_VERSION == RELEASE_VERSION
     assert pyproject["project"]["version"] == RELEASE_VERSION
     assert contract["version"] == RELEASE_VERSION
+    assert EVALUATION_CONTRACT_STATUS == "frozen"
+    assert contract["status"] == "frozen"
     assert f"Version: {RELEASE_VERSION}" in readme
+    assert "Contract: frozen" in readme
+
+
+def test_active_protocol_and_profile_docs_name_v11() -> None:
+    paths = (
+        "PROTOCOL.md",
+        "configs/model-profiles/experiment-profile.template.yaml",
+        "docs/async-rbench-result-contract-and-termination.md",
+    )
+    for path in paths:
+        text = (ROOT / path).read_text(encoding="utf-8")
+        assert "v11.0.0" in text
+        assert "v10.1" not in text
 
 
 def test_current_contract_surfaces_describe_five_million_fuse_and_zero_rule() -> None:
@@ -59,7 +77,7 @@ def test_readme_is_concise_and_names_the_registered_release_contract() -> None:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
     assert len(readme.splitlines()) <= 220
-    assert "10.1.1" in readme
+    assert RELEASE_VERSION in readme
     assert "200 case directories" in readme
     assert "201 registered instances" in readme
     assert "82 calibration / 30 development / 89 test" in readme
@@ -85,7 +103,7 @@ def test_release_docs_do_not_reference_removed_or_missing_guides() -> None:
     assert "private_rejection" not in runbook
 
 
-def test_v101_profiles_have_one_step_bounded_resource_schema() -> None:
+def test_v11_profiles_have_one_step_bounded_resource_schema() -> None:
     removed = {
         "max_main_turns", "max_child_turns", "max_total_tokens",
         "budget_child_shared", "budget_main_pre", "budget_main_post",

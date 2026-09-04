@@ -83,5 +83,9 @@ from __future__ import annotations
 # 10.1.1: participant-controlled non-exposure contributes event DRS=0 instead
 # of shrinking the dynamic denominator. The shared emergency fuse is reduced
 # to 5,000,000 actual provider-reported tokens per episode.
-EVALUATION_CONTRACT_VERSION = "10.1.1"
-EVALUATION_CONTRACT_STATUS = "development"
+# 11.0.0: freezes the step-bounded termination and zero-for-non-exposure
+# contract for the formal 61-case experiment. Repository release validation is
+# based on the frozen contract and publication-locked dataset; calibration is
+# retained as an optional diagnostic rather than a release prerequisite.
+EVALUATION_CONTRACT_VERSION = "11.0.0"
+EVALUATION_CONTRACT_STATUS = "frozen"

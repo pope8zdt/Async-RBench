@@ -20,6 +20,12 @@ from .evaluation.weighting import (
 POLICY_PATH = "dataset_policy.json"
 DATASET_SPLITS = {"calibration", "development", "test"}
 DIFFICULTIES = {"easy", "medium", "hard"}
+DATASET_POLICY_STATUSES = {
+    "pre_calibration_locked",
+    "post_calibration_locked",
+    "frozen",
+    "publication_locked",
+}
 REQUIRED_ACCEPTANCE_GATES = {
     "requires_human_review": bool,
     "requires_public_private_contract_validation": bool,
@@ -55,8 +61,10 @@ def validate_dataset_policy(root: Path) -> list[str]:
     errors: list[str] = []
     if policy.get("schema_version") != "1.0":
         errors.append(f"{path}: schema_version must be '1.0'")
-    if policy.get("status") != "pre_calibration_locked":
-        errors.append(f"{path}: status must be 'pre_calibration_locked' before calibration")
+    if policy.get("status") not in DATASET_POLICY_STATUSES:
+        errors.append(
+            f"{path}: status must be one of {sorted(DATASET_POLICY_STATUSES)}"
+        )
     target = policy.get("target_instance_count")
     allowed = policy.get("allowed_instance_count_range")
     if not isinstance(target, int) or target <= 0:

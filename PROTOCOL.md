@@ -32,7 +32,7 @@ the applicable capability points fail.
 
 ## Termination and resource contract
 
-The official v10.1 horizon is 100 completed main-model responses and 40
+The official v11.0.0 horizon is 100 completed main-model responses and 40
 completed responses per child attempt. A response is one model step regardless
 of how many tool calls it contains. Reaching the main horizon produces
 `step_limit_reached` and remains a scored participant outcome.

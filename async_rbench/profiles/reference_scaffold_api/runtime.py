@@ -1399,7 +1399,7 @@ class ReferenceScaffold:
         self.workspace = workspace
         self.emitter = emitter
         self.delivery_reader = delivery_reader
-        # Tokens are descriptive diagnostics in v10.1. The only runtime guard
+        # Tokens are descriptive diagnostics in v11.0.0. The only runtime guard
         # is a deliberately high, shared emergency fuse for provider runaway.
         self.token_usage = TokenUsageLedger(
             emergency_cap=config.emergency_total_token_cap,

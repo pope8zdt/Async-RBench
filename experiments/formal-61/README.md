@@ -1,13 +1,13 @@
 # Formal 61-Case Experiment
 
 This directory is the authoritative formal evaluation entry point for
-Async-RBench v10.1.0.
+Async-RBench v11.0.0.
 
 `paper-eval-existing-61.csv` freezes exactly 61 registered `seed-1` instances
 in execution order. Their implementations are not copied here: every row
 resolves to the unique canonical case under [`../../cases/`](../../cases/).
-The cohort excludes `gaia2-stockholm-moveout` and the 19 planned cases that
-have not been constructed.
+The current runnable cohort contains 61 of the planned 80 cases. It excludes
+`gaia2-stockholm-moveout` and the 19 cases that have not yet been constructed.
 
 ## Prerequisites
 

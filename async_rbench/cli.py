@@ -98,9 +98,8 @@ def cmd_validate(args: argparse.Namespace) -> int:
     errors.extend(validate_case_registry(ROOT, cases))
     if getattr(args, "release", False):
         # Certifying a formal Track A headline requires the experiment to be
-        # frozen.  Generic dataset validation does not; this gate is opt-in so a
-        # pre-frozen dataset can still be validated while it is still in
-        # calibration.
+        # frozen. Generic repository validation remains available independently
+        # of this release-only state check.
         errors.extend(validate_frozen_release(ROOT))
     if errors:
         for error in errors:

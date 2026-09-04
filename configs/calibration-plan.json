@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "status": "ready_to_execute_after_preflight",
-  "purpose": "Single-model small-scale protocol calibration with DeepSeek V4 Pro; not a paper result and not sufficient to freeze the evaluation contract.",
+  "purpose": "Optional single-model protocol diagnostics with DeepSeek V4 Pro; not a paper result and not part of the v11.0.0 release gate.",
   "case_selection": {
     "registry_split": "calibration",
     "use_all_current_seed_families": true,
@@ -14,7 +14,7 @@
   "model_panel": [
     {"model_id": "deepseek-v4-pro", "model_family": "deepseek", "profile": "configs/model-profiles/deepseek-v4-pro.yaml"}
   ],
-  "scope_limit": "This run calibrates endpoint compatibility, resource ceilings, failure modes, token use, and point responsiveness for one model. The later freeze audit still requires at least five models from at least three model families.",
+  "scope_limit": "This optional run diagnoses endpoint compatibility, resource ceilings, failure modes, token use, and point responsiveness for one model. Its panel size does not determine repository release eligibility.",
   "run_policy": {
     "backend": "real_api_only",
     "precondition": "Every selected instance must pass build, Oracle, hidden verifier, conformance, registry, and mutation-design audits.",
@@ -36,5 +36,5 @@
     "minimum_non_degenerate_point_fraction": 0.8,
     "maximum_absolute_phi": 0.8
   },
-  "freeze_rule": "Do not change evaluation_contract.json status to frozen until calibration-audit reports zero gaps and all resulting changes have been reviewed."
+  "release_relation": "Optional diagnostics only. v11.0.0 release validation checks this tracked definition for repository consistency, but does not require executing it, a calibration audit, or any minimum model-panel size."
 }

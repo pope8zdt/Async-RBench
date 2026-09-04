@@ -125,7 +125,7 @@ def cmd_guidance(args) -> int:
 def cmd_score(args) -> int:
     if getattr(args, "legacy", False):
         raise ValueError(
-            "legacy trace.jsonl (protocol 1.0) is not loadable by contract 10.1.1; "
+            "legacy trace.jsonl (protocol 1.0) is not loadable by contract 11.0.0; "
             "create and rerun a new manifest with the current repository"
         )
     trace_path = Path(args.trace).resolve()
@@ -244,7 +244,7 @@ def cmd_conformance(args) -> int:
 def cmd_aggregate(args) -> int:
     if getattr(args, "legacy", False):
         raise ValueError(
-            "legacy score.json artifacts are not loadable by contract 10.1.1; "
+            "legacy score.json artifacts are not loadable by contract 11.0.0; "
             "create and rerun a new manifest with the current repository"
         )
     root = Path(args.root).resolve()
@@ -639,7 +639,7 @@ def build_parser() -> argparse.ArgumentParser:
     ); score.add_argument("--output", required=True)
     score.add_argument(
         "--legacy", action="store_true",
-        help="Report that protocol-1.0 traces are not loadable by contract 10.1.1",
+        help="Report that protocol-1.0 traces are not loadable by contract 11.0.0",
     )
     score.set_defaults(func=cmd_score)
     aggregate = sub.add_parser("aggregate")
@@ -655,7 +655,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     aggregate.add_argument(
         "--legacy", action="store_true",
-        help="Report that legacy scores are not loadable by contract 10.1.1",
+        help="Report that legacy scores are not loadable by contract 11.0.0",
     )
     aggregate.set_defaults(func=cmd_aggregate)
     audit = sub.add_parser("audit-run")

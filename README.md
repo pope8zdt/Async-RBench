@@ -1,7 +1,7 @@
 # Async-RBench
 
-[![Version: 10.1.1](https://img.shields.io/badge/version-10.1.1-blue)](https://github.com/pope8zdt/Async-RBench)
-[![Contract: development](https://img.shields.io/badge/contract-development-orange)](evaluation_contract.json)
+[![Version: 11.0.0](https://img.shields.io/badge/version-11.0.0-blue)](https://github.com/pope8zdt/Async-RBench)
+[![Contract: frozen](https://img.shields.io/badge/contract-frozen-green)](evaluation_contract.json)
 
 Async-RBench evaluates whether a main agent can integrate independently completing subagent results and replan after delayed, stale, conflicting, partial, duplicated, failed, or resource-constrained events.
 
@@ -17,12 +17,12 @@ The fixed kernel owns scheduling, event delivery, private truth, workspace isola
 > [!IMPORTANT]
 > This private collaboration repository contains hidden verifiers, private event truth, and held-out test instances. Do not publish the repository, expose private case paths to evaluated agents, or use test instances for prompt, adapter, threshold, or verifier development.
 
-## Version 10.1.1
+## Version 11.0.0
 
 The current release surface is:
 
-- contract version: `10.1.1`;
-- contract status: `development`;
+- contract version: `11.0.0`;
+- contract status: `frozen`;
 - dataset: 200 case directories and 201 registered instances;
 - split: 82 calibration / 30 development / 89 test;
 - execution modes: `linear` and `async`;
@@ -31,7 +31,7 @@ The current release surface is:
 - participant-controlled non-exposure keeps every declared Async DRS event in the denominator as score `0`;
 - the shared emergency token fuse is `5,000,000` actual provider-reported tokens per episode.
 
-The dataset composition is locked, but the evaluation contract is not yet a frozen leaderboard contract. Development and pilot runs are diagnostic. Do not use `validate --release` until the contract status is explicitly frozen.
+Version 11.0.0 is the frozen contract for the formal 61-case main experiment. Repository validation checks the tracked optional calibration definition for consistency, but does not require executing it, producing an audit, or meeting a model-panel minimum. Run `validate --release` before every formal experiment.
 
 Only `(case_id, instance_id)` pairs in [`cases/registry.json`](cases/registry.json) are official registered instances.
 
@@ -54,7 +54,7 @@ The exact theme definitions and frozen counts are in [`event_taxonomy.json`](eve
 
 ### Primary metrics
 
-Async-RBench v10.1.1 reports three independent headline metrics:
+Async-RBench v11.0.0 reports three independent headline metrics:
 
 - `linear_base_task_score`: base-task correctness in Linear mode;
 - `async_base_task_score`: base-task correctness in Async mode;
@@ -163,8 +163,8 @@ The launcher validates the repository, checks the provider and Docker, creates a
 
 ### Run the formal 61-case experiment
 
-The formal Async-RBench v10.1.0 experiment is defined in [`experiments/formal-61/`](experiments/formal-61/).
-Its frozen CSV selects 61 registered `seed-1` instances from canonical top-level `cases/`; implementations are not copied, and the retired GAIA2 plus 19 unconstructed cases are excluded.
+The formal Async-RBench v11.0.0 experiment is defined in [`experiments/formal-61/`](experiments/formal-61/).
+Its frozen CSV selects the 61 currently available registered `seed-1` instances from canonical top-level `cases/`; the target cohort is 80 cases, with 19 cases still pending construction. Implementations are not copied, and the retired GAIA2 case is excluded.
 
 ```powershell
 .\experiments\formal-61\run.ps1 `

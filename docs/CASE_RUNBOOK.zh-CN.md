@@ -95,11 +95,11 @@ docker info
 先运行仓库静态校验和框架测试：
 
 ```powershell
-python -m async_rbench.cli validate
+python -m async_rbench.cli validate --release
 python -m pytest -q
 ```
 
-这里不使用 `--release`。当前评测合同仍是 development，release gate 正确拒绝正式冻结并不代表普通 case 运行失败。
+v11.0.0 已冻结评测合同，并将数据集标记为 publication-locked。正式实验必须通过 `validate --release`；校准仍可用于诊断，但不再是仓库发布的前置条件。
 
 如上述任一命令失败，不要启动付费模型实验。保存完整错误输出并报告 commit SHA、Python 版本、Docker 版本和操作系统。
 
@@ -200,7 +200,7 @@ artifacts/experiments/manual-<case>-<timestamp>/
 
 ### 运行正式的 61-case 实验
 
-`experiments/formal-61/` 是 Async-RBench v10.1.0 的正式实验目录，其中的
+`experiments/formal-61/` 是 Async-RBench v11.0.0 的正式实验目录，其中的
 `paper-eval-existing-61.csv` 固化了 61 个现有、已注册的 `seed-1` 实例。case
 实现仍然唯一保存在顶层 `cases/`，实验目录只引用它们，不复制。该集合不包含
 `gaia2-stockholm-moveout`，也不包含计划新增但尚未构造的 19 个 case。拉取仓库并配置好模型密钥后，可直接运行：
@@ -292,7 +292,7 @@ token、公开拒绝导致的额外 token、无效再委托率。论文中的 As
 
 **`validate --release` 失败是否表示框架不能运行？**
 
-不是。当前合同未冻结，正式 release gate 应当失败。使用普通 `validate` 完成开发/验证实验。
+不一定，但表示当前仓库状态不能用于 v11.0.0 正式主实验。先修复报告的合同版本、冻结状态、数据集锁定或一致性问题；普通开发诊断可使用 `validate`，正式运行必须使用 `validate --release`。多模型校准和 calibration audit 是可选诊断，不再阻断发布。
 
 **模型得到 0 分，是否需要重试？**
 

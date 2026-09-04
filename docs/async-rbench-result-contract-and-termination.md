@@ -12,7 +12,7 @@ One child attempt is decomposed along three orthogonal axes:
 The runtime is built so that only a *public* contract can produce `result_rejected`;
 every spawned child resolves to exactly one terminal class once its episode closes; and
 the paper metrics read those classifications, never re-derived guesses from mixed states.
-This document states the boundary, lifecycle, audit gates, and v10.1 metric
+This document states the boundary, lifecycle, audit gates, and v11.0.0 metric
 denominators.
 
 ---
