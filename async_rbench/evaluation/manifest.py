@@ -38,19 +38,16 @@ def create_manifest(
     ).hexdigest()
     instances = discover_case_instances(root, case_ids)
     if instance_keys:
-        requested_instances = set(instance_keys)
-        known_instances = {
-            case_instance_key(instance.case_id, instance.instance_id)
+        if len(instance_keys) != len(set(instance_keys)):
+            raise ValueError("instance keys must be unique")
+        instances_by_key = {
+            case_instance_key(instance.case_id, instance.instance_id): instance
             for instance in instances
         }
-        unknown_instances = sorted(requested_instances - known_instances)
+        unknown_instances = sorted(set(instance_keys) - set(instances_by_key))
         if unknown_instances:
             raise ValueError(f"unknown registered case instances: {unknown_instances}")
-        instances = [
-            instance for instance in instances
-            if case_instance_key(instance.case_id, instance.instance_id)
-            in requested_instances
-        ]
+        instances = [instances_by_key[key] for key in instance_keys]
     if split is not None:
         if split not in DATASET_SPLITS:
             raise ValueError(f"split must be one of {sorted(DATASET_SPLITS)}")
