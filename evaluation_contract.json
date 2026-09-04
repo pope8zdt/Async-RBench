@@ -1,5 +1,5 @@
 {
-  "version": "10.0.0",
+  "version": "10.1.0",
   "status": "development",
   "evaluation_object": "Measure whether a main agent integrates independently completing subagent results, detects changed assumptions, and dynamically replans to a verified final state.",
   "execution_modes": [
@@ -81,18 +81,15 @@
   "resource_policy": {
     "episode_timeout_sec": 2400,
     "gateway_grace_sec": 15,
-    "exhaustion_semantics": "A harness turn ceiling produces local_status=budget_exhausted; it remains a scored participant outcome when scenario construction and score integrity are valid.",
+    "termination_semantics": "A model-step horizon produces local_status=step_limit_reached and remains scored. Voluntary early stop also remains scored. The emergency token fuse produces resource_safety_abort and is unscored and leaderboard-ineligible.",
     "profile_limits": {
       "max_output_tokens": 16384,
-      "max_main_turns": 100,
-      "max_child_turns": 40,
+      "max_main_steps": 100,
+      "max_child_steps": 40,
       "max_concurrent_children": 3,
       "max_total_child_spawns": 5,
       "max_api_concurrency": 4,
-      "budget_child_shared": 1000000,
-      "budget_main_pre": 500000,
-      "budget_main_post": 500000,
-      "budget_main_total": 1000000,
+      "emergency_total_token_cap": 20000000,
       "main_terminal_timeout_sec": 180,
       "child_terminal_timeout_sec": 180,
       "child_timeout_sec": 1200,
@@ -168,16 +165,17 @@
     "scenario_construction_rate": "Infrastructure audit that the harness admitted the complete bounded initial wave and established the required linear or async execution topology.",
     "scenario_exposure_complete": "Participant-behaviour diagnostic: whether all case-designed async result roles and any required in-flight opportunity were observed before the participant ended. Incomplete exposure remains scored.",
     "leaderboard_eligibility": "Only containerized, conformant, API-only runs using the fixed reference harness enter official leaderboard aggregation.",
-    "terminal_taxonomy": "Every spawned child attempt terminates in exactly one mutually exclusive class: gateway_accepted, public_rejection, sealed_pending_verdict, token_budget_exhausted, turn_limit_exhausted, no_submission, timeout, crash, cancel, case_contract_failure, infrastructure_failure, in_flight. First-attempt vs retry is an attempt_number facet, never a duplicated set of counters.",
+    "terminal_taxonomy": "Every spawned child attempt terminates in exactly one mutually exclusive class: gateway_accepted, public_rejection, sealed_pending_verdict, step_limit_reached, resource_safety_abort, no_submission, timeout, crash, cancel, case_contract_failure, infrastructure_failure, in_flight. First-attempt vs retry is an attempt_number facet, never a duplicated set of counters.",
     "gateway_verdict": "Contract acceptance is the gateway verdict: result_delivered marks gateway_accepted whether or not the main agent later consumed the result (consumed_by_main is a separate facet). A public result_rejected (one or more actionable public rejection codes) is public_rejection; a private-only rejection reaching the scorer is a case_contract_failure (benchmark contract error), never a model verdict.",
     "sealed_pending_verdict": "A sealed submission (child_completed) that reached no gateway delivery/rejection before the episode closed. It counts as a sealed submission but carries no gateway verdict, so it is excluded from every acceptance/rejection denominator.",
     "submission_acceptance_rate": "gateway_accepted_count / gateway_verdict_count, where gateway_verdict_count = gateway_accepted_count + public_rejected_count. Returns null when gateway_verdict_count is zero.",
-    "submission_rejection_rate": "public_rejected_count / gateway_verdict_count, where gateway_verdict_count = gateway_accepted_count + public_rejected_count. Returns null when gateway_verdict_count is zero. Sealed-without-verdict closes, token/turn/no-submission ends, designed terminals, cancels, case-contract and infrastructure failures and in-flight closes never enter this denominator.",
+    "submission_rejection_rate": "public_rejected_count / gateway_verdict_count, where gateway_verdict_count = gateway_accepted_count + public_rejected_count. Returns null when gateway_verdict_count is zero. Sealed-without-verdict closes, step/safety/no-submission ends, designed terminals, cancels, case-contract and infrastructure failures and in-flight closes never enter this denominator.",
     "first_attempt_and_retry_acceptance": "first_attempt_acceptance_rate = gateway_accepted attempts with attempt_number 1 / verdict-bearing first attempts; retry_acceptance_rate = gateway_accepted retry attempts / verdict-bearing retry attempts. Both return null on a zero verdict denominator.",
     "avg_child_tokens_per_gateway_accepted": "Total child tokens across gateway_accepted attempts / gateway_accepted_count. Null when no gateway-accepted attempt.",
     "extra_child_tokens_from_public_rejections": "Per workstream, child tokens spent on public_rejection attempts before the gateway-accepted attempt (all public-rejected attempts when none was accepted). Sealed-without-verdict attempts are not public rejections and private-only rejections are case-contract failures, so neither contributes.",
-    "outcome_rate_per_attempt": "token_budget_exhaustion_rate_per_attempt = token_budget_exhausted attempts / total spawned attempts; turn_limit_exhaustion_rate_per_attempt and no_submission_rate_per_attempt are analogous. These are per-attempt model/runtime outcome rates, never rejection rates.",
-    "redelegation_metrics": "redelegation_attempt_count counts retry attempts (attempt_number >= 2); invalid_redelegation_count counts duplicate_evidence_retry_detected runtime diagnostics (the legacy no_information_retry_detected name is still counted so pre-rename artifacts replay); invalid_redelegation_rate = invalid_redelegation_count / redelegation_attempt_count (null when there is no redelegation)."
+    "outcome_rate_per_attempt": "child_step_limit_rate_per_attempt = step_limit_reached attempts / total spawned attempts; resource_safety_abort_rate_per_attempt and no_submission_rate_per_attempt are analogous. These are per-attempt model/runtime outcome rates, never rejection rates.",
+    "redelegation_metrics": "redelegation_attempt_count counts retry attempts (attempt_number >= 2); invalid_redelegation_count counts duplicate_evidence_retry_detected runtime diagnostics; invalid_redelegation_rate = invalid_redelegation_count / redelegation_attempt_count (null when there is no redelegation).",
+    "termination_diagnostics": "finish_quality records closure facts at an unconditional explicit finish; termination_reason identifies explicit finish, implicit stop, model-step horizon, emergency safety abort, timeout, or infrastructure termination. token_usage_report contains actual provider-reported main, child, actor, and total token usage."
   },
   "judge": "programmatic_only"
 }

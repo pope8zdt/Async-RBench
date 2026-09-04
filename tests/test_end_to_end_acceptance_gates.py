@@ -9,12 +9,12 @@ Two halves:
   1. a positive valid report submission is accepted and sealed;
   2. a missing report file blocks sealing with a public code the child can see;
   3. a malformed-JSON report blocks sealing the same way;
-  4. a zero token budget ends the child terminal *without* a submission;
+  4. the emergency safety fuse ends the child terminal *without* a submission;
   5. a no-tool-call child ends as ``no_submission``, never as a rejection;
   6. after a public rejection exactly one recovery replacement is admitted and
      carries the prior rejection feedback;
   7. a second replacement for the same workstream is refused without starting a
-     child or spending budget;
+     child or spending its recovery-spawn allowance;
   8. a Linear and Async smoke run (three seeds each) shows nonzero child tokens,
      at least one main turn, no in-flight/private-only terminal rows, and
      complete mode-separated paper metrics.
@@ -38,8 +38,8 @@ import pytest
 import yaml
 
 import async_rbench.evaluation.runner as runner_module
-from async_rbench.evaluation.budget import BudgetPool
 from async_rbench.evaluation.model_backend import ModelTurn, ToolCall
+from async_rbench.evaluation.token_usage import TokenUsageLedger
 from async_rbench.evaluation.runner import EpisodeConfig, _make_start, run_episode
 from async_rbench.evaluation.workspace_runtime import (
     CommandResult, DisabledWorkspaceRuntime,
@@ -166,7 +166,7 @@ def _report_agent(workspace: Any, backend: Any) -> ChildAgent:
     return ChildAgent(
         backend, workspace, config,
         ProtocolEmitter(stdout=io.StringIO()),
-        BudgetPool("child_shared", maximum=500_000),
+        TokenUsageLedger(emergency_cap=20_000_000),
     )
 
 
@@ -227,7 +227,7 @@ def test_acceptance_03_malformed_json_report_blocks_sealing_with_public_code() -
 
 # ============================================================================
 # Step 1 / scenarios 4-5: non-submission ends are terminal and never fabricate a
-# rejection.  A zero-budget pool and a no-tool-call child must each close the
+# rejection.  A safety-aborted child and a no-tool-call child must each close the
 # manager wait and Linear bundle with no child_completed / result_rejected.
 # ============================================================================
 
@@ -257,9 +257,9 @@ def _start(mode: str = "linear") -> dict[str, Any]:
     return _make_start(config, case, task, None, "0123456789ab")
 
 
-def _scaffold(backend: Any) -> ReferenceScaffold:
+def _scaffold(backend: Any, **overrides: Any) -> ReferenceScaffold:
     config = ScaffoldConfig.from_file(None, {
-        "backend": "scripted_test", "workspace_mode": "disabled",
+        "backend": "scripted_test", "workspace_mode": "disabled", **overrides,
     })
     start = _start()
     only = start["initial_wave"][0]
@@ -286,19 +286,18 @@ async def _run_one_child(scaffold: ReferenceScaffold):
     return manager, record, scaffold.emitter.events
 
 
-def test_acceptance_04_zero_token_budget_is_terminal_without_submission() -> None:
+def test_acceptance_04_emergency_fuse_is_terminal_without_submission() -> None:
     async def exercise() -> Any:
-        scaffold = _scaffold(_NoToolBackend())
-        scaffold.manager.token_budget.maximum = 0
+        scaffold = _scaffold(_NoToolBackend(), emergency_total_token_cap=1)
         return await _run_one_child(scaffold)
 
     manager, record, events = asyncio.run(exercise())
-    assert record.status == "token_budget_exhausted"
-    assert record.decision == "token_budget_exhausted"
+    assert record.status == "resource_safety_abort"
+    assert record.decision == "resource_safety_abort"
     assert manager.unresolved_count() == 0
     assert manager.linear_bundle_ready() is True
     types = [event["type"] for event in events]
-    assert "child_token_budget_exhausted" in types
+    assert "child_resource_safety_abort" in types
     assert "child_completed" not in types
     assert "result_rejected" not in types
 
@@ -363,7 +362,7 @@ def test_acceptance_06_07_one_recovery_admitted_with_feedback_then_second_refuse
             "child_id": "c-wal",
         })
         assert manager.workstream_rejections["wal_recovery"]["actionable"] is True
-        pool = manager.token_budget
+        usage_before = manager.token_usage.snapshot
 
         # Scenario 6: the first replacement is admitted and carries feedback.
         first = await manager.spawn("wal_recovery", _WAL_TASK, [], "", "high")
@@ -376,8 +375,7 @@ def test_acceptance_06_07_one_recovery_admitted_with_feedback_then_second_refuse
         payload = json.loads(messages[1]["content"])
         assert payload["prior_attempt"]["failed_attempt_count"] == 1
         assert payload["prior_attempt"]["last_rejection"]["reason_codes"] == ["report_file_missing"]
-        reserved_after_first = pool.reserved
-        assert reserved_after_first > 0
+        assert manager.token_usage.snapshot == usage_before
 
         # Scenario 7: a second replacement is refused and consumes nothing.
         before_count = len(manager.children)
@@ -386,7 +384,7 @@ def test_acceptance_06_07_one_recovery_admitted_with_feedback_then_second_refuse
         assert "maximum recovery attempts for workstream" in second["error"]
         assert second["budget_consumed"] is False
         assert len(manager.children) == before_count  # no child started
-        assert pool.reserved == reserved_after_first  # nothing extra reserved
+        assert manager.token_usage.snapshot == usage_before
         assert manager.recovery_spawn_counts["wal_recovery"] == 1
 
     asyncio.run(exercise())
@@ -401,7 +399,7 @@ def test_acceptance_06_07_one_recovery_admitted_with_feedback_then_second_refuse
 def smoke_scores(tmp_path_factory: pytest.TempPathFactory) -> dict[str, list[dict[str, Any]]]:
     root = tmp_path_factory.mktemp("acceptance-smoke")
     linear_config = root / "linear_config.yaml"
-    linear_config.write_text("max_main_turns: 5\n", encoding="utf-8")
+    linear_config.write_text("max_main_steps: 5\n", encoding="utf-8")
 
     def _build(episode_id: str, mode: str, seed: int) -> dict[str, Any]:
         monkey = pytest.MonkeyPatch()

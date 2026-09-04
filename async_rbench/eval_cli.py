@@ -79,7 +79,7 @@ def cmd_guidance(args) -> int:
 def cmd_score(args) -> int:
     if getattr(args, "legacy", False):
         raise ValueError(
-            "legacy trace.jsonl (protocol 1.0) is not loadable by contract 10.0.0; "
+            "legacy trace.jsonl (protocol 1.0) is not loadable by contract 10.1.0; "
             "create and rerun a new manifest with the current repository"
         )
     trace_path = Path(args.trace).resolve()
@@ -200,7 +200,7 @@ def cmd_conformance(args) -> int:
 def cmd_aggregate(args) -> int:
     if getattr(args, "legacy", False):
         raise ValueError(
-            "legacy score.json artifacts are not loadable by contract 10.0.0; "
+            "legacy score.json artifacts are not loadable by contract 10.1.0; "
             "create and rerun a new manifest with the current repository"
         )
     root = Path(args.root).resolve()
@@ -427,7 +427,7 @@ async def _run_manifest(args) -> int:
     # episode: the same adapter that runs the manifest should first pass the
     # protocol suite in its deterministic, no-model/no-Docker conformance mode.
     # A requested conformance run is a gate: a failing adapter must not consume
-    # model budget or produce episode scores.  Development callers that need to
+    # model calls or produce episode scores.  Development callers that need to
     # inspect a non-conformant adapter can opt out explicitly with
     # ``--skip-conformance``.
     conformance_passed: bool | None = None
@@ -570,7 +570,7 @@ def build_parser() -> argparse.ArgumentParser:
     ); score.add_argument("--output", required=True)
     score.add_argument(
         "--legacy", action="store_true",
-        help="Report that protocol-1.0 traces are not loadable by contract 10.0.0",
+        help="Report that protocol-1.0 traces are not loadable by contract 10.1.0",
     )
     score.set_defaults(func=cmd_score)
     aggregate = sub.add_parser("aggregate")
@@ -586,7 +586,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     aggregate.add_argument(
         "--legacy", action="store_true",
-        help="Report that legacy scores are not loadable by contract 10.0.0",
+        help="Report that legacy scores are not loadable by contract 10.1.0",
     )
     aggregate.set_defaults(func=cmd_aggregate)
     audit = sub.add_parser("audit-run")

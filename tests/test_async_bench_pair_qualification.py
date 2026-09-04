@@ -60,7 +60,7 @@ def test_strict_pair_rejects_false_passed_or_unscored_episode():
 # ---------------------------------------------------------------------------
 # Task 11 Step 4: aggregation-level counterfactual pair qualification.  A pair
 # must share the benchmark-owned fixed factors (case/instance/seed, task bundle,
-# child pool identity/budget/provider) while the main model/provider may differ.
+# child pool identity/provider) while the main model/provider may differ.
 # ---------------------------------------------------------------------------
 
 
@@ -69,7 +69,7 @@ def _pair(linear_extra=None, async_extra=None):
         "execution_mode": "linear", "case_id": "c1", "instance_id": "i1",
         "agent_seed": 7, "counterfactual_pair_id": "c1-i1-0",
         "task_bundle_sha256": "bundle-a", "child_pool_id": "pool-x",
-        "child_budget": "shared:1m", "child_provider": "codex_cli",
+        "child_provider": "codex_cli",
         "child_model": "mini", "child_backend": "codex_cli",
         "child_child_overlap": True, "main_child_overlap": False,
         "individual_result_presentations": 0, "atomic_bundle_presentations": 1,
@@ -79,7 +79,7 @@ def _pair(linear_extra=None, async_extra=None):
         "execution_mode": "async", "case_id": "c1", "instance_id": "i1",
         "agent_seed": 7, "counterfactual_pair_id": "c1-i1-0",
         "task_bundle_sha256": "bundle-a", "child_pool_id": "pool-x",
-        "child_budget": "shared:1m", "child_provider": "codex_cli",
+        "child_provider": "codex_cli",
         "child_model": "mini", "child_backend": "codex_cli",
         "individual_result_presentations": 2,
         "score_status": "scored",

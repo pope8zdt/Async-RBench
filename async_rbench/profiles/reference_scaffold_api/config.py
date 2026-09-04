@@ -104,9 +104,6 @@ class _RoleView:
     async def complete(self, **kwargs: Any) -> Any:
         return await self._inner.complete(**kwargs)
 
-    def estimate_input_tokens(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> Any:
-        return self._inner.estimate_input_tokens(messages, tools)
-
     def runtime_metadata(self) -> dict[str, Any]:
         meta = dict(self._inner.runtime_metadata() or {})
         meta["role"] = self._role_config.role
@@ -144,8 +141,8 @@ class ScaffoldConfig:
     max_output_tokens: int = 8192
     max_tokens_parameter: str = "max_completion_tokens"
     send_seed: bool = True
-    max_main_turns: int = 100
-    max_child_turns: int = 40
+    max_main_steps: int = 100
+    max_child_steps: int = 40
     max_concurrent_children: int = 3
     # Bounded model-requested replacement/recovery spawns. Benchmark-owned
     # initial-wave children are tracked separately and do not consume this.
@@ -155,18 +152,11 @@ class ScaffoldConfig:
     # same workstream can be retried at most this many times (Task 7).
     max_recovery_spawns_per_workstream: int = 1
     max_api_concurrency: int = 4
-    # Legacy single-pool ceiling, retained only for non-official legacy profiles
-    # (spec §7.3).  Official Track A profiles declare the split pools below.
-    max_total_tokens: int = 500000
-    # Split token budget pools (spec §7).  Async: main_pre / child_shared /
-    # main_post.  Linear: child_shared / main_total (the two 500k main pools
-    # merged to keep the same 1M main budget).
-    budget_child_shared: int = 1_000_000
-    budget_main_pre: int = 500_000
-    budget_main_post: int = 500_000
-    budget_main_total: int = 1_000_000
-    # Optional exact tokenizer identity; empty string opts into conservative
-    # input estimation with accounting_mode="conservative" (spec §7.3).
+    # Actual token usage is diagnostic. This deliberately high episode-wide
+    # cap is only a runaway-cost fuse and never a normal admission budget.
+    emergency_total_token_cap: int = 20_000_000
+    # Optional exact tokenizer identity retained for provider metadata and
+    # backend diagnostics; it does not gate model-call admission.
     tokenizer: str = ""
     main_terminal_timeout_sec: int = 180
     child_terminal_timeout_sec: int = 180
@@ -181,9 +171,6 @@ class ScaffoldConfig:
     # history exceeds the budget, the oldest tool results are compressed to a
     # short excerpt while recent turns stay verbatim.
     child_context_budget_bytes: int = 120_000
-    # Deprecated one-release alias. When supplied without the byte field,
-    # from_file maps it to child_context_budget_bytes.
-    child_context_budget_chars: int | None = None
     child_keep_recent_turns: int = 8
     child_old_tool_excerpt_chars: int = 800
     request_timeout_sec: int = 300
@@ -199,7 +186,7 @@ class ScaffoldConfig:
     child_provider: dict[str, Any] = field(default_factory=dict)
     child_pool_id: str = ""
     # Transport-reuse optimization for exactly-identical main/child providers.
-    # Metadata and budget accounting remain role-separated even when enabled.
+    # Metadata and token-usage accounting remain role-separated when enabled.
     reuse_transport_when_identical: bool = False
 
     @classmethod
@@ -216,17 +203,10 @@ class ScaffoldConfig:
             "api_key_env": os.getenv("ASYNC_RBENCH_MODEL_API_KEY_ENV"),
             "main_model": os.getenv("ASYNC_RBENCH_MAIN_MODEL"),
             "child_model": os.getenv("ASYNC_RBENCH_CHILD_MODEL"),
-            "max_total_tokens": (
-                int(os.environ["ASYNC_RBENCH_MAX_TOTAL_TOKENS"])
-                if os.getenv("ASYNC_RBENCH_MAX_TOTAL_TOKENS") else None
-            ),
         }
         raw.update({key: value for key, value in env_overrides.items() if value is not None})
         raw.update({key: value for key, value in (overrides or {}).items() if value is not None})
-        byte_budget_declared = "child_context_budget_bytes" in raw
         config = cls(**raw)
-        if config.child_context_budget_chars is not None and not byte_budget_declared:
-            config.child_context_budget_bytes = int(config.child_context_budget_chars)
         if config.backend == "scripted_test" and not config.main_model:
             config.main_model = "scripted-test"
         if not config.child_model:
@@ -313,29 +293,18 @@ class ScaffoldConfig:
         if overlap:
             raise ValueError(f"request_body_extra cannot override protected fields: {sorted(overlap)}")
         for name in (
-            "max_main_turns", "max_child_turns", "max_concurrent_children",
+            "max_main_steps", "max_child_steps", "max_concurrent_children",
             "max_total_child_spawns", "max_recovery_spawns_per_workstream",
             "max_api_concurrency",
-            "max_total_tokens",
-            "budget_child_shared", "budget_main_pre", "budget_main_post",
-            "budget_main_total",
+            "emergency_total_token_cap",
             "start_barrier_timeout_sec", "live_cancellation_grace_sec",
             "child_context_budget_bytes", "child_keep_recent_turns",
             "child_old_tool_excerpt_chars",
         ):
             if int(getattr(self, name)) <= 0:
                 raise ValueError(f"{name} must be positive")
-        if (
-            self.child_context_budget_chars is not None
-            and int(self.child_context_budget_chars) <= 0
-        ):
-            raise ValueError("child_context_budget_chars must be positive")
         if self.max_total_child_spawns < self.max_concurrent_children:
             raise ValueError("max_total_child_spawns must be at least max_concurrent_children")
-        if self.budget_main_total != self.budget_main_pre + self.budget_main_post:
-            raise ValueError(
-                "budget_main_total must equal budget_main_pre + budget_main_post"
-            )
         for role in ("main", "child"):
             override = self.main_provider if role == "main" else self.child_provider
             if not isinstance(override, dict):
@@ -379,17 +348,13 @@ class ScaffoldConfig:
             "max_output_tokens": self.max_output_tokens,
             "max_tokens_parameter": self.max_tokens_parameter,
             "send_seed": self.send_seed,
-            "max_main_turns": self.max_main_turns,
-            "max_child_turns": self.max_child_turns,
+            "max_main_steps": self.max_main_steps,
+            "max_child_steps": self.max_child_steps,
             "max_concurrent_children": self.max_concurrent_children,
             "max_total_child_spawns": self.max_total_child_spawns,
             "max_recovery_spawns_per_workstream": self.max_recovery_spawns_per_workstream,
             "max_api_concurrency": self.max_api_concurrency,
-            "max_total_tokens": self.max_total_tokens,
-            "budget_child_shared": self.budget_child_shared,
-            "budget_main_pre": self.budget_main_pre,
-            "budget_main_post": self.budget_main_post,
-            "budget_main_total": self.budget_main_total,
+            "emergency_total_token_cap": self.emergency_total_token_cap,
             "tokenizer": self.tokenizer,
             "start_barrier_timeout_sec": self.start_barrier_timeout_sec,
             "live_cancellation_grace_sec": self.live_cancellation_grace_sec,

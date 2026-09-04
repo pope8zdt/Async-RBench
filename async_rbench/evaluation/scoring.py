@@ -10,10 +10,10 @@ from .termination import (
     GATEWAY_ACCEPTED,
     NO_SUBMISSION,
     PUBLIC_REJECTION,
+    RESOURCE_SAFETY_ABORT,
     SEALED_PENDING_VERDICT,
+    STEP_LIMIT_REACHED,
     TERMINAL_CLASSES,
-    TOKEN_BUDGET_EXHAUSTED,
-    TURN_LIMIT_EXHAUSTED,
     classify_child_terminals,
 )
 from .control_flow_gates import (
@@ -907,7 +907,8 @@ def score_trace(
         for child_id, event in completed.items()
         if event.get("success") is False
         or str(event.get("status") or "").lower() in {
-            "failed", "error", "timeout", "budget_exhausted",
+            "failed", "error", "timeout", "step_limit_reached",
+            "resource_safety_abort",
         }
         for workstream in (spawned.get(child_id, {}).get("work_units") or [])
     }
@@ -994,7 +995,9 @@ def score_trace(
         "conflicting_completion_ids": {
             str(item.get("completion_id")) for item in deliveries
         },
-        "resource_limit_exceeded": "budget_exhausted" in local_statuses,
+        "resource_limit_exceeded": bool(
+            {"step_limit_reached", "resource_safety_abort"} & local_statuses
+        ),
     }
     control_flow_results, control_flow_counts = evaluate_control_flow_checks(
         list(control_flow_checks or []), execution_mode, control_flow_facts,
@@ -1299,7 +1302,7 @@ def score_trace(
     # whether the main agent later consumed the result (``consumed_by_main``
     # facet).  Verdict acceptance/rejection denominators cover only
     # verdict-bearing submissions (``gateway_accepted`` + ``public_rejection``);
-    # sealed-without-verdict, budget/turn/no-submission ends, designed
+    # sealed-without-verdict, step/safety/no-submission ends, designed
     # terminals, cancels, case-contract and infrastructure failures never enter
     # them.
     child_terminals = classify_child_terminals(events)
@@ -1357,14 +1360,14 @@ def score_trace(
     extra_child_tokens_from_public_rejections = _extra_tokens_from_public_rejections(
         child_terminals,
     )
-    token_budget_exhaustion_rate_per_attempt = _rate(
+    resource_safety_abort_rate_per_attempt = _rate(
         sum(1 for row in child_terminals
-            if row["terminal_class"] == TOKEN_BUDGET_EXHAUSTED),
+            if row["terminal_class"] == RESOURCE_SAFETY_ABORT),
         total_attempt_count,
     )
-    turn_limit_exhaustion_rate_per_attempt = _rate(
+    child_step_limit_rate_per_attempt = _rate(
         sum(1 for row in child_terminals
-            if row["terminal_class"] == TURN_LIMIT_EXHAUSTED),
+            if row["terminal_class"] == STEP_LIMIT_REACHED),
         total_attempt_count,
     )
     no_submission_rate_per_attempt = _rate(
@@ -1374,12 +1377,9 @@ def score_trace(
     redelegation_attempt_count = len(retry_rows)
     # P0-9: a redelegation that contributes no new evidence is a duplicate
     # evidence retry; the runtime marker (renamed in Task 7 to
-    # ``duplicate_evidence_retry_detected``) records each instance.  The legacy
-    # ``no_information_retry_detected`` name is still counted so pre-rename
-    # artifacts replay identically.
-    invalid_redelegation_count = (
-        len(_events_of(events, "duplicate_evidence_retry_detected"))
-        + len(_events_of(events, "no_information_retry_detected"))
+    # ``duplicate_evidence_retry_detected``) records each instance.
+    invalid_redelegation_count = len(
+        _events_of(events, "duplicate_evidence_retry_detected")
     )
     invalid_redelegation_rate = _rate(
         invalid_redelegation_count, redelegation_attempt_count,
@@ -1455,7 +1455,7 @@ def score_trace(
         "result_contract_rejected_count": len(contract_rejections),
         # Raw per-completion gateway diagnostic: the paper-facing
         # ``submission_rejection_rate`` below is over verdict-bearing
-        # submissions only (gateway_accepted + public_rejection), so budget
+        # submissions only (gateway_accepted + public_rejection), so step/safety
         # exits, sealed-without-verdict closes, designed terminals, cancels,
         # case-contract and infrastructure failures never enter its denominator.
         "result_contract_rejection_rate": (
@@ -1482,8 +1482,8 @@ def score_trace(
         "retry_acceptance_rate": retry_acceptance_rate,
         "avg_child_tokens_per_gateway_accepted": avg_child_tokens_per_gateway_accepted,
         "extra_child_tokens_from_public_rejections": extra_child_tokens_from_public_rejections,
-        "token_budget_exhaustion_rate_per_attempt": token_budget_exhaustion_rate_per_attempt,
-        "turn_limit_exhaustion_rate_per_attempt": turn_limit_exhaustion_rate_per_attempt,
+        "resource_safety_abort_rate_per_attempt": resource_safety_abort_rate_per_attempt,
+        "child_step_limit_rate_per_attempt": child_step_limit_rate_per_attempt,
         "no_submission_rate_per_attempt": no_submission_rate_per_attempt,
         "redelegation_attempt_count": redelegation_attempt_count,
         "invalid_redelegation_count": invalid_redelegation_count,

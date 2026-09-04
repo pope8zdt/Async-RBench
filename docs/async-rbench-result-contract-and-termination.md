@@ -12,10 +12,8 @@ One child attempt is decomposed along three orthogonal axes:
 The runtime is built so that only a *public* contract can produce `result_rejected`;
 every spawned child resolves to exactly one terminal class once its episode closes; and
 the paper metrics read those classifications, never re-derived guesses from mixed states.
-This document states the boundary, the lifecycle, the audit gates, and the metric
-denominators that implement the fix plan `2026-09-03-async-rbench-remaining-correctness-fixes`
-(Task 8 correct taxonomy / Task 3 shared public validation / Task 4 private-supervision
-split / Task 10 end-to-end gates).
+This document states the boundary, lifecycle, audit gates, and v10.1 metric
+denominators.
 
 ---
 
@@ -96,8 +94,8 @@ child_spawned                       attempt N for workstream W
    ├── result_delivered(terminal_outcome=crash)          ─▶ crash
    ├── child_cancelled(initiated_by=main)                ─▶ cancel
    │
-   ├── child_token_budget_exhausted  (no submission)     ─▶ token_budget_exhausted
-   ├── child_turn_limit_exhausted    (no submission)     ─▶ turn_limit_exhausted
+   ├── child_step_limit_reached      (no submission)     ─▶ step_limit_reached
+   ├── child_resource_safety_abort   (no submission)     ─▶ resource_safety_abort
    ├── child_no_submission           (no submission)     ─▶ no_submission
    │
    ├── result_rejected  with ≥1 public code              ─▶ public_rejection
@@ -116,7 +114,7 @@ Precedence per attempt (higher wins):
 1. `case_contract_failure` / `infrastructure_failure`
 2. designed terminal (`timeout` / `crash`)
 3. explicit main cancellation (`cancel`)
-4. token/turn/no-submission terminal event
+4. step-limit/safety-abort/no-submission terminal event
 5. public `result_rejected` (`public_rejection`); private-only ⇒ `case_contract_failure`
 6. `result_delivered` ⇒ `gateway_accepted`
 7. `child_completed` without a verdict ⇒ `sealed_pending_verdict`
@@ -198,7 +196,7 @@ descriptive only. Counts have no denominator; rates list their denominator expli
 | `extra_child_tokens_from_public_rejections` | per-episode tokens on public-rejected attempts (per workstream, attempts before the accepted one, or all when none accepted) |
 | `redelegation_attempt_count` | attempts with `retry` true |
 | `invalid_redelegation_count` | per-record `invalid_redelegation_count` |
-| `token_exhausted_attempts` / `turn_limit_exhausted_attempts` / `no_submission_attempts` | rows in each non-submission class |
+| `step_limit_attempts` / `resource_safety_abort_attempts` / `no_submission_attempts` | rows in each non-submission class |
 
 ### 4.2 Rates
 
@@ -208,14 +206,14 @@ descriptive only. Counts have no denominator; rates list their denominator expli
 | `submission_rejection_rate` | `public_rejected` | `gateway_verdict` |
 | `first_attempt_acceptance_rate` | `first_attempt_accepted` | `first_attempt_verdict` |
 | `retry_acceptance_rate` | `retry_accepted` | `retry_verdict` |
-| `token_budget_exhaustion_rate_per_attempt` | `token_exhausted_attempts` | `total_attempts` (all rows) |
-| `turn_limit_exhaustion_rate_per_attempt` | `turn_limit_exhausted_attempts` | `total_attempts` |
+| `child_step_limit_rate_per_attempt` | `step_limit_attempts` | `total_attempts` (all rows) |
+| `resource_safety_abort_rate_per_attempt` | `resource_safety_abort_attempts` | `total_attempts` |
 | `no_submission_rate_per_attempt` | `no_submission_attempts` | `total_attempts` |
 | `avg_child_tokens_per_gateway_accepted` | child tokens summed over `gateway_accepted` rows | `gateway_accepted` |
 | `invalid_redelegation_rate` | `invalid_redelegation_count` | `redelegation_attempt_count` |
 
 **Non-overlapping denominators.** Verdict acceptance/rejection rates run over
-verdict-bearing submissions only. `sealed_pending_verdict`, budget/turn/no-submission
+verdict-bearing submissions only. `sealed_pending_verdict`, step/safety/no-submission
 ends, designed terminals, cancels, case-contract failures, infrastructure failures, and
 in-flight closes never enter a verdict denominator. The three per-attempt outcome rates
 run over *all* attempts and are therefore disjoint from the verdict rates.
@@ -226,34 +224,21 @@ run over *all* attempts and are therefore disjoint from the verdict rates.
 
 - **`submission_acceptance_rate` / `submission_rejection_rate` are Gateway verdict rates**:
   among submissions on which the Gateway reached accept/reject, what fraction were
-  accepted/rejected. A run with many budget exits and few verdicts will show a *low
+  accepted/rejected. A run with many non-submission exits and few verdicts will show a *low
   verdict count*, not a high rejection rate.
-- **Token exhaustion, turn-limit exhaustion and no-submission are model/runtime outcome
+- **Step-limit, emergency-safety-abort, and no-submission are model/runtime outcome
   rates over attempts — they are *not* rejection rates and never describe a submission.**
-  `token_budget_exhaustion_rate_per_attempt`,
-  `turn_limit_exhaustion_rate_per_attempt`, and `no_submission_rate_per_attempt` share
-  `total_attempts` as denominator; each measures how often an attempt ended without
-  sealing because the runtime cut it off (budget / turn cap) or the child ended without a
-  submission. A high token-exhaustion rate signals a budget-sizing or long-horizon
-  problem, and a high no-submission rate signals a child-behavior/context problem —
-  neither indicates that submissions were rejected.
+  `child_step_limit_rate_per_attempt`, `resource_safety_abort_rate_per_attempt`, and
+  `no_submission_rate_per_attempt` share `total_attempts` as denominator. A step-limit
+  exit is an ordinary scored model outcome. A safety abort is an abnormal protection
+  event that makes the episode unscored; it is not evidence that a submission failed.
 - **`sealed_pending_verdict` measures submissions whose verdict the episode never reached**;
   it is a runtime-completeness signal (gateway didn't settle before close), not a model
   outcome.
 - **`extra_child_tokens_from_public_rejections` is rejection cost, not acceptance cost**;
   read it together with `avg_child_tokens_per_gateway_accepted` when judging whether
-  public feedback loops are spending the budget.
+  public feedback loops are spending tokens.
 - **Acceptance ≠ consumption.** A high acceptance rate does not imply the main agent used
   every delivered result; use the `consumed_by_main` facet for the orchestration/use view.
 
 ---
-
-## 6. Legacy `child_resource_exhausted` compatibility
-
-`child_resource_exhausted` is a legacy artifact alias emitted before Task 1 split the
-non-submission outcomes. The classifier maps it to `token_budget_exhausted`
-(`_EXHAUST_EVENT_TO_CLASS`); both spellings are accepted from event sources and neither
-`child_completed`, `result_contract_validated`, nor `result_rejected` is ever emitted on a
-non-submission path. New episodes emit `child_token_budget_exhausted`,
-`child_turn_limit_exhausted`, or `child_no_submission`; readers should treat any remaining
-`child_resource_exhausted` records as token-budget exhaustion for accounting purposes.

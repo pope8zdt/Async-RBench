@@ -6,8 +6,8 @@ import io
 import json
 from typing import Any
 
-from async_rbench.evaluation.budget import BudgetPool
-from async_rbench.evaluation.model_backend import ModelTurn, TokenEstimate, ToolCall
+from async_rbench.evaluation.model_backend import ModelTurn, ToolCall
+from async_rbench.evaluation.token_usage import TokenUsageLedger
 from async_rbench.evaluation.workspace_runtime import DisabledWorkspaceRuntime
 from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 from async_rbench.profiles.reference_scaffold_api.gateway import ProtocolEmitter
@@ -86,13 +86,8 @@ def test_compression_bounds_full_wire_and_preserves_tool_call_pairs() -> None:
 
 class OrderingSpyBackend:
     def __init__(self) -> None:
-        self.estimated: list[list[dict[str, Any]]] = []
         self.completed: list[list[dict[str, Any]]] = []
         self.calls = 0
-
-    def estimate_input_tokens(self, messages, tools) -> TokenEstimate:
-        self.estimated.append(copy.deepcopy(messages))
-        return TokenEstimate(serialized_conversation_bytes(messages, tools), "provider_exact")
 
     async def complete(self, *, messages, **_: Any) -> ModelTurn:
         self.completed.append(copy.deepcopy(messages))
@@ -152,7 +147,7 @@ def _record() -> ChildRecord:
     )
 
 
-def test_estimator_and_provider_receive_the_same_compressed_history() -> None:
+def test_provider_receives_compressed_history_without_admission_estimation() -> None:
     backend = OrderingSpyBackend()
     config = ScaffoldConfig.from_file(None, {
         "backend": "scripted_test",
@@ -164,14 +159,13 @@ def test_estimator_and_provider_receive_the_same_compressed_history() -> None:
         DisabledWorkspaceRuntime(),
         config,
         ProtocolEmitter(stdout=io.StringIO()),
-        BudgetPool("child_shared", 1_000_000),
+        TokenUsageLedger(emergency_cap=20_000_000),
     )
 
     outcome = asyncio.run(agent.run(_record(), "scripted-test", 1))
 
     assert outcome.kind == "submitted"
-    assert len(backend.estimated) == len(backend.completed) == 2
-    assert backend.estimated == backend.completed
+    assert len(backend.completed) == 2
     assert serialized_conversation_bytes(
         backend.completed[1], ChildAgent.tools()
     ) <= config.child_context_budget_bytes
@@ -205,7 +199,7 @@ def test_uncompressible_base_context_is_infrastructure_failure_without_provider_
         workspace=DisabledWorkspaceRuntime(),
         emitter=emitter,
         config=config,
-        token_budget=BudgetPool("child_shared", 1_000_000),
+        token_usage=TokenUsageLedger(emergency_cap=20_000_000),
     )
     manager._launch_queued = lambda: None
     manager.spawn_initial_wave()

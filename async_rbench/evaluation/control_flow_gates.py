@@ -785,7 +785,7 @@ def score_event_replanning(
     applicable = {name: name in applicability for name in COMPONENT_ORDER}
 
     # Spec 9.4: participant failure to create the required provisional within
-    # the full pre budget yields a related DRS of 0.
+    # the complete pre-event window yields a related DRS of 0.
     if _provisional_missing(contract, before):
         return EventDRS(
             process_score=0.0,

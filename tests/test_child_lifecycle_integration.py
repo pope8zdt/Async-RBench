@@ -81,11 +81,12 @@ def _start(mode: str = "linear") -> dict[str, Any]:
     return _make_start(config, case, task, None, "0123456789ab")
 
 
-def _scaffold(backend: Any, *, max_child_turns: int = 40) -> ReferenceScaffold:
+def _scaffold(backend: Any, *, max_child_steps: int = 40, **overrides: Any) -> ReferenceScaffold:
     config = ScaffoldConfig.from_file(None, {
         "backend": "scripted_test",
         "workspace_mode": "disabled",
-        "max_child_turns": max_child_turns,
+        "max_child_steps": max_child_steps,
+        **overrides,
     })
     start = _start()
     only = start["initial_wave"][0]
@@ -126,21 +127,20 @@ def _assert_non_submission_terminal(manager, record, events, expected_event: str
     assert "result_rejected" not in types
 
 
-def test_token_exhaustion_is_terminal_without_submission() -> None:
+def test_emergency_safety_abort_is_terminal_without_submission() -> None:
     async def exercise():
-        scaffold = _scaffold(NoToolBackend())
-        scaffold.manager.token_budget.maximum = 0
+        scaffold = _scaffold(NoToolBackend(), emergency_total_token_cap=1)
         return await _run_one(scaffold)
 
     manager, record, events = asyncio.run(exercise())
-    assert record.status == "token_budget_exhausted"
-    assert record.decision == "token_budget_exhausted"
+    assert record.status == "resource_safety_abort"
+    assert record.decision == "resource_safety_abort"
     _assert_non_submission_terminal(
-        manager, record, events, "child_token_budget_exhausted"
+        manager, record, events, "child_resource_safety_abort"
     )
 
 
-def test_three_unsealed_assistant_turns_end_as_no_submission() -> None:
+def test_one_unsealed_assistant_response_ends_as_no_submission() -> None:
     manager, record, events = asyncio.run(_run_one(_scaffold(NoToolBackend())))
     assert record.status == "no_submission"
     assert record.decision == "no_submission"
@@ -148,13 +148,13 @@ def test_three_unsealed_assistant_turns_end_as_no_submission() -> None:
     _assert_non_submission_terminal(manager, record, events, "child_no_submission")
 
 
-def test_non_submit_tools_reaching_turn_limit_end_as_turn_limit_exhausted() -> None:
+def test_non_submit_tools_reaching_step_limit_end_as_step_limit_reached() -> None:
     manager, record, events = asyncio.run(
-        _run_one(_scaffold(NonSubmitToolBackend(), max_child_turns=2))
+        _run_one(_scaffold(NonSubmitToolBackend(), max_child_steps=2))
     )
-    assert record.status == "turn_limit_exhausted"
-    assert record.decision == "turn_limit_exhausted"
+    assert record.status == "step_limit_reached"
+    assert record.decision == "step_limit_reached"
     assert record.payload is None
     _assert_non_submission_terminal(
-        manager, record, events, "child_turn_limit_exhausted"
+        manager, record, events, "child_step_limit_reached"
     )

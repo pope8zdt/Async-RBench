@@ -444,10 +444,6 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
         str(event.get("completion_id")): event
         for event in events if event.get("type") == "result_contract_validated"
     }
-    completions = {
-        str(event.get("completion_id")): event
-        for event in events if event.get("type") == "child_completed"
-    }
     outcomes: list[dict[str, Any]] = []
     for event in events:
         if event.get("type") not in {"result_delivered", "result_rejected"}:
@@ -455,17 +451,9 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
         completion_id = str(event.get("completion_id"))
         private = private_rejections.get(completion_id, {})
         validation = validations.get(completion_id, {})
-        completion = completions.get(completion_id, {})
-        payload = completion.get("payload")
-        evidence = payload.get("evidence") if isinstance(payload, dict) else None
         private_codes = [str(code) for code in private.get("reason_codes") or []]
-        child_budget_exhausted = bool(
-            isinstance(evidence, dict) and evidence.get("turn_budget_exhausted") is True
-        )
         if event.get("type") == "result_delivered":
             root_cause = "accepted"
-        elif child_budget_exhausted:
-            root_cause = "child_budget_exhausted"
         elif "report_path_not_required_file" in private_codes:
             root_cause = "participant_structural_contract_violation"
         elif any(code in REPORT_CONTRACT_CODES for code in private_codes):
@@ -499,7 +487,6 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
             "completion_id": completion_id,
             "outcome": "accepted" if event.get("type") == "result_delivered" else "rejected",
             "root_cause": root_cause,
-            "child_budget_exhausted": child_budget_exhausted,
             "public_reason_codes": list(event.get("reason_codes") or []),
             "private_reason_codes": private_codes,
             "has_public_structural_reason": any(
@@ -527,31 +514,28 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
     local_status = ends[-1].get("local_status") if ends else None
     terminal_rows = classify_child_terminals(events)
     episode_closed = bool(ends)
-    main_turns = max(
+    main_steps = max(
         (int(event.get("turn", 0)) for event in finished if event.get("role") == "main"),
         default=0,
     )
-    child_turns: dict[str, int] = defaultdict(int)
-    for event in finished:
-        role = str(event.get("role", ""))
-        if role.startswith("child:"):
-            child_turns[role.removeprefix("child:")] = max(
-                child_turns[role.removeprefix("child:")], int(event.get("turn", 0)),
-            )
-    main_limit = int(metadata.get("max_main_turns") or 0)
-    child_limit = int(metadata.get("max_child_turns") or 0)
-    child_limit_hits = sorted(
-        child_id for child_id, turns in child_turns.items()
-        if child_limit and turns >= child_limit
+    main_limit = int(metadata.get("max_main_steps") or 0)
+    child_limit = int(metadata.get("max_child_steps") or 0)
+    main_step_limit_reached = bool(
+        score.get("step_limit_reached")
+        or any(
+            event.get("type") == "step_limit_reached"
+            and event.get("role") == "main"
+            for event in events
+        )
     )
-    child_budget_exhausted_ids = sorted({
-        str(event.get("child_id"))
-        for event in events
-        if event.get("type") == "child_completed"
-        and isinstance(event.get("payload"), dict)
-        and isinstance(event["payload"].get("evidence"), dict)
-        and event["payload"]["evidence"].get("turn_budget_exhausted") is True
-    })
+    child_limit_hits = sorted(
+        str(row.get("child_id")) for row in terminal_rows
+        if row.get("terminal_class") == "step_limit_reached"
+    )
+    child_safety_abort_ids = sorted(
+        str(row.get("child_id")) for row in terminal_rows
+        if row.get("terminal_class") == "resource_safety_abort"
+    )
     episode = {
         "case_id": score.get("case_id"),
         "instance_id": score.get("instance_id", "seed-1"),
@@ -562,15 +546,20 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
         "episode_closed": episode_closed,
         "leaderboard_eligible": bool(score.get("leaderboard_eligible")),
         "child_terminal_classifications": terminal_rows,
-        "budget_exhausted": local_status == "budget_exhausted",
+        "step_limit_reached": local_status == "step_limit_reached",
+        "resource_safety_abort": bool(
+            score.get("resource_safety_abort")
+            or local_status == "resource_safety_abort"
+            or any(event.get("type") == "resource_safety_abort" for event in events)
+        ),
         "main_model_calls": sum(event.get("role") == "main" for event in finished),
         "child_model_calls": sum(str(event.get("role", "")).startswith("child:") for event in finished),
-        "main_turn_limit": main_limit or None,
-        "max_observed_main_turn": main_turns,
-        "main_turn_limit_reached": bool(main_limit and main_turns >= main_limit),
-        "child_turn_limit": child_limit or None,
-        "child_turn_limit_hit_ids": child_limit_hits,
-        "child_budget_exhausted_ids": child_budget_exhausted_ids,
+        "main_step_limit": main_limit or None,
+        "max_observed_main_step": main_steps,
+        "main_step_limit_reached": main_step_limit_reached,
+        "child_step_limit": child_limit or None,
+        "child_step_limit_hit_ids": child_limit_hits,
+        "child_resource_safety_abort_ids": child_safety_abort_ids,
         "result_contract_rejected_count": score.get("result_contract_rejected_count", 0),
         "main_tokens": score.get("main_tokens", 0),
         "child_tokens": score.get("child_tokens", 0),
@@ -758,10 +747,10 @@ def audit_run(
             "total_duration_ms": sum(durations),
             "max_episode_duration_ms": max(durations, default=0.0),
             "p95_episode_duration_ms": _percentile(durations, 0.95) or 0.0,
-            "main_turn_limit_reached_count": sum(item["main_turn_limit_reached"] for item in episodes),
-            "child_turn_limit_hit_count": sum(len(item["child_turn_limit_hit_ids"]) for item in episodes),
-            "child_budget_exhausted_count": sum(len(item["child_budget_exhausted_ids"]) for item in episodes),
-            "budget_exhausted_episode_count": sum(item["budget_exhausted"] for item in episodes),
+            "main_step_limit_reached_count": sum(item["main_step_limit_reached"] for item in episodes),
+            "child_step_limit_hit_count": sum(len(item["child_step_limit_hit_ids"]) for item in episodes),
+            "child_resource_safety_abort_count": sum(len(item["child_resource_safety_abort_ids"]) for item in episodes),
+            "resource_safety_abort_episode_count": sum(item["resource_safety_abort"] for item in episodes),
             "episodes": episodes,
         },
         "contract_fixtures": fixtures,

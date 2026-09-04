@@ -1,11 +1,11 @@
-# Qwen3.5-27B through the configured OpenAI-compatible newapi relay.
-# The runtime credential is read only from QWEN35_27B_API_KEY.
+# Gemini 3.8 Flash through the poloai.top relay.
+# Credential is read only from POLO_GEMINI_API_KEY.
 backend: openai_compatible
-api_url: http://47.109.111.28:3000/v1/chat/completions
-api_key_env: QWEN35_27B_API_KEY
+api_url: https://poloai.top/v1/chat/completions
+api_key_env: POLO_GEMINI_API_KEY
 api_key_required: true
-main_model: qwen3.5-27b
-child_model: qwen3.5-27b
+main_model: gemini-3.8-flash
+child_model: gemini-3.8-flash
 
 temperature: null
 max_output_tokens: 16384

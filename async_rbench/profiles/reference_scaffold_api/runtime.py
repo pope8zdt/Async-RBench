@@ -19,13 +19,13 @@ from ...evaluation.result_contract import ResultContractValidation
 from ...evaluation.presentation import DeliveryOccurrence, PresentationQueue
 from ...evaluation.protocol import canonical_digest
 from ...evaluation.termination import is_runtime_terminal
+from ...evaluation.token_usage import TokenUsageLedger
 
 from .config import ScaffoldConfig
 from .gateway import DeliveryReader, ProtocolEmitter
-from ...evaluation.budget import BudgetLedger, BudgetPool, Reservation, build_budget_ledger
 from ...evaluation.model_backend import (
     ModelBackend, ModelTurn, ToolCall,
-    conservative_input_estimate, function_tool, serialized_conversation_bytes,
+    function_tool, serialized_conversation_bytes,
 )
 from ...evaluation.workspace_runtime import CommandResult, WorkspaceRuntime
 
@@ -69,21 +69,6 @@ CHILD_SYSTEM_PROMPT = (
 )
 
 
-def _estimate_input(backend: ModelBackend, messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> tuple[int, str]:
-    """Return ``(input_upper_bound, accounting_mode)`` for strict admission.
-
-    Uses the backend's exact tokenizer when available (``accounting_mode``
-    ``"provider_exact"``); otherwise falls back to a conservative upper bound
-    and ``"conservative"`` so Track A can report how the pool accounted
-    (spec §7.3).
-    """
-    estimator = getattr(backend, "estimate_input_tokens", None)
-    if estimator is not None:
-        estimate = estimator(messages=messages, tools=tools)
-        return estimate.input_tokens, estimate.accounting_mode
-    return conservative_input_estimate(messages, tools), "conservative"
-
-
 # Modifying tools whose *completion* can establish a provisional boundary. Only
 # these are handed to the post-tool observer (spec §4.1(1)); read/query tools and
 # the participant-visible ``commit_artifact`` audit signal are deliberately
@@ -125,29 +110,18 @@ class ChildRecord:
     # replacement child carries, so the new worker repairs the right part.
     attempt_number: int = 1
     prior_attempt_rejection: dict[str, Any] | None = None
-    # Task 7: the reservation committed at spawn admission for the recovery
-    # child's exact first model call.  ``ChildAgent.run`` consumes it for turn 1
-    # instead of reserving again; a child that is cancelled or fails to start
-    # releases it.  ``None`` for benchmark-owned initial-wave children.
-    initial_reservation: Reservation | None = None
-
-
 @dataclass(frozen=True)
 class ChildRunOutcome:
     kind: Literal[
         "submitted",
-        "token_budget_exhausted",
-        "turn_limit_exhausted",
+        "step_limit_reached",
+        "resource_safety_abort",
         "no_submission",
     ]
     payload: dict[str, Any] | None
     hint: str | None
     tokens: int
     reason: str | None = None
-
-
-class ChildBudgetAccountingError(RuntimeError):
-    """The child pool was halted because accounting already overran."""
 
 
 class ChildContextBudgetError(RuntimeError):
@@ -245,41 +219,6 @@ def compress_child_messages(
     )
 
 
-@dataclass
-class EpisodeTokenBudget:
-    maximum: int
-    used: int = 0
-    _lock: asyncio.Lock = field(default_factory=asyncio.Lock)
-
-    @property
-    def remaining(self) -> int:
-        return max(0, self.maximum - self.used)
-
-    async def reserve(self, estimate: int) -> bool:
-        """Atomically reserve up to ``estimate`` tokens, or stop at the cap.
-
-        The previous design ran ``can_start()`` (checks ``used < maximum``) and
-        then ``consume()`` (adds the real count *after* the call) as two separate
-        locked steps.  That lets several concurrent children all observe ``used <
-        maximum`` and launch, so the async mode can start a few extra calls past
-        the boundary that linear would not.  Here the check-and-reserve happen
-        under a single lock, so a call is allowed to start only if its estimated
-        cost still fits; the caller settles to the actual count afterwards.
-        """
-        async with self._lock:
-            estimate = max(0, int(estimate))
-            if self.used + estimate > self.maximum:
-                return False
-            self.used += estimate
-            return True
-
-    async def settle(self, estimate: int, actual: int) -> None:
-        """Release the unspent part of an earlier reservation and charge the truth."""
-        async with self._lock:
-            self.used -= max(0, int(estimate))
-            self.used += max(0, int(actual))
-
-
 def build_child_user_message(record: ChildRecord) -> dict[str, Any]:
     """The participant-visible child instruction block.
 
@@ -325,17 +264,13 @@ class ChildAgent:
     def __init__(
         self, backend: ModelBackend, workspace: WorkspaceRuntime,
         config: ScaffoldConfig, emitter: ProtocolEmitter,
-        token_budget: BudgetPool,
+        token_usage: TokenUsageLedger,
     ) -> None:
         self.backend = backend
         self.workspace = workspace
         self.config = config
         self.emitter = emitter
-        self.token_budget = token_budget
-        # The reservation of the in-flight turn, so a failure or timeout between
-        # reserve and settle can release its provisional charge back to the pool
-        # instead of leaking it into ``reserved``.
-        self._open_reservation: Reservation | None = None
+        self.token_usage = token_usage
 
     @staticmethod
     def tools() -> list[dict[str, Any]]:
@@ -360,13 +295,7 @@ class ChildAgent:
 
     @staticmethod
     def initial_messages(record: ChildRecord) -> list[dict[str, Any]]:
-        """The exact system + user payload of a child's first model call.
-
-        ``SubagentManager.spawn`` builds, compresses and estimates this exact
-        payload so it can reserve the recovery child's first call at admission
-        (Task 7); ``run`` replays the same payload on turn 1, so the messages a
-        queued recovery child was admitted for are the messages it sends.
-        """
+        """Build the exact system + user payload of a child's first model step."""
         return [
             {"role": "system", "content": CHILD_SYSTEM_PROMPT},
             {"role": "user", "content": json.dumps(
@@ -391,54 +320,21 @@ class ChildAgent:
             raise ChildPublicContractDefinitionError("; ".join(validation.details))
         return validation
 
-    @staticmethod
-    def _compress_messages(
-        messages: list[dict[str, Any]],
-        *,
-        context_budget_chars: int,
-        keep_recent: int,
-        max_old_tool_content_chars: int,
-    ) -> list[dict[str, Any]]:
-        """Deprecated compatibility wrapper for the old character API."""
-        return compress_child_messages(
-            messages,
-            ChildAgent.tools(),
-            budget_bytes=context_budget_chars,
-            keep_recent_blocks=keep_recent,
-            excerpt_chars=max_old_tool_content_chars,
-        )
-
-    async def release_open_reservation(self) -> None:
-        """Release the in-flight reservation if a turn never reached ``settle``.
-
-        A reserved child turn is settled on the normal path.  If the backend call
-        raised, or ``asyncio.wait_for`` (child timeout) cancelled the turn before
-        settle, the provisional charge stays in ``reserved`` and silently
-        compresses every sibling's headroom.  ``_run_child`` calls this in a
-        ``finally`` so a failed child returns its estimate immediately.  It is a
-        no-op when no reservation is open (the normal case).
-        """
-        reservation = self._open_reservation
-        if reservation is None:
-            return
-        self._open_reservation = None
-        await self.token_budget.release(reservation.reservation_id)
-        self.emitter.emit(
-            "budget_released",
-            pool=self.token_budget.name,
-            reservation_id=reservation.reservation_id,
-            estimate=reservation.estimated_total,
-            remaining=self.token_budget.remaining,
-        )
-
     async def run(
         self, record: ChildRecord, model: str, seed: int,
     ) -> ChildRunOutcome:
         messages: list[dict[str, Any]] = self.initial_messages(record)
         total_tokens = 0
-        unsealed_turns = 0
-        for turn_index in range(1, self.config.max_child_turns + 1):
+        for turn_index in range(1, self.config.max_child_steps + 1):
             role = f"child:{record.child_id}"
+            if not await self.token_usage.can_start():
+                return ChildRunOutcome(
+                    kind="resource_safety_abort",
+                    payload=None,
+                    hint=None,
+                    tokens=total_tokens,
+                    reason="episode emergency token safety cap already reached",
+                )
             tools = self.tools()
             messages = compress_child_messages(
                 messages,
@@ -447,57 +343,6 @@ class ChildAgent:
                 keep_recent_blocks=self.config.child_keep_recent_turns,
                 excerpt_chars=self.config.child_old_tool_excerpt_chars,
             )
-            if turn_index == 1 and record.initial_reservation is not None:
-                # Task 7: ``spawn`` already compressed, estimated and reserved
-                # this child's exact first call at admission.  Consume that
-                # reservation for turn 1 instead of reserving a second time; the
-                # matching ``budget_reserved`` boundary was emitted at spawn, so
-                # no duplicate reserve event is produced here.
-                reservation = record.initial_reservation
-                record.initial_reservation = None
-                self._open_reservation = reservation
-            else:
-                input_bound, accounting_mode = _estimate_input(
-                    self.backend, messages, tools,
-                )
-                reservation = await self.token_budget.reserve(
-                    input_bound, self.config.max_output_tokens,
-                    accounting_mode=accounting_mode,
-                )
-                if reservation is None:
-                    self._open_reservation = None
-                    self.emitter.emit(
-                        "budget_exhausted",
-                        pool=self.token_budget.name,
-                        role=role, turn=turn_index,
-                        refusal_reason=self.token_budget.refusal_reason,
-                        halt_reason=self.token_budget.halt_reason,
-                        required_estimate=input_bound + self.config.max_output_tokens,
-                        remaining=self.token_budget.remaining,
-                    )
-                    if self.token_budget.refusal_reason == "halted_pool":
-                        raise ChildBudgetAccountingError(
-                            "child token pool halted after estimation overrun"
-                        )
-                    return ChildRunOutcome(
-                        kind="token_budget_exhausted",
-                        payload=None,
-                        hint=None,
-                        tokens=total_tokens,
-                        reason="episode token budget exhausted before child submission",
-                    )
-                # Track the in-flight reservation so failure/timeout cleanup can
-                # release it (see ``release_open_reservation``).
-                self._open_reservation = reservation
-                self.emitter.emit(
-                    "budget_reserved",
-                    pool=self.token_budget.name,
-                    reservation_id=reservation.reservation_id,
-                    input_upper_bound=input_bound,
-                    max_output=self.config.max_output_tokens,
-                    accounting_mode=accounting_mode,
-                    remaining=self.token_budget.remaining,
-                )
             self.emitter.emit(
                 "agent_progress", phase="model_call_started", role=role,
                 turn=turn_index, model=model,
@@ -506,20 +351,7 @@ class ChildAgent:
                 role=role, model=model, messages=messages,
                 tools=tools, seed=_role_seed(seed, record.child_id),
             )
-            overrun = await self.token_budget.settle(
-                reservation.reservation_id, turn.total_tokens,
-            )
-            self._open_reservation = None
-            self.emitter.emit(
-                "budget_settled",
-                pool=self.token_budget.name,
-                reservation_id=reservation.reservation_id,
-                estimate=reservation.estimated_total,
-                actual=turn.total_tokens,
-                overrun=overrun,
-                remaining=self.token_budget.remaining,
-                accounting_mode=self.token_budget.accounting_mode,
-            )
+            usage = await self.token_usage.record(role, turn.total_tokens)
             self.emitter.emit(
                 "agent_progress", phase="model_call_finished", role=role,
                 turn=turn_index, tokens=turn.total_tokens,
@@ -531,19 +363,23 @@ class ChildAgent:
                     "child_progress_checkpoint", child_id=record.child_id,
                     phase="first_model_turn_finished", tokens=turn.total_tokens,
                 )
+            if usage.crossed_now:
+                self.emitter.emit(
+                    "resource_safety_abort",
+                    emergency_cap=self.config.emergency_total_token_cap,
+                    observed_total=usage.total,
+                    trigger_role=role,
+                )
+            if usage.tripped:
+                return ChildRunOutcome(
+                    kind="resource_safety_abort",
+                    payload=None,
+                    hint=None,
+                    tokens=total_tokens,
+                    reason="episode emergency token safety cap reached",
+                )
             messages.append(turn.assistant_message)
             if not turn.tool_calls:
-                unsealed_turns += 1
-                if unsealed_turns <= 2:
-                    messages.append({
-                        "role": "user",
-                        "content": (
-                            "Your delegated workstream has not been sealed. Do not run more commands. "
-                            "Call submit_result now with the observed outcome, including failures or "
-                            "incomplete work truthfully in summary/evidence."
-                        ),
-                    })
-                    continue
                 content = (
                     turn.assistant_message.get("content")
                     or "child ended without a structured result"
@@ -555,7 +391,6 @@ class ChildAgent:
                     tokens=total_tokens,
                     reason=str(content),
                 )
-            unsealed_turns = 0
             submitted: tuple[dict[str, Any], str] | None = None
             for call in turn.tool_calls:
                 if call.name == "terminal":
@@ -634,35 +469,12 @@ class ChildAgent:
                     tokens=total_tokens,
                 )
         return ChildRunOutcome(
-            kind="turn_limit_exhausted",
+            kind="step_limit_reached",
             payload=None,
             hint=None,
             tokens=total_tokens,
-            reason="child exhausted its turn limit without submit_result",
+            reason="child reached its model-step limit without submit_result",
         )
-
-
-def _recovery_first_call(
-    config: ScaffoldConfig, backend: ModelBackend, record: ChildRecord,
-) -> tuple[int, str]:
-    """Compress and estimate the recovery child's exact first model call.
-
-    Task 7 (Step 3) admission reserves exactly this payload -- never a crude
-    ``2 * max_output_tokens`` floor -- so the bound committed to the pool at
-    spawn is the bound the child actually consumes on turn 1
-    (``ChildAgent.run`` replays the same payload and consumes the stored
-    reservation).  Returns ``(input_upper_bound, accounting_mode)``.
-    """
-    messages = ChildAgent.initial_messages(record)
-    tools = ChildAgent.tools()
-    messages = compress_child_messages(
-        messages,
-        tools,
-        budget_bytes=config.child_context_budget_bytes,
-        keep_recent_blocks=config.child_keep_recent_turns,
-        excerpt_chars=config.child_old_tool_excerpt_chars,
-    )
-    return _estimate_input(backend, messages, tools)
 
 
 class SubagentManager:
@@ -674,7 +486,7 @@ class SubagentManager:
         workspace: WorkspaceRuntime,
         emitter: ProtocolEmitter,
         config: ScaffoldConfig,
-        token_budget: BudgetPool,
+        token_usage: TokenUsageLedger,
         backend: ModelBackend | None = None,
     ) -> None:
         self.start = start
@@ -690,7 +502,7 @@ class SubagentManager:
         self.workspace = workspace
         self.emitter = emitter
         self.config = config
-        self.token_budget = token_budget
+        self.token_usage = token_usage
         self.children: dict[str, ChildRecord] = {}
         self.completion_to_child: dict[str, str] = {}
         self._delivery_event = asyncio.Event()
@@ -759,29 +571,6 @@ class SubagentManager:
             record.asyncio_task = asyncio.create_task(
                 self._run_child(record), name=f"async_rbench-{record.child_id}"
             )
-
-    async def _release_initial_reservation(self, record: ChildRecord) -> None:
-        """Release a recovery child's admission reservation if run never consumed it.
-
-        ``spawn`` stores the exact-first-call reservation on the record so
-        ``ChildAgent.run`` can consume it for turn 1.  A child that is cancelled,
-        fails to start its workspace, or exits before its first model turn never
-        consumes it; this returns the provisional charge to the pool.  No-op when
-        the reservation is already consumed or released (the record field is
-        cleared on the first release, so this cannot double-release).
-        """
-        reservation = record.initial_reservation
-        if reservation is None:
-            return
-        record.initial_reservation = None
-        await self.token_budget.release(reservation.reservation_id)
-        self.emitter.emit(
-            "budget_released",
-            pool=self.token_budget.name,
-            reservation_id=reservation.reservation_id,
-            estimate=reservation.estimated_total,
-            remaining=self.token_budget.remaining,
-        )
 
     async def _signal_start_progress(self) -> None:
         """Wake siblings blocked in ``_wave_start_barrier`` for a child that just
@@ -1022,13 +811,9 @@ class SubagentManager:
                 reason=result["error"], budget_consumed=False,
             )
             return result
-        # Task 7 (Step 3): admission reserves the recovery child's exact first
-        # model call instead of gating on a crude ``2 * max_output_tokens``
-        # floor.  Build the prospective record, compress/estimate the real first
-        # payload it would send on turn 1, and reserve atomically.  The
-        # reservation is committed to the pool *before* the child is added to
-        # ``self.children``, so two concurrent recovery spawns racing for one
-        # call of remaining budget admit exactly one.
+        # Build the prospective record before consuming a recovery slot so an
+        # impossible public/context contract is rejected without changing the
+        # model's bounded spawn allowance.
         attempt_number = self.attempt_counts[workstream_id] + 1
         self._counter += 1
         child_id = f"child-{self._counter}"
@@ -1074,8 +859,12 @@ class SubagentManager:
             prior_attempt_rejection=self.workstream_rejections.get(workstream_id),
         )
         try:
-            input_bound, accounting_mode = _recovery_first_call(
-                self.config, self.backend, record,
+            compress_child_messages(
+                ChildAgent.initial_messages(record),
+                ChildAgent.tools(),
+                budget_bytes=self.config.child_context_budget_bytes,
+                keep_recent_blocks=self.config.child_keep_recent_turns,
+                excerpt_chars=self.config.child_old_tool_excerpt_chars,
             )
         except ChildContextBudgetError as exc:
             result = {
@@ -1090,54 +879,9 @@ class SubagentManager:
                 reason=result["error"], budget_consumed=False,
             )
             return result
-        reservation = await self.token_budget.reserve(
-            input_bound, self.config.max_output_tokens,
-            accounting_mode=accounting_mode,
-        )
-        if reservation is None:
-            # Distinguish a pool halted by an estimation overrun (an
-            # infrastructure accounting failure) from a genuine participant
-            # budget shortfall.  Neither consumes budget nor a recovery slot.
-            if self.token_budget.refusal_reason == "halted_pool":
-                result = {
-                    "error": (
-                        f"child token pool {self.token_budget.name} is halted after "
-                        "an estimation overrun (infrastructure accounting failure); "
-                        "re-delegation refused"
-                    ),
-                    "budget_consumed": False,
-                }
-            else:
-                result = {
-                    "error": (
-                        f"remaining child budget ({self.token_budget.remaining} "
-                        "tokens) cannot admit this recovery child's exact first "
-                        "call; re-delegation refused"
-                    ),
-                    "budget_consumed": False,
-                }
-            self.emitter.emit(
-                "delegation_validation_error", requested_workstream=workstream_id,
-                reason=result["error"], budget_consumed=False,
-            )
-            return result
-        # The recovery child is admitted: commit the counters and store the
-        # reservation so ``ChildAgent.run`` consumes it for turn 1 instead of
-        # reserving a second time.  The ``budget_reserved`` boundary that run()
-        # would otherwise emit is recorded here at admission.
         self.attempt_counts[workstream_id] += 1
         self.recovery_spawn_counts[workstream_id] += 1
-        record.initial_reservation = reservation
         self.children[child_id] = record
-        self.emitter.emit(
-            "budget_reserved",
-            pool=self.token_budget.name,
-            reservation_id=reservation.reservation_id,
-            input_upper_bound=input_bound,
-            max_output=self.config.max_output_tokens,
-            accounting_mode=accounting_mode,
-            remaining=self.token_budget.remaining,
-        )
         self.emitter.emit(
             "child_spawned", child_id=child_id, parent_id="main",
             work_units=work_units, initial_wave=False,
@@ -1268,43 +1012,27 @@ class SubagentManager:
             # arrival order.
             agent = ChildAgent(
                 self.backend, self.workspace, self.config, self.emitter,
-                self.token_budget,
+                self.token_usage,
             )
-            try:
-                outcome = await asyncio.wait_for(
-                    agent.run(
-                        record, self.config.child_model, int(self.start["agent_seed"]),
-                    ),
-                    timeout=self.config.child_timeout_sec,
-                )
-            finally:
-                # A child timeout or a raised backend call must release its
-                # provisional charge; a normal completion already settled, so
-                # this is a no-op on the success path.
-                await agent.release_open_reservation()
+            outcome = await asyncio.wait_for(
+                agent.run(
+                    record, self.config.child_model, int(self.start["agent_seed"]),
+                ),
+                timeout=self.config.child_timeout_sec,
+            )
             record.tokens = outcome.tokens
             if outcome.kind != "submitted":
                 record.status = outcome.kind
                 record.decision = outcome.kind
                 event_type = {
-                    "token_budget_exhausted": "child_token_budget_exhausted",
-                    "turn_limit_exhausted": "child_turn_limit_exhausted",
+                    "step_limit_reached": "child_step_limit_reached",
+                    "resource_safety_abort": "child_resource_safety_abort",
                     "no_submission": "child_no_submission",
                 }[outcome.kind]
                 fields: dict[str, Any] = {
                     "child_id": record.child_id,
                     "reason": outcome.reason or outcome.kind,
                 }
-                if outcome.kind != "no_submission":
-                    fields.update({
-                        "pool": self.token_budget.name,
-                        "remaining": self.token_budget.remaining,
-                    })
-                if outcome.kind == "token_budget_exhausted":
-                    fields.update({
-                        "refusal_reason": self.token_budget.refusal_reason,
-                        "halt_reason": self.token_budget.halt_reason,
-                    })
                 self.emitter.emit(event_type, **fields)
                 self._delivery_event.set()
                 return
@@ -1350,16 +1078,6 @@ class SubagentManager:
                 detail=str(exc),
             )
             self._delivery_event.set()
-        except ChildBudgetAccountingError as exc:
-            record.status = "infrastructure_failed"
-            record.decision = "infrastructure_failed"
-            self.emitter.emit(
-                "infrastructure_failure",
-                component="child_budget_accounting",
-                child_id=record.child_id,
-                detail=str(exc),
-            )
-            self._delivery_event.set()
         except asyncio.CancelledError:
             record.status = "cancelled"
             raise
@@ -1372,13 +1090,6 @@ class SubagentManager:
             self._delivery_event.set()
             LOGGER.exception("child %s failed", record.child_id)
         finally:
-            # A recovery child that never reached its first model turn
-            # (workspace-start failure, cancellation while blocked in the start
-            # barrier, or an infrastructure exit before ``ChildAgent.run``)
-            # must give back the admission reservation; a child whose run
-            # consumed/settled it has already cleared the field, so this is a
-            # no-op there.
-            await self._release_initial_reservation(record)
             # A child leaving the wave — however it exits (success, failure, or
             # cancellation while blocked in the start barrier) — must wake any
             # sibling that is waiting for this child to leave ``starting``.
@@ -1601,10 +1312,6 @@ class SubagentManager:
                 await record.asyncio_task
             except asyncio.CancelledError:
                 pass
-        # A recovery child cancelled before its first model turn must give back
-        # the reservation ``spawn`` committed for it at admission.  If the task
-        # was cancelled above, ``_run_child`` already released it (no-op here).
-        await self._release_initial_reservation(record)
         record.status = "cancelled"
         record.decision = "cancelled"
         self.emitter.emit(
@@ -1692,23 +1399,14 @@ class ReferenceScaffold:
         self.workspace = workspace
         self.emitter = emitter
         self.delivery_reader = delivery_reader
-        # Split token budget pools (spec §7).  Children share one account in
-        # every mode; the main side splits into main_pre / main_post for async
-        # (phase switch on the first scored presentation) or a single main_total
-        # for linear.  Official Track A profiles declare these pool values; the
-        # legacy ``max_total_tokens`` ceiling is only a non-official fallback.
-        scheme = "linear" if start.get("execution_mode") == "linear" else "async"
-        self.budget_ledger = build_budget_ledger(
-            scheme,
-            child_shared=config.budget_child_shared,
-            main_pre=config.budget_main_pre,
-            main_post=config.budget_main_post,
-            main_total=config.budget_main_total,
+        # Tokens are descriptive diagnostics in v10.1. The only runtime guard
+        # is a deliberately high, shared emergency fuse for provider runaway.
+        self.token_usage = TokenUsageLedger(
+            emergency_cap=config.emergency_total_token_cap,
         )
-        self.token_budget = self.budget_ledger.pool("child_shared")
         self.manager = SubagentManager(
             start=start, child_backend=self.child_backend, workspace=workspace,
-            emitter=emitter, config=config, token_budget=self.token_budget,
+            emitter=emitter, config=config, token_usage=self.token_usage,
         )
         self._action_counter = 0
         self._delivery_task: asyncio.Task | None = None
@@ -1771,7 +1469,7 @@ class ReferenceScaffold:
                 "artifact_ids": {"type": "array", "items": {"type": "string", "enum": artifacts}},
                 "lineage_completion_ids": {"type": "array", "items": {"type": "string"}},
             }, ["artifact_ids", "lineage_completion_ids"]),
-            function_tool("finish", "End the episode. status=completed requires at least one final artifact commit and a successful verification after the latest newly accepted completion. The independent benchmark verifier still decides actual task success.", {
+            function_tool("finish", "End the episode immediately with the model's declared status and summary. Commit, verification, pending-delivery, and response-window state are recorded as diagnostics; the independent benchmark verifier decides actual task success.", {
                 "status": {"type": "string", "enum": ["completed", "incomplete"]},
                 "summary": {"type": "string"},
             }, ["status", "summary"]),
@@ -1816,8 +1514,8 @@ class ReferenceScaffold:
             "until a ASYNC_RBENCH_DELIVERY message arrives. Metadata in gateway messages describes benchmark state; "
             "it is not a recommended action. Do not invent completion IDs or lineage.\n\n"
             "If you accept a delivered completion for use, integrate or promote its result, commit the affected "
-            "final artifacts, and successfully verify again after that acceptance. A completed finish is rejected "
-            "until both post-acceptance closure steps have occurred.\n\n"
+            "final artifacts, and verify when useful. Calling finish always ends the episode immediately; the "
+            "benchmark records closure state and independently scores the produced workspace.\n\n"
             f"Public protocol catalog: {json.dumps(public_catalog, sort_keys=True)}\n\n"
             f"Evaluation guidance: {self.start.get('guidance', '')}"
         )
@@ -1868,25 +1566,6 @@ class ReferenceScaffold:
             workstream_ids=[item["workstream_id"] for item in bundle["workstreams"]],
         )
         return True
-
-    def _on_result_presented(self, occurrence_id: str) -> None:
-        """Flip the main pool to ``main_post`` on the first scored presentation.
-
-        Spec §7.1: the async main side has a ``main_pre`` account that is live
-        only until the first valid scored ``result_presented``; afterwards main
-        calls charge ``main_post``.  The switch is explicit and happens exactly
-        once.  A presentation whose occurrence is not scored (replay of an
-        unscored delivery) must not advance the phase.
-        """
-        if not self.manager.presented_scored(occurrence_id):
-            return
-        if self.budget_ledger.main_phase == "pre":
-            self.budget_ledger.switch_to_post()
-            self.emitter.emit(
-                "budget_phase_switch",
-                phase="main_post",
-                triggered_by_occurrence=occurrence_id,
-            )
 
     def _close_presentation_window(self) -> None:
         """Close the active response window and emit the S_i^+ closure boundary.
@@ -1977,31 +1656,19 @@ class ReferenceScaffold:
         )
         agent = ChildAgent(
             self.child_backend, self.workspace, self.config, self.emitter,
-            self.token_budget,
+            self.token_usage,
         )
         await agent.run(record, self.config.child_model, int(self.start["agent_seed"]))
 
-    def _emit_budget_ledger_snapshot(self) -> None:
-        """Persist the final per-pool accounting as one kernel-visible event.
-
-        The runner reports settled / remaining / overrun / halt reason per pool
-        (spec §7); emitting the ledger's own snapshot keeps a single source of
-        truth instead of replaying reserve/settle arithmetic.  It runs in a
-        ``finally`` so every termination path -- including an early barrier
-        failure before any model call -- reports the real state.
-        """
-        self.emitter.emit(
-            "budget_ledger_snapshot",
-            mode=str(self.start.get("execution_mode") or ""),
-            main_phase=self.budget_ledger.main_phase,
-            pools=self.budget_ledger.all_snapshots(),
-        )
+    def _emit_token_usage_snapshot(self) -> None:
+        """Persist final descriptive token usage on every termination path."""
+        self.emitter.emit("token_usage_snapshot", **self.token_usage.snapshot)
 
     async def run(self) -> None:
         try:
             await self._run()
         finally:
-            self._emit_budget_ledger_snapshot()
+            self._emit_token_usage_snapshot()
 
     async def _run(self) -> None:
         self.delivery_reader.start()
@@ -2044,77 +1711,21 @@ class ReferenceScaffold:
                 }, ensure_ascii=False, sort_keys=True),
             })
         messages = self.messages
-        idle_turns = 0
-        for turn_index in range(self.next_turn_index, self.config.max_main_turns + 1):
-            self.next_turn_index = turn_index
-            # Track the per-turn reservation so a backend failure (the call
-            # raised before settle) releases its provisional charge instead of
-            # leaking it into the pool's ``reserved``.
-            main_pool: BudgetPool | None = None
-            reservation: Reservation | None = None
-            settled = False
+        for step_index in range(self.next_turn_index, self.config.max_main_steps + 1):
+            self.next_turn_index = step_index
+            if not await self.token_usage.can_start():
+                self.finish_status = "resource_safety_abort"
+                self.final_summary = "emergency total-token safety fuse was already tripped"
+                return
             try:
-                # Reserve the per-call ceiling before launching (under the budget
-                # lock), then settle to the true token count on completion.  This
-                # keeps the cap a hard ceiling that concurrent main/child calls
-                # cannot overrun at the boundary.  Strict conservative admission:
-                # estimated_input_upper_bound + requested_max_output <= remaining
-                # (spec §7.3).  If the pool has not yet seen a scored presentation,
-                # this is the main_pre account; it flips to main_post on the first
-                # scored result_presented (spec §7.1).
-                main_pool = self.budget_ledger.main_pool()
-                input_bound, accounting_mode = _estimate_input(
-                    self.main_backend, messages, self.main_tools(),
-                )
-                reservation = await main_pool.reserve(
-                    input_bound, self.config.max_output_tokens,
-                    accounting_mode=accounting_mode,
-                )
-                if reservation is None:
-                    # Two very different terminations carry the same local
-                    # status: the pool was halted by an estimation overrun
-                    # (benchmark defect) vs a genuine admission shortfall
-                    # (the model consumed its bounded budget).  Record which so
-                    # the runner's budget report never conflates them.
-                    self.emitter.emit(
-                        "budget_exhausted",
-                        pool=main_pool.name,
-                        role="main",
-                        turn=turn_index,
-                        refusal_reason=main_pool.refusal_reason,
-                        halt_reason=main_pool.halt_reason,
-                        required_estimate=input_bound + self.config.max_output_tokens,
-                        remaining=main_pool.remaining,
-                    )
-                    self.finish_status = "budget_exhausted"
-                    self.final_summary = (
-                        "main budget pool halted after estimation overrun"
-                        if main_pool.halt_reason == "estimation_overrun"
-                        else "episode token budget exhausted"
-                    )
-                    return
-                self.emitter.emit(
-                    "budget_reserved",
-                    pool=main_pool.name,
-                    reservation_id=reservation.reservation_id,
-                    input_upper_bound=input_bound,
-                    max_output=self.config.max_output_tokens,
-                    accounting_mode=accounting_mode,
-                    remaining=main_pool.remaining,
-                )
-                # Budget admission succeeded.  Presentation preparation: select at
-                # most one new occurrence in FIFO receive order, but only while no
-                # response window is open — never more than one new occurrence per
-                # main-model request.  The occurrence enters the request context
-                # but is NOT yet marked presented.  It is only appended after the
-                # evaluator prepares the before-presentation snapshot S_i^- and
-                # authorizes presenting it (spec §3.3, §5.1(4)); on a failed
-                # snapshot the occurrence stays queued for a later request.
+                # Select at most one FIFO occurrence while no response window is
+                # open. Preparation remains evaluator-owned, but it is no longer
+                # a gate on whether the model may end the episode.
                 candidate = self.manager.select_presentable()
                 prepared_occurrence_id: str | None = None
                 if candidate is not None:
                     prepared_occurrence_id = await self._prepare_presentation(
-                        candidate, f"t{turn_index}",
+                        candidate, f"t{step_index}",
                     )
                     if prepared_occurrence_id is not None:
                         messages.append({
@@ -2125,7 +1736,7 @@ class ReferenceScaffold:
                         })
                 self.emitter.emit(
                     "agent_progress", phase="model_call_started", role="main",
-                    turn=turn_index, model=self.config.main_model,
+                    turn=step_index, model=self.config.main_model,
                 )
                 turn = await self.main_backend.complete(
                     role="main",
@@ -2134,57 +1745,31 @@ class ReferenceScaffold:
                     tools=self.main_tools(),
                     seed=_role_seed(int(self.start["agent_seed"]), "main"),
                 )
-                # The prepared occurrence was injected into the main request that
-                # has now actually started and returned (complete() succeeded), so
-                # it is observably presented into that request and its response
-                # window opens.  mark_presented is intentionally called here, after
-                # the await returns, not before the request was issued.
                 if prepared_occurrence_id is not None:
                     self.manager.mark_presented(
                         prepared_occurrence_id,
-                        turn_id=f"t{turn_index}",
-                        window_id=f"w{turn_index}",
+                        turn_id=f"t{step_index}",
+                        window_id=f"w{step_index}",
                     )
-                    # A scored presentation ends main_pre (spec §7.1).  This must
-                    # run after the occurrence is presented into a real request.
-                    self._on_result_presented(prepared_occurrence_id)
-                overrun = await main_pool.settle(
-                    reservation.reservation_id, turn.total_tokens,
-                )
-                settled = True
-                self.emitter.emit(
-                    "budget_settled",
-                    pool=main_pool.name,
-                    reservation_id=reservation.reservation_id,
-                    estimate=reservation.estimated_total,
-                    actual=turn.total_tokens,
-                    overrun=overrun,
-                    remaining=main_pool.remaining,
-                    accounting_mode=main_pool.accounting_mode,
-                )
+                usage = await self.token_usage.record("main", turn.total_tokens)
                 self.emitter.emit(
                     "agent_progress", phase="model_call_finished", role="main",
-                    turn=turn_index, tokens=turn.total_tokens,
+                    turn=step_index, tokens=turn.total_tokens,
                 )
                 self._emit_runtime_metadata_snapshot()
-            except Exception as exc:
-                if main_pool is not None and reservation is not None and not settled:
-                    await main_pool.release(reservation.reservation_id)
+                if usage.crossed_now:
                     self.emitter.emit(
-                        "budget_released",
-                        pool=main_pool.name,
-                        reservation_id=reservation.reservation_id,
-                        estimate=reservation.estimated_total,
-                        remaining=main_pool.remaining,
+                        "resource_safety_abort",
+                        emergency_cap=self.config.emergency_total_token_cap,
+                        observed_total=usage.total,
+                        trigger_role="main",
                     )
+                if usage.tripped:
+                    self.finish_status = "resource_safety_abort"
+                    self.final_summary = "emergency total-token safety fuse tripped"
+                    return
+            except Exception as exc:
                 LOGGER.exception("main model call failed")
-                # A raised model API request is benchmark tooling failing, not a
-                # decision the participant made (the participant did not choose to
-                # stop; the call never returned).  Mark it unscored as an
-                # infrastructure crash rather than an X=0, so an API outage mid
-                # episode is never counted against the model.  The participant
-                # who produced no tool calls (idle_turns) is handled separately
-                # and stays a scored X=0.
                 self.emitter.emit(
                     "infrastructure_failure",
                     component="model_request", detail=f"main model call failed: {exc}",
@@ -2193,47 +1778,44 @@ class ReferenceScaffold:
                 self.final_summary = f"main model failure: {exc}"
                 return
             messages.append(turn.assistant_message)
-            # The active response window, if any, has now received a main-model
-            # response.  Record it, then close the window once it settles (unknown
-            # to the adapter) or hits max_response_turns, so the next queued
-            # occurrence can unseal on a later request.
             self.manager.presentation_queue.record_turn()
             self._close_presentation_window()
             if (
                 not self.manager.presentation_queue.has_pending()
                 and self.manager.presentation_queue.active_window is None
             ):
-                # Nothing left to present and no window open: a later wait() for a
-                # still-running child must block until a fresh delivery arrives.
                 self.manager._delivery_event.clear()
             if not turn.tool_calls:
-                idle_turns += 1
-                if idle_turns >= 2:
-                    self.finish_status = "incomplete"
-                    self.final_summary = str(turn.assistant_message.get("content") or "main ended without finish")
-                    return
-                messages.append({"role": "user", "content": "Use a tool to continue, or call finish explicitly."})
-                continue
-            idle_turns = 0
-            self._current_turn_id = f"t{turn_index}"
+                self.finish_status = "incomplete"
+                self.final_summary = str(
+                    turn.assistant_message.get("content") or "main ended without finish"
+                )
+                self.emitter.emit(
+                    "main_implicit_stop", summary=self.final_summary,
+                )
+                return
+            self._current_turn_id = f"t{step_index}"
+            executed_tool_count = 0
             for call in turn.tool_calls:
                 result = await self._execute_main_tool(call)
                 messages.append(_tool_result(call.id, result))
-            # The runtime signals that every tool in this assistant response has
-            # finished (spec §3.3).  It is a *completion* boundary — not a
-            # submission boundary — so the evaluator can observe the state after
-            # the whole batch, not after a single isolated tool.
+                executed_tool_count += 1
+                if self.finished:
+                    break
             self.emitter.emit(
                 "main_turn_completed",
-                turn_id=f"t{turn_index}",
-                tool_count=len(turn.tool_calls),
+                turn_id=f"t{step_index}",
+                tool_count=executed_tool_count,
             )
             await asyncio.sleep(0)
-            self.next_turn_index = turn_index + 1
+            self.next_turn_index = step_index + 1
             if self.finished:
                 return
-        self.finish_status = "budget_exhausted"
-        self.final_summary = "main turn budget exhausted"
+        self.finish_status = "step_limit_reached"
+        self.final_summary = "main model-step limit reached"
+        self.emitter.emit(
+            "step_limit_reached", role="main", limit=self.config.max_main_steps,
+        )
 
     async def _execute_main_tool(self, call: ToolCall) -> dict[str, Any]:
         args = call.arguments
@@ -2425,36 +2007,35 @@ class ReferenceScaffold:
             return result
         if call.name == "finish":
             requested_status = str(args.get("status", "incomplete"))
-            # Finish guard (spec §5.1(6), §9.4): a finish — whether completed
-            # or incomplete — must not skip a required occurrence that is
-            # queued (adapter-received but unpresented) or an active, unclosed
-            # response window.  The guard deliberately does NOT depend on the
-            # declared status, so a participant cannot silently surrender past
-            # a queued delivery that never reached a main-model request.
-            pending_occs = self.manager.presentation_queue.has_pending()
+            pending_occurrence_count = len(
+                self.manager.presentation_queue.pending_occurrence_ids
+            )
             open_window = (
                 self.manager.presentation_queue.active_window is not None
                 and self.manager.presentation_queue.active_window.active
             )
-            missing: list[str] = []
-            if requested_status == "completed":
-                if self._final_commit_revision != self._accepted_state_revision:
-                    missing.append("a final artifact commit after the latest accepted completion")
-                if (
-                    self._verification_revision != self._accepted_state_revision
-                    or not self._verification_passed
-                ):
-                    missing.append("a successful verification after the latest accepted completion")
-            if pending_occs or open_window:
-                missing.append(
-                    "all delivered occurrences presented and response windows closed"
-                )
-            if missing:
-                return {
-                    "error": "completion_preconditions_not_met",
-                    "missing": missing,
-                    "accepted_state_revision": self._accepted_state_revision,
-                }
+            final_commit_current = (
+                self._final_commit_revision == self._accepted_state_revision
+            )
+            verification_current = (
+                self._verification_revision == self._accepted_state_revision
+                and self._verification_passed
+            )
+            closure_complete = (
+                pending_occurrence_count == 0
+                and not open_window
+                and final_commit_current
+                and verification_current
+            )
+            self.emitter.emit(
+                "finish_invoked",
+                requested_status=requested_status,
+                pending_occurrence_count=pending_occurrence_count,
+                active_response_window=open_window,
+                final_commit_current=final_commit_current,
+                verification_current=verification_current,
+                closure_complete=closure_complete,
+            )
             self.finished = True
             self.finish_status = requested_status
             self.final_summary = str(args.get("summary", ""))

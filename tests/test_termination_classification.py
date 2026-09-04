@@ -29,8 +29,8 @@ from async_rbench.evaluation.termination import (
     SUBMISSION_CLASSES,
     TERMINAL_CLASSES,
     TIMEOUT,
-    TOKEN_BUDGET_EXHAUSTED,
-    TURN_LIMIT_EXHAUSTED,
+    RESOURCE_SAFETY_ABORT,
+    STEP_LIMIT_REACHED,
     classify_child_terminals,
 )
 
@@ -188,34 +188,24 @@ def test_case_contract_infrastructure_event_is_contract_failure() -> None:
     assert rows["c1"]["gateway_verdict"] is False
 
 
-def test_token_turn_no_submission_are_non_submission_classes() -> None:
+def test_step_safety_and_no_submission_are_distinct_non_submission_classes() -> None:
     rows = _rows([
         _spawn("c1"),
-        {"type": "child_token_budget_exhausted", "event_id": "ep:2", "seq": 2,
-         "child_id": "c1", "pool": "episode", "remaining": 0},
+        {"type": "child_resource_safety_abort", "event_id": "ep:2", "seq": 2,
+         "child_id": "c1", "reason": "fuse"},
         _spawn("c2"),
-        {"type": "child_turn_limit_exhausted", "event_id": "ep:4", "seq": 4,
-         "child_id": "c2"},
+        {"type": "child_step_limit_reached", "event_id": "ep:4", "seq": 4,
+         "child_id": "c2", "reason": "limit"},
         _spawn("c3"),
         {"type": "child_no_submission", "event_id": "ep:6", "seq": 6,
          "child_id": "c3", "reason": "no tool calls"},
     ])
-    assert rows["c1"]["terminal_class"] == TOKEN_BUDGET_EXHAUSTED
-    assert rows["c2"]["terminal_class"] == TURN_LIMIT_EXHAUSTED
+    assert rows["c1"]["terminal_class"] == RESOURCE_SAFETY_ABORT
+    assert rows["c2"]["terminal_class"] == STEP_LIMIT_REACHED
     assert rows["c3"]["terminal_class"] == NO_SUBMISSION
     for child in ("c1", "c2", "c3"):
         assert rows[child]["sealed_submission"] is False
         assert rows[child]["gateway_verdict"] is False
-
-
-def test_legacy_resource_exhausted_aliases_token_budget() -> None:
-    rows = _rows([
-        _spawn("c1"),
-        {"type": "child_resource_exhausted", "event_id": "ep:2", "seq": 2,
-         "child_id": "c1", "pool": "episode", "remaining": 0},
-    ])
-    assert rows["c1"]["terminal_class"] == TOKEN_BUDGET_EXHAUSTED
-    assert rows["c1"]["sealed_submission"] is False
 
 
 def test_designed_timeout_terminal() -> None:
@@ -356,8 +346,8 @@ def test_single_class_per_child_on_a_mixed_trace() -> None:
         _spawn("c2", "ws-a", seq=5), _completed("c2", "p2"),
         _delivered("c2", "p2"), _consumed("p2"),
         _spawn("c3", "ws-b", seq=9),
-        {"type": "child_token_budget_exhausted", "event_id": "ep:10", "seq": 10,
-         "child_id": "c3", "pool": "episode", "remaining": 0},
+        {"type": "child_step_limit_reached", "event_id": "ep:10", "seq": 10,
+         "child_id": "c3", "reason": "limit"},
         _spawn("c4", "ws-b", seq=11),
         _delivered("c4", "terminal:ev-3", terminal_outcome="timeout"),
         _spawn("c5", "ws-c", seq=13),
@@ -365,7 +355,7 @@ def test_single_class_per_child_on_a_mixed_trace() -> None:
     ]
     rows = _rows(events)
     assert {row["child_id"]: row["terminal_class"] for row in rows.values()} == {
-        "c1": PUBLIC_REJECTION, "c2": GATEWAY_ACCEPTED, "c3": TOKEN_BUDGET_EXHAUSTED,
+        "c1": PUBLIC_REJECTION, "c2": GATEWAY_ACCEPTED, "c3": STEP_LIMIT_REACHED,
         "c4": TIMEOUT, "c5": CANCEL,
     }
     assert all(row["terminal_class"] in TERMINAL_CLASSES for row in rows.values())

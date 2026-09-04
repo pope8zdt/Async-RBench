@@ -22,8 +22,8 @@ Taxonomy::
     public_rejection       gateway rejected with >=1 actionable public code
     sealed_pending_verdict sealed submission (``child_completed``) that reached
                            no gateway verdict before the episode closed
-    token_budget_exhausted episode token budget cut the child off (no submission)
-    turn_limit_exhausted   child turn limit cut the child off (no submission)
+    step_limit_reached     child model-step horizon ended the attempt
+    resource_safety_abort emergency provider-runaway fuse ended the attempt
     no_submission          child ended without sealing any submission
     timeout                designed child-timeout terminal, delivered to main
     crash                  designed child-crash terminal, delivered to main
@@ -61,8 +61,8 @@ from .case_contract import (
 GATEWAY_ACCEPTED = "gateway_accepted"
 PUBLIC_REJECTION = "public_rejection"
 SEALED_PENDING_VERDICT = "sealed_pending_verdict"
-TOKEN_BUDGET_EXHAUSTED = "token_budget_exhausted"
-TURN_LIMIT_EXHAUSTED = "turn_limit_exhausted"
+STEP_LIMIT_REACHED = "step_limit_reached"
+RESOURCE_SAFETY_ABORT = "resource_safety_abort"
 NO_SUBMISSION = "no_submission"
 TIMEOUT = "timeout"
 CRASH = "crash"
@@ -75,8 +75,8 @@ TERMINAL_CLASSES = (
     GATEWAY_ACCEPTED,
     PUBLIC_REJECTION,
     SEALED_PENDING_VERDICT,
-    TOKEN_BUDGET_EXHAUSTED,
-    TURN_LIMIT_EXHAUSTED,
+    STEP_LIMIT_REACHED,
+    RESOURCE_SAFETY_ABORT,
     NO_SUBMISSION,
     TIMEOUT,
     CRASH,
@@ -94,7 +94,7 @@ SUBMISSION_CLASSES = frozenset({
 
 #: Classes that reached a gateway accept/reject verdict on the sealed
 #: submission.  Only these enter a verdict acceptance/rejection denominator
-#: (Task 8): budget exits, turn/no-submission ends, designed terminals, cancels,
+#: (Task 8): step/safety/no-submission ends, designed terminals, cancels,
 #: case-contract and infrastructure failures and in-flight closes never did.
 GATEWAY_VERDICT_CLASSES = frozenset({GATEWAY_ACCEPTED, PUBLIC_REJECTION})
 
@@ -110,8 +110,8 @@ RUNTIME_TERMINAL_STATUSES = frozenset({
     "contract_rejected",
     "rejected",
     "cancelled",
-    "token_budget_exhausted",
-    "turn_limit_exhausted",
+    "step_limit_reached",
+    "resource_safety_abort",
     "no_submission",
     "timed_out",
     "infrastructure_failed",
@@ -130,14 +130,10 @@ def _by_child(events: list[dict[str, Any]], child_id: str) -> list[dict[str, Any
     return [event for event in events if str(event.get("child_id") or "") == child_id]
 
 
-#: Runtime events that end an attempt without sealing a submission, mapped to
-#: their terminal class.  ``child_resource_exhausted`` is a legacy artifact
-#: alias for a token-budget exhaustion emitted before Task 1 split the three
-#: non-submission outcomes.
-_EXHAUST_EVENT_TO_CLASS = {
-    "child_token_budget_exhausted": TOKEN_BUDGET_EXHAUSTED,
-    "child_resource_exhausted": TOKEN_BUDGET_EXHAUSTED,
-    "child_turn_limit_exhausted": TURN_LIMIT_EXHAUSTED,
+#: Runtime events that end an attempt without sealing a submission.
+_TERMINAL_EVENT_TO_CLASS = {
+    "child_step_limit_reached": STEP_LIMIT_REACHED,
+    "child_resource_safety_abort": RESOURCE_SAFETY_ABORT,
     "child_no_submission": NO_SUBMISSION,
 }
 
@@ -156,7 +152,7 @@ def classify_child_terminals(
     1. case-contract / infrastructure failure
     2. designed timeout/crash terminal
     3. explicit cancellation (``initiated_by=main``)
-    4. token/turn/no-submission terminal event
+    4. step/safety/no-submission terminal event
     5. public ``result_rejected`` (a private-only rejection is a
        ``case_contract_failure``)
     6. ``result_delivered`` => ``gateway_accepted``
@@ -169,14 +165,9 @@ def classify_child_terminals(
     spawns = _events_of(events, "child_spawned")
     completions = _events_of(events, "child_completed")
     cancelled = _events_of(events, "child_cancelled")
-    exhausted = [
+    runtime_terminals = [
         event for event in events
-        if event.get("type") in {
-            "child_resource_exhausted",  # legacy artifact alias
-            "child_token_budget_exhausted",
-            "child_turn_limit_exhausted",
-            "child_no_submission",
-        }
+        if event.get("type") in _TERMINAL_EVENT_TO_CLASS
     ]
     deliveries = _events_of(events, "result_delivered")
     rejections = _events_of(events, "result_rejected")
@@ -275,11 +266,11 @@ def classify_child_terminals(
                 cancel_event = _by_child(cancelled, child_id)[0]
                 detail = str(cancel_event.get("reason") or "") or None
             else:
-                exhausted_events = _by_child(exhausted, child_id)
-                if exhausted_events:
-                    terminal_class = _EXHAUST_EVENT_TO_CLASS.get(
-                        str(exhausted_events[0].get("type")), TOKEN_BUDGET_EXHAUSTED,
-                    )
+                runtime_terminal_events = _by_child(runtime_terminals, child_id)
+                if runtime_terminal_events:
+                    terminal_class = _TERMINAL_EVENT_TO_CLASS[
+                        str(runtime_terminal_events[0].get("type"))
+                    ]
                 else:
                     rejection = _by_child(rejections, child_id)
                     if rejection:

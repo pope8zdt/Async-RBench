@@ -30,6 +30,26 @@ episode unscored. If the participant ends before all designed async results are
 observed, the episode remains scored: `scenario_exposure_complete` is false and
 the applicable capability points fail.
 
+## Termination and resource contract
+
+The official v10.1 horizon is 100 completed main-model responses and 40
+completed responses per child attempt. A response is one model step regardless
+of how many tool calls it contains. Reaching the main horizon produces
+`step_limit_reached` and remains a scored participant outcome.
+
+`finish(status, summary)` ends the episode immediately. It is not rejected for
+an unpresented delivery, open response window, missing final commit, or stale
+verification. Those closure facts are recorded in `finish_quality`, while the
+private final verifier independently determines task correctness. A main
+response with no tool call is an implicit incomplete stop; a child response
+with no tool call is `no_submission`. The framework adds no coaching retry.
+
+Actual provider-reported tokens are recorded for main, child, each actor, and
+the episode total. They do not participate in normal call admission. A shared
+20,000,000-token emergency fuse exists only for runaway protection; if crossed,
+no later model call starts and the episode ends as `resource_safety_abort`,
+unscored and leaderboard-ineligible.
+
 ## Capability categories
 
 Cases may target `late_revision_adoption`, `stale_result_rejection`, `inflight_cancellation`, `selective_invalidation`, `cascading_replan`, `verification_reopen`, `failure_redelegation`, and `conflict_arbitration`. These labels classify cases for analysis and are not sent to participants.

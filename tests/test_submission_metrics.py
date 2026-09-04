@@ -100,8 +100,8 @@ def test_submission_verdict_rates_exclude_resource_and_cancel() -> None:
         {"type": "result_consumed", "seq": 8, "completion_id": "p2", "action_id": "a"},
         _spawn("c3", "ws-b", 9),
         {
-            "type": "child_resource_exhausted", "seq": 10, "child_id": "c3",
-            "pool": "episode", "remaining": 0,
+            "type": "child_resource_safety_abort", "seq": 10, "child_id": "c3",
+            "reason": "emergency fuse",
         },
         _spawn("c4", "ws-c", 11),
         {
@@ -111,16 +111,15 @@ def test_submission_verdict_rates_exclude_resource_and_cancel() -> None:
     ]
     score = _score(events)
 
-    # Task 8: exact one class per attempt, and the legacy resource-exhausted
-    # alias classifies as a token-budget exit (not a submission).
+    # Task 8: exact one class per attempt; the emergency fuse is not a submission.
     assert score["child_terminal_counts"] == {
         "gateway_accepted": 1, "public_rejection": 1, "sealed_pending_verdict": 0,
-        "token_budget_exhausted": 1, "turn_limit_exhausted": 0, "no_submission": 0,
+        "resource_safety_abort": 1, "step_limit_reached": 0, "no_submission": 0,
         "timeout": 0, "crash": 0, "cancel": 1, "case_contract_failure": 0,
         "infrastructure_failure": 0, "in_flight": 0,
     }
     # Verdict denominator = gateway_accepted + public_rejection (2), so the
-    # budget exit and the cancel do not dilute the rates.
+    # safety abort and the cancel do not dilute the rates.
     assert score["sealed_submission_count"] == 2
     assert score["gateway_verdict_count"] == 2
     assert score["gateway_accepted_count"] == 1
@@ -139,8 +138,8 @@ def test_submission_verdict_rates_exclude_resource_and_cancel() -> None:
     # Extra tokens from public rejections: the 50-token rejected attempt before
     # the accepted one in ws-a.
     assert score["extra_child_tokens_from_public_rejections"] == 50
-    assert score["token_budget_exhaustion_rate_per_attempt"] == 1 / 4
-    assert score["turn_limit_exhaustion_rate_per_attempt"] == 0.0
+    assert score["resource_safety_abort_rate_per_attempt"] == 1 / 4
+    assert score["child_step_limit_rate_per_attempt"] == 0.0
     assert score["no_submission_rate_per_attempt"] == 0.0
     assert score["redelegation_attempt_count"] == 1
     assert score["invalid_redelegation_count"] == 0
@@ -237,17 +236,6 @@ def test_invalid_redelegation_rate_from_runtime_markers() -> None:
     assert score["invalid_redelegation_rate"] == 1.0
 
 
-def test_legacy_invalid_redelegation_marker_still_counted() -> None:
-    # The pre-Task-7 diagnostic name still counts so stale artifacts replay.
-    events = [
-        _spawn("c1", "ws-a", 1), _spawn("c2", "ws-a", 2),
-        {"type": "no_information_retry_detected", "seq": 3,
-         "workstream_id": "ws-a", "no_new_evidence_retries": 1},
-    ]
-    score = _score(events)
-    assert score["invalid_redelegation_count"] == 1
-
-
 # ---------------------------------------------------------------------------
 # Task 8 aggregation: gateway-verdict denominators and mode-separated metrics.
 # ---------------------------------------------------------------------------
@@ -294,9 +282,9 @@ def test_paper_metrics_aggregate_first_attempt_and_retry_acceptance() -> None:
             _row("c2", "public_rejection", 1, True, 40),
             _row("c3", "gateway_accepted", 2, True, 60),
         ]),
-        # A budget exit is not a submission.
+        # A step-limit exit is not a submission.
         _record([
-            _row("c4", "token_budget_exhausted", 1, False, 30, workstream="ws-b"),
+            _row("c4", "step_limit_reached", 1, False, 30, workstream="ws-b"),
         ]),
     ]
     paper = aggregate_reports(
@@ -316,7 +304,7 @@ def test_paper_metrics_aggregate_first_attempt_and_retry_acceptance() -> None:
     assert paper["retry_acceptance_rate"] == 1.0
     assert paper["avg_child_tokens_per_gateway_accepted"] == (100 + 60) / 2
     assert paper["extra_child_tokens_from_public_rejections"] == 40
-    assert paper["terminal_class_counts"]["token_budget_exhausted"] == 1
+    assert paper["terminal_class_counts"]["step_limit_reached"] == 1
     # One redelegation (episode 2's retry), which was valid (added evidence and
     # was accepted), so the invalid-redelegation rate is zero, not null.
     assert paper["redelegation_attempt_count"] == 1
@@ -440,7 +428,7 @@ def test_first_attempt_and_retry_acceptance_use_verdict_bearing_only() -> None:
             "completion_id": "p2", "payload": {"x": 1},
             "result_kind": "authority_result",
         },
-        # Sealed with no verdict and a budget exit carry no verdict at all.
+        # Sealed with no verdict and a step-limit exit carry no verdict at all.
         _spawn("c3", "ws-b", 7),
         {
             "type": "child_completed", "seq": 8, "child_id": "c3",
@@ -448,8 +436,8 @@ def test_first_attempt_and_retry_acceptance_use_verdict_bearing_only() -> None:
         },
         _spawn("c4", "ws-c", 9),
         {
-            "type": "child_token_budget_exhausted", "seq": 10, "child_id": "c4",
-            "pool": "episode", "remaining": 0,
+            "type": "child_step_limit_reached", "seq": 10, "child_id": "c4",
+            "reason": "limit",
         },
     ]
     score = _score(events)
@@ -460,8 +448,8 @@ def test_first_attempt_and_retry_acceptance_use_verdict_bearing_only() -> None:
     assert score["retry_accepted_count"] == 1
     assert score["retry_acceptance_rate"] == 1.0
     assert score["sealed_pending_verdict_count"] == 1
-    assert score["token_budget_exhaustion_rate_per_attempt"] == 1 / 4
-    assert score["turn_limit_exhaustion_rate_per_attempt"] == 0.0
+    assert score["child_step_limit_rate_per_attempt"] == 1 / 4
+    assert score["resource_safety_abort_rate_per_attempt"] == 0.0
     assert score["no_submission_rate_per_attempt"] == 0.0
 
 

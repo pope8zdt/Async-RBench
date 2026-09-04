@@ -55,6 +55,16 @@ def test_no_crash_keeps_participant_outcomes_scored() -> None:
     assert reason is None
 
 
+def test_resource_safety_abort_is_unscored_but_not_infrastructure() -> None:
+    status, reason = _score_status_decision(
+        scenario_constructed=True,
+        score_integrity_ok=True,
+        resource_safety_abort=True,
+    )
+    assert status == "unscored"
+    assert reason == "resource_safety_abort"
+
+
 def test_crash_components_are_the_tooling_ones() -> None:
     # A child crash from a provider/workspace outage (not a designed case crash)
     # is benchmark tooling failing mid-run, so it must also be unscored.  The

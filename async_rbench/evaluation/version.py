@@ -77,5 +77,8 @@ from __future__ import annotations
 # frozen) --- a frozen leaderboard still requires ``validate_frozen_release``
 # to pass, which it will not until both the contract status and the dataset
 # policy move to a frozen post-calibration state.
-EVALUATION_CONTRACT_VERSION = "10.0.0"
+# 10.1.0: fixed model-step horizons replace token-pool admission. Explicit
+# finish is immediately terminal, actual tokens are diagnostics, and only the
+# high shared emergency fuse produces an unscored resource_safety_abort.
+EVALUATION_CONTRACT_VERSION = "10.1.0"
 EVALUATION_CONTRACT_STATUS = "development"

@@ -17,7 +17,6 @@ from pathlib import Path
 from async_rbench.evaluation.model_backend import (
     ModelTurn,
     OpenAICompatibleBackend,
-    TokenEstimate,
     ToolCall,
 )
 from async_rbench.evaluation.runner import EpisodeConfig, _make_start
@@ -95,7 +94,6 @@ class _SpyBackend:
         self.config = None
         self.submits = submits
         self._semaphore = object()
-        self.estimate_calls = 0
 
     def attach(self, config) -> None:
         self.config = config
@@ -134,10 +132,6 @@ class _SpyBackend:
             tool_calls=[],
             total_tokens=0,
         )
-
-    def estimate_input_tokens(self, messages: list[dict], tools: list[dict]) -> TokenEstimate:
-        self.estimate_calls += 1
-        return TokenEstimate(1, "conservative")
 
     def runtime_metadata(self) -> dict:
         cfg = self.config

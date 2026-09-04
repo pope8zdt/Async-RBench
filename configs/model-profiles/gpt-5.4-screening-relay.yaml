@@ -13,11 +13,12 @@ send_seed: false
 request_body_extra:
   reasoning_effort: low
 
-max_main_turns: 1
-max_child_turns: 1
+max_main_steps: 1
+max_child_steps: 1
 max_concurrent_children: 1
 max_total_child_spawns: 1
 max_api_concurrency: 8
+emergency_total_token_cap: 20000000
 main_terminal_timeout_sec: 180
 child_terminal_timeout_sec: 180
 child_timeout_sec: 1200

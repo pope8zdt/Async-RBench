@@ -37,9 +37,17 @@ child_model: exact-child-model-id
 temperature: null
 max_tokens_parameter: max_completion_tokens
 workspace_mode: container_clone
+max_main_steps: 100
+max_child_steps: 40
+emergency_total_token_cap: 20000000
 ```
 
 For a trusted keyless local endpoint, set `api_key_env: ""` and `api_key_required: false`. Provider/model resolution metadata is recorded for audit.
+
+The scaffold uses fixed model-step horizons, not token reservations. Actual
+token consumption is emitted as a final diagnostic snapshot. `finish` is
+terminal on first execution, even when closure work is incomplete; the runtime
+records the state but never returns benchmark-authored remediation advice.
 
 ## Conformance
 

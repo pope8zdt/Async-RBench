@@ -250,13 +250,13 @@ Get-FileHash "manual-<case>-<timestamp>.zip" -Algorithm SHA256
 
 - `child_terminal_classifications`：每个子任务尝试恰有一类互斥终止
   （`gateway_accepted` / `public_rejection` / `sealed_pending_verdict` /
-  `token_budget_exhausted` / `turn_limit_exhausted` / `no_submission` /
+  `step_limit_reached` / `resource_safety_abort` / `no_submission` /
   `timeout` / `crash` / `cancel` / `case_contract_failure` /
   `infrastructure_failure` / `in_flight`）。`attempt_number` / `retry` 把
   "首次 vs 重试" 作为维度写在每一行上，不另建一套计数器。
 - `submission_rejection_rate`：`public_rejected_count / gateway_verdict_count`；
   分母只含 `gateway_accepted` 和 `public_rejection`，未取得 gateway verdict 的
-  sealed 提交、预算/轮次耗尽、无提交、取消、超时、崩溃及基础设施失败均不计入。
+  sealed 提交、步数上限/安全中止、无提交、取消、超时、崩溃及基础设施失败均不计入。
 - `extra_child_tokens_from_public_rejections` / `invalid_redelegation_rate` 等成本指标。
 
 聚合报告（`aggregate` 输出）的每条 leaderboard 项和 `development_summary`

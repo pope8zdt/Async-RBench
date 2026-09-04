@@ -92,23 +92,7 @@ RUNTIME_PHASE_EVENT_TYPES = frozenset({
     # they bypass ``validate_adapter_event`` but remain recorded for replay.
     "result_available", "response_window_closed",
     "linear_bundle_ready", "linear_bundle_presented",
-    # Token budget accounting boundaries (spec §7): a reserve/settle/release/
-    # phase-switch is recorded as a runtime phase marker so replay/audit can
-    # reconstruct the per-pool tokens without the adapter-event registry
-    # validating them.  ``budget_ledger_snapshot`` is the runtime's own final
-    # per-pool accounting view (settled / remaining / overrun / halt reason),
-    # emitted once per episode on every termination path.
-    "budget_reserved", "budget_settled", "budget_released",
-    "budget_exhausted", "budget_phase_switch", "budget_ledger_snapshot",
-    # Legacy artifacts used one combined resource event. New typed child
-    # lifecycle events are protocol-validated adapter events below.
-    "child_resource_exhausted",
-    # P0-9: repeated evidence across attempts is a no-information retry. It is a
-    # runtime-phase marker (no gateway/adapter validation) used to bound
-    # re-delegation and report the no-new-evidence retry rate. Task 7 renamed the
-    # emitted marker to ``duplicate_evidence_retry_detected``; keep the legacy
-    # ``no_information_retry_detected`` name so pre-rename artifacts replay.
-    "no_information_retry_detected",
+    # P0-9: repeated evidence across attempts is a descriptive diagnostic.
     "duplicate_evidence_retry_detected",
 })
 
@@ -127,7 +111,6 @@ class EpisodeConfig:
     counterfactual_pair_id: str | None = None
     timeout_sec: int = 2400
     gateway_grace_sec: int = 15
-    max_total_tokens: int = 500000
     use_container: bool = True
     build_image: bool = True
     keep_container: bool = False
@@ -361,7 +344,6 @@ def _adapter_environment(config: EpisodeConfig) -> dict[str, str]:
     return {
         **os.environ,
         "ASYNC_RBENCH_EPISODE_ID": config.episode_id,
-        "ASYNC_RBENCH_MAX_TOTAL_TOKENS": str(config.max_total_tokens),
         # Windows otherwise inherits the active ANSI code page for Python stdio.
         # The wire protocol is UTF-8 on every platform.
         "PYTHONUTF8": "1",
@@ -410,7 +392,7 @@ def _metadata_audit(
             if value:
                 resolved_model = value
     # Fixed child pool identity (spec §8): every compared main model must run the
-    # same child model/provider/prompt/budget.  The runner exposes the declared
+    # same child model/provider/prompt/runtime policy. The runner exposes the declared
     # ``child_pool_id`` and the child provider backend so a model group's
     # constancy can be verified at aggregation without reading secrets.
     child_pool_id = str(metadata.get("child_pool_id", "")).strip() or None
@@ -470,7 +452,7 @@ def verify_child_pool_constancy(episode_metadata: list[dict[str, Any] | None]) -
     """Verify one compared model group shares a single fixed child-pool identity.
 
     A fixed child pool means different main models use the same child
-    model/provider/prompt/budget/workstream config (spec §8).  The runner
+    model/provider/prompt/runtime/workstream config (spec §8). The runner
     integrity check therefore refuses a group whose episodes declare different
     ``child_pool_id`` / child provider / child model, or where one episode
     omits the identity entirely.
@@ -1078,6 +1060,7 @@ def _score_status_decision(
     integrity_reason: str | None = None,
     dynamic_scenario_qualified: Any = True,
     infrastructure_crash: bool = False,
+    resource_safety_abort: bool = False,
 ) -> tuple[str, str | None]:
     """Decide an episode's score_status from construction and integrity.
 
@@ -1096,6 +1079,8 @@ def _score_status_decision(
         return "unscored", "scenario_construction_failed"
     if infrastructure_crash:
         return "unscored", "infrastructure_crash"
+    if resource_safety_abort:
+        return "unscored", "resource_safety_abort"
     if dynamic_scenario_qualified is False:
         return "unscored", "dynamic_scenario_qualification_failed"
     if not score_integrity_ok:
@@ -1194,7 +1179,7 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     # scoring domain (with a non-empty event_id for async_replanning).  A
     # malformed registry would silently empty the base_task_score / async_drs
     # headline consumers, so it fails deterministically before any participant
-    # container or model budget is spent — same fail-fast class as a failed
+    # container starts or model call is made — same fail-fast class as a failed
     # conformance gate or an unknown execution mode.
     domain_errors = validate_scoring_domains(
         list(semantic_registry.get("checks") or []),
@@ -1541,15 +1526,9 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
                 _progress(config, "subagent", f"{event['child_id']} completed; result held by gateway")
             elif event_type == "child_cancelled":
                 _progress(config, "subagent", f"{event['child_id']} cancelled: {event.get('reason', '')}")
-            elif event_type == "child_resource_exhausted":
-                _progress(
-                    config, "subagent",
-                    f"{event.get('child_id')} resource-exhausted "
-                    f"(remaining={event.get('remaining')})",
-                )
             elif event_type in {
-                "child_token_budget_exhausted",
-                "child_turn_limit_exhausted",
+                "child_step_limit_reached",
+                "child_resource_safety_abort",
                 "child_no_submission",
             }:
                 _progress(
@@ -1748,42 +1727,52 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     episode_local_status = (
         episode_end_events[-1].get("local_status") if episode_end_events else None
     )
-    # Per-pool budget report (spec §7): the runtime persists one final ledger
-    # snapshot on every termination path.  The snapshots carry each pool's
-    # settled / remaining / overrun / halt reason, so ``budget_exhausted``
-    # episodes can be separated into genuine admission shortfalls vs the pool
-    # halted by an estimation overrun (a benchmark defect, never a model
-    # outcome).  The last ``budget_exhausted`` event additionally records the
-    # exact refusal cause (``refusal_reason`` / ``halt_reason``) and the
-    # required estimate at the moment the terminal refusal happened.
-    budget_snapshot_events = [
-        event for event in store.events if event.get("type") == "budget_ledger_snapshot"
+    token_usage_events = [
+        event for event in store.events if event.get("type") == "token_usage_snapshot"
     ]
-    budget_exhausted_events = [
-        event for event in store.events if event.get("type") == "budget_exhausted"
-    ]
-    budget_report = (
-        dict((budget_snapshot_events[-1].get("pools") or {}))
-        if budget_snapshot_events else None
-    )
-    budget_termination = None
-    if budget_exhausted_events:
-        last_exhaustion = budget_exhausted_events[-1]
-        refusal_reason = str(last_exhaustion.get("refusal_reason") or "")
-        pool_name = str(last_exhaustion.get("pool") or "")
-        budget_termination = {
-            "pool": pool_name,
-            "refusal_reason": refusal_reason or None,
-            "halt_reason": last_exhaustion.get("halt_reason"),
-            "kind": (
-                "estimation_overrun_halt"
-                if refusal_reason == "halted_pool"
-                and last_exhaustion.get("halt_reason") == "estimation_overrun"
-                else "insufficient_remaining"
-            ),
-            "required_estimate": last_exhaustion.get("required_estimate"),
-            "remaining_at_refusal": last_exhaustion.get("remaining"),
+    token_usage_report = None
+    if token_usage_events:
+        last_usage = token_usage_events[-1]
+        token_usage_report = {
+            key: last_usage.get(key)
+            for key in (
+                "emergency_cap", "total", "main", "child", "by_actor",
+                "tripped", "trigger_role",
+            )
         }
+    finish_events = [
+        event for event in store.events if event.get("type") == "finish_invoked"
+    ]
+    finish_quality = None
+    if finish_events:
+        last_finish = finish_events[-1]
+        finish_quality = {
+            key: last_finish.get(key)
+            for key in (
+                "requested_status", "pending_occurrence_count",
+                "active_response_window", "final_commit_current",
+                "verification_current", "closure_complete",
+            )
+        }
+    resource_safety_abort = bool(
+        episode_local_status == "resource_safety_abort"
+        or any(event.get("type") == "resource_safety_abort" for event in store.events)
+    )
+    step_limit_reached = episode_local_status == "step_limit_reached"
+    if resource_safety_abort:
+        termination_reason = "resource_safety_abort"
+    elif finish_events:
+        termination_reason = "explicit_finish"
+    elif any(event.get("type") == "main_implicit_stop" for event in store.events):
+        termination_reason = "implicit_stop"
+    elif step_limit_reached:
+        termination_reason = "step_limit_reached"
+    elif timed_out:
+        termination_reason = "episode_timeout"
+    elif infrastructure_failure_events:
+        termination_reason = "infrastructure_failure"
+    else:
+        termination_reason = str(episode_local_status or "unknown")
     score.update({
         "episode_id": config.episode_id, "case_id": config.case_id, "instance_id": config.instance_id,
         "execution_mode": config.execution_mode, "guidance": config.guidance, "agent_seed": config.agent_seed,
@@ -1797,9 +1786,11 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         "repeat": config.repeat, "counterfactual_pair_id": config.counterfactual_pair_id,
         "timed_out": timed_out, "gateway_notes": controller.protocol_notes,
         "episode_local_status": episode_local_status,
-        "budget_exhausted": episode_local_status == "budget_exhausted",
-        "budget_report": budget_report,
-        "budget_termination": budget_termination,
+        "termination_reason": termination_reason,
+        "finish_quality": finish_quality,
+        "step_limit_reached": step_limit_reached,
+        "resource_safety_abort": resource_safety_abort,
+        "token_usage_report": token_usage_report,
         "gateway_result_bundle_digest": controller.result_bundle_digest(),
         "requested_model": metadata_audit["requested_model"],
         "resolved_model": metadata_audit["resolved_model"],
@@ -1852,6 +1843,9 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     )
     if linear_abnormal:
         eligibility_reasons.append(LINEAR_ZERO_MAIN_REASON)
+        leaderboard_eligible = False
+    if resource_safety_abort:
+        eligibility_reasons.append("resource_safety_abort")
         leaderboard_eligible = False
     score.update({
         "execution_tier": "official_track_a" if config.official_track else "development",
@@ -1913,7 +1907,7 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     )
     score["score_status"], score["score_status_reason"] = _score_status_decision(
         score.get("scenario_constructed"), score_integrity_ok, integrity_reason,
-        dynamic_scenario_qualified, infrastructure_crash,
+        dynamic_scenario_qualified, infrastructure_crash, resource_safety_abort,
     )
     if linear_abnormal and score["score_status"] == "scored":
         # The main arm measured nothing: score as unscored rather than an

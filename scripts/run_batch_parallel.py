@@ -1,11 +1,9 @@
-"""Shared-queue multi-lane batch driver for run_case.ps1.
+"""Per-model batch driver for run_case.ps1.
 
-Runs every instance in cases/registry.json across a fixed set of lanes.
-Each lane is bound to one model profile / channel (one api key).  Lanes pull
-instances from one shared queue, so faster models naturally take more work and
-all lanes stay busy until the queue empties.
+Run one model's batch across registered instances. Multiple invocations can use
+the same bounded instance set, while lanes stride that set without overlap.
 
-Secrets are NEVER written here or to disk: each lane's api_key_env value is
+Secrets are never written here or to disk: the model's api_key_env value is
 read from the process environment (set by the launching shell) and passed to
 the run_case.ps1 child via the environment only.
 
@@ -28,15 +26,6 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 POWERSHELL = "powershell.exe"
 RUN_CASE = REPO / "run_case.ps1"
-
-# Lane layout: both lanes on the official DeepSeek key (the shared relay at
-# 47.109.111.28:3000 was down during the previous smoke; operator supplied a
-# direct API key).  Two lanes on one key = max wall-clock speed.
-LANES = [
-    {"name": "dsA", "profile": "configs/model-profiles/deepseek-v4-flash.yaml", "env_key": "ASYNC_RBENCH_DEEPSEEK_KEY"},
-    {"name": "dsB", "profile": "configs/model-profiles/deepseek-v4-flash.yaml", "env_key": "ASYNC_RBENCH_DEEPSEEK_KEY"},
-]
-
 
 def load_instances() -> list[str]:
     reg = json.loads((REPO / "cases" / "registry.json").read_text(encoding="utf-8"))
@@ -66,7 +55,7 @@ def run_one(inst: str, lane: dict, seq: int, out_dir: Path) -> dict:
         POWERSHELL, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(RUN_CASE),
         "-Instance", inst,
         "-Config", str(REPO / lane["profile"]),
-        "-Repetitions", "3",
+        "-Repetitions", str(lane["repeat"]),
         "-ExperimentRoot", str(exp_root),
     ]
     env = dict(os.environ)
@@ -128,11 +117,25 @@ def worker(lane: dict, jobs: queue.Queue, out_dir: Path, results: list, lock: th
 
 def main() -> int:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--profile", default="configs/model-profiles/deepseek-v4-flash-vibecodex.yaml")
+    ap.add_argument("--env-key", default="ASYNC_RBENCH_DEEPSEEK_KEY")
+    ap.add_argument("--repeat", type=int, default=3)
+    ap.add_argument("--tag", default="model")
     ap.add_argument("--out", default=str(REPO / "artifacts" / "experiments" / "batch-results.jsonl"))
     ap.add_argument("--jobs", type=int, default=0, help="limit instance count (0 = all)")
+    ap.add_argument("--lane", type=int, default=0, help="zero-based lane index")
+    ap.add_argument("--lanes", type=int, default=1, help="number of lanes striding the instance set")
     ap.add_argument("--stop-flag", default=str(REPO / "batch-stop.FLAG"))
     ap.add_argument("--only-file", default="", help="resume file: one 'case::instance' per line; overrides registry")
     args = ap.parse_args()
+    if args.lanes <= 0 or args.lane < 0 or args.lane >= args.lanes:
+        ap.error("--lane must satisfy 0 <= lane < lanes and --lanes must be positive")
+    lanes = [{
+        "name": args.tag,
+        "profile": args.profile,
+        "env_key": args.env_key,
+        "repeat": args.repeat,
+    }]
 
     instances = load_instances()
     if args.only_file:
@@ -143,12 +146,12 @@ def main() -> int:
         instances = [ln.strip() for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()]
     elif args.jobs and args.jobs > 0:
         instances = instances[: args.jobs]
-    print(f"[batch] {len(instances)} instances, {len(LANES)} lanes "
-          f"({[l['name'] for l in LANES]})", flush=True)
+    instances = instances[args.lane::args.lanes]
+    print(f"[batch] {len(instances)} instances, lane {args.lane}/{args.lanes}, "
+          f"profile={args.profile}, repeat={args.repeat}", flush=True)
     print(f"[batch] stop flag (write to pause-after-current): {args.stop_flag}", flush=True)
 
-    # Fail fast if a lane's key is missing.
-    missing = sorted({l["env_key"] for l in LANES if not os.environ.get(l["env_key"])})
+    missing = sorted({l["env_key"] for l in lanes if not os.environ.get(l["env_key"])})
     if missing:
         print(f"[batch] FATAL: missing env keys {missing} — set them before launching.", flush=True)
         return 1
@@ -159,14 +162,14 @@ def main() -> int:
 
     out_dir = REPO / "artifacts" / "experiments"
     results: list = []
-    done = {l["name"]: 0 for l in LANES}
+    done = {l["name"]: 0 for l in lanes}
     lock = threading.Lock()
     stop_flag = Path(args.stop_flag)
     if stop_flag.exists():
         stop_flag.unlink()
 
     threads = [threading.Thread(target=worker, args=(l, jobs, out_dir, results, lock, stop_flag, done),
-                                daemon=True) for l in LANES]
+                                daemon=True) for l in lanes]
     for t in threads:
         t.start()
     try:

@@ -19,7 +19,7 @@ STALE_RELEASE_PATHS = (
 )
 
 
-def test_v10_release_surface_excludes_superseded_material() -> None:
+def test_v101_release_surface_excludes_superseded_material() -> None:
     present = [path for path in STALE_RELEASE_PATHS if (ROOT / path).exists()]
     assert present == []
 
@@ -28,7 +28,7 @@ def test_readme_is_concise_and_names_the_registered_release_contract() -> None:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
     assert len(readme.splitlines()) <= 220
-    assert "10.0.0" in readme
+    assert "10.1.0" in readme
     assert "200 case directories" in readme
     assert "201 registered instances" in readme
     assert "82 calibration / 30 development / 89 test" in readme
@@ -52,3 +52,18 @@ def test_release_docs_do_not_reference_removed_or_missing_guides() -> None:
     assert "paper_metrics_by_mode" in runbook
     assert "gateway_accepted" in runbook
     assert "private_rejection" not in runbook
+
+
+def test_v101_profiles_have_one_step_bounded_resource_schema() -> None:
+    removed = {
+        "max_main_turns", "max_child_turns", "max_total_tokens",
+        "budget_child_shared", "budget_main_pre", "budget_main_post",
+        "budget_main_total", "child_context_budget_chars",
+    }
+    for path in (ROOT / "configs" / "model-profiles").glob("*.yaml"):
+        text = path.read_text(encoding="utf-8")
+        assert "max_main_steps:" in text, path
+        assert "max_child_steps:" in text, path
+        assert "emergency_total_token_cap:" in text, path
+        for key in removed:
+            assert f"{key}:" not in text, (path, key)

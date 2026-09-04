@@ -1,6 +1,6 @@
 # Async-RBench
 
-[![Version: 10.0.0](https://img.shields.io/badge/version-10.0.0-blue)](https://github.com/pope8zdt/Async-RBench)
+[![Version: 10.1.0](https://img.shields.io/badge/version-10.1.0-blue)](https://github.com/pope8zdt/Async-RBench)
 [![Contract: development](https://img.shields.io/badge/contract-development-orange)](evaluation_contract.json)
 
 Async-RBench evaluates whether a main agent can integrate independently completing subagent results and replan after delayed, stale, conflicting, partial, duplicated, failed, or resource-constrained events.
@@ -17,11 +17,11 @@ The fixed kernel owns scheduling, event delivery, private truth, workspace isola
 > [!IMPORTANT]
 > This private collaboration repository contains hidden verifiers, private event truth, and held-out test instances. Do not publish the repository, expose private case paths to evaluated agents, or use test instances for prompt, adapter, threshold, or verifier development.
 
-## Version 10.0.0
+## Version 10.1.0
 
 The current release surface is:
 
-- contract version: `10.0.0`;
+- contract version: `10.1.0`;
 - contract status: `development`;
 - dataset: 200 case directories and 201 registered instances;
 - split: 82 calibration / 30 development / 89 test;
@@ -52,7 +52,7 @@ The exact theme definitions and frozen counts are in [`event_taxonomy.json`](eve
 
 ### Primary metrics
 
-Async-RBench v10.0.0 reports three independent headline metrics:
+Async-RBench v10.1.0 reports three independent headline metrics:
 
 - `linear_base_task_score`: base-task correctness in Linear mode;
 - `async_base_task_score`: base-task correctness in Async mode;
@@ -77,7 +77,8 @@ The headline values are theme-equal macro-averages. A theme must satisfy the min
 - reliability: Async and Linear `pass@1`, `pass@2`, and `pass@3`.
 - efficiency: token means/medians/p95, paired Async token delta, mode-separated wall-clock statistics, and cost-quality Pareto rows.
 - submission metrics: acceptance/rejection rate, first-attempt and retry acceptance, accepted-child token cost, and extra tokens from public rejections.
-- attempt outcomes: token-budget exhaustion, turn-limit exhaustion, no-submission, cancellation, timeout, crash, contract failure, and infrastructure failure rates/counts.
+- attempt outcomes: model-step limit, emergency safety abort, no-submission, cancellation, timeout, crash, contract failure, and infrastructure failure rates/counts.
+- termination diagnostics: explicit/implicit stop reason, finish-time closure facts, and actual main/child/per-actor token use. Token use is descriptive and does not gate normal calls.
 - redelegation metrics: retry attempt count, invalid redelegation count, and invalid redelegation rate.
 - integrity diagnostics: scored/unscored counts, leaderboard eligibility, theme coverage, denominator digest consistency, pair completeness, conformance, and hard-fail reasons.
 
@@ -179,7 +180,7 @@ artifacts/experiments/manual-<case>-<timestamp>/
   -Resume
 ```
 
-Resume only with the original experiment directory, manifest, profile, and commit. Model failures, low scores, timeouts caused by participant behavior, and budget exhaustion are valid outcomes and must not be rerun as infrastructure failures.
+Resume only with the original experiment directory, manifest, profile, and commit. Model failures, low scores, participant-caused timeouts, implicit stops, and step-limit exits are valid outcomes and must not be rerun as infrastructure failures. A `resource_safety_abort` is reported separately and remains unscored.
 
 ## Documentation
 

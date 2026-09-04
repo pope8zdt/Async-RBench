@@ -9,49 +9,24 @@ from pathlib import Path
 import pytest
 
 import async_rbench.evaluation.runner as runner_module
-from async_rbench.evaluation.budget import BudgetPool
 from async_rbench.evaluation.case_contract import find_private_fields
 from async_rbench.evaluation.model_backend import (
     ModelTurn, ToolCall, serialized_conversation_bytes,
 )
+from async_rbench.evaluation.token_usage import TokenUsageLedger
 from async_rbench.evaluation.runner import EpisodeConfig, _make_start, run_episode
 from async_rbench.evaluation.workspace_runtime import CommandResult, DisabledWorkspaceRuntime, _safe_name
 from async_rbench.profiles.conformance_mock.scripted_backend import ScriptedTestBackend
 from async_rbench.profiles.reference_scaffold_api.config import ScaffoldConfig
 from async_rbench.profiles.reference_scaffold_api.gateway import DeliveryReader, ProtocolEmitter
 from async_rbench.profiles.reference_scaffold_api.runtime import (
-    ChildAgent, ChildRecord, EpisodeTokenBudget, ReferenceScaffold,
-    build_child_user_message,
+    ChildAgent, ChildRecord, ReferenceScaffold, build_child_user_message,
+    compress_child_messages,
 )
 from async_rbench.spec import load_case
 
 
 ROOT = Path(__file__).resolve().parents[1]
-
-
-def test_episode_token_budget_is_shared_and_fail_closed() -> None:
-    # The budget is a per-episode hard ceiling shared across the main agent and
-    # every concurrent child.  reserve() atomically checks-and-reserves under one
-    # lock (so two concurrent reserves cannot both launch past the cap), and
-    # settle() releases the unspent part of an estimate and charges the truth.
-    async def exercise() -> tuple[bool, bool, int]:
-        budget = EpisodeTokenBudget(10)
-        first = await budget.reserve(6)
-        second = await budget.reserve(5)
-        return first, second, budget.remaining
-
-    assert asyncio.run(exercise()) == (True, False, 4)
-
-    async def settle_exercise() -> tuple[int, bool, bool]:
-        budget = EpisodeTokenBudget(10)
-        assert await budget.reserve(8)
-        await budget.settle(8, 3)  # only 3 tokens actually used
-        assert budget.remaining == 7
-        fits = await budget.reserve(4)
-        overflow = await budget.reserve(4)
-        return budget.remaining, fits, overflow
-
-    assert asyncio.run(settle_exercise()) == (3, True, False)
 
 
 def _start(case_id: str = "data-recovery-service", mode: str = "async") -> dict:
@@ -113,95 +88,21 @@ def test_main_tools_expose_opaque_verification_not_commands() -> None:
     assert "command" not in json.dumps(schema).lower()
 
 
-def test_completed_finish_requires_fresh_final_commit_and_verification() -> None:
-    class PassingWorkspace(DisabledWorkspaceRuntime):
-        async def observe_artifact(self, artifact_id: str) -> dict[str, str]:
-            return {
-                "observed_digest": "a" * 64,
-                "observed_path": f"/app/output_data/{artifact_id}.json",
-            }
-
-        async def verify_current_state(
-            self, artifact_ids: list[str], lineage_completion_ids: list[str],
-        ) -> dict[str, object]:
-            return {"passed": True, "checks_total": 1, "checks_passed": 1}
-
+def test_completed_finish_records_closure_quality_without_gating() -> None:
     async def exercise() -> None:
         scaffold = _scaffold(_start())
-        scaffold.workspace = PassingWorkspace()
-        artifact_id = scaffold.start["allowed_artifacts"][0]
-
-        blocked = await scaffold._execute_main_tool(ToolCall(
-            "finish-early", "finish", {"status": "completed", "summary": "too early"},
+        result = await scaffold._execute_main_tool(ToolCall(
+            "finish-early", "finish", {"status": "completed", "summary": "done"},
         ))
-        assert blocked["error"] == "completion_preconditions_not_met"
-        assert scaffold.finished is False
-
-        committed = await scaffold._execute_main_tool(ToolCall(
-            "commit-1", "commit_artifact", {
-                "artifact_id": artifact_id,
-                "version": "v1",
-                "lineage_completion_ids": [],
-                "evidence_paths": [],
-                "final": True,
-            },
-        ))
-        assert committed["committed"] is True
-        verified = await scaffold._execute_main_tool(ToolCall(
-            "verify-1", "verify_current_state", {
-                "artifact_ids": [artifact_id], "lineage_completion_ids": [],
-            },
-        ))
-        assert verified["passed"] is True
-
-        completion_id = "completion-authority"
-        scaffold.manager.children["child-authority"] = ChildRecord(
-            child_id="child-authority",
-            task="authority",
-            work_units=[],
-            targets=[],
-            expected_output="authority",
-            priority="high",
-            status="delivered",
-            completion_id=completion_id,
-            delivery={"completion_id": completion_id},
-        )
-        scaffold.manager.completion_to_child[completion_id] = "child-authority"
-        accepted = await scaffold._execute_main_tool(ToolCall(
-            "accept-1", "acknowledge_result", {
-                "completion_id": completion_id,
-                "decision": "use",
-                "reason": "authoritative evidence",
-            },
-        ))
-        assert accepted["decision"] == "use"
-
-        stale_finish = await scaffold._execute_main_tool(ToolCall(
-            "finish-stale", "finish", {"status": "completed", "summary": "stale closure"},
-        ))
-        assert stale_finish["error"] == "completion_preconditions_not_met"
-        assert len(stale_finish["missing"]) == 2
-
-        await scaffold._execute_main_tool(ToolCall(
-            "commit-2", "commit_artifact", {
-                "artifact_id": artifact_id,
-                "version": "v2",
-                "lineage_completion_ids": [completion_id],
-                "evidence_paths": [],
-                "final": True,
-            },
-        ))
-        await scaffold._execute_main_tool(ToolCall(
-            "verify-2", "verify_current_state", {
-                "artifact_ids": [artifact_id],
-                "lineage_completion_ids": [completion_id],
-            },
-        ))
-        finished = await scaffold._execute_main_tool(ToolCall(
-            "finish-good", "finish", {"status": "completed", "summary": "closed"},
-        ))
-        assert finished == {"ending": True, "status": "completed"}
+        assert result == {"ending": True, "status": "completed"}
         assert scaffold.finished is True
+        event = next(
+            item for item in scaffold.emitter.events
+            if item.get("type") == "finish_invoked"
+        )
+        assert event["final_commit_current"] is False
+        assert event["verification_current"] is False
+        assert event["closure_complete"] is False
 
     asyncio.run(exercise())
 
@@ -261,9 +162,9 @@ def test_scripted_backend_runs_protocol3_end_to_end(
         # The scripted conformance controller only parses ASYNC_RBENCH_DELIVERY
         # messages, not the new ASYNC_RBENCH_LINEAR_BUNDLE. Linear presents ONE
         # atomic bundle (spec §6) so the scripted main cannot act on it; cap the
-        # turn budget so the conformance run terminates quickly.
+        # step horizon so the conformance run terminates quickly.
         config_path = tmp_path / "linear_config.yaml"
-        config_path.write_text("max_main_turns: 5\n", encoding="utf-8")
+        config_path.write_text("max_main_steps: 5\n", encoding="utf-8")
         adapter_command += ["--config", str(config_path)]
     config = EpisodeConfig(
         episode_id=f"reference-{mode}",
@@ -281,12 +182,9 @@ def test_scripted_backend_runs_protocol3_end_to_end(
     assert score["execution_mode"] == mode
     assert score["scenario_constructed"] is True
     assert score["leaderboard_eligible"] is False
-    # The runtime's final per-pool snapshot must survive to the score record:
-    # settled / remaining / overrun / halt reason per pool (spec §7).
-    assert score["budget_report"] is not None
-    assert set(score["budget_report"]) == {
-        "child_shared", "main_pre", "main_post", "main_total",
-    }
+    # Actual-use diagnostics survive to the score record without admission pools.
+    assert score["token_usage_report"] is not None
+    assert score["token_usage_report"]["total"] == score["total_tokens"]
     participant = (tmp_path / mode / "participant_trace.jsonl").read_text(encoding="utf-8").lower()
     for forbidden in (
         "result_kind", "event_assets", "observer_command", "validator_command",
@@ -400,114 +298,24 @@ def test_subagent_manager_enqueues_deliveries_in_fifo_receive_order() -> None:
     asyncio.run(exercise())
 
 
-def test_finish_guard_rejects_queued_occurrence_and_open_window() -> None:
-    class PassingWorkspace(DisabledWorkspaceRuntime):
-        async def observe_artifact(self, artifact_id: str) -> dict[str, str]:
-            return {
-                "observed_digest": "a" * 64,
-                "observed_path": f"/app/output_data/{artifact_id}.json",
-            }
-
-        async def verify_current_state(
-            self, artifact_ids: list[str], lineage_completion_ids: list[str],
-        ) -> dict[str, object]:
-            return {"passed": True, "checks_total": 1, "checks_passed": 1}
-
+def test_finish_records_queued_occurrence_and_open_window_without_refusal() -> None:
     async def exercise() -> None:
         scaffold = _scaffold(_start())
-        scaffold.workspace = PassingWorkspace()
-        artifact_id = scaffold.start["allowed_artifacts"][0]
-        # Bring the commit + verification preconditions to satisfied so the only
-        # outstanding precondition is a queued occurrence / open response window.
-        await scaffold._execute_main_tool(ToolCall(
-            "commit-1", "commit_artifact", {
-                "artifact_id": artifact_id, "version": "v1",
-                "lineage_completion_ids": [], "evidence_paths": [], "final": True,
-            },
-        ))
-        await scaffold._execute_main_tool(ToolCall(
-            "verify-1", "verify_current_state", {
-                "artifact_ids": [artifact_id], "lineage_completion_ids": [],
-            },
-        ))
-
-        # A queued, adapter-received-but-unpresented occurrence blocks completion.
         _inject_delivery(scaffold, "child-queue", "compl-queue")
         await scaffold.manager.handle_delivery(
             {"completion_id": "compl-queue", "payload": {"id": 1}},
         )
-        blocked = await scaffold._execute_main_tool(ToolCall(
-            "finish-queued", "finish", {"status": "completed", "summary": "s"},
+        result = await scaffold._execute_main_tool(ToolCall(
+            "finish-queued", "finish", {"status": "incomplete", "summary": "stop"},
         ))
-        assert blocked["error"] == "completion_preconditions_not_met"
-        assert blocked["missing"] == [
-            "all delivered occurrences presented and response windows closed",
-        ]
-
-        # Presenting it opens a response window, which still blocks completion.
-        candidate = scaffold.manager.select_presentable()
-        assert candidate is not None
-        scaffold.manager.mark_presented(candidate.occurrence_id, turn_id="t1", window_id="w1")
-        blocked_window = await scaffold._execute_main_tool(ToolCall(
-            "finish-window", "finish", {"status": "completed", "summary": "s"},
-        ))
-        assert blocked_window["error"] == "completion_preconditions_not_met"
-
-        # Once the window closes deterministically, completion is allowed.
-        for _ in range(4):
-            scaffold.manager.presentation_queue.record_turn()
-        assert scaffold.manager.presentation_queue.close_active_window() is True
-        finished = await scaffold._execute_main_tool(ToolCall(
-            "finish-ok", "finish", {"status": "completed", "summary": "closed"},
-        ))
-        assert finished == {"ending": True, "status": "completed"}
-
-    asyncio.run(exercise())
-
-
-def test_finish_guard_rejects_incomplete_finish_while_occurrence_queued() -> None:
-    async def exercise() -> None:
-        scaffold = _scaffold(_start())
-        # A queued, adapter-received-but-unpresented occurrence also blocks an
-        # *incomplete* finish: the guard is deliberately status-agnostic (spec
-        # §5.1(6), §9.4), so a participant cannot quietly surrender past a
-        # delivery that never reached a main-model request.
-        _inject_delivery(scaffold, "child-inc", "compl-inc")
-        await scaffold.manager.handle_delivery(
-            {"completion_id": "compl-inc", "payload": {"id": 1}},
+        assert result == {"ending": True, "status": "incomplete"}
+        event = next(
+            item for item in scaffold.emitter.events
+            if item.get("type") == "finish_invoked"
         )
-        blocked = await scaffold._execute_main_tool(ToolCall(
-            "finish-inc-blocked", "finish", {"status": "incomplete", "summary": "s"},
-        ))
-        assert blocked["error"] == "completion_preconditions_not_met"
-        assert blocked["missing"] == [
-            "all delivered occurrences presented and response windows closed",
-        ]
-        assert scaffold.finished is False
-
-        # Presenting opens a window; an incomplete finish is still refused while
-        # the window is unclosed.
-        candidate = scaffold.manager.select_presentable()
-        assert candidate is not None
-        scaffold.manager.mark_presented(
-            candidate.occurrence_id, turn_id="t1", window_id="w1",
-        )
-        blocked_window = await scaffold._execute_main_tool(ToolCall(
-            "finish-inc-window", "finish", {"status": "incomplete", "summary": "s"},
-        ))
-        assert blocked_window["error"] == "completion_preconditions_not_met"
-        assert scaffold.finished is False
-
-        # Once the window closes deterministically, an incomplete finish is
-        # accepted (no commit/verify preconditions apply to incomplete).
-        for _ in range(4):
-            scaffold.manager.presentation_queue.record_turn()
-        assert scaffold.manager.presentation_queue.close_active_window() is True
-        finished = await scaffold._execute_main_tool(ToolCall(
-            "finish-inc-ok", "finish", {"status": "incomplete", "summary": "closed"},
-        ))
-        assert finished == {"ending": True, "status": "incomplete"}
-        assert scaffold.finished is True
+        assert event["pending_occurrence_count"] == 1
+        assert event["active_response_window"] is False
+        assert event["closure_complete"] is False
 
     asyncio.run(exercise())
 
@@ -649,37 +457,23 @@ def test_linear_bundle_wait_cap_is_the_child_lifecycle_not_the_terminal_cap() ->
     asyncio.run(exercise())
 
 
-def test_main_budget_refusal_emits_distinguishing_event_and_snapshot() -> None:
-    """A refused main admission records why (insufficient vs halted) and the
-    final per-pool snapshot is persisted on the same termination path."""
+def test_final_token_usage_snapshot_is_actual_usage_only() -> None:
     async def exercise() -> None:
         scaffold = _scaffold(_start("data-recovery-service", "async"))
-        scaffold.budget_ledger.pool("main_pre").maximum = 0
+        scaffold.messages = [
+            {"role": "system", "content": scaffold._system_prompt()},
+            {"role": "user", "content": str(scaffold.start["instruction"])},
+        ]
         await scaffold.run()
         await scaffold.shutdown()
-        assert scaffold.finish_status == "budget_exhausted"
-        exhaustions = [
-            event for event in scaffold.emitter.events
-            if event.get("type") == "budget_exhausted"
-        ]
-        assert len(exhaustions) == 1
-        assert exhaustions[0]["pool"] == "main_pre"
-        assert exhaustions[0]["refusal_reason"] == "insufficient_remaining"
-        assert exhaustions[0]["halt_reason"] is None
         snapshots = [
-            event.get("pools", {}) for event in scaffold.emitter.events
-            if event.get("type") == "budget_ledger_snapshot"
+            event for event in scaffold.emitter.events
+            if event.get("type") == "token_usage_snapshot"
         ]
         assert len(snapshots) == 1
-        assert set(snapshots[0]) == {
-            "child_shared", "main_pre", "main_post", "main_total",
-        }
-        for pool_name in ("main_pre", "main_post", "child_shared"):
-            pool = snapshots[0][pool_name]
-            assert "settled" in pool and "remaining" in pool
-            assert "overrun" in pool and "halt_reason" in pool
-            assert "refusal_reason" in pool and "accounting_mode" in pool
-        assert snapshots[0]["main_pre"]["remaining"] == 0
+        assert snapshots[0]["total"] == (
+            snapshots[0]["main"] + snapshots[0]["child"]
+        )
 
     asyncio.run(exercise())
 
@@ -813,10 +607,7 @@ def test_spawn_refuses_without_actionable_feedback() -> None:
     asyncio.run(exercise())
 
 
-def test_spawn_refuses_after_recovery_cap_and_when_exact_first_call_does_not_fit() -> None:
-    """Task 7: re-delegation is bounded by the hard per-workstream recovery cap
-    and by exact-first-call admission — a remaining budget that cannot fit the
-    recovery child's real first call refuses it."""
+def test_spawn_refuses_after_per_workstream_recovery_cap() -> None:
     async def exercise() -> None:
         scaffold = _scaffold(_start("data-recovery-service", "linear"))
         manager = scaffold.manager
@@ -828,33 +619,15 @@ def test_spawn_refuses_after_recovery_cap_and_when_exact_first_call_does_not_fit
             "completion_id": "comp-c-wal",
             "reason_codes": ["report_payload_field_mismatch"], "child_id": "c-wal",
         })
-        await manager.handle_rejection({
-            "completion_id": "comp-c-check",
-            "reason_codes": ["report_file_missing"], "child_id": "c-check",
-        })
         manager.attempt_counts["wal_recovery"] = 1
         manager._launch_queued = lambda: None
 
-        # Initial attempt + one recovery for the workstream is allowed.
         first = await manager.spawn("wal_recovery", "try again", [], "", "high")
         assert "child_id" in first
         assert manager.recovery_spawn_counts["wal_recovery"] == 1
 
-        # A second recovery for the same workstream hits the hard per-workstream
-        # cap — Task 7 replaces the digest-based no-information bound.
         result = await manager.spawn("wal_recovery", "try again", [], "", "high")
         assert "maximum recovery attempts for workstream" in result["error"]
-        assert result["budget_consumed"] is False
-        assert len(manager.children) == 4
-
-        # Exact-first-call admission: once the remaining child budget cannot fit
-        # the recovery child's real first call the spawn is refused (the old
-        # crude 2 * max_output floor is gone).  checkpoint_recovery is rejected
-        # above (actionable) so it is a valid P0-9 recovery and reaches this gate.
-        pool = manager.token_budget
-        pool.settled += pool.maximum  # remaining == 0
-        result = await manager.spawn("checkpoint_recovery", "try again", [], "", "high")
-        assert "exact first call" in result["error"]
         assert result["budget_consumed"] is False
         assert len(manager.children) == 4
 
@@ -1053,7 +826,7 @@ def test_pre_submit_validate_result_dry_runs_the_public_rule() -> None:
         agent = ChildAgent(
             backend, workspace, config,
             ProtocolEmitter(stdout=io.StringIO()),
-            BudgetPool("child_shared", maximum=500_000),
+            TokenUsageLedger(emergency_cap=20_000_000),
         )
         outcome = await agent.run(record, "test-model", 1)
         assert len(workspace.calls) == 2
@@ -1092,11 +865,12 @@ def test_child_context_is_compressed_within_budget() -> None:
         {"role": "assistant", "content": None, "tool_calls": []},
         {"role": "tool", "content": "c" * 5000},
     ]
-    compressed = ChildAgent._compress_messages(
+    compressed = compress_child_messages(
         messages,
-        context_budget_chars=8000,
-        keep_recent=1,
-        max_old_tool_content_chars=100,
+        ChildAgent.tools(),
+        budget_bytes=8000,
+        keep_recent_blocks=1,
+        excerpt_chars=100,
     )
     # The newest complete assistant/tool block is untouched; older tool output
     # is excerpted until the full serialized wire payload fits.
@@ -1107,7 +881,7 @@ def test_child_context_is_compressed_within_budget() -> None:
 
     # A history within budget is returned verbatim.
     small = messages[:1] + messages[-2:]
-    assert ChildAgent._compress_messages(
-        small, context_budget_chars=100_000, keep_recent=8,
-        max_old_tool_content_chars=100,
+    assert compress_child_messages(
+        small, ChildAgent.tools(), budget_bytes=100_000, keep_recent_blocks=8,
+        excerpt_chars=100,
     ) is small

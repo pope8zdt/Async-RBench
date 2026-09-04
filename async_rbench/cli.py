@@ -1443,9 +1443,6 @@ async def _run_dynamic_pilot_pair(args: argparse.Namespace) -> int:
             counterfactual_pair_id=pair_id,
             timeout_sec=args.timeout,
             gateway_grace_sec=args.gateway_grace,
-            max_total_tokens=(
-                args.max_linear_tokens if mode == "linear" else args.max_async_tokens
-            ),
             use_container=True,
             build_image=(index == 1),
             keep_container=False,
@@ -1467,16 +1464,16 @@ async def _run_dynamic_pilot_pair(args: argparse.Namespace) -> int:
                 "scenario_ok": score.get("scenario_constructed") is True,
                 "protocol_ok": score.get("protocol_valid") is True,
                 "infrastructure_ok": not score.get("infrastructure_failures"),
-                "token_budget_ok": int(score.get("total_tokens") or 0) <= args.max_linear_tokens,
-                "duration_budget_ok": float(score.get("episode_duration_ms") or 0) <= args.max_linear_duration_ms,
+                "token_usage_within_gate": int(score.get("total_tokens") or 0) <= args.max_linear_tokens,
+                "duration_within_gate": float(score.get("episode_duration_ms") or 0) <= args.max_linear_duration_ms,
             }
             linear_gate["passed"] = bool(
                 isinstance(semantic, (int, float))
                 and semantic >= args.linear_threshold
                 and all(linear_gate[key] for key in (
                     "score_status_ok", "scenario_ok", "protocol_ok",
-                    "infrastructure_ok", "token_budget_ok",
-                    "duration_budget_ok",
+                    "infrastructure_ok", "token_usage_within_gate",
+                    "duration_within_gate",
                 ))
             )
             if not linear_gate["passed"]:
@@ -1507,7 +1504,7 @@ async def _run_dynamic_pilot_pair(args: argparse.Namespace) -> int:
     async_resource_gate = None
     if async_score is not None:
         async_resource_gate = {
-            "max_total_tokens": args.max_async_tokens,
+            "max_observed_tokens": args.max_async_tokens,
             "max_duration_ms": args.max_async_duration_ms,
             "observed_total_tokens": int(async_score.get("total_tokens") or 0),
             "observed_duration_ms": float(async_score.get("episode_duration_ms") or 0),

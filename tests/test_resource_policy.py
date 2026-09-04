@@ -26,11 +26,56 @@ def test_official_resource_policy_rejects_runtime_drift() -> None:
         )
 
 
-def test_budget_exhausted_is_a_valid_explicit_episode_status() -> None:
+def test_v101_explicit_episode_statuses_are_step_or_safety_bounded() -> None:
     validate_adapter_event({
         "type": "episode_ended",
-        "local_status": "budget_exhausted",
+        "local_status": "step_limit_reached",
+        "declared_task_success": False,
+    })
+    validate_adapter_event({
+        "type": "episode_ended",
+        "local_status": "resource_safety_abort",
         "declared_task_success": False,
     })
     with pytest.raises(ProtocolError, match="local_status"):
+        validate_adapter_event({
+            "type": "episode_ended",
+            "local_status": "budget_exhausted",
+        })
+    with pytest.raises(ProtocolError, match="local_status"):
         validate_adapter_event({"type": "episode_ended", "local_status": "unknown"})
+
+
+def test_v101_runtime_diagnostic_events_are_protocol_validated() -> None:
+    validate_adapter_event({
+        "type": "finish_invoked",
+        "requested_status": "completed",
+        "pending_occurrence_count": 1,
+        "active_response_window": False,
+        "final_commit_current": False,
+        "verification_current": False,
+        "closure_complete": False,
+    })
+    validate_adapter_event({
+        "type": "token_usage_snapshot",
+        "emergency_cap": 20_000_000,
+        "total": 12,
+        "main": 7,
+        "child": 5,
+        "by_actor": {"main": 7, "child:c1": 5},
+        "tripped": False,
+        "trigger_role": None,
+    })
+    validate_adapter_event({
+        "type": "resource_safety_abort",
+        "emergency_cap": 20_000_000,
+        "observed_total": 20_000_001,
+        "trigger_role": "child:c1",
+    })
+    with pytest.raises(ProtocolError, match="unknown adapter event"):
+        validate_adapter_event({
+            "type": "child_token_budget_exhausted",
+            "child_id": "c1",
+            "reason": "old",
+            "pool": "child_shared",
+        })

@@ -34,7 +34,7 @@ def test_run_audit_separates_public_and_private_rejections(
         "case_id": "secure-release",
         "execution_mode": "async",
         "score_status": "scored",
-        "participant_metadata": {"max_main_turns": 2, "max_child_turns": 1},
+        "participant_metadata": {"max_main_steps": 2, "max_child_steps": 1},
         "main_tokens": 7,
         "child_tokens": 5,
         "total_tokens": 12,
@@ -44,11 +44,14 @@ def test_run_audit_separates_public_and_private_rejections(
     (episode / "score.json").write_text(json.dumps(score), encoding="utf-8")
     events = [
         {"type": "child_spawned", "child_id": "child-1", "work_units": ["security_patch"]},
+        {"type": "child_spawned", "child_id": "child-2", "work_units": ["step_limited"]},
+        {"type": "child_spawned", "child_id": "child-3", "work_units": ["safety_abort"]},
         {"type": "agent_progress", "phase": "model_call_finished", "role": "main", "turn": 2},
         {"type": "agent_progress", "phase": "model_call_finished", "role": "child:child-1", "turn": 1},
+        {"type": "agent_progress", "phase": "model_call_finished", "role": "child:child-2", "turn": 1},
         {
             "type": "child_completed", "child_id": "child-1",
-            "payload": {"evidence": {"turn_budget_exhausted": True}},
+            "payload": {"evidence": {"finding": "incomplete"}},
         },
         {
             "type": "result_rejection_evaluator_fact", "completion_id": "completion-1",
@@ -59,7 +62,10 @@ def test_run_audit_separates_public_and_private_rejections(
             "workstream_id": "security_patch",
             "reason_codes": ["missing_required_evidence", "result_contract_rejected"],
         },
-        {"type": "episode_ended", "local_status": "budget_exhausted"},
+        {"type": "step_limit_reached", "role": "main", "limit": 2},
+        {"type": "child_step_limit_reached", "child_id": "child-2", "reason": "horizon"},
+        {"type": "child_resource_safety_abort", "child_id": "child-3", "reason": "fuse"},
+        {"type": "episode_ended", "local_status": "resource_safety_abort"},
     ]
     (episode / "event_source.jsonl").write_text(
         "".join(json.dumps(event) + "\n" for event in events), encoding="utf-8",
@@ -73,10 +79,10 @@ def test_run_audit_separates_public_and_private_rejections(
     }
     assert report["rejections"]["private_validator_review_rejection_count"] == 1
     assert report["rejections"]["rejections_with_public_structural_reason_count"] == 1
-    assert report["resources"]["main_turn_limit_reached_count"] == 1
-    assert report["resources"]["child_turn_limit_hit_count"] == 1
-    assert report["resources"]["child_budget_exhausted_count"] == 1
-    assert report["resources"]["budget_exhausted_episode_count"] == 1
+    assert report["resources"]["main_step_limit_reached_count"] == 1
+    assert report["resources"]["child_step_limit_hit_count"] == 1
+    assert report["resources"]["child_resource_safety_abort_count"] == 1
+    assert report["resources"]["resource_safety_abort_episode_count"] == 1
     assert report["rejections"]["root_cause_counts"] == {
         "participant_structural_contract_violation": 1,
     }

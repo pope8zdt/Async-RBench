@@ -4,8 +4,8 @@ The pairing design promises that the two execution paths can only differ in
 when/how results are presented to the main model (async: per-result
 occurrences; linear: one atomic bundle after the wave resolves).  Everything
 the child technically experiences --- its prompt, the public contract it is
-graded against, the private validator rendered from that contract, the token
-budget accounting, and the terminal classification of its outcome --- must be
+graded against, the private validator rendered from that contract, the fixed
+step/safety limits, and the terminal classification of its outcome --- must be
 identical across both arms.  Any drift invalidates the Linear/Async
 head-to-head, so it is guarded here as an automated invariant suite, not as a
 manual verification.
@@ -25,7 +25,6 @@ from typing import Any
 
 import pytest
 
-from async_rbench.evaluation.budget import build_budget_ledger
 from async_rbench.evaluation.model_backend import ModelTurn, ToolCall
 from async_rbench.evaluation.report_contract import report_contract_errors
 from async_rbench.evaluation.runner import EpisodeConfig, _make_start
@@ -186,37 +185,22 @@ def test_gateway_validation_has_exactly_one_mode_free_call_site() -> None:
     assert contract_src.count("def validate_completion_contract") == 1
 
 
-# --- Facet 4: budget layout --------------------------------------------------
+# --- Facet 4: runtime limits -------------------------------------------------
 
 
-def test_budget_layout_is_identical_for_both_arms() -> None:
+def test_step_and_safety_limits_are_identical_for_both_arms() -> None:
     config = ScaffoldConfig.from_file(
         None, {"backend": "scripted_test", "workspace_mode": "disabled"},
     )
-    linear = build_budget_ledger(
-        "linear",
-        child_shared=config.budget_child_shared,
-        main_pre=config.budget_main_pre,
-        main_post=config.budget_main_post,
-        main_total=config.budget_main_total,
-    )
-    async_ = build_budget_ledger(
-        "async",
-        child_shared=config.budget_child_shared,
-        main_pre=config.budget_main_pre,
-        main_post=config.budget_main_post,
-        main_total=config.budget_main_total,
-    )
-    # The child budget is one identical shared pool in both modes: the model's
-    # child-side resource ceiling must not change across arms.
-    assert linear.pool("child_shared").maximum == async_.pool("child_shared").maximum
-    # The main side is only SPLIT differently (pre/post vs one merged pool);
-    # the total main budget is identical.
+    linear = _scaffold(_start("data-recovery-service", "linear"))
+    async_ = _scaffold(_start("data-recovery-service", "async"))
+    assert linear.config.max_main_steps == async_.config.max_main_steps == config.max_main_steps
+    assert linear.config.max_child_steps == async_.config.max_child_steps == config.max_child_steps
     assert (
-        linear.pool("main_total").maximum
-        == async_.pool("main_pre").maximum + async_.pool("main_post").maximum
+        linear.config.emergency_total_token_cap
+        == async_.config.emergency_total_token_cap
+        == config.emergency_total_token_cap
     )
-    assert config.budget_main_total == config.budget_main_pre + config.budget_main_post
 
 
 # --- Facet 5: terminal classification is identical ----------------------------
@@ -233,8 +217,7 @@ def test_budget_layout_is_identical_for_both_arms() -> None:
 
 
 class NoToolBackend:
-    """A child that never calls a tool.  With budget it ends ``no_submission``;
-    with an empty shared pool it ends ``token_budget_exhausted``."""
+    """A child that never calls a tool and ends ``no_submission`` normally."""
 
     async def complete(self, **_: Any) -> ModelTurn:
         return ModelTurn(
@@ -249,7 +232,7 @@ class NoToolBackend:
 
 class NonSubmitToolBackend:
     """A child that only calls the terminal tool (never submit_result): bounded
-    by ``max_child_turns`` the manager records ``turn_limit_exhausted``."""
+    by ``max_child_steps`` the manager records ``step_limit_reached``."""
 
     def __init__(self) -> None:
         self.turn = 0
@@ -317,12 +300,14 @@ def _single_worker_start(mode: str) -> dict:
 
 
 def _terminal_scaffold(
-    mode: str, backend: Any, *, max_child_turns: int = 40,
+    mode: str, backend: Any, *, max_child_steps: int = 40,
+    emergency_total_token_cap: int = 20_000_000,
 ) -> ReferenceScaffold:
     config = ScaffoldConfig.from_file(None, {
         "backend": "scripted_test",
         "workspace_mode": "disabled",
-        "max_child_turns": max_child_turns,
+        "max_child_steps": max_child_steps,
+        "emergency_total_token_cap": emergency_total_token_cap,
     })
     return ReferenceScaffold(
         start=_single_worker_start(mode),
@@ -352,9 +337,9 @@ def _non_presentation_types(events: list[dict]) -> list[str]:
 TERMINAL_SCENARIOS = (
     "public_valid_submission",
     "public_contract_rejection",
-    "token_budget_exhaustion",
+    "resource_safety_abort",
     "no_submission",
-    "turn_limit_exhaustion",
+    "step_limit_reached",
     "designed_timeout",
 )
 
@@ -362,23 +347,23 @@ TERMINAL_SCENARIOS = (
 _SCENARIO_BACKEND = {
     "public_valid_submission": ScriptedTestBackend,
     "public_contract_rejection": ScriptedTestBackend,
-    "token_budget_exhaustion": NoToolBackend,
+    "resource_safety_abort": NoToolBackend,
     "no_submission": NoToolBackend,
-    "turn_limit_exhaustion": NonSubmitToolBackend,
+    "step_limit_reached": NonSubmitToolBackend,
     "designed_timeout": NoToolBackend,
 }
 
 #: Scenarios that bound the child's turns instead of running to the default.
-_SCENARIO_MAX_CHILD_TURNS = {"turn_limit_exhaustion": 2}
+_SCENARIO_MAX_CHILD_STEPS = {"step_limit_reached": 2}
 
 #: The manager-recorded terminal each scenario must reach (Task 8 keeps these
 #: runtime status strings; the deeper scorer taxonomy is guarded separately).
 _SCENARIO_TERMINAL_STATUS = {
     "public_valid_submission": "delivered",
     "public_contract_rejection": "contract_rejected",
-    "token_budget_exhaustion": "token_budget_exhausted",
+    "resource_safety_abort": "resource_safety_abort",
     "no_submission": "no_submission",
-    "turn_limit_exhaustion": "turn_limit_exhausted",
+    "step_limit_reached": "step_limit_reached",
     "designed_timeout": "delivered",
 }
 
@@ -386,9 +371,9 @@ _SCENARIO_TERMINAL_STATUS = {
 _SCENARIO_TOKENS = {
     "public_valid_submission": 10,
     "public_contract_rejection": 10,
-    "token_budget_exhaustion": 0,
-    "no_submission": 21,
-    "turn_limit_exhaustion": 22,
+    "resource_safety_abort": 7,
+    "no_submission": 7,
+    "step_limit_reached": 22,
     "designed_timeout": 0,
 }
 
@@ -401,9 +386,9 @@ _SCENARIO_PROJECTION = {
         "report_file",
         1,
     ),
-    "token_budget_exhaustion": ("token_budget_exhausted", (), None, None),
+    "resource_safety_abort": ("resource_safety_abort", (), None, None),
     "no_submission": ("no_submission", (), None, None),
-    "turn_limit_exhaustion": ("turn_limit_exhausted", (), None, None),
+    "step_limit_reached": ("step_limit_reached", (), None, None),
     "designed_timeout": ("delivered", (), None, None),
 }
 
@@ -429,14 +414,11 @@ async def _drive_terminal(manager: Any, record: ChildRecord, scenario: str) -> N
             "reason_codes": ["report_file_missing", "report_json_invalid"],
             "child_id": child_id,
         })
-    elif scenario == "token_budget_exhaustion":
-        # The child's shared pool has no remaining budget: admission is refused,
-        # ending the attempt without a submission.
-        manager.token_budget.maximum = 0
+    elif scenario == "resource_safety_abort":
         await manager._run_child(record)
     elif scenario == "no_submission":
         await manager._run_child(record)
-    elif scenario == "turn_limit_exhaustion":
+    elif scenario == "step_limit_reached":
         await manager._run_child(record)
     elif scenario == "designed_timeout":
         # A designed terminal is a gateway-owned delivery that names the running
@@ -463,9 +445,16 @@ def test_termination_classification_is_identical_across_modes(scenario: str) -> 
     """
     async def exercise() -> None:
         backend_cls = _SCENARIO_BACKEND[scenario]
-        max_turns = _SCENARIO_MAX_CHILD_TURNS.get(scenario, 40)
-        linear = _terminal_scaffold("linear", backend_cls(), max_child_turns=max_turns)
-        async_ = _terminal_scaffold("async", backend_cls(), max_child_turns=max_turns)
+        max_steps = _SCENARIO_MAX_CHILD_STEPS.get(scenario, 40)
+        safety_cap = 1 if scenario == "resource_safety_abort" else 20_000_000
+        linear = _terminal_scaffold(
+            "linear", backend_cls(), max_child_steps=max_steps,
+            emergency_total_token_cap=safety_cap,
+        )
+        async_ = _terminal_scaffold(
+            "async", backend_cls(), max_child_steps=max_steps,
+            emergency_total_token_cap=safety_cap,
+        )
         for scaffold in (linear, async_):
             scaffold.manager._launch_queued = lambda: None  # drive children manually
             scaffold.manager.spawn_initial_wave()

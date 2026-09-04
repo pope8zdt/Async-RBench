@@ -141,8 +141,8 @@ ADAPTER_EVENT_REQUIREMENTS: dict[str, tuple[str, ...]] = {
     # private workstream role from child_id; adapters cannot self-classify it.
     "child_completed": ("child_id", "completion_id", "payload"),
     "child_cancelled": ("child_id", "reason"),
-    "child_token_budget_exhausted": ("child_id", "reason", "pool"),
-    "child_turn_limit_exhausted": ("child_id", "reason", "pool"),
+    "child_step_limit_reached": ("child_id", "reason"),
+    "child_resource_safety_abort": ("child_id", "reason"),
     "child_no_submission": ("child_id", "reason"),
     "delegation_validation_error": ("requested_workstream", "reason", "budget_consumed"),
     "main_action": ("action_id", "kind"),
@@ -162,6 +162,20 @@ ADAPTER_EVENT_REQUIREMENTS: dict[str, tuple[str, ...]] = {
     "artifact_committed": (
         "artifact_id", "version", "lineage_completion_ids", "observed_digest",
         "observed_path", "evaluator_observed",
+    ),
+    "finish_invoked": (
+        "requested_status", "pending_occurrence_count",
+        "active_response_window", "final_commit_current",
+        "verification_current", "closure_complete",
+    ),
+    "main_implicit_stop": ("summary",),
+    "step_limit_reached": ("role", "limit"),
+    "resource_safety_abort": (
+        "emergency_cap", "observed_total", "trigger_role",
+    ),
+    "token_usage_snapshot": (
+        "emergency_cap", "total", "main", "child", "by_actor",
+        "tripped", "trigger_role",
     ),
     "episode_ended": (),
 }
@@ -212,12 +226,33 @@ def validate_adapter_event(event: dict[str, Any]) -> None:
     if event_type == "episode_ended":
         local_status = event.get("local_status")
         if local_status is not None and local_status not in {
-            "completed", "incomplete", "budget_exhausted",
+            "completed", "incomplete", "step_limit_reached",
+            "resource_safety_abort",
         }:
             raise ProtocolError("episode_ended.local_status is invalid")
         declared_success = event.get("declared_task_success")
         if declared_success is not None and not isinstance(declared_success, bool):
             raise ProtocolError("episode_ended.declared_task_success must be boolean")
+    if event_type == "finish_invoked":
+        if event.get("requested_status") not in {"completed", "incomplete"}:
+            raise ProtocolError("finish_invoked.requested_status is invalid")
+        if not isinstance(event.get("pending_occurrence_count"), int):
+            raise ProtocolError("finish_invoked.pending_occurrence_count must be integer")
+        for key in (
+            "active_response_window", "final_commit_current",
+            "verification_current", "closure_complete",
+        ):
+            if not isinstance(event.get(key), bool):
+                raise ProtocolError(f"finish_invoked.{key} must be boolean")
+    if event_type == "token_usage_snapshot":
+        for key in ("emergency_cap", "total", "main", "child"):
+            value = event.get(key)
+            if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                raise ProtocolError(f"token_usage_snapshot.{key} must be non-negative integer")
+        if not isinstance(event.get("by_actor"), dict):
+            raise ProtocolError("token_usage_snapshot.by_actor must be an object")
+        if not isinstance(event.get("tripped"), bool):
+            raise ProtocolError("token_usage_snapshot.tripped must be boolean")
 
 
 def validate_gateway_event(event: dict[str, Any]) -> list[str]:

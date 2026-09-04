@@ -131,8 +131,8 @@ def _pair_key(item: dict[str, Any]) -> tuple[Any, ...]:
     shared a counterfactual and report a spurious effect.
 
     The fixed benchmark-owned factors are part of the key too (spec 8): a
-    linear/async pair must share the same task bundle, child pool identity, child
-    budget and child provider.  Two runs built against a different child pool
+    linear/async pair must share the same task bundle, child pool identity, and
+    child provider. Two runs built against a different child pool
     never share a counterfactual even when they agree on case/instance/model, so
     they must not be paired.
     """
@@ -146,7 +146,7 @@ def _pair_key(item: dict[str, Any]) -> tuple[Any, ...]:
         # Fixed child-pool identity factors: absent (None) on both sides matches
         # trivially, present and differing forces separate pairs.
         item.get("task_bundle_sha256"), item.get("child_pool_id"),
-        item.get("child_budget"), item.get("child_provider"),
+        item.get("child_provider"),
         item.get("child_model"), item.get("child_backend"),
     )
 
@@ -159,7 +159,6 @@ _PAIR_FIXED_FACTORS = (
     ("counterfactual_pair_id", "counterfactual_pair_id"),
     ("task_bundle_sha256", "task_bundle"),
     ("child_pool_id", "child_pool"),
-    ("child_budget", "child_budget"),
     ("child_provider", "child_provider"),
     ("child_model", "child_model"),
     ("child_backend", "child_backend"),
@@ -172,7 +171,7 @@ def pair_identity_errors(
     """Return strict pairing errors for a linear/async counterfactual pair.
 
     A valid pair must share the fixed benchmark-owned factors above (case /
-    instance / seed / task bundle / child pool id / child budget / child provider
+    instance / seed / task bundle / child pool id / child provider
     / child model / child backend).  The main model and main provider are the
     participant factor and are allowed to differ.  Linear must satisfy the
     synchronous-aggregation invariant (spec 6) and Async the per-result
@@ -778,7 +777,7 @@ def _opportunity_summary(records: list[dict[str, Any]]) -> dict[str, int]:
 # means mean "no qualifying attempt in this factor", never zero.
 _PAPER_TERMINAL_COUNT_FIELDS = (
     "gateway_accepted", "public_rejection", "sealed_pending_verdict",
-    "token_budget_exhausted", "turn_limit_exhausted", "no_submission",
+    "step_limit_reached", "resource_safety_abort", "no_submission",
     "timeout", "crash", "cancel", "case_contract_failure",
     "infrastructure_failure", "in_flight",
 )
@@ -830,8 +829,8 @@ def _paper_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
     retry_accepted = 0
     accepted_tokens = 0
     extra_public_rejection_tokens = 0
-    token_exhausted_attempts = 0
-    turn_limit_exhausted_attempts = 0
+    resource_safety_abort_attempts = 0
+    step_limit_attempts = 0
     no_submission_attempts = 0
     redelegation_attempts = 0
     invalid_redelegations = 0
@@ -847,10 +846,10 @@ def _paper_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
             retry = bool(row.get("retry") or int(row.get("attempt_number") or 1) >= 2)
             if retry:
                 redelegation_attempts += 1
-            if cls == "token_budget_exhausted":
-                token_exhausted_attempts += 1
-            elif cls == "turn_limit_exhausted":
-                turn_limit_exhausted_attempts += 1
+            if cls == "resource_safety_abort":
+                resource_safety_abort_attempts += 1
+            elif cls == "step_limit_reached":
+                step_limit_attempts += 1
             elif cls == "no_submission":
                 no_submission_attempts += 1
             if row.get("sealed_submission"):
@@ -885,7 +884,7 @@ def _paper_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
         # Task 8: per-attempt terminal histogram (attempt dimension included).
         "terminal_class_counts": terminal_counts,
         # Verdict acceptance/rejection rates run over verdict-bearing
-        # submissions only; sealed-without-verdict closes, budget/turn/no-
+        # submissions only; sealed-without-verdict closes, step/safety/no-
         # submission ends, designed terminals, cancels, case-contract and
         # infrastructure failures never enter these denominators.
         "sealed_submission_count": sealed_submissions,
@@ -910,11 +909,11 @@ def _paper_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
         ),
         "extra_child_tokens_from_public_rejections": extra_public_rejection_tokens,
         # Model/runtime outcome rates per attempt (never rejection rates).
-        "token_budget_exhaustion_rate_per_attempt": _rate(
-            token_exhausted_attempts, total_attempts,
+        "resource_safety_abort_rate_per_attempt": _rate(
+            resource_safety_abort_attempts, total_attempts,
         ),
-        "turn_limit_exhaustion_rate_per_attempt": _rate(
-            turn_limit_exhausted_attempts, total_attempts,
+        "child_step_limit_rate_per_attempt": _rate(
+            step_limit_attempts, total_attempts,
         ),
         "no_submission_rate_per_attempt": _rate(
             no_submission_attempts, total_attempts,

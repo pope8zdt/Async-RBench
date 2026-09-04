@@ -37,7 +37,7 @@ class ScriptedTestBackend:
             # The child must produce evidence that actually satisfies the
             # participant-visible contract (required evidence fields + their
             # schema + required files); otherwise submit_result is not sealed and
-            # the child exhausts its turn budget, which is a *resource
+            # the child reaches its step horizon, which is a *runtime
             # termination*, not a submission.  The conformance controller should
             # exercise the delivery/presentation protocol on a genuine sealed
             # result, so synthesise values that satisfy the embedded contract.
@@ -234,7 +234,7 @@ class ScriptedTestBackend:
     ) -> dict[str, Any]:
         """Produce evidence values that satisfy the participant-visible contract,
         so the conformance child genuinely seals its submission instead of
-        exhausting its turn budget on a contract mismatch."""
+        reaching its step horizon on a contract mismatch."""
         schema = schema or {}
         evidence: dict[str, Any] = {}
         for field in required_fields or []:
