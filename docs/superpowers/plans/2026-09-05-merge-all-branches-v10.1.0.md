@@ -27,7 +27,8 @@
 
 **Files:**
 - Preserve: all files unique to `origin/feat/mab-authority-infra-unscored`
-- Merge: `origin/codex/paper-eval-80-redesign`
+- Merge: `origin/codex/paper-eval-existing-61-v10.1.0`
+- Merge history: `origin/codex/paper-eval-80-redesign`
 - Merge equivalence: `origin/codex/paper-eval-existing-61`
 - Preserve: `docs/superpowers/specs/2026-09-01-project-structure-cleanup-design.md`
 
@@ -44,8 +45,8 @@ git fetch origin --tags
 git ls-remote --heads origin
 ```
 
-Expected: the five branch names in the spec, unless a newly created or moved
-head is discovered and added to the integration set before proceeding.
+Expected: the six branch names in the updated spec. The sixth v10.1-compatible
+61-case head was discovered by this refresh and added to the integration set.
 
 - [ ] **Step 2: Merge the unique structure-document branch**
 
@@ -58,31 +59,36 @@ git merge --no-ff origin/feat/mab-authority-infra-unscored -m "merge: preserve p
 Expected: the unique design document is added and no v10.1 runtime file is
 regressed.
 
-- [ ] **Step 3: Merge the shared 61-case remote tip**
+- [ ] **Step 3: Merge the v10.1-compatible 61-case remote tip**
+
+Run:
+
+```powershell
+git merge --no-ff origin/codex/paper-eval-existing-61-v10.1.0 -m "merge: integrate v10.1 formal 61-case branch"
+```
+
+Expected: the seven 61-case feature paths are added on top of the v10.1.0
+runtime without conflicts.
+
+- [ ] **Step 4: Merge the older 61-case history without replacing newer files**
 
 Run:
 
 ```powershell
 git merge --no-ff --no-commit origin/codex/paper-eval-80-redesign
+git commit -m "merge: preserve earlier paper-evaluation branch history"
 ```
 
-Resolve any conflicted 61-case feature paths from the v10.1-compatible replay:
+Expected: only the older branch's unique design and plan documents are added;
+the newer v10.1-compatible 61-case files remain unchanged.
 
-```powershell
-git checkout 3e604972 -- README.md async_rbench/evaluation/manifest.py async_rbench/paper_eval.py docs/CASE_RUNBOOK.zh-CN.md research/experiment-design/paper-eval-existing-61.csv run_paper_eval_61.ps1 tests/test_paper_eval_61.py
-git add -- README.md async_rbench/evaluation/manifest.py async_rbench/paper_eval.py docs/CASE_RUNBOOK.zh-CN.md research/experiment-design/paper-eval-existing-61.csv run_paper_eval_61.ps1 tests/test_paper_eval_61.py
-git commit -m "merge: integrate formal 61-case evaluation branch"
-```
-
-Expected: the remote paper-evaluation tip is an ancestor while all active
-version declarations remain `10.1.0`.
-
-- [ ] **Step 4: Prove all same-tip and main-tip branch names are represented**
+- [ ] **Step 5: Prove all same-tip and main-tip branch names are represented**
 
 Run:
 
 ```powershell
 git merge-base --is-ancestor origin/codex/paper-eval-existing-61 HEAD
+git merge-base --is-ancestor origin/codex/paper-eval-existing-61-v10.1.0 HEAD
 git merge-base --is-ancestor origin/codex/v10.1-step-bounded-termination HEAD
 git merge-base --is-ancestor origin/feat/mab-authority-infra-unscored HEAD
 ```
@@ -304,20 +310,21 @@ Run the ancestry checks for every non-main remote tip:
 git merge-base --is-ancestor origin/codex/v10.1-step-bounded-termination origin/main
 git merge-base --is-ancestor origin/codex/paper-eval-80-redesign origin/main
 git merge-base --is-ancestor origin/codex/paper-eval-existing-61 origin/main
+git merge-base --is-ancestor origin/codex/paper-eval-existing-61-v10.1.0 origin/main
 git merge-base --is-ancestor origin/feat/mab-authority-infra-unscored origin/main
 ```
 
 Expected: every command exits 0 before any deletion command is issued.
 
-- [ ] **Step 4: Delete the four non-main GitHub branch names**
+- [ ] **Step 4: Delete the five non-main GitHub branch names**
 
 Run:
 
 ```powershell
-git push origin --delete codex/v10.1-step-bounded-termination codex/paper-eval-80-redesign codex/paper-eval-existing-61 feat/mab-authority-infra-unscored
+git push origin --delete codex/v10.1-step-bounded-termination codex/paper-eval-80-redesign codex/paper-eval-existing-61 codex/paper-eval-existing-61-v10.1.0 feat/mab-authority-infra-unscored
 ```
 
-Expected: GitHub confirms deletion of all four names.
+Expected: GitHub confirms deletion of all five names.
 
 - [ ] **Step 5: Verify the final remote state**
 

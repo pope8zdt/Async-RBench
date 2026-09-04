@@ -17,6 +17,8 @@ The integration covers every head returned by `git ls-remote --heads origin` on
 - `codex/v10.1-step-bounded-termination` at `eaa854c5`;
 - `codex/paper-eval-80-redesign` at `9812e319`;
 - `codex/paper-eval-existing-61` at `9812e319`;
+- `codex/paper-eval-existing-61-v10.1.0` at `3e604972` (discovered by
+  the mandatory execution-time refresh);
 - `feat/mab-authority-infra-unscored` at `1a353d46`.
 
 Before pushing or deleting branches, the remote heads must be fetched again.
@@ -111,6 +113,7 @@ of the pushed `origin/main`. Delete these remote branch names:
 - `codex/v10.1-step-bounded-termination`;
 - `codex/paper-eval-80-redesign`;
 - `codex/paper-eval-existing-61`;
+- `codex/paper-eval-existing-61-v10.1.0`;
 - `feat/mab-authority-infra-unscored`.
 
 Finally, `git ls-remote --heads origin` must return only `refs/heads/main`.
