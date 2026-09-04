@@ -161,11 +161,8 @@ The launcher validates the repository, checks the provider and Docker, creates a
 
 ### Run the formal 61-case experiment
 
-[`experiments/formal-61/`](experiments/formal-61/) is the authoritative formal
-experiment for Async-RBench v10.1.0. Its frozen CSV selects 61 existing,
-registered `seed-1` instances from the unique canonical implementations under
-top-level `cases/`. It excludes `gaia2-stockholm-moveout` and does not include
-any of the 19 planned new cases.
+The formal Async-RBench v10.1.0 experiment is defined in [`experiments/formal-61/`](experiments/formal-61/).
+Its frozen CSV selects 61 registered `seed-1` instances from canonical top-level `cases/`; implementations are not copied, and the retired GAIA2 plus 19 unconstructed cases are excluded.
 
 ```powershell
 .\experiments\formal-61\run.ps1 `
