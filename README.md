@@ -158,6 +158,30 @@ Never store credentials in the repository.
 
 The launcher validates the repository, checks the provider and Docker, creates an immutable manifest, runs paired Linear/Async episodes, aggregates scores, and audits the run.
 
+### Run the frozen 61-case cohort
+
+The repository includes a runnable cohort of 61 existing, registered `seed-1`
+instances in `research/experiment-design/paper-eval-existing-61.csv`. It excludes
+`gaia2-stockholm-moveout` and does not include any of the 19 planned new cases.
+
+```powershell
+.\run_paper_eval_61.ps1 `
+  -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
+  -Repetitions 1 `
+  -Seed 2026
+```
+
+This validates the selection, creates one immutable manifest in the CSV's
+frozen order, and runs both Linear and Async for all 61 cases. The cohort keeps
+the original calibration/development/test labels; it is a reproducible
+execution cohort, not a claim that every case is held-out.
+
+To validate the selection without starting an experiment:
+
+```powershell
+python -m async_rbench.paper_eval check --root .
+```
+
 Outputs are written to:
 
 ```text

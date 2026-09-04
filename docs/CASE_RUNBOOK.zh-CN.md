@@ -198,6 +198,29 @@ artifacts/experiments/manual-<case>-<timestamp>/
 
 恢复时必须使用原目录、原 manifest、原模型配置和原 commit。脚本不会生成新 manifest。
 
+### 直接运行冻结的 61 个现有 case
+
+`research/experiment-design/paper-eval-existing-61.csv` 固化了 61 个现有、已注册的
+`seed-1` 实例。该集合不包含 `gaia2-stockholm-moveout`，也不包含计划新增但尚未构造的
+19 个 case。拉取仓库并配置好模型密钥后，可直接运行：
+
+```powershell
+.\run_paper_eval_61.ps1 `
+  -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
+  -Repetitions 1 `
+  -Seed 2026
+```
+
+脚本先校验仓库和 61 个实例，然后按冻结顺序生成不可变 manifest，并为每个 case
+运行一组 Linear/Async 配对。集合保留原来的 calibration、development、test 标签，
+因此这是可复现的执行集合，不表示 61 个 case 全部都是未见过的 held-out 数据。
+
+只检查集合、不启动模型运行：
+
+```powershell
+python -m async_rbench.paper_eval check --root .
+```
+
 完成后至少检查：
 
 - `manifest.json` 中只有分配的实例和预期执行模式；
