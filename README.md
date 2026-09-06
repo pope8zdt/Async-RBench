@@ -56,6 +56,8 @@ The exact theme definitions and frozen counts are in [`event_taxonomy.json`](eve
 
 The current main experiment is **exactly 47 cases**, fixed by [`experiments/formal-47/instances.txt`](experiments/formal-47/instances.txt). Each model runs 3 repetitions of Linear and Async, totaling 282 episodes. The website leaderboard includes only this cohort. Calibration/development/test labels are historical corpus metadata and do not partition or filter this leaderboard. See the [main-experiment policy](experiments/formal-47/README.md) for coverage, provisional scores and selection provenance.
 
+The website describes the full current repository corpus separately: case and instance totals, with theme distribution, are regenerated from the registry at build time. Main experiment conditions do not include a fixed child-model pool. The leaderboard switches between paired Linear/Async BTS and Async DRS. Participants can [package and validate results](submissions/README.md); complete submissions enter formal ranking only after a separate maintainer review. Coverage, execution status and independent reproduction are distinct facts.
+
 The historical 61-case selection and full 201-instance registry remain available for traceability; they are not the main leaderboard denominator.
 
 ## Metrics

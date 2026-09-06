@@ -6,12 +6,14 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "python scripts/prepare_data.py && next dev",
     "build": "node scripts/build-static.mjs",
     "build:static": "node scripts/build-static.mjs",
     "test:static": "node --test tests/static-artifact.test.mjs",
     "lint": "oxlint",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "prepare:data": "python scripts/prepare_data.py",
+    "test": "node --test tests/config.test.mjs tests/leaderboard.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
