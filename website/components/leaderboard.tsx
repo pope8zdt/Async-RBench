@@ -17,6 +17,7 @@ import { assetPath } from '@/lib/asset-path';
 import { score, type Experiment } from '@/lib/content';
 import {
   leaderboardRows,
+  leaderboardColumns,
   metricValue,
   reviewStatus,
   type MetricKey,
@@ -32,7 +33,7 @@ export function Leaderboard() {
     () => leaderboardRows(data.records as Experiment[], sort, query),
     [query, sort],
   );
-  const columns: MetricKey[] = view === 'bts' ? ['linear', 'async', 'delta'] : ['drs', 'delta'];
+  const columns = leaderboardColumns(view);
   const titles = { linear: 'Linear BTS', async: 'Async BTS', drs: 'DRS', delta: 'BTS (Async − Linear)' };
   // Keep the visual scale stable when search filters the displayed records.
   const deltaScale = Math.max(0.01, ...data.records.map((record) =>
@@ -146,8 +147,8 @@ export function Leaderboard() {
           <summary>{copy('评分与排名规则', 'Scoring and ranking')}</summary>
           <p>
             {copy(
-              '默认按 DRS 降序排列。BTS 视图按 Async − Linear 差值降序排列，数值越大排名越高。差值以分为单位；正负条形共用对称刻度，搜索不改变刻度。覆盖率见各模型详情。',
-              'DRS is the default, sorted descending. The BTS view ranks by Async − Linear, highest first. Differences are score points; signed bars share a symmetric scale that stays fixed during search. Coverage is available in model details.',
+              'DRS 视图只展示 DRS，并按分数降序排列。BTS 视图展示 Linear BTS、Async BTS 与 Async − Linear 差值，并按差值降序排列。差值越大排名越高；覆盖率见各模型详情。',
+              'The DRS view shows only DRS, sorted highest first. The BTS view shows Linear BTS, Async BTS and their Async − Linear difference, ranked by that difference. Coverage is available in model details.',
             )}
           </p>
           <p>

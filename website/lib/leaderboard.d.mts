@@ -5,6 +5,7 @@ export function executionStatus(record: Experiment): string;
 export function reviewStatus(
   record: Experiment,
 ): 'self_reported' | 'materials_reviewed' | 'independently_reproduced';
+export function leaderboardColumns(view: 'bts' | 'drs'): MetricKey[];
 export function metricValue(
   record: Experiment,
   metric: MetricKey,
