@@ -23,6 +23,10 @@ export function reviewStatus(record) {
     : 'self_reported';
 }
 
+export function leaderboardColumns(view) {
+  return view === 'bts' ? ['linear', 'async', 'delta'] : ['drs'];
+}
+
 export function metricValue(record, metric) {
   if (metric === 'delta') {
     const linear = metricValue(record, 'linear');
