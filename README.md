@@ -12,7 +12,9 @@ The benchmark runs the same registered instance in two controlled modes:
 
 The fixed kernel owns scheduling, event delivery, private truth, workspace isolation, verification, scoring, and aggregation. The evaluated adapter owns only the main agent and its child agents.
 
-<img width="1200" alt="Async-RBench overview" src="https://github.com/user-attachments/assets/3b2cd2bb-8cee-464f-ab9b-97251d8e93ed" />
+<img width="1200" alt="Async-RBench v11.0 framework: paired runs, asynchronous execution, and BTS/DRS evaluation" src="docs/assets/async-rbench-framework-v11.png" />
+
+[High-resolution PNG](docs/assets/async-rbench-framework-v11.png) · [Editable SVG](docs/assets/async-rbench-framework-v11.svg)
 
 > [!IMPORTANT]
 > This private collaboration repository contains hidden verifiers, private event truth, and held-out test instances. Do not publish the repository, expose private case paths to evaluated agents, or use test instances for prompt, adapter, threshold, or verifier development.
