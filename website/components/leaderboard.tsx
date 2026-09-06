@@ -58,8 +58,8 @@ export function Leaderboard() {
           <div>
             <h2>主实验结果</h2>
             <p className="muted" style={{ fontSize: 14, marginTop: 5 }}>
-              固定 {data.cohort.case_count} cases · Linear / Async · 每种模式{' '}
-              {data.cohort.repetitions} 次重复
+              主实验 · Linear / Async · 每种模式 {data.cohort.repetitions}{' '}
+              次重复
             </p>
           </div>
           <a
@@ -95,8 +95,8 @@ export function Leaderboard() {
         </p>
         <div className="note">
           <span>
-            正式名次仅包含完整覆盖且材料已审核或已独立复现的记录；材料审核不等于独立复现。暂计值不代表完整{' '}
-            {data.cohort.case_count}-case 成绩，缺失结果不计为 0。
+            正式名次仅包含完整覆盖且材料已审核或已独立复现的记录；材料审核不等于独立复现。暂计值不代表完整主实验成绩，缺失结果不计为
+            0。
           </span>
         </div>
         <div className="toolbar">
@@ -134,14 +134,13 @@ export function Leaderboard() {
         <div className="table-panel">
           <Table className="data-table">
             <caption className="screen-reader-only">
-              固定 {data.cohort.case_count} case 主实验；按 {titles[sort]}{' '}
-              降序，各覆盖与审核组分开展示。
+              主实验；按 {titles[sort]} 降序，各覆盖与审核组分开展示。
             </caption>
             <TableHeader>
               <TableRow>
                 <TableHead>名次</TableHead>
                 <TableHead>模型 / 记录</TableHead>
-                <TableHead>完整评分 Case</TableHead>
+                <TableHead>配对完成度</TableHead>
                 {columns.map((key) => (
                   <TableHead
                     key={key}
@@ -150,7 +149,7 @@ export function Leaderboard() {
                     {titles[key]}
                   </TableHead>
                 ))}
-                <TableHead>已评分 / 计划运行</TableHead>
+                <TableHead>评分进度</TableHead>
                 <TableHead>审核 / 执行状态</TableHead>
               </TableRow>
             </TableHeader>
@@ -176,7 +175,7 @@ export function Leaderboard() {
           )}
         </div>
         <p className="section-footnote">
-          三次重复先按 case
+          三次重复先按任务
           平均，再对八类事件主题等权汇总。完整记录与暂计记录分别排序；搜索保留全榜名次。执行状态仅按明确报告展示。
         </p>
       </TabsContent>
@@ -225,7 +224,7 @@ function RecordRows({
           </small>
         </TableCell>
         <TableCell className="number">
-          {r.completedCases} / {r.caseCount}
+          {((r.completedCases / r.caseCount) * 100).toFixed(1)}%
           <small className="cell-note">
             {complete ? '完整覆盖' : '覆盖不完整'}
           </small>
@@ -239,7 +238,7 @@ function RecordRows({
           </TableCell>
         ))}
         <TableCell className="number">
-          {r.scored} / {r.episodes}
+          {((r.scored / r.episodes) * 100).toFixed(1)}%
         </TableCell>
         <TableCell>
           <span className="status-label">{reviewLabels[reviewStatus(r)]}</span>

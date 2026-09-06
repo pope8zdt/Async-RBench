@@ -264,16 +264,13 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
             </details>
             <div className="form-row">
               {choice('评测集合', scope, setScope, [
-                ['development', '单实例试跑'],
-                ['formal', '主实验 · 固定 47 case'],
+                ['development', '单任务试跑'],
+                ['formal', '主实验'],
               ])}
               {scope === 'formal' ? (
                 <label className="field">
                   <span>重复次数</span>
-                  <input
-                    value="固定 3 次 / 每种模式 · 共 282 次运行"
-                    readOnly
-                  />
+                  <input value="固定 3 次 / 每种模式" readOnly />
                 </label>
               ) : (
                 choice('重复次数', repetitions, setRepetitions, [

@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     default: 'Async-RBench | 异步重规划评测',
     template: '%s | Async-RBench',
   },
-  description: 'Async-RBench 的评测协议、47-case 主实验结果与本地运行教程。',
+  description:
+    'Async-RBench：201个高质量任务，异步重规划评测、主实验结果与本地运行教程。',
 };
 export default function RootLayout({
   children,

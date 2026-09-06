@@ -5,7 +5,7 @@ export default function Page() {
     <div className="page-wrap">
       <div className="page-title">
         <h1>Leaderboard</h1>
-        <p>只统计固定主实验清单中的 47 个 case，按模型展示结果与完成进度。</p>
+        <p>按模型展示主实验结果与评测进度，支持配对 BTS 与 DRS 切换。</p>
       </div>
       <Leaderboard />
     </div>
