@@ -12,7 +12,7 @@ The benchmark runs the same registered instance in two controlled modes:
 
 The fixed kernel owns scheduling, event delivery, private truth, workspace isolation, verification, scoring, and aggregation. The evaluated adapter owns only the main agent and its child agents.
 
-<img width="1200" alt="Async-RBench v11.0 framework: paired runs, asynchronous execution, and BTS/DRS evaluation" src="docs/assets/async-rbench-framework-v11.png" />
+<img width="1200" alt="Async-RBench framework: paired runs, asynchronous execution, and BTS/DRS evaluation" src="docs/assets/async-rbench-framework-v11.png" />
 
 [High-resolution PNG](docs/assets/async-rbench-framework-v11.png) · [Editable SVG](docs/assets/async-rbench-framework-v11.svg)
 
