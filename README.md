@@ -40,7 +40,8 @@ The fixed evaluation kernel owns scheduling, event delivery, private truth, work
 
 <p align="center">
   <a href="docs/assets/async-rbench-framework-v11.png">High-resolution PNG</a> ·
-  <a href="docs/assets/async-rbench-framework-v11.svg">Editable SVG</a>
+  <a href="docs/assets/async-rbench-framework-v11.svg">Editable SVG</a> ·
+  <a href="docs/assets/async-rbench-framework-v11.pdf">Vector PDF</a>
 </p>
 
 ## ✨ Benchmark Highlights
