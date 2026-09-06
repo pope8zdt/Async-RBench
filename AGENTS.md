@@ -8,7 +8,7 @@
 - Use `python -m async_rbench.main_experiment check` and `experiments/formal-47/run.ps1` for the current main experiment. Preserve old manifests, raw results, existing runs and the frozen per-episode scoring contract.
 - Website source is `website/`. Its exporter reads only selected main-experiment episodes, rejects ambiguous duplicate attempts and exports allowlisted aggregates. Incomplete coverage must remain visible; provisional values are not full 47-case scores or independently verified results.
 
-- Task descriptions use full current registry case counts and theme distribution generated during website build; never substitute the 47-case leaderboard denominator for the corpus total.
+- Corpus data retains full registry counts for validation; public task descriptions follow the wording rule above and use the task distribution, never the leaderboard denominator as the corpus total.
 - Fixed child model pools are not a public experiment condition or submission requirement. Preserve historical raw metadata and per-episode scoring.
 - Leaderboard offers paired BTS and DRS views. Incomplete coverage does not prove an execution is running; preserve separate coverage, execution and review statuses.
 - Submission entries are aggregate-only self-reports. Maintainer review records are separate and digest-bound; CI validation cannot authenticate scores or a reviewer identity.
