@@ -21,15 +21,15 @@ const full = (id, values = {}) => ({
   ...values,
 });
 
-test('BTS difference is Linear minus Async, preserving negatives, zero and missing pairs', () => {
-  assert.equal(metricValue(full('positive', { linear: 0.7, async: 0.4 }), 'delta'), 0.3);
-  assert.equal(metricValue(full('negative', { linear: 0.2, async: 0.5 }), 'delta'), -0.3);
+test('BTS difference is Async minus Linear, preserving negatives, zero and missing pairs', () => {
+  assert.equal(metricValue(full('negative', { linear: 0.7, async: 0.4 }), 'delta'), -0.3);
+  assert.equal(metricValue(full('positive', { linear: 0.2, async: 0.5 }), 'delta'), 0.3);
   assert.equal(metricValue(full('zero', { linear: 0, async: 0 }), 'delta'), 0);
   assert.equal(metricValue(full('missing', { async: null }), 'delta'), null);
   assert.equal(metricValue(full('invalid', { linear: Infinity }), 'delta'), null);
   assert.equal(metricValue(full('partial', {
     pairedComplete: false, observedLinear: 0.8, observedAsync: 0.3,
-  }), 'delta'), 0.5);
+  }), 'delta'), -0.5);
   assert.equal(metricValue(full('partial', {
     pairedComplete: false, observedLinear: 0.8, observedAsync: null,
   }), 'delta'), null);
@@ -45,8 +45,8 @@ test('BTS difference ranks descending with stable arithmetic ties and preserved 
     full('missing', { linear: null }),
   ];
   assert.deepEqual(leaderboardRows(records, 'delta').map(({record, rank}) => [record.id, rank]),
-    [['a', 1], ['b', 1], ['zero', 3], ['negative', 4], ['missing', null], ['partial', null]]);
-  assert.equal(leaderboardRows(records, 'delta', 'negative')[0].rank, 4);
+    [['negative', 1], ['zero', 2], ['a', 3], ['b', 3], ['missing', null], ['partial', null]]);
+  assert.equal(leaderboardRows(records, 'delta', 'negative')[0].rank, 1);
 });
 
 test('coverage never infers execution or review and requires complete pairs', () => {
