@@ -24,6 +24,14 @@ export function reviewStatus(record) {
 }
 
 export function metricValue(record, metric) {
+  if (metric === 'delta') {
+    const linear = metricValue(record, 'linear');
+    const async = metricValue(record, 'async');
+    // Remove subtraction noise so mathematically equal differences tie.
+    return linear === null || async === null
+      ? null
+      : Number((linear - async).toFixed(12));
+  }
   const observed = {
     linear: 'observedLinear',
     async: 'observedAsync',

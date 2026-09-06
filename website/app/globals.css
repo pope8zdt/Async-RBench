@@ -986,6 +986,41 @@ h4 {
   }
 }
 
+.score-visual {
+  display: grid;
+  gap: 7px;
+  min-width: 100px;
+  max-width: 180px;
+}
+.score-track {
+  display: block;
+  position: relative;
+  height: 5px;
+  background: var(--muted);
+  border-radius: 2px;
+}
+.score-fill {
+  position: absolute;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 2px;
+}
+.score-difference::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -3px;
+  height: 11px;
+  width: 1px;
+  background: var(--foreground);
+}
+.score-negative {
+  background: #b56731;
+}
+.dark .score-negative {
+  background: #dfa16e;
+}
+
 /* Corpus metadata and independently selected leaderboard metrics. */
 .metric-switch {
   display: inline-flex;
