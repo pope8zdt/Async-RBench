@@ -30,7 +30,7 @@ export function metricValue(record, metric) {
     // Remove subtraction noise so mathematically equal differences tie.
     return linear === null || async === null
       ? null
-      : Number((linear - async).toFixed(12));
+      : Number((async - linear).toFixed(12));
   }
   const observed = {
     linear: 'observedLinear',
