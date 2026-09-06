@@ -1,136 +1,67 @@
+<div align="center">
+
 # Async-RBench
 
-[![Version: 11.0.0](https://img.shields.io/badge/version-11.0.0-blue)](https://github.com/pope8zdt/Async-RBench)
-[![Contract: frozen](https://img.shields.io/badge/contract-frozen-green)](evaluation_contract.json)
+### Benchmarking asynchronous result integration and dynamic replanning
 
-Async-RBench evaluates whether a main agent can integrate independently completing subagent results and replan after delayed, stale, conflicting, partial, duplicated, failed, or resource-constrained events.
+[![Version](https://img.shields.io/badge/version-11.0.0-2f6f9f)](https://github.com/pope8zdt/Async-RBench)
+[![Contract](https://img.shields.io/badge/evaluation%20contract-frozen-2f855a)](evaluation_contract.json)
+[![Python](https://img.shields.io/badge/python-3.11%2B-3776ab)](pyproject.toml)
+[![Website](https://github.com/pope8zdt/Async-RBench/actions/workflows/pages.yml/badge.svg)](https://github.com/pope8zdt/Async-RBench/actions/workflows/pages.yml)
 
-The benchmark runs the same registered instance in two controlled modes:
+[Website](https://pope8zdt.github.io/Async-RBench/) ·
+[Leaderboard](https://pope8zdt.github.io/Async-RBench/leaderboard/) ·
+[Run the benchmark](https://pope8zdt.github.io/Async-RBench/evaluate/) ·
+[Documentation](https://pope8zdt.github.io/Async-RBench/docs/)
 
-- `linear`: the baseline execution condition;
-- `async`: concurrent subagent execution with evaluator-controlled event delivery.
+If Async-RBench is useful to your research, consider starring the repository.
 
-The fixed kernel owns scheduling, event delivery, private truth, workspace isolation, verification, scoring, and aggregation. The evaluated adapter owns only the main agent and its child agents.
+</div>
 
-<img width="1200" alt="Async-RBench framework: paired runs, asynchronous execution, and BTS/DRS evaluation" src="docs/assets/async-rbench-framework-v11.png" />
+## 📣 Latest News
 
-[High-resolution PNG](docs/assets/async-rbench-framework-v11.png) · [Editable SVG](docs/assets/async-rbench-framework-v11.svg)
+- **September 2026:** The public website, DRS/BTS leaderboard, local-run workflow, and reviewed result submission path are available.
+- **Version 11.0.0:** The evaluation contract is frozen for reproducible Track A experiments.
 
-> [!IMPORTANT]
-> This private collaboration repository contains hidden verifiers, private event truth, and held-out test instances. Do not publish the repository, expose private case paths to evaluated agents, or use test instances for prompt, adapter, threshold, or verifier development.
+## 💡 Overview
 
-## Version 11.0.0
+Async-RBench evaluates whether a main agent can integrate independently completing subagent results and revise its plan when results arrive late, out of order, partially, repeatedly, in conflict, or under failure and resource pressure.
 
-The current release surface is:
+The same task runs in two controlled modes:
 
-- contract version: `11.0.0`;
-- contract status: `frozen`;
-- dataset: 200 case directories and 201 registered instances;
-- split: 82 calibration / 30 development / 89 test;
-- execution modes: `linear` and `async`;
-- aggregation unit: equal macro-average across the eight event themes;
-- official scope: fixed-harness, containerized Track A runs only.
-- participant-controlled non-exposure keeps every declared Async DRS event in the denominator as score `0`;
-- the shared emergency token fuse is `5,000,000` actual provider-reported tokens per episode.
+- **Linear:** a baseline execution condition.
+- **Async:** concurrent subagent execution with evaluator-controlled event delivery.
 
-Version 11.0.0 is the frozen contract for the fixed 47-case main experiment. Repository validation checks the tracked optional calibration definition for consistency, but does not require executing it, producing an audit, or meeting a model-panel minimum. Run `validate --release` before every formal experiment.
+The fixed evaluation kernel owns scheduling, event delivery, private truth, workspace isolation, verification, scoring, and aggregation. The evaluated adapter owns the main agent and its child agents. No fixed child-model pool is required.
 
-Only `(case_id, instance_id)` pairs in [`cases/registry.json`](cases/registry.json) are official registered instances.
+<p align="center">
+  <img width="1200" alt="Async-RBench framework: paired runs, asynchronous execution, and BTS/DRS evaluation" src="docs/assets/async-rbench-framework-v11.png" />
+</p>
 
-## Event themes
+<p align="center">
+  <a href="docs/assets/async-rbench-framework-v11.png">High-resolution PNG</a> ·
+  <a href="docs/assets/async-rbench-framework-v11.svg">Editable SVG</a>
+</p>
 
-Every registered instance belongs to exactly one event theme:
+## ✨ Benchmark Highlights
 
-1. `delayed_authoritative_result`
-2. `late_or_out_of_order_superseded_result`
-3. `partial_then_complete_result`
-4. `conflicting_valid_results`
-5. `duplicate_or_replayed_completion`
-6. `child_failure_or_implicit_error`
-7. `task_scope_or_dependency_change`
-8. `straggler_under_resource_pressure`
+- **201 high-quality tasks** across eight asynchronous event themes.
+- **Paired execution** compares the same registered task under Linear and Async conditions.
+- **Controlled delivery** makes delayed, stale, conflicting, partial, duplicate, failed, and resource-constrained events reproducible.
+- **Independent measurements** separate base-task correctness from dynamic replanning quality.
+- **Local execution** keeps credentials, raw traces, and restricted evaluator materials on the participant's machine.
+- **Static public leaderboard** publishes aggregate results without requiring a hosted evaluation server.
 
-The exact theme definitions and frozen counts are in [`event_taxonomy.json`](event_taxonomy.json). Capabilities are independent multi-label measurements and are not added to event-theme counts.
-
-## Main experiment and leaderboard scope
-
-The current main experiment is **exactly 47 cases**, fixed by [`experiments/formal-47/instances.txt`](experiments/formal-47/instances.txt). Each model runs 3 repetitions of Linear and Async, totaling 282 episodes. The website leaderboard includes only this cohort. Calibration/development/test labels are historical corpus metadata and do not partition or filter this leaderboard. See the [main-experiment policy](experiments/formal-47/README.md) for coverage, provisional scores and selection provenance.
-
-The website describes the full current repository corpus separately: case and instance totals, with theme distribution, are regenerated from the registry at build time. Main experiment conditions do not include a fixed child-model pool. The leaderboard switches between paired Linear/Async BTS and Async DRS. Participants can [package and validate results](submissions/README.md); complete submissions enter formal ranking only after a separate maintainer review. Coverage, execution status and independent reproduction are distinct facts.
-
-The historical 61-case selection and full 201-instance registry remain available for traceability; they are not the main leaderboard denominator.
-
-## Metrics
-
-### Primary metrics
-
-Async-RBench v11.0.0 reports three independent headline metrics:
-
-- `linear_base_task_score`: base-task correctness in Linear mode;
-- `async_base_task_score`: base-task correctness in Async mode;
-- `async_dynamic_replanning_score`: per-event replanning quality in Async mode, combining evaluator-observed process quality and async outcome quality.
-
-The main-47 headline values average the three repetitions within each case, cases within each theme, and then all eight themes equally. Full-cohort scores require all six episodes for every one of the 47 cases; incomplete coverage is shown as provisional. Historical test-instance coverage gates do not select cases for this leaderboard.
-
-### Supporting metrics
-
-- `paired_bts_delta`: paired Linear minus Async Base Task Score.
-- `semantic_task_score`, `linear_semantic_task_score`, `async_semantic_task_score`: frozen programmatic semantic-verifier scores.
-- `paired_semantic_drop`: paired Linear semantic score minus Async semantic score.
-- `dynamic_control_score`: legacy causal decision-group control score retained for compatibility and diagnosis.
-- `dt_score`: secondary compatibility summary, `0.80 * dynamic_control_score + 0.20 * semantic_task_score`.
-- `dynamic_success_rate`: share of Async episodes with Dynamic Control Score at least `0.75` and all critical dynamic checks passing.
-- `critical_dynamic_success_rate`: share of Async episodes passing every critical dynamic check.
-- `dynamic_dimension_scores`: `event_intake`, `state_revision`, `plan_revision`, and `closure` breakdowns.
-- `capability_dynamic_control_scores`: dynamic-control breakdown by declared capability category.
-- `scenario_construction_rate` and `scenario_exposure_rate`: harness construction and participant exposure diagnostics.
-- `stale_retention_rate`, `reverification_completeness`, and `recovery_latency_mean_ms`: replanning-process diagnostics.
-- event-opportunity counts: declared, delivered, presented, acted-on, unreached, and designed-terminal opportunities.
-- reliability: Async and Linear `pass@1`, `pass@2`, and `pass@3`.
-- efficiency: token means/medians/p95, paired Async token delta, mode-separated wall-clock statistics, and cost-quality Pareto rows.
-- submission metrics: acceptance/rejection rate, first-attempt and retry acceptance, accepted-child token cost, and extra tokens from public rejections.
-- attempt outcomes: model-step limit, emergency safety abort, no-submission, cancellation, timeout, crash, contract failure, and infrastructure failure rates/counts.
-- termination diagnostics: explicit/implicit stop reason, finish-time closure facts, and actual main/child/per-actor token use. Token use is descriptive and does not gate normal calls.
-- redelegation metrics: retry attempt count, invalid redelegation count, and invalid redelegation rate.
-- integrity diagnostics: scored/unscored counts, leaderboard eligibility, theme coverage, denominator digest consistency, pair completeness, conformance, and hard-fail reasons.
-
-[`evaluation_contract.json`](evaluation_contract.json) is the machine-readable authority for per-episode metric definitions. The current main-47 summary lives in [`async_rbench/main_results.py`](async_rbench/main_results.py). Historical split-based diagnostic aggregates live in [`async_rbench/evaluation/aggregate.py`](async_rbench/evaluation/aggregate.py); component weighting lives in [`async_rbench/evaluation/weighting.py`](async_rbench/evaluation/weighting.py).
-
-## Repository layout
-
-```text
-Async-RBench/
-|-- async_rbench/           kernel, protocol, runtime, scoring, and audit code
-|   |-- evaluation/         runner, scheduler, scoring, aggregation, termination
-|   |-- conformance/        adapter protocol conformance suite
-|   |-- profiles/           fixed and development adapter profiles
-|   `-- protocol_sdk/       JSONL gateway and capability RPC
-|-- cases/                  200 case directories plus registry.json
-|-- configs/                model profiles, calibration plan, runtime locks
-|-- adapters/               executable adapter entry points
-|-- schemas/                machine-readable JSON Schemas
-|-- scripts/                current audit, batch, and native-runtime utilities
-|-- tests/                  framework unit and integration tests
-|-- docs/                   runbook and v10 architecture contracts
-|-- examples/               simple-review example payloads
-|-- research/               event-migration audit manifest used by tests
-|-- run_case.ps1            canonical single-instance launcher
-|-- evaluation_contract.json
-|-- event_taxonomy.json
-`-- dataset_policy.json
-```
-
-Generated runs belong under `artifacts/experiments/` and are ignored by Git. Optional upstream repositories and native assets belong under `upstream/` and are also excluded.
-
-## Quick start
+## 🚀 Quick Start
 
 ### 1. Install
 
-Windows PowerShell 7, Python 3.11+, Git, and Docker Desktop with the Linux engine are required.
+Async-RBench requires Windows PowerShell 7, Python 3.11+, Git, and Docker Desktop with the Linux engine.
 
 ```powershell
 git clone https://github.com/pope8zdt/Async-RBench.git
 Set-Location Async-RBench
+
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
@@ -138,86 +69,134 @@ python -m pip install -e ".[test]"
 docker info
 ```
 
-### 2. Validate without model cost
+### 2. Validate the checkout
+
+Validation does not call a model.
 
 ```powershell
-python -m async_rbench.cli validate
+python -m async_rbench.cli validate --release
 python -m pytest -q
 ```
 
-A clean clone may skip author-local tests whose large upstream inputs are intentionally not distributed. It must not report failed or errored tests.
+### 3. Configure a model
 
-### 3. Choose an instance and profile
-
-Choose a `calibration` or `development` instance from `cases/registry.json`. Do not independently select held-out `test` instances.
-
-Model profiles are under `configs/model-profiles/`. Set the environment variable named by the profile's `api_key_env` field. Example:
+Use the [configuration generator](https://pope8zdt.github.io/Async-RBench/evaluate/) or add an OpenAI-compatible model profile under `configs/model-profiles/`. Store only the API-key environment-variable name in the profile; keep the key outside the repository.
 
 ```powershell
-$env:ASYNC_RBENCH_DEEPSEEK_KEY = Read-Host "DeepSeek API key" -MaskInput
+$env:MODEL_API_KEY = Read-Host "API key" -MaskInput
 ```
 
-Never store credentials in the repository.
-
-### 4. Run one paired case
+### 4. Run one paired task
 
 ```powershell
 .\run_case.ps1 `
   -Instance "secure-release::seed-1" `
-  -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
+  -Config "model-config.yaml" `
   -Repetitions 1 `
   -Seed 2026
 ```
 
-The launcher validates the repository, checks the provider and Docker, creates an immutable manifest, runs paired Linear/Async episodes, aggregates scores, and audits the run.
-
-### Run the main 47-case experiment
-
-The formal Async-RBench v11.0.0 experiment is defined in [`experiments/formal-47/`](experiments/formal-47/).
-Its fixed `instances.txt` selects exactly 47 registered `seed-1` instances from canonical top-level `cases/`. Membership is the user-supplied main-experiment selection, not a filter by historical split or current score.
+### 5. Run the main experiment
 
 ```powershell
-.\experiments\formal-47\run.ps1 `
-  -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
+.\run_main.ps1 `
+  -Config "model-config.yaml" `
   -Repetitions 3 `
   -Seed 2026
 ```
 
-This validates the selection, creates one immutable manifest in the fixed order,
-and runs three repetitions of both Linear and Async for all 47 cases (282 episodes).
-The original calibration/development/test labels remain historical metadata;
-they do not partition the main-experiment leaderboard.
+The launcher validates the repository and provider, creates an immutable manifest, runs paired Linear/Async episodes, aggregates scores, and audits the result. See the [main experiment policy](experiments/formal-47/README.md) for selection, coverage, and resume rules.
 
-To validate the selection without starting an experiment:
+> [!IMPORTANT]
+> Keep API keys, raw traces, private event truth, and restricted evaluator data local. Public submissions contain only allowlisted aggregate results.
+
+## 📊 Leaderboard and Metrics
+
+The [public leaderboard](https://pope8zdt.github.io/Async-RBench/leaderboard/) opens with the primary DRS view. The BTS view compares task correctness between execution modes.
+
+| View | Measurement | Ranking |
+| --- | --- | --- |
+| **DRS** | Dynamic replanning quality under asynchronous events | Higher is better |
+| **Linear BTS** | Base-task correctness in Linear mode | Component score |
+| **Async BTS** | Base-task correctness in Async mode | Component score |
+| **BTS difference** | Async BTS − Linear BTS | Higher is better |
+
+Scores use a 0–100 scale. Complete reviewed results receive formal ranks; incomplete coverage remains visibly provisional. Coverage, execution status, materials review, and independent reproduction are separate facts.
+
+The eight event themes are:
+
+1. Delayed authoritative results
+2. Stale and out-of-order results
+3. Partial-to-complete results
+4. Conflicting valid results
+5. Duplicate and replayed completions
+6. Child-task failures
+7. Scope and dependency changes
+8. Stragglers under resource pressure
+
+Metric definitions and per-episode scoring are frozen in [`evaluation_contract.json`](evaluation_contract.json). Theme definitions live in [`event_taxonomy.json`](event_taxonomy.json).
+
+## 📤 Submit Results
+
+Participants execute the benchmark locally and submit a public aggregate package. Packaging excludes credentials, provider configuration, raw case scores, traces, and local paths.
 
 ```powershell
-python -m async_rbench.main_experiment check --root .
+$benchmarkCommit = git rev-parse HEAD
+python -m async_rbench.submissions package `
+  --root . `
+  --manifest artifacts/experiments/MY_RUN/manifest.json `
+  --benchmark-commit $benchmarkCommit
+
+python -m async_rbench.submissions check --root .
 ```
 
-Outputs are written under `artifacts/experiments/formal-47-<timestamp>/`; the [formal experiment README](experiments/formal-47/README.md) documents the complete layout and resume procedure.
+Read the [submission and review guide](submissions/README.md), then use the [Track A submission form](https://github.com/pope8zdt/Async-RBench/issues/new?template=benchmark-result.yml). Track B is currently a simulation preview and does not produce real scores or leaderboard entries.
 
-### 5. Resume an infrastructure-interrupted run
+## 📁 Repository Structure
 
-```powershell
-.\run_case.ps1 `
-  -Instance "secure-release::seed-1" `
-  -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
-  -ExperimentRoot "artifacts/experiments/manual-secure-release-seed-1-YYYYMMDD-HHMMSS" `
-  -Resume
+```text
+Async-RBench/
+├── async_rbench/          # Kernel, runtime, scoring, and aggregation
+├── adapters/              # Executable adapter entry points
+├── cases/                 # Registered benchmark tasks
+├── configs/               # Model profiles and runtime configuration
+├── experiments/           # Versioned experiment definitions
+├── schemas/               # Machine-readable contracts
+├── submissions/           # Aggregate result packages and reviews
+├── website/               # Static public website
+├── docs/                  # Protocol and operator documentation
+├── run_case.ps1           # Single-task paired launcher
+└── run_main.ps1           # Main experiment launcher
 ```
 
-Resume only with the original experiment directory, manifest, profile, and commit. Model failures, low scores, participant-caused timeouts, implicit stops, and step-limit exits are valid outcomes and must not be rerun as infrastructure failures. A `resource_safety_abort` is reported separately and remains unscored.
+Generated experiments belong under `artifacts/experiments/` and remain outside version control.
 
-## Documentation
+## 📚 Documentation
 
-- [`docs/CASE_RUNBOOK.zh-CN.md`](docs/CASE_RUNBOOK.zh-CN.md): complete Chinese operator runbook.
-- [`PROTOCOL.md`](PROTOCOL.md): benchmark protocol.
-- [`ADAPTER_PROTOCOL.md`](ADAPTER_PROTOCOL.md): adapter boundary and JSONL interface.
-- [`docs/kernel-contract.md`](docs/kernel-contract.md): fixed kernel responsibilities.
-- [`docs/adapter-contract.md`](docs/adapter-contract.md): adapter responsibilities.
-- [`docs/async-rbench-result-contract-and-termination.md`](docs/async-rbench-result-contract-and-termination.md): result validation and terminal taxonomy.
-- [`docs/evaluation-tracks.md`](docs/evaluation-tracks.md): official and development track separation.
+- [Website tutorial](https://pope8zdt.github.io/Async-RBench/docs/)
+- [Chinese operator runbook](docs/CASE_RUNBOOK.zh-CN.md)
+- [Evaluation protocol](PROTOCOL.md)
+- [Adapter protocol](ADAPTER_PROTOCOL.md)
+- [Kernel contract](docs/kernel-contract.md)
+- [Adapter contract](docs/adapter-contract.md)
+- [Result and termination contract](docs/async-rbench-result-contract-and-termination.md)
+- [Evaluation tracks](docs/evaluation-tracks.md)
+- [Submission and review guide](submissions/README.md)
 
-## Repository hygiene
+## 🥰 Citation
 
-Do not commit API keys, `.env` files, local environments, upstream checkouts, experiment outputs, or private evaluator data copied into participant-visible paths. Keep generated evidence under `artifacts/` and preserve completed experiment directories unchanged.
+If you use Async-RBench in your research, please cite the repository and the exact release used for evaluation:
+
+```bibtex
+@software{async_rbench_2026,
+  title   = {Async-RBench: Benchmarking Asynchronous Result Integration and Dynamic Replanning},
+  author  = {Async-RBench Contributors},
+  year    = {2026},
+  version = {11.0.0},
+  url     = {https://github.com/pope8zdt/Async-RBench}
+}
+```
+
+## 📧 Contact
+
+Use [GitHub Issues](https://github.com/pope8zdt/Async-RBench/issues) for questions, bug reports, and result-submission support.
