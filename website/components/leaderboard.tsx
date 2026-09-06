@@ -11,23 +11,20 @@ import {
   TableRow,
   TableCell,
 } from '@/components/ui/table';
+import { useCopy } from '@/components/preferences';
+import { ReviewLabel } from '@/components/result-labels';
 import { assetPath } from '@/lib/asset-path';
-import {
-  score,
-  reviewLabels,
-  executionLabels,
-  type Experiment,
-} from '@/lib/content';
+import { score, type Experiment } from '@/lib/content';
 import {
   leaderboardRows,
   metricValue,
   reviewStatus,
-  executionStatus,
   type MetricKey,
 } from '@/lib/leaderboard.mjs';
 import data from '@/public/data/leaderboard.json';
 
 export function Leaderboard() {
+  const copy = useCopy();
   const [query, setQuery] = useState('');
   const [view, setView] = useState<'bts' | 'drs'>('bts');
   const [btsSort, setBtsSort] = useState<'linear' | 'async'>('async');
@@ -39,108 +36,90 @@ export function Leaderboard() {
   const columns: MetricKey[] = view === 'bts' ? ['linear', 'async'] : ['drs'];
   const titles = { linear: 'Linear BTS', async: 'Async BTS', drs: 'Async DRS' };
   const groups = [
-    '完整覆盖 · 已审核',
-    '完整覆盖 · 未列入正式排名',
-    '覆盖不完整 · 暂计结果',
+    copy('正式排名 · 完整覆盖且已审核', 'Ranked · complete and reviewed'),
+    copy('完整覆盖 · 未排名', 'Complete · unranked'),
+    copy('暂计结果 · 覆盖不完整', 'Provisional · incomplete coverage'),
   ];
   return (
     <Tabs defaultValue="a">
       <TabsList className="tab-list">
         <TabsTrigger className="tab-trigger" value="a">
-          Track A · 主实验
+          {copy('Track A · 模型', 'Track A · Models')}
         </TabsTrigger>
         <TabsTrigger className="tab-trigger" value="b">
-          Track B · 系统预览
+          {copy('Track B · 系统', 'Track B · Systems')}
         </TabsTrigger>
       </TabsList>
       <TabsContent value="a" className="tab-content">
         <div className="section-heading">
-          <div>
-            <h2>主实验结果</h2>
-            <p className="muted" style={{ fontSize: 14, marginTop: 5 }}>
-              主实验 · Linear / Async · 每种模式 {data.cohort.repetitions}{' '}
-              次重复
-            </p>
-          </div>
+          <fieldset className="metric-switch">
+            <legend className="screen-reader-only">
+              {copy('指标', 'Metric')}
+            </legend>
+            <button
+              type="button"
+              aria-pressed={view === 'bts'}
+              onClick={() => setView('bts')}
+            >
+              BTS
+            </button>
+            <button
+              type="button"
+              aria-pressed={view === 'drs'}
+              onClick={() => setView('drs')}
+            >
+              DRS
+            </button>
+          </fieldset>
           <a
             href={assetPath('/data/leaderboard.json')}
             download
             className="text-link"
           >
-            <Download size={15} /> 下载公开数据
+            <Download size={15} /> {copy('下载数据', 'Download data')}
           </a>
-        </div>
-        <fieldset className="metric-switch">
-          <legend className="screen-reader-only">指标视图</legend>
-          <button
-            type="button"
-            aria-pressed={view === 'bts'}
-            onClick={() => setView('bts')}
-          >
-            BTS · Linear / Async 配对
-          </button>
-          <button
-            type="button"
-            aria-pressed={view === 'drs'}
-            onClick={() => setView('drs')}
-          >
-            DRS · Async 重规划
-          </button>
-        </fieldset>
-        <p className="section-footnote">
-          {view === 'bts'
-            ? '并列比较相同任务在 Linear 与 Async 条件下的基础任务得分。'
-            : '比较 Async 条件下的动态重规划得分。'}{' '}
-          分数范围 0–100，分数越高越好。
-        </p>
-        <div className="note">
-          <span>
-            正式名次仅包含完整覆盖且材料已审核或已独立复现的记录；材料审核不等于独立复现。暂计值不代表完整主实验成绩，缺失结果不计为
-            0。
-          </span>
         </div>
         <div className="toolbar">
           <label>
-            <span className="screen-reader-only">搜索模型或记录编号</span>
+            <span className="screen-reader-only">
+              {copy('搜索模型或记录', 'Search models or records')}
+            </span>
             <input
               className="search-input"
-              placeholder="搜索模型或记录编号…"
+              placeholder={copy('搜索模型…', 'Search models…')}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </label>
           {view === 'bts' ? (
             <label className="sort-control">
-              排序
+              {copy('排序', 'Sort')}
               <select
                 value={btsSort}
                 onChange={(e) =>
                   setBtsSort(e.target.value as 'linear' | 'async')
                 }
               >
-                <option value="async">Async BTS · 从高到低</option>
-                <option value="linear">Linear BTS · 从高到低</option>
+                <option value="async">Async BTS ↓</option>
+                <option value="linear">Linear BTS ↓</option>
               </select>
             </label>
           ) : (
-            <span className="muted" style={{ fontSize: 13 }}>
-              Async DRS · 从高到低
-            </span>
+            <span className="sort-control">Async DRS ↓</span>
           )}
-          <span className="snapshot-time">
-            快照 {data.generatedAt.replace('T', ' ').slice(0, 19)} UTC
-          </span>
         </div>
         <div className="table-panel">
           <Table className="data-table">
             <caption className="screen-reader-only">
-              主实验；按 {titles[sort]} 降序，各覆盖与审核组分开展示。
+              {copy(
+                `主实验，按 ${titles[sort]} 降序，按覆盖与审核状态分组。`,
+                `Main experiment, sorted by ${titles[sort]} descending and grouped by coverage and review status.`,
+              )}
             </caption>
             <TableHeader>
               <TableRow>
-                <TableHead>名次</TableHead>
-                <TableHead>模型 / 记录</TableHead>
-                <TableHead>配对完成度</TableHead>
+                <TableHead>{copy('名次', 'Rank')}</TableHead>
+                <TableHead>{copy('模型', 'Model')}</TableHead>
                 {columns.map((key) => (
                   <TableHead
                     key={key}
@@ -149,17 +128,16 @@ export function Leaderboard() {
                     {titles[key]}
                   </TableHead>
                 ))}
-                <TableHead>评分进度</TableHead>
-                <TableHead>审核 / 执行状态</TableHead>
+                <TableHead>{copy('配对覆盖', 'Paired coverage')}</TableHead>
+                <TableHead>{copy('审核', 'Review')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows.map(({ record: r, rank, group, complete }, index) => (
+              {rows.map(({ record: r, rank, group }, index) => (
                 <RecordRows
                   key={r.id}
                   record={r}
                   rank={rank}
-                  complete={complete}
                   columns={columns}
                   groupLabel={
                     index === 0 || rows[index - 1].group !== group
@@ -171,21 +149,45 @@ export function Leaderboard() {
             </TableBody>
           </Table>
           {rows.length === 0 && (
-            <div className="empty-state">没有匹配的主实验记录。</div>
+            <div className="empty-state">
+              {copy('没有匹配的模型。', 'No matching models.')}
+            </div>
           )}
         </div>
-        <p className="section-footnote">
-          三次重复先按任务
-          平均，再对八类事件主题等权汇总。完整记录与暂计记录分别排序；搜索保留全榜名次。执行状态仅按明确报告展示。
-        </p>
+        <details className="section leaderboard-method">
+          <summary>{copy('评分与排名规则', 'Scoring and ranking')}</summary>
+          <p>
+            {copy(
+              'BTS 衡量任务完成质量，DRS 衡量异步重规划质量，均为 0–100 分。每种执行模式重复三次，先按任务平均，再对八类主题等权汇总。',
+              'BTS measures task completion; DRS measures asynchronous replanning. Both use a 0–100 scale. Three repetitions per mode are averaged by task, then equally across eight themes.',
+            )}
+          </p>
+          <p>
+            {copy(
+              '正式排名要求完整覆盖且材料已审核或已独立复现。材料审核不等于独立复现。暂计结果仅来自已完整评分任务，缺失值不计为零。搜索保留全榜名次。',
+              'Ranking requires complete coverage and materials review or independent reproduction. Materials review is distinct from reproduction. Provisional scores use fully scored tasks only; missing values are not zeros. Search preserves overall ranks.',
+            )}
+          </p>
+          <p>
+            {copy('数据快照', 'Snapshot')}:{' '}
+            {data.generatedAt.replace('T', ' ').slice(0, 19)} UTC
+          </p>
+        </details>
       </TabsContent>
       <TabsContent value="b" className="tab-content">
         <div className="panel empty-state">
-          <span className="tag">模拟预览</span>
-          <h3 style={{ marginTop: 15 }}>Agent System Leaderboard</h3>
-          <p>Track B 尚未运行真实测评，也没有真实排名。</p>
+          <span className="tag">{copy('模拟预览', 'Simulation preview')}</span>
+          <h3 style={{ marginTop: 15 }}>
+            {copy('Agent 系统榜单', 'Agent system leaderboard')}
+          </h3>
+          <p>
+            {copy(
+              '尚未开展真实测评，暂无排名。',
+              'No live evaluations or rankings yet.',
+            )}
+          </p>
           <Link href="/evaluate?track=b" className="btn primary">
-            预览 Track B <ArrowUpRight size={16} />
+            {copy('预览 Track B', 'Preview Track B')} <ArrowUpRight size={16} />
           </Link>
         </div>
       </TabsContent>
@@ -196,13 +198,11 @@ export function Leaderboard() {
 function RecordRows({
   record: r,
   rank,
-  complete,
   columns,
   groupLabel,
 }: {
   record: Experiment;
   rank: number | null;
-  complete: boolean;
   columns: MetricKey[];
   groupLabel: string | null;
 }) {
@@ -210,7 +210,7 @@ function RecordRows({
     <>
       {groupLabel && (
         <TableRow className="record-group">
-          <TableCell colSpan={5 + columns.length}>{groupLabel}</TableCell>
+          <TableCell colSpan={4 + columns.length}>{groupLabel}</TableCell>
         </TableRow>
       )}
       <TableRow>
@@ -219,32 +219,19 @@ function RecordRows({
           <Link className="text-link" href={'/runs/' + r.id}>
             {r.model} <ArrowUpRight size={14} />
           </Link>
-          <small className="mono" title={r.id}>
-            {r.id.slice(0, 12)} · {r.date?.slice(0, 10) ?? '尚无评分'}
-          </small>
-        </TableCell>
-        <TableCell className="number">
-          {((r.completedCases / r.caseCount) * 100).toFixed(1)}%
-          <small className="cell-note">
-            {complete ? '完整覆盖' : '覆盖不完整'}
-          </small>
         </TableCell>
         {columns.map((key) => (
           <TableCell className="number" key={key}>
             {score(metricValue(r, key))}
-            {!complete && metricValue(r, key) !== null && (
-              <small className="cell-note">暂计</small>
-            )}
           </TableCell>
         ))}
         <TableCell className="number">
-          {((r.scored / r.episodes) * 100).toFixed(1)}%
+          {((r.completedCases / r.caseCount) * 100).toFixed(1)}%
         </TableCell>
         <TableCell>
-          <span className="status-label">{reviewLabels[reviewStatus(r)]}</span>
-          <small className="cell-note">
-            执行：{executionLabels[executionStatus(r)]}
-          </small>
+          <span className="status-label">
+            <ReviewLabel status={reviewStatus(r)} />
+          </span>
         </TableCell>
       </TableRow>
     </>

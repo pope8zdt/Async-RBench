@@ -1,14 +1,27 @@
 import { EvaluateForm } from '@/components/evaluate-form';
+import { T } from '@/components/preferences';
 import { Suspense } from 'react';
-export const metadata = { title: '开始评测' };
 export default function Page() {
   return (
     <div className="page-wrap">
       <div className="page-title">
-        <h1>开始评测</h1>
-        <p>填写模型信息，下载配置与脚本，在本地运行评测。</p>
+        <h1>
+          <T zh="开始评测" en="Evaluate" />
+        </h1>
+        <p>
+          <T
+            zh="配置模型，下载脚本，在本地运行。"
+            en="Configure a model. Download the script. Run locally."
+          />
+        </p>
       </div>
-      <Suspense fallback={<p>正在准备本地评测配置…</p>}>
+      <Suspense
+        fallback={
+          <p>
+            <T zh="加载配置…" en="Loading configuration…" />
+          </p>
+        }
+      >
         <EvaluateForm />
       </Suspense>
     </div>

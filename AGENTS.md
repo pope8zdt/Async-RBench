@@ -1,6 +1,7 @@
 # Current experiment scope
 
 - Public website wording is uniformly **201个高质量任务**. Do not display the 47-case cohort size or separate case/instance totals in page copy. Use instance-based theme counts for the public task distribution and percentages for experiment coverage. This presentation rule does not alter the canonical cohort, exporter, raw data or scoring denominator.
+- Keep public pages concise: one-line introductions, primary controls and data first; put detailed rules and provenance in tutorials or disclosures. All user-facing copy supports Chinese/English through the shared preferences provider; theme surfaces use CSS variables for light/dark support. Preserve concise provisional and simulation status labels.
 
 - The public leaderboard reports only the fixed **47-case main experiment** in `experiments/formal-47/instances.txt`. `cohort.json` defines the selection digest, eight theme counts, three repetitions, seed and current model panel.
 - The selection was supplied by the user from `artifacts/run-configs/formal-47-instances.txt`. Do not rediscover membership from completed runs, scores, filenames or historical data splits.

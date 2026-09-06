@@ -7,6 +7,19 @@ const valid = {
   endpoint: 'https://example.com/v1/chat/completions',
   keyEnv: 'MODEL_API_KEY',
 };
+test('English commands and validation messages respect locale', () => {
+  assert.match(buildCommands('formal', 3, 'en'), /Run from/);
+  assert.doesNotMatch(buildCommands('formal', 3, 'en'), /[\u3400-\u9fff]/);
+  assert.throws(
+    () => buildConfig({ ...valid, model: '' }, 'en'),
+    /Enter the main model ID/,
+  );
+  assert.throws(
+    () => buildConfig({ ...valid, endpoint: 'bad' }, 'en'),
+    /valid API URL/,
+  );
+  assert.throws(() => buildCommands('formal', 1, 'en'), /three repetitions/);
+});
 test('configuration uses env references, paired canonical launcher and isolated workspace', () => {
   const yaml = buildConfig(valid);
   assert.match(yaml, /workspace_mode: container_clone/);
