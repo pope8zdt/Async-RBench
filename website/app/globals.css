@@ -483,10 +483,14 @@ h4 {
 }
 .evaluation-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 26px;
   margin-top: 25px;
   align-items: start;
+}
+.evaluation-grid > *,
+.docs-layout > * {
+  min-width: 0;
 }
 .form-section h3 {
   font-size: 19px;
