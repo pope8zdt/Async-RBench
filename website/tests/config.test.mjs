@@ -13,7 +13,7 @@ test('configuration uses env references, paired canonical launcher and isolated 
   assert.match(yaml, /workspace_mode: container_clone/);
   assert.match(yaml, /api_key_env: "MODEL_API_KEY"/);
   assert.match(yaml, /child_pool_id: "fixed-pool"/);
-  assert.match(buildCommands('formal', 3), /formal-61/);
+  assert.match(buildCommands('formal', 3), /formal-47/);
   assert.match(buildCommands('formal', 3), /-Repetitions 3/);
 });
 test('reject unsafe environment names, missing model, embedded credentials and invalid repetitions', () => {
@@ -23,6 +23,7 @@ test('reject unsafe environment names, missing model, embedded credentials and i
     buildConfig({ ...valid, endpoint: 'https://user:pass@example.com' }),
   );
   assert.throws(() => buildCommands('formal', 0));
+  assert.throws(() => buildCommands('formal', 1));
 });
 test('model strings cannot inject YAML fields or PowerShell', () => {
   const yaml = buildConfig({ ...valid, model: 'x\nworkspace_mode: disabled' });
@@ -31,5 +32,5 @@ test('model strings cannot inject YAML fields or PowerShell', () => {
     yaml.split('\n').filter((l) => l === 'workspace_mode: disabled').length,
     0,
   );
-  assert.doesNotMatch(buildCommands('formal', 1), /x\nworkspace_mode/);
+  assert.doesNotMatch(buildCommands('formal', 3), /x\nworkspace_mode/);
 });

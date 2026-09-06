@@ -1,0 +1,35 @@
+{
+  "id": "formal-47",
+  "label": "Main experiment / 47 cases",
+  "case_count": 47,
+  "selection_sha256": "a5b0bfd807c678cabf44e32ca15641ba30bafb53c7d226eca88dd045433f5c41",
+  "selection_file": "experiments/formal-47/instances.txt",
+  "repetitions": 3,
+  "execution_modes": [
+    "linear",
+    "async"
+  ],
+  "seed": 2026,
+  "guidance": "incentive",
+  "models": [
+    "gpt-5.6-luna",
+    "gpt-5.6-terra",
+    "claude-sonnet-5",
+    "deepseek-v4-flash"
+  ],
+  "theme_counts": {
+    "late_or_out_of_order_superseded_result": 7,
+    "partial_then_complete_result": 7,
+    "straggler_under_resource_pressure": 3,
+    "delayed_authoritative_result": 8,
+    "conflicting_valid_results": 5,
+    "task_scope_or_dependency_change": 8,
+    "duplicate_or_replayed_completion": 4,
+    "child_failure_or_implicit_error": 5
+  },
+  "split_policy": "Original registration metadata only; never a leaderboard filter.",
+  "selection_origin": {
+    "plan_id": "formal-47-terra-aligned-20260906",
+    "selection_rule": "All 47 registered cases completed by gpt-5.6-terra when the drain request was evaluated, including the two cases that were in flight when drain mode began."
+  }
+}

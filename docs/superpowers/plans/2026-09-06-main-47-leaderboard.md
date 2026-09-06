@@ -1,0 +1,9 @@
+# Main 47-case leaderboard implementation
+
+User-approved scope: the website leaderboard uses exactly the instances in `artifacts/run-configs/formal-47-instances.txt`. Synchronize active repository documentation, entry points, local website and GitHub publication. The accompanying local plan specifies four models, three repetitions, two execution modes, 282 episodes per model.
+
+1. Promote the supplied selection into version-controlled `experiments/formal-47/instances.txt` and a cohort configuration with fixed hash, membership, repetition and model policy. Keep the existing 61-case assets explicitly historical; keep original dataset split metadata and frozen per-episode scoring semantics.
+2. Add a main-47 entry point and manifest generator, using the existing launcher for execution. Validate exact membership and refuse arbitrary or duplicate selections. Preserve existing historical manifests and completed scores.
+3. Replace broad snapshot export with fixed-cohort episode aggregation: only main-plan models and selected instances; bind scores to manifest identities; reject duplicate attempts instead of choosing high scores; average repetitions per case, cases per theme, then eight themes equally. Missing or unscored episodes remain missing. Only fully measured 47-case rows receive final metrics; partial observations and completion progress are separate. Public output contains allowlisted aggregate values, never raw task artifacts or credentials.
+4. Remove leaderboard split selection/column and update overview, evaluation configuration, details, docs, README, runbook and submission instructions. Every active surface references the same main-47 cohort.
+5. Test membership exclusion, duplicate/identity rejection, mixed historical split inclusion, missing vs zero and macro weighting. Verify actual export, TypeScript, local static build, root/subpath routes, review, GitHub commit and successful Pages deployment.

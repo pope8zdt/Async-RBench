@@ -2,9 +2,9 @@ name: Publish benchmark website
 on:
   push:
     branches: [main]
-    paths: ['website/**', '.github/workflows/pages.yml']
+    paths: ['website/**', '.github/workflows/pages.yml', 'experiments/formal-47/**', 'async_rbench/main_experiment.py', 'async_rbench/main_results.py', 'evaluation_contract.json']
   pull_request:
-    paths: ['website/**', '.github/workflows/pages.yml']
+    paths: ['website/**', '.github/workflows/pages.yml', 'experiments/formal-47/**', 'async_rbench/main_experiment.py', 'async_rbench/main_results.py', 'evaluation_contract.json']
   workflow_dispatch:
 
 permissions:

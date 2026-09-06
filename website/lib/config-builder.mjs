@@ -31,12 +31,14 @@ export function buildCommands(scope, repetitions) {
     throw new Error('重复次数须为 1–10 的整数。');
   if (!['formal', 'development'].includes(scope))
     throw new Error('未知评测集合。');
+  if (scope === 'formal' && repetitions !== 3)
+    throw new Error('主实验 47 case 固定为每种模式 3 次重复。');
   const run =
     scope === 'formal'
-      ? `.\\experiments\\formal-61\\run.ps1 -Config "model-config.yaml" -Repetitions ${repetitions} -Seed 2026`
+      ? `.\\experiments\\formal-47\\run.ps1 -Config "model-config.yaml" -Repetitions ${repetitions} -Seed 2026`
       : `.\\run_case.ps1 -Instance "secure-release::seed-1" -Config "model-config.yaml" -Repetitions ${repetitions} -Seed 2026`;
   return (
-    '# 在已安装 Async-RBench 的仓库根目录运行（PowerShell 7）\n# 将 model-config.yaml 放在仓库根目录，并在终端设置配置所指向的密钥环境变量。\npython -m async_rbench.cli validate --release\npython -m async_rbench.paper_eval check --root .\n' +
+    '# 在已安装 Async-RBench 的仓库根目录运行（PowerShell 7）\n# 将 model-config.yaml 放在仓库根目录，并在终端设置配置所指向的密钥环境变量。\npython -m async_rbench.cli validate --release\npython -m async_rbench.main_experiment check --root .\n' +
     run +
     '\n'
   );

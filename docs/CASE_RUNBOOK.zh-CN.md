@@ -198,28 +198,28 @@ artifacts/experiments/manual-<case>-<timestamp>/
 
 恢复时必须使用原目录、原 manifest、原模型配置和原 commit。脚本不会生成新 manifest。
 
-### 运行正式的 61-case 实验
+### 运行主实验：固定 47 case
 
-`experiments/formal-61/` 是 Async-RBench v11.0.0 的正式实验目录，其中的
-`paper-eval-existing-61.csv` 固化了 61 个现有、已注册的 `seed-1` 实例。case
+`experiments/formal-47/` 是 Async-RBench v11.0.0 的主实验目录，其中的
+`instances.txt` 固化了 47 个现有、已注册的 `seed-1` 实例。case
 实现仍然唯一保存在顶层 `cases/`，实验目录只引用它们，不复制。该集合不包含
 `gaia2-stockholm-moveout`，也不包含计划新增但尚未构造的 19 个 case。拉取仓库并配置好模型密钥后，可直接运行：
 
 ```powershell
-.\experiments\formal-61\run.ps1 `
+.\experiments\formal-47\run.ps1 `
   -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
-  -Repetitions 1 `
+  -Repetitions 3 `
   -Seed 2026
 ```
 
-脚本先校验仓库和 61 个实例，然后按冻结顺序生成不可变 manifest，并为每个 case
+脚本先校验仓库和固定 47 个实例，然后按冻结顺序生成不可变 manifest，并为每个 case
 运行一组 Linear/Async 配对。集合保留原来的 calibration、development、test 标签，
-因此这是可复现的执行集合，不表示 61 个 case 全部都是未见过的 held-out 数据。
+主实验榜单纳入全部 47 个 case，不按历史 split 筛选。每种模式重复 3 次，共 282 次运行；旧 61-case 集合仅供历史复现。
 
 只检查集合、不启动模型运行：
 
 ```powershell
-python -m async_rbench.paper_eval check --root .
+python -m async_rbench.main_experiment check --root .
 ```
 
 完成后至少检查：
@@ -283,7 +283,7 @@ Get-FileHash "manual-<case>-<timestamp>.zip" -Algorithm SHA256
   sealed 提交、步数上限/安全中止、无提交、取消、超时、崩溃及基础设施失败均不计入。
 - `extra_child_tokens_from_public_rejections` / `invalid_redelegation_rate` 等成本指标。
 
-聚合报告（`aggregate` 输出）的每条 leaderboard 项和 `development_summary`
+历史诊断聚合报告（`eval_cli aggregate` 输出；主实验脚本保存为 `historical-split-diagnostics.json`）的每条 leaderboard 项和 `development_summary`
 按模式提供 `paper_metrics_by_mode`：首次/重试提交数与接受率、平均每个接受提交的
 token、公开拒绝导致的额外 token、无效再委托率。论文中的 Async 指标必须读取
 `paper_metrics_by_mode.async`，不要把 all-modes 描述性汇总当作 Async 结果。
@@ -305,3 +305,7 @@ token、公开拒绝导致的额外 token、无效再委托率。论文中的 As
 **为什么 clone 后没有完整 `upstream/`？**
 
 它不是标准注册 case 运行的必要内容，而且包含嵌套 Git 历史和超大文件。只有 source-native/provenance 复核需要单独准备。
+
+## 当前主实验统计口径
+
+固定清单见 [formal-47](../experiments/formal-47/README.md)。本 runbook 开头关于 calibration/development 的限制适用于开发与调参；已冻结的主实验评测按 47-case 清单执行，历史 split 不决定榜单成员。勿将主实验测试结果反用于调参。
