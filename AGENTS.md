@@ -12,4 +12,5 @@
 - Corpus data retains full registry counts for validation; public task descriptions follow the wording rule above and use the task distribution, never the leaderboard denominator as the corpus total.
 - Fixed child model pools are not a public experiment condition or submission requirement. Preserve historical raw metadata and per-episode scoring.
 - Leaderboard offers paired BTS and DRS views. Incomplete coverage does not prove an execution is running; preserve separate coverage, execution and review statuses.
+- DRS is the default primary view, descending. BTS ranks by Linear minus Async descending. The former leaderboard coverage column displays this signed difference; percentage coverage remains in result details, and provisional grouping remains visible. Do not reverse the subtraction or alter the underlying episode scores.
 - Submission entries are aggregate-only self-reports. Maintainer review records are separate and digest-bound; CI validation cannot authenticate scores or a reviewer identity.

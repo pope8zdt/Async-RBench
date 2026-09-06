@@ -30,7 +30,7 @@ export default async function Page({
   const r = data.records.find((x) => x.id === id) as Experiment | undefined;
   if (!r) notFound();
   const complete = coverageStatus(r) === 'complete';
-  const metricTitles: Record<MetricKey, string> = {
+  const metricTitles: Record<Exclude<MetricKey, 'delta'>, string> = {
     linear: 'Linear BTS',
     async: 'Async BTS',
     drs: 'Async DRS',
