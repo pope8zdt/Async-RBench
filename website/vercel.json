@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "npm ci",
+  "installCommand": "npm ci && python -m pip install -r scripts/requirements.txt",
   "buildCommand": "npm run build:static && npm run test:static",
   "outputDirectory": "out",
   "trailingSlash": true

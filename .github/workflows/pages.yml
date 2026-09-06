@@ -2,9 +2,9 @@ name: Publish benchmark website
 on:
   push:
     branches: [main]
-    paths: ['website/**', '.github/workflows/pages.yml', 'experiments/formal-47/**', 'async_rbench/main_experiment.py', 'async_rbench/main_results.py', 'evaluation_contract.json']
+    paths: ['website/**', '.github/workflows/pages.yml', 'experiments/formal-47/**', 'async_rbench/main_experiment.py', 'async_rbench/main_results.py', 'evaluation_contract.json', 'cases/**', 'event_taxonomy.json', 'submissions/**', 'async_rbench/submissions*.py', 'tests/test_submissions.py']
   pull_request:
-    paths: ['website/**', '.github/workflows/pages.yml', 'experiments/formal-47/**', 'async_rbench/main_experiment.py', 'async_rbench/main_results.py', 'evaluation_contract.json']
+    paths: ['website/**', '.github/workflows/pages.yml', 'experiments/formal-47/**', 'async_rbench/main_experiment.py', 'async_rbench/main_results.py', 'evaluation_contract.json', 'cases/**', 'event_taxonomy.json', 'submissions/**', 'async_rbench/submissions*.py', 'tests/test_submissions.py']
   workflow_dispatch:
 
 permissions:
@@ -30,10 +30,18 @@ jobs:
           node-version: '22.14'
           cache: npm
           cache-dependency-path: website/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r scripts/requirements.txt
+      - run: python -m async_rbench.submissions check --root .
+        working-directory: .
+      - run: python -m unittest discover -s tests -p 'test_submissions.py'
+        working-directory: .
       - uses: actions/configure-pages@v5
         id: pages
       - run: npm ci
-      - run: node --test tests/config.test.mjs
+      - run: npm test
       - run: python -m unittest discover -s tests -p 'test_*.py'
       - run: npm run build:static
         env:

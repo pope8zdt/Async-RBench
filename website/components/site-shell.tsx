@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { repositoryUrl } from '@/lib/repository';
 const links = [
   ['/', '概览'],
+  ['/tasks', '任务库'],
   ['/leaderboard', 'Leaderboard'],
   ['/evaluate', '开始评测'],
   ['/docs', '教程与协议'],
@@ -57,7 +58,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <Link href="/" className="footer-brand">
           Async-RBench
         </Link>
-        <span>异步结果整合与动态重规划评测</span>
+        <span>Linear / Async 配对 · 每种模式 3 次重复 · 主榜固定 47 cases</span>
         <Link href="/docs#protocol">评测协议</Link>
         <a className="text-link" href={repositoryUrl}>
           GitHub

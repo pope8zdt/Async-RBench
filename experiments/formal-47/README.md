@@ -5,7 +5,8 @@ This is the active Async-RBench v11.0.0 main experiment and website leaderboard 
 - Exactly 47 distinct registered `seed-1` instances, spanning eight themes.
 - Each model runs Linear and Async three times per case: **282 episodes per model**.
 - Seed 2026; incentive guidance. The current main panel is GPT-5.6 Luna, GPT-5.6 Terra, Claude Sonnet 5 and DeepSeek V4 Flash.
-- Historical registration labels (26 calibration, 4 development, 17 test) are metadata only. The leaderboard includes the entire fixed cohort without a split filter. The corpus still has 201 registered instances; those outside the 47 do not enter this main experiment's statistics.
+- No fixed child-model pool is an experiment condition. A child model remains an optional runtime choice; historical pool metadata is preserved.
+- Historical registration labels (26 calibration, 4 development, 17 test) are metadata only. The leaderboard includes the entire fixed cohort without a split filter. The website counts the full corpus from the current registry and reports it separately from the 47 selected cases.
 
 ## Run locally
 
@@ -22,6 +23,8 @@ Outputs use `artifacts/experiments/formal-47-<timestamp>/`. Resume with the same
 `results.json` is the main-47 summary, produced by the same `async_rbench.main_results` aggregator as the website. `historical-split-diagnostics.json` retains the old split-filtered aggregate for diagnosis only. To regenerate a single run without rerunning agents, use `python -m async_rbench.main_results . --manifest <run-directory>/manifest.json --output <run-directory>/results.json`.
 
 ## Website statistics
+
+Preview current aggregates with `python website/scripts/refresh_results.py --runs-root .`; add `--write` to update the versioned website snapshot. This does not commit or publish. Participant runs use the [submission packaging and review workflow](../../submissions/README.md).
 
 Run `python website/scripts/export_results.py . --output website/public/data/experiments.json` from the repository root. The exporter uses current-panel legacy `batch-<model>-*` manifests and explicitly declared `formal-47` manifests, filters their episodes by exact membership, and verifies each score against its episode, manifest digest, frozen contract, score policy, case/verifier bindings and paired seed/configuration. Only the historical split eligibility gate is disregarded; Track A conformance and protocol requirements still apply. Duplicate attempts for one model/instance/mode/repetition are an error requiring explicit source resolution. Older diagnostic snapshots and the other 14 cases from the historical 61-case cohort are excluded.
 

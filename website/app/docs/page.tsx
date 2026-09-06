@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { metrics } from '@/lib/content';
+import corpus from '@/public/data/corpus.json';
 import { repositoryUrl, submissionUrl } from '@/lib/repository';
 export const metadata = { title: '教程与协议' };
 const navigation = [
@@ -43,7 +44,12 @@ export default function Page() {
               <a className="text-link" href={repositoryUrl}>
                 Async-RBench 主仓库
               </a>
-              。本教程对应 v11.0.0。
+              。本教程对应 v11.0.0。当前仓库包含 {corpus.caseCount} 个 case、
+              {corpus.instanceCount} 个注册实例；完整主题分布见{' '}
+              <Link className="text-link" href="/tasks">
+                任务库
+              </Link>
+              。主榜单独采用固定 47-case 清单。
             </p>
             <ol>
               <li>在已有仓库中安装依赖，启动 Docker。</li>
@@ -84,12 +90,13 @@ export default function Page() {
             <p>
               参考 scaffold 使用支持 function tools 的 OpenAI-compatible Chat
               Completions API。配置精确的模型
-              ID；正式跨模型比较应固定子模型池及其他运行因素。
+              ID；实验条件不包含固定子模型池。子模型为可选运行配置，留空时使用主模型。Linear
+              / Async 配对仍须满足同一评分合约与运行绑定。
             </p>
             <p>
-              网页生成器提供同一服务地址下的主模型与子模型配置。若需要不同地址，编辑
-              main_provider 和 child_provider。不同 API
-              对参数的支持不同，运行前通过提供商预检确认。
+              网页生成器支持独立的子模型服务地址与密钥环境变量。在兼容选项中选择
+              token 上限参数名称及是否发送 seed。不同 API
+              对参数的支持不同，启动器会在运行前执行提供商预检。
             </p>
             <h3>主实验 · 固定 47 case</h3>
             <pre>{`python -m async_rbench.cli validate --release\npython -m async_rbench.main_experiment check --root .\n.\\experiments\\formal-47\\run.ps1 -Config "model-config.yaml" -Repetitions 3 -Seed 2026`}</pre>
@@ -167,8 +174,17 @@ export default function Page() {
             <p>
               统计直接读取主实验 manifest 绑定的 score.json，仅纳入固定 47-case
               清单。 所有 282
-              次运行及主指标齐备后才生成完整得分。进行中的暂计值仅汇总已完整评分的
+              次运行及主指标齐备后才生成完整得分。覆盖不完整时的暂计值仅汇总已完整评分的
               case 及其覆盖主题，不能当作完整 47-case 排名。
+            </p>
+            <p>
+              榜单可切换“配对 BTS”和“DRS”：前者并列展示 Linear BTS 与 Async
+              BTS，后者展示 Async
+              DRS。详情页提供各主题分数，以及完整配对中有记录的 token
+              用量和耗时均值、样本数。
+            </p>
+            <p>
+              网站展示结果快照，没有连接参与者电脑的实时进程状态。“覆盖不完整”不能说明程序仍在运行。材料审核与独立复现需要各自的维护者记录，完整覆盖本身不代表已经审核。
             </p>
             <h3>执行失败与评分失败</h3>
             <p>
@@ -184,8 +200,9 @@ export default function Page() {
             <h2>提交结果</h2>
             <p>
               评测在参与者电脑上执行。通过主仓库的 GitHub
-              表单提交可公开的结果摘要与复现信息。维护者审核后以 Pull Request
-              更新网站数据，合并后自动发布。首次提交需要登录 GitHub。
+              表单提交工具生成的公开汇总包，或发起 Pull Request 将其放入
+              submissions/entries。维护者单独审核，合并后自动发布。首次提交需要登录
+              GitHub。
             </p>
             <ol>
               <li>
@@ -194,17 +211,35 @@ export default function Page() {
               </li>
               <li>
                 整理允许公开的结果摘要，记录 benchmark
-                版本、模型版本、子模型池、运行配置、种子和重复次数。密钥与原始私有轨迹留在本地。
+                版本、模型版本、运行配置、种子和重复次数。密钥与原始私有轨迹留在本地。
               </li>
               <li>
                 提交结果包。维护者核对固定 harness、47-case
-                清单摘要、Linear/Async
-                配对完整性和主题覆盖；当前提交材料由维护者人工审核。
+                清单摘要、Linear/Async 配对完整性和主题覆盖，并在
+                submissions/reviews 生成独立审核记录。
               </li>
               <li>
                 审核通过后合并结果，托管平台重新生成榜单。参与者自报、材料已审核、独立复现应分别标注，正式上榜还须满足发布合约。
               </li>
             </ol>
+            <pre>{`# 开始实验时记录版本\n$benchmarkCommit = git rev-parse HEAD\n\n# 完成后，将 MY_RUN 替换为实际实验目录\npython -m async_rbench.submissions package --root . --manifest artifacts/experiments/MY_RUN/manifest.json --benchmark-commit $benchmarkCommit\npython -m async_rbench.submissions check --root .`}</pre>
+            <p>
+              结果包保存到
+              submissions/entries/&lt;submissionId&gt;.json。单包检查可使用
+              validate --root . --input 文件路径。可选的 --config
+              只保存配置文件摘要。相同模型的不同运行可以分别提交。
+            </p>
+            <h3>维护者审核与发布</h3>
+            <pre>{`# 完成材料核查后执行；替换 SUBMISSION_ID 和审核者名称\npython -m async_rbench.submissions review --root . --input submissions/entries/SUBMISSION_ID.json --status materials_reviewed --reviewer YOUR_GITHUB_LOGIN\npython -m async_rbench.submissions check --root .`}</pre>
+            <p>
+              只有完整覆盖 47 case
+              并有匹配审核的提交进入正式排名。提交包和审核记录合并到主分支后，构建流程会校验、合入榜单并发布。修改成绩后需要重新审核。实际完成独立复现后，才使用
+              independently_reproduced，并提供 --evidence-url
+              对应的公开复现记录。
+            </p>
+            <p>
+              自动校验检查格式、范围、聚合一致性和摘要；审核权限由仓库的审查和合并流程把关。校验通过不等于成绩已经独立复现。
+            </p>
             <a className="text-link" href={submissionUrl}>
               打开 Track A 结果提交表单 <ArrowRight size={15} />
             </a>
@@ -230,6 +265,25 @@ export default function Page() {
               工作区操作通过内核能力接口完成；验证结果由评测端产生，Adapter
               不能自行声明验证真值。官方 Track A 使用固定参考 Adapter。
             </p>
+            <h3>运行遇到问题怎么办？</h3>
+            <ul>
+              <li>
+                Docker 连接失败：确认 Docker Desktop 已启动并使用 Linux
+                engine，再检查 docker info。
+              </li>
+              <li>401 / 403：检查密钥环境变量名称、密钥和模型访问权限。</li>
+              <li>
+                服务商拒绝 max_completion_tokens 或
+                seed：调整配置页的兼容选项，重新进行提供商预检。
+              </li>
+              <li>
+                覆盖不足：检查本地结果和失败原因，使用相同配置及实验目录恢复；未评分不按零分处理。
+              </li>
+              <li>
+                导出提示重复尝试：明确本次提交对应的
+                manifest；保留历史材料，不按分数挑选重试结果。
+              </li>
+            </ul>
             <h3>为什么没有原始轨迹下载？</h3>
             <p>
               participant_trace.jsonl 是参与者可见的审计接口；event_source.jsonl
