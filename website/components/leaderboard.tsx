@@ -1,7 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, Download, FlaskConical } from 'lucide-react';
+import { ArrowUpRight, Download } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Table,
@@ -31,7 +31,11 @@ export function Leaderboard() {
       <span>
         {score(observed)}
         <small
-          style={{ display: 'block', fontSize: 12, color: 'var(--muted)' }}
+          style={{
+            display: 'block',
+            fontSize: 12,
+            color: 'var(--muted-foreground)',
+          }}
         >
           暂计
         </small>
@@ -51,7 +55,7 @@ export function Leaderboard() {
       <TabsContent value="a" className="tab-content">
         <div className="section-heading">
           <div>
-            <h2>主实验 · 固定 {data.cohort.case_count} case</h2>
+            <h2>主实验结果</h2>
             <p className="muted" style={{ fontSize: 14, marginTop: 5 }}>
               Linear / Async × 每种模式 3 次重复 · 每模型 282 次运行
             </p>
@@ -65,11 +69,9 @@ export function Leaderboard() {
           </a>
         </div>
         <div className="note">
-          <FlaskConical size={18} />
           <span>
-            所有模型使用同一份 47-case 清单。暂计分数仅汇总已完整评分的
-            case；尚未完成的运行不计为 0 分，也不形成完整主实验排名。分数按
-            0–100 展示。
+            暂计分数仅包含已完成的 case，不代表完整 47-case 成绩。缺失结果不计为
+            0；分数范围为 0–100。
           </span>
         </div>
         <div className="toolbar">
@@ -138,13 +140,12 @@ export function Leaderboard() {
           )}
         </div>
         <p className="muted" style={{ fontSize: 14, marginTop: 22 }}>
-          清单：formal-47 · 不按历史数据划分筛选。三次重复先按 case
-          平均，再按主题平均，最后对八个主题等权平均。提交审核与独立复现状态另行确认。
+          三次重复先按 case
+          平均，再对八类事件主题等权汇总。当前为实验记录，尚未独立复现。
         </p>
       </TabsContent>
       <TabsContent value="b" className="tab-content">
         <div className="panel empty-state">
-          <FlaskConical size={38} />
           <span className="tag">模拟预览</span>
           <h3 style={{ marginTop: 15 }}>Agent System Leaderboard</h3>
           <p>Track B 尚未运行真实测评，也没有真实排名。</p>
