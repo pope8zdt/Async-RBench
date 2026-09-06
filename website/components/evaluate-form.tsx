@@ -107,7 +107,7 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
           style={{ width: '100%' }}
           aria-label={label}
         >
-          <SelectValue />
+          <SelectValue>{items.find(([id]) => id === value)?.[1]}</SelectValue>
         </SelectTrigger>
         <SelectContent>
           {items.map(([v, l]) => (
