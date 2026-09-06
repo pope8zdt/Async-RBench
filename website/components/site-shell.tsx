@@ -58,7 +58,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <Link href="/" className="footer-brand">
           Async-RBench
         </Link>
-        <span>Linear / Async 配对 · 每种模式 3 次重复 · 主榜固定 47 cases</span>
+        <span>201个高质量任务 · Linear / Async 配对评测</span>
         <Link href="/docs#protocol">评测协议</Link>
         <a className="text-link" href={repositoryUrl}>
           GitHub

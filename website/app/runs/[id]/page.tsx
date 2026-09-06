@@ -39,11 +39,11 @@ export default async function Page({
         <ArrowLeft size={15} /> 返回主实验榜单
       </Link>
       <div className="page-title" style={{ marginTop: 25 }}>
-        <div className="eyebrow">MAIN EXPERIMENT / FORMAL-47</div>
+        <div className="eyebrow">MAIN EXPERIMENT</div>
         <h1>{r.model}</h1>
         <p>
-          固定 {r.caseCount} case · {r.date?.slice(0, 10) ?? '尚无评分'} ·{' '}
-          {r.completedCases}/{r.caseCount} case 完整评分
+          {r.date?.slice(0, 10) ?? '尚无评分'} · 配对完成度{' '}
+          {((r.completedCases / r.caseCount) * 100).toFixed(1)}%
         </p>
         <p className="hash mono">记录 / {r.id}</p>
       </div>
@@ -52,7 +52,7 @@ export default async function Page({
         <span>
           {complete
             ? '配对与重复评分已齐备，覆盖完整主实验清单。'
-            : `覆盖不完整。下方为已完整评分 case 的暂计值，尚不是完整 ${r.caseCount}-case 得分。缺失评分不按 0 分处理。`}{' '}
+            : '覆盖不完整。下方为已完整评分任务的暂计值，尚不是完整主实验得分。缺失评分不按 0 分处理。'}{' '}
           审核：{reviewLabels[reviewStatus(r)]}。执行状态：
           {executionLabels[executionStatus(r)]}。材料审核不等于独立复现。
         </span>
@@ -73,10 +73,13 @@ export default async function Page({
         <h3 style={{ fontSize: 19 }}>主实验覆盖与来源状态</h3>
         <div className="detail-facts">
           {[
-            ['统计范围', `固定 ${r.caseCount} case`],
+            ['统计范围', '主实验任务清单'],
             ['重复次数', `Linear / Async 各 ${data.cohort.repetitions} 次`],
-            ['完成 Case', `${r.completedCases} / ${r.caseCount}`],
-            ['已评分运行', `${r.scored} / ${r.episodes}`],
+            [
+              '配对完成度',
+              `${((r.completedCases / r.caseCount) * 100).toFixed(1)}%`,
+            ],
+            ['评分进度', `${((r.scored / r.episodes) * 100).toFixed(1)}%`],
             ['已覆盖主题', `${r.themeCount} / ${themes.length}`],
             ['覆盖状态', complete ? '完整' : '不完整'],
             ['评测版本', r.version],
@@ -103,7 +106,7 @@ export default async function Page({
             <thead>
               <tr>
                 <th scope="col">事件主题</th>
-                <th scope="col">完整评分 Case</th>
+                <th scope="col">配对完成度</th>
                 <th scope="col">Linear BTS</th>
                 <th scope="col">Async BTS</th>
                 <th scope="col">Async DRS</th>
@@ -112,17 +115,13 @@ export default async function Page({
             <tbody>
               {themes.map(([key, title]) => {
                 const theme = r.themeMetrics?.[key];
-                const expected =
-                  data.cohort.theme_counts[
-                    key as keyof typeof data.cohort.theme_counts
-                  ];
                 return (
                   <tr key={key}>
                     <th scope="row">{title}</th>
                     <td className="number">
                       {theme
-                        ? `${theme.completedCases} / ${theme.caseCount}`
-                        : `— / ${expected}`}
+                        ? `${((theme.completedCases / theme.caseCount) * 100).toFixed(1)}%`
+                        : '—'}
                     </td>
                     <td className="number">{score(theme?.linear)}</td>
                     <td className="number">{score(theme?.async)}</td>
@@ -137,8 +136,8 @@ export default async function Page({
         </div>
         <p className="section-footnote">
           每个主题仅汇总已完整评分的
-          case；覆盖不足时为暂计值。旧快照可能仅含主题 DRS，缺失 BTS
-          与覆盖数量显示为「—」。
+          任务；覆盖不足时为暂计值。旧快照可能仅含主题 DRS，缺失 BTS
+          与完成度显示为「—」。
         </p>
       </section>
       {r.resources && (
@@ -172,7 +171,7 @@ export default async function Page({
             ))}
           </div>
           <p className="section-footnote">
-            均值仅来自完整评分 case 中有观测值的运行。未观测值不按 0
+            均值仅来自完整评分任务中有观测值的运行。未观测值不按 0
             计，不同记录的观测覆盖可能不同；这些数据不是费用估算。
           </p>
         </section>
@@ -182,9 +181,9 @@ export default async function Page({
         <p className="section-footnote">
           {r.submissionId
             ? '该记录来自参与者提交的汇总包，审核状态由与包摘要绑定的维护者记录提供。'
-            : '该快照由主实验清单绑定的评分汇总生成，仅纳入固定清单中的实例。'}{' '}
+            : '该快照由主实验清单绑定的评分汇总生成，仅纳入清单中的任务。'}{' '}
           历史 split 标签不参与筛选。先平均三次重复，再对
-          case、主题逐层聚合。公开数据仅包含汇总指标和可公开的来源元数据。
+          任务、主题逐层聚合。公开数据仅包含汇总指标和可公开的来源元数据。
         </p>
         <p className="hash mono">
           清单 SHA-256 / {data.cohort.selection_sha256}
