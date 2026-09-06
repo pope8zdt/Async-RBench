@@ -1,0 +1,51 @@
+name: Track A evaluation submission
+description: Submit a participant-run result for maintainer review.
+title: '[Track A submission] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is a public submission. Include only material cleared for public sharing.
+        Keep API keys, hidden scoring material, private case paths and raw private traces out of this issue.
+        Track B simulation is not eligible. Submission and maintainer review do not imply independent reproduction.
+  - type: input
+    id: model
+    attributes:
+      label: Main model and exact version
+    validations:
+      required: true
+  - type: input
+    id: child-pool
+    attributes:
+      label: Fixed child model version and child pool identifier
+    validations:
+      required: true
+  - type: input
+    id: benchmark-version
+    attributes:
+      label: Benchmark tag and commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: run-settings
+    attributes:
+      label: Reproduction settings and coverage
+      description: Include harness version, environment, task set, splits, seed, repetitions, paired/scored episode counts and all attempted runs including failures. Omit private instance identifiers.
+    validations:
+      required: true
+  - type: textarea
+    id: public-results
+    attributes:
+      label: Public result summary and supporting material
+      description: Provide cleared public summary or links, the three primary metrics, missing-value counts and source file hashes. Do not attach unreviewed raw artifacts. State whether the run is self-reported or independently reproduced.
+    validations:
+      required: true
+  - type: checkboxes
+    id: acknowledgement
+    attributes:
+      label: Submission acknowledgement
+      options:
+        - label: This is a real Track A run. I understand submission requires maintainer review and does not create a verified leaderboard entry.
+          required: true
+        - label: I checked that this public information contains no credentials, private traces or restricted task material.
+          required: true
