@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import * as leaderboard from '../lib/leaderboard.mjs';
 import {
   coverageStatus,
   executionStatus,
@@ -19,6 +20,15 @@ const full = (id, values = {}) => ({
   drs: 0.3,
   reviewStatus: 'materials_reviewed',
   ...values,
+});
+
+test('metric views keep DRS isolated and BTS paired with its difference', () => {
+  assert.deepEqual(leaderboard.leaderboardColumns?.('drs'), ['drs']);
+  assert.deepEqual(leaderboard.leaderboardColumns?.('bts'), [
+    'linear',
+    'async',
+    'delta',
+  ]);
 });
 
 test('BTS difference is Async minus Linear, preserving negatives, zero and missing pairs', () => {

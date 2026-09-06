@@ -204,8 +204,8 @@ python -m async_rbench.main_experiment check --root .
             </h2>
             <p>
               <T
-                zh="榜单默认展示主指标 DRS。BTS 视图按 Async − Linear 的分数差降序排列，差值越大排名越高。"
-                en="The leaderboard opens with DRS, the primary metric. The BTS view ranks by the score difference Async − Linear, highest first."
+                zh="DRS 视图只展示 DRS，并按分数降序排列。BTS 视图展示两项 BTS 及 Async − Linear 差值，差值越大排名越高。"
+                en="The DRS view shows only DRS, highest first. The BTS view shows both BTS scores and their Async − Linear difference, ranked highest first."
               />
             </p>
             <ul>
