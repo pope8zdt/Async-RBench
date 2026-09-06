@@ -5,11 +5,10 @@ import './globals.css';
 export const metadata: Metadata = {
   icons: { icon: assetPath('/favicon.svg') },
   title: {
-    default: 'Async-RBench — 异步 Agent 评测',
+    default: 'Async-RBench | 异步重规划评测',
     template: '%s | Async-RBench',
   },
-  description:
-    '评测主 Agent 在异步事件下的结果整合与动态重规划能力。Track A、实验记录与接入教程。',
+  description: 'Async-RBench 的评测协议、47-case 主实验结果与本地运行教程。',
 };
 export default function RootLayout({
   children,

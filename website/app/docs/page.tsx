@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { metrics } from '@/lib/content';
 import { repositoryUrl, submissionUrl } from '@/lib/repository';
 export const metadata = { title: '教程与协议' };
@@ -16,10 +16,7 @@ export default function Page() {
   return (
     <div className="page-wrap">
       <div className="page-title">
-        <div className="eyebrow">
-          <BookOpen size={15} /> GUIDES & REFERENCE
-        </div>
-        <h1>从第一次运行，到理解结果</h1>
+        <h1>教程与协议</h1>
         <p>
           基于 Async-RBench v11.0.0 的实际入口、冻结合约和 Adapter Protocol
           3.0。
@@ -35,8 +32,7 @@ export default function Page() {
         </aside>
         <article className="docs-content">
           <section id="quickstart">
-            <span className="doc-label">GET STARTED</span>
-            <h2>跑通一个配对案例</h2>
+            <h2>快速开始</h2>
             <p>
               当前评测环境要求 Windows PowerShell 7、Python 3.11+、Git，以及使用
               Linux engine 的 Docker
@@ -67,8 +63,7 @@ export default function Page() {
             </Link>
           </section>
           <section id="tracks">
-            <span className="doc-label">EVALUATION TRACKS</span>
-            <h2>选择你要评测的对象</h2>
+            <h2>评测赛道</h2>
             <h3>Track A · 固定 harness 下的模型</h3>
             <p>
               固定参考 API
@@ -85,7 +80,6 @@ export default function Page() {
             </p>
           </section>
           <section id="track-a">
-            <span className="doc-label">MODEL API TRACK</span>
             <h2>接入模型并运行评测</h2>
             <p>
               参考 scaffold 使用支持 function tools 的 OpenAI-compatible Chat
@@ -118,7 +112,6 @@ export default function Page() {
             </p>
           </section>
           <section id="track-b">
-            <span className="doc-label">AGENT SYSTEM TRACK / PROPOSED</span>
             <h2>预集成框架与自定义组件</h2>
             <p>
               第一版预留 Claude Code、基于 LangGraph 的参考 Agent，以及自定义
@@ -155,8 +148,7 @@ export default function Page() {
             </Link>
           </section>
           <section id="metrics">
-            <span className="doc-label">READ YOUR RESULTS</span>
-            <h2>三个主指标独立解读</h2>
+            <h2>评测指标</h2>
             {metrics.map((m) => (
               <div key={m.name}>
                 <h3>
@@ -185,13 +177,11 @@ export default function Page() {
               Case / 47、已评分运行 / 282、配对完整性和主题覆盖后再比较。
             </p>
             <p className="doc-label">
-              依据：evaluation_contract.json ·
-              async_rbench/evaluation/aggregate.py
+              依据：evaluation_contract.json · async_rbench/main_results.py
             </p>
           </section>
           <section id="submission">
-            <span className="doc-label">SUBMISSION & PUBLICATION</span>
-            <h2>从实验记录到正式榜单</h2>
+            <h2>提交结果</h2>
             <p>
               评测在参与者电脑上执行。通过主仓库的 GitHub
               表单提交可公开的结果摘要与复现信息。维护者审核后以 Pull Request
@@ -229,8 +219,7 @@ export default function Page() {
             </p>
           </section>
           <section id="protocol">
-            <span className="doc-label">PROTOCOL 3.0</span>
-            <h2>结果“完成”不等于模型“看到”</h2>
+            <h2>结果交付协议</h2>
             <p>
               协议区分三个关键时点：result_available
               表示网关已释放；adapter_queued 表示 Adapter

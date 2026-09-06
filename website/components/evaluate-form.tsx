@@ -2,15 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import {
-  ArrowRight,
-  Check,
-  CheckCircle2,
-  Copy,
-  Download,
-  FlaskConical,
-  Terminal,
-} from 'lucide-react';
+import { ArrowRight, Check, Copy, Download } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Select,
@@ -162,7 +154,6 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
       </TabsList>
       <TabsContent value="a">
         <div className="note">
-          <Terminal size={18} />
           <span>
             评测在参与者电脑上运行。API
             密钥留在本地，官网提供配置、教程和结果展示。
@@ -170,8 +161,7 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
         </div>
         <div className="evaluation-grid">
           <div className="panel form-section">
-            <div className="eyebrow">01 / CONFIGURE</div>
-            <h3>接入你的模型</h3>
+            <h3>模型配置</h3>
             <p className="form-intro">
               适用于当前参考 scaffold 的 OpenAI-compatible
               API。主模型与固定子模型池使用同一服务地址；其他提供商组合请编辑下载的配置。
@@ -245,11 +235,10 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
               )}
             </div>
             <div className="checkline">
-              <CheckCircle2 size={15} /> 固定参考 harness · Linear / Async 配对
+              固定参考 harness · Linear / Async 配对
             </div>
             <div className="checkline">
-              <CheckCircle2 size={15} /> 容器工作区 · 主模型 100 步 / 子模型 40
-              步
+              容器工作区 · 主模型 100 步 / 子模型 40 步
             </div>
             <div className="actions">
               <button className="btn primary" onClick={saveConfig}>
@@ -280,13 +269,11 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
             </p>
           </div>
           <div>
-            <div className="eyebrow">02 / RUN LOCALLY</div>
             <CodeBlock text={commands} title="POWERSHELL 7" />
             <div style={{ marginTop: 20 }}>
               <CodeBlock text={config} title="MODEL-CONFIG.YAML" />
             </div>
             <div className="panel" style={{ marginTop: 20 }}>
-              <div className="eyebrow">03 / SUBMIT RESULTS</div>
               <h3>运行后提交结果</h3>
               <p className="form-intro" style={{ marginTop: 12 }}>
                 保留运行配置、版本与结果。通过 GitHub
@@ -308,14 +295,12 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
       </TabsContent>
       <TabsContent value="b">
         <div className="note amber">
-          <FlaskConical size={18} />
           <span>
             模拟预览：以下操作只在当前浏览器演示配置流程，不连接框架、不调用模型、不生成测评分数。
           </span>
         </div>
         <div className="evaluation-grid">
           <div className="panel form-section">
-            <div className="eyebrow">AGENT SYSTEM / PREVIEW</div>
             <h3>选择框架与策略组件</h3>
             <p className="form-intro">
               预集成与自定义系统均通过统一驱动接入评测内核。
@@ -356,12 +341,11 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
               disabled={simStep >= 0 && simStep < 3}
               onClick={() => setSimStep(0)}
             >
-              <FlaskConical size={16} />
               {simStep === 3 ? '重新模拟' : '演示接入流程'}
             </button>
           </div>
           <div className="panel">
-            <span className="tag">SIMULATION / 无真实执行</span>
+            <span className="tag">模拟预览 · 无真实执行</span>
             <h3 style={{ fontSize: 20, marginTop: 18 }}>接入流程预览</h3>
             <div className="sim-steps">
               {[
