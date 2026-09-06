@@ -1,6 +1,6 @@
 # Async-RBench website
 
-Website source under the main repository's `website/` directory. Real Track A configuration generation, reference documentation, and allowlisted experiment snapshots. Track B is browser-only simulation. Participants run evaluations on their own computers. GitHub Pages or Vercel hosts the static website. Participants submit cleared summaries through the repository's Track A GitHub issue form. Maintainers review them and update published data through a pull request and website rebuild. No online submission backend or independent public ranking verification is implemented.
+Website source under the main repository's `website/` directory. Real Track A configuration generation, reference documentation, and allowlisted main-47 experiment aggregates. Track B is browser-only simulation. Participants run evaluations on their own computers. GitHub Pages or Vercel hosts the static website. Participants submit cleared summaries through the repository's Track A GitHub issue form. Maintainers review them and update published data through a pull request and website rebuild. No online submission backend or independent public ranking verification is implemented.
 
 ## Develop
 
@@ -14,7 +14,7 @@ Node 22.13+; `npm ci`, `npm run dev`.
 
 `python scripts/export_results.py PATH_TO_AUTHORIZED_BENCHMARK_CHECKOUT`
 
-Only allowlisted summary fields are exported. Case paths, original manifests, credentials, hidden scoring material and raw traces stay outside this project. Each entry keeps the original results.json SHA-256. All snapshots remain unpublished diagnostic records; the exporter never promotes an internal leaderboard entry into the public leaderboard.
+Only the fixed 47-case cohort and current four-model main panel are exported. The three repeated pairs produce 282 planned episodes per model. Statistics read manifest-bound score.json files and reject duplicate attempts. Original dataset splits are never a leaderboard filter. Incomplete runs expose coverage and provisional observations, not final 47-case scores. Only allowlisted summary fields are exported. Case paths, original manifests, credentials, hidden scoring material and raw traces stay outside this project. Each entry keeps a digest of the selection and all source manifest/score digests. These hashes do not certify scores or independently verify results.
 
 ## Verify
 

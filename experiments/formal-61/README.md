@@ -1,7 +1,8 @@
-# Formal 61-Case Experiment
+# Historical 61-Case Experiment
 
-This directory is the authoritative formal evaluation entry point for
-Async-RBench v11.0.0.
+This directory preserves the historical Async-RBench v11.0.0 61-case execution cohort.
+The active main experiment and website leaderboard now use the fixed
+[47-case cohort](../formal-47/README.md). Use that entry point for new main-experiment statistics.
 
 `paper-eval-existing-61.csv` freezes exactly 61 registered `seed-1` instances
 in execution order. Their implementations are not copied here: every row

@@ -1,5 +1,7 @@
 # Configuration
 
+> Current main experiment / 当前主实验：仅统计固定 47-case 清单，Linear/Async 各 3 次重复，每模型 282 次运行。历史 split 不作为主实验榜单筛选条件。统一入口与统计规则见 [formal-47](../experiments/formal-47/README.md)。
+
 `model-profiles/` contains versioned model and adapter settings. Each profile declares its provider endpoint, model identifier, credential environment variable, runtime mode, fixed model-step horizons, and the shared emergency safety fuse.
 
 The canonical v11.0.0 runtime fields are `max_main_steps`, `max_child_steps`, and

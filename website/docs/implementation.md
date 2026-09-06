@@ -6,6 +6,7 @@ The user selected participant-local execution and GitHub Pages / Vercel hosting,
 - The root Pages workflow builds and checks website/out, then publishes only that artifact. Pull requests build without deploying.
 - Vercel uses Root Directory website and the included vercel.json.
 - Track A uses real configuration, documentation and diagnostic summaries; Track B is simulation.
+- Current leaderboard scope is exactly the fixed 47-case main experiment in `experiments/formal-47/`. The former mixed-split batch snapshots have been replaced by manifest-bound, per-model aggregates with explicit completion counts, provisional values and missing final scores until all 282 planned episodes are measured.
 - Public GitHub issue form collects cleared Track A summaries for manual maintainer review. It does not certify scores or automatically add rankings.
 - Benchmark execution, task data, credentials and raw artifacts are outside the published website artifact.
 

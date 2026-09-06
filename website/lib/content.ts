@@ -63,20 +63,22 @@ export const metrics = [
 export type Experiment = {
   id: string;
   sourceSha256: string;
-  date: string;
+  date: string | null;
   model: string;
   version: string;
-  splits: string[];
+  caseCount: number;
+  completedCases: number;
   episodes: number;
   scored: number;
   linear: number | null;
   async: number | null;
   drs: number | null;
+  observedLinear: number | null;
+  observedAsync: number | null;
+  observedDrs: number | null;
   pairedComplete: boolean;
   themeCount: number;
   themeScores: Record<string, number | null>;
-  linearMs: number | null;
-  asyncMs: number | null;
   published: boolean;
   scope: string;
 };

@@ -1,14 +1,7 @@
 'use client';
-import { assetPath } from '@/lib/asset-path';
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import {
-  ArrowDown,
-  ArrowUpRight,
-  Download,
-  FlaskConical,
-  ShieldCheck,
-} from 'lucide-react';
+import Link from 'next/link';
+import { ArrowUpRight, Download, FlaskConical } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Table,
@@ -18,232 +11,148 @@ import {
   TableRow,
   TableCell,
 } from '@/components/ui/table';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/components/ui/select';
+import { assetPath } from '@/lib/asset-path';
+import { score } from '@/lib/content';
 import data from '@/public/data/experiments.json';
-import { score, type Experiment } from '@/lib/content';
+
 export function Leaderboard() {
   const [query, setQuery] = useState('');
-  const [split, setSplit] = useState('all');
-  const [page, setPage] = useState(0);
-  const [sort, setSort] = useState<'date' | 'drs'>('date');
   const records = useMemo(
     () =>
-      data.records
-        .filter(
-          (r) =>
-            r.model.toLowerCase().includes(query.toLowerCase()) &&
-            (split === 'all' || r.splits.includes(split)),
-        )
-        .sort((a, b) =>
-          sort === 'drs'
-            ? (b.drs ?? -1) - (a.drs ?? -1)
-            : b.date.localeCompare(a.date),
-        ),
-    [query, split, sort],
+      data.records.filter((r) =>
+        r.model.toLowerCase().includes(query.toLowerCase()),
+      ),
+    [query],
   );
-  const pageCount = Math.max(1, Math.ceil(records.length / 10));
-  const safePage = Math.min(page, pageCount - 1);
-  function table(rows: Experiment[]) {
-    return (
-      <div className="table-panel">
-        <Table className="data-table">
-          <TableHeader>
-            <TableRow>
-              <TableHead>模型 / 结果快照</TableHead>
-              <TableHead>数据划分</TableHead>
-              <TableHead>Linear BTS</TableHead>
-              <TableHead>Async BTS</TableHead>
-              <TableHead>
-                <button
-                  className="sort-button"
-                  onClick={() => {
-                    setSort(sort === 'drs' ? 'date' : 'drs');
-                    setPage(0);
-                  }}
-                >
-                  Async DRS <ArrowDown size={13} />
-                </button>
-              </TableHead>
-              <TableHead>已评分 / Episodes</TableHead>
-              <TableHead>详情</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.map((r) => (
-              <TableRow key={r.id}>
-                <TableCell className="model-cell">
-                  {r.model}
-                  <small className="mono">
-                    {r.id.slice(0, 8)} · {r.date.slice(0, 10)}
-                  </small>
-                </TableCell>
-                <TableCell>
-                  <span className="tag">{r.splits.join(' / ')}</span>
-                </TableCell>
-                <TableCell className="number">{score(r.linear)}</TableCell>
-                <TableCell className="number">{score(r.async)}</TableCell>
-                <TableCell className="number score-strong">
-                  {score(r.drs)}
-                </TableCell>
-                <TableCell className="number">
-                  {r.scored} / {r.episodes}
-                </TableCell>
-                <TableCell>
-                  <Link
-                    href={'/runs/' + r.id}
-                    aria-label={'查看 ' + r.model + ' 运行详情'}
-                  >
-                    <ArrowUpRight size={17} />
-                  </Link>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {rows.length === 0 && (
-          <div className="empty-state">
-            <p>没有符合条件的记录，请调整搜索或筛选条件。</p>
-          </div>
-        )}
-        <div className="pagination-row">
-          <span>
-            {records.length} 条快照 · {safePage + 1} / {pageCount} 页
-          </span>
-          <div className="actions" style={{ margin: 0 }}>
-            <button
-              className="btn secondary"
-              disabled={safePage === 0}
-              onClick={() => setPage(safePage - 1)}
-            >
-              上一页
-            </button>
-            <button
-              className="btn secondary"
-              disabled={safePage >= pageCount - 1}
-              onClick={() => setPage(safePage + 1)}
-            >
-              下一页
-            </button>
-          </div>
-        </div>
-      </div>
+  function metric(final: number | null, observed: number | null) {
+    return final !== null ? (
+      <span>{score(final)}</span>
+    ) : (
+      <span>
+        {score(observed)}
+        <small
+          style={{ display: 'block', fontSize: 12, color: 'var(--muted)' }}
+        >
+          暂计
+        </small>
+      </span>
     );
   }
   return (
-    <>
-      <Tabs defaultValue="a">
-        <TabsList className="tab-list">
-          <TabsTrigger className="tab-trigger" value="a">
-            Track A · 模型
-          </TabsTrigger>
-          <TabsTrigger className="tab-trigger" value="b">
-            Track B · 系统预览
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="a" className="tab-content">
-          <div className="section-heading">
-            <div>
-              <h2>实验记录</h2>
-              <p className="muted" style={{ fontSize: 14, marginTop: 5 }}>
-                独立批次的真实结果，尚未发布为正式榜单。
-              </p>
-            </div>
-            <a
-              href={assetPath('/data/experiments.json')}
-              download
-              className="text-link"
-            >
-              <Download size={15} /> 下载数据
-            </a>
+    <Tabs defaultValue="a">
+      <TabsList className="tab-list">
+        <TabsTrigger className="tab-trigger" value="a">
+          Track A · 主实验
+        </TabsTrigger>
+        <TabsTrigger className="tab-trigger" value="b">
+          Track B · 系统预览
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="a" className="tab-content">
+        <div className="section-heading">
+          <div>
+            <h2>主实验 · 固定 {data.cohort.case_count} case</h2>
+            <p className="muted" style={{ fontSize: 14, marginTop: 5 }}>
+              Linear / Async × 每种模式 3 次重复 · 每模型 282 次运行
+            </p>
           </div>
-          <div className="note amber">
-            <FlaskConical size={18} />
-            <span>
-              不同快照的案例集合与覆盖率不同，不能直接作为统一排名。分数以 0–100
-              展示；“—”表示没有可用评分，并非 0 分。模型名称按运行记录原样保留。
-            </span>
-          </div>
-          <div className="toolbar">
-            <label>
-              <span className="screen-reader-only">搜索模型</span>
-              <input
-                className="search-input"
-                value={query}
-                placeholder="搜索模型名称…"
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setPage(0);
-                }}
-              />
-            </label>
-            <Select
-              value={split}
-              onValueChange={(v) => {
-                setSplit(v ?? 'all');
-                setPage(0);
-              }}
-            >
-              <SelectTrigger
-                className="select-trigger"
-                aria-label="筛选数据划分"
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {[
-                  ['all', '所有数据划分'],
-                  ['calibration', 'Calibration'],
-                  ['development', 'Development'],
-                  ['test', 'Test'],
-                ].map(([v, l]) => (
-                  <SelectItem value={v} key={v}>
-                    {l}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <span
-              className="muted"
-              style={{ fontSize: 12, marginLeft: 'auto' }}
-            >
-              快照更新于 {data.generatedAt.slice(0, 10)} UTC
-            </span>
-          </div>
-          {table(
-            records.slice(safePage * 10, safePage * 10 + 10) as Experiment[],
+          <a
+            href={assetPath('/data/experiments.json')}
+            download
+            className="text-link"
+          >
+            <Download size={15} /> 下载主实验数据
+          </a>
+        </div>
+        <div className="note">
+          <FlaskConical size={18} />
+          <span>
+            所有模型使用同一份 47-case 清单。暂计分数仅汇总已完整评分的
+            case；尚未完成的运行不计为 0 分，也不形成完整主实验排名。分数按
+            0–100 展示。
+          </span>
+        </div>
+        <div className="toolbar">
+          <label>
+            <span className="screen-reader-only">搜索模型</span>
+            <input
+              className="search-input"
+              placeholder="搜索主实验模型…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </label>
+          <span className="muted" style={{ fontSize: 12, marginLeft: 'auto' }}>
+            数据更新于 {data.generatedAt.slice(0, 10)} UTC
+          </span>
+        </div>
+        <div className="table-panel">
+          <Table className="data-table">
+            <TableHeader>
+              <TableRow>
+                <TableHead>模型</TableHead>
+                <TableHead>完成 Case</TableHead>
+                <TableHead>Linear BTS</TableHead>
+                <TableHead>Async BTS</TableHead>
+                <TableHead>Async DRS</TableHead>
+                <TableHead>已评分 / 计划运行</TableHead>
+                <TableHead>状态 / 详情</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {records.map((r) => (
+                <TableRow key={r.id}>
+                  <TableCell className="model-cell">
+                    {r.model}
+                    <small className="mono">
+                      {r.date?.slice(0, 10) ?? '尚无评分'}
+                    </small>
+                  </TableCell>
+                  <TableCell className="number">
+                    {r.completedCases} / {r.caseCount}
+                  </TableCell>
+                  <TableCell className="number">
+                    {metric(r.linear, r.observedLinear)}
+                  </TableCell>
+                  <TableCell className="number">
+                    {metric(r.async, r.observedAsync)}
+                  </TableCell>
+                  <TableCell className="number score-strong">
+                    {metric(r.drs, r.observedDrs)}
+                  </TableCell>
+                  <TableCell className="number">
+                    {r.scored} / {r.episodes}
+                  </TableCell>
+                  <TableCell>
+                    <Link className="text-link" href={'/runs/' + r.id}>
+                      {r.pairedComplete ? '完整统计' : '进行中'}{' '}
+                      <ArrowUpRight size={16} />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          {records.length === 0 && (
+            <div className="empty-state">没有匹配的主实验模型。</div>
           )}
-          <div className="panel" style={{ marginTop: 24 }}>
-            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-              <ShieldCheck size={21} />
-              <h3 style={{ fontSize: 18 }}>正式榜单 · 等待验证发布</h3>
-            </div>
-            <p className="muted" style={{ fontSize: 14, marginTop: 10 }}>
-              满足冻结合约、完整配对和规定主题覆盖要求，并完成发布审核后，结果才进入正式榜单。本页面未将批次内的
-              leaderboard 字段直接视为公开上榜资格。
-            </p>
-          </div>
-        </TabsContent>
-        <TabsContent value="b" className="tab-content">
-          <div className="panel empty-state">
-            <FlaskConical size={38} />
-            <span className="tag">模拟预览</span>
-            <h3 style={{ marginTop: 15 }}>Agent System Leaderboard</h3>
-            <p>
-              Track B
-              尚未运行真实测评，也没有真实排名。现在可以预览框架选择、自定义组件与模拟运行流程。
-            </p>
-            <Link href="/evaluate?track=b" className="btn primary">
-              预览 Track B <ArrowUpRight size={16} />
-            </Link>
-          </div>
-        </TabsContent>
-      </Tabs>
-    </>
+        </div>
+        <p className="muted" style={{ fontSize: 14, marginTop: 22 }}>
+          清单：formal-47 · 不按历史数据划分筛选。三次重复先按 case
+          平均，再按主题平均，最后对八个主题等权平均。提交审核与独立复现状态另行确认。
+        </p>
+      </TabsContent>
+      <TabsContent value="b" className="tab-content">
+        <div className="panel empty-state">
+          <FlaskConical size={38} />
+          <span className="tag">模拟预览</span>
+          <h3 style={{ marginTop: 15 }}>Agent System Leaderboard</h3>
+          <p>Track B 尚未运行真实测评，也没有真实排名。</p>
+          <Link href="/evaluate?track=b" className="btn primary">
+            预览 Track B <ArrowUpRight size={16} />
+          </Link>
+        </div>
+      </TabsContent>
+    </Tabs>
   );
 }

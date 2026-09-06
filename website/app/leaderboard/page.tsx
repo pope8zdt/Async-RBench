@@ -6,7 +6,7 @@ export default function Page() {
       <div className="page-title">
         <div className="eyebrow">RESULTS & REPRODUCIBILITY</div>
         <h1>Leaderboard</h1>
-        <p>从任务正确性、动态重规划和评测覆盖率，理解每一次运行的结果。</p>
+        <p>只统计固定主实验清单中的 47 个 case，按模型展示结果与完成进度。</p>
       </div>
       <Leaderboard />
     </div>

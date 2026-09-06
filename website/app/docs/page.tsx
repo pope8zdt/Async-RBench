@@ -97,12 +97,14 @@ export default function Page() {
               main_provider 和 child_provider。不同 API
               对参数的支持不同，运行前通过提供商预检确认。
             </p>
-            <h3>冻结 61 实例实验</h3>
-            <pre>{`python -m async_rbench.cli validate --release\npython -m async_rbench.paper_eval check --root .\n.\\experiments\\formal-61\\run.ps1 -Config "model-config.yaml" -Repetitions 3 -Seed 2026`}</pre>
+            <h3>主实验 · 固定 47 case</h3>
+            <pre>{`python -m async_rbench.cli validate --release\npython -m async_rbench.main_experiment check --root .\n.\\experiments\\formal-47\\run.ps1 -Config "model-config.yaml" -Repetitions 3 -Seed 2026`}</pre>
             <p>
-              该集合包含 61 个现有实例，是计划中 80
-              实例实验的当前可运行部分。Calibration、Development 和 Test
-              标签保持原样，因此不能把整个集合称为 held-out 测试集。
+              主实验以 experiments/formal-47/instances.txt 的固定 47
+              个实例为准。 每个模型在 Linear 和 Async 下各重复 3 次，共 282
+              次运行。 Calibration、Development、Test
+              仅保留为历史登记信息，不用于主实验榜单筛选。47-case
+              清单的选取来源记录在 cohort.json 中。
             </p>
             <h3>中断后恢复</h3>
             <p>
@@ -111,7 +113,7 @@ export default function Page() {
               参数恢复。清单、配置、运行模式或其他绑定不一致时，启动器会拒绝恢复。
             </p>
             <p className="doc-label">
-              依据：REFERENCE_SCAFFOLD.md · experiments/formal-61/README.md ·
+              依据：REFERENCE_SCAFFOLD.md · experiments/formal-47/README.md ·
               run_case.ps1
             </p>
           </section>
@@ -166,20 +168,21 @@ export default function Page() {
               </div>
             ))}
             <p>
-              正式核心指标按八类事件主题等权宏平均，并遵守主题实例覆盖门槛。网站将原始
-              0–1 分数乘以 100 展示，不进行额外加权。缺失或未评分显示“—”，与 0
-              分有明确区别。
+              主实验指标先平均每个 case 的三次重复，再平均主题内
+              case，最后对八类主题等权宏平均。网站将原始 0–1 分数乘以 100
+              展示，不进行额外加权。缺失或未评分显示“—”，与 0 分有明确区别。
             </p>
             <p>
-              当前实验记录显示每个 results.json 中的
-              development_summary。不同批次的案例集合不同，按 DRS
-              排序仅用于浏览，不构成统一 benchmark 排名。
+              统计直接读取主实验 manifest 绑定的 score.json，仅纳入固定 47-case
+              清单。 所有 282
+              次运行及主指标齐备后才生成完整得分。进行中的暂计值仅汇总已完整评分的
+              case 及其覆盖主题，不能当作完整 47-case 排名。
             </p>
             <h3>执行失败与评分失败</h3>
             <p>
               基础设施中断、协议问题、未评分和低分是不同事实。未评分 episode
-              不应解释为模型得分
-              0，也不能通过只挑选成功重试提高成绩。查看已评分数量、配对完整性、数据划分和主题覆盖后再比较。
+              不应解释为模型得分 0，也不能通过只挑选成功重试提高成绩。查看完成
+              Case / 47、已评分运行 / 282、配对完整性和主题覆盖后再比较。
             </p>
             <p className="doc-label">
               依据：evaluation_contract.json ·
@@ -204,8 +207,8 @@ export default function Page() {
                 版本、模型版本、子模型池、运行配置、种子和重复次数。密钥与原始私有轨迹留在本地。
               </li>
               <li>
-                提交结果包。维护者核对固定
-                harness、评测集合、数据划分、Linear/Async
+                提交结果包。维护者核对固定 harness、47-case
+                清单摘要、Linear/Async
                 配对完整性和主题覆盖；当前提交材料由维护者人工审核。
               </li>
               <li>

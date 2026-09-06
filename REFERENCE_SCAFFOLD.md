@@ -1,5 +1,7 @@
 # Fixed reference API scaffold
 
+> Current main experiment / 当前主实验：仅统计固定 47-case 清单，Linear/Async 各 3 次重复，每模型 282 次运行。历史 split 不作为主实验榜单筛选条件。统一入口与统计规则见 [formal-47](experiments/formal-47/README.md)。
+
 The reference scaffold is the fixed participant harness for official Track A. It supplies a main model loop, concurrent child loops, result-management tools and the protocol adapter. It contains no task-specific plan, result-selection rule, cancellation policy or replan policy; those remain model decisions.
 
 ## Visibility boundary

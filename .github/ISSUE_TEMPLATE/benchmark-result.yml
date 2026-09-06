@@ -8,6 +8,7 @@ body:
         This is a public submission. Include only material cleared for public sharing.
         Keep API keys, hidden scoring material, private case paths and raw private traces out of this issue.
         Track B simulation is not eligible. Submission and maintainer review do not imply independent reproduction.
+        Use the fixed experiments/formal-47/instances.txt cohort: 47 cases, 3 repetitions per mode, 282 planned episodes. Historical dataset splits are not submission filters.
   - type: input
     id: model
     attributes:
@@ -30,7 +31,7 @@ body:
     id: run-settings
     attributes:
       label: Reproduction settings and coverage
-      description: Include harness version, environment, task set, splits, seed, repetitions, paired/scored episode counts and all attempted runs including failures. Omit private instance identifiers.
+      description: Include the formal-47 selection digest, harness version, environment, seed 2026, 3 repetitions per mode, completed cases out of 47, scored episodes out of 282 and all failures. Omit private instance identifiers.
     validations:
       required: true
   - type: textarea

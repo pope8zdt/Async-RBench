@@ -84,10 +84,10 @@ export default function Home() {
       </section>
       <div className="stats-strip">
         {[
-          ['201', '注册实例'],
+          [String(data.cohort.case_count), '主实验 Case'],
           ['8', '事件主题'],
           ['2', '配对执行条件'],
-          [String(data.records.length), '真实结果快照'],
+          [String(data.records.length), '主实验模型'],
         ].map(([n, t]) => (
           <div key={t}>
             <strong>{n}</strong>
@@ -169,8 +169,8 @@ export default function Home() {
         <div className="note">
           <FlaskConical size={18} />
           <span>
-            核心指标按事件主题等权宏平均。当前 61
-            实例实验集合包含不同数据划分，不等同于完整 held-out 榜单。
+            主实验固定为 47 个
+            case。所有模型使用同一份清单，按八类事件主题等权汇总。进行中的结果显示完成进度与暂计值。
           </span>
         </div>
       </section>

@@ -31,7 +31,7 @@ The current release surface is:
 - participant-controlled non-exposure keeps every declared Async DRS event in the denominator as score `0`;
 - the shared emergency token fuse is `5,000,000` actual provider-reported tokens per episode.
 
-Version 11.0.0 is the frozen contract for the formal 61-case main experiment. Repository validation checks the tracked optional calibration definition for consistency, but does not require executing it, producing an audit, or meeting a model-panel minimum. Run `validate --release` before every formal experiment.
+Version 11.0.0 is the frozen contract for the fixed 47-case main experiment. Repository validation checks the tracked optional calibration definition for consistency, but does not require executing it, producing an audit, or meeting a model-panel minimum. Run `validate --release` before every formal experiment.
 
 Only `(case_id, instance_id)` pairs in [`cases/registry.json`](cases/registry.json) are official registered instances.
 
@@ -50,6 +50,12 @@ Every registered instance belongs to exactly one event theme:
 
 The exact theme definitions and frozen counts are in [`event_taxonomy.json`](event_taxonomy.json). Capabilities are independent multi-label measurements and are not added to event-theme counts.
 
+## Main experiment and leaderboard scope
+
+The current main experiment is **exactly 47 cases**, fixed by [`experiments/formal-47/instances.txt`](experiments/formal-47/instances.txt). Each model runs 3 repetitions of Linear and Async, totaling 282 episodes. The website leaderboard includes only this cohort. Calibration/development/test labels are historical corpus metadata and do not partition or filter this leaderboard. See the [main-experiment policy](experiments/formal-47/README.md) for coverage, provisional scores and selection provenance.
+
+The historical 61-case selection and full 201-instance registry remain available for traceability; they are not the main leaderboard denominator.
+
 ## Metrics
 
 ### Primary metrics
@@ -60,7 +66,7 @@ Async-RBench v11.0.0 reports three independent headline metrics:
 - `async_base_task_score`: base-task correctness in Async mode;
 - `async_dynamic_replanning_score`: per-event replanning quality in Async mode, combining evaluator-observed process quality and async outcome quality.
 
-The headline values are theme-equal macro-averages. A theme must satisfy the minimum test-instance coverage gate before entering the official aggregate.
+The main-47 headline values average the three repetitions within each case, cases within each theme, and then all eight themes equally. Full-cohort scores require all six episodes for every one of the 47 cases; incomplete coverage is shown as provisional. Historical test-instance coverage gates do not select cases for this leaderboard.
 
 ### Supporting metrics
 
@@ -84,7 +90,7 @@ The headline values are theme-equal macro-averages. A theme must satisfy the min
 - redelegation metrics: retry attempt count, invalid redelegation count, and invalid redelegation rate.
 - integrity diagnostics: scored/unscored counts, leaderboard eligibility, theme coverage, denominator digest consistency, pair completeness, conformance, and hard-fail reasons.
 
-[`evaluation_contract.json`](evaluation_contract.json) is the machine-readable authority for metric definitions. Aggregate field generation lives in [`async_rbench/evaluation/aggregate.py`](async_rbench/evaluation/aggregate.py); component weighting lives in [`async_rbench/evaluation/weighting.py`](async_rbench/evaluation/weighting.py).
+[`evaluation_contract.json`](evaluation_contract.json) is the machine-readable authority for per-episode metric definitions. The current main-47 summary lives in [`async_rbench/main_results.py`](async_rbench/main_results.py). Historical split-based diagnostic aggregates live in [`async_rbench/evaluation/aggregate.py`](async_rbench/evaluation/aggregate.py); component weighting lives in [`async_rbench/evaluation/weighting.py`](async_rbench/evaluation/weighting.py).
 
 ## Repository layout
 
@@ -161,30 +167,30 @@ Never store credentials in the repository.
 
 The launcher validates the repository, checks the provider and Docker, creates an immutable manifest, runs paired Linear/Async episodes, aggregates scores, and audits the run.
 
-### Run the formal 61-case experiment
+### Run the main 47-case experiment
 
-The formal Async-RBench v11.0.0 experiment is defined in [`experiments/formal-61/`](experiments/formal-61/).
-Its frozen CSV selects the 61 currently available registered `seed-1` instances from canonical top-level `cases/`; the target cohort is 80 cases, with 19 cases still pending construction. Implementations are not copied, and the retired GAIA2 case is excluded.
+The formal Async-RBench v11.0.0 experiment is defined in [`experiments/formal-47/`](experiments/formal-47/).
+Its fixed `instances.txt` selects exactly 47 registered `seed-1` instances from canonical top-level `cases/`. Membership is the user-supplied main-experiment selection, not a filter by historical split or current score.
 
 ```powershell
-.\experiments\formal-61\run.ps1 `
+.\experiments\formal-47\run.ps1 `
   -Config "configs/model-profiles/deepseek-v4-pro.yaml" `
-  -Repetitions 1 `
+  -Repetitions 3 `
   -Seed 2026
 ```
 
-This validates the selection, creates one immutable manifest in the CSV's
-frozen order, and runs both Linear and Async for all 61 cases. The cohort keeps
-the original calibration/development/test labels; it is a reproducible
-execution cohort, not a claim that every case is held-out.
+This validates the selection, creates one immutable manifest in the fixed order,
+and runs three repetitions of both Linear and Async for all 47 cases (282 episodes).
+The original calibration/development/test labels remain historical metadata;
+they do not partition the main-experiment leaderboard.
 
 To validate the selection without starting an experiment:
 
 ```powershell
-python -m async_rbench.paper_eval check --root .
+python -m async_rbench.main_experiment check --root .
 ```
 
-Outputs are written under `artifacts/experiments/paper-eval-existing-61-<timestamp>/`; the [formal experiment README](experiments/formal-61/README.md) documents the complete layout and resume procedure.
+Outputs are written under `artifacts/experiments/formal-47-<timestamp>/`; the [formal experiment README](experiments/formal-47/README.md) documents the complete layout and resume procedure.
 
 ### 5. Resume an infrastructure-interrupted run
 

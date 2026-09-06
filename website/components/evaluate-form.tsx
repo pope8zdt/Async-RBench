@@ -97,7 +97,10 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
       return '# ' + (e as Error).message;
     }
   }, [model, childModel, endpoint, keyEnv, childPool]);
-  const commands = buildCommands(scope, Number(repetitions));
+  const commands = buildCommands(
+    scope,
+    scope === 'formal' ? 3 : Number(repetitions),
+  );
   const choice = (
     label: string,
     value: string,
@@ -223,13 +226,23 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
             <div className="form-row">
               {choice('评测集合', scope, setScope, [
                 ['development', '单实例试跑'],
-                ['formal', '冻结 61 实例实验'],
+                ['formal', '主实验 · 固定 47 case'],
               ])}
-              {choice('重复次数', repetitions, setRepetitions, [
-                ['1', '1 次'],
-                ['3', '3 次'],
-                ['5', '5 次'],
-              ])}
+              {scope === 'formal' ? (
+                <label className="field">
+                  <span>重复次数</span>
+                  <input
+                    value="固定 3 次 / 每种模式 · 共 282 次运行"
+                    readOnly
+                  />
+                </label>
+              ) : (
+                choice('重复次数', repetitions, setRepetitions, [
+                  ['1', '1 次'],
+                  ['3', '3 次'],
+                  ['5', '5 次'],
+                ])
+              )}
             </div>
             <div className="checkline">
               <CheckCircle2 size={15} /> 固定参考 harness · Linear / Async 配对
