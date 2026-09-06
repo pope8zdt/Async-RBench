@@ -2,6 +2,8 @@
 
 Static public website; participants execute evaluations on their own computers. Track A provides real configuration generation and main-47 aggregates. Track B remains an explicitly labeled simulation.
 
+Pages use concise Chinese/English copy and a persistent light/dark preference. New visitors start in Chinese with their system color scheme. Optional configuration, scoring rules and provenance are available in expandable sections; incomplete coverage and simulation labels stay visible.
+
 Public page copy uses “201个高质量任务” and shows eight-theme distribution using registered-instance counts. Case/instance distinctions and the main-cohort size remain in machine-readable data, without appearing in page copy. The leaderboard retains the fixed main cohort and presents coverage as percentages, with paired Linear/Async BTS and Async DRS views. Full coverage, execution status and review status are separate facts. The website has no participant-process telemetry. The public `run_main.ps1` entry forwards to the unchanged canonical experiment launcher.
 
 ## Develop and build

@@ -11,8 +11,10 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { useCopy, usePreferences } from '@/components/preferences';
 import { buildConfig, buildCommands } from '@/lib/config-builder.mjs';
 import { submissionUrl } from '@/lib/repository';
+
 function download(name: string, text: string) {
   const url = URL.createObjectURL(
     new Blob([text], { type: 'text/plain;charset=utf-8' }),
@@ -23,7 +25,9 @@ function download(name: string, text: string) {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+
 export function CodeBlock({ text, title }: { text: string; title: string }) {
+  const copy = useCopy();
   const [copied, setCopied] = useState(false);
   const [failed, setFailed] = useState(false);
   return (
@@ -42,20 +46,27 @@ export function CodeBlock({ text, title }: { text: string; title: string }) {
             }
           }}
         >
-          {copied ? <Check size={14} /> : <Copy size={14} />}{' '}
-          {failed ? '请手动选择复制' : copied ? '已复制' : '复制'}
+          {copied ? <Check size={14} /> : <Copy size={14} />}
+          {failed
+            ? copy('请手动复制', 'Copy manually')
+            : copied
+              ? copy('已复制', 'Copied')
+              : copy('复制', 'Copy')}
         </button>
       </div>
       <pre>{text}</pre>
     </div>
   );
 }
+
 export function EvaluateForm() {
-  const queryTrack = useSearchParams().get('track');
-  const initialTrack = queryTrack === 'b' ? 'b' : 'a';
+  const initialTrack = useSearchParams().get('track') === 'b' ? 'b' : 'a';
   return <EvaluationWorkspace key={initialTrack} initialTrack={initialTrack} />;
 }
+
 function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
+  const copy = useCopy();
+  const { locale } = usePreferences();
   const [track, setTrack] = useState(initialTrack);
   const [model, setModel] = useState('');
   const [childModel, setChildModel] = useState('');
@@ -71,30 +82,45 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
   const [sendSeed, setSendSeed] = useState('true');
   const [scope, setScope] = useState('development');
   const [repetitions, setRepetitions] = useState('1');
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [attempted, setAttempted] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [framework, setFramework] = useState('claude-code');
   const [component, setComponent] = useState('default');
   const [simStep, setSimStep] = useState(-1);
+
   useEffect(() => {
     if (simStep < 0 || simStep >= 3) return;
     const timer = setTimeout(() => setSimStep((s) => s + 1), 900);
     return () => clearTimeout(timer);
   }, [simStep]);
+
   const config = useMemo(() => {
+    const options = {
+      model,
+      childModel,
+      endpoint,
+      keyEnv,
+      childEndpoint,
+      childKeyEnv,
+      maxTokensParameter,
+      sendSeed: sendSeed === 'true',
+    };
+    let error = '';
     try {
-      return buildConfig({
-        model: model || 'replace-with-exact-model-id',
-        childModel,
-        endpoint,
-        keyEnv,
-        childEndpoint,
-        childKeyEnv,
-        maxTokensParameter,
-        sendSeed: sendSeed === 'true',
-      });
+      buildConfig(options, locale);
     } catch (e) {
-      return '# ' + (e as Error).message;
+      error = (e as Error).message;
+    }
+    try {
+      return {
+        text: buildConfig(
+          { ...options, model: model || 'replace-with-exact-model-id' },
+          locale,
+        ),
+        error,
+      };
+    } catch (e) {
+      return { text: '# ' + (e as Error).message, error };
     }
   }, [
     model,
@@ -105,11 +131,14 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
     childKeyEnv,
     maxTokensParameter,
     sendSeed,
+    locale,
   ]);
   const commands = buildCommands(
     scope,
     scope === 'formal' ? 3 : Number(repetitions),
+    locale,
   );
+
   const choice = (
     label: string,
     value: string,
@@ -136,26 +165,13 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
       </Select>
     </label>
   );
+
   function saveConfig() {
-    try {
-      const text = buildConfig({
-        model,
-        childModel,
-        endpoint,
-        keyEnv,
-        childEndpoint,
-        childKeyEnv,
-        maxTokensParameter,
-        sendSeed: sendSeed === 'true',
-      });
-      download('model-config.yaml', text);
-      setError('');
-      setMessage('配置已生成。下载运行脚本后，在本地仓库根目录执行。');
-    } catch (e) {
-      setError((e as Error).message);
-      setMessage('');
-    }
+    setAttempted(true);
+    setSaved(!config.error);
+    if (!config.error) download('model-config.yaml', config.text);
   }
+
   return (
     <Tabs
       value={track}
@@ -166,28 +182,27 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
     >
       <TabsList className="tab-list">
         <TabsTrigger value="a" className="tab-trigger">
-          Track A · 模型 API
+          Track A · {copy('模型 API', 'Model API')}
         </TabsTrigger>
         <TabsTrigger value="b" className="tab-trigger">
-          Track B · 模拟预览
+          Track B · {copy('模拟预览', 'Simulation')}
         </TabsTrigger>
       </TabsList>
       <TabsContent value="a">
-        <div className="note">
-          <span>
-            评测在参与者电脑上运行。API
-            密钥留在本地，官网提供配置、教程和结果展示。
-          </span>
-        </div>
         <div className="evaluation-grid">
           <div className="panel form-section">
-            <h3>模型配置</h3>
-            <p className="form-intro">
-              适用于当前参考 scaffold 的 OpenAI-compatible
-              API。子模型默认与主模型相同，可按实际运行需要另行配置。
-            </p>
+            <h3>{copy('模型配置', 'Model configuration')}</h3>
             <label className="field">
-              <span>API 地址</span>
+              <span>{copy('模型 ID', 'Model ID')}</span>
+              <input
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                placeholder={copy('填写精确版本', 'Exact model version')}
+                spellCheck={false}
+              />
+            </label>
+            <label className="field">
+              <span>{copy('API 地址', 'API URL')}</span>
               <input
                 type="url"
                 value={endpoint}
@@ -195,58 +210,61 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
                 spellCheck={false}
               />
             </label>
-            <div className="form-row">
-              <label className="field">
-                <span>主模型 ID</span>
-                <input
-                  value={model}
-                  onChange={(e) => setModel(e.target.value)}
-                  placeholder="填写精确模型版本"
-                  spellCheck={false}
-                />
-              </label>
-              <label className="field">
-                <span>子模型 ID（可选）</span>
-                <input
-                  value={childModel}
-                  onChange={(e) => setChildModel(e.target.value)}
-                  placeholder="留空则使用主模型"
-                  spellCheck={false}
-                />
-              </label>
-            </div>
             <label className="field">
-              <span>密钥环境变量名</span>
+              <span>
+                {copy('密钥环境变量名', 'API key environment variable')}
+              </span>
               <input
                 value={keyEnv}
                 onChange={(e) => setKeyEnv(e.target.value)}
                 spellCheck={false}
               />
-              <small>只填写变量名。实际密钥在运行机器的终端中设置。</small>
             </label>
             <details className="provider-options">
-              <summary>服务商选项</summary>
+              <summary>
+                {copy('子模型与服务商选项', 'Child model & provider options')}
+              </summary>
               <label className="field">
-                <span>子模型 API 地址（可选）</span>
+                <span>{copy('子模型 ID', 'Child model ID')}</span>
+                <input
+                  value={childModel}
+                  onChange={(e) => setChildModel(e.target.value)}
+                  placeholder={copy('默认使用主模型', 'Defaults to main model')}
+                  spellCheck={false}
+                />
+              </label>
+              <label className="field">
+                <span>{copy('子模型 API 地址', 'Child API URL')}</span>
                 <input
                   type="url"
                   value={childEndpoint}
                   onChange={(e) => setChildEndpoint(e.target.value)}
-                  placeholder="默认使用上方 API 地址"
+                  placeholder={copy(
+                    '默认使用主模型地址',
+                    'Defaults to main API URL',
+                  )}
                   spellCheck={false}
                 />
               </label>
               <label className="field">
-                <span>子模型密钥环境变量（可选）</span>
+                <span>
+                  {copy(
+                    '子模型密钥环境变量',
+                    'Child API key environment variable',
+                  )}
+                </span>
                 <input
                   value={childKeyEnv}
                   onChange={(e) => setChildKeyEnv(e.target.value)}
-                  placeholder="默认使用上方环境变量"
+                  placeholder={copy(
+                    '默认使用主模型变量',
+                    'Defaults to main key variable',
+                  )}
                   spellCheck={false}
                 />
               </label>
               {choice(
-                '输出长度参数',
+                copy('输出长度参数', 'Output limit parameter'),
                 maxTokensParameter,
                 setMaxTokensParameter,
                 [
@@ -254,154 +272,174 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
                   ['max_tokens', 'max_tokens'],
                 ],
               )}
-              {choice('向 API 传递 seed', sendSeed, setSendSeed, [
-                ['true', '是'],
-                ['false', '否'],
+              {choice(copy('传递 seed', 'Send seed'), sendSeed, setSendSeed, [
+                ['true', copy('是', 'Yes')],
+                ['false', copy('否', 'No')],
               ])}
-              <p className="muted">
-                按服务商支持的参数选择。运行脚本会在本地执行服务连接预检。
-              </p>
             </details>
             <div className="form-row">
-              {choice('评测集合', scope, setScope, [
-                ['development', '单任务试跑'],
-                ['formal', '主实验'],
+              {choice(copy('评测集合', 'Evaluation scope'), scope, setScope, [
+                ['development', copy('单任务试跑', 'Single-task trial')],
+                ['formal', copy('主实验', 'Main experiment')],
               ])}
               {scope === 'formal' ? (
                 <label className="field">
-                  <span>重复次数</span>
-                  <input value="固定 3 次 / 每种模式" readOnly />
+                  <span>{copy('重复次数', 'Repetitions')}</span>
+                  <input
+                    value={copy('每种模式固定 3 次', '3 per mode (fixed)')}
+                    readOnly
+                  />
                 </label>
               ) : (
-                choice('重复次数', repetitions, setRepetitions, [
-                  ['1', '1 次'],
-                  ['3', '3 次'],
-                  ['5', '5 次'],
-                ])
+                choice(
+                  copy('重复次数', 'Repetitions'),
+                  repetitions,
+                  setRepetitions,
+                  [
+                    ['1', '1'],
+                    ['3', '3'],
+                    ['5', '5'],
+                  ],
+                )
               )}
             </div>
-            <div className="checkline">
-              固定参考 harness · Linear / Async 配对
-            </div>
-            <div className="checkline">
-              容器工作区 · 主模型 100 步 / 子模型 40 步
-            </div>
+            <p>
+              {copy(
+                '在本地运行，密钥留在本地。此处只填写环境变量名。',
+                'Run locally. Keep keys local; enter only the environment variable name here.',
+              )}
+            </p>
             <div className="actions">
               <button className="btn primary" onClick={saveConfig}>
                 <Download size={16} />
-                下载配置
+                {copy('下载配置', 'Download config')}
               </button>
               <button
                 className="btn secondary"
                 onClick={() => download('run-evaluation.ps1', commands)}
               >
-                下载运行脚本
+                {copy('下载脚本', 'Download script')}
               </button>
             </div>
-            {error && (
+            {attempted && config.error && (
               <p className="error-text" role="alert">
-                {error}
+                {config.error}
               </p>
             )}
-            {message && <output className="checkline">{message}</output>}
-            <p
-              className="form-intro"
-              style={{ marginTop: 20, marginBottom: 0 }}
+            {saved && !config.error && (
+              <output>
+                {copy('配置已下载。', 'Configuration downloaded.')}
+              </output>
+            )}
+            <Link
+              className="text-link"
+              style={{ marginTop: 20 }}
+              href="/docs#quickstart"
             >
-              需要仓库访问权限及对应任务资源。下载配置不代表获得正式上榜资格。
-              <Link className="text-link" href="/docs#track-a">
-                阅读 Track A 教程 <ArrowRight size={14} />
-              </Link>
-            </p>
+              {copy('运行教程', 'Run tutorial')} <ArrowRight size={14} />
+            </Link>
           </div>
           <div>
             <CodeBlock text={commands} title="POWERSHELL 7" />
-            <div style={{ marginTop: 20 }}>
-              <CodeBlock text={config} title="MODEL-CONFIG.YAML" />
-            </div>
+            <details className="provider-options" style={{ marginTop: 20 }}>
+              <summary>{copy('预览配置', 'Preview configuration')}</summary>
+              <CodeBlock text={config.text} title="MODEL-CONFIG.YAML" />
+            </details>
             <div className="panel" style={{ marginTop: 20 }}>
-              <h3>运行后提交结果</h3>
-              <p className="form-intro" style={{ marginTop: 12 }}>
-                使用提交工具打包并校验公开摘要，再通过 GitHub
-                提交。维护者审核记录合并后，榜单自动更新。
+              <h3>{copy('提交结果', 'Submit results')}</h3>
+              <p>
+                {copy(
+                  '提交公开汇总包。自报结果需经维护者审核。',
+                  'Submit a public summary package. Self-reported results require maintainer review.',
+                )}
               </p>
-              <a className="text-link" href={submissionUrl}>
-                提交 Track A 结果 <ArrowRight size={14} />
-              </a>
-              <p className="form-intro" style={{ marginTop: 12 }}>
-                表单内容公开可见，请先核对
+              <div className="actions">
+                <a className="text-link" href={submissionUrl}>
+                  {copy('打开提交表单', 'Open submission form')}{' '}
+                  <ArrowRight size={14} />
+                </a>
                 <Link className="text-link" href="/docs#submission">
-                  提交说明
+                  {copy('提交说明', 'Submission guide')}
                 </Link>
-                。提交不会自动生成已验证成绩。
-              </p>
+              </div>
             </div>
           </div>
         </div>
       </TabsContent>
       <TabsContent value="b">
         <div className="note amber">
-          <span>
-            模拟预览：以下操作只在当前浏览器演示配置流程，不连接框架、不调用模型、不生成测评分数。
-          </span>
+          {copy(
+            '模拟预览：不调用模型、不生成真实结果，不具备上榜资格。',
+            'Simulation only: no model calls, real results or leaderboard eligibility.',
+          )}
         </div>
         <div className="evaluation-grid">
           <div className="panel form-section">
-            <h3>选择框架与策略组件</h3>
-            <p className="form-intro">
-              预集成与自定义系统均通过统一驱动接入评测内核。
-            </p>
+            <h3>{copy('Agent 系统', 'Agent system')}</h3>
             {choice(
-              'Agent 系统',
+              copy('框架', 'Framework'),
               framework,
               (v) => {
                 setFramework(v);
                 setSimStep(-1);
               },
               [
-                ['claude-code', 'Claude Code · 计划集成'],
-                ['langgraph', 'LangGraph 参考 Agent · 计划集成'],
-                ['custom', '自定义 Agent · 接口预览'],
+                [
+                  'claude-code',
+                  copy('Claude Code · 计划中', 'Claude Code · Planned'),
+                ],
+                [
+                  'langgraph',
+                  copy('LangGraph · 计划中', 'LangGraph · Planned'),
+                ],
+                [
+                  'custom',
+                  copy('自定义 Agent · 预览', 'Custom agent · Preview'),
+                ],
               ],
             )}
             {choice(
-              '自定义组件',
+              copy('策略组件', 'Policy component'),
               component,
               (v) => {
                 setComponent(v);
                 setSimStep(-1);
               },
               [
-                ['default', '使用框架默认策略'],
-                ['context', 'ContextBuilder · 上下文管理'],
-                ['delegation', 'DelegationPolicy · 子任务策略'],
-                ['policy', 'AgentPolicy · 主 Agent 决策'],
+                ['default', copy('框架默认策略', 'Framework default')],
+                ['context', 'ContextBuilder'],
+                ['delegation', 'DelegationPolicy'],
+                ['policy', 'AgentPolicy'],
               ],
             )}
-            <div className="simulation">
-              固定内核继续掌握事件交付、工作区和评分。组件只能决定如何处理已释放的信息。
-            </div>
             <button
               className="btn primary"
-              style={{ marginTop: 24 }}
+              style={{ marginTop: 20 }}
               disabled={simStep >= 0 && simStep < 3}
               onClick={() => setSimStep(0)}
             >
-              {simStep === 3 ? '重新模拟' : '演示接入流程'}
+              {simStep === 3
+                ? copy('重新模拟', 'Simulate again')
+                : copy('开始模拟', 'Start simulation')}
             </button>
           </div>
           <div className="panel">
-            <span className="tag">模拟预览 · 无真实执行</span>
-            <h3 style={{ fontSize: 20, marginTop: 18 }}>接入流程预览</h3>
-            <div className="sim-steps">
+            <h3>{copy('模拟流程', 'Simulation workflow')}</h3>
+            <div className="sim-steps" aria-live="polite">
               {[
-                '读取框架配置',
-                '演示协议兼容性检查',
-                '演示 Linear / Async 任务创建',
-                '模拟完成 · 未生成真实结果',
-              ].map((s, i) => (
+                copy('读取框架配置', 'Read framework configuration'),
+                copy('模拟协议检查', 'Simulate protocol checks'),
+                copy(
+                  '模拟 Linear / Async 创建',
+                  'Simulate Linear / Async setup',
+                ),
+                copy(
+                  '模拟完成 · 无真实结果',
+                  'Simulation complete · No real results',
+                ),
+              ].map((step, i) => (
                 <div
-                  key={s}
+                  key={i}
                   className={'sim-step ' + (simStep >= i ? 'done' : 'muted')}
                 >
                   <span className="mono">
@@ -409,25 +447,17 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
                       ? '✓'
                       : String(i + 1).padStart(2, '0')}
                   </span>
-                  {s}
+                  {step}
                   {simStep === i && i < 3 ? ' …' : ''}
                 </div>
               ))}
             </div>
-            <output
-              className="muted"
-              style={{ display: 'block', fontSize: 13, marginTop: 24 }}
-            >
-              {simStep === 3
-                ? '这次模拟没有通过真实协议测试，也不会进入排行榜。'
-                : '选择一个系统，查看后续接入流程。'}
-            </output>
             <Link
               className="text-link"
               style={{ marginTop: 20 }}
               href="/docs#track-b"
             >
-              查看 Track B 接口说明 <ArrowRight size={14} />
+              {copy('接口说明', 'Interface guide')} <ArrowRight size={14} />
             </Link>
           </div>
         </div>
