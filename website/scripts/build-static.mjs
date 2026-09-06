@@ -1,6 +1,10 @@
 import { spawnSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 
+const prepared = spawnSync(process.env.PYTHON || 'python', ['scripts/prepare_data.py'], { stdio: 'inherit' });
+if (prepared.error) throw prepared.error;
+if (prepared.status !== 0) process.exit(prepared.status || 1);
+
 // Native Next export supports Pages subpaths and domain-root hosting.
 const result = spawnSync(
   process.execPath,

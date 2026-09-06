@@ -1,35 +1,48 @@
 # Async-RBench website
 
-Website source under the main repository's `website/` directory. Real Track A configuration generation, reference documentation, and allowlisted main-47 experiment aggregates. Track B is browser-only simulation. Participants run evaluations on their own computers. GitHub Pages or Vercel hosts the static website. Participants submit cleared summaries through the repository's Track A GitHub issue form. Maintainers review them and update published data through a pull request and website rebuild. No online submission backend or independent public ranking verification is implemented.
+Static public website; participants execute evaluations on their own computers. Track A provides real configuration generation and main-47 aggregates. Track B remains an explicitly labeled simulation.
 
-## Develop
+Home and task pages count all current registered cases and instances and show eight-theme distribution. The leaderboard independently uses the fixed 47-case main cohort, with paired Linear/Async BTS and Async DRS views. Full coverage, execution status and review status are separate facts. The website has no participant-process telemetry.
 
-Node 22.13+; `npm ci`, `npm run dev`.
+## Develop and build
 
-`npm run build:static` generates `out/` for GitHub Pages and Vercel. `npm run test:static` checks every exported route and local asset link. Optional `NEXT_PUBLIC_BASE_PATH=/repository-name` builds for a project subpath. All experiment detail routes are rendered at build time. Changes to results require a rebuild.
+Use Node 22.13+ and Python 3.9+ from a full repository checkout. From `website/`:
 
-`npm run build` and `npm run build:static` both produce the static website. Run all commands in `website/`.
+```powershell
+python -m pip install -r scripts/requirements.txt
+npm ci
+npm run dev
+```
 
-## Refresh real data
+`npm run build:static` generates `out/`. It first regenerates `public/data/corpus.json` and `public/data/leaderboard.json`; these derived files are ignored by Git. The catalog emits only counts and a registry digest. The leaderboard merges the validated versioned main snapshot with complete, separately reviewed submissions. All detail routes are rendered during the build. Optional `NEXT_PUBLIC_BASE_PATH=/repository-name` supports project hosting paths.
 
-`python scripts/export_results.py PATH_TO_AUTHORIZED_BENCHMARK_CHECKOUT`
+## Refresh main-experiment results
 
-Only the fixed 47-case cohort and current four-model main panel are exported. The three repeated pairs produce 282 planned episodes per model. Statistics read manifest-bound score.json files and reject duplicate attempts. Original dataset splits are never a leaderboard filter. Incomplete runs expose coverage and provisional observations, not final 47-case scores. Only allowlisted summary fields are exported. Case paths, original manifests, credentials, hidden scoring material and raw traces stay outside this project. Each entry keeps a digest of the selection and all source manifest/score digests. These hashes do not certify scores or independently verify results.
+```powershell
+python scripts/refresh_results.py --runs-root PATH_TO_AUTHORIZED_CHECKOUT
+python scripts/refresh_results.py --runs-root PATH_TO_AUTHORIZED_CHECKOUT --write
+```
+
+The first command previews coverage. `--write` updates `public/data/experiments.json` atomically; neither command commits or publishes. Policy comes from this checkout's fixed main-47 cohort. The exporter rejects ambiguous attempts and checks manifest, score and configuration bindings. Missing scores remain missing; provisional metrics average only complete paired cases and their represented themes. Resources disclose measurement counts. No fixed child-model pool is required.
+
+## Submit and review
+
+See [the executable participant and maintainer workflow](../submissions/README.md). Entries live in `submissions/entries/<digest>.json`; a separate maintainer record in `submissions/reviews/` binds to the same content digest. The build includes only complete reviewed submissions in formal ranking. Main-experiment snapshots may still show incomplete, self-reported results.
+
+Merge reviewed changes to `main` to trigger Pages validation/build/publication. Format checks and hashes do not authenticate scores or reviewer identity; repository maintainers authorize reviews and merges. No submission command calls models, transmits credentials or publishes raw artifacts.
 
 ## Verify
 
-`python -m unittest discover -s tests -p 'test_*.py'`
+From `website/`:
 
-`node --test tests/config.test.mjs`
+```powershell
+python -m unittest discover -s tests -p "test_*.py"
+npm test
+npm run build:static
+npm run test:static
+npx oxlint app components/site-shell.tsx components/leaderboard.tsx components/evaluate-form.tsx lib
+```
 
-`npx tsc --noEmit`
+From the repository root, also run `python -m unittest discover -s tests -p test_submissions.py` and `python -m async_rbench.submissions check --root .`. The unused starter UI catalog has existing lint findings and is outside this application lint scope.
 
-`npm run build`
-
-Application-source lint: `npx oxlint app components/site-shell.tsx components/leaderboard.tsx components/evaluate-form.tsx lib`. The generated starter's unused UI catalog has pre-existing lint findings; it is retained unchanged, so repository-wide `npm run lint` is not clean.
-
-## Hosting boundary
-
-The root Pages workflow deploys only `website/out/`. Config generation runs in the browser and does not collect secrets. Real evaluation requires an authorized local checkout and working model provider. Participants control their host computers; container isolation does not keep scoring material secret from the host owner. File hashes support file comparison, not score attestation.
-
-See [deployment instructions](docs/deployment.md) for GitHub Pages and Vercel. Vercel can import the same repository with Root Directory set to `website`.
+Only `website/out/` is published. Model credentials, raw results and private case contents are excluded. See [deployment instructions](docs/deployment.md).

@@ -81,7 +81,47 @@ export type Experiment = {
   themeScores: Record<string, number | null>;
   published: boolean;
   scope: string;
+  coverageStatus?: string;
+  executionStatus?: string;
+  reviewStatus?: string;
+  submissionId?: string;
+  reviewer?: string;
+  reviewedAt?: string;
+  reviewEvidenceUrl?: string | null;
+  benchmarkCommit?: string;
+  configSha256?: string | null;
+  themeMetrics?: Record<
+    string,
+    {
+      linear: number | null;
+      async: number | null;
+      drs: number | null;
+      completedCases: number;
+      caseCount: number;
+    }
+  >;
+  resources?: Record<
+    'linear' | 'async',
+    {
+      tokens: { mean: number | null; measuredEpisodes: number };
+      durationMs: { mean: number | null; measuredEpisodes: number };
+    }
+  >;
 };
-export function score(value: number | null) {
-  return value === null ? '—' : (value * 100).toFixed(1);
+export const reviewLabels = {
+  self_reported: '自行报告',
+  materials_reviewed: '材料已审核',
+  independently_reproduced: '已独立复现',
+};
+export const executionLabels: Record<string, string> = {
+  unknown: '未知',
+  running: '运行中（已报告）',
+  completed: '已结束（已报告）',
+  failed: '失败（已报告）',
+  stopped: '已停止（已报告）',
+};
+export function score(value: number | null | undefined) {
+  return typeof value !== 'number' || !Number.isFinite(value)
+    ? '—'
+    : (value * 100).toFixed(1);
 }

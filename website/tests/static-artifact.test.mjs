@@ -5,7 +5,7 @@ import { join } from 'node:path';
 
 const root = 'out';
 const base = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
-const data = JSON.parse(readFileSync('public/data/experiments.json', 'utf8'));
+const data = JSON.parse(readFileSync('public/data/leaderboard.json', 'utf8'));
 
 test('all public routes exist as static HTML, including every experiment', () => {
   for (const route of [
@@ -13,6 +13,7 @@ test('all public routes exist as static HTML, including every experiment', () =>
     'evaluate',
     'docs',
     'leaderboard',
+    'tasks',
     ...data.records.map((r) => `runs/${r.id}`),
   ]) {
     assert.ok(
@@ -29,6 +30,7 @@ test('HTML assets and internal links resolve under the configured hosting path',
     'evaluate',
     'docs',
     'leaderboard',
+    'tasks',
     `runs/${data.records[0].id}`,
   ]) {
     const html = readFileSync(join(root, route, 'index.html'), 'utf8');
@@ -53,7 +55,7 @@ test('HTML assets and internal links resolve under the configured hosting path',
     }
   }
   assert.deepEqual(
-    JSON.parse(readFileSync(join(root, 'data/experiments.json'), 'utf8')),
+    JSON.parse(readFileSync(join(root, 'data/leaderboard.json'), 'utf8')),
     data,
   );
 });

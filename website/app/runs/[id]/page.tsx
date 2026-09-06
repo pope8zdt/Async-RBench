@@ -1,8 +1,22 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Download, FileCheck2 } from 'lucide-react';
-import data from '@/public/data/experiments.json';
-import { metrics, score, themes, type Experiment } from '@/lib/content';
+import data from '@/public/data/leaderboard.json';
+import {
+  metrics,
+  score,
+  themes,
+  reviewLabels,
+  executionLabels,
+  type Experiment,
+} from '@/lib/content';
+import {
+  coverageStatus,
+  reviewStatus,
+  executionStatus,
+  metricValue,
+  type MetricKey,
+} from '@/lib/leaderboard.mjs';
 import { assetPath } from '@/lib/asset-path';
 export const metadata = { title: '主实验详情' };
 export const dynamicParams = false;
@@ -17,6 +31,8 @@ export default async function Page({
   const { id } = await params;
   const r = data.records.find((x) => x.id === id) as Experiment | undefined;
   if (!r) notFound();
+  const complete = coverageStatus(r) === 'complete';
+  const keys: MetricKey[] = ['linear', 'async', 'drs'];
   return (
     <div className="page-wrap">
       <Link className="text-link" href="/leaderboard">
@@ -26,44 +42,47 @@ export default async function Page({
         <div className="eyebrow">MAIN EXPERIMENT / FORMAL-47</div>
         <h1>{r.model}</h1>
         <p>
-          固定 47 case · {r.date?.slice(0, 10) ?? '尚无评分'} ·{' '}
-          {r.completedCases}/47 case 完整评分
+          固定 {r.caseCount} case · {r.date?.slice(0, 10) ?? '尚无评分'} ·{' '}
+          {r.completedCases}/{r.caseCount} case 完整评分
         </p>
+        <p className="hash mono">记录 / {r.id}</p>
       </div>
       <div className="note amber">
         <FileCheck2 size={18} />
         <span>
-          {r.pairedComplete
-            ? '47 个 case 的配对与重复评分已齐备。该统计尚未声明通过独立复现。'
-            : '运行仍在进行。下方为已完整评分 case 的暂计值，尚不是完整 47-case 得分。缺失评分不按 0 分处理。'}
+          {complete
+            ? '配对与重复评分已齐备，覆盖完整主实验清单。'
+            : `覆盖不完整。下方为已完整评分 case 的暂计值，尚不是完整 ${r.caseCount}-case 得分。缺失评分不按 0 分处理。`}{' '}
+          审核：{reviewLabels[reviewStatus(r)]}。执行状态：
+          {executionLabels[executionStatus(r)]}。材料审核不等于独立复现。
         </span>
       </div>
       <div className="detail-grid">
-        {metrics.map((m, i) => (
-          <div className="detail-metric" key={m.name}>
+        {metrics.map((metric, index) => (
+          <div className="detail-metric" key={metric.name}>
             <span>
-              {m.name}
-              {r.pairedComplete ? '' : ' · 暂计'}
+              {metric.name}
+              {complete ? '' : ' · 暂计'}
             </span>
-            <strong>
-              {score([r.observedLinear, r.observedAsync, r.observedDrs][i])}
-            </strong>
-            <span>{m.full} / 0–100</span>
+            <strong>{score(metricValue(r, keys[index]))}</strong>
+            <span>{metric.full} / 0–100</span>
           </div>
         ))}
       </div>
       <div className="panel">
-        <h3 style={{ fontSize: 19 }}>主实验覆盖</h3>
+        <h3 style={{ fontSize: 19 }}>主实验覆盖与来源状态</h3>
         <div className="detail-facts">
           {[
-            ['统计范围', '固定 47 case'],
-            ['重复次数', 'Linear / Async 各 3 次'],
-            ['完成 Case', `${r.completedCases} / 47`],
+            ['统计范围', `固定 ${r.caseCount} case`],
+            ['重复次数', `Linear / Async 各 ${data.cohort.repetitions} 次`],
+            ['完成 Case', `${r.completedCases} / ${r.caseCount}`],
             ['已评分运行', `${r.scored} / ${r.episodes}`],
-            ['暂计值覆盖主题', `${r.themeCount} / 8`],
-            ['完整 47-case 得分', r.pairedComplete ? '已齐备' : '等待其余运行'],
+            ['已覆盖主题', `${r.themeCount} / ${themes.length}`],
+            ['覆盖状态', complete ? '完整' : '不完整'],
             ['评测版本', r.version],
-            ['发布验证', '待审核 / 未声明独立复现'],
+            ['审核状态', reviewLabels[reviewStatus(r)]],
+            ['执行状态', executionLabels[executionStatus(r)]],
+            ['快照时间 (UTC)', data.generatedAt.replace('T', ' ').slice(0, 19)],
           ].map(([label, value]) => (
             <div key={label}>
               <span>{label}</span>
@@ -73,41 +92,132 @@ export default async function Page({
         </div>
       </div>
       <section className="section">
-        <h2>事件主题结果{r.pairedComplete ? '' : ' · 暂计'}</h2>
-        <div className="theme-grid">
-          {themes.map(([key, title]) => (
-            <div
-              key={key}
-              className="theme-item"
-              style={{ justifyContent: 'space-between' }}
-            >
-              <h4>{title}</h4>
-              <span className="number score-strong">
-                {score(r.themeScores[key] ?? null)}
-              </span>
-            </div>
-          ))}
+        <div className="section-heading">
+          <h2>事件主题结果{complete ? '' : ' · 暂计'}</h2>
         </div>
+        <div className="table-panel corpus-table-wrap">
+          <table className="data-table theme-results">
+            <caption className="screen-reader-only">
+              事件主题的配对 BTS 与 Async DRS 分数，范围 0–100
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">事件主题</th>
+                <th scope="col">完整评分 Case</th>
+                <th scope="col">Linear BTS</th>
+                <th scope="col">Async BTS</th>
+                <th scope="col">Async DRS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {themes.map(([key, title]) => {
+                const theme = r.themeMetrics?.[key];
+                const expected =
+                  data.cohort.theme_counts[
+                    key as keyof typeof data.cohort.theme_counts
+                  ];
+                return (
+                  <tr key={key}>
+                    <th scope="row">{title}</th>
+                    <td className="number">
+                      {theme
+                        ? `${theme.completedCases} / ${theme.caseCount}`
+                        : `— / ${expected}`}
+                    </td>
+                    <td className="number">{score(theme?.linear)}</td>
+                    <td className="number">{score(theme?.async)}</td>
+                    <td className="number">
+                      {score(theme ? theme.drs : r.themeScores[key])}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="section-footnote">
+          每个主题仅汇总已完整评分的
+          case；覆盖不足时为暂计值。旧快照可能仅含主题 DRS，缺失 BTS
+          与覆盖数量显示为「—」。
+        </p>
       </section>
+      {r.resources && (
+        <section className="section panel">
+          <h3 style={{ fontSize: 19 }}>资源观测</h3>
+          <div className="detail-facts">
+            {(['linear', 'async'] as const).map((mode) => (
+              <div key={mode}>
+                <span>{mode === 'linear' ? 'Linear' : 'Async'}</span>
+                <strong className="resource-values">
+                  {r.resources?.[mode].tokens.mean == null
+                    ? '—'
+                    : Math.round(r.resources[mode].tokens.mean).toLocaleString(
+                        'en-US',
+                      )}{' '}
+                  tokens / 运行
+                  <small className="cell-note">
+                    已观测 {r.resources?.[mode].tokens.measuredEpisodes} 次
+                  </small>
+                  {r.resources?.[mode].durationMs.mean == null
+                    ? '—'
+                    : (r.resources[mode].durationMs.mean / 1000).toFixed(
+                        1,
+                      )}{' '}
+                  秒 / 运行
+                  <small className="cell-note">
+                    已观测 {r.resources?.[mode].durationMs.measuredEpisodes} 次
+                  </small>
+                </strong>
+              </div>
+            ))}
+          </div>
+          <p className="section-footnote">
+            均值仅来自完整评分 case 中有观测值的运行。未观测值不按 0
+            计，不同记录的观测覆盖可能不同；这些数据不是费用估算。
+          </p>
+        </section>
+      )}
       <section className="section panel">
         <h3 style={{ fontSize: 19 }}>清单与结果来源</h3>
-        <p className="muted" style={{ fontSize: 14, margin: '12px 0' }}>
-          统计直接读取主实验 manifest 绑定的
-          score.json，仅纳入固定清单中的实例。历史 split
-          标签不参与筛选。先平均三次重复，再对 case、主题逐层聚合。
+        <p className="section-footnote">
+          {r.submissionId
+            ? '该记录来自参与者提交的汇总包，审核状态由与包摘要绑定的维护者记录提供。'
+            : '该快照由主实验清单绑定的评分汇总生成，仅纳入固定清单中的实例。'}{' '}
+          历史 split 标签不参与筛选。先平均三次重复，再对
+          case、主题逐层聚合。公开数据仅包含汇总指标和可公开的来源元数据。
         </p>
         <p className="hash mono">
           清单 SHA-256 / {data.cohort.selection_sha256}
         </p>
         <p className="hash mono">来源集合 SHA-256 / {r.sourceSha256}</p>
-        <p className="muted" style={{ fontSize: 14, margin: '12px 0' }}>
-          来源集合摘要由清单摘要及已读取
-          manifest、评分文件的摘要计算，用于追溯快照，不构成真实性认证。公开数据仅包含汇总指标。
+        {r.submissionId && (
+          <p className="hash mono">提交摘要 / {r.submissionId}</p>
+        )}
+        {r.benchmarkCommit && (
+          <p className="hash mono">Benchmark commit / {r.benchmarkCommit}</p>
+        )}
+        {r.configSha256 && (
+          <p className="hash mono">配置 SHA-256 / {r.configSha256}</p>
+        )}
+        {r.reviewer && (
+          <p className="section-footnote">
+            审核记录：{r.reviewer} · {r.reviewedAt}
+          </p>
+        )}
+        {r.reviewEvidenceUrl && (
+          <p>
+            <a className="text-link" href={r.reviewEvidenceUrl}>
+              查看审核 / 复现记录 ↗
+            </a>
+          </p>
+        )}
+        <p className="section-footnote">
+          摘要用于识别与追溯具体快照，本身不构成分数真实性认证。本地结构校验不等于材料审核或独立复现。
         </p>
         <a
           className="text-link"
           download
-          href={assetPath('/data/experiments.json')}
+          href={assetPath('/data/leaderboard.json')}
         >
           <Download size={15} /> 下载主实验公开统计
         </a>

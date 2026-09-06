@@ -62,6 +62,11 @@ class MainExportTests(unittest.TestCase):
         self.assertEqual(result['scored'],18)
         self.assertEqual(result['drs'],0.5) # themes equally weighted, not cases or episodes
         self.assertEqual(result['linear'],0.5)
+        self.assertEqual(result['themeMetrics']['two']['completedCases'],2)
+        self.assertEqual(result['themeMetrics']['one']['linear'],0)
+        self.assertEqual(result['executionStatus'],'unknown')
+        self.assertEqual(result['coverageStatus'],'complete')
+        self.assertIsNone(result['resources']['async']['tokens']['mean'])
         self.assertFalse(result['published'])
         self.assertNotIn('DO-NOT-EXPORT',json.dumps(result))
         self.assertNotIn('private_trace',json.dumps(result))
@@ -74,6 +79,8 @@ class MainExportTests(unittest.TestCase):
         self.assertEqual(result['scored'],17)
         self.assertIsNone(result['drs'])
         self.assertEqual(result['observedDrs'],0.5)
+        self.assertEqual(result['coverageStatus'],'incomplete')
+        self.assertEqual(result['themeMetrics']['two']['completedCases'],1)
         values[('a::seed-1','async',0)]['async_drs']=None
         self.assertEqual(exporter.aggregate_model('model',cohort(),values)['completedCases'],1)
 
@@ -167,6 +174,10 @@ class MainExportTests(unittest.TestCase):
             self.assertEqual(record['completedCases'],47)
             self.assertEqual(record['scored'],282)
             self.assertEqual(record['drs'],1)
+            # Historical pool labels are not a main-experiment condition.
+            score['child_pool_id']='a-different-historical-label'
+            score_path.write_text(json.dumps(score))
+            self.assertEqual(exporter.export(root,path)['records'][0]['completedCases'],47)
             score['resource_policy_sha256']='different-policy'
             score_path.write_text(json.dumps(score))
             with self.assertRaisesRegex(ValueError,'paired score configuration'):

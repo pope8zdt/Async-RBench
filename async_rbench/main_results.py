@@ -61,10 +61,25 @@ def aggregate_model(model, cohort, scores):
             themes[cohort['themes'][key]].append(mean(scored[(key, mode, repeat)][field] for repeat in repetitions))
         theme_means = {theme: mean(values) for theme, values in themes.items()}
         return (mean(theme_means.values()) if theme_means else None), theme_means
-    linear, _ = metric('linear', 'base_task_score')
-    asynchronous, _ = metric('async', 'base_task_score')
+    linear, linear_themes = metric('linear', 'base_task_score')
+    asynchronous, async_themes = metric('async', 'base_task_score')
     drs, themes = metric('async', 'async_drs')
     full = len(complete) == cohort['case_count']
+    theme_metrics = {
+        theme: {'linear': linear_themes.get(theme), 'async': async_themes.get(theme),
+                'drs': themes.get(theme), 'caseCount': count,
+                'completedCases': sum(cohort['themes'][key] == theme for key in complete)}
+        for theme, count in cohort['theme_counts'].items()
+    }
+    resources = {}
+    for mode in modes:
+        mode_scores = [scored[(key, mode, repeat)] for key in complete for repeat in repetitions]
+        resources[mode] = {}
+        for output, field in [('tokens', 'total_tokens'), ('durationMs', 'episode_duration_ms')]:
+            values = [s[field] for s in mode_scores if isinstance(s.get(field), (int, float))
+                      and not isinstance(s[field], bool) and math.isfinite(s[field]) and s[field] >= 0]
+            resources[mode][output] = {'mean': mean(values) if values else None,
+                                      'measuredEpisodes': len(values)}
     return {
         'id': hashlib.sha256((cohort['id'] + ':' + model).encode()).hexdigest()[:16],
         'model': model, 'version': cohort['evaluation_contract_version'], 'scope': 'main_experiment_47',
@@ -73,6 +88,9 @@ def aggregate_model(model, cohort, scores):
         'linear': linear if full else None, 'async': asynchronous if full else None, 'drs': drs if full else None,
         'observedLinear': linear, 'observedAsync': asynchronous, 'observedDrs': drs,
         'pairedComplete': full, 'themeCount': len(themes), 'themeScores': themes,
+        'themeMetrics': theme_metrics, 'resources': resources,
+        'coverageStatus': 'complete' if full else 'incomplete',
+        'executionStatus': 'unknown', 'reviewStatus': 'self_reported',
         'published': False,
     }
 
@@ -132,10 +150,9 @@ def read_experiments(root, cohort, manifest_paths=None):
             if not score or score.get('score_status') != 'scored':
                 continue
             fields = ['agent_seed', 'counterfactual_pair_id', 'case_sha256', 'verifier_bundle_sha256',
-                      'resource_policy_sha256', 'scaffold_and_protocol_sha256', 'child_pool_id']
+                      'resource_policy_sha256', 'scaffold_and_protocol_sha256']
             binding = tuple(score.get(field) for field in fields)
-            # Reference-scaffold runs can have no external child pool.
-            if any(value is None for value in binding[:-1]):
+            if any(value is None for value in binding):
                 raise ValueError('Missing pair configuration binding')
             pair = (key, repeat)
             if pair in pairs and pairs[pair] != binding:
@@ -143,8 +160,8 @@ def read_experiments(root, cohort, manifest_paths=None):
             pairs[pair] = binding
     return scores, evidence, dates
 
-def export(root, manifest_path=None):
-    cohort = load_main_cohort(root)
+def export(root, manifest_path=None, *, cohort_root=None):
+    cohort = load_main_cohort(cohort_root or root)
     if manifest_path is not None:
         manifest = json.loads(manifest_path.read_bytes())
         validate_main_manifest(manifest, cohort)
