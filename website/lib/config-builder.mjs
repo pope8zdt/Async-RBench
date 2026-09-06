@@ -1,9 +1,14 @@
-function apiUrl(value) {
+function copy(locale, zh, en) {
+  return locale === 'en' ? en : zh;
+}
+function apiUrl(value, locale) {
   let url;
   try {
     url = new URL(value);
   } catch {
-    throw new Error('请输入有效的 API 地址。');
+    throw new Error(
+      copy(locale, '请输入有效的 API 地址。', 'Enter a valid API URL.'),
+    );
   }
   if (
     !['https:', 'http:'].includes(url.protocol) ||
@@ -12,34 +17,54 @@ function apiUrl(value) {
     url.search ||
     url.hash
   )
-    throw new Error('API 地址不能包含凭据、查询参数或片段。');
+    throw new Error(
+      copy(
+        locale,
+        'API 地址不能包含凭据、查询参数或片段。',
+        'API URLs cannot contain credentials, query parameters or fragments.',
+      ),
+    );
   return value;
 }
-function envName(value) {
+function envName(value, locale) {
   if (!/^[A-Z_][A-Z0-9_]*$/.test(value))
-    throw new Error('密钥环境变量只允许大写字母、数字和下划线。');
+    throw new Error(
+      copy(
+        locale,
+        '密钥环境变量只允许大写字母、数字和下划线。',
+        'Use uppercase letters, digits and underscores for environment variable names.',
+      ),
+    );
   return value;
 }
-export function buildConfig({
-  model,
-  childModel = '',
-  endpoint,
-  keyEnv,
-  childEndpoint = '',
-  childKeyEnv = '',
-  maxTokensParameter = 'max_completion_tokens',
-  sendSeed = true,
-}) {
-  if (!model?.trim()) throw new Error('请填写主模型 ID。');
-  apiUrl(endpoint);
-  envName(keyEnv);
-  const childUrl = apiUrl(childEndpoint || endpoint);
-  const childKey = envName(childKeyEnv || keyEnv);
+export function buildConfig(
+  {
+    model,
+    childModel = '',
+    endpoint,
+    keyEnv,
+    childEndpoint = '',
+    childKeyEnv = '',
+    maxTokensParameter = 'max_completion_tokens',
+    sendSeed = true,
+  },
+  locale = 'zh',
+) {
+  if (!model?.trim())
+    throw new Error(
+      copy(locale, '请填写主模型 ID。', 'Enter the main model ID.'),
+    );
+  apiUrl(endpoint, locale);
+  envName(keyEnv, locale);
+  const childUrl = apiUrl(childEndpoint || endpoint, locale);
+  const childKey = envName(childKeyEnv || keyEnv, locale);
   if (
     !['max_tokens', 'max_completion_tokens'].includes(maxTokensParameter) ||
     typeof sendSeed !== 'boolean'
   )
-    throw new Error('无效的服务商参数选项。');
+    throw new Error(
+      copy(locale, '无效的服务商参数选项。', 'Invalid provider options.'),
+    );
   const q = JSON.stringify;
   return `# Async-RBench v11.0.0 — reference scaffold
 # Credentials stay in your local environment.
@@ -83,19 +108,38 @@ request_timeout_sec: 600
 `;
 }
 
-export function buildCommands(scope, repetitions) {
+export function buildCommands(scope, repetitions, locale = 'zh') {
   if (!Number.isInteger(repetitions) || repetitions < 1 || repetitions > 10)
-    throw new Error('重复次数须为 1–10 的整数。');
+    throw new Error(
+      copy(
+        locale,
+        '重复次数须为 1–10 的整数。',
+        'Repetitions must be an integer from 1 to 10.',
+      ),
+    );
   if (!['formal', 'development'].includes(scope))
-    throw new Error('未知评测集合。');
+    throw new Error(
+      copy(locale, '未知评测集合。', 'Unknown evaluation scope.'),
+    );
   if (scope === 'formal' && repetitions !== 3)
-    throw new Error('主实验固定为每种模式 3 次重复。');
+    throw new Error(
+      copy(
+        locale,
+        '主实验固定为每种模式 3 次重复。',
+        'The main experiment requires three repetitions per mode.',
+      ),
+    );
   const run =
     scope === 'formal'
       ? `.\\run_main.ps1 -Config "model-config.yaml" -Repetitions ${repetitions} -Seed 2026`
       : `.\\run_case.ps1 -Instance "secure-release::seed-1" -Config "model-config.yaml" -Repetitions ${repetitions} -Seed 2026`;
   return (
-    '# 在已安装 Async-RBench 的仓库根目录运行（PowerShell 7）\n# 将 model-config.yaml 放在仓库根目录，并在终端设置配置所指向的密钥环境变量。\npython -m async_rbench.cli validate --release\npython -m async_rbench.main_experiment check --root .\n' +
+    copy(
+      locale,
+      '# 在仓库根目录运行（PowerShell 7），将配置放在此目录并设置密钥环境变量。\n',
+      '# Run from the repository root in PowerShell 7, with the config file and API key environment variable ready.\n',
+    ) +
+    'python -m async_rbench.cli validate --release\npython -m async_rbench.main_experiment check --root .\n' +
     run +
     '\n'
   );
