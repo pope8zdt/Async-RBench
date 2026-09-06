@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { metrics } from '@/lib/content';
-import corpus from '@/public/data/corpus.json';
 import { repositoryUrl, submissionUrl } from '@/lib/repository';
 export const metadata = { title: '教程与协议' };
 const navigation = [
@@ -44,12 +43,11 @@ export default function Page() {
               <a className="text-link" href={repositoryUrl}>
                 Async-RBench 主仓库
               </a>
-              。本教程对应 v11.0.0。当前仓库包含 {corpus.caseCount} 个 case、
-              {corpus.instanceCount} 个注册实例；完整主题分布见{' '}
+              。本教程对应 v11.0.0。201个高质量任务，完整主题分布见{' '}
               <Link className="text-link" href="/tasks">
                 任务库
               </Link>
-              。主榜单独采用固定 47-case 清单。
+              。主榜展示主实验结果。
             </p>
             <ol>
               <li>在已有仓库中安装依赖，启动 Docker。</li>
@@ -98,14 +96,12 @@ export default function Page() {
               token 上限参数名称及是否发送 seed。不同 API
               对参数的支持不同，启动器会在运行前执行提供商预检。
             </p>
-            <h3>主实验 · 固定 47 case</h3>
-            <pre>{`python -m async_rbench.cli validate --release\npython -m async_rbench.main_experiment check --root .\n.\\experiments\\formal-47\\run.ps1 -Config "model-config.yaml" -Repetitions 3 -Seed 2026`}</pre>
+            <h3>运行主实验</h3>
+            <pre>{`python -m async_rbench.cli validate --release\npython -m async_rbench.main_experiment check --root .\n.\\run_main.ps1 -Config "model-config.yaml" -Repetitions 3 -Seed 2026`}</pre>
             <p>
-              主实验以 experiments/formal-47/instances.txt 的固定 47
-              个实例为准。 每个模型在 Linear 和 Async 下各重复 3 次，共 282
-              次运行。 Calibration、Development、Test
-              仅保留为历史登记信息，不用于主实验榜单筛选。47-case
-              清单的选取来源记录在 cohort.json 中。
+              主实验使用仓库定义的任务清单。每个模型在 Linear 和 Async 下各重复
+              3 次。Calibration、Development、Test
+              仅保留为历史登记信息，不用于主实验榜单筛选。清单的选取来源记录在实验配置中。
             </p>
             <h3>中断后恢复</h3>
             <p>
@@ -114,8 +110,7 @@ export default function Page() {
               参数恢复。清单、配置、运行模式或其他绑定不一致时，启动器会拒绝恢复。
             </p>
             <p className="doc-label">
-              依据：REFERENCE_SCAFFOLD.md · experiments/formal-47/README.md ·
-              run_case.ps1
+              依据：REFERENCE_SCAFFOLD.md · run_main.ps1 · run_case.ps1
             </p>
           </section>
           <section id="track-b">
@@ -167,15 +162,13 @@ export default function Page() {
               </div>
             ))}
             <p>
-              主实验指标先平均每个 case 的三次重复，再平均主题内
-              case，最后对八类主题等权宏平均。网站将原始 0–1 分数乘以 100
-              展示，不进行额外加权。缺失或未评分显示“—”，与 0 分有明确区别。
+              主实验指标先平均每个任务的三次重复，再平均主题内任务，最后对八类主题等权宏平均。网站将原始
+              0–1 分数乘以 100 展示，不进行额外加权。缺失或未评分显示“—”，与 0
+              分有明确区别。
             </p>
             <p>
-              统计直接读取主实验 manifest 绑定的 score.json，仅纳入固定 47-case
-              清单。 所有 282
-              次运行及主指标齐备后才生成完整得分。覆盖不完整时的暂计值仅汇总已完整评分的
-              case 及其覆盖主题，不能当作完整 47-case 排名。
+              统计直接读取主实验 manifest 绑定的
+              score.json，仅纳入主实验任务清单。所有计划运行及主指标齐备后才生成完整得分。覆盖不完整时的暂计值仅汇总已完整评分的任务及其覆盖主题，不能当作完整主实验排名。
             </p>
             <p>
               榜单可切换“配对 BTS”和“DRS”：前者并列展示 Linear BTS 与 Async
@@ -190,7 +183,7 @@ export default function Page() {
             <p>
               基础设施中断、协议问题、未评分和低分是不同事实。未评分 episode
               不应解释为模型得分 0，也不能通过只挑选成功重试提高成绩。查看完成
-              Case / 47、已评分运行 / 282、配对完整性和主题覆盖后再比较。
+              配对完成度、评分进度和主题覆盖后再比较。
             </p>
             <p className="doc-label">
               依据：evaluation_contract.json · async_rbench/main_results.py
@@ -214,7 +207,7 @@ export default function Page() {
                 版本、模型版本、运行配置、种子和重复次数。密钥与原始私有轨迹留在本地。
               </li>
               <li>
-                提交结果包。维护者核对固定 harness、47-case
+                提交结果包。维护者核对固定 harness、主实验任务
                 清单摘要、Linear/Async 配对完整性和主题覆盖，并在
                 submissions/reviews 生成独立审核记录。
               </li>
@@ -232,7 +225,7 @@ export default function Page() {
             <h3>维护者审核与发布</h3>
             <pre>{`# 完成材料核查后执行；替换 SUBMISSION_ID 和审核者名称\npython -m async_rbench.submissions review --root . --input submissions/entries/SUBMISSION_ID.json --status materials_reviewed --reviewer YOUR_GITHUB_LOGIN\npython -m async_rbench.submissions check --root .`}</pre>
             <p>
-              只有完整覆盖 47 case
+              只有完整覆盖主实验任务
               并有匹配审核的提交进入正式排名。提交包和审核记录合并到主分支后，构建流程会校验、合入榜单并发布。修改成绩后需要重新审核。实际完成独立复现后，才使用
               independently_reproduced，并提供 --evidence-url
               对应的公开复现记录。

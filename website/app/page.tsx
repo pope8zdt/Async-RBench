@@ -13,9 +13,8 @@ export default function Home() {
           <h1>Async-RBench</h1>
           <p className="lead">
             在相同任务的 Linear 与 Async 条件下，比较模型整合子任务结果、
-            处理事件变化和完成任务的能力。 当前任务库包含 {corpus.caseCount} 个
-            case、{corpus.instanceCount} 个注册实例，覆盖 {corpus.themes.length}{' '}
-            类事件主题。
+            处理事件变化和完成任务的能力。201个高质量任务，覆盖{' '}
+            {corpus.themes.length} 类事件主题。
           </p>
           <div className="actions">
             <Link href="/leaderboard" className="btn primary">
@@ -34,7 +33,7 @@ export default function Home() {
           <dl>
             <div>
               <dt>评测范围</dt>
-              <dd>固定 {data.cohort.case_count} cases · 8 类事件</dd>
+              <dd>主实验任务清单 · 8 类事件</dd>
             </div>
             <div>
               <dt>执行条件</dt>
@@ -45,10 +44,8 @@ export default function Home() {
               <dd>每种模式 {data.cohort.repetitions} 次</dd>
             </div>
             <div>
-              <dt>运行总数</dt>
-              <dd>
-                每模型 {data.cohort.case_count * data.cohort.repetitions * 2} 次
-              </dd>
+              <dt>评分方式</dt>
+              <dd>配对评分 · 主题等权汇总</dd>
             </div>
           </dl>
           <Link href="/docs#metrics" className="text-link">
@@ -107,8 +104,7 @@ export default function Home() {
           ))}
         </dl>
         <p className="section-footnote">
-          固定 47-case
-          清单，按八类事件主题等权汇总。未完成的实验展示覆盖进度与暂计分数。
+          按主实验清单与八类事件主题等权汇总。未完成的实验展示覆盖进度与暂计分数。
         </p>
       </section>
 
@@ -120,8 +116,7 @@ export default function Home() {
           </Link>
         </div>
         <p className="section-intro">
-          当前仓库共 {corpus.caseCount} 个 case，按以下 {corpus.themes.length}{' '}
-          类主题分布。主榜采用单独冻结的 {data.cohort.case_count}-case 清单。
+          201个高质量任务，按以下 {corpus.themes.length} 类主题分布。
         </p>
         <div className="theme-grid">
           {themes.map(([id, title, desc]) => (
@@ -131,8 +126,8 @@ export default function Home() {
                   {title}{' '}
                   <span className="theme-count">
                     {corpus.themes.find((theme) => theme.id === id)
-                      ?.caseCount ?? '—'}{' '}
-                    cases
+                      ?.instanceCount ?? '—'}{' '}
+                    个任务
                   </span>
                 </h3>
                 <p>{desc}</p>

@@ -12,7 +12,7 @@ test('configuration uses env references, paired canonical launcher and isolated 
   assert.match(yaml, /workspace_mode: container_clone/);
   assert.match(yaml, /api_key_env: "MODEL_API_KEY"/);
   assert.doesNotMatch(yaml, /child_pool_id/);
-  assert.match(buildCommands('formal', 3), /formal-47/);
+  assert.match(buildCommands('formal', 3), /run_main\.ps1/);
   assert.match(buildCommands('formal', 3), /-Repetitions 3/);
 });
 test('reject unsafe environment names, missing model, embedded credentials and invalid repetitions', () => {
