@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Mapping
 from typing import Any
 
@@ -30,35 +31,69 @@ def _function_names(request: FrameworkRequest) -> set[str]:
     return names
 
 
+def _protocol_payload(text: str) -> dict[str, Any] | None:
+    candidate = text.strip()
+    try:
+        payload = json.loads(candidate)
+    except json.JSONDecodeError:
+        # Decode from each fence opening so literal backticks inside JSON strings
+        # cannot prematurely terminate a command or answer. Recovery is allowed
+        # only when there is one complete protocol object, never by block order.
+        decoder = json.JSONDecoder()
+        candidates: list[dict[str, Any]] = []
+        for match in re.finditer(r"```(?:json\b)?\s*", candidate, re.IGNORECASE):
+            body = candidate[match.end():]
+            try:
+                fenced_payload, end = decoder.raw_decode(body)
+            except json.JSONDecodeError:
+                continue
+            if (
+                body[end:].lstrip().startswith("```")
+                and isinstance(fenced_payload, dict)
+                and "actions" in fenced_payload
+            ):
+                candidates.append(fenced_payload)
+        if len(candidates) > 1:
+            raise ValueError("ambiguous framework protocol response: multiple JSON action objects")
+        if candidates:
+            return candidates[0]
+    else:
+        if isinstance(payload, dict) and "actions" in payload:
+            return payload
+    if re.search(r'"(?:output_text|actions)"\s*:', candidate):
+        raise ValueError("malformed framework protocol response: expected one JSON action object")
+    return None
+
+
 def parse_protocol_result(
     text: str,
     request: FrameworkRequest,
     *,
     usage: Mapping[str, int] | None = None,
 ) -> FrameworkResult:
-    candidate = text.strip()
-    if candidate.startswith("```json") and candidate.endswith("```"):
-        candidate = candidate[7:-3].strip()
-    try:
-        payload = json.loads(candidate)
-    except json.JSONDecodeError:
+    payload = _protocol_payload(text)
+    if payload is None:
         return FrameworkResult(output_text=text, usage=dict(usage or {}))
-    if not isinstance(payload, dict) or "actions" not in payload:
-        return FrameworkResult(output_text=text, usage=dict(usage or {}))
+    raw_actions = payload["actions"]
+    if not isinstance(raw_actions, list):
+        raise ValueError("framework protocol actions must be a list")
     allowed = _function_names(request)
     actions: list[HarnessAction] = []
-    for index, item in enumerate(payload.get("actions") or []):
+    for index, item in enumerate(raw_actions):
         if not isinstance(item, dict):
             raise ValueError(f"framework action {index} must be an object")
         kind = str(item.get("kind") or "")
-        arguments = item.get("arguments") or {}
+        arguments = item.get("arguments", {})
         if kind not in allowed:
             raise ValueError(f"framework requested unavailable tool {kind!r}")
         if not isinstance(arguments, dict):
             raise ValueError(f"framework action {index} arguments must be an object")
         actions.append(HarnessAction(kind, arguments))
+    output_text = str(payload.get("output_text") or "")
+    if not actions and not output_text.strip():
+        raise ValueError("framework protocol response requires actions or nonempty output_text")
     return FrameworkResult(
-        output_text=str(payload.get("output_text") or ""),
+        output_text=output_text,
         actions=tuple(actions),
         usage=dict(usage or {}),
         status=str(payload.get("status") or "completed"),

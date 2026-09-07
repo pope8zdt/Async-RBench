@@ -144,3 +144,11 @@ For a resource-limited development run, set `TRACK_B_CONTAINER_CPUS` and `TRACK_
 Each run records the Track B config digest, framework and model identity, component entry points, participant runtime metadata, event source, participant trace and score. Secrets and environment-variable values are never placed in public metadata.
 
 Stdout from an adapter is reserved for JSONL. Framework logs go to stderr. A malformed component, unavailable tool, private-field leak, invalid lineage reference or conformance failure stops the run before it can be treated as a valid measurement.
+
+## Diagnose billed requests without usable output
+
+Provider token usage can include reasoning and failed or refused responses. Episode token totals currently cover successful adapter turns only; they are not billing totals. Check the HTTP status, provider request ID, `finish_reason`, answer length, reasoning length and raw usage separately. Keep response bodies and credentials local.
+
+The OpenAI Agents SDK can synthesize a refusal when a Chat Completions response has `finish_reason: content_filter` and no answer, refusal text or tool calls. That SDK message alone does not identify which upstream component set the status. A timeout likewise means the client did not receive a complete response within its configured limit, even if the provider recorded consumption. Preserve request IDs to correlate both sides.
+
+The text protocol accepts one JSON action object, including one complete fenced object accompanied by explanatory text or a malformed draft. Multiple complete action objects are ambiguous and rejected. Malformed protocol output and an empty structured answer fail explicitly; they must not become an implicit agent stop. Reasoning text is never substituted for an answer or executed as a tool call. Preserve old episode records and use a fresh output directory after changing an adapter.
