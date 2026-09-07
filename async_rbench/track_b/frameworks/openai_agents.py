@@ -105,8 +105,11 @@ class OpenAIAgentsRuntime:
             render_protocol_prompt(request),
             max_turns=int(self.config.limits.get("max_turns", 100)),
         )
+        output_text = str(getattr(result, "final_output", "") or "")
+        if not output_text.strip():
+            raise RuntimeError("OpenAI Agents returned empty model output; no valid agent action or answer was received")
         return parse_protocol_result(
-            str(getattr(result, "final_output", "") or ""),
+            output_text,
             request,
             usage=_sdk_usage(result),
         )

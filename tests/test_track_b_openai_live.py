@@ -170,3 +170,16 @@ def test_runner_usage_counts_tokens_once_and_preserves_total_only_fallback(usage
     result = asyncio.run(runtime.run(FrameworkRequest(messages=())))
 
     assert result.usage == expected
+
+
+@pytest.mark.parametrize("output", ["", "\n", " \t ", None])
+def test_empty_provider_output_is_a_runtime_failure_not_an_agent_stop(output):
+    async def run_agent(agent, prompt, **kwargs):
+        return SimpleNamespace(
+            final_output=output,
+            context_wrapper=SimpleNamespace(usage=SimpleNamespace(input_tokens=100, output_tokens=10)),
+        )
+
+    runtime = OpenAIAgentsRuntime(_config(), agent="injected", run_agent=run_agent)
+    with pytest.raises(RuntimeError, match="empty model output"):
+        asyncio.run(runtime.run(FrameworkRequest(messages=())))
