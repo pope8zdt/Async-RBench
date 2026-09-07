@@ -4,6 +4,7 @@ from typing import Any
 
 from ..config import TrackBConfig
 from ..contracts import FrameworkRequest, FrameworkResult
+from .common import parse_protocol_result, render_protocol_prompt
 
 
 def _message_text(message: Any) -> str:
@@ -28,9 +29,12 @@ class LangGraphRuntime:
 
     async def run(self, request: FrameworkRequest) -> FrameworkResult:
         graph = self._graph or self._build_graph()
-        state = await graph.ainvoke({"messages": list(request.messages)})
+        state = await graph.ainvoke({
+            "messages": [{"role": "user", "content": render_protocol_prompt(request)}],
+        })
         messages = list(state.get("messages") or [])
-        return FrameworkResult(output_text=_message_text(messages[-1]) if messages else "")
+        text = _message_text(messages[-1]) if messages else ""
+        return parse_protocol_result(text, request)
 
 
 def build_runtime(config: TrackBConfig) -> LangGraphRuntime:

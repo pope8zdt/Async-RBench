@@ -16,15 +16,12 @@ from ..profiles.reference_scaffold_api.config import ScaffoldConfig
 from ..profiles.reference_scaffold_api.gateway import DeliveryReader, ProtocolEmitter
 from ..profiles.reference_scaffold_api.runtime import ReferenceScaffold
 from ..protocol_sdk.capability import CapabilityRuntimeProxy
-from .components import load_component
+from .components import HarnessComponents, resolve_components
 from .config import TrackBConfig
 from .contracts import (
-    AgentPolicy,
     AgentRuntime,
-    ContextBuilder,
-    DelegationPolicy,
     FrameworkRequest,
-    LifecycleHooks,
+    FrameworkResult,
     ModelBackend,
     PublicEpisodeContext,
 )
@@ -34,39 +31,32 @@ from .frameworks import build_runtime
 LOGGER = logging.getLogger("async_rbench.track_b")
 
 
-_COMPONENT_PROTOCOLS: dict[str, type[Any]] = {
-    "context_builder": ContextBuilder,
-    "delegation_policy": DelegationPolicy,
-    "agent_policy": AgentPolicy,
-    "lifecycle_hooks": LifecycleHooks,
-    "model_backend": ModelBackend,
-}
-
-
 def build_public_context(start: dict[str, Any]) -> PublicEpisodeContext:
     assert_participant_safe(start, surface="Track B public context")
     return PublicEpisodeContext(
         instruction=str(start.get("instruction") or ""),
         episode_id=str(start.get("episode_id") or ""),
         execution_mode=str(start.get("execution_mode") or ""),
-        workstreams=tuple(start.get("workstreams") or ()),
+        workstreams=tuple(start.get("initial_wave") or ()),
     )
-
-
-def validate_custom_components(config: TrackBConfig) -> dict[str, Any]:
-    return {
-        name: load_component(spec, _COMPONENT_PROTOCOLS[name])
-        for name, spec in config.components.items()
-    }
 
 
 class FrameworkModelBackend:
     """Translate a Track B framework turn into the frozen scaffold model shape."""
 
-    def __init__(self, config: TrackBConfig, runtime: AgentRuntime) -> None:
+    def __init__(
+        self,
+        config: TrackBConfig,
+        runtime: AgentRuntime,
+        episode_context: PublicEpisodeContext | None = None,
+        components: HarnessComponents | None = None,
+    ) -> None:
         self.config = config
         self.runtime = runtime
+        self.episode_context = episode_context or PublicEpisodeContext(instruction="")
+        self.components = components or resolve_components(config)
         self._observations: list[dict[str, Any]] = []
+        self._main_turns = 0
 
     async def complete(
         self,
@@ -77,23 +67,42 @@ class FrameworkModelBackend:
         tools: list[dict[str, Any]],
         seed: int,
     ) -> ModelTurn:
-        request = FrameworkRequest(
+        context = replace(
+            self.episode_context,
+            instruction=str(messages[-1].get("content") or "") if messages else "",
             messages=tuple(messages),
             tools=tuple(tools),
-            metadata={"role": role, "model": model, "seed": seed},
+        )
+        request = self.components.context_builder.build(context)
+        request = FrameworkRequest(
+            messages=request.messages,
+            tools=request.tools,
+            metadata={**request.metadata, "role": role, "model": model, "seed": seed},
         )
         assert_participant_safe(
             {"messages": request.messages, "tools": request.tools},
             surface="Track B framework request",
         )
+        self.components.lifecycle_hooks.on_event({
+            "type": "framework_turn_started", "role": role, "model": model,
+        })
         result = await self.runtime.run(request)
+        actions = self.components.agent_policy.select_actions(context, result)
+        if role == "main" and self._main_turns == 0:
+            actions = (*self.components.delegation_policy.initial_actions(context), *actions)
+        if role == "main":
+            self._main_turns += 1
+        self.components.lifecycle_hooks.on_event({
+            "type": "framework_turn_finished", "role": role,
+            "status": result.status,
+        })
         tool_calls = [
             ToolCall(
                 id=f"track-b-{role}-{index}",
                 name=action.kind,
                 arguments=dict(action.arguments),
             )
-            for index, action in enumerate(result.actions, start=1)
+            for index, action in enumerate(actions, start=1)
         ]
         assistant_tool_calls = [
             {
@@ -128,6 +137,14 @@ class FrameworkModelBackend:
         return {"model_observations": list(self._observations)}
 
 
+class ComponentBackendRuntime:
+    def __init__(self, backend: ModelBackend) -> None:
+        self.backend = backend
+
+    async def run(self, request: FrameworkRequest) -> FrameworkResult:
+        return await self.backend.complete(request.messages, request.tools)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Async-RBench Track B adapter")
     parser.add_argument("--config", type=Path, required=True)
@@ -143,8 +160,7 @@ def build_parser() -> argparse.ArgumentParser:
 async def run_adapter(args: argparse.Namespace) -> int:
     start = DeliveryReader.receive_start()
     track_config = TrackBConfig.from_file(args.config)
-    build_public_context(start)
-    validate_custom_components(track_config)
+    episode_context = build_public_context(start)
 
     emitter = ProtocolEmitter()
     reader = DeliveryReader()
@@ -170,8 +186,24 @@ async def run_adapter(args: argparse.Namespace) -> int:
         main_backend = ScriptedTestBackend()
         child_backend = ScriptedTestBackend()
     else:
-        main_backend = FrameworkModelBackend(track_config, build_runtime(track_config))
-        child_backend = FrameworkModelBackend(track_config, build_runtime(track_config))
+        main_components = resolve_components(track_config)
+        child_components = resolve_components(track_config)
+        main_runtime = (
+            ComponentBackendRuntime(main_components.model_backend)
+            if main_components.model_backend is not None
+            else build_runtime(track_config)
+        )
+        child_runtime = (
+            ComponentBackendRuntime(child_components.model_backend)
+            if child_components.model_backend is not None
+            else build_runtime(track_config)
+        )
+        main_backend = FrameworkModelBackend(
+            track_config, main_runtime, episode_context, main_components,
+        )
+        child_backend = FrameworkModelBackend(
+            track_config, child_runtime, episode_context, child_components,
+        )
     scaffold = ReferenceScaffold(
         start=start,
         config=scaffold_config,

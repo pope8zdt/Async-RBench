@@ -1,18 +1,14 @@
 from __future__ import annotations
 
-import json
 from collections.abc import Awaitable, Callable
 from typing import Any
 
 from ..config import TrackBConfig
 from ..contracts import FrameworkRequest, FrameworkResult
+from .common import parse_protocol_result, render_protocol_prompt
 
 
 RunnerFn = Callable[..., Awaitable[Any]]
-
-
-def _prompt(request: FrameworkRequest) -> str:
-    return json.dumps({"messages": request.messages, "tools": request.tools}, ensure_ascii=False)
 
 
 class OpenAIAgentsRuntime:
@@ -48,10 +44,13 @@ class OpenAIAgentsRuntime:
             agent, run_agent = self._agent, self._run_agent
         result = await run_agent(
             agent,
-            _prompt(request),
+            render_protocol_prompt(request),
             max_turns=int(self.config.limits.get("max_turns", 100)),
         )
-        return FrameworkResult(output_text=str(getattr(result, "final_output", "") or ""))
+        return parse_protocol_result(
+            str(getattr(result, "final_output", "") or ""),
+            request,
+        )
 
 
 def build_runtime(config: TrackBConfig) -> OpenAIAgentsRuntime:

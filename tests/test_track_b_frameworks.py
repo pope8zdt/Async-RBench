@@ -62,16 +62,59 @@ def test_claude_code_runtime_normalizes_injected_query() -> None:
         assert "solve it" in prompt
         return {"output_text": "claude result", "input_tokens": 12, "output_tokens": 4}
 
-    result = asyncio.run(ClaudeCodeRuntime(_config("claude-code"), query_fn=query).run(_request()))
+    request = FrameworkRequest(
+        messages=_request().messages,
+        tools=({"type": "function", "function": {"name": "terminal"}},),
+    )
+    result = asyncio.run(ClaudeCodeRuntime(_config("claude-code"), query_fn=query).run(request))
 
     assert result.output_text == "claude result"
     assert result.usage == {"input_tokens": 12, "output_tokens": 4}
 
 
+def test_claude_code_runtime_falls_back_to_installed_cli(monkeypatch) -> None:
+    calls = []
+
+    async def cli_query(config, prompt):
+        calls.append((config.model, prompt))
+        return {"output_text": "cli result", "input_tokens": 5, "output_tokens": 2}
+
+    monkeypatch.setattr("async_rbench.track_b.frameworks.claude_code.importlib.util.find_spec", lambda _: None)
+    monkeypatch.setattr("async_rbench.track_b.frameworks.claude_code.shutil.which", lambda _: "claude")
+    monkeypatch.setattr("async_rbench.track_b.frameworks.claude_code._cli_query", cli_query)
+
+    result = asyncio.run(ClaudeCodeRuntime(_config("claude-code")).run(_request()))
+
+    assert calls[0][0] == "test-model"
+    assert "solve it" in calls[0][1]
+    assert result.output_text == "cli result"
+    assert result.usage == {"input_tokens": 5, "output_tokens": 2}
+
+
+def test_framework_runtime_parses_structured_harness_actions() -> None:
+    async def query(prompt: str, **_: object):
+        assert "JSON" in prompt
+        return {
+            "output_text": '{"output_text":"checking","actions":[{"kind":"terminal","arguments":{"command":"pwd"}}]}',
+            "input_tokens": 2,
+            "output_tokens": 3,
+        }
+
+    request = FrameworkRequest(
+        messages=_request().messages,
+        tools=({"type": "function", "function": {"name": "terminal"}},),
+    )
+    result = asyncio.run(ClaudeCodeRuntime(_config("claude-code"), query_fn=query).run(request))
+
+    assert result.output_text == "checking"
+    assert result.actions[0].kind == "terminal"
+    assert result.actions[0].arguments == {"command": "pwd"}
+
+
 def test_langgraph_runtime_normalizes_injected_graph() -> None:
     class Graph:
         async def ainvoke(self, state):
-            assert state["messages"][0]["content"] == "solve it"
+            assert "solve it" in state["messages"][0]["content"]
             return {"messages": [*state["messages"], {"role": "assistant", "content": "graph result"}]}
 
     result = asyncio.run(LangGraphRuntime(_config("langgraph"), graph=Graph()).run(_request()))

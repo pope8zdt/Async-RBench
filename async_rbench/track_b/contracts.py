@@ -34,6 +34,8 @@ class PublicEpisodeContext:
     deliveries: tuple[Mapping[str, Any], ...] = ()
     prior_actions: tuple[Mapping[str, Any], ...] = ()
     capability_results: tuple[Mapping[str, Any], ...] = ()
+    messages: tuple[Mapping[str, Any], ...] = ()
+    tools: tuple[Mapping[str, Any], ...] = ()
 
 
 @runtime_checkable
