@@ -4,7 +4,7 @@ Track B runs an agent framework on the participant's computer while Async-RBench
 
 Track B is a development track. Its records are deliberately excluded from the Track A leaderboard.
 
-See the [two-case Codex CLI + Luna live validation](reports/2026-09-07-track-b-codex-luna.md) for measured results and current harness/scoring limitations.
+See the [Linux container runtime and live validation](reports/2026-09-07-track-b-linux-containers.md) for the current two-case measurement, isolation evidence and runtime limits. The [earlier host validation](reports/2026-09-07-track-b-codex-luna.md) records the execution-environment issue that the container runtime resolves.
 
 ## Maintained integrations
 
