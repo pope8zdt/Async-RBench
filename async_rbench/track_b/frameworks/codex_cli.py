@@ -225,14 +225,9 @@ def _strict_parameter_schema(source: dict[str, Any]) -> dict[str, Any]:
     if type(additional) is not bool:
         raise ValueError("unsupported Codex tool schema typed additionalProperties")
     if additional:
-        return {
-            "$ref": "#/$defs/json_object",
-            "description": (
-                str(source.get("description") or "")
-                + " Represent this arbitrary object as entries of key and value. "
-                "Nested objects also use entries; arrays and scalar values remain typed JSON."
-            ).strip(),
-        }
+        # Codex strict schemas reject siblings of $ref. The prompt already
+        # explains entries encoding and includes the original tool descriptions.
+        return {"$ref": "#/$defs/json_object"}
     return _strict_object(converted)
 
 

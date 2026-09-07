@@ -93,6 +93,24 @@ def test_strict_tool_branches_match_kind_to_parameters():
         validator.validate(payload)
 
 
+def test_child_schema_references_have_no_sibling_keywords_rejected_by_codex():
+    from async_rbench.profiles.reference_scaffold_api.runtime import ChildAgent
+
+    schema = driver().response_schema(FrameworkRequest(messages=(), tools=tuple(ChildAgent.tools())))
+
+    def check(value):
+        if isinstance(value, dict):
+            if "$ref" in value:
+                assert set(value) == {"$ref"}, "Codex strict schema rejects siblings of $ref"
+            for child in value.values():
+                check(child)
+        elif isinstance(value, list):
+            for child in value:
+                check(child)
+
+    check(schema)
+
+
 def test_optional_null_is_omitted_before_original_tool_execution():
     from async_rbench.profiles.reference_scaffold_api.runtime import ChildAgent
 
