@@ -8,6 +8,7 @@ import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
+from .evaluation.container_policy import container_resource_args
 from .evaluation.pytest_results import (
     parse_component_summaries, parse_pytest_summary, parse_semantic_check_results,
 )
@@ -138,6 +139,7 @@ def run_isolated_verifier(
     processes. The case verifier starts required services from that state.
     Hidden tests are copied only to the private clone.
     """
+    resource_args = container_resource_args()
     # The runner already performed the strict audit (including /tests) before
     # exposing the clean participant container to the agent. At submission
     # time, keep auditing genuinely private paths but allow agent-authored
@@ -153,7 +155,7 @@ def run_isolated_verifier(
         _docker("commit", main_container, image)
         _docker(
             "run", "-d", "--name", container, "--entrypoint", "/bin/sh",
-            image, "-c", "sleep infinity",
+            *resource_args, image, "-c", "sleep infinity",
         )
         _copy_private_bundle(container, task_dir)
         try:

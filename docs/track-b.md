@@ -14,6 +14,24 @@ Track B is a development track. Its records are deliberately excluded from the T
 
 Framework dependencies are optional. Installing Async-RBench or running Track A does not import them.
 
+For an OpenAI-compatible provider, use the OpenAI Agents SDK integration with an explicit client:
+
+```yaml
+track: B
+framework: openai-agents
+model: your-exact-model-id
+credential_env: TRACK_B_API_KEY
+framework_options:
+  base_url: https://your-provider.example/v1
+  api_mode: chat_completions
+  max_retries: 1
+limits:
+  request_timeout_sec: 120
+  max_output_tokens: 4096
+```
+
+The selected credential variable is required; this driver never falls back to another account. SDK tracing is disabled. Token usage comes from the SDK response, while an unavailable provider-returned model identity remains empty rather than being inferred from configuration.
+
 ## What can be customized
 
 | Component | Participant control | Evaluator boundary |
@@ -118,6 +136,8 @@ python scripts/validate_track_b.py --output artifacts/track-b-validation
 It runs protocol conformance and writes four episode records plus `track-b-validation.json`. It does not start Docker or call a model. The records are expected to be unscored and are never leaderboard eligible; they prove only that configuration, framework normalization, the adapter boundary and paired episode plumbing work together.
 
 Use a maintained framework with container isolation for model-quality measurements. Do not add `--no-container` to those runs.
+
+For a resource-limited development run, set `TRACK_B_CONTAINER_CPUS` and `TRACK_B_CONTAINER_MEMORY` in the launch process (for example, `0.25` and `512m`). These limits apply to participant, child and verifier containers; record them with the results because they can affect execution time. `TRACK_B_PARTICIPANT_IMAGE_IDS` accepts a JSON mapping from `case::instance` to immutable `sha256:` image IDs and disables rebuilding those images for Track B. Verify their task files against the registered task before reusing them. Keep these environment variables local to that launch process.
 
 ## Output and audit
 

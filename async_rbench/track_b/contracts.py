@@ -23,6 +23,7 @@ class FrameworkResult:
     actions: tuple[HarnessAction, ...] = ()
     usage: Mapping[str, int] = field(default_factory=dict)
     status: str = "completed"
+    resolved_model: str = ""
 
 
 @dataclass(frozen=True)

@@ -115,11 +115,16 @@ class FrameworkModelBackend:
             }
             for call in tool_calls
         ]
-        total_tokens = sum(int(value) for value in result.usage.values())
+        total_tokens = (
+            int(result.usage.get("input_tokens", 0))
+            + int(result.usage.get("output_tokens", 0))
+        )
+        if not total_tokens:
+            total_tokens = int(result.usage.get("total_tokens", 0))
         self._observations.append({
             "role": role,
             "requested_model": model,
-            "resolved_model": self.config.model,
+            "resolved_model": result.resolved_model,
             "tokens": total_tokens,
         })
         return ModelTurn(
@@ -130,7 +135,7 @@ class FrameworkModelBackend:
             },
             tool_calls=tool_calls,
             total_tokens=total_tokens,
-            resolved_model=self.config.model,
+            resolved_model=result.resolved_model,
         )
 
     def runtime_metadata(self) -> dict[str, Any]:
@@ -217,6 +222,10 @@ async def run_adapter(args: argparse.Namespace) -> int:
         "participant_metadata",
         **track_config.public_metadata(),
         scaffold="async-rbench-track-b",
+        main_model=track_config.model,
+        child_model=track_config.model,
+        backend=track_config.framework,
+        workspace_mode=args.workspace_mode,
         development_only=True,
     )
     emitter.emit("ready")
