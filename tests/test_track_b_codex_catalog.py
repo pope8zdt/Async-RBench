@@ -98,3 +98,21 @@ def test_codex_doctor_rejects_api_credential_override(monkeypatch: pytest.Monkey
     assert report.credential_present is False
     assert "credential_env must be empty" in report.detail
     assert "local-test-secret" not in report.detail
+
+
+def test_codex_doctor_reports_missing_schema_dependency_without_importing_driver(monkeypatch):
+    monkeypatch.setattr("shutil.which", lambda _: "codex")
+    monkeypatch.setattr("importlib.util.find_spec", lambda _: None)
+    def unexpected_probe():
+        pytest.fail("doctor must not import/probe a driver whose dependency is missing")
+    monkeypatch.setitem(sys.modules, "async_rbench.track_b.frameworks.codex_cli", SimpleNamespace(check_cli_login=unexpected_probe))
+    report = doctor_framework("codex-cli", _config())
+    assert not report.ready
+    assert not report.dependency_present
+    assert "track-b-codex" in report.install_hint
+
+
+def test_codex_optional_extra_installs_schema_validation():
+    import tomllib
+    project = tomllib.loads((Path(__file__).parents[1] / "pyproject.toml").read_text(encoding="utf-8"))
+    assert "jsonschema>=4.0" in project["project"]["optional-dependencies"]["track-b-codex"]

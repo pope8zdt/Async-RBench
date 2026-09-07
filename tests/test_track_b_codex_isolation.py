@@ -56,11 +56,14 @@ def test_installed_codex_advertises_no_host_tools_or_private_context(monkeypatch
     request = FrameworkRequest(
         messages=({"role": "user", "content": "Select a benchmark terminal action."},),
         tools=({"type": "function", "function": {
-            "name": "terminal", "parameters": {"type": "object"},
+            "name": "terminal", "parameters": {
+                "type": "object", "properties": {"command": {"type": "string"}},
+                "required": ["command"], "additionalProperties": False,
+            },
         }},),
     )
     final_text = json.dumps({"output_text": "Inspect the benchmark workspace", "actions": [
-        {"kind": "terminal", "arguments_json": json.dumps({"command": "pwd"})},
+        {"kind": "terminal", "arguments": {"command": "pwd"}},
     ]})
     captures: list[dict[str, Any]] = []
     paths: list[str] = []

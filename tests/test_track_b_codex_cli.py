@@ -34,13 +34,18 @@ def config(**options):
 def request():
     return FrameworkRequest(
         messages=({"role": "user", "content": "Inspect /app using terminal."},),
-        tools=({"type": "function", "function": {"name": "terminal"}},),
+        tools=({"type": "function", "function": {
+            "name": "terminal", "parameters": {
+                "type": "object", "properties": {"command": {"type": "string"}},
+                "required": ["command"], "additionalProperties": False,
+            },
+        }},),
     )
 
 
 def output(command="ls -la /app"):
     return json.dumps({"output_text": "Inspecting workspace", "actions": [
-        {"kind": "terminal", "arguments_json": json.dumps({"command": command})},
+        {"kind": "terminal", "arguments": {"command": command}},
     ]})
 
 
@@ -62,6 +67,180 @@ def test_normalizes_cli_output_and_counts_cached_input_only_once():
     assert result.actions[0].arguments == {"command": "ls -la /app"}
     assert result.usage == {"input_tokens": 20, "output_tokens": 7}
     assert result.resolved_model == ""
+
+
+def test_typed_command_preserves_backslashes_quotes_and_newlines():
+    command = 'python -c "print(\'C:\\\\tasks\\\\results\')"\nprintf \'\\\\d+\\\\.csv\'\n'
+    text = output(command)
+    result = driver().decode_codex_result(events(text=text), text, request())
+    assert result.actions[0].arguments == {"command": command}
+
+
+def test_strict_tool_branches_match_kind_to_parameters():
+    from jsonschema import Draft202012Validator, ValidationError
+    from async_rbench.profiles.reference_scaffold_api.runtime import ChildAgent
+
+    child_request = FrameworkRequest(messages=(), tools=tuple(ChildAgent.tools()))
+    schema = driver().response_schema(child_request)
+    Draft202012Validator.check_schema(schema)
+    validator = Draft202012Validator(schema)
+    payload = {"output_text": "Inspect", "actions": [{
+        "kind": "terminal", "arguments": {"command": "pwd", "timeout_seconds": None},
+    }]}
+    validator.validate(payload)
+    payload["actions"][0]["kind"] = "submit_result"
+    with pytest.raises(ValidationError):
+        validator.validate(payload)
+
+
+def test_optional_null_is_omitted_before_original_tool_execution():
+    from async_rbench.profiles.reference_scaffold_api.runtime import ChildAgent
+
+    child_request = FrameworkRequest(messages=(), tools=tuple(ChildAgent.tools()))
+    text = json.dumps({"output_text": "Inspect", "actions": [{
+        "kind": "terminal", "arguments": {"command": "pwd", "timeout_seconds": None},
+    }]})
+    result = driver().decode_codex_result(events(text=text), text, child_request)
+    assert result.actions[0].arguments == {"command": "pwd"}
+
+
+def test_open_evidence_object_round_trips_without_nested_json_text():
+    from async_rbench.profiles.reference_scaffold_api.runtime import ChildAgent
+
+    child_request = FrameworkRequest(messages=(), tools=tuple(ChildAgent.tools()))
+    evidence = {"entries": [
+        {"key": "path", "value": "C:\\task\\report.json"},
+        {"key": "metrics", "value": {"entries": [{"key": "rows", "value": 12}]}},
+        {"key": "flags", "value": [True, None, "observed"]},
+    ]}
+    text = json.dumps({"output_text": "Validate", "actions": [{
+        "kind": "validate_result", "arguments": {
+            "summary": "observed facts", "evidence": evidence, "files": ["report.json"],
+        },
+    }]})
+    result = driver().decode_codex_result(events(text=text), text, child_request)
+    assert result.actions[0].arguments["evidence"] == {
+        "path": "C:\\task\\report.json", "metrics": {"rows": 12},
+        "flags": [True, None, "observed"],
+    }
+
+
+@pytest.mark.parametrize("arguments", [{}, {"command": 123}, {"command": "pwd", "extra": True}])
+def test_typed_arguments_are_validated_locally_before_execution(arguments):
+    text = json.dumps({"output_text": "Inspect", "actions": [{"kind": "terminal", "arguments": arguments}]})
+    with pytest.raises(ValueError, match="schema"):
+        driver().decode_codex_result(events(text=text), text, request())
+
+
+def test_open_object_original_constraints_are_checked_after_decoding():
+    custom = FrameworkRequest(messages=(), tools=({"type": "function", "function": {
+        "name": "custom", "parameters": {
+            "type": "object", "properties": {"count": {"type": "integer"}},
+            "required": ["count"],
+        },
+    }},))
+    text = json.dumps({"output_text": "Check", "actions": [{
+        "kind": "custom", "arguments": {"entries": [{"key": "count", "value": "wrong type"}]},
+    }]})
+    with pytest.raises(ValueError, match="schema"):
+        driver().decode_codex_result(events(text=text), text, custom)
+
+
+def test_open_object_duplicate_keys_are_rejected():
+    custom = FrameworkRequest(messages=(), tools=({"type": "function", "function": {
+        "name": "custom", "parameters": {"type": "object"},
+    }},))
+    text = json.dumps({"output_text": "Check", "actions": [{
+        "kind": "custom", "arguments": {"entries": [
+            {"key": "same", "value": 1}, {"key": "same", "value": 2},
+        ]},
+    }]})
+    with pytest.raises(ValueError, match="duplicate"):
+        driver().decode_codex_result(events(text=text), text, custom)
+
+
+@pytest.mark.parametrize("parameters", [
+    {"oneOf": [{"type": "object"}]},
+    {"$ref": "https://untrusted.invalid/tool-schema"},
+    {"type": "object", "properties": {"x": {"type": ["string", "null"]}}, "additionalProperties": False},
+    {"type": "object", "properties": {"x": True}, "additionalProperties": False},
+])
+def test_unsupported_custom_schemas_fail_before_a_model_request(parameters):
+    custom = FrameworkRequest(messages=(), tools=({"type": "function", "function": {
+        "name": "custom", "parameters": parameters,
+    }},))
+    with pytest.raises(ValueError, match="unsupported"):
+        driver().response_schema(custom)
+
+
+@pytest.mark.parametrize("value", ["NaN", "Infinity", "-Infinity", "1e999"])
+def test_nonfinite_json_numbers_are_rejected_before_tool_execution(value):
+    custom = FrameworkRequest(messages=(), tools=({"type": "function", "function": {
+        "name": "custom", "parameters": {"type": "object"},
+    }},))
+    text = '{"output_text":"Check","actions":[{"kind":"custom","arguments":{"entries":[{"key":"n","value":' + value + '}]}}]}'
+    with pytest.raises(ValueError, match="finite|constant"):
+        driver().decode_codex_result(events(text=text), text, custom)
+
+
+def test_duplicate_raw_json_keys_are_rejected():
+    text = '{"output_text":"first","output_text":"second","actions":[{"kind":"terminal","arguments":{"command":"pwd"}}]}'
+    with pytest.raises(ValueError, match="duplicate"):
+        driver().decode_codex_result(events(text=text), text, request())
+
+
+def test_every_current_main_tool_decodes_with_its_original_parameter_contract():
+    from async_rbench.profiles.reference_scaffold_api.runtime import ReferenceScaffold
+
+    tools = ReferenceScaffold.main_tools(SimpleNamespace(start={
+        "allowed_artifacts": ["artifact-1"], "allowed_work_units": ["workstream-1"],
+    }))
+    main_request = FrameworkRequest(messages=(), tools=tuple(tools))
+    examples = [
+        ("terminal", {"command": "pwd", "timeout_seconds": None}),
+        ("spawn_subagent", {"workstream_id": "workstream-1", "task": "Inspect", "targets": [], "expected_output": "report", "priority": None}),
+        ("list_subagents", {}),
+        ("wait_for_results", {"child_ids": [], "timeout_seconds": 0, "return_when": "any"}),
+        ("cancel_subagent", {"child_id": "child-1", "reason": "done"}),
+        ("acknowledge_result", {"completion_id": "completion-1", "decision": "use", "reason": "observed"}),
+        ("promote_child_path", {"completion_id": "completion-1", "source_path": "report", "destination_path": "report"}),
+        ("commit_artifact", {"artifact_id": "artifact-1", "version": "v1", "lineage_completion_ids": [], "evidence_paths": None, "final": None}),
+        ("verify_current_state", {"artifact_ids": ["artifact-1"], "lineage_completion_ids": []}),
+        ("finish", {"status": "incomplete", "summary": "stopped"}),
+    ]
+    text = json.dumps({"output_text": "Selected actions", "actions": [
+        {"kind": name, "arguments": arguments} for name, arguments in examples
+    ]})
+    result = driver().decode_codex_result(events(text=text), text, main_request)
+    assert [action.kind for action in result.actions] == [name for name, _ in examples]
+    assert result.actions[2].arguments == {}
+    assert result.actions[3].arguments["timeout_seconds"] == 0
+    assert "final" not in result.actions[7].arguments
+
+
+def test_required_nullable_value_is_preserved():
+    custom = FrameworkRequest(messages=(), tools=({"type": "function", "function": {
+        "name": "custom", "parameters": {
+            "type": "object", "properties": {"value": {"type": ["string", "null"]}},
+            "required": ["value"], "additionalProperties": False,
+        },
+    }},))
+    text = json.dumps({"output_text": "Check", "actions": [{"kind": "custom", "arguments": {"value": None}}]})
+    result = driver().decode_codex_result(events(text=text), text, custom)
+    assert result.actions[0].arguments == {"value": None}
+
+
+def test_nullable_type_enum_does_not_add_null_when_source_enum_excludes_it():
+    from jsonschema import Draft202012Validator
+
+    custom = FrameworkRequest(messages=(), tools=({"type": "function", "function": {
+        "name": "custom", "parameters": {
+            "type": "object", "properties": {"value": {"type": ["string", "null"], "enum": ["allowed"]}},
+            "required": ["value"], "additionalProperties": False,
+        },
+    }},))
+    value = {"output_text": "Check", "actions": [{"kind": "custom", "arguments": {"value": None}}]}
+    assert not Draft202012Validator(driver().response_schema(custom)).is_valid(value)
 
 
 def test_disabled_code_mode_warning_is_compatible_with_completed_tool_free_turn():
@@ -126,8 +305,8 @@ def test_final_file_must_match_last_completed_message():
 
 
 @pytest.mark.parametrize("text", ["", "\n", "not JSON", '{"output_text":"","actions":[]}',
-    '{"output_text":"working","actions":[{"kind":"terminal","arguments_json":"[1]"}]}',
-    '{"output_text":"working","actions":[{"kind":"unavailable","arguments_json":"{}"}]}',
+    '{"output_text":"working","actions":[{"kind":"terminal","arguments":[1]}]}',
+    '{"output_text":"working","actions":[{"kind":"unavailable","arguments":{}}]}',
 ])
 def test_invalid_final_outputs_fail_explicitly(text):
     with pytest.raises((ValueError, RuntimeError)):
@@ -221,7 +400,8 @@ def test_subprocess_uses_fresh_directory_schema_and_stdin(monkeypatch):
         assert not (cwd / "AGENTS.md").exists()
         schema = json.loads(Path(args[args.index("--output-schema") + 1]).read_text())
         assert schema["additionalProperties"] is False
-        assert schema["properties"]["actions"]["items"]["properties"]["kind"]["enum"] == ["terminal"]
+        branch = schema["properties"]["actions"]["items"]["anyOf"][0]
+        assert branch["properties"]["kind"]["enum"] == ["terminal"]
         captured.append((args, kwargs))
         class Process:
             returncode = 0

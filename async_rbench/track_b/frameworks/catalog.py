@@ -37,8 +37,8 @@ FRAMEWORKS: dict[str, FrameworkSpec] = {
         'pip install "async-rbench[track-b-claude]"',
     ),
     "codex-cli": FrameworkSpec(
-        "codex-cli", "codex_cli", None, "codex",
-        "Install the Codex CLI, then run codex login with ChatGPT",
+        "codex-cli", "codex_cli", "jsonschema", "codex",
+        'pip install "async-rbench[track-b-codex]"; install the Codex CLI and run codex login with ChatGPT',
     ),
     "langgraph": FrameworkSpec(
         "langgraph", "langgraph", "langgraph", None,
@@ -78,12 +78,12 @@ def doctor_framework(name: str, config: TrackBConfig) -> DoctorReport:
         credential_present = False
         if config.credential_env:
             credential_detail = "codex-cli uses saved ChatGPT login; credential_env must be empty"
-        elif executable_present:
+        elif runtime_present:
             from .codex_cli import check_cli_login
 
             credential_present, credential_detail = check_cli_login()
         else:
-            credential_detail = "saved ChatGPT login (Codex CLI unavailable)"
+            credential_detail = "saved ChatGPT login (Codex runtime dependency unavailable)"
     else:
         credential_present = not config.credential_env or bool(os.getenv(config.credential_env))
     ready = runtime_present and credential_present

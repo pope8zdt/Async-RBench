@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import copy
 import json
+import math
 import os
 import shutil
 import signal
@@ -142,25 +143,201 @@ def build_command(config: TrackBConfig, directory: Path, *, executable: str) -> 
     return [*args, "-"]
 
 
-def response_schema(request: FrameworkRequest) -> dict[str, Any]:
-    names = sorted({str(t["function"]["name"]) for t in request.tools})
-    kind: dict[str, Any] = {"type": "string"}
-    if names:
-        kind["enum"] = names
-    actions: dict[str, Any] = {
-        "type": "array", "items": {
-            "type": "object", "additionalProperties": False,
-            "properties": {"kind": kind, "arguments_json": {"type": "string"}},
-            "required": ["kind", "arguments_json"],
-        },
-    }
-    if not names:
-        actions["maxItems"] = 0
+def _strict_object(properties: dict[str, Any]) -> dict[str, Any]:
     return {
-        "type": "object", "additionalProperties": False,
-        "properties": {"output_text": {"type": "string"}, "actions": actions},
-        "required": ["output_text", "actions"],
+        "type": "object", "properties": properties,
+        "required": list(properties), "additionalProperties": False,
     }
+
+
+def _json_value_definitions() -> dict[str, Any]:
+    # Arbitrary evidence keys cannot be expressed as strict object properties.
+    # Entries preserve keys and all JSON value types without JSON inside strings.
+    return {
+        "json_object": _strict_object({"entries": {
+            "type": "array", "items": _strict_object({
+                "key": {"type": "string"}, "value": {"$ref": "#/$defs/json_value"},
+            }),
+        }}),
+        "json_value": {"anyOf": [
+            {"type": "string"}, {"type": "number"}, {"type": "boolean"},
+            {"type": "null"},
+            {"type": "array", "items": {"$ref": "#/$defs/json_value"}},
+            {"$ref": "#/$defs/json_object"},
+        ]},
+    }
+
+
+def _strict_parameter_schema(source: dict[str, Any]) -> dict[str, Any]:
+    from jsonschema import Draft202012Validator
+
+    if not isinstance(source, dict):
+        raise ValueError("unsupported Codex tool schema: typed object schema required")
+    if any(isinstance(value, (dict, list)) for value in source.get("enum", [])):
+        raise ValueError("unsupported Codex tool schema object/array enum")
+    kind = source.get("type")
+    if isinstance(kind, list):
+        if len(kind) != 2 or "null" not in kind:
+            raise ValueError("unsupported Codex tool schema type union")
+        nonnull = next(value for value in kind if value != "null")
+        nonnull_source = {**source, "type": nonnull}
+        enum = source.get("enum")
+        enum_values = [value for value in enum if value is not None] if enum is not None else None
+        if enum_values:
+            nonnull_source["enum"] = enum_values
+        elif enum is not None:
+            nonnull_source.pop("enum")
+        converted = _strict_parameter_schema(nonnull_source)
+        branches = [converted] if enum is None or enum_values else []
+        if Draft202012Validator(source).is_valid(None):
+            branches.append({"type": "null"})
+        if not branches:
+            raise ValueError("unsupported Codex tool schema empty nullable enum")
+        return {"anyOf": branches}
+    keywords = {
+        "object": {"properties", "required", "additionalProperties"},
+        "array": {"items", "minItems", "maxItems"},
+        "string": {"minLength", "maxLength", "pattern", "format"},
+        "integer": {"minimum", "maximum"},
+        "number": {"minimum", "maximum"}, "boolean": set(), "null": set(),
+    }
+    if kind not in keywords:
+        raise ValueError("unsupported Codex tool schema type")
+    unknown = set(source) - keywords[kind] - {"type", "description", "title", "enum"}
+    if unknown:
+        raise ValueError("unsupported Codex tool schema keywords: " + ", ".join(sorted(unknown)))
+    if kind == "array":
+        if not isinstance(source.get("items"), dict):
+            raise ValueError("unsupported Codex tool schema array without typed items")
+        return {**source, "items": _strict_parameter_schema(source["items"])}
+    if kind != "object":
+        return copy.deepcopy(source)
+    properties = source.get("properties", {})
+    required = source.get("required", [])
+    converted = {}
+    for name, schema in properties.items():
+        converted[name] = _strict_parameter_schema(schema)
+        if name not in required:
+            if Draft202012Validator(schema).is_valid(None):
+                raise ValueError("unsupported Codex tool schema optional nullable property")
+            converted[name] = {"anyOf": [converted[name], {"type": "null"}]}
+    additional = source.get("additionalProperties", True)
+    if type(additional) is not bool:
+        raise ValueError("unsupported Codex tool schema typed additionalProperties")
+    if additional:
+        return {
+            "$ref": "#/$defs/json_object",
+            "description": (
+                str(source.get("description") or "")
+                + " Represent this arbitrary object as entries of key and value. "
+                "Nested objects also use entries; arrays and scalar values remain typed JSON."
+            ).strip(),
+        }
+    return _strict_object(converted)
+
+
+def _tool_parameter_schemas(request: FrameworkRequest) -> dict[str, dict[str, Any]]:
+    from jsonschema import Draft202012Validator, SchemaError
+
+    schemas = {}
+    for tool in request.tools:
+        function = tool.get("function") or {}
+        name, parameters = function.get("name"), function.get("parameters")
+        if not isinstance(name, str) or not name or name in schemas:
+            raise ValueError("unsupported Codex tool schema missing or duplicate function name")
+        if not isinstance(parameters, dict) or parameters.get("type") != "object":
+            raise ValueError("unsupported Codex tool schema: parameters must be an object schema")
+        try:
+            Draft202012Validator.check_schema(parameters)
+        except SchemaError as exc:
+            raise ValueError("unsupported Codex tool parameter schema") from exc
+        _strict_parameter_schema(parameters)  # Reject unsupported constructs before any model call.
+        schemas[name] = parameters
+    return schemas
+
+
+def response_schema(request: FrameworkRequest) -> dict[str, Any]:
+    schemas = _tool_parameter_schemas(request)
+    branches = [
+        _strict_object({
+            "kind": {"type": "string", "enum": [name]},
+            "arguments": _strict_parameter_schema(parameters),
+        })
+        for name, parameters in sorted(schemas.items())
+    ]
+    actions: dict[str, Any] = {"type": "array", "items": {"anyOf": branches}}
+    if not branches:
+        actions = {"type": "array", "items": _strict_object({}), "maxItems": 0}
+    return {
+        **_strict_object({"output_text": {"type": "string"}, "actions": actions}),
+        "$defs": _json_value_definitions(),
+    }
+
+
+def _decode_json_value(value: Any) -> Any:
+    if isinstance(value, list):
+        return [_decode_json_value(item) for item in value]
+    if not isinstance(value, dict):
+        return value
+    result = {}
+    for entry in value["entries"]:
+        if entry["key"] in result:
+            raise ValueError("Codex CLI returned duplicate object entry keys")
+        result[entry["key"]] = _decode_json_value(entry["value"])
+    return result
+
+
+def _decode_arguments(value: Any, source: dict[str, Any]) -> Any:
+    if value is None:
+        return None
+    kind = source["type"]
+    if isinstance(kind, list):
+        kind = next(item for item in kind if item != "null")
+    if kind == "array":
+        return [_decode_arguments(item, source["items"]) for item in value]
+    if kind != "object":
+        return value
+    if source.get("additionalProperties", True):
+        return _decode_json_value(value)
+    return {
+        name: _decode_arguments(item, source["properties"][name])
+        for name, item in value.items()
+        if item is not None or name in source.get("required", [])
+    }
+
+
+def _validate_schema(value: Any, schema: dict[str, Any]) -> None:
+    from jsonschema import Draft202012Validator, FormatChecker, ValidationError
+
+    try:
+        Draft202012Validator(schema, format_checker=FormatChecker()).validate(value)
+    except ValidationError as exc:
+        path = "/".join(str(part) for part in exc.absolute_path) or "response"
+        raise ValueError(f"Codex CLI response violates tool schema at {path}") from exc
+
+
+def _strict_json(text: str) -> Any:
+    def unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError("Codex CLI returned duplicate JSON object keys")
+            value[key] = item
+        return value
+
+    def finite_float(number: str) -> float:
+        value = float(number)
+        if not math.isfinite(value):
+            raise ValueError("Codex CLI JSON numbers must be finite")
+        return value
+
+    def reject_constant(_value: str) -> None:
+        raise ValueError("Codex CLI returned an invalid JSON constant")
+
+    return json.loads(
+        text, object_pairs_hook=unique_object,
+        parse_float=finite_float, parse_constant=reject_constant,
+    )
 
 
 def decode_codex_result(stdout: bytes, final_text: str, request: FrameworkRequest) -> FrameworkResult:
@@ -171,7 +348,7 @@ def decode_codex_result(stdout: bytes, final_text: str, request: FrameworkReques
     for line in stdout.decode("utf-8").splitlines():
         if not line.strip():
             continue
-        event = json.loads(line)
+        event = _strict_json(line)
         kind = event.get("type")
         if kind == "error" and str(event.get("message", "")).startswith("Reconnecting... "):
             # Transport retries are diagnostic events. A completed turn with
@@ -199,19 +376,15 @@ def decode_codex_result(stdout: bytes, final_text: str, request: FrameworkReques
         raise RuntimeError("Codex CLI completed turn has missing or invalid token usage")
     if not final_text.strip() or not messages or messages[-1].strip() != final_text.strip():
         raise RuntimeError("Codex CLI returned empty or unbound final output")
-    payload = json.loads(final_text)
-    if not isinstance(payload, dict) or not isinstance(payload.get("actions"), list):
-        raise ValueError("Codex CLI returned an invalid structured action envelope")
-    if not isinstance(payload.get("output_text"), str):
-        raise ValueError("Codex CLI output_text must be a string")
+    payload = _strict_json(final_text)
+    _validate_schema(payload, response_schema(request))
+    schemas = _tool_parameter_schemas(request)
     actions = []
     for action in payload["actions"]:
-        if not isinstance(action, dict) or not isinstance(action.get("arguments_json"), str):
-            raise ValueError("Codex CLI action arguments_json must be a JSON string")
-        arguments = json.loads(action["arguments_json"])
-        if not isinstance(arguments, dict):
-            raise ValueError("Codex CLI action arguments must decode to an object")
-        actions.append({"kind": action.get("kind"), "arguments": arguments})
+        source = schemas[action["kind"]]
+        arguments = _decode_arguments(action["arguments"], source)
+        _validate_schema(arguments, source)
+        actions.append({"kind": action["kind"], "arguments": arguments})
     return parse_protocol_result(
         json.dumps({"output_text": payload["output_text"], "actions": actions}), request,
         usage={"input_tokens": usage["input_tokens"], "output_tokens": usage["output_tokens"]},
@@ -373,8 +546,10 @@ class CodexCLIRuntime:
             args = build_command(self.config, directory, executable=executable)
             prompt = (
                 render_protocol_prompt(request)
-                + "\n\nRESPONSE ENVELOPE: For the supplied output schema, encode each action's "
-                "arguments object as a JSON string in arguments_json (instead of an arguments field). "
+                + "\n\nRESPONSE ENVELOPE: Return each action with kind and a typed arguments object; "
+                "do not serialize arguments as JSON text. Use null for omitted optional arguments. "
+                "For arbitrary evidence objects, use {\"entries\":[{\"key\":\"fact\",\"value\":123}]}; "
+                "nested arbitrary objects also use entries, while arrays and scalar values stay typed. "
                 "Select actions only; the benchmark executes them and returns observations on the next turn."
             )
             process = await asyncio.create_subprocess_exec(

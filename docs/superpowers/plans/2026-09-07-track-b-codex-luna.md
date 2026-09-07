@@ -28,7 +28,7 @@ Interface: `CodexCLIRuntime(config).run(FrameworkRequest) -> FrameworkResult`; `
 
 - [x] Discover and verify CLI settings that remove host tools, external integrations, skills and inherited project context.
 - [x] Write failing tests for selected model/effort, stdin prompt, fresh cwd, controlled environment, schema and flags, successful JSONL usage, ambiguous output, native tool events, malformed actions, login failure and timeout cleanup.
-- [x] Build a strict response envelope containing `output_text` and `actions` with `kind` and JSON-encoded `arguments_json`; decode arguments, then reuse the shared action allowlist/parser.
+- [x] Build a strict response envelope containing `output_text` and typed `actions` with `kind` and `arguments`; validate decoded arguments against the original schemas, then reuse the shared action allowlist/parser. Arbitrary evidence uses recursive key/value entries. This replaces the initial nested JSON string format after real validation exposed escaping errors.
 - [x] Reject empty output, CLI failures, missing completed-turn events and any native action. Count input/output once; do not add cached or total counters again.
 - [x] Run runtime tests and perform an isolated real Luna connectivity/tool-selection probe before full evaluation.
 

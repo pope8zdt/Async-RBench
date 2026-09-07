@@ -9,7 +9,7 @@ Track B is a development track. Its records are deliberately excluded from the T
 | Framework | Install | Runtime |
 | --- | --- | --- |
 | Claude Code | Install the `claude` command or run `pip install -e ".[track-b-claude]"` | Claude Code CLI, with Agent SDK preferred when installed |
-| Codex CLI | Install the `codex` command and sign in with ChatGPT | Model-only CLI using the participant's saved subscription login |
+| Codex CLI | `pip install -e ".[track-b-codex]"`, install `codex` and sign in with ChatGPT | Model-only CLI using the participant's saved subscription login |
 | LangGraph | `pip install -e ".[track-b-langgraph]"` | LangChain agent compiled on LangGraph |
 | OpenAI Agents SDK | `pip install -e ".[track-b-openai]"` | `Agent` and `Runner` |
 
@@ -40,6 +40,7 @@ Run this integration on your own computer with the Codex CLI installed. It uses 
 If you have not signed in, run `codex login` and choose ChatGPT. Confirm the saved login and copy the Luna example:
 
 ```powershell
+python -m pip install -e ".[track-b-codex]"
 codex login status
 Copy-Item configs/track-b/codex-cli.example.yaml track-b-config.yaml
 python -m async_rbench.track_b doctor --config track-b-config.yaml
@@ -52,6 +53,8 @@ Each model request runs the CLI in a fresh empty directory with controlled setti
 The isolation profile is verified with Codex CLI `0.153.4`. A temporary copy of the selected model's bundled catalog entry disables native tool presentation while preserving the exact model ID and other model capabilities. The integration test captures the CLI's actual request against a local mock endpoint, including nested tool declarations, and checks that no native tool, repository instructions or installed skill content is advertised. Run `python -m pytest tests/test_track_b_codex_isolation.py -q` before using a different CLI version. This test makes no real model call.
 
 The runtime selects HTTPS transport through a per-invocation OpenAI provider entry that retains saved authentication and the CLI's official endpoint selection. This avoids repeated WebSocket connection attempts on networks where that transport is unavailable. Recoverable reconnection diagnostics are accepted only when the CLI subsequently completes a turn with valid usage and matching structured output. On Windows, each CLI process tree is tied to its adapter's lifetime, including termination of a virtual-environment Python launcher.
+
+Tool arguments use typed structured output and are validated against the original benchmark schemas before execution. Optional non-nullable fields use `null` to request omission; arbitrary evidence objects use key/value entries and are reconstructed without parsing JSON embedded in strings. All maintained benchmark tools are covered. Unsupported custom schema constructs, including optional nullable properties, are rejected explicitly rather than silently changing their meaning.
 
 Keep account authentication files and tokens on the participant's computer. Do not put them in YAML, GitHub repositories, GitHub Actions secrets or a hosted submission service. Participants run the evaluation locally and share permitted aggregate results; Track B remains separate from the public Track A leaderboard.
 
