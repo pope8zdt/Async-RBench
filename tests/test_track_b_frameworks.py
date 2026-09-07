@@ -50,6 +50,10 @@ def test_deterministic_runtime_returns_stable_finish_action() -> None:
 
     assert result.output_text == "Track B deterministic validation complete"
     assert [action.kind for action in result.actions] == ["finish"]
+    assert result.actions[0].arguments == {
+        "status": "incomplete",
+        "summary": "Track B deterministic validation complete",
+    }
     assert result.usage == {"input_tokens": 0, "output_tokens": 0}
 
 

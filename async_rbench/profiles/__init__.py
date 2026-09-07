@@ -45,6 +45,12 @@ BUILTIN_PROFILES: dict[str, AdapterProfile] = {
         cancellation_policy="automatic",
         adapter_command=[sys.executable, "adapters/conformance_mock.py"],
     ),
+    "track_b": AdapterProfile(
+        profile="track_b",
+        runtime_mode="agent_system",
+        provider={"kind": "agent_framework"},
+        adapter_command=[sys.executable, "adapters/track_b.py"],
+    ),
 }
 
 

@@ -13,7 +13,10 @@ class DeterministicRuntime:
     async def run(self, request: FrameworkRequest) -> FrameworkResult:
         return FrameworkResult(
             output_text="Track B deterministic validation complete",
-            actions=(HarnessAction("finish", {"declared_task_success": False}),),
+            actions=(HarnessAction("finish", {
+                "status": "incomplete",
+                "summary": "Track B deterministic validation complete",
+            }),),
             usage={"input_tokens": 0, "output_tokens": 0},
             status="completed",
         )
