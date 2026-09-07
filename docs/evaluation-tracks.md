@@ -8,6 +8,14 @@ Track A is the only publication/leaderboard track. It fixes the reference API ha
 
 Eligibility is recorded per episode. Any custom adapter, scripted backend, disabled workspace, skipped conformance, contract drift or digest mismatch moves the run out of Track A instead of silently mixing it into official results.
 
+## Track B — agent systems
+
+Track B runs complete agent systems through a benchmark-maintained bridge. It includes drivers for Claude Code, LangGraph and the OpenAI Agents SDK. Participants may replace `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy` and `LifecycleHooks` with `module:factory` components.
+
+The adapter profile is always development-only. The kernel still owns scheduling, result release, capability execution, workspace isolation, private verification and scoring. Track B results do not enter the Track A leaderboard.
+
+See [Track B agent systems](track-b.md) for installation, configuration and commands.
+
 ## Development runs
 
 Development runs exist for debugging adapters, cases and infrastructure. They may disable containers, use deterministic backends, skip conformance or use another adapter. Their scores and diagnostics are reported separately and cannot affect the official leaderboard.

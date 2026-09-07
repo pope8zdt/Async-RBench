@@ -21,6 +21,7 @@ If Async-RBench is useful to your research, consider starring the repository.
 ## 📣 Latest News
 
 - **September 2026:** The public website, DRS/BTS leaderboard, local-run workflow, and reviewed result submission path are available.
+- **Track B:** Claude Code, LangGraph, OpenAI Agents SDK and custom harness components are available as a development track.
 - **Version 11.0.0:** The evaluation contract is frozen for reproducible Track A experiments.
 
 ## 💡 Overview
@@ -52,6 +53,7 @@ The fixed evaluation kernel owns scheduling, event delivery, private truth, work
 - **Independent measurements** separate base-task correctness from dynamic replanning quality.
 - **Local execution** keeps credentials, raw traces, and restricted evaluator materials on the participant's machine.
 - **Static public leaderboard** publishes aggregate results without requiring a hosted evaluation server.
+- **Agent-system evaluation** runs maintained frameworks or custom harness components through the same evaluator boundary.
 
 ## 🚀 Quick Start
 
@@ -108,6 +110,17 @@ $env:MODEL_API_KEY = Read-Host "API key" -MaskInput
 
 The launcher validates the repository and provider, creates an immutable manifest, runs paired Linear/Async episodes, aggregates scores, and audits the result. See the [main experiment policy](experiments/formal-47/README.md) for selection, coverage, and resume rules.
 
+### Run an agent system with Track B
+
+```powershell
+python -m pip install -e ".[track-b-claude]"
+Copy-Item configs/track-b/claude-code.example.yaml track-b-config.yaml
+python -m async_rbench.track_b doctor --config track-b-config.yaml
+python -m async_rbench.track_b conformance --config track-b-config.yaml --output artifacts/track-b/conformance
+```
+
+Track B also supports `track-b-langgraph` and `track-b-openai` extras. See the [Track B guide](docs/track-b.md) for paired runs and custom `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy`, and `LifecycleHooks` implementations.
+
 > [!IMPORTANT]
 > Keep API keys, raw traces, private event truth, and restricted evaluator data local. Public submissions contain only allowlisted aggregate results.
 
@@ -151,13 +164,14 @@ python -m async_rbench.submissions package `
 python -m async_rbench.submissions check --root .
 ```
 
-Read the [submission and review guide](submissions/README.md), then use the [Track A submission form](https://github.com/pope8zdt/Async-RBench/issues/new?template=benchmark-result.yml). Track B is currently a simulation preview and does not produce real scores or leaderboard entries.
+Read the [submission and review guide](submissions/README.md), then use the [Track A submission form](https://github.com/pope8zdt/Async-RBench/issues/new?template=benchmark-result.yml). Track B produces development results that remain separate from the Track A leaderboard.
 
 ## 📁 Repository Structure
 
 ```text
 Async-RBench/
 ├── async_rbench/          # Kernel, runtime, scoring, and aggregation
+│   └── track_b/           # Agent frameworks and custom harness API
 ├── adapters/              # Executable adapter entry points
 ├── cases/                 # Registered benchmark tasks
 ├── configs/               # Model profiles and runtime configuration
@@ -182,6 +196,7 @@ Generated experiments belong under `artifacts/experiments/` and remain outside v
 - [Adapter contract](docs/adapter-contract.md)
 - [Result and termination contract](docs/async-rbench-result-contract-and-termination.md)
 - [Evaluation tracks](docs/evaluation-tracks.md)
+- [Track B agent systems](docs/track-b.md)
 - [Submission and review guide](submissions/README.md)
 
 ## 🥰 Citation

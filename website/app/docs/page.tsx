@@ -103,8 +103,8 @@ $env:MODEL_API_KEY = Read-Host "API key" -MaskInput
             <p>
               <strong>Track B · </strong>
               <T
-                zh="Agent 系统赛道规划中。当前仅为模拟预览，无真实执行、成绩或上榜资格。"
-                en="The agent systems track is planned. The current simulation has no real execution, scores or leaderboard eligibility."
+                zh="在本机运行完整 Agent 系统，支持预集成框架与自定义 harness 组件。"
+                en="Run complete agent systems locally with maintained frameworks or custom harness components."
               />
             </p>
           </section>
@@ -150,17 +150,23 @@ python -m async_rbench.main_experiment check --root .
           </section>
           <section id="track-b">
             <h2>
-              <T zh="Agent 系统 · 模拟预览" en="Agent systems · Simulation" />
+              <T zh="Agent 系统" en="Agent systems" />
             </h2>
             <p>
               <T
-                zh="预览 Claude Code、LangGraph 和自定义 Agent 的配置流程。"
-                en="Preview configuration workflows for Claude Code, LangGraph and custom agents."
+                zh="支持 Claude Code、LangGraph、OpenAI Agents SDK，以及自定义策略组件。"
+                en="Supports Claude Code, LangGraph, OpenAI Agents SDK and custom policy components."
               />
             </p>
+            <CodeBlock
+              title="POWERSHELL 7"
+              text={`python -m async_rbench.track_b doctor --config "track-b-config.yaml"
+python -m async_rbench.track_b conformance --config "track-b-config.yaml" --output "artifacts/track-b/conformance"
+python -m async_rbench.track_b run --config "track-b-config.yaml" --manifest "artifacts/track-b/manifest.json" --output "artifacts/track-b/runs"`}
+            />
             <details>
               <summary>
-                <T zh="接口提案" en="Proposed interfaces" />
+                <T zh="可自定义组件" en="Custom components" />
               </summary>
               <ul>
                 <li>
@@ -185,16 +191,20 @@ python -m async_rbench.main_experiment check --root .
                     en="Delegation, cancellation and retries"
                   />
                 </li>
+                <li>
+                  <strong>LifecycleHooks</strong> ·{' '}
+                  <T zh="只读诊断回调" en="Read-only diagnostic hooks" />
+                </li>
               </ul>
               <p>
                 <T
-                  zh="这些是设计提案，尚非可调用 API。真实驱动须通过协议验证；结果释放、工作区与评分仍由内核控制。"
-                  en="These are proposals, not callable APIs. Real drivers must pass protocol validation; the kernel retains control of result release, workspaces and scoring."
+                  zh="结果释放、工作区、隐藏验证与评分由内核固定控制。Track B 结果与 Track A 榜单分开。"
+                  en="The kernel fixes result delivery, workspaces, private verification and scoring. Track B results remain separate from the Track A leaderboard."
                 />
               </p>
             </details>
             <Link className="text-link" href="/evaluate?track=b">
-              <T zh="打开模拟预览" en="Open simulation" />{' '}
+              <T zh="生成本地运行配置" en="Build a local run config" />{' '}
               <ArrowRight size={15} />
             </Link>
           </section>
