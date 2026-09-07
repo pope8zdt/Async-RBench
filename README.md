@@ -21,7 +21,7 @@ If Async-RBench is useful to your research, consider starring the repository.
 ## 📣 Latest News
 
 - **September 2026:** The public website, DRS/BTS leaderboard, local-run workflow, and reviewed result submission path are available.
-- **Track B:** Claude Code, LangGraph, OpenAI Agents SDK and custom harness components are available as a development track.
+- **Track B:** Claude Code, Codex CLI, LangGraph, OpenAI Agents SDK and custom harness components are available as a development track.
 - **Version 11.0.0:** The evaluation contract is frozen for reproducible Track A experiments.
 
 ## 💡 Overview
@@ -119,7 +119,7 @@ python -m async_rbench.track_b doctor --config track-b-config.yaml
 python -m async_rbench.track_b conformance --config track-b-config.yaml --output artifacts/track-b/conformance
 ```
 
-Track B also supports `track-b-langgraph` and `track-b-openai` extras. See the [Track B guide](docs/track-b.md) for paired runs and custom `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy`, and `LifecycleHooks` implementations.
+Track B also supports `track-b-codex`, `track-b-langgraph` and `track-b-openai` extras. Codex CLI uses the participant's saved ChatGPT login. See the [Track B guide](docs/track-b.md) for paired runs and custom `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy`, and `LifecycleHooks` implementations.
 
 > [!IMPORTANT]
 > Keep API keys, raw traces, private event truth, and restricted evaluator data local. Public submissions contain only allowlisted aggregate results.
@@ -197,6 +197,7 @@ Generated experiments belong under `artifacts/experiments/` and remain outside v
 - [Result and termination contract](docs/async-rbench-result-contract-and-termination.md)
 - [Evaluation tracks](docs/evaluation-tracks.md)
 - [Track B agent systems](docs/track-b.md)
+- [Codex CLI + Luna live validation](docs/reports/2026-09-07-track-b-codex-luna.md)
 - [Submission and review guide](submissions/README.md)
 
 ## 🥰 Citation

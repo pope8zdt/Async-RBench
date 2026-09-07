@@ -47,7 +47,7 @@ Files: `config.py`, `frameworks/catalog.py`, `configs/track-b/codex-cli.example.
 Local artifacts: `artifacts/track-b-luna-live/` with config, image map, manifest, probe, logs, runs and report.
 
 - [x] Verify existing immutable image IDs/task content and limit all validation containers to 0.25 CPU and 512 MB memory.
-- [ ] Run dependency-unblock and late-test-evidence, one repetition of Linear and Async per case, using new output paths and a fresh config-bound conformance run.
-- [ ] Inspect protocol events, tool use, result delivery, verifier and score status. Distinguish task failure from infrastructure failure; report actual BTS/DRS without inventing success.
-- [ ] Verify the main experiment continues and scan published files/diagnostics for credential leakage.
-- [ ] Commit tested implementation and publish only the existing Track B branch. Report concrete measurements and any remaining limitations.
+- [x] Run dependency-unblock and late-test-evidence, one repetition of Linear and Async per case, using new output paths and a fresh config-bound conformance run.
+- [x] Inspect protocol events, tool use, result delivery, verifier and score status. Distinguish task failure from infrastructure failure; report actual BTS/DRS without inventing success.
+- [x] Verify the main experiment continues and scan published files/diagnostics for credential leakage.
+- [x] Commit tested implementation and publish only the existing Track B branch. Report concrete measurements and any remaining limitations.
