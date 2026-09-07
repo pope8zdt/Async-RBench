@@ -113,13 +113,14 @@ The launcher validates the repository and provider, creates an immutable manifes
 ### Run an agent system with Track B
 
 ```powershell
-python -m pip install -e ".[track-b-claude]"
+python -m pip install -e .
+python docker/track-b/build.py claude
 Copy-Item configs/track-b/claude-code.example.yaml track-b-config.yaml
 python -m async_rbench.track_b doctor --config track-b-config.yaml
 python -m async_rbench.track_b conformance --config track-b-config.yaml --output artifacts/track-b/conformance
 ```
 
-Track B also supports `track-b-codex`, `track-b-langgraph` and `track-b-openai` extras. Codex CLI uses the participant's saved ChatGPT login. See the [Track B guide](docs/track-b.md) for paired runs and custom `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy`, and `LifecycleHooks` implementations.
+Track B provides Linux agent containers for Claude Code, Codex CLI, LangGraph and OpenAI Agents SDK. Configure the selected provider credential; Codex CLI uses the participant's saved ChatGPT login. See the [Track B guide](docs/track-b.md) for paired runs, host execution and custom `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy`, and `LifecycleHooks` implementations.
 
 > [!IMPORTANT]
 > Keep API keys, raw traces, private event truth, and restricted evaluator data local. Public submissions contain only allowlisted aggregate results.

@@ -32,9 +32,14 @@ _ENV_ALLOWLIST = {
     "PATH", "PATHEXT", "SYSTEMROOT", "WINDIR", "COMSPEC", "USERPROFILE",
     "HOMEDRIVE", "HOMEPATH", "HOME", "APPDATA", "LOCALAPPDATA", "TEMP", "TMP",
     "TMPDIR", "CODEX_HOME", "LANG", "LC_ALL", "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY",
-    "SSL_CERT_FILE", "SSL_CERT_DIR",
+    "SSL_CERT_FILE", "SSL_CERT_DIR", "SHELL",
 }
 _MAX_EVENT_BYTES = 8 * 1024 * 1024
+# CLI 0.153.4 installs these during the first exec in a fresh account home,
+# after our directory scan. Predeclare their exact disabled paths as well.
+_BUNDLED_SYSTEM_SKILLS = (
+    "imagegen", "openai-docs", "plugin-creator", "skill-creator", "skill-installer",
+)
 MODEL_INSTRUCTIONS = (
     "You are the decision-making agent inside Async-RBench Track B. "
     "Use only the supplied public task, message history and benchmark tool schemas. "
@@ -74,9 +79,13 @@ def disabled_skill_config() -> str:
     roots = [account_home / "skills", Path.home() / ".agents" / "skills"]
     if os.name != "nt":
         roots.append(Path("/etc/codex/skills"))
-    paths = sorted({path.as_posix() for root in roots if root.is_dir() for path in root.rglob("SKILL.md")})
+    paths = {path.as_posix() for root in roots if root.is_dir() for path in root.rglob("SKILL.md")}
+    paths.update(
+        (account_home / "skills" / ".system" / name / "SKILL.md").as_posix()
+        for name in _BUNDLED_SYSTEM_SKILLS
+    )
     return "skills.config=[" + ",".join(
-        "{path=" + json.dumps(path) + ",enabled=false}" for path in paths
+        "{path=" + json.dumps(path) + ",enabled=false}" for path in sorted(paths)
     ) + "]"
 
 

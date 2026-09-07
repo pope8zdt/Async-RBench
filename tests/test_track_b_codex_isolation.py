@@ -46,10 +46,18 @@ def _context_strings(value: Any):
             yield from _context_strings(child)
 
 
-def test_installed_codex_advertises_no_host_tools_or_private_context(monkeypatch):
+@pytest.mark.parametrize("fresh_home", [False, True])
+def test_installed_codex_advertises_no_host_tools_or_private_context(monkeypatch, tmp_path, fresh_home):
     executable = shutil.which("codex")
     if executable is None:
         pytest.skip("Codex CLI is not installed; this test requires the real executable")
+
+    if fresh_home:
+        # A new container has no installed skills when the adapter scans paths.
+        # The CLI can install builtins later during its first exec invocation.
+        account = tmp_path / "empty-account"
+        account.mkdir()
+        monkeypatch.setenv("CODEX_HOME", str(account))
 
     model = "gpt-5.6-luna"
     catalog = codex_cli.load_model_catalog(executable, model)

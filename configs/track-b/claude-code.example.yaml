@@ -2,6 +2,12 @@ track: B
 framework: claude-code
 model: replace-with-exact-claude-model-id
 credential_env: ANTHROPIC_API_KEY
+runtime:
+  type: docker
+  image: async-rbench-track-b:claude
+  cpus: 0.5
+  memory: 768m
+  timeout_sec: 2400
 limits:
   max_main_steps: 100
   max_child_steps: 40

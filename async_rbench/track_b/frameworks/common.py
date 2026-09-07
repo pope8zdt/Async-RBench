@@ -18,6 +18,13 @@ def render_protocol_prompt(request: FrameworkRequest) -> str:
         "supplied schemas. Return one JSON object with `output_text` and `actions`; "
         "each action has `kind` equal to a supplied function name and an `arguments` "
         "object. Return an empty actions list when no tool is needed.\n\n"
+        "TASK ENVIRONMENT: Benchmark terminal actions execute remotely in a Linux "
+        "task container using bash. Use Linux paths and bash commands; task instructions "
+        "usually name /app, but use the terminal tool with pwd to confirm the task "
+        "working directory. The framework runtime workspace is separate; its current "
+        "directory and host files are not the task workspace. Access task "
+        "files only through the supplied benchmark tools, and wait for observations "
+        "before treating an action as executed.\n\n"
         f"PUBLIC REQUEST JSON:\n{payload}"
     )
 

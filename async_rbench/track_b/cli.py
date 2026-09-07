@@ -2,15 +2,17 @@ from __future__ import annotations
 
 import argparse
 import json
-from dataclasses import asdict
+import os
+from dataclasses import asdict, replace
 from pathlib import Path
 
-from .. import eval_cli
 from .config import TrackBConfig
 from .frameworks import doctor_framework, public_frameworks
 
 
 def run_eval_cli(argv: list[str]) -> int:
+    from .. import eval_cli
+
     return eval_cli.main(argv)
 
 
@@ -42,6 +44,12 @@ def cmd_list_frameworks(_args: argparse.Namespace) -> int:
 
 def cmd_doctor(args: argparse.Namespace) -> int:
     config = TrackBConfig.from_file(Path(args.config))
+    if config.runtime.get("type") == "docker" and os.environ.get("ASYNC_RBENCH_AGENT_CONTAINER") != "1":
+        from .container_runtime import doctor_container
+
+        report = doctor_container(config)
+        print(json.dumps(report, indent=2, sort_keys=True))
+        return 0 if report.get("ready") else 1
     report = doctor_framework(config.framework, config)
     print(json.dumps(asdict(report), indent=2, sort_keys=True))
     return 0 if report.ready else 1
@@ -84,6 +92,21 @@ def cmd_run(args: argparse.Namespace) -> int:
     output = Path(args.output).resolve()
     if _is_formal_output(output):
         raise ValueError("Track B output cannot be inside a formal experiment directory")
+    if config.runtime.get("type") == "docker":
+        from .container_runtime import inspect_image
+
+        image = inspect_image(config.runtime["image"])
+        resolved = replace(config, runtime={**config.runtime, "image": image["image_id"]})
+        output.mkdir(parents=True, exist_ok=True)
+        resolved_path = output / "track-b-runtime-config.json"
+        payload = json.dumps(resolved._public_payload(), indent=2, sort_keys=True) + "\n"
+        try:
+            with resolved_path.open("x", encoding="utf-8") as stream:
+                stream.write(payload)
+        except FileExistsError:
+            if resolved_path.read_text(encoding="utf-8") != payload:
+                raise ValueError("Track B output already binds a different runtime configuration")
+        config = replace(resolved, source_path=resolved_path)
     argv = [
         "run-manifest", "--manifest", str(manifest_path),
         "--profile", "track_b", "--config", str(config.source_path),

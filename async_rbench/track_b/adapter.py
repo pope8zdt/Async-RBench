@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import json
 import logging
+import os
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -227,6 +228,8 @@ async def run_adapter(args: argparse.Namespace) -> int:
         backend=track_config.framework,
         workspace_mode=args.workspace_mode,
         development_only=True,
+        **({"agent_runtime": json.loads(os.environ["ASYNC_RBENCH_AGENT_RUNTIME_METADATA"])}
+           if os.environ.get("ASYNC_RBENCH_AGENT_CONTAINER") == "1" else {}),
     )
     emitter.emit("ready")
     try:
@@ -263,7 +266,16 @@ def main(argv: list[str] | None = None) -> int:
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
-    return asyncio.run(run_adapter(build_parser().parse_args(argv)))
+    args = build_parser().parse_args(argv)
+    config = TrackBConfig.from_file(args.config)
+    if config.runtime.get("type") == "docker" and os.environ.get("ASYNC_RBENCH_AGENT_CONTAINER") != "1":
+        from .container_runtime import run_container_adapter
+
+        child_args = ["--workspace-mode", args.workspace_mode]
+        if args.conformance:
+            child_args.insert(0, "--conformance")
+        return run_container_adapter(config, child_args)
+    return asyncio.run(run_adapter(args))
 
 
 if __name__ == "__main__":

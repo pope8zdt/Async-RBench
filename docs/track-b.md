@@ -17,6 +17,49 @@ See the [two-case Codex CLI + Luna live validation](reports/2026-09-07-track-b-c
 
 Framework dependencies are optional. Installing Async-RBench or running Track A does not import them.
 
+## Run frameworks in Linux containers
+
+The maintained example configs run the framework and custom harness components in a Linux agent container. The benchmark kernel stays on the participant's computer and executes task actions in separate task/child containers. All scheduling, deliveries and scoring use the existing v11.0 protocol.
+
+Install the benchmark and build the selected runtime from the repository root:
+
+```powershell
+python -m pip install -e .
+python docker/track-b/build.py codex
+Copy-Item configs/track-b/codex-cli.example.yaml track-b-config.yaml
+python -m async_rbench.track_b doctor --config track-b-config.yaml
+```
+
+Use `claude`, `langgraph` or `openai` in the build command for the corresponding framework. `all` builds the four targets sequentially. The build helper sends only Python package source and declared build inputs to Docker; task data, artifacts, Git history and credentials are excluded. Framework versions are pinned in `docker/track-b/`. Host execution remains available by omitting `runtime` or setting `runtime: {type: host}` and installing the relevant optional dependencies.
+
+```yaml
+runtime:
+  type: docker
+  image: async-rbench-track-b:codex
+  cpus: 0.5
+  memory: 768m
+  timeout_sec: 2400
+```
+
+`run` resolves the image once before the batch and saves `track-b-runtime-config.json` in the output directory. Both execution modes use this immutable image ID, which is also included in episode metadata. The original configuration is unchanged. CPU/memory limits here cover the agent runtime; task-container limits are separate. The wall-clock timeout includes framework startup and model calls.
+
+The agent container runs without root privileges, with a read-only root filesystem and temporary home/work files. It receives public protocol messages and returns benchmark actions; it has no host filesystem or Docker socket mount. Task paths belong to the task container: use benchmark terminal actions to inspect them, even though both containers run Linux/bash.
+
+Authentication is configured per framework. For Codex, the launcher transfers only file-backed saved ChatGPT authentication into the temporary container home. For the other integrations, set the provider credential named by `credential_env`; use an uppercase variable ending in `_KEY`, `_TOKEN` or `_SECRET`. Credentials travel through the private bootstrap input, not Docker arguments, image layers or result metadata. Container credentials are discarded at shutdown; global account files and preferences are not rewritten.
+
+Docker mode also supports the five existing custom component interfaces. Install your component package in a derived image and reference its `module:factory` in the config:
+
+```dockerfile
+FROM async-rbench-track-b:langgraph
+USER root
+COPY my_harness-0.1.0-py3-none-any.whl /tmp/my_harness-0.1.0-py3-none-any.whl
+RUN chmod -R u+w /opt/venv && pip install --no-deps /tmp/my_harness-0.1.0-py3-none-any.whl \
+    && rm /tmp/my_harness-0.1.0-py3-none-any.whl && chmod -R a-w /opt/venv
+USER 1000:1000
+```
+
+Set `runtime.image` to the derived image. Include any additional dependencies explicitly. Keep component diagnostics on stderr and preserve stdout for the benchmark protocol. Files written in the agent container are temporary; task artifacts must be created through benchmark capabilities. Cancellation, input closure and runtime timeouts terminate the agent container and its model processes.
+
 For an OpenAI-compatible provider, use the OpenAI Agents SDK integration with an explicit client:
 
 ```yaml
@@ -42,13 +85,14 @@ Run this integration on your own computer with the Codex CLI installed. It uses 
 If you have not signed in, run `codex login` and choose ChatGPT. Confirm the saved login and copy the Luna example:
 
 ```powershell
-python -m pip install -e ".[track-b-codex]"
+python -m pip install -e .
 codex login status
+python docker/track-b/build.py codex
 Copy-Item configs/track-b/codex-cli.example.yaml track-b-config.yaml
 python -m async_rbench.track_b doctor --config track-b-config.yaml
 ```
 
-The example selects `gpt-5.6-luna`, medium reasoning effort and a 180-second request timeout. Keep the same model and effort in paired Linear/Async runs. Leave `credential_env` empty: this integration rejects API-key credential overrides and requires the CLI to report a saved ChatGPT login. The doctor checks installation and sign-in; it does not prove that the selected model is available to the account.
+The example selects `gpt-5.6-luna`, medium reasoning effort and a 180-second request timeout. Keep the same model and effort in paired Linear/Async runs. Leave `credential_env` empty: this integration rejects API-key credential overrides and requires the CLI to report a saved ChatGPT login. In Docker mode, the doctor checks the CLI inside the selected image; it does not require host framework dependencies or prove that the selected model is available to the account.
 
 Each model request runs the CLI in a fresh empty directory with controlled settings and native tools disabled. Codex returns structured benchmark actions; the Async-RBench kernel executes tools inside participant containers and retains control of child scheduling, private verification and scoring. The CLI supplies model decisions only. The implementation uses Codex's [non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode) and leaves global preferences unchanged.
 
