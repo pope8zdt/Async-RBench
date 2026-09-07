@@ -14,6 +14,9 @@ dependencies = ["PyYAML>=6.0", "requests>=2.0"]
 # of imported test modules; `.[test]` must be self-sufficient for the full
 # framework test run on a fresh clone.
 test = ["pytest>=8.0,<10", "jsonschema>=4.0", "filelock>=3.0"]
+track-b-claude = ["claude-agent-sdk>=0.2,<0.3"]
+track-b-langgraph = ["langgraph>=1,<2", "langchain>=1,<2"]
+track-b-openai = ["openai-agents>=0.2,<1"]
 
 [project.scripts]
 async-rbench = "async_rbench.cli:main"
