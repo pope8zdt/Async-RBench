@@ -9,6 +9,7 @@ Track B is a development track. Its records are deliberately excluded from the T
 | Framework | Install | Runtime |
 | --- | --- | --- |
 | Claude Code | Install the `claude` command or run `pip install -e ".[track-b-claude]"` | Claude Code CLI, with Agent SDK preferred when installed |
+| Codex CLI | Install the `codex` command and sign in with ChatGPT | Model-only CLI using the participant's saved subscription login |
 | LangGraph | `pip install -e ".[track-b-langgraph]"` | LangChain agent compiled on LangGraph |
 | OpenAI Agents SDK | `pip install -e ".[track-b-openai]"` | `Agent` and `Runner` |
 
@@ -32,6 +33,28 @@ limits:
 
 The selected credential variable is required; this driver never falls back to another account. SDK tracing is disabled. Token usage comes from the SDK response, while an unavailable provider-returned model identity remains empty rather than being inferred from configuration.
 
+## Use a local ChatGPT subscription with Codex
+
+Run this integration on your own computer with the Codex CLI installed. It uses your saved ChatGPT sign-in; subscription access and API-key access are separate authentication modes. See the official [Codex authentication guide](https://learn.chatgpt.com/docs/auth).
+
+If you have not signed in, run `codex login` and choose ChatGPT. Confirm the saved login and copy the Luna example:
+
+```powershell
+codex login status
+Copy-Item configs/track-b/codex-cli.example.yaml track-b-config.yaml
+python -m async_rbench.track_b doctor --config track-b-config.yaml
+```
+
+The example selects `gpt-5.6-luna`, medium reasoning effort and a 180-second request timeout. Keep the same model and effort in paired Linear/Async runs. Leave `credential_env` empty: this integration rejects API-key credential overrides and requires the CLI to report a saved ChatGPT login. The doctor checks installation and sign-in; it does not prove that the selected model is available to the account.
+
+Each model request runs the CLI in a fresh empty directory with controlled settings and native tools disabled. Codex returns structured benchmark actions; the Async-RBench kernel executes tools inside participant containers and retains control of child scheduling, private verification and scoring. The CLI supplies model decisions only. The implementation uses Codex's [non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode) and leaves global preferences unchanged.
+
+The isolation profile is verified with Codex CLI `0.153.4`. A temporary copy of the selected model's bundled catalog entry disables native tool presentation while preserving the exact model ID and other model capabilities. The integration test captures the CLI's actual request against a local mock endpoint, including nested tool declarations, and checks that no native tool, repository instructions or installed skill content is advertised. Run `python -m pytest tests/test_track_b_codex_isolation.py -q` before using a different CLI version. This test makes no real model call.
+
+The runtime selects HTTPS transport through a per-invocation OpenAI provider entry that retains saved authentication and the CLI's official endpoint selection. This avoids repeated WebSocket connection attempts on networks where that transport is unavailable. Recoverable reconnection diagnostics are accepted only when the CLI subsequently completes a turn with valid usage and matching structured output. On Windows, each CLI process tree is tied to its adapter's lifetime, including termination of a virtual-environment Python launcher.
+
+Keep account authentication files and tokens on the participant's computer. Do not put them in YAML, GitHub repositories, GitHub Actions secrets or a hosted submission service. Participants run the evaluation locally and share permitted aggregate results; Track B remains separate from the public Track A leaderboard.
+
 ## What can be customized
 
 | Component | Participant control | Evaluator boundary |
@@ -54,7 +77,7 @@ Copy one example:
 Copy-Item configs/track-b/claude-code.example.yaml track-b-config.yaml
 ```
 
-Set an exact model ID and the name of its credential environment variable. Keep the credential itself outside YAML and version control.
+Set an exact model ID and, for API-backed integrations, the name of its credential environment variable. Codex uses the saved-login flow above. Keep credentials outside YAML and version control.
 
 ```yaml
 track: B

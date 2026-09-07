@@ -24,8 +24,8 @@ def _request() -> FrameworkRequest:
     return FrameworkRequest(messages=({"role": "user", "content": "solve it"},))
 
 
-def test_catalog_contains_three_public_frameworks() -> None:
-    assert public_frameworks() == ("claude-code", "langgraph", "openai-agents")
+def test_catalog_contains_four_public_frameworks() -> None:
+    assert public_frameworks() == ("claude-code", "codex-cli", "langgraph", "openai-agents")
     assert get_framework("deterministic").public is False
 
 

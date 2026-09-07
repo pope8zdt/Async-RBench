@@ -9,7 +9,9 @@ from typing import Any
 import yaml
 
 
-KNOWN_FRAMEWORKS = frozenset({"claude-code", "langgraph", "openai-agents", "deterministic"})
+KNOWN_FRAMEWORKS = frozenset({
+    "claude-code", "codex-cli", "langgraph", "openai-agents", "deterministic",
+})
 COMPONENT_NAMES = frozenset({
     "context_builder",
     "delegation_policy",
@@ -62,6 +64,10 @@ class TrackBConfig:
             raise ValueError(f"unknown Track B framework: {self.framework!r}")
         if not self.model:
             raise ValueError("Track B model is required")
+        if self.framework == "codex-cli" and self.credential_env:
+            raise ValueError(
+                "codex-cli uses saved ChatGPT login; credential_env must be empty"
+            )
         unknown_components = sorted(set(self.components) - COMPONENT_NAMES)
         if unknown_components:
             raise ValueError(

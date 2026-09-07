@@ -36,6 +36,10 @@ FRAMEWORKS: dict[str, FrameworkSpec] = {
         "claude-code", "claude_code", "claude_agent_sdk", "claude",
         'pip install "async-rbench[track-b-claude]"',
     ),
+    "codex-cli": FrameworkSpec(
+        "codex-cli", "codex_cli", None, "codex",
+        "Install the Codex CLI, then run codex login with ChatGPT",
+    ),
     "langgraph": FrameworkSpec(
         "langgraph", "langgraph", "langgraph", None,
         'pip install "async-rbench[track-b-langgraph]"',
@@ -69,13 +73,28 @@ def doctor_framework(name: str, config: TrackBConfig) -> DoctorReport:
         runtime_present = dependency_present or executable_present
     else:
         runtime_present = dependency_present and executable_present
-    credential_present = not config.credential_env or bool(os.getenv(config.credential_env))
+    credential_detail = f"credential environment variable {config.credential_env}"
+    if name == "codex-cli":
+        credential_present = False
+        if config.credential_env:
+            credential_detail = "codex-cli uses saved ChatGPT login; credential_env must be empty"
+        elif executable_present:
+            from .codex_cli import check_cli_login
+
+            credential_present, credential_detail = check_cli_login()
+        else:
+            credential_detail = "saved ChatGPT login (Codex CLI unavailable)"
+    else:
+        credential_present = not config.credential_env or bool(os.getenv(config.credential_env))
     ready = runtime_present and credential_present
     missing: list[str] = []
     if not runtime_present:
         missing.append("runtime dependency")
     if not credential_present:
-        missing.append(f"credential environment variable {config.credential_env}")
+        missing.append(credential_detail)
+    detail = "ready" if ready else "missing " + " and ".join(missing)
+    if ready and name == "codex-cli":
+        detail += f"; {credential_detail}"
     return DoctorReport(
         framework=name,
         ready=ready,
@@ -83,7 +102,7 @@ def doctor_framework(name: str, config: TrackBConfig) -> DoctorReport:
         executable_present=executable_present,
         credential_present=credential_present,
         install_hint=spec.install_extra if not runtime_present else "",
-        detail="ready" if ready else "missing " + " and ".join(missing),
+        detail=detail,
     )
 
 
