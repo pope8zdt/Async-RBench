@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
@@ -8,6 +11,9 @@ from async_rbench.evaluation.case_contract import ContractError
 from async_rbench.track_b.adapter import FrameworkModelBackend, build_public_context
 from async_rbench.track_b.config import TrackBConfig
 from async_rbench.track_b.contracts import FrameworkResult, HarnessAction
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class _Runtime:
@@ -57,3 +63,16 @@ def test_adapter_builds_context_from_public_episode_start() -> None:
     assert context.episode_id == "episode-1"
     assert context.execution_mode == "async"
     assert context.workstreams[0]["id"] == "ws-1"
+
+
+def test_adapter_script_imports_package_outside_repository_cwd(tmp_path: Path) -> None:
+    completed = subprocess.run(
+        [sys.executable, str(ROOT / "adapters" / "track_b.py"), "--help"],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert "Track B adapter" in completed.stdout

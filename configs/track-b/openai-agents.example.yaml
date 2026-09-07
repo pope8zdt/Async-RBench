@@ -1,0 +1,10 @@
+track: B
+framework: openai-agents
+model: replace-with-exact-openai-model-id
+credential_env: OPENAI_API_KEY
+limits:
+  max_main_steps: 100
+  max_child_steps: 40
+  max_concurrent_children: 3
+  max_total_child_spawns: 5
+  request_timeout_sec: 600
