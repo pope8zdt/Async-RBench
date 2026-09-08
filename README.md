@@ -2,7 +2,7 @@
 
 # Async-RBench
 
-### Benchmarking asynchronous result integration and dynamic replanning
+### ENCHMARKING CORRECT REPLANNING UNDER ASYNCHRONOUS SUBAGENT INTERRUPTIONS
 
 [![Version](https://img.shields.io/badge/version-11.0.0-111827?style=flat-square)](evaluation_contract.json)
 [![Contract](https://img.shields.io/badge/evaluation-frozen-2563eb?style=flat-square)](PROTOCOL.md)
