@@ -322,13 +322,24 @@ def test_final_file_must_match_last_completed_message():
         driver().decode_codex_result(stdout, first, request())
 
 
-@pytest.mark.parametrize("text", ["", "\n", "not JSON", '{"output_text":"","actions":[]}',
+@pytest.mark.parametrize("text", ["", "\n", "not JSON",
     '{"output_text":"working","actions":[{"kind":"terminal","arguments":[1]}]}',
     '{"output_text":"working","actions":[{"kind":"unavailable","arguments":{}}]}',
 ])
 def test_invalid_final_outputs_fail_explicitly(text):
     with pytest.raises((ValueError, RuntimeError)):
         driver().decode_codex_result(events(text=text), text, request())
+
+
+def test_completed_empty_protocol_result_is_preserved_for_scaffold_classification():
+    text = '{"output_text":"","actions":[]}'
+
+    result = driver().decode_codex_result(events(text=text), text, request())
+
+    assert result.output_text == ""
+    assert result.actions == ()
+    assert result.status == "completed"
+    assert result.usage == {"input_tokens": 20, "output_tokens": 7}
 
 
 def test_child_environment_excludes_api_keys_routing_and_parent_context(monkeypatch):

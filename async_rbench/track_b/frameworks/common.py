@@ -97,8 +97,6 @@ def parse_protocol_result(
             raise ValueError(f"framework action {index} arguments must be an object")
         actions.append(HarnessAction(kind, arguments))
     output_text = str(payload.get("output_text") or "")
-    if not actions and not output_text.strip():
-        raise ValueError("framework protocol response requires actions or nonempty output_text")
     return FrameworkResult(
         output_text=output_text,
         actions=tuple(actions),
