@@ -10,9 +10,9 @@ Eligibility is recorded per episode. Any custom adapter, scripted backend, disab
 
 ## Track B — agent systems
 
-Track B runs complete agent systems through a benchmark-maintained bridge. It includes drivers for Claude Code, LangGraph and the OpenAI Agents SDK. Participants may replace `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy` and `LifecycleHooks` with `module:factory` components.
+Track B runs complete agent systems through a benchmark-maintained bridge. It includes Linux-container drivers for Claude Code, Codex CLI, LangGraph and the OpenAI Agents SDK. Participants may replace `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy` and `LifecycleHooks` with `module:factory` components.
 
-The adapter profile is always development-only. The kernel still owns scheduling, result release, capability execution, workspace isolation, private verification and scoring. Track B results do not enter the Track A leaderboard.
+The adapter profile and v1 public result packages are development-only. The kernel still owns scheduling, result release, capability execution, workspace isolation, private verification and scoring. Track B results do not enter the Track A leaderboard.
 
 See [Track B agent systems](track-b.md) for installation, configuration and commands.
 

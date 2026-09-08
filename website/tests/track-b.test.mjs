@@ -7,14 +7,12 @@ import {
   buildTrackBCommands,
 } from '../lib/track-b.mjs';
 
-
-test('Track B exposes three maintained frameworks', () => {
+test('Track B exposes four maintained frameworks', () => {
   assert.deepEqual(
     TRACK_B_FRAMEWORKS.map(({ id }) => id),
-    ['claude-code', 'langgraph', 'openai-agents'],
+    ['claude-code', 'codex-cli', 'langgraph', 'openai-agents'],
   );
 });
-
 
 test('Track B builder emits a runnable local config and command', () => {
   const config = buildTrackBConfig({
@@ -23,17 +21,43 @@ test('Track B builder emits a runnable local config and command', () => {
     credentialEnv: 'OPENAI_API_KEY',
     component: 'default',
   });
-  const commands = buildTrackBCommands('track-b-config.yaml', 'gpt-test');
+  const commands = buildTrackBCommands(
+    'track-b-config.yaml',
+    'gpt-test',
+    'openai-agents',
+  );
 
   assert.match(config, /^track: B$/m);
   assert.match(config, /^framework: openai-agents$/m);
   assert.match(config, /^model: gpt-test$/m);
+  assert.match(config, /^runtime:$/m);
+  assert.match(config, /image: async-rbench-track-b:openai/);
+  assert.match(commands, /docker\\track-b\\build\.py openai/);
   assert.match(commands, /python -m async_rbench\.track_b doctor/);
   assert.match(commands, /python -m async_rbench\.track_b run/);
+  assert.match(commands, /python -m async_rbench\.track_b package/);
+  assert.match(commands, /python -m async_rbench\.track_b validate-package/);
   assert.match(commands, /--model "gpt-test"/);
   assert.doesNotMatch(commands, /simulate/i);
 });
 
+test('Codex config uses saved login and its maintained image', () => {
+  const config = buildTrackBConfig({
+    framework: 'codex-cli',
+    model: 'gpt-5.6-luna',
+    credentialEnv: 'MUST_NOT_BE_USED',
+    component: 'default',
+  });
+  const commands = buildTrackBCommands(
+    'track-b-config.yaml',
+    'gpt-5.6-luna',
+    'codex-cli',
+  );
+
+  assert.match(config, /^credential_env: ""$/m);
+  assert.match(config, /image: async-rbench-track-b:codex/);
+  assert.match(commands, /docker\\track-b\\build\.py codex/);
+});
 
 test('custom harness selection emits a module factory component', () => {
   const config = buildTrackBConfig({

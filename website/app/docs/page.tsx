@@ -2,7 +2,11 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { T } from '@/components/preferences';
 import { CodeBlock } from '@/components/evaluate-form';
-import { repositoryUrl, submissionUrl } from '@/lib/repository';
+import {
+  repositoryUrl,
+  submissionUrl,
+  trackBSubmissionUrl,
+} from '@/lib/repository';
 
 const navigation = [
   ['quickstart', '快速开始', 'Quickstart'],
@@ -154,15 +158,20 @@ python -m async_rbench.main_experiment check --root .
             </h2>
             <p>
               <T
-                zh="支持 Claude Code、LangGraph、OpenAI Agents SDK，以及自定义策略组件。"
-                en="Supports Claude Code, LangGraph, OpenAI Agents SDK and custom policy components."
+                zh="支持 Claude Code、Codex CLI、LangGraph、OpenAI Agents SDK，以及自定义策略组件。"
+                en="Supports Claude Code, Codex CLI, LangGraph, OpenAI Agents SDK and custom policy components."
               />
             </p>
             <CodeBlock
               title="POWERSHELL 7"
-              text={`python -m async_rbench.track_b doctor --config "track-b-config.yaml"
-python -m async_rbench.track_b conformance --config "track-b-config.yaml" --output "artifacts/track-b/conformance"
-python -m async_rbench.track_b run --config "track-b-config.yaml" --manifest "artifacts/track-b/manifest.json" --output "artifacts/track-b/runs"`}
+              text={`python docker\\track-b\\build.py codex
+python -m async_rbench.track_b doctor --config "track-b-config.yaml"
+python -m async_rbench.track_b conformance --config "track-b-config.yaml" --output "artifacts/track-b/conformance" --cases "secure-release"
+python -m async_rbench.track_b make-manifest --instances "secure-release::seed-1" --model "gpt-5.6-luna" --output "artifacts/track-b/manifest.json"
+python -m async_rbench.track_b run --config "track-b-config.yaml" --manifest "artifacts/track-b/manifest.json" --output "artifacts/track-b/runs"
+$benchmarkCommit = git rev-parse HEAD
+python -m async_rbench.track_b package --runs "artifacts/track-b/runs" --manifest "artifacts/track-b/manifest.json" --benchmark-commit $benchmarkCommit --output "artifacts/track-b/public-result.json"
+python -m async_rbench.track_b validate-package --input "artifacts/track-b/public-result.json"`}
             />
             <details>
               <summary>
@@ -207,6 +216,13 @@ python -m async_rbench.track_b run --config "track-b-config.yaml" --manifest "ar
               <T zh="生成本地运行配置" en="Build a local run config" />{' '}
               <ArrowRight size={15} />
             </Link>
+            <a className="text-link" href={trackBSubmissionUrl}>
+              <T
+                zh="提交 Track B 结果包"
+                en="Submit a Track B result package"
+              />{' '}
+              <ArrowRight size={15} />
+            </a>
           </section>
           <section id="metrics">
             <h2>

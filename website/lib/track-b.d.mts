@@ -10,4 +10,8 @@ export function buildTrackBConfig(options: {
   component?: string;
 }): string;
 
-export function buildTrackBCommands(configName?: string, model?: string): string;
+export function buildTrackBCommands(
+  configName?: string,
+  model?: string,
+  framework?: string,
+): string;

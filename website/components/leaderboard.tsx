@@ -171,18 +171,18 @@ export function Leaderboard() {
       </TabsContent>
       <TabsContent value="b" className="tab-content">
         <div className="panel empty-state">
-          <span className="tag">{copy('模拟预览', 'Simulation preview')}</span>
+          <span className="tag">{copy('开发阶段', 'Development')}</span>
           <h3 style={{ marginTop: 15 }}>
             {copy('Agent 系统榜单', 'Agent system leaderboard')}
           </h3>
           <p>
             {copy(
-              '尚未开展真实测评，暂无排名。',
-              'No live evaluations or rankings yet.',
+              '运行与结果包已开放，正式排名尚未发布。',
+              'Runs and result packages are available; formal rankings are not published yet.',
             )}
           </p>
           <Link href="/evaluate?track=b" className="btn primary">
-            {copy('预览 Track B', 'Preview Track B')} <ArrowUpRight size={16} />
+            {copy('运行 Track B', 'Run Track B')} <ArrowUpRight size={16} />
           </Link>
         </div>
       </TabsContent>

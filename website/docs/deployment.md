@@ -1,6 +1,6 @@
 # 无常驻服务器部署
 
-本方案：官网静态托管，参与者电脑运行评测，维护者审核结果。官网无需数据库或在线评测任务队列。当前代码已包含 Track A 配置生成、教程、全仓库任务计数与主题分布、47-case 主榜 BTS / DRS 切换、结果包校验与审核导入，以及 Track B 模拟。
+本方案：官网静态托管，参与者电脑运行评测，维护者审核结果。官网无需数据库或在线评测任务队列。当前代码已包含 Track A 配置生成、教程、全仓库任务计数与主题分布、主榜 BTS / DRS 切换、结果包校验与审核导入，以及 Track B 的四框架 Docker 配置与本地公开结果包。
 
 ## GitHub Pages
 
@@ -54,7 +54,7 @@ Remove-Item Env:NEXT_PUBLIC_BASE_PATH
 - 参与者按 [结果包教程](../../submissions/README.md) 执行 package / validate，提交 `submissions/entries/<digest>.json`。GitHub 表单可用于交付包与复现信息；表单不会自动认证成绩。
 - 维护者检查材料与发布合约。自动格式检查、人工材料审核、独立复现是不同级别，不以本地文件哈希代替独立验证。
 - 维护者核查后通过 review 命令生成独立审核记录，放入 `submissions/reviews`。完整覆盖且审核摘要匹配的提交，才会在构建时进入正式排名。主实验快照通过 `python scripts/refresh_results.py --runs-root AUTHORIZED_CHECKOUT_PATH --write` 更新；未评分不以 0 分补齐。
-- 将审核后的公开数据更新合并到 `main`，托管平台自动重建。Track B 模拟不会产生提交或榜单记录。
+- 将审核后的公开数据更新合并到 `main`，托管平台自动重建。Track B 公开结果包目前用于材料提交与复核，尚未进入正式榜单。
 
 构建会重新生成 `public/data/corpus.json` 和 `public/data/leaderboard.json`，这两个派生文件不直接提交。CI 负责数据结构与聚合一致性检查，维护者通过仓库审查与合并流程控制审核权限。没有独立复现记录的成绩不标为“独立复现”。网页也不推断参与者本机是否还在执行。
 

@@ -117,10 +117,10 @@ python -m pip install -e .
 python docker/track-b/build.py claude
 Copy-Item configs/track-b/claude-code.example.yaml track-b-config.yaml
 python -m async_rbench.track_b doctor --config track-b-config.yaml
-python -m async_rbench.track_b conformance --config track-b-config.yaml --output artifacts/track-b/conformance
+python -m async_rbench.track_b conformance --config track-b-config.yaml --output artifacts/track-b/conformance --cases secure-release
 ```
 
-Track B provides Linux agent containers for Claude Code, Codex CLI, LangGraph and OpenAI Agents SDK. Configure the selected provider credential; Codex CLI uses the participant's saved ChatGPT login. See the [Track B guide](docs/track-b.md) for paired runs, host execution and custom `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy`, and `LifecycleHooks` implementations.
+Track B provides Linux agent containers for Claude Code, Codex CLI, LangGraph and OpenAI Agents SDK. Configure the selected provider credential; Codex CLI uses the participant's saved ChatGPT login. See the [Track B guide](docs/track-b.md) for paired runs, public result packaging, host execution and custom `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy`, and `LifecycleHooks` implementations.
 
 > [!IMPORTANT]
 > Keep API keys, raw traces, private event truth, and restricted evaluator data local. Public submissions contain only allowlisted aggregate results.
@@ -165,7 +165,7 @@ python -m async_rbench.submissions package `
 python -m async_rbench.submissions check --root .
 ```
 
-Read the [submission and review guide](submissions/README.md), then use the [Track A submission form](https://github.com/pope8zdt/Async-RBench/issues/new?template=benchmark-result.yml). Track B produces development results that remain separate from the Track A leaderboard.
+Read the [submission and review guide](submissions/README.md), then use the [Track A submission form](https://github.com/pope8zdt/Async-RBench/issues/new?template=benchmark-result.yml). Track B uses its own aggregate-only `track_b package` command and [Track B result form](https://github.com/pope8zdt/Async-RBench/issues/new?template=track-b-result.yml); its development results remain separate from the Track A leaderboard.
 
 ## 📁 Repository Structure
 

@@ -117,6 +117,39 @@ def cmd_run(args: argparse.Namespace) -> int:
     return run_eval_cli(argv)
 
 
+def cmd_package(args: argparse.Namespace) -> int:
+    from .submission import package_run
+
+    package = package_run(
+        args.runs, args.manifest, benchmark_commit=args.benchmark_commit,
+    )
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open("x", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(
+            package, ensure_ascii=False, sort_keys=True, indent=2,
+            allow_nan=False,
+        ) + "\n")
+    print(json.dumps({
+        "submissionId": package["submissionId"],
+        "validPairs": package["record"]["validPairs"],
+        "pairedComplete": package["record"]["pairedComplete"],
+        "output": str(output.resolve()),
+    }))
+    return 0
+
+
+def cmd_validate_package(args: argparse.Namespace) -> int:
+    from .submission import load_package
+
+    package = load_package(args.input)
+    print(json.dumps({
+        "submissionId": package["submissionId"],
+        "valid": True,
+    }))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m async_rbench.track_b")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -152,6 +185,17 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--output", required=True)
     run.add_argument("--no-container", action="store_true")
     run.set_defaults(func=cmd_run)
+
+    package = sub.add_parser("package")
+    package.add_argument("--runs", required=True)
+    package.add_argument("--manifest", required=True)
+    package.add_argument("--benchmark-commit", required=True)
+    package.add_argument("--output", required=True)
+    package.set_defaults(func=cmd_package)
+
+    validate_package = sub.add_parser("validate-package")
+    validate_package.add_argument("--input", required=True)
+    validate_package.set_defaults(func=cmd_validate_package)
     return parser
 
 

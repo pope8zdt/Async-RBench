@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { useCopy, usePreferences } from '@/components/preferences';
 import { buildConfig, buildCommands } from '@/lib/config-builder.mjs';
-import { submissionUrl } from '@/lib/repository';
+import { submissionUrl, trackBSubmissionUrl } from '@/lib/repository';
 import {
   TRACK_B_FRAMEWORKS,
   buildTrackBConfig,
@@ -149,6 +149,7 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
   const trackBCommands = buildTrackBCommands(
     'track-b-config.yaml',
     model || 'replace-with-exact-model-id',
+    framework,
   );
 
   const choice = (
@@ -402,11 +403,18 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
               />
             </label>
             <label className="field">
-              <span>{copy('密钥环境变量', 'Credential environment variable')}</span>
+              <span>
+                {copy('密钥环境变量', 'Credential environment variable')}
+              </span>
               <input
-                value={keyEnv}
+                value={framework === 'codex-cli' ? '' : keyEnv}
                 onChange={(event) => setKeyEnv(event.target.value)}
-                placeholder="MODEL_API_KEY"
+                placeholder={
+                  framework === 'codex-cli'
+                    ? copy('使用本机已登录账号', 'Uses local signed-in account')
+                    : 'MODEL_API_KEY'
+                }
+                disabled={framework === 'codex-cli'}
               />
             </label>
             {choice(
@@ -438,8 +446,16 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
               style={{ marginTop: 20 }}
               href="/docs#track-b"
             >
-              {copy('接口说明', 'Interface guide')} <ArrowRight size={14} />
+              {copy('完整教程', 'Full guide')} <ArrowRight size={14} />
             </Link>
+            <a
+              className="text-link"
+              style={{ marginTop: 12 }}
+              href={trackBSubmissionUrl}
+            >
+              {copy('提交结果包', 'Submit result package')}{' '}
+              <ArrowRight size={14} />
+            </a>
           </div>
         </div>
       </TabsContent>

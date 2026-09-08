@@ -163,9 +163,20 @@ python -m async_rbench.track_b run `
   --config track-b-config.yaml `
   --manifest artifacts/track-b/manifest.json `
   --output artifacts/track-b/runs
+
+$benchmarkCommit = git rev-parse HEAD
+python -m async_rbench.track_b package `
+  --runs artifacts/track-b/runs `
+  --manifest artifacts/track-b/manifest.json `
+  --benchmark-commit $benchmarkCommit `
+  --output artifacts/track-b/public-result.json
+python -m async_rbench.track_b validate-package `
+  --input artifacts/track-b/public-result.json
 ```
 
 `run` executes conformance again against the exact config-bound adapter before starting an episode. It never passes `--official-track` and rejects output paths inside formal experiment directories.
+
+`package` verifies every score against the declared manifest, then exports only aggregate metrics, coverage, framework/model identity, component names, immutable runtime identity and content hashes. It excludes case IDs, prompts, traces, task artifacts, credential names and values, and private verifier details. A pair with a protocol, conformance or infrastructure failure remains incomplete and does not contribute to the packaged BTS difference or DRS. `validate-package` checks the strict schema and content digest; it does not authenticate a self-reported score.
 
 ## Implement a custom component
 
