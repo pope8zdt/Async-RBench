@@ -99,9 +99,17 @@ def test_plain_final_answers_keep_compatibility(text: str) -> None:
     assert result.usage == {"input_tokens": 7}
 
 
-def test_blank_protocol_answer_without_actions_is_rejected() -> None:
-    with pytest.raises(ValueError, match="nonempty output_text"):
-        parse_protocol_result('{"output_text":"\\n","actions":[]}', _request())
+def test_blank_protocol_answer_is_preserved_for_scaffold_termination_classification() -> None:
+    result = parse_protocol_result(
+        '{"output_text":"\\n","actions":[]}',
+        _request(),
+        usage={"input_tokens": 11, "output_tokens": 2},
+    )
+
+    assert result.output_text == "\n"
+    assert result.actions == ()
+    assert result.status == "completed"
+    assert result.usage == {"input_tokens": 11, "output_tokens": 2}
 
 
 def test_explicit_nonempty_final_answer_without_actions_is_allowed() -> None:
