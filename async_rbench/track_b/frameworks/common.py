@@ -97,6 +97,10 @@ def parse_protocol_result(
             raise ValueError(f"framework action {index} arguments must be an object")
         actions.append(HarnessAction(kind, arguments))
     output_text = str(payload.get("output_text") or "")
+    # Preserve a syntactically valid empty completion. The frozen scaffold owns
+    # role-specific termination semantics: child -> no_submission, main ->
+    # implicit_stop. Transport and incomplete-turn failures are rejected by
+    # each framework driver before this shared protocol boundary.
     return FrameworkResult(
         output_text=output_text,
         actions=tuple(actions),
