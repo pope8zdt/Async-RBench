@@ -5,7 +5,6 @@
 ### BENCHMARKING CORRECT REPLANNING UNDER ASYNCHRONOUS SUBAGENT INTERRUPTIONS
 
 [![Version](https://img.shields.io/badge/version-11.0.0-111827?style=flat-square)](evaluation_contract.json)
-[![Contract](https://img.shields.io/badge/evaluation-frozen-2563eb?style=flat-square)](PROTOCOL.md)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.11-3776ab?style=flat-square&logo=python&logoColor=white)](pyproject.toml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-d22128?style=flat-square)](LICENSE)
 [![Website](https://img.shields.io/badge/website-live-16a34a?style=flat-square)](https://pope8zdt.github.io/Async-RBench/)
