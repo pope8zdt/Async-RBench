@@ -1,0 +1,16 @@
+track: B
+framework: openai-agents
+model: replace-with-exact-openai-model-id
+credential_env: OPENAI_API_KEY
+runtime:
+  type: docker
+  image: async-rbench-track-b:openai
+  cpus: 0.5
+  memory: 768m
+  timeout_sec: 2400
+limits:
+  max_main_steps: 100
+  max_child_steps: 40
+  max_concurrent_children: 3
+  max_total_child_spawns: 5
+  request_timeout_sec: 600

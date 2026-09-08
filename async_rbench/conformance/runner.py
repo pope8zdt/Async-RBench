@@ -37,6 +37,10 @@ def conformance_adapter_command(
             command += ["--config", str(config_path)]
     elif profile.profile in {"native_agent", "minimal_api", "conformance_mock"}:
         command += ["--workspace-mode", "disabled"]
+    elif profile.profile == "track_b":
+        command += ["--conformance", "--workspace-mode", "disabled"]
+        if config_path is not None and "--config" not in command:
+            command += ["--config", str(config_path)]
     return command
 
 

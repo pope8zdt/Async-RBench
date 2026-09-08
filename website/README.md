@@ -1,8 +1,8 @@
 # Async-RBench website
 
-Static public website; participants execute evaluations on their own computers. Track A provides real configuration generation and main-47 aggregates. Track B remains an explicitly labeled simulation.
+Static public website; participants execute evaluations on their own computers. Track A provides configuration generation and reviewed aggregates. Track B provides Linux-container configurations for four maintained agent frameworks and an aggregate-only local result package.
 
-Pages use concise Chinese/English copy and a persistent light/dark preference. New visitors start in Chinese with their system color scheme. Optional configuration, scoring rules and provenance are available in expandable sections; incomplete coverage and simulation labels stay visible.
+Pages use concise Chinese/English copy and a persistent light/dark preference. New visitors start in Chinese with their system color scheme. Optional configuration, scoring rules and provenance are available in expandable sections; incomplete coverage stays visible.
 
 The leaderboard defaults to a DRS-only view sorted descending. The BTS view shows both component scores and their Async minus Linear difference, sorted by that difference descending. Percentage coverage remains in model details. DRS bars use the 0–100 scale, and BTS difference bars share a symmetric, search-independent scale. Missing either BTS component produces a missing difference, never zero; coverage and review eligibility still control formal ranking.
 

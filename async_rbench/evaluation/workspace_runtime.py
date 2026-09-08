@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from .protocol import canonical_digest
+from .container_policy import container_resource_args
 
 
 class WorkspaceConfig(Protocol):
@@ -219,6 +220,7 @@ class DockerWorkspaceRuntime(WorkspaceRuntime):
                 raise RuntimeError(f"failed to stage event asset {path}: {copied.output[-4000:]}")
 
     async def create_child(self, child_id: str) -> str:
+        resource_args = container_resource_args()
         safe_child = _safe_name(child_id, 12)
         image = f"async_rbench-child-{self.episode_id}-{self.workspace_run_id}-{safe_child}:snapshot"
         container = _safe_name(
@@ -237,7 +239,7 @@ class DockerWorkspaceRuntime(WorkspaceRuntime):
             "docker", "run", "-d", "--name", container,
             "--label", "async_rbench.managed=child",
             "--label", f"async_rbench.workspace_run_id={self.workspace_run_id}",
-            image,
+            *resource_args, image,
             timeout=self.config.child_terminal_timeout_sec,
         )
         if started.exit_code != 0:

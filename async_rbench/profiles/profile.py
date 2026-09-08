@@ -7,8 +7,11 @@ from typing import Any
 import yaml
 
 
-PROFILE_TYPES = ("reference_scaffold_api", "native_agent", "minimal_api", "conformance_mock")
-RUNTIME_MODES = ("api_only", "native_agent", "minimal", "conformance")
+PROFILE_TYPES = (
+    "reference_scaffold_api", "native_agent", "minimal_api", "conformance_mock",
+    "track_b",
+)
+RUNTIME_MODES = ("api_only", "native_agent", "minimal", "conformance", "agent_system")
 CHILD_ISOLATIONS = ("container_clone", "disabled")
 TOKEN_ACCOUNTING = ("provider_usage", "adapter_estimated")
 

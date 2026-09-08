@@ -4,60 +4,65 @@
 
 ### Benchmarking asynchronous result integration and dynamic replanning
 
-[![Version](https://img.shields.io/badge/version-11.0.0-2f6f9f)](https://github.com/pope8zdt/Async-RBench)
-[![Contract](https://img.shields.io/badge/evaluation%20contract-frozen-2f855a)](evaluation_contract.json)
-[![Python](https://img.shields.io/badge/python-3.11%2B-3776ab)](pyproject.toml)
-[![Website](https://github.com/pope8zdt/Async-RBench/actions/workflows/pages.yml/badge.svg)](https://github.com/pope8zdt/Async-RBench/actions/workflows/pages.yml)
+[![Version](https://img.shields.io/badge/version-11.0.0-111827?style=flat-square)](evaluation_contract.json)
+[![Contract](https://img.shields.io/badge/evaluation-frozen-2563eb?style=flat-square)](PROTOCOL.md)
+[![Python](https://img.shields.io/badge/python-%E2%89%A53.11-3776ab?style=flat-square&logo=python&logoColor=white)](pyproject.toml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-d22128?style=flat-square)](LICENSE)
+[![Website](https://img.shields.io/badge/website-live-16a34a?style=flat-square)](https://pope8zdt.github.io/Async-RBench/)
 
-[Website](https://pope8zdt.github.io/Async-RBench/) ·
-[Leaderboard](https://pope8zdt.github.io/Async-RBench/leaderboard/) ·
-[Run the benchmark](https://pope8zdt.github.io/Async-RBench/evaluate/) ·
-[Documentation](https://pope8zdt.github.io/Async-RBench/docs/)
-
-If Async-RBench is useful to your research, consider starring the repository.
+[Website](https://pope8zdt.github.io/Async-RBench/) · [Leaderboard](https://pope8zdt.github.io/Async-RBench/leaderboard/) · [Evaluate](https://pope8zdt.github.io/Async-RBench/evaluate/) · [Tutorial](https://pope8zdt.github.io/Async-RBench/docs/) · [中文运行说明](docs/CASE_RUNBOOK.zh-CN.md)
 
 </div>
 
-## 📣 Latest News
-
-- **September 2026:** The public website, DRS/BTS leaderboard, local-run workflow, and reviewed result submission path are available.
-- **Version 11.0.0:** The evaluation contract is frozen for reproducible Track A experiments.
-
-## 💡 Overview
-
-Async-RBench evaluates whether a main agent can integrate independently completing subagent results and revise its plan when results arrive late, out of order, partially, repeatedly, in conflict, or under failure and resource pressure.
-
-The same task runs in two controlled modes:
-
-- **Linear:** a baseline execution condition.
-- **Async:** concurrent subagent execution with evaluator-controlled event delivery.
-
-The fixed evaluation kernel owns scheduling, event delivery, private truth, workspace isolation, verification, scoring, and aggregation. The evaluated adapter owns the main agent and its child agents. No fixed child-model pool is required.
+Async-RBench measures whether an agent can integrate independently completing subagent results and revise its plan when evidence arrives late, out of order, partially, repeatedly, in conflict, or under failure and resource pressure.
 
 <p align="center">
   <img width="1200" alt="Async-RBench framework: paired runs, asynchronous execution, and BTS/DRS evaluation" src="docs/assets/async-rbench-framework-v11.png" />
 </p>
 
 <p align="center">
-  <a href="docs/assets/async-rbench-framework-v11.png">High-resolution PNG</a> ·
-  <a href="docs/assets/async-rbench-framework-v11.svg">Editable SVG</a> ·
-  <a href="docs/assets/async-rbench-framework-v11.pdf">Vector PDF</a>
+  <a href="docs/assets/async-rbench-framework-v11.png">PNG</a> ·
+  <a href="docs/assets/async-rbench-framework-v11.svg">SVG</a> ·
+  <a href="docs/assets/async-rbench-framework-v11.pdf">PDF</a>
 </p>
 
-## ✨ Benchmark Highlights
+## News
 
-- **201 high-quality tasks** across eight asynchronous event themes.
-- **Paired execution** compares the same registered task under Linear and Async conditions.
-- **Controlled delivery** makes delayed, stale, conflicting, partial, duplicate, failed, and resource-constrained events reproducible.
-- **Independent measurements** separate base-task correctness from dynamic replanning quality.
-- **Local execution** keeps credentials, raw traces, and restricted evaluator materials on the participant's machine.
-- **Static public leaderboard** publishes aggregate results without requiring a hosted evaluation server.
+- **2026-09:** Track B completed a real two-case Codex CLI + Luna validation in isolated Linux containers.
+- **2026-09:** The public website, DRS/BTS leaderboard, local evaluation workflow, and reviewed submission path are live.
+- **v11.0.0:** The Track A evaluation contract is frozen for reproducible comparison.
 
-## 🚀 Quick Start
+## At a glance
 
-### 1. Install
+| Item | Description |
+| --- | --- |
+| Task suite | 201 high-quality tasks across eight asynchronous event themes |
+| Comparison | The same registered task runs in paired **Linear** and **Async** modes |
+| Track A | Fixed reference harness for official leaderboard evaluation |
+| Track B | Claude Code, Codex CLI, LangGraph, OpenAI Agents SDK, or custom harness components |
+| Primary metric | **DRS**, ranked from high to low |
+| Paired task metric | **Async BTS − Linear BTS**, ranked from high to low |
+| Execution | Participant-owned machine; Docker isolates task, child, verifier, and agent runtimes |
 
-Async-RBench requires Windows PowerShell 7, Python 3.11+, Git, and Docker Desktop with the Linux engine.
+The evaluation kernel owns scheduling, event delivery, private truth, workspace isolation, verification, scoring, and aggregation. The evaluated adapter owns the main agent and child agents. A fixed child-model pool is not an experiment condition.
+
+## Reproduce the benchmark
+
+### Environment
+
+The standard API evaluation path does not require a local GPU, CUDA, cuDNN, PyTorch, model weights, or checkpoints.
+
+| Component | Requirement |
+| --- | --- |
+| Host | Windows 10/11 x86-64 with hardware virtualization |
+| Runtime | Python 3.11+, PowerShell 7, Git |
+| Isolation | Docker Desktop using the Linux container engine |
+| Storage | At least 30 GB free for images and run artifacts |
+| Model | An API or Track B framework compatible with the selected configuration |
+
+The latest container validation used an Intel Core i7-12700K, 32 GB RAM, Windows 11 x64, Python 3.12.13, PowerShell 7.6.5, Docker Desktop 4.73.1, and Docker Engine 29.4.3. Its local GPU was not used. See the [validation report](docs/reports/2026-09-07-track-b-linux-containers.md) for the container resource limits and immutable runtime IDs.
+
+### Install
 
 ```powershell
 git clone https://github.com/pope8zdt/Async-RBench.git
@@ -70,26 +75,25 @@ python -m pip install -e ".[test]"
 docker info
 ```
 
-### 2. Validate the checkout
+Dependencies and optional Track B integrations are declared in [`pyproject.toml`](pyproject.toml). Framework-specific container versions are pinned under [`docker/track-b/`](docker/track-b/).
 
-Validation does not call a model.
+### Validate without calling a model
 
 ```powershell
 python -m async_rbench.cli validate --release
+python -m async_rbench.main_experiment check --root .
 python -m pytest -q
 ```
 
-### 3. Configure a model
+A clean checkout may skip author-local tests whose large upstream source trees are intentionally excluded from Git. It should not report failed or errored tests.
 
-Use the [configuration generator](https://pope8zdt.github.io/Async-RBench/evaluate/) or add an OpenAI-compatible model profile under `configs/model-profiles/`. Store only the API-key environment-variable name in the profile; keep the key outside the repository.
+### Run one paired task
+
+Create a local model configuration with the [configuration generator](https://pope8zdt.github.io/Async-RBench/evaluate/) or copy [`configs/model-profiles/reference-config.example.yaml`](configs/model-profiles/reference-config.example.yaml) outside version control. Store only the credential variable name in the file.
 
 ```powershell
 $env:MODEL_API_KEY = Read-Host "API key" -MaskInput
-```
 
-### 4. Run one paired task
-
-```powershell
 .\run_case.ps1 `
   -Instance "secure-release::seed-1" `
   -Config "model-config.yaml" `
@@ -97,7 +101,9 @@ $env:MODEL_API_KEY = Read-Host "API key" -MaskInput
   -Seed 2026
 ```
 
-### 5. Run the main experiment
+This calibration case is the minimal end-to-end example. It creates an immutable manifest, runs both modes, scores the episodes, aggregates the pair, and writes a run audit under `artifacts/experiments/`.
+
+### Reproduce the main experiment
 
 ```powershell
 .\run_main.ps1 `
@@ -106,40 +112,61 @@ $env:MODEL_API_KEY = Read-Host "API key" -MaskInput
   -Seed 2026
 ```
 
-The launcher validates the repository and provider, creates an immutable manifest, runs paired Linear/Async episodes, aggregates scores, and audits the result. See the [main experiment policy](experiments/formal-47/README.md) for selection, coverage, and resume rules.
+The [main experiment manifest](experiments/formal-47/README.md) freezes task membership, eight-theme distribution, three paired repetitions, seed `2026`, and contract digests. Historical calibration/development/test labels remain provenance metadata and do not select the current leaderboard cohort. Results are averaged within each task, then within each theme, then equally across themes. A seed fixes benchmark-controlled choices; remote model responses may still vary.
 
-> [!IMPORTANT]
-> Keep API keys, raw traces, private event truth, and restricted evaluator data local. Public submissions contain only allowlisted aggregate results.
+Retain the repository commit, exact model ID, reasoning settings, configuration digest, manifest, `results.json`, and `run-audit.json` with every result. Resume only from the original experiment directory and manifest.
 
-## 📊 Leaderboard and Metrics
+## Tasks and data
 
-The [public leaderboard](https://pope8zdt.github.io/Async-RBench/leaderboard/) opens with the primary DRS view. The BTS view compares task correctness between execution modes.
+Registered tasks are listed in [`cases/registry.json`](cases/registry.json). Each case separates participant-visible instructions and artifacts from evaluator-only event truth, validators, and hidden checks. [`event_taxonomy.json`](event_taxonomy.json) defines the eight public themes, while [`evaluation_contract.json`](evaluation_contract.json) freezes scoring and eligibility.
 
-| View | Measurement | Ranking |
-| --- | --- | --- |
-| **DRS** | Dynamic replanning quality under asynchronous events | Higher is better |
-| **Linear BTS** | Base-task correctness in Linear mode | Component score |
-| **Async BTS** | Base-task correctness in Async mode | Component score |
-| **BTS difference** | Async BTS − Linear BTS | Higher is better |
+Standard registered bundles under `cases/` are self-contained for containerized evaluation. Cases derived from external datasets record source identifiers and hashes in `public_case.yaml` and may include a case-level provenance record such as [`PROVENANCE.md`](cases/gaia2-stockholm-moveout/PROVENANCE.md). Large upstream repositories, VM assets, and source caches are excluded from Git and remain subject to their original licenses and access terms; [`upstream/README.md`](upstream/README.md) lists the supported acquisition paths.
 
-Scores use a 0–100 scale. Complete reviewed results receive formal ranks; incomplete coverage remains visibly provisional. Coverage, execution status, materials review, and independent reproduction are separate facts.
+Private evaluator material stays outside participant workspaces and public submissions. The calibration command above provides a complete runnable path without downloading optional upstream corpora.
 
-The eight event themes are:
+## Training and checkpoints
 
-1. Delayed authoritative results
-2. Stale and out-of-order results
-3. Partial-to-complete results
-4. Conflicting valid results
-5. Duplicate and replayed completions
-6. Child-task failures
-7. Scope and dependency changes
-8. Stragglers under resource pressure
+Async-RBench evaluates existing models and agent systems; it does not train a model. There is no optimizer, loss function, training split, or benchmark checkpoint to reproduce. Model weights are supplied by the selected API provider or agent framework, and the exact model/configuration identity is recorded with the run.
 
-Metric definitions and per-episode scoring are frozen in [`evaluation_contract.json`](evaluation_contract.json). Theme definitions live in [`event_taxonomy.json`](event_taxonomy.json).
+## Track B: agent systems
 
-## 📤 Submit Results
+Track B runs complete agent frameworks through the same benchmark-owned public protocol. Build one maintained Linux runtime and verify it before launching paid episodes:
 
-Participants execute the benchmark locally and submit a public aggregate package. Packaging excludes credentials, provider configuration, raw case scores, traces, and local paths.
+```powershell
+python -m pip install -e .
+python docker/track-b/build.py codex
+Copy-Item configs/track-b/codex-cli.example.yaml track-b-config.yaml
+python -m async_rbench.track_b doctor --config track-b-config.yaml
+python -m async_rbench.track_b conformance --config track-b-config.yaml --output artifacts/track-b/conformance --cases secure-release
+```
+
+Maintained integrations include Claude Code, Codex CLI, LangGraph, and OpenAI Agents SDK. Custom packages may implement `ModelBackend`, `ContextBuilder`, `DelegationPolicy`, `AgentPolicy`, and `LifecycleHooks`. The evaluator still owns execution modes, event schedules, isolated task containers, private verification, scoring, and aggregation.
+
+Read the [Track B guide](docs/track-b.md) for authentication, paired runs, custom component loading, result packaging, and the two-case live validation.
+
+## Results and metrics
+
+The [public leaderboard](https://pope8zdt.github.io/Async-RBench/leaderboard/) opens with DRS, the primary dynamic-replanning metric. The BTS view shows both paired task scores and ranks by **Async BTS − Linear BTS**. Higher values rank higher in both views.
+
+| Output | Meaning |
+| --- | --- |
+| DRS | Dynamic replanning quality under asynchronous events |
+| Linear BTS | Base-task correctness in Linear mode |
+| Async BTS | Base-task correctness in Async mode |
+| BTS difference | Async BTS minus Linear BTS |
+
+Scores use a 0–100 scale. Complete reviewed results receive formal ranks; incomplete coverage remains provisional. Coverage, execution status, materials review, and independent reproduction are recorded separately.
+
+Published evidence:
+
+- [Track A leaderboard](https://pope8zdt.github.io/Async-RBench/leaderboard/)
+- [Track B Codex CLI + Luna live validation](docs/reports/2026-09-07-track-b-linux-containers.md)
+- [Frozen evaluation protocol](PROTOCOL.md)
+- [Result and termination contract](docs/async-rbench-result-contract-and-termination.md)
+
+## Submit results
+
+Runs stay on the participant's machine. The packaging command exports only allowlisted aggregate fields and excludes credentials, provider configuration, raw case scores, traces, and local paths.
 
 ```powershell
 $benchmarkCommit = git rev-parse HEAD
@@ -151,42 +178,44 @@ python -m async_rbench.submissions package `
 python -m async_rbench.submissions check --root .
 ```
 
-Read the [submission and review guide](submissions/README.md), then use the [Track A submission form](https://github.com/pope8zdt/Async-RBench/issues/new?template=benchmark-result.yml). Track B is currently a simulation preview and does not produce real scores or leaderboard entries.
+Read the [submission and review guide](submissions/README.md), then open the [Track A result form](https://github.com/pope8zdt/Async-RBench/issues/new?template=benchmark-result.yml). Track B uses `track_b package` and the separate [Track B result form](https://github.com/pope8zdt/Async-RBench/issues/new?template=track-b-result.yml).
 
-## 📁 Repository Structure
+## Repository map
 
 ```text
 Async-RBench/
-├── async_rbench/          # Kernel, runtime, scoring, and aggregation
+├── async_rbench/          # Kernel, runtime, scoring, aggregation, Track B API
 ├── adapters/              # Executable adapter entry points
-├── cases/                 # Registered benchmark tasks
+├── cases/                 # Registered public/private task bundles
 ├── configs/               # Model profiles and runtime configuration
-├── experiments/           # Versioned experiment definitions
+├── experiments/           # Frozen experiment definitions
 ├── schemas/               # Machine-readable contracts
-├── submissions/           # Aggregate result packages and reviews
+├── submissions/           # Aggregate packages and review records
 ├── website/               # Static public website
-├── docs/                  # Protocol and operator documentation
-├── run_case.ps1           # Single-task paired launcher
+├── docs/                  # Protocols, runbooks, and validation reports
+├── run_case.ps1           # One-task paired launcher
 └── run_main.ps1           # Main experiment launcher
 ```
 
-Generated experiments belong under `artifacts/experiments/` and remain outside version control.
+Generated runs belong under `artifacts/experiments/` and remain outside version control.
 
-## 📚 Documentation
+## Documentation
 
-- [Website tutorial](https://pope8zdt.github.io/Async-RBench/docs/)
 - [Chinese operator runbook](docs/CASE_RUNBOOK.zh-CN.md)
 - [Evaluation protocol](PROTOCOL.md)
 - [Adapter protocol](ADAPTER_PROTOCOL.md)
 - [Kernel contract](docs/kernel-contract.md)
-- [Adapter contract](docs/adapter-contract.md)
-- [Result and termination contract](docs/async-rbench-result-contract-and-termination.md)
 - [Evaluation tracks](docs/evaluation-tracks.md)
+- [Track B agent systems](docs/track-b.md)
 - [Submission and review guide](submissions/README.md)
 
-## 🥰 Citation
+## License
 
-If you use Async-RBench in your research, please cite the repository and the exact release used for evaluation:
+Async-RBench source code and original documentation are released under the [Apache License 2.0](LICENSE). Third-party datasets, tasks, repositories, VM assets, and model/framework dependencies retain their own licenses and access terms; review the relevant case provenance before redistribution.
+
+## Citation
+
+If you use Async-RBench in research, cite the repository and the exact release evaluated:
 
 ```bibtex
 @software{async_rbench_2026,
@@ -198,6 +227,6 @@ If you use Async-RBench in your research, please cite the repository and the exa
 }
 ```
 
-## 📧 Contact
+## Maintainer and contact
 
-Use [GitHub Issues](https://github.com/pope8zdt/Async-RBench/issues) for questions, bug reports, and result-submission support.
+Maintained by [@pope8zdt](https://github.com/pope8zdt). Use [GitHub Issues](https://github.com/pope8zdt/Async-RBench/issues) for questions, bug reports, reproducibility reports, and result-submission support.

@@ -1,0 +1,52 @@
+name: Track B evaluation materials
+description: Submit a participant-run Agent system result for maintainer review.
+title: '[Track B result] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Attach only the aggregate-only package produced by the Track B package command.
+        Keep credentials, raw traces, task artifacts and private verifier material local.
+        Track B packages are development results and do not create a formal leaderboard rank.
+  - type: input
+    id: framework
+    attributes:
+      label: Agent framework and version
+      placeholder: Codex CLI 0.153.4
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model and exact version
+    validations:
+      required: true
+  - type: input
+    id: benchmark-version
+    attributes:
+      label: Benchmark tag and commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: public-package
+    attributes:
+      label: Validated public result package
+      description: Attach public-result.json or link to it. Include the submissionId printed by validate-package.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Runtime and reproduction notes
+      description: State the runtime image ID, selected component interfaces, coverage, conformance result and any failures.
+    validations:
+      required: true
+  - type: checkboxes
+    id: acknowledgement
+    attributes:
+      label: Submission acknowledgement
+      options:
+        - label: I understand this is a development Track B result and does not create a formal leaderboard rank.
+          required: true
+        - label: I checked that the attached material contains no credentials, raw traces, task artifacts or private verifier data.
+          required: true

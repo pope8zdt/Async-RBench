@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowRight, Check, Copy, Download } from 'lucide-react';
@@ -13,7 +13,12 @@ import {
 } from '@/components/ui/select';
 import { useCopy, usePreferences } from '@/components/preferences';
 import { buildConfig, buildCommands } from '@/lib/config-builder.mjs';
-import { submissionUrl } from '@/lib/repository';
+import { submissionUrl, trackBSubmissionUrl } from '@/lib/repository';
+import {
+  TRACK_B_FRAMEWORKS,
+  buildTrackBConfig,
+  buildTrackBCommands,
+} from '@/lib/track-b.mjs';
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(
@@ -86,13 +91,6 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
   const [saved, setSaved] = useState(false);
   const [framework, setFramework] = useState('claude-code');
   const [component, setComponent] = useState('default');
-  const [simStep, setSimStep] = useState(-1);
-
-  useEffect(() => {
-    if (simStep < 0 || simStep >= 3) return;
-    const timer = setTimeout(() => setSimStep((s) => s + 1), 900);
-    return () => clearTimeout(timer);
-  }, [simStep]);
 
   const config = useMemo(() => {
     const options = {
@@ -138,6 +136,21 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
     scope === 'formal' ? 3 : Number(repetitions),
     locale,
   );
+  const trackBConfig = useMemo(
+    () =>
+      buildTrackBConfig({
+        framework,
+        model: model || 'replace-with-exact-model-id',
+        credentialEnv: keyEnv,
+        component,
+      }),
+    [framework, model, keyEnv, component],
+  );
+  const trackBCommands = buildTrackBCommands(
+    'track-b-config.yaml',
+    model || 'replace-with-exact-model-id',
+    framework,
+  );
 
   const choice = (
     label: string,
@@ -177,7 +190,6 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
       value={track}
       onValueChange={(v) => {
         setTrack(String(v));
-        setSimStep(-1);
       }}
     >
       <TabsList className="tab-list">
@@ -185,7 +197,7 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
           Track A · {copy('模型 API', 'Model API')}
         </TabsTrigger>
         <TabsTrigger value="b" className="tab-trigger">
-          Track B · {copy('模拟预览', 'Simulation')}
+          Track B · {copy('Agent 系统', 'Agent systems')}
         </TabsTrigger>
       </TabsList>
       <TabsContent value="a">
@@ -367,10 +379,10 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
         </div>
       </TabsContent>
       <TabsContent value="b">
-        <div className="note amber">
+        <div className="note">
           {copy(
-            '模拟预览：不调用模型、不生成真实结果，不具备上榜资格。',
-            'Simulation only: no model calls, real results or leaderboard eligibility.',
+            '在本机运行完整 Agent 系统；Track B 结果与 Track A 榜单分开。',
+            'Run a complete agent system locally. Track B results remain separate from the Track A leaderboard.',
           )}
         </div>
         <div className="evaluation-grid">
@@ -379,86 +391,71 @@ function EvaluationWorkspace({ initialTrack }: { initialTrack: string }) {
             {choice(
               copy('框架', 'Framework'),
               framework,
-              (v) => {
-                setFramework(v);
-                setSimStep(-1);
-              },
-              [
-                [
-                  'claude-code',
-                  copy('Claude Code · 计划中', 'Claude Code · Planned'),
-                ],
-                [
-                  'langgraph',
-                  copy('LangGraph · 计划中', 'LangGraph · Planned'),
-                ],
-                [
-                  'custom',
-                  copy('自定义 Agent · 预览', 'Custom agent · Preview'),
-                ],
-              ],
+              setFramework,
+              TRACK_B_FRAMEWORKS.map(({ id, label }) => [id, label]),
             )}
+            <label className="field">
+              <span>{copy('模型 ID', 'Model ID')}</span>
+              <input
+                value={model}
+                onChange={(event) => setModel(event.target.value)}
+                placeholder="exact-model-id"
+              />
+            </label>
+            <label className="field">
+              <span>
+                {copy('密钥环境变量', 'Credential environment variable')}
+              </span>
+              <input
+                value={framework === 'codex-cli' ? '' : keyEnv}
+                onChange={(event) => setKeyEnv(event.target.value)}
+                placeholder={
+                  framework === 'codex-cli'
+                    ? copy('使用本机已登录账号', 'Uses local signed-in account')
+                    : 'MODEL_API_KEY'
+                }
+                disabled={framework === 'codex-cli'}
+              />
+            </label>
             {choice(
               copy('策略组件', 'Policy component'),
               component,
-              (v) => {
-                setComponent(v);
-                setSimStep(-1);
-              },
+              setComponent,
               [
                 ['default', copy('框架默认策略', 'Framework default')],
                 ['context', 'ContextBuilder'],
                 ['delegation', 'DelegationPolicy'],
                 ['policy', 'AgentPolicy'],
+                ['backend', 'ModelBackend'],
+                ['hooks', 'LifecycleHooks'],
               ],
             )}
             <button
               className="btn primary"
               style={{ marginTop: 20 }}
-              disabled={simStep >= 0 && simStep < 3}
-              onClick={() => setSimStep(0)}
+              onClick={() => download('track-b-config.yaml', trackBConfig)}
             >
-              {simStep === 3
-                ? copy('重新模拟', 'Simulate again')
-                : copy('开始模拟', 'Start simulation')}
+              <Download size={15} /> {copy('下载配置', 'Download config')}
             </button>
           </div>
           <div className="panel">
-            <h3>{copy('模拟流程', 'Simulation workflow')}</h3>
-            <div className="sim-steps" aria-live="polite">
-              {[
-                copy('读取框架配置', 'Read framework configuration'),
-                copy('模拟协议检查', 'Simulate protocol checks'),
-                copy(
-                  '模拟 Linear / Async 创建',
-                  'Simulate Linear / Async setup',
-                ),
-                copy(
-                  '模拟完成 · 无真实结果',
-                  'Simulation complete · No real results',
-                ),
-              ].map((step, i) => (
-                <div
-                  key={i}
-                  className={'sim-step ' + (simStep >= i ? 'done' : 'muted')}
-                >
-                  <span className="mono">
-                    {simStep > i || simStep === 3
-                      ? '✓'
-                      : String(i + 1).padStart(2, '0')}
-                  </span>
-                  {step}
-                  {simStep === i && i < 3 ? ' …' : ''}
-                </div>
-              ))}
-            </div>
+            <h3>{copy('本地运行', 'Run locally')}</h3>
+            <CodeBlock title="POWERSHELL 7" text={trackBCommands} />
             <Link
               className="text-link"
               style={{ marginTop: 20 }}
               href="/docs#track-b"
             >
-              {copy('接口说明', 'Interface guide')} <ArrowRight size={14} />
+              {copy('完整教程', 'Full guide')} <ArrowRight size={14} />
             </Link>
+            <a
+              className="text-link"
+              style={{ marginTop: 12 }}
+              href={trackBSubmissionUrl}
+            >
+              {copy('提交结果包', 'Submit result package')}{' '}
+              <ArrowRight size={14} />
+            </a>
           </div>
         </div>
       </TabsContent>

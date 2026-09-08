@@ -17,6 +17,7 @@ from typing import Any, Awaitable, Callable, Sequence
 import yaml
 
 from .guidance import render_guidance
+from .container_policy import container_resource_args, participant_image_override
 from .protocol import (
     CAPABILITY_REQUEST, CAPABILITY_RESPONSE, ProtocolError, TraceRecorder,
     canonical_digest, validate_adapter_event,
@@ -200,7 +201,12 @@ def _prepare_container(
     root: Path, case_id: str, instance_id: str, episode_id: str, build: bool,
     workspace_run_id: str,
     case_dir_override: Path | None = None,
+    *, adapter_profile: str | None = None, official_track: bool = False,
 ) -> tuple[str, str, str]:
+    resource_args = container_resource_args()
+    image_override = participant_image_override(
+        case_id, instance_id, adapter_profile=adapter_profile, official_track=official_track,
+    )
     case_dir = (
         case_dir_override.resolve()
         if case_dir_override is not None
@@ -208,19 +214,19 @@ def _prepare_container(
     )
     task = case_dir / "task"
     image_component = re.sub(r"[^a-z0-9_.-]+", "-", f"{case_id}-{instance_id}".lower())
-    image = f"async_rbench-eval-{image_component}:locked"
+    image = image_override or f"async_rbench-eval-{image_component}:locked"
     episode_component = "".join(
         ch for ch in episode_id.lower() if ch.isalnum() or ch in "-_"
     )[:40].rstrip("-_")
     container = f"dtb2-{episode_component}-{workspace_run_id}"
-    if build:
+    if build and image_override is None:
         _docker("build", "-t", image, str(task))
     # A crashed/interrupted run may leave only this deterministic episode
     # container behind. Removing that exact name makes --resume reliable.
     _docker("rm", "-f", container, check=False)
     _docker(
         "run", "-d", "--name", container,
-        "--label", "async_rbench.managed=participant", image,
+        "--label", "async_rbench.managed=participant", *resource_args, image,
     )
     image_id = _docker("image", "inspect", "--format", "{{.Id}}", image).stdout.strip()
     return image, container, image_id
@@ -234,6 +240,7 @@ def _source_digest(root: Path) -> str:
     return tree_sha256([
         root / "async_rbench" / "evaluation",
         root / "async_rbench" / "profiles",
+        root / "async_rbench" / "track_b",
         root / "async_rbench" / "conformance",
         root / "async_rbench" / "private_eval.py",
         root / "adapters",
@@ -1207,6 +1214,7 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         _, container, image_id = _prepare_container(
             root, config.case_id, config.instance_id, config.episode_id,
             config.build_image, workspace_run_id, config.case_dir_override,
+            adapter_profile=config.adapter_profile, official_track=config.official_track,
         )
         audit_participant_container(container)
         _progress(config, "prepare", f"participant container ready and clean: {container}")
