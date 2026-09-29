@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 from pathlib import Path
-import inspect
 
 from types import SimpleNamespace
 
 from async_rbench import docker_case
-from async_rbench import cli
 from async_rbench.docker_case import _project, cleanup_instance
 
 
@@ -65,15 +63,3 @@ def test_cleanup_instance_does_not_mask_docker_unavailable(tmp_path: Path, monke
 
     monkeypatch.setattr(docker_case, "_compose", unavailable)
     cleanup_instance("case-a", tmp_path / "instance")
-
-
-def test_quality_orchestrators_have_outer_compose_cleanup() -> None:
-    # Verifier normally performs the down itself. These outer finally blocks
-    # cover interruption/failure after Oracle has succeeded but before the
-    # verifier process can start.
-    declared = inspect.getsource(cli._execute_declared_quality_variants)
-    candidate = inspect.getsource(cli.cmd_candidate_quality_preflight)
-    assert declared.count("finally:\n            cleanup_instance(case_id, instance)") == 2
-    assert candidate.count(
-        "finally:\n            cleanup_instance(args.candidate, instance)"
-    ) == 2

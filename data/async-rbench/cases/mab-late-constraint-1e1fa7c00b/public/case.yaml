@@ -1,0 +1,136 @@
+format_version: 2
+case_id: mab-late-constraint-1e1fa7c00b
+title: 'Terminal-Bench LoRA: reject late base predictions after merged inference'
+source_tasks:
+- benchmark: terminal-bench
+  id: hf-lora-adapter
+  source_sha256: f0e8a4e52fd64cf1d142685e7532940c23896db8961460bd08f7b41f5742390e
+  evidence_notes: Structure-derived editorial reimplementation of the official task;
+    see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: base_cache
+  path: /app/model_cache/xlm-roberta-base
+- id: merged_model
+  path: /app/merged_model
+- id: detection_results
+  path: /app/detection_results.json
+- id: base_diagnostic_results
+  path: /app/output_data/base_diagnostic_results.json
+- id: late_base_report
+  path: /app/output_data/late_base_report.json
+- id: supersession_manifest
+  path: /app/output_data/supersession_manifest.json
+milestones:
+- id: prepare_base
+  depends_on: []
+- id: merge_and_infer
+  depends_on:
+  - prepare_base
+- id: reconcile_late_base
+  depends_on:
+  - merge_and_infer
+public_checks: []
+workstreams:
+- id: base_preparation
+  task: Report configured-base revision, label count, and artifact digests.
+  expected_output: Bound revision-1 base cache.
+  priority: high
+  targets:
+  - base_cache
+  allowed_files:
+  - /app/task_file/runtime_logits.json
+  required_files:
+  - /app/task_file/runtime_logits.json
+  required_evidence_fields:
+  - revision
+  - num_labels
+  - base_digest
+  - tokenizer_digest
+  evidence_schema:
+    revision:
+      type: integer
+    num_labels:
+      type: integer
+    base_digest: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    tokenizer_digest: *id001
+  public_result_contract:
+    kind: payload_only
+- id: merged_inference
+  task: Report merged revision, adapter identity, prediction count, and results digest.
+  expected_output: Authoritative revision-2 inference.
+  priority: high
+  targets:
+  - merged_model
+  - detection_results
+  allowed_files:
+  - /app/task_file/runtime_logits.json
+  required_files:
+  - /app/task_file/runtime_logits.json
+  required_evidence_fields:
+  - revision
+  - adapter
+  - prediction_count
+  - results_digest
+  evidence_schema:
+    revision:
+      type: integer
+    adapter:
+      type: string
+    prediction_count:
+      type: integer
+    results_digest: *id001
+  public_result_contract:
+    kind: payload_only
+- id: late_base_diagnostic
+  task: Report the delayed base diagnostic with revision provenance.
+  expected_output: Valid but superseded revision-1 report.
+  priority: high
+  targets:
+  - late_base_report
+  - supersession_manifest
+  allowed_files:
+  - /app/task_file/runtime_logits.json
+  required_files:
+  - /app/task_file/runtime_logits.json
+  required_evidence_fields:
+  - revision
+  - delivered_after_revision
+  - results_digest
+  - receipt_digest
+  evidence_schema:
+    revision:
+      type: integer
+    delivered_after_revision:
+      type: integer
+    results_digest: *id001
+    receipt_digest: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Inspect final artifacts and report authority, result count, and manifest digest.
+  expected_output: Byte-bound model closure.
+  priority: high
+  targets:
+  - base_cache
+  - merged_model
+  - detection_results
+  - supersession_manifest
+  allowed_files:
+  - /app/task_file/runtime_logits.json
+  required_files:
+  - /app/task_file/runtime_logits.json
+  required_evidence_fields:
+  - authoritative_revision
+  - result_count
+  - manifest_digest
+  evidence_schema:
+    authoritative_revision:
+      type: integer
+    result_count:
+      type: integer
+    manifest_digest: *id001
+  public_result_contract:
+    kind: payload_only

@@ -1,0 +1,143 @@
+format_version: 2
+case_id: mab-dependency-unblock-0daa930906
+title: 'GAIA2 Shopping: prioritize stock event over recipient straggler'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_yoh9br
+  source_sha256: 848df1243c6b3639299995f448b777d674fe147304f57e0ac54b998147ecb041
+  evidence_notes: Structure-derived editorial reimplementation of the official GAIA2
+    scenario; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: recipient_lookup_receipt
+  path: /app/output_data/recipient_lookup_receipt.json
+- id: shopping_final
+  path: /app/output_data/shopping_final.json
+- id: messaging_final
+  path: /app/output_data/messaging_final.json
+- id: user_notifications
+  path: /app/output_data/user_notifications.json
+- id: resource_decision_manifest
+  path: /app/output_data/resource_decision_manifest.json
+milestones:
+- id: monitor_and_resolve
+  depends_on: []
+- id: triage_on_stock
+  depends_on:
+  - monitor_and_resolve
+- id: purchase_message_confirm
+  depends_on:
+  - triage_on_stock
+public_checks: []
+workstreams:
+- id: recipient_lookup_checkpoint
+  task: Report resolver status, checkpoint_sec, projected_finish_sec, and source_sha256.
+  expected_output: Evidence that the resolver will miss the deadline.
+  priority: high
+  targets:
+  - recipient_lookup_receipt
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - status
+  - checkpoint_sec
+  - projected_finish_sec
+  - source_sha256
+  evidence_schema:
+    status:
+      type: string
+    checkpoint_sec:
+      type: integer
+    projected_finish_sec:
+      type: integer
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: stock_monitor
+  task: Report item_id, available, observed_at_sec, deadline_sec, source_sha256, and
+    receipt_sha256.
+  expected_output: Authoritative stock availability result.
+  priority: high
+  targets:
+  - shopping_final
+  - resource_decision_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - item_id
+  - available
+  - observed_at_sec
+  - deadline_sec
+  - source_sha256
+  - receipt_sha256
+  evidence_schema:
+    item_id:
+      type: string
+    available:
+      type: boolean
+    observed_at_sec:
+      type: integer
+    deadline_sec:
+      type: integer
+    source_sha256: *id001
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: direct_recipient_fallback
+  task: Report route, recipient_id, duration_sec, and source_sha256.
+  expected_output: Bounded direct Chats recipient resolution.
+  priority: high
+  targets:
+  - messaging_final
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - route
+  - recipient_id
+  - duration_sec
+  - source_sha256
+  evidence_schema:
+    route:
+      type: string
+    recipient_id:
+      type: string
+    duration_sec:
+      type: integer
+    source_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Inspect outputs and report shopping_sha256, messaging_sha256, notifications_sha256,
+    and purchase_sec.
+  expected_output: Byte-bound closure report.
+  priority: high
+  targets:
+  - shopping_final
+  - messaging_final
+  - user_notifications
+  - resource_decision_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - shopping_sha256
+  - messaging_sha256
+  - notifications_sha256
+  - purchase_sec
+  evidence_schema:
+    shopping_sha256: *id001
+    messaging_sha256: *id001
+    notifications_sha256: *id001
+    purchase_sec:
+      type: integer
+  public_result_contract:
+    kind: payload_only

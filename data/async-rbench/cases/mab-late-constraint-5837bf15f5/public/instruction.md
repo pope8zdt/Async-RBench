@@ -1,0 +1,5 @@
+Book a premium cab for me and the attendees listed in the staff meeting scheduled for this morning and have it pick us up 30 minutes before the meeting is supposed to start. It should pick us up from my hotel in 1235 Broadway Avenue, New York, NY 10001 and drop us off at the Restaurant in 678 Times Square, New York, NY 10036. Let me know the names of the attendees (excluding myself). If the cab is delayed at all, text the attendees individually on Messages (if they don't use the app, text them on Chats) to let them know there's an issue with the cab. If the cab is delayed more than 15 minutes, just cancel the ride. Then email Jamila Patel to ask them about borrowing her private driver this morning for the staff meeting and CC the attendees. Then send them follow-up texts on the app you texted them on about the delayed cab explaining that I'm trying to find a solution.
+
+ASYNC-RBENCH EXTENSION
+Independently produced evidence may arrive after provisional work. Consume only evidence that matches the pinned source_task_id and source_sha256 in /app/task_file/source_task.json, preserve unaffected work, and reverify the final result.
+

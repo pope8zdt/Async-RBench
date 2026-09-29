@@ -1,0 +1,139 @@
+format_version: 2
+case_id: mab-conflicting-specialist-results-5f19377089
+title: 'Terminal-Bench deterministic tarball: arbitrate mixed-content classifiers'
+source_tasks:
+- benchmark: terminal-bench
+  id: deterministic-tarball
+  source_sha256: 1d14ad4b722978776e8538ac47ceeededcdfd14fdeabb39bb7bc022e04c06279
+  evidence_notes: Structure-derived compact source tree grounded in the authoritative
+    Terminal-Bench task; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: source_manifest
+  path: /app/task_file/source_manifest.json
+- id: content_authority
+  path: /app/task_file/content_authority.json
+- id: name_mime_report
+  path: /app/output_data/name_mime_report.json
+- id: byte_inspection_report
+  path: /app/output_data/byte_inspection_report.json
+- id: build_script
+  path: /app/output_data/build.sh
+- id: release_archive
+  path: /app/output_data/release.tar.zst
+- id: reconciliation_report
+  path: /app/output_data/reconciliation_report.json
+- id: verification_report
+  path: /app/output_data/verification_report.json
+- id: decision_manifest
+  path: /app/output_data/decision_manifest.json
+milestones:
+- id: collect_classifiers
+  depends_on: []
+- id: arbitrate_content
+  depends_on:
+  - collect_classifiers
+- id: build_and_verify
+  depends_on:
+  - arbitrate_content
+public_checks: []
+workstreams:
+- id: name_mime_classifier
+  task: Report file, recommendation with complete source evidence.
+  expected_output: Validated evidence for the assigned workstream.
+  priority: high
+  targets:
+  - name_mime_report
+  allowed_files:
+  - /app/task_file/source_manifest.json
+  - /app/task_file/content_authority.json
+  - /app/task_file/src
+  required_files:
+  - /app/task_file/source_manifest.json
+  required_evidence_fields:
+  - file
+  - recommendation
+  evidence_schema:
+    file:
+      type: string
+    recommendation:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: byte_inspector
+  task: Report file, recommendation, source_sha256 with complete source evidence.
+  expected_output: Validated evidence for the assigned workstream.
+  priority: high
+  targets:
+  - byte_inspection_report
+  allowed_files:
+  - /app/task_file/source_manifest.json
+  - /app/task_file/content_authority.json
+  - /app/task_file/src
+  required_files:
+  - /app/task_file/source_manifest.json
+  required_evidence_fields:
+  - file
+  - recommendation
+  - source_sha256
+  evidence_schema:
+    file:
+      type: string
+    recommendation:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: content_arbitrator
+  task: Report rule, decision, receipt_sha256 with complete source evidence.
+  expected_output: Validated evidence for the assigned workstream.
+  priority: high
+  targets:
+  - content_authority
+  - reconciliation_report
+  allowed_files:
+  - /app/task_file/source_manifest.json
+  - /app/task_file/content_authority.json
+  - /app/task_file/src
+  required_files:
+  - /app/task_file/source_manifest.json
+  required_evidence_fields:
+  - rule
+  - decision
+  - receipt_sha256
+  evidence_schema:
+    rule:
+      type: string
+    decision:
+      type: string
+    receipt_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report repeated_build_equal, manifest_sha256 with complete source evidence.
+  expected_output: Validated evidence for the assigned workstream.
+  priority: high
+  targets:
+  - verification_report
+  - decision_manifest
+  allowed_files:
+  - /app/task_file/source_manifest.json
+  - /app/task_file/content_authority.json
+  - /app/task_file/src
+  required_files:
+  - /app/task_file/source_manifest.json
+  required_evidence_fields:
+  - repeated_build_equal
+  - manifest_sha256
+  evidence_schema:
+    repeated_build_equal:
+      type: boolean
+    manifest_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only

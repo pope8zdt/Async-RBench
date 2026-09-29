@@ -1,0 +1,159 @@
+format_version: 2
+case_id: mab-dependency-unblock-1c96d4414d
+title: 'GAIA2 Axel coffee: reject a late Friday booking receipt'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_4o5b3h
+  source_sha256: 626c9e72ede1a3bdf90db77ab97f12687d5f07d904af5f0cd7396ba0f3503911
+  evidence_notes: Structure-derived editorial reimplementation of the official GAIA2
+    scenario; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: late_initial_receipt
+  path: /app/output_data/late_initial_receipt.json
+- id: calendar_final
+  path: /app/output_data/calendar_final.json
+- id: messages_final
+  path: /app/output_data/messages_final.json
+- id: cab_final
+  path: /app/output_data/cab_final.json
+- id: supersession_manifest
+  path: /app/output_data/supersession_manifest.json
+milestones:
+- id: initial_booking
+  depends_on: []
+- id: consume_axel_response
+  depends_on:
+  - initial_booking
+- id: reject_late_receipt
+  depends_on:
+  - consume_axel_response
+public_checks: []
+workstreams:
+- id: late_booking_receipt
+  task: Report operation_bundle_id, captured_revision, calendar_event_id, cab_ride_id
+    and source_sha256.
+  expected_output: The delayed revision-1 Friday booking receipt.
+  priority: high
+  targets:
+  - late_initial_receipt
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - operation_bundle_id
+  - captured_revision
+  - calendar_event_id
+  - cab_ride_id
+  - source_sha256
+  evidence_schema:
+    operation_bundle_id:
+      type: string
+    captured_revision:
+      type: integer
+    calendar_event_id:
+      type: string
+    cab_ride_id:
+      type: string
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: response_monitor
+  task: Report reply_id, authority_revision, disposition, selected_slot, source_sha256
+    and receipt_sha256.
+  expected_output: Axel’s authoritative unavailability reply and earliest offered
+    slot.
+  priority: high
+  targets:
+  - calendar_final
+  - cab_final
+  - supersession_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - reply_id
+  - authority_revision
+  - disposition
+  - selected_slot
+  - source_sha256
+  - receipt_sha256
+  evidence_schema:
+    reply_id:
+      type: string
+    authority_revision:
+      type: integer
+    disposition:
+      type: string
+    selected_slot:
+      type: string
+    source_sha256: *id001
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: booking_reconciler
+  task: Report adopted_revision, rejected_revision, current_event_id, current_ride_id,
+    ignored_invitation_count and source_sha256.
+  expected_output: Revision-aware replacement of the Friday event and cab with Monday
+    state.
+  priority: high
+  targets:
+  - calendar_final
+  - messages_final
+  - cab_final
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - adopted_revision
+  - rejected_revision
+  - current_event_id
+  - current_ride_id
+  - ignored_invitation_count
+  - source_sha256
+  evidence_schema:
+    adopted_revision:
+      type: integer
+    rejected_revision:
+      type: integer
+    current_event_id:
+      type: string
+    current_ride_id:
+      type: string
+    ignored_invitation_count:
+      type: integer
+    source_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Inspect outputs and report calendar_sha256, messages_sha256, cab_sha256 and
+    disposition.
+  expected_output: Byte-bound closure proving the obsolete Friday receipt was rejected.
+  priority: high
+  targets:
+  - calendar_final
+  - messages_final
+  - cab_final
+  - supersession_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - calendar_sha256
+  - messages_sha256
+  - cab_sha256
+  - disposition
+  evidence_schema:
+    calendar_sha256: *id001
+    messages_sha256: *id001
+    cab_sha256: *id001
+    disposition:
+      type: string
+  public_result_contract:
+    kind: payload_only

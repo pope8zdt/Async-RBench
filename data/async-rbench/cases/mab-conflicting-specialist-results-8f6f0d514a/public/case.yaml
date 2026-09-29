@@ -1,0 +1,119 @@
+format_version: 2
+case_id: mab-conflicting-specialist-results-8f6f0d514a
+title: 'GAIA2 Gondola gifts: suppress replayed recipient completion before side effects'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_9s0qxq
+  source_sha256: 8219a109759ae1d4cd8d0d0942118ee140a6e71ee04cc1ccc4207c8e86f4b408
+  evidence_notes: Structure-derived application-state fixture grounded in the official
+    scenario graph; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: task_state
+  path: /app/task_file/task_state.json
+- id: recipient_replay
+  path: /app/task_file/recipient_replay.json
+- id: selection_report
+  path: /app/output_data/selection_report.json
+- id: cart
+  path: /app/output_data/cart.json
+- id: messages
+  path: /app/output_data/messages.json
+- id: replay_receipt
+  path: /app/output_data/replay_receipt.json
+- id: action_ledger
+  path: /app/output_data/action_ledger.json
+- id: purchase_manifest
+  path: /app/output_data/purchase_manifest.json
+milestones:
+- id: enumerate_and_select
+  depends_on: []
+- id: purchase_and_message
+  depends_on:
+  - enumerate_and_select
+- id: deduplicate_and_close
+  depends_on:
+  - purchase_and_message
+public_checks: []
+workstreams:
+- id: recipient_enumerator
+  task: Report partition_id, eligible_people, content_sha256 from the disclosed application
+    state.
+  expected_output: Validated task evidence for the assigned workstream.
+  priority: high
+  targets:
+  - selection_report
+  - recipient_replay
+  allowed_files:
+  - /app/task_file/task_state.json
+  - /app/task_file/recipient_replay.json
+  required_files:
+  - /app/task_file/task_state.json
+  required_evidence_fields:
+  - partition_id
+  - eligible_people
+  - content_sha256
+  evidence_schema:
+    partition_id:
+      type: string
+    eligible_people:
+      type: array
+    content_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: product_selector
+  task: Report selected_sku, price, tie_break from the disclosed application state.
+  expected_output: Validated task evidence for the assigned workstream.
+  priority: high
+  targets:
+  - selection_report
+  - cart
+  allowed_files:
+  - /app/task_file/task_state.json
+  - /app/task_file/recipient_replay.json
+  required_files:
+  - /app/task_file/task_state.json
+  required_evidence_fields:
+  - selected_sku
+  - price
+  - tie_break
+  evidence_schema:
+    selected_sku:
+      type: string
+    price:
+      type: number
+    tie_break:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: side_effect_validator
+  task: Report checkout_count, message_count, manifest_sha256 from the disclosed application
+    state.
+  expected_output: Validated task evidence for the assigned workstream.
+  priority: high
+  targets:
+  - cart
+  - messages
+  - action_ledger
+  - purchase_manifest
+  allowed_files:
+  - /app/task_file/task_state.json
+  - /app/task_file/recipient_replay.json
+  required_files:
+  - /app/task_file/task_state.json
+  required_evidence_fields:
+  - checkout_count
+  - message_count
+  - manifest_sha256
+  evidence_schema:
+    checkout_count:
+      type: integer
+    message_count:
+      type: integer
+    manifest_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only

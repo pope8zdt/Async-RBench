@@ -14,7 +14,7 @@ send_seed: true
 # Role-separated provider bindings (spec §8). The main agent and the fixed
 # child pool resolve provider fields from these mappings; any key omitted from
 # a role mapping falls back to the legacy top-level single-provider field above.
-# The official Track A profile (deepseek-v4-pro.yaml) declares both explicitly;
+# Paper-comparable profiles declare both roles explicitly;
 # set child_pool_id to one stable id shared across every compared main model.
 main_provider:
   backend: openai_compatible

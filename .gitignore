@@ -1,46 +1,31 @@
-# Generated benchmark outputs and local workspaces
-/.generated/
-/.method-smoke/
-/.reference-scaffold-smoke/
+# Generated outputs and local workspaces
 /artifacts/
 /experiment/
 /outputs/
 /tmp/
 /.tmp-*/
+/.superpowers/
 
-# Case-production work is not part of the registered benchmark release
-/candidate_cases/
-/candidate_instances/
-/paper/
-/实验设计结果示例.html
-/cases/**/review_evidence/
-
-# Upstream repositories and large source caches are optional provenance/native
-# inputs. The registered case bundles under cases/ are self-contained.
+# Upstream source trees are optional provenance inputs; case bundles are self-contained
 /upstream/*
 !/upstream/README.md
 
-# Python environments, packages, and caches
+# Python
 /.venv*/
-/*.egg-info/
+*.egg-info/
 **/__pycache__/
 /.pytest_cache/
 *.pyc
 /dist/
 /build/
 
-# Local editor/agent/browser state
-/.codex-*/
-/.codex-work/
-/.claude/
-/.codex/
-/.cursor/
+# Editor and OS state
 /.idea/
 /.vscode/
 .DS_Store
 Thumbs.db
 
-# Local model configuration and credentials
+# Credentials — never commit
 /configs/local/
 apikey.txt
 .env
@@ -51,5 +36,8 @@ apikey.txt
 *.p12
 *.pfx
 
-# Logs are generated evidence and belong under an ignored artifacts directory
+# Logs are generated evidence
 *.log
+.migration-staging/
+migration-plan.json.tmp
+migration-report.json.tmp

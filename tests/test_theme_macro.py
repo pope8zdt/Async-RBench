@@ -131,8 +131,10 @@ def test_headline_exposes_bts_and_drs_as_separate_primary_metrics() -> None:
     assert summary["observed_async_dynamic_replanning_score"] == pytest.approx(0.3)
     assert summary["async_dynamic_replanning_score"] == pytest.approx(0.3)
     # The headline must not designate an old blended metric as primary.
+    assert summary["batched_task_success"] == pytest.approx(0.9)
+    assert summary["async_task_success"] == pytest.approx(0.65)
     assert summary["primary_metric"] == [
-        "linear_base_task_score", "async_base_task_score", "async_dynamic_replanning_score",
+        "batched_task_success", "async_task_success", "async_dynamic_replanning_score",
     ]
     for legacy in ("dynamic_control_score", "dt_score", "dynamic_success_rate",
                    "critical_dynamic_success_rate"):
@@ -154,3 +156,15 @@ def test_bts_and_drs_are_independent_headlines() -> None:
     # The legacy blended async measure is still surfaced as legacy, never as BTS.
     assert summary["async_test_point_pass_rate"] == 1.0
     assert summary["theme_async_drs_scores"]["unassigned"] == 0.1
+
+
+def test_paper_reports_three_repetition_level_scenario_means_and_sample_sd() -> None:
+    records = []
+    for repeat, drs in enumerate((0.2, 0.4, 0.6)):
+        for case_id in ("c1", "c2"):
+            records.append(_rec(case_id, "async", drs, base_task=1.0, drs=drs, repeat=repeat))
+    summary = aggregate_reports(records, bootstrap_iterations=5)["development_summary"]
+    stats = summary["theme_async_drs_repetition_stats"]["unassigned"]
+    assert stats["repetition_means"] == [0.2, 0.4, 0.6]
+    assert stats["mean"] == pytest.approx(0.4)
+    assert stats["sample_sd"] == pytest.approx(0.2)

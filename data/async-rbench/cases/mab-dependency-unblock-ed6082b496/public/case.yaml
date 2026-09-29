@@ -1,0 +1,166 @@
+format_version: 2
+case_id: mab-dependency-unblock-ed6082b496
+title: 'Terminal-Bench Vim macros: validate candidate and cancel optimization straggler'
+source_tasks:
+- benchmark: terminal-bench
+  id: large-scale-text-editing
+  source_sha256: 2746a16369b28b2e368ca168bc85222811cbe570f3b315f1b1c432afad07ddc8
+  evidence_notes: Structure-derived editorial reimplementation of the official task;
+    see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: source_input
+  path: /app/task_file/input.csv
+- id: source_expected
+  path: /app/task_file/expected.csv
+- id: apply_macros
+  path: /app/apply_macros.vim
+- id: input
+  path: /app/input.csv
+- id: script_audit
+  path: /app/output_data/script_audit.json
+- id: straggler_receipt
+  path: /app/output_data/straggler_receipt.json
+- id: validation_report
+  path: /app/output_data/validation_report.json
+- id: resource_manifest
+  path: /app/output_data/resource_manifest.json
+milestones:
+- id: observe_candidates
+  depends_on: []
+- id: triage_budget
+  depends_on:
+  - observe_candidates
+- id: validate_and_close
+  depends_on:
+  - triage_budget
+public_checks: []
+workstreams:
+- id: optimizer_checkpoint
+  task: Report branch, status, projected_cost, remaining_budget, and source_sha256.
+  expected_output: Evidence that further macro optimization cannot finish inside the
+    remaining budget.
+  priority: high
+  targets:
+  - straggler_receipt
+  allowed_files:
+  - /app/task_file/input.csv
+  - /app/task_file/expected.csv
+  required_files:
+  - /app/task_file/input.csv
+  - /app/task_file/expected.csv
+  required_evidence_fields:
+  - branch
+  - status
+  - projected_cost
+  - remaining_budget
+  - source_sha256
+  evidence_schema:
+    branch:
+      type: string
+    status:
+      type: string
+    projected_cost:
+      type: integer
+    remaining_budget:
+      type: integer
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: candidate_script
+  task: Report candidate_id, macro_count, total_keystrokes, syntax_compliant, and
+    script_sha256.
+  expected_output: A complete candidate Vim macro script.
+  priority: high
+  targets:
+  - apply_macros
+  - script_audit
+  allowed_files:
+  - /app/task_file/input.csv
+  - /app/task_file/expected.csv
+  required_files:
+  - /app/task_file/input.csv
+  - /app/task_file/expected.csv
+  required_evidence_fields:
+  - candidate_id
+  - macro_count
+  - total_keystrokes
+  - syntax_compliant
+  - script_sha256
+  evidence_schema:
+    candidate_id:
+      type: string
+    macro_count:
+      type: integer
+    total_keystrokes:
+      type: integer
+    syntax_compliant:
+      type: boolean
+    script_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: full_file_validator
+  task: Report vim_exit_code, byte_equal, row_count, validation_cost, and script_sha256.
+  expected_output: Independent validation of the candidate on the disclosed representative
+    fixture.
+  priority: high
+  targets:
+  - input
+  - validation_report
+  - resource_manifest
+  allowed_files:
+  - /app/task_file/input.csv
+  - /app/task_file/expected.csv
+  required_files:
+  - /app/task_file/input.csv
+  - /app/task_file/expected.csv
+  required_evidence_fields:
+  - vim_exit_code
+  - byte_equal
+  - row_count
+  - validation_cost
+  - script_sha256
+  evidence_schema:
+    vim_exit_code:
+      type: integer
+    byte_equal:
+      type: boolean
+    row_count:
+      type: integer
+    validation_cost:
+      type: integer
+    script_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report audit_sha256, straggler_sha256, report_sha256, script_sha256, and remaining_budget.
+  expected_output: Byte-bound resource and transformation closure.
+  priority: high
+  targets:
+  - script_audit
+  - straggler_receipt
+  - validation_report
+  - resource_manifest
+  allowed_files:
+  - /app/task_file/input.csv
+  - /app/task_file/expected.csv
+  required_files:
+  - /app/task_file/input.csv
+  - /app/task_file/expected.csv
+  required_evidence_fields:
+  - audit_sha256
+  - straggler_sha256
+  - report_sha256
+  - script_sha256
+  - remaining_budget
+  evidence_schema:
+    audit_sha256: *id001
+    straggler_sha256: *id001
+    report_sha256: *id001
+    script_sha256: *id001
+    remaining_budget:
+      type: integer
+  public_result_contract:
+    kind: payload_only

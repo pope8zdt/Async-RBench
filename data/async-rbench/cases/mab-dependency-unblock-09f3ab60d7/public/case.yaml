@@ -1,0 +1,155 @@
+format_version: 2
+case_id: mab-dependency-unblock-09f3ab60d7
+title: 'Terminal-Bench CoreWars: recover an incomplete opponent batch without losing
+  valid results'
+source_tasks:
+- benchmark: terminal-bench
+  id: winning-avg-corewars
+  source_sha256: f8198a1644547b116b4b67384f6bb6b3a78e85076f8cda20079a77f2f3499242
+  evidence_notes: Structure-derived deterministic battle fixture grounded in the official
+    task; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: my_warrior
+  path: /app/output_data/my_warrior.red
+- id: paper_worker_result
+  path: /app/task_file/paper_worker_result.json
+- id: stone_battle_report
+  path: /app/output_data/battles/stone.json
+- id: vampire_battle_report
+  path: /app/output_data/battles/vampire.json
+- id: paper_battle_report
+  path: /app/output_data/battles/paper.json
+- id: snake_battle_report
+  path: /app/output_data/battles/snake.json
+- id: g2_clear_battle_report
+  path: /app/output_data/battles/g2-clear.json
+- id: recovery_report
+  path: /app/output_data/recovery_report.json
+- id: certification_report
+  path: /app/output_data/certification_report.json
+- id: certification_manifest
+  path: /app/output_data/certification_manifest.json
+- id: opponent_fixtures
+  path: /app/task_file/warriors
+milestones:
+- id: build_and_run_four_batches
+  depends_on: []
+- id: classify_and_recover_paper
+  depends_on:
+  - build_and_run_four_batches
+- id: certify_all_opponents
+  depends_on:
+  - classify_and_recover_paper
+public_checks: []
+workstreams:
+- id: completed_batch_collector
+  task: Report completed_opponents, warrior_sha256 with exact battle-count provenance.
+  expected_output: Validated opponent-batch evidence for the assigned workstream.
+  priority: high
+  targets:
+  - stone_battle_report
+  - vampire_battle_report
+  - snake_battle_report
+  - g2_clear_battle_report
+  allowed_files:
+  - /app/task_file/battle_fixture.json
+  - /app/task_file/paper_worker_result.json
+  required_files:
+  - /app/task_file/battle_fixture.json
+  required_evidence_fields:
+  - completed_opponents
+  - warrior_sha256
+  evidence_schema:
+    completed_opponents:
+      type: array
+    warrior_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: paper_batch_worker
+  task: Report status, battles_completed, required_battles, certifiable, receipt_sha256
+    with exact battle-count provenance.
+  expected_output: Validated opponent-batch evidence for the assigned workstream.
+  priority: high
+  targets:
+  - paper_worker_result
+  allowed_files:
+  - /app/task_file/battle_fixture.json
+  - /app/task_file/paper_worker_result.json
+  required_files:
+  - /app/task_file/battle_fixture.json
+  required_evidence_fields:
+  - status
+  - battles_completed
+  - required_battles
+  - certifiable
+  - receipt_sha256
+  evidence_schema:
+    status:
+      type: string
+    battles_completed:
+      type: integer
+    required_battles:
+      type: integer
+    certifiable:
+      type: boolean
+    receipt_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: paper_recovery_worker
+  task: Report opponent, battles_completed, wins, warrior_sha256 with exact battle-count
+    provenance.
+  expected_output: Validated opponent-batch evidence for the assigned workstream.
+  priority: high
+  targets:
+  - paper_battle_report
+  - recovery_report
+  allowed_files:
+  - /app/task_file/battle_fixture.json
+  - /app/task_file/paper_worker_result.json
+  required_files:
+  - /app/task_file/battle_fixture.json
+  required_evidence_fields:
+  - opponent
+  - battles_completed
+  - wins
+  - warrior_sha256
+  evidence_schema:
+    opponent:
+      type: string
+    battles_completed:
+      type: integer
+    wins:
+      type: integer
+    warrior_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report all_thresholds_met, manifest_sha256 with exact battle-count provenance.
+  expected_output: Validated opponent-batch evidence for the assigned workstream.
+  priority: high
+  targets:
+  - certification_report
+  - certification_manifest
+  allowed_files:
+  - /app/task_file/battle_fixture.json
+  - /app/task_file/paper_worker_result.json
+  required_files:
+  - /app/task_file/battle_fixture.json
+  required_evidence_fields:
+  - all_thresholds_met
+  - manifest_sha256
+  evidence_schema:
+    all_thresholds_met:
+      type: boolean
+    manifest_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only

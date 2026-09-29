@@ -30,7 +30,7 @@ def _read(workspace: Path, name: str) -> dict:
 def test_database017_source_binding_and_state_reconciliation_contract(tmp_path: Path) -> None:
     runtime = _runtime()
     runtime.build(tmp_path)
-    source = json.loads((CASE / "private" / "source_manifests" / "01-native_case.json").read_text(encoding="utf-8"))
+    source = json.loads((CASE / "evaluator" / "source_manifests" / "01-native_case.json").read_text(encoding="utf-8"))
     receipt = _read(tmp_path, "event_receipt.json")
     diagnosis = _read(tmp_path, "database_diagnosis.json")
     closure = _read(tmp_path, "reconciliation_closure.json")

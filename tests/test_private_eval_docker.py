@@ -43,7 +43,7 @@ def test_hidden_verifier_bundle_exists_only_in_private_clone(tmp_path: Path) -> 
             check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         )
         result = run_isolated_verifier(
-            main_container=participant, task_dir=task, episode_id=f"private-test-{suffix}", timeout_sec=30,
+            main_container=participant, verifier_dir=task, episode_id=f"private-test-{suffix}", timeout_sec=30,
         )
         assert result.success
         absent = subprocess.run(

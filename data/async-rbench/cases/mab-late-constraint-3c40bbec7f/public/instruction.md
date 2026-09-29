@@ -1,0 +1,6 @@
+Create a 5-hour event on October 21st 2024 starting at 9 AM titled 'Brand Partnership Meeting'. Set the location as 'Zoom Meeting' and include Luís Pimentel as the attendee. Cancel all other events on that day. Let me know once you have created the event. Don't let me know about anything else.
+If the newly created Brand Partnership Meeting event is cancelled by Luís Pimentel, send him a Messages message asking for the reason for cancellation, and restore all events I cancelled for that day. If the restored events have attendees, send separate emails to each attendee informing them that their cancelled event has been restored to its original time and will start as normal, and express apologies.
+
+ASYNC-RBENCH EXTENSION
+Independently produced evidence may arrive after provisional work. Consume only evidence that matches the pinned source_task_id and source_sha256 in /app/task_file/source_task.json, preserve unaffected work, and reverify the final result.
+

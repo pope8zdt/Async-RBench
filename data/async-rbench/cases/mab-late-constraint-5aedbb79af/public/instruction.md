@@ -1,0 +1,5 @@
+Order a van from my home to 1945 SE Water Ave, Portland, OR 97214, pick up at 11AM tomorrow. Send a Messages message in the Wine, Art and Technology conversation asking for updates about the Wine Ceremony tomorrow and let me know when that's been sent. If any of the participants in that conversation reply with changes about the time, schedule or reschedule the "Wine Ceremony" in my calendar according to changes in specified in the most recent message in that conversation by timestamp. If there are any conflicting events, move those to the next available weekday with the same time of day and with same details and inform the attendees that the event has been rescheduled via a group email. Also adjust the van booking by cancelling the ride then book another one for one hour prior to the event. Tell me about any updates to the event or van booking after you've made the changes.
+
+ASYNC-RBENCH EXTENSION
+Independently produced evidence may arrive after provisional work. Consume only evidence that matches the pinned source_task_id and source_sha256 in /app/task_file/source_task.json, preserve unaffected work, and reverify the final result.
+

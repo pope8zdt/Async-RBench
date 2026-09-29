@@ -1,0 +1,158 @@
+format_version: 2
+case_id: mab-dependency-unblock-0394988930
+title: 'Terminal-Bench ESCI: deduplicate a replayed export shard'
+source_tasks:
+- benchmark: terminal-bench
+  id: add-benchmark-lm-eval-harness
+  upstream_commit: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  upstream_path: private/source
+  source_sha256: 96cdb4a6fbe47e63ba076bf70a759df09454e1d656ce43b2543002de12eea799
+  source_task_definition_sha256: 96cdb4a6fbe47e63ba076bf70a759df09454e1d656ce43b2543002de12eea799
+  source_lock: private/source_lock.json
+  preserved_test: private/source/test_outputs.py
+task_instruction_path: task/task.yaml
+artifacts:
+- id: dataset
+  path: /app/esci.jsonl
+- id: task_config
+  path: /app/escitask/esci.yaml
+- id: shard_receipt
+  path: /app/shards/shard-017.json
+- id: integration_manifest
+  path: /app/integration_manifest.json
+milestones:
+- id: assemble_corpus
+  depends_on: []
+- id: integrate_shard_completion
+  depends_on:
+  - assemble_corpus
+- id: deduplicate_replay
+  depends_on:
+  - integrate_shard_completion
+public_checks: []
+workstreams:
+- id: shard_exporter
+  task: Export shard-017 and report completion_id, shard_id, source_revision, start,
+    stop, row_count, payload_sha256 and receipt_sha256.
+  expected_output: One byte-bound shard completion that may be replayed.
+  priority: high
+  targets:
+  - shard_receipt
+  allowed_files:
+  - /app/task_file/corpus_plan.json
+  required_files:
+  - /app/task_file/corpus_plan.json
+  required_evidence_fields:
+  - completion_id
+  - shard_id
+  - source_revision
+  - start
+  - stop
+  - row_count
+  - payload_sha256
+  - receipt_sha256
+  evidence_schema:
+    completion_id:
+      type: string
+    shard_id:
+      type: string
+    source_revision:
+      type: string
+    start:
+      type: integer
+    stop:
+      type: integer
+    row_count:
+      type: integer
+    payload_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: corpus_assembler
+  task: Report row_count, unique_example_ids, locale, required_fields, choices and
+    plan_sha256.
+  expected_output: Complete nonduplicated Spanish corpus.
+  priority: high
+  targets:
+  - dataset
+  allowed_files:
+  - /app/task_file/corpus_plan.json
+  required_files:
+  - /app/task_file/corpus_plan.json
+  required_evidence_fields:
+  - row_count
+  - unique_example_ids
+  - locale
+  - required_fields
+  - choices
+  - plan_sha256
+  evidence_schema:
+    row_count:
+      type: integer
+    unique_example_ids:
+      type: integer
+    locale:
+      type: string
+    required_fields:
+      type: array
+    choices:
+      type: array
+    plan_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: replay_guard
+  task: Report completion_id, delivery_count, contribution_count, disposition and
+    plan_sha256.
+  expected_output: Replay-safe contribution ledger.
+  priority: high
+  targets:
+  - integration_manifest
+  allowed_files:
+  - /app/task_file/corpus_plan.json
+  required_files:
+  - /app/task_file/corpus_plan.json
+  required_evidence_fields:
+  - completion_id
+  - delivery_count
+  - contribution_count
+  - disposition
+  - plan_sha256
+  evidence_schema:
+    completion_id:
+      type: string
+    delivery_count:
+      type: integer
+    contribution_count:
+      type: integer
+    disposition:
+      type: string
+    plan_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report dataset_sha256, config_sha256, manifest_sha256 and disposition.
+  expected_output: Byte-bound corpus and benchmark closure.
+  priority: high
+  targets:
+  - dataset
+  - task_config
+  - integration_manifest
+  allowed_files:
+  - /app/task_file/corpus_plan.json
+  required_files:
+  - /app/task_file/corpus_plan.json
+  required_evidence_fields:
+  - dataset_sha256
+  - config_sha256
+  - manifest_sha256
+  - disposition
+  evidence_schema:
+    dataset_sha256: *id001
+    config_sha256: *id001
+    manifest_sha256: *id001
+    disposition:
+      type: string
+  public_result_contract:
+    kind: payload_only

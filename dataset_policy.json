@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0",
   "status": "publication_locked",
-  "target_instance_count": 201,
+  "target_instance_count": 200,
   "allowed_instance_count_range": [
-    201,
-    201
+    200,
+    200
   ],
   "counting_unit": "registered_instance",
   "splits": {
-    "calibration": 82,
+    "calibration": 81,
     "development": 30,
     "test": 89
   },
@@ -18,23 +18,23 @@
     "test": "Held out from prompt, adapter, threshold, and verifier development; used for headline results only after the evaluation contract is frozen."
   },
   "primary_event_theme_targets": {
-    "child_failure_or_implicit_error": 6,
-    "conflicting_valid_results": 6,
-    "delayed_authoritative_result": 90,
-    "duplicate_or_replayed_completion": 4,
-    "late_or_out_of_order_superseded_result": 22,
-    "partial_then_complete_result": 24,
-    "straggler_under_resource_pressure": 10,
-    "task_scope_or_dependency_change": 39
+    "child_failure_or_implicit_error": 25,
+    "conflicting_valid_results": 25,
+    "delayed_authoritative_result": 25,
+    "duplicate_or_replayed_completion": 25,
+    "late_or_out_of_order_superseded_result": 25,
+    "partial_then_complete_result": 25,
+    "straggler_under_resource_pressure": 25,
+    "task_scope_or_dependency_change": 25
   },
   "async_scenario_class_targets": {
-    "live_eventful": 39,
-    "resource_eventful": 16,
-    "result_eventful": 146
+    "live_eventful": 26,
+    "resource_eventful": 31,
+    "result_eventful": 143
   },
   "difficulty_targets": {
     "easy": 0,
-    "hard": 97,
+    "hard": 96,
     "medium": 104
   },
   "difficulty_rubric": {
@@ -77,7 +77,9 @@
   "split_freeze": {
     "frozen_at": "2026-09-01",
     "family_count": 200,
-    "instance_count": 201,
+    "instance_count": 200,
+    "deduplicated_at": "2026-09-26",
+    "deduplication_rule": "The duplicate secure-release instance tracebench-git-recovery-late-authority-001 was removed so every registered case family carries exactly one seed instance; the eight primary_event_theme lanes are 25 each.",
     "rule": "Registered cases with any recorded episode/pair evidence under artifacts/ are pinned to calibration and excluded from the held-out test split; 30 untouched cases are the deterministic (sha256-ranked) development buffer; remaining untouched cases form the held-out test split.",
     "leakage_evidence_sources": [
       "tmp/debug_touched_cases.json"

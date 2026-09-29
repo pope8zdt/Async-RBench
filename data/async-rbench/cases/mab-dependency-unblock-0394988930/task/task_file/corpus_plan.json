@@ -1,0 +1,492 @@
+{
+  "task_id": "add-benchmark-lm-eval-harness",
+  "source_revision": "d28711d0da2675d0bb1d56de45ae5df6082438a3",
+  "row_count": 93347,
+  "locale": "es",
+  "required_fields": [
+    "example_id",
+    "query",
+    "esci_label",
+    "product_locale",
+    "product_title"
+  ],
+  "choices": [
+    "E",
+    "S",
+    "C",
+    "I"
+  ],
+  "prompt": "Is the following product title relevant to the query? Query: {{query}} Product Title: {{product_title}}. Respond with one of the following characters: E for Exact, C for Complement, S for Substitute, or I for Irrelevant.",
+  "shards": [
+    {
+      "shard_id": "shard-000",
+      "start": 0,
+      "stop": 1000
+    },
+    {
+      "shard_id": "shard-001",
+      "start": 1000,
+      "stop": 2000
+    },
+    {
+      "shard_id": "shard-002",
+      "start": 2000,
+      "stop": 3000
+    },
+    {
+      "shard_id": "shard-003",
+      "start": 3000,
+      "stop": 4000
+    },
+    {
+      "shard_id": "shard-004",
+      "start": 4000,
+      "stop": 5000
+    },
+    {
+      "shard_id": "shard-005",
+      "start": 5000,
+      "stop": 6000
+    },
+    {
+      "shard_id": "shard-006",
+      "start": 6000,
+      "stop": 7000
+    },
+    {
+      "shard_id": "shard-007",
+      "start": 7000,
+      "stop": 8000
+    },
+    {
+      "shard_id": "shard-008",
+      "start": 8000,
+      "stop": 9000
+    },
+    {
+      "shard_id": "shard-009",
+      "start": 9000,
+      "stop": 10000
+    },
+    {
+      "shard_id": "shard-010",
+      "start": 10000,
+      "stop": 11000
+    },
+    {
+      "shard_id": "shard-011",
+      "start": 11000,
+      "stop": 12000
+    },
+    {
+      "shard_id": "shard-012",
+      "start": 12000,
+      "stop": 13000
+    },
+    {
+      "shard_id": "shard-013",
+      "start": 13000,
+      "stop": 14000
+    },
+    {
+      "shard_id": "shard-014",
+      "start": 14000,
+      "stop": 15000
+    },
+    {
+      "shard_id": "shard-015",
+      "start": 15000,
+      "stop": 16000
+    },
+    {
+      "shard_id": "shard-016",
+      "start": 16000,
+      "stop": 16000
+    },
+    {
+      "shard_id": "shard-017",
+      "start": 16000,
+      "stop": 17200
+    },
+    {
+      "shard_id": "shard-018",
+      "start": 17200,
+      "stop": 19000
+    },
+    {
+      "shard_id": "shard-019",
+      "start": 19000,
+      "stop": 20000
+    },
+    {
+      "shard_id": "shard-020",
+      "start": 20000,
+      "stop": 21000
+    },
+    {
+      "shard_id": "shard-021",
+      "start": 21000,
+      "stop": 22000
+    },
+    {
+      "shard_id": "shard-022",
+      "start": 22000,
+      "stop": 23000
+    },
+    {
+      "shard_id": "shard-023",
+      "start": 23000,
+      "stop": 24000
+    },
+    {
+      "shard_id": "shard-024",
+      "start": 24000,
+      "stop": 25000
+    },
+    {
+      "shard_id": "shard-025",
+      "start": 25000,
+      "stop": 26000
+    },
+    {
+      "shard_id": "shard-026",
+      "start": 26000,
+      "stop": 27000
+    },
+    {
+      "shard_id": "shard-027",
+      "start": 27000,
+      "stop": 28000
+    },
+    {
+      "shard_id": "shard-028",
+      "start": 28000,
+      "stop": 29000
+    },
+    {
+      "shard_id": "shard-029",
+      "start": 29000,
+      "stop": 30000
+    },
+    {
+      "shard_id": "shard-030",
+      "start": 30000,
+      "stop": 31000
+    },
+    {
+      "shard_id": "shard-031",
+      "start": 31000,
+      "stop": 32000
+    },
+    {
+      "shard_id": "shard-032",
+      "start": 32000,
+      "stop": 33000
+    },
+    {
+      "shard_id": "shard-033",
+      "start": 33000,
+      "stop": 34000
+    },
+    {
+      "shard_id": "shard-034",
+      "start": 34000,
+      "stop": 35000
+    },
+    {
+      "shard_id": "shard-035",
+      "start": 35000,
+      "stop": 36000
+    },
+    {
+      "shard_id": "shard-036",
+      "start": 36000,
+      "stop": 37000
+    },
+    {
+      "shard_id": "shard-037",
+      "start": 37000,
+      "stop": 38000
+    },
+    {
+      "shard_id": "shard-038",
+      "start": 38000,
+      "stop": 39000
+    },
+    {
+      "shard_id": "shard-039",
+      "start": 39000,
+      "stop": 40000
+    },
+    {
+      "shard_id": "shard-040",
+      "start": 40000,
+      "stop": 41000
+    },
+    {
+      "shard_id": "shard-041",
+      "start": 41000,
+      "stop": 42000
+    },
+    {
+      "shard_id": "shard-042",
+      "start": 42000,
+      "stop": 43000
+    },
+    {
+      "shard_id": "shard-043",
+      "start": 43000,
+      "stop": 44000
+    },
+    {
+      "shard_id": "shard-044",
+      "start": 44000,
+      "stop": 45000
+    },
+    {
+      "shard_id": "shard-045",
+      "start": 45000,
+      "stop": 46000
+    },
+    {
+      "shard_id": "shard-046",
+      "start": 46000,
+      "stop": 47000
+    },
+    {
+      "shard_id": "shard-047",
+      "start": 47000,
+      "stop": 48000
+    },
+    {
+      "shard_id": "shard-048",
+      "start": 48000,
+      "stop": 49000
+    },
+    {
+      "shard_id": "shard-049",
+      "start": 49000,
+      "stop": 50000
+    },
+    {
+      "shard_id": "shard-050",
+      "start": 50000,
+      "stop": 51000
+    },
+    {
+      "shard_id": "shard-051",
+      "start": 51000,
+      "stop": 52000
+    },
+    {
+      "shard_id": "shard-052",
+      "start": 52000,
+      "stop": 53000
+    },
+    {
+      "shard_id": "shard-053",
+      "start": 53000,
+      "stop": 54000
+    },
+    {
+      "shard_id": "shard-054",
+      "start": 54000,
+      "stop": 55000
+    },
+    {
+      "shard_id": "shard-055",
+      "start": 55000,
+      "stop": 56000
+    },
+    {
+      "shard_id": "shard-056",
+      "start": 56000,
+      "stop": 57000
+    },
+    {
+      "shard_id": "shard-057",
+      "start": 57000,
+      "stop": 58000
+    },
+    {
+      "shard_id": "shard-058",
+      "start": 58000,
+      "stop": 59000
+    },
+    {
+      "shard_id": "shard-059",
+      "start": 59000,
+      "stop": 60000
+    },
+    {
+      "shard_id": "shard-060",
+      "start": 60000,
+      "stop": 61000
+    },
+    {
+      "shard_id": "shard-061",
+      "start": 61000,
+      "stop": 62000
+    },
+    {
+      "shard_id": "shard-062",
+      "start": 62000,
+      "stop": 63000
+    },
+    {
+      "shard_id": "shard-063",
+      "start": 63000,
+      "stop": 64000
+    },
+    {
+      "shard_id": "shard-064",
+      "start": 64000,
+      "stop": 65000
+    },
+    {
+      "shard_id": "shard-065",
+      "start": 65000,
+      "stop": 66000
+    },
+    {
+      "shard_id": "shard-066",
+      "start": 66000,
+      "stop": 67000
+    },
+    {
+      "shard_id": "shard-067",
+      "start": 67000,
+      "stop": 68000
+    },
+    {
+      "shard_id": "shard-068",
+      "start": 68000,
+      "stop": 69000
+    },
+    {
+      "shard_id": "shard-069",
+      "start": 69000,
+      "stop": 70000
+    },
+    {
+      "shard_id": "shard-070",
+      "start": 70000,
+      "stop": 71000
+    },
+    {
+      "shard_id": "shard-071",
+      "start": 71000,
+      "stop": 72000
+    },
+    {
+      "shard_id": "shard-072",
+      "start": 72000,
+      "stop": 73000
+    },
+    {
+      "shard_id": "shard-073",
+      "start": 73000,
+      "stop": 74000
+    },
+    {
+      "shard_id": "shard-074",
+      "start": 74000,
+      "stop": 75000
+    },
+    {
+      "shard_id": "shard-075",
+      "start": 75000,
+      "stop": 76000
+    },
+    {
+      "shard_id": "shard-076",
+      "start": 76000,
+      "stop": 77000
+    },
+    {
+      "shard_id": "shard-077",
+      "start": 77000,
+      "stop": 78000
+    },
+    {
+      "shard_id": "shard-078",
+      "start": 78000,
+      "stop": 79000
+    },
+    {
+      "shard_id": "shard-079",
+      "start": 79000,
+      "stop": 80000
+    },
+    {
+      "shard_id": "shard-080",
+      "start": 80000,
+      "stop": 81000
+    },
+    {
+      "shard_id": "shard-081",
+      "start": 81000,
+      "stop": 82000
+    },
+    {
+      "shard_id": "shard-082",
+      "start": 82000,
+      "stop": 83000
+    },
+    {
+      "shard_id": "shard-083",
+      "start": 83000,
+      "stop": 84000
+    },
+    {
+      "shard_id": "shard-084",
+      "start": 84000,
+      "stop": 85000
+    },
+    {
+      "shard_id": "shard-085",
+      "start": 85000,
+      "stop": 86000
+    },
+    {
+      "shard_id": "shard-086",
+      "start": 86000,
+      "stop": 87000
+    },
+    {
+      "shard_id": "shard-087",
+      "start": 87000,
+      "stop": 88000
+    },
+    {
+      "shard_id": "shard-088",
+      "start": 88000,
+      "stop": 89000
+    },
+    {
+      "shard_id": "shard-089",
+      "start": 89000,
+      "stop": 90000
+    },
+    {
+      "shard_id": "shard-090",
+      "start": 90000,
+      "stop": 91000
+    },
+    {
+      "shard_id": "shard-091",
+      "start": 91000,
+      "stop": 92000
+    },
+    {
+      "shard_id": "shard-092",
+      "start": 92000,
+      "stop": 93000
+    },
+    {
+      "shard_id": "shard-093",
+      "start": 93000,
+      "stop": 93347
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+format_version: 2
+case_id: mab-cross-app-artifact-7bfdfeaa3c
+title: 'GAIA2 Sven properties: integrate the complete match set after a partial result'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_9rpukr
+  upstream_commit: 78ea3bdbdeec2bdcd6afa5420915d8a22f23ed99
+  source_sha256: 99eed1964a5c00df29b708bd402fda33ef4772fc327d30c20282b9ada06c5775
+  evidence_notes: Structure-derived editorial reimplementation of the official GAIA2
+    event graph; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: contact
+  path: /app/output_data/contact.json
+- id: communications
+  path: /app/output_data/communications.json
+- id: saved_properties
+  path: /app/output_data/saved_properties.json
+- id: partial_receipt
+  path: /app/output_data/partial_receipt.json
+- id: completion_manifest
+  path: /app/output_data/completion_manifest.json
+milestones:
+- id: establish_contact_and_request
+  depends_on: []
+- id: retain_partial_matches
+  depends_on:
+  - establish_contact_and_request
+- id: integrate_complete_matches
+  depends_on:
+  - retain_partial_matches
+- id: verify_closure
+  depends_on:
+  - integrate_complete_matches
+public_checks: []
+workstreams:
+- id: partial_property_resolver
+  task: Report completion_id, status, matched_names, matched_ids, unresolved_names
+    and source_sha256.
+  expected_output: Two valid matches with one name unresolved.
+  priority: high
+  targets:
+  - partial_receipt
+  - saved_properties
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - completion_id
+  - status
+  - matched_names
+  - matched_ids
+  - unresolved_names
+  - source_sha256
+  evidence_schema:
+    completion_id:
+      type: string
+    status:
+      type: string
+    matched_names:
+      type: array
+    matched_ids:
+      type: array
+    unresolved_names:
+      type: array
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: complete_property_resolver
+  task: Report completion_id, status, coverage, saved_count, source_sha256 and receipt_sha256.
+  expected_output: All three Sven Stockholm matches.
+  priority: high
+  targets:
+  - saved_properties
+  - completion_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - completion_id
+  - status
+  - coverage
+  - saved_count
+  - source_sha256
+  - receipt_sha256
+  evidence_schema:
+    completion_id:
+      type: string
+    status:
+      type: string
+    coverage:
+      type: array
+    saved_count:
+      type: integer
+    source_sha256: *id001
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: communication_guard
+  task: Report reply_within_deadline, fallback_message_count, ignored_email_ids, notification_count
+    and source_sha256.
+  expected_output: Reply-aware communications without fallback or distractor effects.
+  priority: high
+  targets:
+  - communications
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - reply_within_deadline
+  - fallback_message_count
+  - ignored_email_ids
+  - notification_count
+  - source_sha256
+  evidence_schema:
+    reply_within_deadline:
+      type: boolean
+    fallback_message_count:
+      type: integer
+    ignored_email_ids:
+      type: array
+    notification_count:
+      type: integer
+    source_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report contact_sha256, communications_sha256, saved_sha256, partial_sha256
+    and final_count.
+  expected_output: Byte-bound three-property closure.
+  priority: high
+  targets:
+  - contact
+  - communications
+  - saved_properties
+  - partial_receipt
+  - completion_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - contact_sha256
+  - communications_sha256
+  - saved_sha256
+  - partial_sha256
+  - final_count
+  evidence_schema:
+    contact_sha256: *id001
+    communications_sha256: *id001
+    saved_sha256: *id001
+    partial_sha256: *id001
+    final_count:
+      type: integer
+  public_result_contract:
+    kind: payload_only

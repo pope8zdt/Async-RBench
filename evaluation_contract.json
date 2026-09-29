@@ -6,6 +6,10 @@
     "linear",
     "async"
   ],
+  "execution_mode_labels": {
+    "linear": "Batched",
+    "async": "Async"
+  },
   "case_capability_categories": [
     "late_revision_adoption",
     "stale_result_rejection",
@@ -35,9 +39,9 @@
     "case_family": "case_family is one of the eight primary_event_theme categories and is the headline macro-averaging category.",
     "case_id": "case_id identifies one registered case unit within a case family.",
     "instance_id": "instance_id identifies one immutable registered protocol bundle within a case.",
-    "registry": "Only case/instance pairs explicitly listed in cases/registry.json are official. The registry key case_families is a legacy schema-v2 field whose entries are registered cases, not the eight case families.",
+    "registry": "Only case/instance pairs explicitly listed in data/async-rbench/registry.json are official. The registry key case_families is a legacy schema-v2 field whose entries are registered cases, not the eight case families.",
     "manifest_lock": "Each manifest pins the verifier bundle and complete case bundle digest for every case/instance pair.",
-    "pairing": "Linear and async counterfactual pairs must share case_id, instance_id, repeat, agent seed, evaluator source and case digest.",
+    "pairing": "Batched (internal key: linear) and Async counterfactual pairs must share case_id, instance_id, repeat, agent seed, evaluator source and case digest.",
     "legacy_family_id": "Any legacy artifact field named family_id aliases case_id for backward compatibility and must not be interpreted as case_family."
   },
   "event_capability_separation": {
@@ -52,12 +56,12 @@
     "participant_exposure_failure_is_scored": "Participant-controlled early termination, invalid authority output, rejected completion, or failure to reach the event boundary remains a scored dynamic failure and never shrinks the denominator.",
     "semantic_control_independence": "Semantic outcome anchors are reported as diagnostics; control-flow points are scored from evaluator-observed process evidence without double-penalising semantic failure.",
     "private_truth_is_evaluator_only": "Result roles, staleness, invalidation, hidden checks, and event schedules never enter participant-visible messages or traces.",
-    "dynamic_primary": "Dynamic control is normalized independently over case-specific causal decision groups and is the primary async benchmark metric.",
-    "semantic_secondary": "The unchanged semantic verifier score is reported independently and contributes 20 percent to the secondary DTScore.",
-    "critical_dynamic_gate": "Dynamic success requires every critical dynamic point to pass and Dynamic Control Score >= 0.75."
+    "drs_primary": "Async Dynamic Replanning Score is the equally weighted mean of the applicable ERC process components and event outcome, averaged across target events.",
+    "task_success_independent": "End-to-end task success is reported independently for Batched and Async and is never blended into the DRS headline.",
+    "legacy_dynamic_fields": "Dynamic Control Score, dynamic-success gates, and DTScore are compatibility diagnostics only and are not paper metrics."
   },
   "experiment_integrity": {
-    "official_track": "Track A only",
+    "paper_protocol": "fixed reference harness",
     "harness": "fixed_reference_scaffold_api",
     "backend": "real_api_only",
     "workspace": "isolated_container_clone",
@@ -81,7 +85,7 @@
   "resource_policy": {
     "episode_timeout_sec": 2400,
     "gateway_grace_sec": 15,
-    "termination_semantics": "A model-step horizon produces local_status=step_limit_reached and remains scored. Voluntary early stop also remains scored. The emergency token fuse produces resource_safety_abort and is unscored and leaderboard-ineligible.",
+    "termination_semantics": "A model-step horizon produces local_status=step_limit_reached and remains scored. Voluntary early stop also remains scored. The emergency token fuse produces resource_safety_abort and is unscored and excluded from paper aggregates.",
     "profile_limits": {
       "max_output_tokens": 16384,
       "max_main_steps": 100,
@@ -102,20 +106,23 @@
     }
   },
   "primary_outcomes": {
-    "dynamic_control": "async_dynamic_control_score",
-    "semantic_task": "unchanged_programmatic_semantic_task_score",
-    "dt_score": "0.80_dynamic_control_plus_0.20_semantic_task",
-    "leaderboard": "equal_macro_mean_async_dynamic_control_across_the_eight_case_families_after_within_family_case_balancing_for_official_track_a_only",
-    "linear_semantic_baseline": "macro_mean_linear_semantic_task_score_across_cases",
-    "paired_semantic_drop": "paired_linear_semantic_minus_async_semantic",
-    "capability_breakdown": "macro_mean_async_dynamic_control_across_cases_tagged_with_each_capability"
+    "batched_task_success": "unweighted_mean_of_eight_scenario_means_each_built_from_three_repetition_level_25_task_means",
+    "async_task_success": "unweighted_mean_of_eight_scenario_means_each_built_from_three_repetition_level_25_task_means",
+    "async_dynamic_replanning_score": "unweighted_mean_of_eight_scenario_drs_means_each_built_from_three_repetition_level_25_task_means",
+    "scenario_dispersion": "sample_standard_deviation_of_the_three_repetition_level_scenario_means"
   },
   "primary_metrics": [
-    "linear_base_task_score",
-    "async_base_task_score",
+    "batched_task_success",
+    "async_task_success",
     "async_dynamic_replanning_score"
   ],
+  "metric_scale": {
+    "machine_readable": "normalized_[0,1]",
+    "paper_display": "100_times_machine_value"
+  },
   "legacy_primary_metrics": [
+    "linear_base_task_score",
+    "async_base_task_score",
     "dynamic_control_score",
     "dynamic_success_rate",
     "critical_dynamic_success_rate",
@@ -152,9 +159,11 @@
     "minimum_critical_mutation_kill_rate": 1.0
   },
   "metric_definitions": {
-    "linear_base_task_score": "Primary metric (linear). Equal-vote theme macro over the base_task subset of programmatic checks, computed separately for linear execution mode.",
-    "async_base_task_score": "Primary metric (async). Equal-vote theme macro over the base_task subset of programmatic checks for async execution mode; computed independently of the replanning score.",
-    "async_dynamic_replanning_score": "Primary metric (async). Mean per-event async dynamic replanning score, each equal to 0.5*process_score + 0.5*async_outcome; participant-controlled unreached events contribute zero, while construction, infrastructure, and resource-safety failures remain unscored and excluded.",
+    "batched_task_success": "Primary paper metric. End-to-end task success under Batched delivery (internal execution key: linear). Each repetition averages the 25 tasks in a scenario; scenario means are averaged across three repetitions; the overall score is the unweighted mean of eight scenarios.",
+    "async_task_success": "Primary paper metric. End-to-end task success under Async delivery. Each repetition averages the 25 tasks in a scenario; scenario means are averaged across three repetitions; the overall score is the unweighted mean of eight scenarios.",
+    "async_dynamic_replanning_score": "Primary paper metric (Async only). The machine value for each event equals (process_score + async_outcome) / 2 on [0,1], where process_score is the mean of applicable Change/Preserve/Forbid/Verify components; paper display multiplies it by 100; participant-controlled unreached events contribute zero, while construction, infrastructure, and resource-safety failures remain unscored and excluded.",
+    "linear_base_task_score": "Compatibility key for batched_task_success.",
+    "async_base_task_score": "Compatibility key for async_task_success.",
     "dynamic_control_score": "Legacy primary metric. Equal-mass macro over the case-specific causal decision groups compiled from the task graph and event policy. Lifecycle stages are diagnostic tags, not fixed score mass.",
     "semantic_task_score": "Unchanged weighted result of the frozen programmatic semantic verifier, reported for both execution modes.",
     "dt_score": "Secondary summary equal to 0.80 Dynamic Control Score plus 0.20 Semantic Task Score for async episodes.",
@@ -164,7 +173,7 @@
     "capability_dynamic_control_scores": "Case-macro Dynamic Control Score reported for each declared case capability category.",
     "scenario_construction_rate": "Infrastructure audit that the harness admitted the complete bounded initial wave and established the required linear or async execution topology.",
     "scenario_exposure_complete": "Participant-behaviour diagnostic: whether all case-designed async result roles and any required in-flight opportunity were observed before the participant ended. Incomplete exposure remains scored.",
-    "leaderboard_eligibility": "Only containerized, conformant, API-only runs using the fixed reference harness enter official leaderboard aggregation.",
+    "paper_comparability": "Paper-comparable runs are containerized, conformant, API-only, and use the fixed reference harness.",
     "terminal_taxonomy": "Every spawned child attempt terminates in exactly one mutually exclusive class: gateway_accepted, public_rejection, sealed_pending_verdict, step_limit_reached, resource_safety_abort, no_submission, timeout, crash, cancel, case_contract_failure, infrastructure_failure, in_flight. First-attempt vs retry is an attempt_number facet, never a duplicated set of counters.",
     "gateway_verdict": "Contract acceptance is the gateway verdict: result_delivered marks gateway_accepted whether or not the main agent later consumed the result (consumed_by_main is a separate facet). A public result_rejected (one or more actionable public rejection codes) is public_rejection; a private-only rejection reaching the scorer is a case_contract_failure (benchmark contract error), never a model verdict.",
     "sealed_pending_verdict": "A sealed submission (child_completed) that reached no gateway delivery/rejection before the episode closed. It counts as a sealed submission but carries no gateway verdict, so it is excluded from every acceptance/rejection denominator.",

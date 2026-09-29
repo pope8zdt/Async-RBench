@@ -1,0 +1,151 @@
+format_version: 2
+case_id: mab-dependency-unblock-9739b40e89
+title: 'Terminal-Bench Huarong Dao: validate solution and cancel search straggler'
+source_tasks:
+- benchmark: terminal-bench
+  id: huarong-dao-solver
+  source_sha256: 6ae7219ae479256fc7c90581cf706e9ba70e12e38887d0856d7f5445acd2db4c
+  evidence_notes: Structure-derived editorial reimplementation of the official task;
+    see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: solution
+  path: /app/solution.json
+- id: candidate_path_receipt
+  path: /app/output_data/candidate_path_receipt.json
+- id: straggler_receipt
+  path: /app/output_data/straggler_receipt.json
+- id: validation_report
+  path: /app/output_data/validation_report.json
+- id: resource_manifest
+  path: /app/output_data/resource_manifest.json
+milestones:
+- id: observe_searches
+  depends_on: []
+- id: triage_budget
+  depends_on:
+  - observe_searches
+- id: validate_and_close
+  depends_on:
+  - triage_budget
+public_checks: []
+workstreams:
+- id: alternate_search_checkpoint
+  task: Report branch, status, projected_cost, remaining_budget, and source_sha256.
+  expected_output: Evidence that alternate search cannot finish inside the remaining
+    budget.
+  priority: high
+  targets:
+  - straggler_receipt
+  allowed_files:
+  - /app/task_file/puzzle_state.json
+  required_files:
+  - /app/task_file/puzzle_state.json
+  required_evidence_fields:
+  - branch
+  - status
+  - projected_cost
+  - remaining_budget
+  - source_sha256
+  evidence_schema:
+    branch:
+      type: string
+    status:
+      type: string
+    projected_cost:
+      type: integer
+    remaining_budget:
+      type: integer
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: candidate_search
+  task: Report branch, move_count, goal_reached, source_sha256, and receipt_sha256.
+  expected_output: A complete candidate path from the primary branch.
+  priority: high
+  targets:
+  - candidate_path_receipt
+  - solution
+  allowed_files:
+  - /app/task_file/puzzle_state.json
+  required_files:
+  - /app/task_file/puzzle_state.json
+  required_evidence_fields:
+  - branch
+  - move_count
+  - goal_reached
+  - source_sha256
+  - receipt_sha256
+  evidence_schema:
+    branch:
+      type: string
+    move_count:
+      type: integer
+    goal_reached:
+      type: boolean
+    source_sha256: *id001
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: path_validator
+  task: Report valid, legal_transition_count, goal_reached, validation_cost, and solution_sha256.
+  expected_output: Independent validation of the candidate path.
+  priority: high
+  targets:
+  - solution
+  - validation_report
+  - resource_manifest
+  allowed_files:
+  - /app/task_file/puzzle_state.json
+  required_files:
+  - /app/task_file/puzzle_state.json
+  required_evidence_fields:
+  - valid
+  - legal_transition_count
+  - goal_reached
+  - validation_cost
+  - solution_sha256
+  evidence_schema:
+    valid:
+      type: boolean
+    legal_transition_count:
+      type: integer
+    goal_reached:
+      type: boolean
+    validation_cost:
+      type: integer
+    solution_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report candidate_sha256, straggler_sha256, report_sha256, solution_sha256,
+    and remaining_budget.
+  expected_output: Byte-bound resource and solution closure.
+  priority: high
+  targets:
+  - solution
+  - candidate_path_receipt
+  - straggler_receipt
+  - validation_report
+  - resource_manifest
+  allowed_files:
+  - /app/task_file/puzzle_state.json
+  required_files:
+  - /app/task_file/puzzle_state.json
+  required_evidence_fields:
+  - candidate_sha256
+  - straggler_sha256
+  - report_sha256
+  - solution_sha256
+  - remaining_budget
+  evidence_schema:
+    candidate_sha256: *id001
+    straggler_sha256: *id001
+    report_sha256: *id001
+    solution_sha256: *id001
+    remaining_budget:
+      type: integer
+  public_result_contract:
+    kind: payload_only

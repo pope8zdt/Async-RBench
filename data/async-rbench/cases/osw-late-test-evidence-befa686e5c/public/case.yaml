@@ -1,0 +1,83 @@
+format_version: 2
+case_id: osw-late-test-evidence-befa686e5c
+title: 'terminal-bench source-bound async case: cpp-compatibility'
+task_instruction_path: task/task.yaml
+source_tasks:
+- benchmark: terminal-bench
+  id: cpp-compatibility
+  revision: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  source_sha256: 3f19bd8e37b820578884b42f32a18be976cc481831253f7f94cc4a827879462b
+artifacts:
+- id: provisional_checkpoint
+  path: /app/output_data/provisional_checkpoint.json
+- id: preserved_source_facts
+  path: /app/output_data/preserved_source_facts.json
+- id: final_state
+  path: /app/output_data/decision_manifest.json
+- id: workspace_state
+  path: /app
+milestones:
+- id: inspect_source
+  depends_on: []
+- id: checkpoint_valid_work
+  depends_on:
+  - inspect_source
+- id: consume_async_evidence
+  depends_on:
+  - checkpoint_valid_work
+- id: reverify_and_close
+  depends_on:
+  - consume_async_evidence
+public_checks: []
+workstreams:
+- id: source_worker_01
+  task: For cpp-compatibility, analyze the pinned source objective and identify the affected state.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: normal
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: source_worker_02
+  task: For cpp-compatibility, implement or execute the source task against the disclosed environment.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: high
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only
+implementation: source-rebound

@@ -1,0 +1,40 @@
+instruction: 'I need to book a whole day with my friend who’s a Film Producer in Stockholm.
+  Cancel any appointments I have scheduled for this upcoming Saturday and schedule
+  an event titled “Film Production Day” from 8 AM to 8 PM on that day, adding my friend
+  as an attendee. Send him an email after scheduling the event, with the appointment
+  details. Let me know when you’ve done these things. If my friend says he can’t make
+  it, accept any suggested date and time he proposes and reschedule the “Film Production
+  Day” event to that date and time. If I have any appointments on that proposed day,
+  cancel them all. If he can''t make it and doesn’t suggest another date or time,
+  cancel the Film Production Day you scheduled.
+
+
+  ASYNC-RBENCH EXTENSION
+
+  The deterministic application snapshot is at /app/task_file/environment_state.json.
+  First complete the requested Saturday cleanup, Film Production Day booking, email,
+  and user confirmation. Åke''s authoritative reply then says he cannot attend Saturday
+  and proposes Thursday 17 October 2024 from 08:00 to 20:00. Remove every event on
+  that proposed day and reschedule Film Production Day with Åke.
+
+
+  A calendar worker captured revision 1 of the original Saturday event before the
+  reply, but that snapshot is delivered only after revision 2 has already been applied.
+  Write five artifacts under /app/output_data: initial_snapshot_receipt.json, calendar_final.json,
+  email_final.json, user_notifications.json, and supersession_manifest.json. Reject
+  the late revision-1 snapshot, preserve the revision-2 Thursday event, preserve unrelated
+  calendar and mail state, and bind the exact output hashes in the manifest. Arrival
+  order does not determine authority; event identity and revision do.
+
+  '
+author_name: Async-RBench transformation
+difficulty: medium
+category: personal-assistant
+tags:
+- gaia2
+- calendar
+- late-result
+- revision-authority
+parser_name: pytest
+max_agent_timeout_sec: 1200.0
+max_test_timeout_sec: 300.0

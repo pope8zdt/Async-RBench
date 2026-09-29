@@ -1,0 +1,11 @@
+Schedule a Networking Prep call for next Monday during the earliest available 1-hour block of time between 10 AM and 2 PM, including all attendees from the Networking Event on that Tuesday. Afterward, send individual Messages or Chats messages to each attendee to notify them about the meeting and confirm their availability for the Networking Event on that Tuesday. I prefer Messages, but if they are not on it, use Chats. Let me know once the meeting has been scheduled and the messages have been sent.  If any attendee indicates they cannot attend, replace that attendee with Beshoy Gadallah for both the prep meeting and the Networking Event. If both attendees are unavailable, cancel the Networking Event entirely.
+
+ASYNC-RBENCH EXTENSION
+
+Use /app/task_file/environment_state.json as the source snapshot. The initial Networking Prep Call is Monday 2024-10-21 from 12:00 to 13:00, and the Tuesday Networking Event is 2024-10-22 from 19:00 to 21:00. Preserve their shared initial roster and all unrelated events.
+
+Apply Sunita Bishwakarma's authoritative revision-2 PTO response: replace Sunita with Beshoy Gadallah in both events while retaining Linnea Åström. Preserve exactly one initial availability message to each original attendee, exactly one replacement notification to Beshoy, and one completion notification. Ignore the unrelated social-media-session message.
+
+Write late_snapshot_receipt.json, calendar_final.json, communications_final.json, scope_final.json, and supersession_manifest.json under /app/output_data. Bind the exact calendar, communication, scope, and source receipt bytes with SHA-256 values in the manifest.
+
+A revision-1 roster snapshot containing Linnea and Sunita may arrive after revision 2 is committed. Reject it by event identity and revision. Do not restore Sunita, remove Beshoy, duplicate messages, alter event times, or change unrelated state.

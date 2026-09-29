@@ -1,0 +1,47 @@
+instruction: 'Send a Messages message to Axel in my one-on-one conversation with him
+  asking if he still wants to meet for coffee as I haven''t received a calendar invite
+  from him yet, and invite him to join me on this Friday at 2:00pm at the Coffee Shop
+  located at Kungsholmsgatan 10, 112 27 Stockholm. Set up the event in my calendar
+  for an hour on that day and name it "Coffee Break with Axel". Book a default cab
+  to pick me up 30 minutes ahead of our coffee break from Home to the Coffee Shop.
+  Let me know when you’ve done these 3 things. If Axel is not available, reschedule
+  our Coffee Break for the earliest day that we are both available, rebook the cab
+  ride, and reply to him confirming the new date. If anyone else sends me a Messages
+  message with an invite to an event, please ignore them and I will reply later.
+
+
+  ASYNC-RBENCH EXTENSION
+
+
+  Use /app/task_file/environment_state.json as the source snapshot. Preserve the initial
+  message to Axel and the one initial completion notification. Apply Axel''s revision-2
+  unavailability response: remove the Friday October 18 calendar event, cancel its
+  cab, choose the earliest offered mutually available time on Monday October 21 from
+  14:00 to 15:00, create the replacement event, book one replacement Default cab from
+  Home for 13:30, and send Axel exactly one confirmation of the new date. Keep the
+  two unrelated invitation messages unanswered.
+
+
+  Write late_initial_receipt.json, calendar_final.json, messages_final.json, cab_final.json,
+  and supersession_manifest.json under /app/output_data. Bind the exact calendar,
+  messages, cab, and source late-receipt bytes with SHA-256 values in the manifest.
+
+
+  The revision-1 receipt for the original Friday calendar and cab operations may arrive
+  after Axel''s revision-2 response and the Monday replacements are integrated. Reject
+  that delayed receipt by operation identity and revision. Do not restore the Friday
+  event or cab, duplicate either message to Axel, answer unrelated invitations, or
+  create extra user notifications.'
+author_name: Async-RBench transformation
+difficulty: medium
+category: productivity
+tags:
+- gaia2
+- calendar
+- messages
+- cab
+- late-result
+- supersession
+parser_name: pytest
+max_agent_timeout_sec: 1200.0
+max_test_timeout_sec: 300.0

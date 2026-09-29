@@ -20,9 +20,8 @@ def _record(
         "main_tokens": 100,
         "leaderboard_eligible": official, "conformance_passed": official,
         "capability_categories": ["stale_result_rejection"],
-        # Formal experiment factors now required on every record: the dataset
-        # split and the single model. Official (Track-A) records must sit in the
-        # held-out test split; calibration/development records carry a split too.
+        # Formal experiment factors required on every record: the registry's
+        # organizational split label and the single model identifier.
         "split": "test" if official else "calibration",
         "model": "deepseek-v4-pro",
         "scaffold_and_protocol_sha256": "evaluator-scaffold-v1",
@@ -116,6 +115,19 @@ def test_clean_run_does_not_hard_fail() -> None:
     audit = aggregate_reports(records, bootstrap_iterations=5)["audit"]
     assert audit["hard_fail"] is False
     assert audit["hard_fail_reasons"] == []
+
+
+def test_paper_official_run_accepts_all_three_registry_splits() -> None:
+    records = []
+    for index, split in enumerate(("calibration", "development", "test")):
+        for mode in ("linear", "async"):
+            item = _record(f"case-{index}", mode, 1.0, official=True)
+            item["split"] = split
+            records.append(item)
+    audit = aggregate_reports(records, bootstrap_iterations=5)["audit"]
+    assert audit["official_splits"] == ["calibration", "development", "test"]
+    assert audit["hard_fail"] is False
+    assert "official_split_not_test" not in audit["hard_fail_reasons"]
 
 
 def test_opportunity_counts_are_reported() -> None:

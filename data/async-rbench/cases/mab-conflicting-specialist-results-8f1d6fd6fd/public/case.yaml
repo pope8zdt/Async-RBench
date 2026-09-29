@@ -1,0 +1,141 @@
+format_version: 2
+case_id: mab-conflicting-specialist-results-8f1d6fd6fd
+title: 'SWE-bench Astropy sliced WCS: reconcile valid reports with different spectral
+  units'
+source_tasks:
+- benchmark: swe-bench
+  id: astropy__astropy-13579
+  source_sha256: 6fb42626b30bd7aa75e21d54e79572da0e58ab8672248359bc7c83298e4278d0
+  evidence_notes: Structure-derived numerical reproduction grounded in a real model
+    execution trace; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: wcs_case
+  path: /app/task_file/wcs_case.json
+- id: unit_authority
+  path: /app/task_file/unit_authority.json
+- id: high_level_report
+  path: /app/output_data/high_level_report.json
+- id: low_level_report
+  path: /app/output_data/low_level_report.json
+- id: sliced_wcs_fixed
+  path: /app/output_data/sliced_wcs_fixed.py
+- id: reconciliation_report
+  path: /app/output_data/reconciliation_report.json
+- id: verification_report
+  path: /app/output_data/verification_report.json
+- id: recovery_manifest
+  path: /app/output_data/recovery_manifest.json
+milestones:
+- id: collect_reproductions
+  depends_on: []
+- id: arbitrate_units
+  depends_on:
+  - collect_reproductions
+- id: fix_and_verify
+  depends_on:
+  - arbitrate_units
+public_checks: []
+workstreams:
+- id: high_level_reproducer
+  task: Report input_value, input_unit, normalized_spectral_m, pixel with complete
+    numerical provenance.
+  expected_output: Validated numerical evidence for the assigned workstream.
+  priority: high
+  targets:
+  - high_level_report
+  allowed_files:
+  - /app/task_file/wcs_case.json
+  - /app/task_file/unit_authority.json
+  required_files:
+  - /app/task_file/wcs_case.json
+  required_evidence_fields:
+  - input_value
+  - input_unit
+  - normalized_spectral_m
+  - pixel
+  evidence_schema:
+    input_value:
+      type: number
+    input_unit:
+      type: string
+    normalized_spectral_m:
+      type: number
+    pixel:
+      type: array
+  public_result_contract:
+    kind: payload_only
+- id: low_level_reproducer
+  task: Report input_value, input_unit, pixel with complete numerical provenance.
+  expected_output: Validated numerical evidence for the assigned workstream.
+  priority: high
+  targets:
+  - low_level_report
+  allowed_files:
+  - /app/task_file/wcs_case.json
+  - /app/task_file/unit_authority.json
+  required_files:
+  - /app/task_file/wcs_case.json
+  required_evidence_fields:
+  - input_value
+  - input_unit
+  - pixel
+  evidence_schema:
+    input_value:
+      type: number
+    input_unit:
+      type: string
+    pixel:
+      type: array
+  public_result_contract:
+    kind: payload_only
+- id: unit_arbitrator
+  task: Report spectral_world_axis_unit, angstrom_to_meter, receipt_sha256 with complete
+    numerical provenance.
+  expected_output: Validated numerical evidence for the assigned workstream.
+  priority: high
+  targets:
+  - unit_authority
+  - reconciliation_report
+  allowed_files:
+  - /app/task_file/wcs_case.json
+  - /app/task_file/unit_authority.json
+  required_files:
+  - /app/task_file/wcs_case.json
+  required_evidence_fields:
+  - spectral_world_axis_unit
+  - angstrom_to_meter
+  - receipt_sha256
+  evidence_schema:
+    spectral_world_axis_unit:
+      type: string
+    angstrom_to_meter:
+      type: number
+    receipt_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report equivalent_inputs_match, manifest_sha256 with complete numerical provenance.
+  expected_output: Validated numerical evidence for the assigned workstream.
+  priority: high
+  targets:
+  - verification_report
+  - recovery_manifest
+  allowed_files:
+  - /app/task_file/wcs_case.json
+  - /app/task_file/unit_authority.json
+  required_files:
+  - /app/task_file/wcs_case.json
+  required_evidence_fields:
+  - equivalent_inputs_match
+  - manifest_sha256
+  evidence_schema:
+    equivalent_inputs_match:
+      type: boolean
+    manifest_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only

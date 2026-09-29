@@ -1,0 +1,92 @@
+artifacts:
+- id: provisional_checkpoint
+  path: /app/output_data/provisional_checkpoint.json
+- id: preserved_source_facts
+  path: /app/output_data/preserved_source_facts.json
+- id: final_state
+  path: /app/output_data/decision_manifest.json
+- id: workspace_state
+  path: /app
+case_id: mab-late-constraint-f4ef18dd00
+format_version: 2
+implementation: source-rebound
+milestones:
+- depends_on: []
+  id: inspect_source
+- depends_on:
+  - inspect_source
+  id: resolve_requirement_01
+- depends_on:
+  - resolve_requirement_01
+  id: resolve_requirement_02
+- depends_on:
+  - resolve_requirement_02
+  id: resolve_requirement_03
+- depends_on:
+  - resolve_requirement_03
+  id: resolve_requirement_04
+- depends_on:
+  - resolve_requirement_04
+  id: consume_async_evidence
+- depends_on:
+  - consume_async_evidence
+  id: reverify_and_close
+public_checks: []
+source_tasks:
+- benchmark: terminal-bench
+  id: vertex-solver
+  revision: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  source_sha256: 1636fb9b1adbc77363e6bfed4b008b810c36fc86dc0e7beccad14c38ce9d134a
+task_instruction_path: task/task.yaml
+title: 'terminal-bench source-bound async case: vertex-solver'
+workstreams:
+- id: source_worker_01
+  task: For vertex-solver, analyze the pinned source objective and identify the affected state.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: normal
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: source_worker_02
+  task: For vertex-solver, implement or execute the source task against the disclosed environment.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: high
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only

@@ -1,0 +1,130 @@
+format_version: 2
+case_id: mab-dependency-unblock-18d7c09304
+title: 'Log-summary: independent service counts with completion replay'
+source_tasks:
+- benchmark: terminal-bench
+  id: log-summary
+  upstream_commit: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  upstream_path: private/source/log-summary
+  source_sha256: 351cd6600ec7b796bdec0340005d14119cf0421865366c0739dcf764bb152ce0
+  source_task_definition_sha256: abc161a3dcfdf87f9d21eabbb6665a9e354ebfa66940fbbc65b020f479673e27
+  source_lock: private/terminal_bench_source_lock.json
+  preserved_test: task/tests/upstream_tests/test_outputs.py
+task_instruction_path: task/task.yaml
+artifacts:
+- id: summary
+  path: /app/summary.csv
+- id: aggregation
+  path: /app/aggregation.json
+- id: app1_report
+  path: /app/shards/app1.log.json
+- id: app2_report
+  path: /app/shards/app2.log.json
+- id: db_report
+  path: /app/shards/db.log.json
+milestones:
+- id: count_logs
+  depends_on: []
+- id: write_aggregate
+  depends_on:
+  - count_logs
+public_checks: []
+workstreams:
+- id: app1_counter
+  task: Count lines containing ERROR, WARNING, INFO in /app/logs/app1.log. Save /app/shards/app1.log.json
+    with source_file='app1.log', source_sha256 of the exact log bytes, and counts
+    with the three severity keys. You may run python /app/count_shard.py app1.log.
+    Complete with payload.evidence containing those same fields plus report_path='/app/shards/app1.log.json',
+    and payload.files=['/app/shards/app1.log.json']. Read /async_rbench/event_assets/app1_authority_receipt.json
+    and include its exact SHA-256 as payload.evidence.authority_receipt_sha256.
+  expected_output: One byte-bound per-file count report.
+  priority: normal
+  targets:
+  - app1_report
+  allowed_files:
+  - /app/shards/app1.log.json
+  required_files:
+  - /app/shards/app1.log.json
+  required_evidence_fields:
+  - source_file
+  - source_sha256
+  - counts
+  - report_path
+  - authority_receipt_sha256
+  evidence_schema:
+    source_file:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    counts:
+      type: object
+    report_path:
+      type: string
+    authority_receipt_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: app2_counter
+  task: Count lines containing ERROR, WARNING, INFO in /app/logs/app2.log. Save /app/shards/app2.log.json
+    with source_file='app2.log', source_sha256 of the exact log bytes, and counts
+    with the three severity keys. You may run python /app/count_shard.py app2.log.
+    Complete with payload.evidence containing those same fields plus report_path='/app/shards/app2.log.json',
+    and payload.files=['/app/shards/app2.log.json'].
+  expected_output: One byte-bound per-file count report.
+  priority: normal
+  targets:
+  - app2_report
+  allowed_files:
+  - /app/shards/app2.log.json
+  required_files:
+  - /app/shards/app2.log.json
+  required_evidence_fields:
+  - source_file
+  - source_sha256
+  - counts
+  - report_path
+  evidence_schema:
+    source_file:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    counts:
+      type: object
+    report_path:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: db_counter
+  task: Count lines containing ERROR, WARNING, INFO in /app/logs/db.log. Save /app/shards/db.log.json
+    with source_file='db.log', source_sha256 of the exact log bytes, and counts with
+    the three severity keys. You may run python /app/count_shard.py db.log. Complete
+    with payload.evidence containing those same fields plus report_path='/app/shards/db.log.json',
+    and payload.files=['/app/shards/db.log.json'].
+  expected_output: One byte-bound per-file count report.
+  priority: normal
+  targets:
+  - db_report
+  allowed_files:
+  - /app/shards/db.log.json
+  required_files:
+  - /app/shards/db.log.json
+  required_evidence_fields:
+  - source_file
+  - source_sha256
+  - counts
+  - report_path
+  evidence_schema:
+    source_file:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    counts:
+      type: object
+    report_path:
+      type: string
+  public_result_contract:
+    kind: payload_only

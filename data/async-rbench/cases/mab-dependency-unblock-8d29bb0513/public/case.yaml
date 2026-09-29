@@ -1,0 +1,159 @@
+format_version: 2
+case_id: mab-dependency-unblock-8d29bb0513
+title: 'Terminal-Bench Home Server HTTPS: cancel certificate straggler and validate
+  local fallback'
+source_tasks:
+- benchmark: terminal-bench
+  id: home-server-https
+  source_sha256: b189a7245d3b3cb455ca9942a041f8cfda58ccb92cfdbe1d4a4eee26be620f9a
+  evidence_notes: Structure-derived editorial reimplementation of the official task;
+    see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: certificate
+  path: /root/.acme.sh/homeserver.local_ecc/homeserver.local.cer
+- id: private_key
+  path: /root/.acme.sh/homeserver.local_ecc/homeserver.local.key
+- id: nginx_config
+  path: /etc/nginx/sites-available/default
+- id: page
+  path: /var/www/html/index.html
+- id: ddclient_config
+  path: /etc/ddclient.conf
+- id: certificate_receipt
+  path: /app/output_data/certificate_receipt.json
+- id: straggler_receipt
+  path: /app/output_data/straggler_receipt.json
+- id: tls_validation_report
+  path: /app/output_data/tls_validation_report.json
+- id: service_state
+  path: /app/output_data/service_state.json
+- id: deployment_manifest
+  path: /app/output_data/deployment_manifest.json
+- id: budget_window
+  path: /app/task_file/budget_window.json
+milestones:
+- id: prepare_dns_and_page
+  depends_on: []
+- id: triage_certificate_budget
+  depends_on:
+  - prepare_dns_and_page
+- id: validate_and_close
+  depends_on:
+  - triage_certificate_budget
+public_checks: []
+workstreams:
+- id: certificate_worker_checkpoint
+  task: Report worker status, projected_remaining_sec, remaining_budget_sec, and source_sha256.
+  expected_output: Evidence that delegated certificate provisioning cannot finish
+    within budget.
+  priority: high
+  targets:
+  - straggler_receipt
+  allowed_files:
+  - /app/task_file/server_spec.json
+  required_files:
+  - /app/task_file/server_spec.json
+  required_evidence_fields:
+  - status
+  - projected_remaining_sec
+  - remaining_budget_sec
+  - source_sha256
+  evidence_schema:
+    status:
+      type: string
+    projected_remaining_sec:
+      type: integer
+    remaining_budget_sec:
+      type: integer
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: budget_controller
+  task: Report the authorized local fallback, its cost, validation reserve, and budget
+    receipt hash.
+  expected_output: A bounded decision to cancel the straggler and generate a local
+    self-signed pair.
+  priority: high
+  targets:
+  - certificate_receipt
+  - straggler_receipt
+  allowed_files:
+  - /app/task_file/server_spec.json
+  required_files:
+  - /app/task_file/server_spec.json
+  required_evidence_fields:
+  - decision
+  - local_generation_cost_sec
+  - validation_cost_sec
+  - receipt_sha256
+  evidence_schema:
+    decision:
+      type: string
+    local_generation_cost_sec:
+      type: integer
+    validation_cost_sec:
+      type: integer
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: tls_validator
+  task: Report domain, certificate/key match, nginx validity, DNS validity, HTTPS
+    readiness, validation cost, and certificate hash.
+  expected_output: Independent validation of the local TLS deployment.
+  priority: high
+  targets:
+  - certificate
+  - private_key
+  - nginx_config
+  - tls_validation_report
+  - service_state
+  allowed_files:
+  - /app/task_file/server_spec.json
+  required_files:
+  - /app/task_file/server_spec.json
+  required_evidence_fields:
+  - domain
+  - pair_matches
+  - nginx_valid
+  - dns_valid
+  - https_ready
+  - validation_cost_sec
+  - certificate_sha256
+  evidence_schema:
+    domain:
+      type: string
+    pair_matches:
+      type: boolean
+    nginx_valid:
+      type: boolean
+    dns_valid:
+      type: boolean
+    https_ready:
+      type: boolean
+    validation_cost_sec:
+      type: integer
+    certificate_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report manifest_sha256 and remaining_budget_sec after verifying all byte bindings.
+  expected_output: Byte-bound deployment closure.
+  priority: high
+  targets:
+  - deployment_manifest
+  allowed_files:
+  - /app/task_file/server_spec.json
+  required_files:
+  - /app/task_file/server_spec.json
+  required_evidence_fields:
+  - manifest_sha256
+  - remaining_budget_sec
+  evidence_schema:
+    manifest_sha256: *id001
+    remaining_budget_sec:
+      type: integer
+  public_result_contract:
+    kind: payload_only

@@ -1,0 +1,27 @@
+author_name: Async-RBench transformation
+category: gaia2
+difficulty: medium
+instruction: 'Reschedule the wine tasting event this Friday that is latest in the day for this Saturday
+  at the same time. Email each of the attendees notifying them that I have to reschedule the event for
+  this Saturday at the same time and ask them if that day works for them using the subject "Rescheduling".
+  Let me know once you have finished these actions. If any of the attendees reply and mention that they
+  are unable to attend during that time/date, delete the event and reschedule it for the earliest time
+  and date that works for everyone, including myself (no conflicts in my calendar). After rescheduling
+  the event, reply to the attendees emails informing them of the new time and date.
+
+
+  ASYNC-RBENCH EXTENSION
+
+  Independently produced evidence may arrive after provisional work. Consume only evidence that matches
+  the pinned source_task_id and source_sha256 in /app/task_file/source_task.json, preserve unaffected
+  work, and reverify the final result.
+
+  '
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 1200
+parser_name: pytest
+tags:
+- gaia2
+- late_or_out_of_order_superseded_result
+- source-rebound
+runtime_status: static_source_binding_accepted_runtime_pending

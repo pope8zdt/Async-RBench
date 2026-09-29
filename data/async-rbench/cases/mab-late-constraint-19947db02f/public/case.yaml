@@ -1,0 +1,151 @@
+format_version: 2
+case_id: mab-late-constraint-19947db02f
+title: 'GAIA2 networking roster: reject a late pre-response attendee snapshot'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_5fny1x
+  source_sha256: 067747a0bfa194aaa8402a81dc1058a5c22ef7be0d643e6b279677e33d271d96
+  evidence_notes: Structure-derived editorial reimplementation of the official GAIA2
+    event graph; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: environment_snapshot
+  path: /app/task_file/environment_state.json
+- id: authority_receipt
+  path: /app/task_file/response_authority_receipt.json
+- id: late_snapshot_receipt
+  path: /app/output_data/late_snapshot_receipt.json
+- id: calendar_final
+  path: /app/output_data/calendar_final.json
+- id: communications_final
+  path: /app/output_data/communications_final.json
+- id: scope_final
+  path: /app/output_data/scope_final.json
+- id: supersession_manifest
+  path: /app/output_data/supersession_manifest.json
+milestones:
+- id: capture_initial_roster
+  depends_on: []
+- id: apply_authoritative_replacement
+  depends_on:
+  - capture_initial_roster
+- id: reject_late_snapshot_and_verify
+  depends_on:
+  - apply_authoritative_replacement
+public_checks: []
+workstreams:
+- id: initial_roster_audit
+  task: Report event_ids, initial_attendees, revision, and source_digest.
+  expected_output: Task-specific evidence payload.
+  priority: high
+  targets:
+  - environment_snapshot
+  allowed_files:
+  - /app/task_file/environment_state.json
+  - /app/task_file/response_authority_receipt.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - event_ids
+  - initial_attendees
+  - revision
+  - source_digest
+  evidence_schema:
+    event_ids:
+      type: array
+    initial_attendees:
+      type: array
+    revision:
+      type: integer
+    source_digest:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: availability_monitor
+  task: Report message_id, unavailable_attendee, replacement_attendee, and response_digest.
+  expected_output: Task-specific evidence payload.
+  priority: high
+  targets:
+  - authority_receipt
+  allowed_files:
+  - /app/task_file/environment_state.json
+  - /app/task_file/response_authority_receipt.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - message_id
+  - unavailable_attendee
+  - replacement_attendee
+  - response_digest
+  evidence_schema:
+    message_id:
+      type: string
+    unavailable_attendee:
+      type: string
+    replacement_attendee:
+      type: string
+    response_digest:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: calendar_reconciler
+  task: Report prep_attendees, networking_attendees, retained_times, and calendar_digest.
+  expected_output: Task-specific evidence payload.
+  priority: high
+  targets:
+  - calendar_final
+  - communications_final
+  allowed_files:
+  - /app/task_file/environment_state.json
+  - /app/task_file/response_authority_receipt.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - prep_attendees
+  - networking_attendees
+  - retained_times
+  - calendar_digest
+  evidence_schema:
+    prep_attendees:
+      type: array
+    networking_attendees:
+      type: array
+    retained_times:
+      type: boolean
+    calendar_digest:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report late_disposition, ignored_event_ids, replacement_count, and manifest_digest.
+  expected_output: Task-specific evidence payload.
+  priority: high
+  targets:
+  - late_snapshot_receipt
+  - scope_final
+  - supersession_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  - /app/task_file/response_authority_receipt.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - late_disposition
+  - ignored_event_ids
+  - replacement_count
+  - manifest_digest
+  evidence_schema:
+    late_disposition:
+      type: string
+    ignored_event_ids:
+      type: array
+    replacement_count:
+      type: integer
+    manifest_digest:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only

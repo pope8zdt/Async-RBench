@@ -1,0 +1,148 @@
+format_version: 2
+case_id: mab-late-constraint-0e3747a21b
+title: 'GAIA2 Calendar: reject late initial snapshot after authoritative reschedule'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_5e0gvz
+  source_sha256: 4a28e672fd25c1bb6f13ea74e1716692dd0fa8fa16d845f175883ec469fa3e01
+  evidence_notes: Structure-derived editorial reimplementation of the official GAIA2
+    scenario; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: initial_snapshot_receipt
+  path: /app/output_data/initial_snapshot_receipt.json
+- id: calendar_final
+  path: /app/output_data/calendar_final.json
+- id: email_final
+  path: /app/output_data/email_final.json
+- id: user_notifications
+  path: /app/output_data/user_notifications.json
+- id: supersession_manifest
+  path: /app/output_data/supersession_manifest.json
+milestones:
+- id: initial_schedule
+  depends_on: []
+- id: consume_friend_reply
+  depends_on:
+  - initial_schedule
+- id: reconcile_and_reverify
+  depends_on:
+  - consume_friend_reply
+public_checks: []
+workstreams:
+- id: initial_calendar_snapshot
+  task: Report event_id, captured_revision, captured_start, captured_end, and source_sha256.
+  expected_output: The pre-reply Saturday calendar snapshot.
+  priority: high
+  targets:
+  - initial_snapshot_receipt
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - event_id
+  - captured_revision
+  - captured_start
+  - captured_end
+  - source_sha256
+  evidence_schema:
+    event_id:
+      type: string
+    captured_revision:
+      type: integer
+    captured_start:
+      type: string
+    captured_end:
+      type: string
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: friend_reply_monitor
+  task: Report reply_id, authority_revision, suggested_start, suggested_end, source_sha256,
+    and receipt_sha256.
+  expected_output: Åke’s authoritative replacement-date reply.
+  priority: high
+  targets:
+  - calendar_final
+  - supersession_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - reply_id
+  - authority_revision
+  - suggested_start
+  - suggested_end
+  - source_sha256
+  - receipt_sha256
+  evidence_schema:
+    reply_id:
+      type: string
+    authority_revision:
+      type: integer
+    suggested_start:
+      type: string
+    suggested_end:
+      type: string
+    source_sha256: *id001
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: calendar_reconciler
+  task: Report adopted_revision, superseded_revision, final_event_id, and source_sha256.
+  expected_output: Revision-aware calendar reconciliation that retains Thursday.
+  priority: high
+  targets:
+  - calendar_final
+  - email_final
+  - user_notifications
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - adopted_revision
+  - superseded_revision
+  - final_event_id
+  - source_sha256
+  evidence_schema:
+    adopted_revision:
+      type: integer
+    superseded_revision:
+      type: integer
+    final_event_id:
+      type: string
+    source_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Inspect outputs and report calendar_sha256, email_sha256, notifications_sha256,
+    and disposition.
+  expected_output: Byte-bound closure proving the stale snapshot was rejected.
+  priority: high
+  targets:
+  - calendar_final
+  - email_final
+  - user_notifications
+  - supersession_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - calendar_sha256
+  - email_sha256
+  - notifications_sha256
+  - disposition
+  evidence_schema:
+    calendar_sha256: *id001
+    email_sha256: *id001
+    notifications_sha256: *id001
+    disposition:
+      type: string
+  public_result_contract:
+    kind: payload_only

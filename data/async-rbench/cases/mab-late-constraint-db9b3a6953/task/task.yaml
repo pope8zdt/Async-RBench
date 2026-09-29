@@ -1,0 +1,22 @@
+author_name: Async-RBench transformation
+category: terminal-bench
+difficulty: medium
+instruction: 'Convert the file ''/app/data.csv'' into a Parquet file named ''/app/data.parquet''. The
+  CSV file contains sample data with headers.
+
+
+  ASYNC-RBENCH EXTENSION
+
+  Independently produced evidence may arrive after provisional work. Consume only evidence that matches
+  the pinned source_task_id and source_sha256 in /app/task_file/source_task.json, preserve unaffected
+  work, and reverify the final result.
+
+  '
+max_agent_timeout_sec: 1800
+max_test_timeout_sec: 1200
+parser_name: pytest
+tags:
+- terminal-bench
+- late_or_out_of_order_superseded_result
+- source-rebound
+runtime_status: static_source_binding_accepted_runtime_pending

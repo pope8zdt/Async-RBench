@@ -1,0 +1,152 @@
+format_version: 2
+case_id: mab-dependency-unblock-0d4cb0c77d
+title: 'GAIA2 yoga cutoffs: integrate recipient-specific partial then complete monitoring'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_30dro5
+  source_sha256: 66f6f1facc53210890f6cd09f029e016906253629d68630edbf7fd18f0fa7fed
+  evidence_notes: Structure-derived editorial reimplementation of the official GAIA2
+    event graph; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: environment_snapshot
+  path: /app/task_file/environment_state.json
+- id: complete_monitor_receipt
+  path: /app/task_file/complete_monitor_receipt.json
+- id: partial_receipt
+  path: /app/output_data/partial_receipt.json
+- id: calendar_final
+  path: /app/output_data/calendar_final.json
+- id: communications_final
+  path: /app/output_data/communications_final.json
+- id: cancellation_ledger
+  path: /app/output_data/cancellation_ledger.json
+- id: completion_manifest
+  path: /app/output_data/completion_manifest.json
+milestones:
+- id: send_and_audit
+  depends_on: []
+- id: integrate_asa_partial
+  depends_on:
+  - send_and_audit
+- id: integrate_linnea_completion
+  depends_on:
+  - integrate_asa_partial
+public_checks: []
+workstreams:
+- id: calendar_audit
+  task: Report yoga_event_ids, unrelated_event_ids, recipient_index, and snapshot_digest.
+  expected_output: Task-specific evidence payload.
+  priority: high
+  targets:
+  - environment_snapshot
+  allowed_files:
+  - /app/task_file/environment_state.json
+  - /app/task_file/complete_monitor_receipt.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - yoga_event_ids
+  - unrelated_event_ids
+  - recipient_index
+  - snapshot_digest
+  evidence_schema:
+    yoga_event_ids:
+      type: array
+    unrelated_event_ids:
+      type: array
+    recipient_index:
+      type: object
+    snapshot_digest:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: partial_mailbox_monitor
+  task: Report covered_recipient, cutoff_seconds, pending_recipient, and receipt_digest.
+  expected_output: Task-specific evidence payload.
+  priority: high
+  targets:
+  - partial_receipt
+  allowed_files:
+  - /app/task_file/environment_state.json
+  - /app/task_file/complete_monitor_receipt.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - covered_recipient
+  - cutoff_seconds
+  - pending_recipient
+  - receipt_digest
+  evidence_schema:
+    covered_recipient:
+      type: string
+    cutoff_seconds:
+      type: integer
+    pending_recipient:
+      type: string
+    receipt_digest:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: complete_mailbox_monitor
+  task: Report covered_recipients, cutoff_seconds_by_recipient, no_reply_recipients,
+    and receipt_digest.
+  expected_output: Task-specific evidence payload.
+  priority: high
+  targets:
+  - complete_monitor_receipt
+  allowed_files:
+  - /app/task_file/environment_state.json
+  - /app/task_file/complete_monitor_receipt.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - covered_recipients
+  - cutoff_seconds_by_recipient
+  - no_reply_recipients
+  - receipt_digest
+  evidence_schema:
+    covered_recipients:
+      type: array
+    cutoff_seconds_by_recipient:
+      type: object
+    no_reply_recipients:
+      type: array
+    receipt_digest:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report cancelled_ids, preserved_ids, email_count, and manifest_digest.
+  expected_output: Task-specific evidence payload.
+  priority: high
+  targets:
+  - calendar_final
+  - communications_final
+  - cancellation_ledger
+  - completion_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  - /app/task_file/complete_monitor_receipt.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - cancelled_ids
+  - preserved_ids
+  - email_count
+  - manifest_digest
+  evidence_schema:
+    cancelled_ids:
+      type: array
+    preserved_ids:
+      type: array
+    email_count:
+      type: integer
+    manifest_digest:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only

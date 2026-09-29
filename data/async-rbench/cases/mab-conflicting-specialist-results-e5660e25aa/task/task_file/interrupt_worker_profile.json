@@ -1,0 +1,19 @@
+{
+  "operation": "validate asynchronous cleanup after keyboard interruption",
+  "public_requirement": "Active task cleanup must run, while queued work must not start after interruption.",
+  "execution_report_path": "/app/worker_failure.json",
+  "coverage_cases": [
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      3,
+      2
+    ]
+  ]
+}

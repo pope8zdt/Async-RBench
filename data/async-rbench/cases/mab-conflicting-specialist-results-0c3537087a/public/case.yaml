@@ -1,0 +1,127 @@
+format_version: 2
+case_id: mab-conflicting-specialist-results-0c3537087a
+title: 'GAIA2 Chats: August title updates with completion replay'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_d1ip53
+  source_sha256: 3a4f3c58532783c189a934e8a314d347ea757e1648e522f5087ebf77aa2255c9
+  evidence_notes: Structure-derived editorial reimplementation of the official GAIA2
+    scenario, bound in PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: final_chats
+  path: /app/output_data/chats_final.json
+- id: action_ledger
+  path: /app/output_data/action_ledger.json
+- id: decision_manifest
+  path: /app/output_data/decision_manifest.json
+milestones:
+- id: index_conversations
+  depends_on: []
+- id: apply_changes
+  depends_on:
+  - index_conversations
+- id: close_manifest
+  depends_on:
+  - apply_changes
+public_checks: []
+workstreams:
+- id: august_conversation_index_a
+  task: Read /app/task_file/chats_state.json and report partition A of the qualifying
+    August conversations. Return subset, conversation_ids, source_sha256 and conversation_count
+    as observations. Read /async_rbench/event_assets/index_a_authority_receipt.json
+    and include its exact SHA-256 as authority_receipt_sha256.
+  expected_output: Byte-bound qualifying conversation index partition A.
+  priority: high
+  targets:
+  - final_chats
+  - action_ledger
+  allowed_files:
+  - /app/task_file/chats_state.json
+  required_files:
+  - /app/task_file/chats_state.json
+  required_evidence_fields:
+  - subset
+  - conversation_ids
+  - source_sha256
+  - conversation_count
+  - authority_receipt_sha256
+  evidence_schema:
+    subset:
+      type: string
+    conversation_ids:
+      type: array
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    conversation_count:
+      type: integer
+    authority_receipt_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: august_conversation_index_b
+  task: Read /app/task_file/chats_state.json and report partition B of the qualifying
+    August conversations. Return subset, conversation_ids, source_sha256 and conversation_count
+    as observations.
+  expected_output: Byte-bound qualifying conversation index partition B.
+  priority: high
+  targets:
+  - final_chats
+  - action_ledger
+  allowed_files:
+  - /app/task_file/chats_state.json
+  required_files:
+  - /app/task_file/chats_state.json
+  required_evidence_fields:
+  - subset
+  - conversation_ids
+  - source_sha256
+  - conversation_count
+  evidence_schema:
+    subset:
+      type: string
+    conversation_ids:
+      type: array
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    conversation_count:
+      type: integer
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Inspect /app/output_data/chats_final.json and /app/output_data/action_ledger.json
+    after integration. Report outputs_present, final_sha256, ledger_sha256 and action_count
+    as observations.
+  expected_output: Byte-bound final-state closure report.
+  priority: high
+  targets:
+  - final_chats
+  - action_ledger
+  - decision_manifest
+  allowed_files:
+  - /app/output_data/chats_final.json
+  - /app/output_data/action_ledger.json
+  required_files:
+  - /app/output_data/chats_final.json
+  - /app/output_data/action_ledger.json
+  required_evidence_fields:
+  - outputs_present
+  - final_sha256
+  - ledger_sha256
+  - action_count
+  evidence_schema:
+    outputs_present:
+      type: boolean
+    final_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    ledger_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    action_count:
+      type: integer
+  public_result_contract:
+    kind: payload_only

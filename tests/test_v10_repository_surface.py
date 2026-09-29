@@ -54,7 +54,7 @@ def test_active_protocol_and_profile_docs_name_v11() -> None:
     paths = (
         "PROTOCOL.md",
         "configs/model-profiles/experiment-profile.template.yaml",
-        "docs/async-rbench-result-contract-and-termination.md",
+        "docs/kernel-contract.md",
     )
     for path in paths:
         text = (ROOT / path).read_text(encoding="utf-8")
@@ -79,8 +79,8 @@ def test_readme_is_concise_and_names_the_registered_release_contract() -> None:
     assert len(readme.splitlines()) <= 220
     assert RELEASE_VERSION in readme
     assert "200 case directories" in readme
-    assert "201 registered instances" in readme
-    assert "82 calibration / 30 development / 89 test" in readme
+    assert "200 registered instances" in readme
+    assert "81 calibration / 30 development / 89 test" in readme
     assert "linear_base_task_score" in readme
     assert "async_base_task_score" in readme
     assert "async_dynamic_replanning_score" in readme
@@ -91,16 +91,16 @@ def test_readme_is_concise_and_names_the_registered_release_contract() -> None:
 def test_release_docs_do_not_reference_removed_or_missing_guides() -> None:
     config_readme = (ROOT / "configs" / "README.md").read_text(encoding="utf-8")
     upstream_readme = (ROOT / "upstream" / "README.md").read_text(encoding="utf-8")
-    eval_cli = (ROOT / "async_rbench" / "eval_cli.py").read_text(encoding="utf-8")
-    runbook = (ROOT / "docs" / "CASE_RUNBOOK.zh-CN.md").read_text(encoding="utf-8")
+    eval_cli = (ROOT / "src" / "async_rbench" / "eval_cli.py").read_text(encoding="utf-8")
+    cli_doc = (ROOT / "docs" / "cli.md").read_text(encoding="utf-8")
 
     assert "only paid model profile" not in config_readme
     assert "source_native_v4_rebuild_report.md" not in upstream_readme
     assert "MIGRATION.md" not in eval_cli
-    assert "482 collected" not in runbook
-    assert "paper_metrics_by_mode" in runbook
-    assert "gateway_accepted" in runbook
-    assert "private_rejection" not in runbook
+    assert "482 collected" not in cli_doc
+    assert "Batched" in cli_doc
+    assert "Async" in cli_doc
+    assert "private_rejection" not in cli_doc
 
 
 def test_v11_profiles_have_one_step_bounded_resource_schema() -> None:

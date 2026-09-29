@@ -1,0 +1,93 @@
+artifacts:
+- id: provisional_checkpoint
+  path: /app/output_data/provisional_checkpoint.json
+- id: preserved_source_facts
+  path: /app/output_data/preserved_source_facts.json
+- id: final_state
+  path: /app/output_data/decision_manifest.json
+- id: workspace_state
+  path: /app
+case_id: mab-late-constraint-e4a188e60e
+format_version: 2
+implementation: source-rebound
+milestones:
+- depends_on: []
+  id: inspect_source
+- depends_on:
+  - inspect_source
+  id: resolve_requirement_01
+- depends_on:
+  - resolve_requirement_01
+  id: resolve_requirement_02
+- depends_on:
+  - resolve_requirement_02
+  id: resolve_requirement_03
+- depends_on:
+  - resolve_requirement_03
+  id: resolve_requirement_04
+- depends_on:
+  - resolve_requirement_04
+  id: consume_async_evidence
+- depends_on:
+  - consume_async_evidence
+  id: reverify_and_close
+public_checks: []
+source_tasks:
+- benchmark: terminal-bench
+  id: multistep-definite-integral
+  revision: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  source_sha256: 01a53355386edd40a1f0725cba50f329bc6072517843ceab625242ed290d115a
+task_instruction_path: task/task.yaml
+title: 'terminal-bench source-bound async case: multistep-definite-integral'
+workstreams:
+- id: source_worker_01
+  task: For multistep-definite-integral, analyze the pinned source objective and identify the affected
+    state.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: normal
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: source_worker_02
+  task: For multistep-definite-integral, implement or execute the source task against the disclosed environment.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: high
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only

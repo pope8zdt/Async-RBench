@@ -1,0 +1,5 @@
+Please re-schedule the 9am meeting today for 10 AM today in the main conference room, instead of zoom call. The meeting should last for 1 hour. Add everyone from the 'Net-Zero Energy Buildings and Sustainable Communities' Messages group to the attendee list (and include myself) and then send a message to the group inviting them to the meeting. Once you've rescheduled the meeting and sent the invitations, please confirm with me. If any attendee from the group cancels the event, reschedule the meeting for the same day next week at 2 PM. Remove any events that start at the same time on that day before rescheduling. After rescheduling again, send a Messages message to everyone in the group with the updated time. Let me know once the meeting has been rescheduled and the group has been notified.
+
+ASYNC-RBENCH EXTENSION
+Independently produced evidence may arrive after provisional work. Consume only evidence that matches the pinned source_task_id and source_sha256 in /app/task_file/source_task.json, preserve unaffected work, and reverify the final result.
+

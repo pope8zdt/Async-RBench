@@ -1,0 +1,53 @@
+instruction: 'In my Messages conversation with Joana Silva and Vigdis Rønne, suggest
+  the dates and times two hours before my next two yoga classes for a 1 hour call
+  between the three of us. Let me know as soon as you’ve done this. Wait exactly 3
+  minutes from your message to me for responses. If availability is confirmed by both
+  of them in that time, schedule the call at the agreed upon time. If they are both
+  available for both times, tell them in the same Messages conversation that we''ll
+  do the earlier one. In either case, confirm with them in the same Messages conversation,
+  schedule the call on the calendar, then let me know which date and time was selected.
+  If only one or neither of them replies, you''re done.
+
+
+  ASYNC-RBENCH EXTENSION
+
+  The deterministic application snapshot is at /app/task_file/environment_state.json.
+  The two yoga classes begin at 18:00 on October 16 and October 17, so the proposed
+  one-hour call slots are 16:00-17:00 on those dates. Joana''s reply accepting both
+  slots arrives at second 120. Vigdis first acknowledges at second 90 and then accepts
+  only October 16 at 16:00 at second 150, inside the exact three-minute response window.
+
+
+  Two monitoring workstreams consume the concurrency allowance. At second 165 the
+  Vigdis monitor is still pending and projects completion at second 205, beyond the
+  second-180 cutoff; no additional child spawn is available. A direct read of the
+  same conversation can recover the already available authoritative reply in four
+  seconds. Preserve Joana''s completed result and the two proposed slots, cancel or
+  bypass only the stalled monitor, perform the bounded direct read, then confirm and
+  schedule the jointly agreed October 16 slot before the cutoff.
+
+
+  Write five artifacts under /app/output_data: monitor_checkpoint.json, messages_final.json,
+  calendar_final.json, user_notifications.json, and resource_decision_manifest.json.
+  Preserve the source conversation, both yoga classes, and unrelated calendar state.
+  Add exactly one confirmation message, exactly one one-hour call with Joana Silva
+  and Vigdis Rønne, and exactly the two required user notices: the immediate proposal
+  notice and the final selected-time notice. The manifest must bind exact hashes and
+  record the stalled monitor as cancelled_and_replaced_by_direct_read.
+
+
+  Do not let the stalled worker convert an in-window reply into a false no-response
+  outcome. Do not schedule before both substantive replies are established, do not
+  wait past the deadline, and do not duplicate messages, events, or notices.'
+author_name: Async-RBench transformation
+difficulty: hard
+category: personal-assistant
+tags:
+- gaia2
+- calendar
+- messages
+- resource-pressure
+- straggler-triage
+parser_name: pytest
+max_agent_timeout_sec: 1200.0
+max_test_timeout_sec: 300.0

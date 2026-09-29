@@ -1,0 +1,154 @@
+format_version: 2
+case_id: mab-dependency-unblock-1247bebf08
+title: 'Terminal-Bench GCC optimization: complete an O3 partial measurement'
+source_tasks:
+- benchmark: terminal-bench
+  id: gcc-compiler-optimization
+  source_sha256: 36c029e3fb873262ad9c458d364beec122d9eabc40536a9cc761a1e179e28c30
+  evidence_notes: Structure-derived compact measurement task grounded in the authoritative
+    Terminal-Bench source; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: program_source
+  path: /app/task_file/program.c
+- id: measurement_spec
+  path: /app/task_file/measurement_spec.json
+- id: completion_receipt
+  path: /app/task_file/complete_result_receipt.json
+- id: o3_binary
+  path: /app/output_data/program_O3
+- id: other_binaries
+  path: /app/output_data
+- id: partial_receipt
+  path: /app/output_data/partial_receipt.json
+- id: results_table
+  path: /app/output_data/results.md
+- id: verification_report
+  path: /app/output_data/verification_report.json
+- id: decision_manifest
+  path: /app/output_data/decision_manifest.json
+milestones:
+- id: compile_and_measure_partial
+  depends_on: []
+- id: integrate_o3_completion
+  depends_on:
+  - compile_and_measure_partial
+- id: verify_four_rows
+  depends_on:
+  - integrate_o3_completion
+public_checks: []
+workstreams:
+- id: o3_compile_partial
+  task: Report configuration, binary_size_bytes, runtime_status with complete measurement
+    evidence.
+  expected_output: Validated evidence for the assigned workstream.
+  priority: high
+  targets:
+  - o3_binary
+  - partial_receipt
+  allowed_files:
+  - /app/task_file/program.c
+  - /app/task_file/measurement_spec.json
+  - /app/task_file/partial_result_receipt.json
+  - /app/task_file/complete_result_receipt.json
+  required_files:
+  - /app/task_file/program.c
+  - /app/task_file/measurement_spec.json
+  required_evidence_fields:
+  - configuration
+  - binary_size_bytes
+  - runtime_status
+  evidence_schema:
+    configuration:
+      type: string
+    binary_size_bytes:
+      type: integer
+    runtime_status:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: other_configuration_runner
+  task: Report configurations, argument, all_measured with complete measurement evidence.
+  expected_output: Validated evidence for the assigned workstream.
+  priority: high
+  targets:
+  - other_binaries
+  allowed_files:
+  - /app/task_file/program.c
+  - /app/task_file/measurement_spec.json
+  - /app/task_file/partial_result_receipt.json
+  - /app/task_file/complete_result_receipt.json
+  required_files:
+  - /app/task_file/program.c
+  - /app/task_file/measurement_spec.json
+  required_evidence_fields:
+  - configurations
+  - argument
+  - all_measured
+  evidence_schema:
+    configurations:
+      type: array
+    argument:
+      type: integer
+    all_measured:
+      type: boolean
+  public_result_contract:
+    kind: payload_only
+- id: o3_runtime_completion
+  task: Report completion_of, runtime_ms, argument, exit_code with complete measurement
+    evidence.
+  expected_output: Validated evidence for the assigned workstream.
+  priority: high
+  targets:
+  - completion_receipt
+  - results_table
+  allowed_files:
+  - /app/task_file/program.c
+  - /app/task_file/measurement_spec.json
+  - /app/task_file/partial_result_receipt.json
+  - /app/task_file/complete_result_receipt.json
+  required_files:
+  - /app/task_file/program.c
+  - /app/task_file/measurement_spec.json
+  required_evidence_fields:
+  - completion_of
+  - runtime_ms
+  - argument
+  - exit_code
+  evidence_schema:
+    completion_of:
+      type: string
+    runtime_ms:
+      type: number
+    argument:
+      type: integer
+    exit_code:
+      type: integer
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Report all_complete, manifest_sha256 with complete measurement evidence.
+  expected_output: Validated evidence for the assigned workstream.
+  priority: high
+  targets:
+  - verification_report
+  - decision_manifest
+  allowed_files:
+  - /app/task_file/program.c
+  - /app/task_file/measurement_spec.json
+  - /app/task_file/partial_result_receipt.json
+  - /app/task_file/complete_result_receipt.json
+  required_files:
+  - /app/task_file/program.c
+  - /app/task_file/measurement_spec.json
+  required_evidence_fields:
+  - all_complete
+  - manifest_sha256
+  evidence_schema:
+    all_complete:
+      type: boolean
+    manifest_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only

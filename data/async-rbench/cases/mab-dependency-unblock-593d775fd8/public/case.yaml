@@ -1,0 +1,136 @@
+format_version: 2
+case_id: mab-dependency-unblock-593d775fd8
+title: 'SWE-bench Catch2: integrate partial then complete CAPTURE parser audit'
+source_tasks:
+- benchmark: swe-bench
+  id: catchorg__Catch2-1608
+  source_sha256: 82efb1eff1a14a27cd38b26ac7635e27c21210dce0c63ec76d7d1c6e01428a3d
+  evidence_notes: Structure-derived editorial reimplementation of the bound SWE-bench
+    trace; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: partial_receipt
+  path: /app/output_data/partial_receipt.json
+- id: modular_parser
+  path: /app/output_data/catch_message.cpp
+- id: single_header_parser
+  path: /app/output_data/catch.hpp
+- id: verification_report
+  path: /app/output_data/verification_report.json
+- id: decision_manifest
+  path: /app/output_data/decision_manifest.json
+milestones:
+- id: retain_modular_partial
+  depends_on: []
+- id: integrate_distribution_completion
+  depends_on:
+  - retain_modular_partial
+- id: verify_synchronized_closure
+  depends_on:
+  - integrate_distribution_completion
+public_checks: []
+workstreams:
+- id: modular_partial_audit
+  task: Report modular_location, modular_status, single_header_status, verified_cases,
+    source_sha256, and receipt_sha256.
+  expected_output: Verified modular parser result with the distribution check still
+    pending.
+  priority: high
+  targets:
+  - partial_receipt
+  - modular_parser
+  allowed_files:
+  - /app/task_file/repository_state.json
+  - /app/task_file/repository/include/internal/catch_message.cpp
+  - /app/task_file/repository/single_include/catch2/catch.hpp
+  required_files:
+  - /app/task_file/repository_state.json
+  required_evidence_fields:
+  - modular_location
+  - modular_status
+  - single_header_status
+  - verified_cases
+  - source_sha256
+  - receipt_sha256
+  evidence_schema:
+    modular_location:
+      type: string
+    modular_status:
+      type: string
+    single_header_status:
+      type: string
+    verified_cases:
+      type: array
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: distribution_complete_audit
+  task: Report both locations, both statuses, consistency, completion_of, source_sha256,
+    and receipt_sha256.
+  expected_output: Complete audit for both shipped parser representations.
+  priority: high
+  targets:
+  - single_header_parser
+  - verification_report
+  - decision_manifest
+  allowed_files:
+  - /app/task_file/repository_state.json
+  - /app/task_file/repository/include/internal/catch_message.cpp
+  - /app/task_file/repository/single_include/catch2/catch.hpp
+  required_files:
+  - /app/task_file/repository_state.json
+  required_evidence_fields:
+  - locations
+  - modular_status
+  - single_header_status
+  - consistent
+  - completion_of
+  - source_sha256
+  - receipt_sha256
+  evidence_schema:
+    locations:
+      type: array
+    modular_status:
+      type: string
+    single_header_status:
+      type: string
+    consistent:
+      type: boolean
+    completion_of:
+      type: string
+    source_sha256: *id001
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Inspect outputs and report modular_sha256, single_header_sha256, report_sha256,
+    and consistent.
+  expected_output: Byte-bound synchronized distribution closure.
+  priority: high
+  targets:
+  - modular_parser
+  - single_header_parser
+  - verification_report
+  - decision_manifest
+  allowed_files:
+  - /app/task_file/repository_state.json
+  - /app/task_file/repository/include/internal/catch_message.cpp
+  - /app/task_file/repository/single_include/catch2/catch.hpp
+  required_files:
+  - /app/task_file/repository_state.json
+  required_evidence_fields:
+  - modular_sha256
+  - single_header_sha256
+  - report_sha256
+  - consistent
+  evidence_schema:
+    modular_sha256: *id001
+    single_header_sha256: *id001
+    report_sha256: *id001
+    consistent:
+      type: boolean
+  public_result_contract:
+    kind: payload_only

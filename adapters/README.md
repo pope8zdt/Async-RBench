@@ -1,10 +1,8 @@
 # Connecting an evaluated agent system
 
-This directory exposes Async-RBench's low-level adapter entrypoints. The current
-formal evaluation is the Model API Track through `reference_scaffold_api`.
-Track B provides benchmark-maintained drivers for Claude Code, LangGraph and
-the OpenAI Agents SDK, so those runtimes do not implement JSONL directly. See
-`docs/track-b.md`.
+This directory exposes Async-RBench's low-level adapter entrypoints. The formal
+paper evaluation uses the fixed `reference_scaffold_api`; the remaining
+entrypoints support protocol conformance and framework development.
 
 For an unknown or experimental agent system, one adapter process represents the
 whole evaluated system. It owns participant policy: the main-agent loop,
@@ -21,16 +19,12 @@ Use `async_rbench.protocol_sdk.gateway.JsonlGateway` to instrument lifecycle hoo
 6. emit `episode_ended`.
 
 Stdout is reserved for JSONL; send model/tool logs to stderr. Terminal, child
-workspace, promotion and cleanup operations must use the kernel capability RPC;
+workspace, commit and cleanup operations must use the kernel capability RPC;
 an adapter must not invoke Docker directly.
 
 `tests/mock_adapter.py` is a protocol conformance example, not an evaluated agent.
 `adapters/native_agent.py` is also currently a deterministic protocol smoke
 profile, not a real native-agent integration.
-
-`adapters/track_b.py` is the common Agent System Track entry point. Framework
-and custom component selection belongs in `configs/track-b/*.yaml`; the adapter
-validates every component before emitting `ready`.
 
 ## Included reference scaffold
 

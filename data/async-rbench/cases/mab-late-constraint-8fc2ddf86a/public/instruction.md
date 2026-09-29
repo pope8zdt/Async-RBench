@@ -1,0 +1,5 @@
+Send an email to the person I had the Coffee Break event with yesterday. Ask her if she wants to go and see a movie with me this Friday at 18:00. Order her the Ubisoft Six Collection Figure – Ela made out of resin. Order a default cab for myself to pick me up at home and drive me to her address, one hour before we're meeting for the movie. Let me know, once you wrote her and ordered the cab and collection figure. If she declines, write a Messages message to my best friend, if he wants to have a beer with me on Friday at 18:00. He lives in Prague and has the closest age to mine from all the guys. Cancel the order of the collection figure and change the location of the cab to the address of my best friend.
+
+ASYNC-RBENCH EXTENSION
+Independently produced evidence may arrive after provisional work. Consume only evidence that matches the pinned source_task_id and source_sha256 in /app/task_file/source_task.json, preserve unaffected work, and reverify the final result.
+

@@ -1,0 +1,146 @@
+format_version: 2
+case_id: mab-dependency-unblock-3005dbb57f
+title: 'GAIA2 Scheduling: bypass a reply-monitor straggler before the three-minute
+  cutoff'
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_21_0obld3
+  source_sha256: db38da1ed0e5b9948a3f8d8a8d8476200dcf0a9a02011715064ca23e7a9b44e7
+  evidence_notes: Structure-derived editorial reimplementation of the official GAIA2
+    scenario; see PROVENANCE.md.
+task_instruction_path: task/task.yaml
+artifacts:
+- id: monitor_checkpoint
+  path: /app/output_data/monitor_checkpoint.json
+- id: messages_final
+  path: /app/output_data/messages_final.json
+- id: calendar_final
+  path: /app/output_data/calendar_final.json
+- id: user_notifications
+  path: /app/output_data/user_notifications.json
+- id: resource_decision_manifest
+  path: /app/output_data/resource_decision_manifest.json
+milestones:
+- id: propose_and_monitor
+  depends_on: []
+- id: triage_straggler
+  depends_on:
+  - propose_and_monitor
+- id: confirm_schedule_verify
+  depends_on:
+  - triage_straggler
+public_checks: []
+workstreams:
+- id: joana_monitor
+  task: Report Joana's sender, accepted slots, reply second, and source hash.
+  expected_output: Completed Joana availability result.
+  priority: high
+  targets:
+  - monitor_checkpoint
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - sender_id
+  - accepted_slots
+  - reply_sec
+  - source_sha256
+  evidence_schema:
+    sender_id:
+      type: string
+    accepted_slots:
+      type: array
+    reply_sec:
+      type: integer
+    source_sha256: &id001
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: vigdis_monitor_checkpoint
+  task: Report the stalled monitor checkpoint and projection.
+  expected_output: Evidence that the monitor will miss the cutoff.
+  priority: high
+  targets:
+  - monitor_checkpoint
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - status
+  - checkpoint_sec
+  - projected_finish_sec
+  - deadline_sec
+  - source_sha256
+  evidence_schema:
+    status:
+      type: string
+    checkpoint_sec:
+      type: integer
+    projected_finish_sec:
+      type: integer
+    deadline_sec:
+      type: integer
+    source_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: direct_conversation_fallback
+  task: Report the direct conversation read and bound reply receipt.
+  expected_output: Authoritative in-window Vigdis reply.
+  priority: high
+  targets:
+  - messages_final
+  - calendar_final
+  - resource_decision_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - sender_id
+  - accepted_slots
+  - available_at_sec
+  - duration_sec
+  - source_sha256
+  - receipt_sha256
+  evidence_schema:
+    sender_id:
+      type: string
+    accepted_slots:
+      type: array
+    available_at_sec:
+      type: integer
+    duration_sec:
+      type: integer
+    source_sha256: *id001
+    receipt_sha256: *id001
+  public_result_contract:
+    kind: payload_only
+- id: final_state_validator
+  task: Inspect outputs and report exact hashes and scheduling time.
+  expected_output: Byte-bound closure report.
+  priority: high
+  targets:
+  - messages_final
+  - calendar_final
+  - user_notifications
+  - resource_decision_manifest
+  allowed_files:
+  - /app/task_file/environment_state.json
+  required_files:
+  - /app/task_file/environment_state.json
+  required_evidence_fields:
+  - calendar_sha256
+  - messages_sha256
+  - notifications_sha256
+  - scheduled_at_sec
+  evidence_schema:
+    calendar_sha256: *id001
+    messages_sha256: *id001
+    notifications_sha256: *id001
+    scheduled_at_sec:
+      type: integer
+  public_result_contract:
+    kind: payload_only

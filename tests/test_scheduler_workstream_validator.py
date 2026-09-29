@@ -6,6 +6,7 @@ import re
 import shutil
 import subprocess
 import sys
+from async_rbench.paths import cases_root
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_public_scheduler_validator_emits_self_consistent_per_bucket_facts(
     tmp_path: Path,
 ) -> None:
-    source = ROOT / "cases" / "scheduler-selective-replan" / "task" / "task_file"
+    source = cases_root(ROOT) / "scheduler-selective-replan" / "task" / "task_file"
     task_file = tmp_path / "task_file"
     shutil.copytree(source, task_file)
     scripts = task_file / "scripts"

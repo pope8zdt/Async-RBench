@@ -4,9 +4,9 @@ Async-RBench measures whether a main agent can use concurrently completing subag
 
 ## Frozen evaluation architecture
 
-Official Track A fixes all non-model components:
+The formal paper protocol fixes all non-model components:
 
-1. paired `linear` and `async` manifest episodes;
+1. paired Batched (`linear`) and Async (`async`) manifest episodes;
 2. fixed reference API harness;
 3. kernel scheduler and result gateway;
 4. isolated main/child workspaces and kernel-owned event-asset staging;
@@ -15,12 +15,18 @@ Official Track A fixes all non-model components:
 7. frozen semantic and control-flow registries;
 8. scorer and case-macro aggregator with reproducibility digests.
 
-Development runs may use custom adapters or skip isolation/conformance, but they are ineligible and never enter the official leaderboard.
+Development runs may use custom adapters or skip isolation/conformance, but
+they are not comparable to the paper's reported results.
 
 ## Execution modes
 
-- `linear`: the same workstreams run without initial-wave overlap. It is the paired task baseline.
-- `async`: the initial wave overlaps and results are released in their real completion order. The kernel does not script the order.
+- **Batched (`linear`)**: the required subagent workstreams run concurrently,
+  but their results are buffered and presented together after the required
+  workstreams terminate. This is the paper's paired delivery baseline.
+- **Async (`async`)**: the same workstreams run with the same resource limits,
+  while results are presented individually as eligible completions arrive and
+  the main agent continues working. The kernel controls release boundaries but
+  does not prescribe a model-generated completion order.
 
 The benchmark-owned initial wave has separate bounded capacity (currently at
 most eight workstreams), independent of the participant's replacement-child
@@ -48,7 +54,7 @@ Actual provider-reported tokens are recorded for main, child, each actor, and
 the episode total. They do not participate in normal call admission. A shared
 5,000,000-token emergency fuse exists only for runaway protection; if crossed,
 no later model call starts and the episode ends as `resource_safety_abort`,
-unscored and leaderboard-ineligible.
+unscored and excluded from paper aggregates.
 
 ## Capability categories
 
@@ -75,28 +81,33 @@ Every participant-visible message is built from an allowlist. Private facts are 
 
 ## Scoring
 
-Each case freezes unchanged semantic points and evaluator-observed dynamic-control
-points. A task-causal Case IR compiles independent decision groups from the task
-requirements, dependency closure, event policy and observable evidence. The tags
-`event_intake`, `state_revision`, `plan_revision`, and `closure` locate failures in
-the response lifecycle but do not receive fixed score mass. Relevance tiers weight
-points inside one decision group; the number of semantic checks cannot change
-dynamic score mass.
+Each target event has an Event Response Contract (ERC) with five components:
+Change (`C`), Preserve (`R`), Forbid (`F`), Verify (`V`), and event Outcome
+(`O`). The process score `P` is the mean of the applicable `C/R/F/V`
+components. The per-event Dynamic Replanning Score is
 
-The primary async metric is Dynamic Control Score `D`, the macro mean of the
-case-specific causal decision-group scores. Stage scores are diagnostics. Semantic
-Task Score `S` is reported independently for both
-modes. The secondary `DTScore = 0.80 D + 0.20 S`. Dynamic success additionally
-requires `D >= 0.75` and every critical dynamic point to pass. Linear episodes
-have no dynamic score; the paired effect is `linear S - async S`, never a
-subtraction of unlike mixed denominators.
+`DRS_i = 100 * (P_i + O_i) / 2`.
+
+Machine-readable episode and aggregate fields store the normalized quantity
+`DRS_i / 100` on `[0, 1]`; paper tables multiply it by 100. Task-success fields
+use the same normalized-storage / percentage-display convention.
+
+The Async DRS for a task run is the mean over its scored target events. A
+participant-controlled termination before a required event is reached assigns
+zero to that event; construction, infrastructure, and resource-safety failures
+remain unscored. Batched runs do not receive DRS.
+
+End-to-end task success `S` is determined independently by the frozen final
+task checks and is reported for both Batched and Async. DRS is never blended
+with task success in a paper headline. Within each repetition, the aggregate
+averages the 25 tasks in a scenario; each scenario reports the mean and sample
+standard deviation of its three repetition-level means. Overall DRS is the
+unweighted mean of the eight scenario means. Legacy dynamic-control and DTScore
+fields may appear in older machine-readable artifacts only as compatibility
+diagnostics; they are not paper metrics.
 
 For a given case and execution mode, all models share the same applicable-point
 set. The denominator digest binds score-policy version, point id, measurement
-type, dynamic dimension, relevance weight and criticality. Only fixed-harness,
-containerized, API-only, conformant Track A episodes with matching digests and
-the current score policy are leaderboard eligible.
-
-## Dataset expansion
-
-After architecture freeze, a Case Factory may screen authoritative benchmark trajectories and transform selected tasks into this public/private contract. Every generated case must bind a task-causal Case IR (requirements, dependency graph, prior and revised state, affected closure, preservation boundary, required and forbidden responses, observable evidence and local negative mutations) and pass schema, leakage, information-sufficiency, event-policy, mutation-locality, protocol, scenario-construction and verifier tests. Case generation cannot alter the frozen harness.
+type, dynamic dimension, relevance weight and criticality. Paper-comparable
+episodes use the fixed harness, isolated containers, the reference API adapter,
+matching digests, and the current score policy.

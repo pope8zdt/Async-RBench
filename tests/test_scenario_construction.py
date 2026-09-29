@@ -9,11 +9,12 @@ from async_rbench.evaluation.scoring import score_trace
 from async_rbench.spec import load_case
 
 from author_local import requires_author_local
+from async_rbench.paths import cases_root
 
 
 ROOT = Path(__file__).resolve().parents[1]
 _CANCELLATION_GATE = requires_author_local(
-    "candidate_instances/gaia2-stockholm-moveout/gaia2-zip-revision-sim-001/public_case.yaml",
+    "candidate_instances/gaia2-stockholm-moveout/gaia2-zip-revision-sim-001/public/case.yaml",
 )
 
 
@@ -40,7 +41,7 @@ def test_old_conditions_are_not_part_of_the_architecture() -> None:
 
 def test_participant_early_end_is_scored_failure_not_construction_failure() -> None:
     case = load_case(
-        ROOT / "cases" / "gaia2-stockholm-moveout" / "public_case.yaml"
+        cases_root(ROOT) / "gaia2-stockholm-moveout" / "public/case.yaml"
     ).raw
     events = []
     for index, item in enumerate(case["initial_wave"], start=1):
@@ -351,7 +352,7 @@ def test_registered_cancellation_gate_creates_opportunity_without_capability_lab
         / "candidate_instances"
         / "gaia2-stockholm-moveout"
         / "gaia2-zip-revision-sim-001"
-        / "public_case.yaml"
+        / "public/case.yaml"
     ).raw
     assert "inflight_cancellation" not in set(case.get("capabilities") or [])
     planner = next(

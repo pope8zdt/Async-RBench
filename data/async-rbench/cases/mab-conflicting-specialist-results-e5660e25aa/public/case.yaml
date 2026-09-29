@@ -1,0 +1,88 @@
+format_version: 2
+case_id: mab-conflicting-specialist-results-e5660e25aa
+title: 'Async task runner: recover interrupted cleanup validation'
+source_tasks:
+- benchmark: terminal-bench
+  id: cancel-async-tasks
+  upstream_commit: d28711d0da2675d0bb1d56de45ae5df6082438a3
+  upstream_path: private/source/cancel-async-tasks
+  source_sha256: d106d940f96d1a9cc9b3dddbde87842f0954c76f555afb7a28ca53f2b7d2122a
+  source_task_definition_sha256: aee450320fc0bbe385ecbb2d5082a631f45aa55ffe5e5e0516e7e4936e026728
+  source_lock: private/terminal_bench_source_lock.json
+  preserved_test: task/tests/upstream_tests/test_outputs.py
+task_instruction_path: task/task.yaml
+artifacts:
+- id: implementation
+  path: /app/run.py
+- id: validation_report
+  path: /app/validation_report.json
+- id: failure_report
+  path: /app/worker_failure.json
+milestones:
+- id: implement_api
+  depends_on: []
+- id: validate_cleanup
+  depends_on:
+  - implement_api
+public_checks: []
+workstreams:
+- id: normal_audit
+  task: Review the public normal-execution probe and the source concurrency bound.
+    This is a bounded independent audit of validation criteria, not a claim that the
+    current main implementation has passed. Write /app/workstreams/normal_audit.json
+    with finding and probe_sha256 of /app/task_file/validation_probe.py. Complete
+    with payload.evidence containing report_path, finding, probe_sha256 and payload.files=['/app/workstreams/normal_audit.json'].
+    The main-workspace validation handoff will publish the separately executed worker
+    report at /app/worker_failure.json.
+  expected_output: Source-derived audit of the assigned validation criteria.
+  priority: normal
+  targets:
+  - implementation
+  allowed_files:
+  - /app/workstreams/normal_audit.json
+  required_files:
+  - /app/workstreams/normal_audit.json
+  required_evidence_fields:
+  - report_path
+  - finding
+  - probe_sha256
+  evidence_schema:
+    report_path:
+      type: string
+    finding:
+      type: string
+    probe_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only
+- id: interrupt_audit
+  task: Read your interruption worker profile and review active versus queued cleanup
+    coverage in the public probe. This is a bounded independent audit of validation
+    criteria, not a claim that the current main implementation has passed. Write /app/workstreams/interrupt_audit.json
+    with finding and probe_sha256 of /app/task_file/validation_probe.py. Complete
+    with payload.evidence containing report_path, finding, probe_sha256 and payload.files=['/app/workstreams/interrupt_audit.json'].
+    The main-workspace validation handoff will publish the separately executed worker
+    report at /app/worker_failure.json.
+  expected_output: Source-derived audit of the assigned validation criteria.
+  priority: normal
+  targets:
+  - implementation
+  allowed_files:
+  - /app/workstreams/interrupt_audit.json
+  required_files:
+  - /app/workstreams/interrupt_audit.json
+  required_evidence_fields:
+  - report_path
+  - finding
+  - probe_sha256
+  evidence_schema:
+    report_path:
+      type: string
+    finding:
+      type: string
+    probe_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+  public_result_contract:
+    kind: payload_only

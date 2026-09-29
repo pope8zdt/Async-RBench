@@ -1,0 +1,144 @@
+artifacts:
+- id: provisional_checkpoint
+  path: /app/output_data/provisional_checkpoint.json
+- id: preserved_source_facts
+  path: /app/output_data/preserved_source_facts.json
+- id: final_state
+  path: /app/output_data/decision_manifest.json
+- id: workspace_state
+  path: /app
+case_id: mab-late-constraint-cb2a355435
+format_version: 2
+implementation: source-rebound
+milestones:
+- depends_on: []
+  id: inspect_source
+- depends_on:
+  - inspect_source
+  id: resolve_requirement_01
+- depends_on:
+  - resolve_requirement_01
+  id: resolve_requirement_02
+- depends_on:
+  - resolve_requirement_02
+  id: resolve_requirement_03
+- depends_on:
+  - resolve_requirement_03
+  id: resolve_requirement_04
+- depends_on:
+  - resolve_requirement_04
+  id: consume_async_evidence
+- depends_on:
+  - consume_async_evidence
+  id: reverify_and_close
+public_checks: []
+source_tasks:
+- benchmark: gaia2
+  id: scenario_universe_29_0q1dww
+  revision: 78ea3bdbdeec2bdcd6afa5420915d8a22f23ed99
+  source_sha256: 0ab4e7c58153720c93cd0ed0d94242457a318dc7b5a9bb336e324e1e1f46e66f
+task_instruction_path: task/task.yaml
+title: 'gaia2 source-bound async case: scenario_universe_29_0q1dww'
+workstreams:
+- id: source_worker_01
+  task: For scenario_universe_29_0q1dww, analyze the pinned source objective and identify the affected
+    state.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: normal
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: source_worker_02
+  task: For scenario_universe_29_0q1dww, implement or execute the source task against the disclosed environment.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: normal
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: source_worker_03
+  task: For scenario_universe_29_0q1dww, check the source acceptance constraints and report remaining
+    failures.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: normal
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only
+- id: source_worker_04
+  task: For scenario_universe_29_0q1dww, reconcile the late asynchronous evidence with completed work.
+  expected_output: Source-bound evidence tied to the pinned task and revision.
+  priority: high
+  targets:
+  - workspace_state
+  - final_state
+  allowed_files:
+  - /app/task_file/source_task.json
+  required_files:
+  - /app/task_file/source_task.json
+  required_evidence_fields:
+  - source_task_id
+  - source_sha256
+  - finding
+  evidence_schema:
+    source_task_id:
+      type: string
+    source_sha256:
+      type: string
+      pattern: ^[0-9a-f]{64}$
+    finding:
+      type: string
+  public_result_contract:
+    kind: payload_only

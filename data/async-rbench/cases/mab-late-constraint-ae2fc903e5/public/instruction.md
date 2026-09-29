@@ -1,0 +1,5 @@
+Send a message to Kofi Ogunlesi on Chats asking them to add the apartment search we discussed to my calendar, including the address. Order a default cab from my address to Fosswinckels gate 10, Bergen at 12 PM today. After the message is sent to Kofi, tell me the contents of the message that was sent to Kofi on Chats. If the event titled apartment search is added to my calendar by Kofi Ogunlesi with a location that's different from the destination of the cab ride, cancel that ride and order a new one with the same time and start location, but change the destination to the location of the event. Then, send Kofi Ogunlesi an email letting them know I've ordered a cab to that address. If you change the cab destination, let me know the new location you changed it to.
+
+ASYNC-RBENCH EXTENSION
+Independently produced evidence may arrive after provisional work. Consume only evidence that matches the pinned source_task_id and source_sha256 in /app/task_file/source_task.json, preserve unaffected work, and reverify the final result.
+
