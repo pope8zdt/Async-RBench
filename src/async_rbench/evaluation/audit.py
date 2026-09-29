@@ -637,7 +637,7 @@ def audit_run(
     )
     current_source_digest = _source_digest(benchmark_root)
     current_contract_digest = hashlib.sha256(
-        (benchmark_root / "evaluation_contract.json").read_bytes()
+        (benchmark_root / "configs" / "evaluation-contract.json").read_bytes()
     ).hexdigest()
     current_case_digests = {
         case_instance_key(instance.case_id, instance.instance_id):

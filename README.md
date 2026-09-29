@@ -1,56 +1,78 @@
-# Async-RBench: Benchmarking Asynchronous Task Execution in LLM Agents
+<div align="center">
 
-Async-RBench evaluates whether a main LLM agent can integrate independently
-completing subagent results, respond to changed assumptions, and dynamically
-replan toward a verified final state.
+# Async-RBench
+
+**Benchmarking Asynchronous Task Execution in LLM Agents**
+
+[![CI](https://github.com/pope8zdt/Async-RBench/actions/workflows/ci.yml/badge.svg)](https://github.com/pope8zdt/Async-RBench/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](pyproject.toml)
+[![Tasks](https://img.shields.io/badge/Tasks-200-6F52B5.svg)](data/async-rbench/registry.json)
+[![Version](https://img.shields.io/badge/Version-11.0.0-2E8B57.svg)](CITATION.cff)
+
+[Overview](#overview) · [Results](#main-results) · [Dataset](#dataset) · [Quick start](#quick-start) · [Evaluation](#evaluation) · [Documentation](#documentation)
+
+</div>
+
+![Async-RBench overview](assets/overview.png)
+
+## Overview
+
+Async-RBench tests whether a main agent can use results returned by concurrently
+running subagents. A strong agent must revise work invalidated by new evidence,
+preserve work that remains valid, avoid prohibited changes, and rerun the checks
+affected by the update.
+
+We compare two delivery modes. **Batched** runs the subagents concurrently but
+holds their results until every required workflow terminates. **Async** presents
+eligible results as they arrive while the main agent continues working. The task,
+subagent workflows, limits, and scoring rules are otherwise held fixed.
 
 Version: 11.0.0  
 Contract: frozen  
 Release: `v11.0-paper`
 
-This repository is the public paper release. It contains the evaluation
-framework and the complete 200-task public benchmark. Formal scoring truth is
-kept in a separately distributed judge bundle and is never included here.
+![Async-RBench benchmark and scoring mechanism](assets/benchmark-mechanism.png)
 
-## Benchmark at a glance
+## Main results
 
-| Item | Frozen paper setting |
-|---|---:|
-| Public tasks | 200 case directories / 200 registered instances |
-| Source balance | 40 each from GAIA2, MultiAgentBench, OSWorld, SWE-bench, and Terminal-Bench |
-| Scenario balance | 8 asynchronous scenarios, 25 tasks each |
-| Initial subtasks | 621 total: 73 two-subtask, 40 three-subtask, 87 four-or-more-subtask tasks |
-| Difficulty | 104 medium, 96 hard |
-| Dataset splits | 81 calibration / 30 development / 89 test |
-| Delivery modes | Batched and Async |
-| Repetitions | 3 per task and mode |
-| Evaluated models | 9 |
-| Main experiment | 10,800 episodes |
+- Across nine evaluated agents, Async DRS ranges from **19.2 to 45.1**. Oracle
+  responses score **96.4–98.8** on the same events.
+- Mean task success falls from **29.7% under Batched delivery to 26.0% under
+  Async delivery**. All nine agents have a lower Async point estimate.
+- Full-rebuild raises DRS from 39.7 to 42.3 for Terra, 31.1 to 34.6 for Luna,
+  and 19.2 to 21.9 for Gemini, while increasing mean model calls by 7.5–10.2%.
+
+<p align="center">
+  <img src="assets/drs-validation.png" width="48%" alt="DRS validation with Oracle, Native, and Frozen responses">
+  <img src="assets/full-rebuild.png" width="48%" alt="DRS and model calls under Native and Full-rebuild execution">
+</p>
 
 The paper evaluates Claude Sonnet 5, GPT-5.6 Terra, Qwen3.7 Plus, GLM5.3
 Flash, GPT-5.6 Luna, DeepSeek V4 Pro, Qwen3.5 27B, Kimi K2.5, and Gemini 3
-Flash High. The main agent and its children use the same model in each run.
-The frozen experiment definition is in
-[`paper_artifacts/experiment_manifest.json`](paper_artifacts/experiment_manifest.json).
+Flash High. The main agent and its subagents use the same model in each run.
 
-## What is released
+## Dataset
 
-- `src/async_rbench/`: execution, scheduling, scoring, aggregation, audit, and
-  adapter-conformance framework;
-- `data/async-rbench/cases/`: the 200 participant-visible task bundles;
-- `data/async-rbench/registry.json` and `release.json`: the frozen registry and
-  corpus digest binding;
-- `adapters/`: reference adapter entry points;
-- `configs/`: public configuration templates and native-runtime dependency
-  locks;
-- `tests/`: public framework and release-contract tests;
-- `paper_artifacts/`: the publication-safe main-experiment manifest.
+The release contains **200 case directories / 200 registered instances**. Cases
+are balanced across five source families and eight asynchronous scenarios.
 
-Each public task contains only `public/`, `task/`, and `PROVENANCE.md`. Hidden
-tests, solutions, mutation suites, event policy, verifier logic, oracle truth,
-credentials, and run traces are not part of this repository.
+| Property | Paper setting |
+|---|---:|
+| Source families | 40 each from GAIA2, MultiAgentBench, OSWorld, SWE-bench, and Terminal-Bench |
+| Async scenarios | 8 scenarios, 25 tasks each |
+| Initial subtasks | 621 total: 73 with two, 40 with three, and 87 with four or more |
+| Difficulty | 104 medium / 96 hard |
+| Splits | 81 calibration / 30 development / 89 test |
+| Repetitions | 3 per task and delivery mode |
+| Main experiment | 10,800 episodes |
 
-## Installation
+Each case contains `public/`, `task/`, and `PROVENANCE.md`. The public package
+does not include solutions, hidden tests, event schedules, verifier logic,
+credentials, or experiment traces. Formal scoring uses a separately distributed
+judge bundle.
+
+## Quick start
 
 Python 3.11 or newer is required.
 
@@ -58,33 +80,21 @@ Python 3.11 or newer is required.
 python -m venv .venv
 python -m pip install -U pip
 python -m pip install -e ".[test]"
-```
 
-Validate the public checkout:
-
-```bash
 async-rbench list
 async-rbench validate-public
 python -m pytest -q
 ```
 
-The validation result for this release is:
+A valid checkout reports:
 
 ```json
 {"valid": true, "case_count": 200, "instances": 200}
 ```
 
-## Running the paper protocol
+## Evaluation
 
-The two paper-facing delivery modes share the same concurrent child execution:
-
-- **Batched** (internal compatibility key `linear`) buffers eligible subagent
-  results and presents them together after the required workflows terminate.
-- **Async** (`async`) presents eligible results individually while the main
-  agent continues working.
-
-Create and execute a reproducible manifest with an explicitly supplied judge
-bundle:
+Create and run a manifest after obtaining the matching judge bundle:
 
 ```bash
 async-rbench validate-judge --judge-root <judge-root>
@@ -104,71 +114,51 @@ async-rbench-eval run-manifest \
   --judge-root <judge-root>
 ```
 
-The framework does not search for a private judge path implicitly. Generated
-manifests bind all 200 public cases, their verifier digests, and the judge
-release digest.
+The paper reports Batched task success, Async task success, and Async Dynamic
+Replanning Score (DRS). For an event, the process score `P` averages the
+applicable Change, Preserve, Forbid, and Verify components. With event outcome
+`O`, `DRS_event = 100 × (P + O) / 2`.
 
-The frozen per-episode limits are 100 main-agent responses, 40 responses per
-subagent, 16,384 output tokens per model response, at most 3 concurrent
-participant-spawned children, and a 2,400-second episode timeout.
+Machine-readable outputs retain the field names `linear_base_task_score`,
+`async_base_task_score`, and `async_dynamic_replanning_score`. They store values
+on `[0, 1]`; paper tables display percentages.
 
-See [`PROTOCOL.md`](PROTOCOL.md), [`docs/cli.md`](docs/cli.md), and
-[`docs/adapter-contract.md`](docs/adapter-contract.md) for the complete public
-contract.
+## Documentation
 
-## Metrics
-
-Async-RBench reports three paper-facing metrics:
-
-1. Batched task success;
-2. Async task success;
-3. Async Dynamic Replanning Score (DRS).
-
-For each target event, the process score `P` is the mean of the applicable
-Change, Preserve, Forbid, and Verify components. With event outcome `O`,
-
-```text
-DRS_event = 100 * (P + O) / 2
-```
-
-DRS is reported only for Async runs and is independent of end-to-end task
-success. Machine artifacts use the compatibility fields
-`linear_base_task_score`, `async_base_task_score`, and
-`async_dynamic_replanning_score`, storing values on `[0, 1]`; paper tables
-display percentages. Scenario results average the 25 tasks within each
-repetition, then report the mean and sample standard deviation across the three
-repetition-level means. The overall result weights the eight scenarios equally.
-
-The manuscript reports Async DRS values from 19.2 to 45.1 across the nine
-evaluated models. Averaged across models, Async task success is 29.7% versus
-26.0% under Batched delivery; tasks requiring full rebuilds show gains of
-2.6--3.5 percentage points.
+| Document | Contents |
+|---|---|
+| [Evaluation protocol](docs/protocol.md) | Delivery modes, limits, information boundary, and scoring |
+| [Adapter protocol](docs/adapter-protocol.md) | JSONL interface and delivery lifecycle |
+| [CLI reference](docs/cli.md) | Validation, manifests, execution, and aggregation |
+| [Dataset guide](docs/dataset.md) | Public case layout and provenance |
+| [Kernel contract](docs/kernel-contract.md) | Kernel-owned scheduling and verification |
+| [Adapter contract](docs/adapter-contract.md) | Participant-facing runtime boundary |
+| [Configuration](configs/README.md) | Model profiles and native runtimes |
+| [Contributing](docs/contributing.md) | Development and pull requests |
+| [Security](docs/security.md) | Reporting sensitive issues |
 
 ## Repository structure
 
 ```text
 Async-RBench/
+├── assets/                   # figures used on this page
 ├── adapters/                 # adapter entry points
-├── configs/                  # public templates and runtime locks
-├── data/async-rbench/
-│   ├── cases/                # 200 public task bundles
-│   ├── registry.json         # 200 registered instances
-│   └── release.json          # frozen public corpus binding
-├── docs/                     # dataset, CLI, kernel, and adapter contracts
-├── paper_artifacts/          # frozen paper experiment manifest
-├── schemas/                  # public adapter-event schema
-├── scripts/                  # release/runtime helpers
+├── configs/                  # contracts, profiles, and runtime locks
+├── data/async-rbench/        # 200 public task bundles and registry
+├── docs/                     # protocol and usage documentation
+├── paper_artifacts/          # paper experiment manifest
+├── schemas/                  # adapter event schemas
+├── scripts/                  # release and runtime helpers
 ├── src/async_rbench/         # evaluation framework
-└── tests/                    # public verification suite
+├── tests/                    # public verification suite
+└── upstream/                 # upstream source records
 ```
 
-## Licensing and citation
+## Citation and license
 
-Original Async-RBench code and documentation are released under Apache-2.0.
-Transformed upstream task materials retain their applicable upstream terms;
-see [`NOTICE`](NOTICE) and
+Citation metadata is available in [`CITATION.cff`](CITATION.cff). Author names
+remain anonymized during double-blind review.
+
+Async-RBench code and documentation are released under Apache-2.0. Transformed
+task materials retain their upstream terms; see [`NOTICE`](NOTICE) and
 [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
-
-Citation metadata is provided in [`CITATION.cff`](CITATION.cff). Until the
-double-blind review is complete, the author fields remain anonymized in the
-release metadata.

@@ -249,9 +249,9 @@ def _source_digest(root: Path) -> str:
         root / "src" / "async_rbench" / "conformance",
         root / "src" / "async_rbench" / "private_eval.py",
         root / "adapters",
-        root / "PROTOCOL.md",
-        root / "ADAPTER_PROTOCOL.md",
-        root / "evaluation_contract.json",
+        root / "docs" / "protocol.md",
+        root / "docs" / "adapter-protocol.md",
+        root / "configs" / "evaluation-contract.json",
         root / "src" / "async_rbench" / "event_taxonomy.json",
     ])
 
@@ -345,7 +345,7 @@ def _record_controller_stimulus_audits(
 
 
 def _evaluation_contract_identity(root: Path) -> tuple[str, str]:
-    path = root / "evaluation_contract.json"
+    path = root / "configs" / "evaluation-contract.json"
     raw = path.read_bytes()
     contract = json.loads(raw)
     if contract.get("version") != EVALUATION_CONTRACT_VERSION:

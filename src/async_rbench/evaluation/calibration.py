@@ -86,7 +86,7 @@ def _frozen_point_ids(root: Path) -> tuple[
 
 
 def audit_score_calibration(root: Path, evidence_root: Path) -> dict[str, Any]:
-    contract = _load_json(root / "evaluation_contract.json")
+    contract = _load_json(root / "configs" / "evaluation-contract.json")
     policy = contract["calibration_diagnostics"]
     semantic_ids, registry_ids_by_mode, critical_ids, weighted_ids_by_mode = _frozen_point_ids(root)
     registry_ids = {

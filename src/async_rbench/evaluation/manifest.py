@@ -44,7 +44,7 @@ def create_manifest(
         raise FileNotFoundError(f"judge release manifest is missing: {judge_release_path}")
     root = Path(__file__).resolve().parents[3]
     evaluation_contract_sha256 = hashlib.sha256(
-        (root / "evaluation_contract.json").read_bytes()
+        (root / "configs" / "evaluation-contract.json").read_bytes()
     ).hexdigest()
     instances = discover_case_instances(root, case_ids)
     if instance_keys:

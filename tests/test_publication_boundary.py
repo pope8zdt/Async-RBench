@@ -40,9 +40,11 @@ def test_public_provenance_is_registered_and_does_not_name_private_paths() -> No
 
 
 def test_paper_facing_contract_uses_batched_async_and_drs() -> None:
-    protocol = (ROOT / "PROTOCOL.md").read_text(encoding="utf-8")
+    protocol = (ROOT / "docs" / "protocol.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    contract = json.loads((ROOT / "evaluation_contract.json").read_text(encoding="utf-8"))
+    contract = json.loads(
+        (ROOT / "configs" / "evaluation-contract.json").read_text(encoding="utf-8")
+    )
 
     assert "Batched (`linear`)" in protocol
     assert "Dynamic Replanning Score" in protocol

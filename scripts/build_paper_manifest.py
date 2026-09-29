@@ -59,7 +59,7 @@ def main() -> None:
     args = parser.parse_args()
 
     public_release_path = Path("data/async-rbench/release.json")
-    evaluation_contract_path = Path("evaluation_contract.json")
+    evaluation_contract_path = Path("configs/evaluation-contract.json")
     judge_release_path = args.judge_root / "release.json"
     public_release = json.loads(public_release_path.read_text(encoding="utf-8"))
     judge_release = json.loads(judge_release_path.read_text(encoding="utf-8"))

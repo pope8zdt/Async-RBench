@@ -19,11 +19,10 @@ stable task ID, revision, and content commitments; changing only a benchmark
 label or case name is not a source rebinding.
 
 Any accepted corpus change must regenerate the public and judge release
-manifests together and preserve the paper release invariants documented in
-`docs/dataset.md`.
+manifests together and preserve the paper release invariants documented in the
+[dataset guide](dataset.md).
 
 ## Pull requests
 
 Keep changes reviewable, explain any corpus-count effect, and include the exact
 validation commands and results. Never include private judge files in a patch.
-

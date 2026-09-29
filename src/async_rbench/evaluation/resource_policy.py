@@ -9,7 +9,7 @@ import yaml
 
 
 def load_resource_policy(root: Path) -> tuple[dict[str, Any], str]:
-    contract_path = root / "evaluation_contract.json"
+    contract_path = root / "configs" / "evaluation-contract.json"
     contract = json.loads(contract_path.read_text(encoding="utf-8"))
     policy = dict(contract.get("resource_policy") or {})
     if not policy:

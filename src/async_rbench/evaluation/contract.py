@@ -12,9 +12,9 @@ from .version import EVALUATION_CONTRACT_STATUS, EVALUATION_CONTRACT_VERSION
 
 
 REQUIRED_METHOD_FILES = (
-    "PROTOCOL.md",
-    "ADAPTER_PROTOCOL.md",
-    "evaluation_contract.json",
+    "docs/protocol.md",
+    "docs/adapter-protocol.md",
+    "configs/evaluation-contract.json",
     "src/async_rbench/event_taxonomy.json",
     "schemas/adapter-event.schema.json",
 )
@@ -39,7 +39,7 @@ def validate_evaluation_contract(root: Path) -> list[str]:
     for filename in REQUIRED_METHOD_FILES:
         if not (root / filename).is_file():
             errors.append(f"missing evaluation method file: {filename}")
-    path = root / "evaluation_contract.json"
+    path = root / "configs" / "evaluation-contract.json"
     if not path.is_file():
         return errors
     contract = json.loads(path.read_text(encoding="utf-8"))

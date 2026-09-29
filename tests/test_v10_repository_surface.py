@@ -37,7 +37,9 @@ def test_v11_release_surface_excludes_superseded_material() -> None:
 
 def test_release_version_is_synchronized_across_public_surfaces() -> None:
     pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    contract = json.loads((ROOT / "evaluation_contract.json").read_text(encoding="utf-8"))
+    contract = json.loads(
+        (ROOT / "configs" / "evaluation-contract.json").read_text(encoding="utf-8")
+    )
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
     assert __version__ == RELEASE_VERSION
@@ -52,7 +54,7 @@ def test_release_version_is_synchronized_across_public_surfaces() -> None:
 
 def test_active_protocol_and_profile_docs_name_v11() -> None:
     paths = (
-        "PROTOCOL.md",
+        "docs/protocol.md",
         "configs/model-profiles/experiment-profile.template.yaml",
         "docs/kernel-contract.md",
     )
@@ -63,8 +65,10 @@ def test_active_protocol_and_profile_docs_name_v11() -> None:
 
 
 def test_current_contract_surfaces_describe_five_million_fuse_and_zero_rule() -> None:
-    protocol = (ROOT / "PROTOCOL.md").read_text(encoding="utf-8")
-    contract = json.loads((ROOT / "evaluation_contract.json").read_text(encoding="utf-8"))
+    protocol = (ROOT / "docs" / "protocol.md").read_text(encoding="utf-8")
+    contract = json.loads(
+        (ROOT / "configs" / "evaluation-contract.json").read_text(encoding="utf-8")
+    )
     metric = contract["metric_definitions"]["async_dynamic_replanning_score"]
 
     assert "5,000,000-token emergency fuse" in protocol

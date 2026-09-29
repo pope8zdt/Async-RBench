@@ -35,8 +35,19 @@ def _public_leaks() -> list[Path]:
 
 
 def test_public_release_has_required_documents_and_no_private_case_paths() -> None:
-    for name in ("README.md", "CITATION.cff", "CONTRIBUTING.md", "SECURITY.md", "NOTICE"):
+    for name in ("README.md", "CITATION.cff", "NOTICE"):
         assert (ROOT / name).is_file(), name
+    for name in ("contributing.md", "security.md", "protocol.md", "adapter-protocol.md"):
+        assert (ROOT / "docs" / name).is_file(), name
+    for name in (
+        "CONTRIBUTING.md",
+        "SECURITY.md",
+        "PROTOCOL.md",
+        "ADAPTER_PROTOCOL.md",
+        "dataset_policy.json",
+        "evaluation_contract.json",
+    ):
+        assert not (ROOT / name).exists(), name
     assert len(list((ROOT / "data" / "async-rbench" / "cases").iterdir())) == 200
     assert _public_leaks() == []
 
@@ -50,7 +61,7 @@ def test_frozen_public_manifest_matches_current_200_task_corpus() -> None:
 
 
 def test_release_visible_documents_do_not_contain_local_absolute_paths() -> None:
-    files = [ROOT / "README.md", ROOT / "CONTRIBUTING.md", ROOT / "SECURITY.md", ROOT / "NOTICE"]
+    files = [ROOT / "README.md", ROOT / "NOTICE"]
     files.extend((ROOT / "docs").glob("*.md"))
     windows_absolute = re.compile(r"(?i)(?:^|[\s`(])[a-z]:\\")
     for path in files:

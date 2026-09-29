@@ -23,3 +23,11 @@ include = ["async_rbench*"]
 
 [tool.setuptools.package-data]
 async_rbench = ["event_taxonomy.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--strict-markers -p no:langsmith_plugin"
+markers = [
+    "docker: opt-in tests that create and remove isolated Docker resources",
+]
