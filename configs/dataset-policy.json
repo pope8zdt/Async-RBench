@@ -7,15 +7,28 @@
     200
   ],
   "counting_unit": "registered_instance",
+  "paper_evaluation": {
+    "selection": "all_registered_instances",
+    "instance_count": 200,
+    "split_filter": null,
+    "agent_count": 9,
+    "delivery_mode_count": 2,
+    "repetitions_per_task_and_mode": 3,
+    "episode_count": 10800,
+    "construction_tasks_reported_in_paper": 47,
+    "construction_tasks_in_public_release": false,
+    "construction_tasks_in_reported_results": false
+  },
+  "split_semantics": "Legacy diagnostic labels, not partitions of the paper evaluation set or guarantees of held-out status.",
   "splits": {
     "calibration": 81,
     "development": 30,
     "test": 89
   },
   "split_rules": {
-    "calibration": "May be used for verifier and protocol calibration; never enters headline results.",
-    "development": "May be used while changing prompts, adapters, and implementation; never enters headline results.",
-    "test": "Held out from prompt, adapter, threshold, and verifier development; used for headline results only after the evaluation contract is frozen."
+    "calibration": "Legacy label retained for diagnostic filtering; included in the full-corpus paper evaluation.",
+    "development": "Legacy label retained for diagnostic filtering; included in the full-corpus paper evaluation.",
+    "test": "Legacy label retained for diagnostic filtering; included in the full-corpus paper evaluation, without establishing held-out status."
   },
   "primary_event_theme_targets": {
     "child_failure_or_implicit_error": 25,
@@ -75,6 +88,13 @@
     "dynamic_success_threshold": 0.75
   },
   "split_freeze": {
+    "status": "superseded_policy_record_not_current_evaluation_rule",
+    "evidence_status": "The referenced assignment evidence is not included in the public release; the original exposure and held-out claims cannot be independently verified from this package.",
+    "superseded_split_rules": {
+      "calibration": "May be used for verifier and protocol calibration; never enters headline results.",
+      "development": "May be used while changing prompts, adapters, and implementation; never enters headline results.",
+      "test": "Held out from prompt, adapter, threshold, and verifier development; used for headline results only after the evaluation contract is frozen."
+    },
     "frozen_at": "2026-09-01",
     "family_count": 200,
     "instance_count": 200,

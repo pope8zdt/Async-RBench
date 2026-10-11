@@ -3,6 +3,10 @@
 `evaluation-contract.json` and `dataset-policy.json` are the machine-readable
 contracts for the v11.0.0 evaluation and public dataset.
 
+The dataset policy specifies all 200 registered instances as the paper evaluation
+set. Its split labels and superseded assignment rules are retained as historical
+metadata, not as a held-out partition; see the [dataset guide](../docs/dataset.md#legacy-registry-labels).
+
 `model-profiles/experiment-profile.template.yaml` is the public template for a
 paper-protocol run. It fixes the v11.0.0 response horizons, concurrency limits,
 timeouts, adapter runtime, and credential environment-variable fields without

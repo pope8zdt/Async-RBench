@@ -84,7 +84,6 @@ def test_readme_is_concise_and_names_the_registered_release_contract() -> None:
     assert RELEASE_VERSION in readme
     assert "200 case directories" in readme
     assert "200 registered instances" in readme
-    assert "81 calibration / 30 development / 89 test" in readme
     assert "linear_base_task_score" in readme
     assert "async_base_task_score" in readme
     assert "async_dynamic_replanning_score" in readme

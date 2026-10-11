@@ -24,14 +24,6 @@ Counting rule: each case is counted exactly once, by `primary_event_theme`.
 Capabilities are independent multi-label measurements and are never added to
 event-theme counts.
 
-## Splits
-
-| Split | Instances |
-|---|---|
-| `calibration` | 81 |
-| `development` | 30 |
-| `test` | 89 |
-
 ## Paper release composition
 
 `v11.0-paper` freezes 200 cases and 621 initial subtasks. Each source contributes
@@ -39,8 +31,36 @@ event-theme counts.
 difficulty split is 104 medium and 96 hard. The initial-subtask histogram is 73
 cases with two, 40 with three, and 87 with four or more subtasks.
 
-The 47 construction tasks used during benchmark development are separate from
-the evaluation corpus and do not appear in `registry.json`.
+The paper's evaluation set is the full 200-task registry, not a subset selected
+by the `split` field. Each of the nine agents is evaluated in two delivery modes
+with three repetitions: 200 × 9 × 2 × 3 = 10,800 episodes.
+
+The paper reports 47 separate construction tasks used during benchmark
+development, excluded from the evaluation set and all reported results. Those
+tasks are not distributed in this release; they are not the registry's 81
+`calibration` instances.
+
+## Legacy registry labels
+
+The registry retains the following labels from an earlier repository policy
+for compatibility and optional diagnostic filtering. All three groups are
+included in the paper experiment manifest; they are not separate calibration,
+development, and held-out test partitions for the paper.
+
+| Legacy label | Instances |
+|---|---|
+| `calibration` | 81 |
+| `development` | 30 |
+| `test` | 89 |
+
+The original policy assigned cases with recorded episode or pair evidence to
+`calibration`, reserved 30 other cases for development, and labeled the remainder
+`test`. The recorded rules are preserved as superseded history in
+[`dataset-policy.json`](../configs/dataset-policy.json). The referenced evidence
+file, `tmp/debug_touched_cases.json`, is not included in this release, so the
+assignment history cannot be independently verified from the public package.
+These labels do not establish that the full 200-task evaluation set was held
+out from development. Documenting them does not resolve any prior exposure.
 
 ## Score aggregation
 
@@ -69,7 +89,7 @@ case directories are not discovered on their own. Schema version `2`:
 | `case_families[].instances[]` | Registered instances of the case |
 | `case_families[].instances[].instance_id` | Instance identifier within the case |
 | `case_families[].instances[].path` | Instance path, relative to the case directory |
-| `case_families[].instances[].split` | `calibration`, `development`, or `test` |
+| `case_families[].instances[].split` | Legacy diagnostic label: `calibration`, `development`, or `test`; not a paper evaluation partition |
 
 ## Source binding and limitations
 

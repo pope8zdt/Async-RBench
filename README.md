@@ -63,9 +63,13 @@ are balanced across five source families and eight asynchronous scenarios.
 | Async scenarios | 8 scenarios, 25 tasks each |
 | Initial subtasks | 621 total: 73 with two, 40 with three, and 87 with four or more |
 | Difficulty | 104 medium / 96 hard |
-| Splits | 81 calibration / 30 development / 89 test |
 | Repetitions | 3 per task and delivery mode |
 | Main experiment | 10,800 episodes |
+
+The paper evaluates all 200 tasks in both delivery modes. Its 47 separate
+construction tasks are not part of this release. The registry's legacy split
+labels are documented in the [dataset guide](docs/dataset.md#legacy-registry-labels);
+they do not partition the paper's evaluation set.
 
 Each case contains `public/`, `task/`, and `PROVENANCE.md`. The public package
 does not include solutions, hidden tests, event schedules, verifier logic,
