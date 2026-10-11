@@ -21,3 +21,12 @@ corresponding third-party material.
 The public repository intentionally omits upstream repository caches and all
 private judge content. Anyone publishing a modified distribution is
 responsible for checking the terms of newly added or changed assets.
+
+## Website model icons
+
+The website uses model-family and provider marks from
+[LobeHub Icons](https://github.com/lobehub/lobe-icons), distributed under MIT.
+Unmodified SVGs, the upstream copyright notice and the pinned source revision
+are in [`docs/site/assets/model-icons/`](docs/site/assets/model-icons/).
+The site build includes these notices alongside the icons. Brand names and
+marks belong to their respective owners; use does not imply endorsement.

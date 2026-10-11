@@ -11,7 +11,7 @@ import shutil
 
 import yaml
 
-from pages import render_pages
+from pages import MODEL_ICONS, render_pages
 
 SITE = Path(__file__).resolve().parent
 ROOT = SITE.parents[1]
@@ -96,6 +96,10 @@ def build_site(repo_root: Path, output: Path, base_path: str):
         shutil.copyfile(SITE / name, assets / name)
     for name in ("overview.png", "benchmark-mechanism.png", "drs-validation.png", "full-rebuild.png"):
         shutil.copyfile(repo_root / "assets" / name, assets / name)
+    icons = assets / "model-icons"
+    icons.mkdir()
+    for name in sorted(set(MODEL_ICONS.values()) | {"LICENSE", "README.md"}):
+        shutil.copyfile(SITE / "assets/model-icons" / name, icons / name)
     data_dir = output / "data"
     data_dir.mkdir()
     for name, data in (("corpus.json", corpus), ("leaderboard.json", paper)):

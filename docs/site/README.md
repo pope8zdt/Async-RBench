@@ -42,11 +42,14 @@ to the site or its public inputs and publishes only the generated artifact.
   0–100, including the mean and model-detail score; do not normalize to the best
   model or introduce unreported performance bands. Numeric labels remain visible.
 - The leaderboard presents Table 3 data as ranked cards, not a reproduction of
-  the paper's table layout. Each compact card shows rank, agent and the DRS bar.
-  Its native disclosure starts closed and reveals Calls and all eight scenario
-  means with sample SD, including without JavaScript. The paper-mean summary
-  uses the same disclosure. Scenario maxima are bold; Calls is cost, not a
+  the paper's table layout. Each compact card shows rank, model icon and name,
+  Calls and the DRS bar, followed by all eight scenario means with sample SD.
+  Scenario scores and the separate paper-mean summary are always visible,
+  including without JavaScript. Scenario maxima are bold; Calls is cost, not a
   performance score. Paper means remain in a separate, unranked summary.
+- Model-family icons are local SVGs from LobeHub Icons, with their revision and
+  MIT notice in `assets/model-icons/`. Keep this notice in the built artifact.
+  They identify the models, not version-specific capabilities or endorsement.
 - Table 4 task success has its own ranked list. Both lists start in paper order
   and share the agent search. DRS ranking can also use a scenario mean; task
   success has an independent ordering control. Tied scores share a rank;

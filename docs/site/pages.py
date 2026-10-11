@@ -4,6 +4,13 @@ import json
 
 REPO = "https://github.com/pope8zdt/Async-RBench"
 SOURCES = {"gaia2": "GAIA2", "multiagentbench": "MultiAgentBench", "osworld": "OSWorld", "swe-bench": "SWE-bench", "terminal-bench": "Terminal-Bench"}
+MODEL_ICONS = {
+    "claude-sonnet-5": "claude-color.svg", "gpt-5.6-terra": "openai.svg",
+    "qwen3.7-plus": "qwen-color.svg", "glm-5.3-flash": "zai.svg",
+    "gpt-5.6-luna": "openai.svg", "deepseek-v4-pro": "deepseek-color.svg",
+    "qwen3.5-27b": "qwen-color.svg", "kimi-k2.5": "kimi-color.svg",
+    "gemini-3-flash-preview-thinking-high": "gemini-color.svg",
+}
 SCENARIOS = [
     ("delay", "权威结果延迟", "Delayed authority", "采纳迟到的权威证据，修正受影响的工作。", "Adopt authoritative evidence and revise affected work."),
     ("stale", "过时与乱序结果", "Staleness and ordering", "识别过时结果，保留当前有效状态。", "Reject stale results and preserve the current valid state."),
@@ -50,8 +57,20 @@ def figure(base, name, zh, en):
     return f'<figure><a href="{base}/assets/{name}" aria-label="{escape(en)}"><img src="{base}/assets/{name}" alt="{escape(en)}" loading="lazy"></a><figcaption>{t(zh,en)}</figcaption></figure>'
 
 
-def heading(label, zh, en, lead_zh, lead_en):
-    return f'<section class="page-heading"><h1>{t(zh,en)}</h1><p class="lead">{t(lead_zh,lead_en)}</p></section>'
+def heading(label, zh, en, lead_zh, lead_en, icon=''):
+    title = f'<span class="model-link">{icon}<span>{t(zh,en)}</span></span>' if icon else t(zh,en)
+    return f'<section class="page-heading"><h1>{title}</h1><p class="lead">{t(lead_zh,lead_en)}</p></section>'
+
+
+def model_icon(base, record):
+    name = MODEL_ICONS[record['id']]
+    dark = ' model-icon-dark' if name == 'kimi-color.svg' else ''
+    return f'<img class="model-icon{dark}" src="{base}/assets/model-icons/{name}" width="32" height="32" alt="" aria-hidden="true">'
+
+
+def model_link(base, record):
+    label = escape(record.get('paper_label', record['model']))
+    return f'<a class="model-link" href="{base}/runs/{record["id"]}/">{model_icon(base,record)}<span>{label}</span></a>'
 
 
 def source_note(base, table=None):
@@ -83,20 +102,18 @@ def scenario_scores(scenarios, maxima=None, detailed=False):
     return f'<dl class="scenario-scores {"scenario-detail" if detailed else ""}">{"".join(items)}</dl>'
 
 
-def scenario_disclosure(scenarios, calls, label_zh, label_en, maxima=None):
-    return f'''<details class="rank-details"><summary class="rank-toggle"><span class="sr-only">{t(label_zh + '：八场景成绩', label_en + ': eight scenario scores')}</span><span class="disclosure-icon" aria-hidden="true"></span></summary>
-{scenario_scores(scenarios, maxima)}<dl class="call-count"><dt>Calls</dt><dd data-field="calls">{calls:.1f}</dd></dl></details>'''
+def call_count(calls):
+    return f'<dl class="call-count"><dt>Calls</dt><dd data-field="calls">{calls:.1f}</dd></dl>'
 
 
 def result_rows(base, paper):
     maxima = {key: max(r["scenarios"][key]["mean"] for r in paper["records"]) for key in paper["scenario_order"]}
     rows = []
     for rank, record in enumerate(sorted(paper["records"], key=lambda r: -r["drs"]), 1):
-        label = record.get('paper_label', record['model'])
         rows.append(f'''<li class="rank-card" data-record="{record['id']}" data-place="{rank}" value="{rank}"><article>
-<div class="rank-card-heading"><span class="rank-number" aria-hidden="true">{rank:02d}</span><div class="rank-identity"><h3><a href="{base}/runs/{record['id']}/">{escape(label)}</a></h3></div>
+<div class="rank-card-heading"><span class="rank-number" aria-hidden="true">{rank:02d}</span><div class="rank-identity"><h3>{model_link(base,record)}</h3>{call_count(record['calls'])}</div>
 <div class="rank-score"><span class="score-label">DRS <small>/ 100</small></span>{score_bar(record['drs'], record['model'] + ' DRS')}</div></div>
-{scenario_disclosure(record['scenarios'], record['calls'], label, label, maxima)}</article></li>''')
+{scenario_scores(record['scenarios'], maxima)}</article></li>''')
     return ''.join(rows)
 
 
@@ -106,10 +123,10 @@ def leaderboard(base, paper, compact=False):
 <label>{t('排名依据','Rank by')}<select id="metric" aria-controls="result-rows"><option value="drs">DRS ↓</option>{scenario_options}</select></label>
 <div class="result-downloads"><a href="{base}/data/leaderboard.json" download>JSON</a><a href="{base}/data/leaderboard.csv" download>CSV</a></div></div>"""
     mean = paper['mean']
-    return f"""{controls}<p class="ranking-caption">{t('点击右侧箭头展开八场景成绩（均值 ± 样本标准差）与 Calls。','Use the arrows to expand eight scenario scores (mean ± sample SD) and Calls.')}</p>
+    return f"""{controls}<p class="ranking-caption">{t('八场景成绩：均值 ± 样本标准差。','Eight scenario scores: mean ± sample SD.')}</p>
 <ol id="result-rows" class="rank-list" role="list" aria-label="DRS leaderboard">{result_rows(base,paper)}</ol>
 <p id="result-empty" class="empty-state" role="status" hidden>{t('没有匹配的模型。请尝试其他关键词。','No matching agents. Try another search.')}</p>
-<aside class="ranking-mean drs-mean" data-summary="drs-mean"><div class="rank-card-heading"><div class="rank-identity"><h3>{t('九模型均值','Nine-agent mean')}</h3></div><div class="rank-score"><span class="score-label">DRS <small>/ 100</small></span>{score_bar(mean['drs'], 'Mean DRS')}</div></div>{scenario_disclosure(mean['scenarios'], mean['calls'], '九模型均值', 'Nine-agent mean')}</aside>
+<aside class="ranking-mean drs-mean" data-summary="drs-mean"><div class="rank-card-heading"><div class="rank-identity"><h3>{t('九模型均值','Nine-agent mean')}</h3>{call_count(mean['calls'])}</div><div class="rank-score"><span class="score-label">DRS <small>/ 100</small></span>{score_bar(mean['drs'], 'Mean DRS')}</div></div>{scenario_scores(mean['scenarios'])}</aside>
 <div class="ranking-notes"><p>{t('粗体标出各场景最高分。Calls 是每次 Async 运行中主代理与全部子代理的平均响应总数，不是得分。','Bold marks the best score in each scenario. Calls is the mean number of main-agent and subagent responses per Async run, not a score.')}</p>
 <p>{t('DRS 条统一采用 0–100 刻度。点击模型名称可查看详情。','DRS bars use a fixed 0–100 scale. Open an agent for its detail view.')}</p></div>{source_note(base,3)}"""
 
@@ -119,7 +136,7 @@ def success_leaderboard(base, paper):
     maxima = {key: max(r[key] for r in paper["records"]) for key in ("batched", "async")}
     for rank, record in enumerate(sorted(paper["records"], key=lambda r: -r["drs"]), 1):
         rates = ''.join(f'<div><dt>{label} S <small>(%)</small></dt><dd data-field="{key}"><{"strong" if record[key] == maxima[key] else "span"}>{record[key]:.1f}</{"strong" if record[key] == maxima[key] else "span"}></dd></div>' for key, label in (("batched", "Batched"), ("async", "Async")))
-        rows.append(f'''<li class="success-card" data-record="{record['id']}" value="{rank}"><div class="success-identity"><span class="rank-number" aria-hidden="true">{rank:02d}</span><h3><a href="{base}/runs/{record['id']}/">{escape(record.get('paper_label', record['model']))}</a></h3></div><dl class="success-scores">{rates}<div><dt>ΔS <small>{t('百分点','pp')}</small></dt><dd class="delta" data-field="delta">{record['delta']:+.1f}</dd></div></dl></li>''')
+        rows.append(f'''<li class="success-card" data-record="{record['id']}" value="{rank}"><div class="success-identity"><span class="rank-number" aria-hidden="true">{rank:02d}</span><h3>{model_link(base,record)}</h3></div><dl class="success-scores">{rates}<div><dt>ΔS <small>{t('百分点','pp')}</small></dt><dd class="delta" data-field="delta">{record['delta']:+.1f}</dd></div></dl></li>''')
     mean = paper["mean"]
     return f"""<section class="section success-section" id="task-success"><div class="section-title"><h2>{t('任务成功率','Task success')}</h2>
 <label class="inline-filter" data-enhance hidden>{t('排名依据','Rank by')}<select id="success-metric" aria-controls="success-rows"><option value="drs" data-zh="DRS（论文顺序）" data-en="DRS (paper order)">DRS（论文顺序）</option><option value="batched">Batched ↓</option><option value="async">Async ↓</option><option value="delta">ΔS ↓</option></select></label></div>
@@ -168,7 +185,7 @@ def results_page(base, paper):
 
 
 def model_page(base, record):
-    return f'<a class="back-link" href="{base}/leaderboard/">← {t("返回论文结果","All paper results")}</a>' + heading('AGENT RESULTS', record['model'], record['model'], '论文表 3、表 4 的聚合结果。','Aggregate results from Tables 3 and 4.') + f'''
+    return f'<a class="back-link" href="{base}/leaderboard/">← {t("返回论文结果","All paper results")}</a>' + heading('AGENT RESULTS', record['model'], record['model'], '论文表 3、表 4 的聚合结果。','Aggregate results from Tables 3 and 4.', icon=model_icon(base,record)) + f'''
 <div class="model-summary"><div class="main-score"><span>Async DRS</span>{score_bar(record['drs'], record['model'] + ' DRS')}<small>{t('固定刻度 0–100','Fixed scale · 0–100')}</small></div><div class="stats"><div><strong>{record['batched']:.1f}%</strong><span>Batched S</span></div><div><strong>{record['async']:.1f}%</strong><span>Async S</span></div><div><strong>{record['delta']:+.1f}</strong><span>ΔS · {t('百分点','pp')}</span></div></div></div>
 <section class="section narrow"><h2>{t('场景 DRS','Scenario DRS')}</h2><p class="ranking-caption">{t('均值 ± 样本标准差','Mean ± sample SD')}</p>{scenario_scores(record['scenarios'], detailed=True)}<p class="fine">{t('每场景 25 个任务，每模式 3 次重复；每模型每模式 600 次运行。','25 tasks per scenario, three repetitions per mode; 600 runs per agent per mode.')} {t('平均 Async 调用次数：','Mean Async calls: ')}{record['calls']:.1f}.</p>{source_note(base)}</section>'''
 

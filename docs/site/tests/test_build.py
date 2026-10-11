@@ -34,6 +34,17 @@ class ScoreMeters(HTMLParser):
             self.meters.append(dict(attrs))
 
 
+class ModelIcons(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.icons = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "img" and "model-icon" in attrs.get("class", "").split():
+            self.icons.append(attrs)
+
+
 class RankedResults(HTMLParser):
     def __init__(self):
         super().__init__()
@@ -51,7 +62,7 @@ class RankedResults(HTMLParser):
             self.list_id = attrs.get("id")
             self.lists[self.list_id] = []
         elif tag == "li" and self.list_id:
-            self.item = {"rank": attrs.get("value"), "fields": {}}
+            self.item = {"rank": attrs.get("value"), "fields": {}, "icons": []}
             self.items[attrs["data-record"] + ":" + self.list_id] = self.item
             self.lists[self.list_id].append(attrs["data-record"])
         elif tag == "aside" and "data-summary" in attrs:
@@ -62,6 +73,8 @@ class RankedResults(HTMLParser):
             self.item["disclosure"] = {"open": "open" in attrs, "fields": [], "summaries": 0}
         elif tag == "summary" and self.in_details:
             self.item["disclosure"]["summaries"] += 1
+        if tag == "img" and self.item is not None:
+            self.item["icons"].append(attrs)
         if self.item is not None and "data-field" in attrs:
             self.field = {"text": "", "bold": False}
             self.item["fields"][attrs["data-field"]] = self.field
@@ -199,7 +212,7 @@ class WebsiteBuildTests(unittest.TestCase):
                          ["42.3", "38.2", "-4.2"])
         self.assertEqual([parser.items["success-mean"]["fields"][k]["text"] for k in ("batched", "async", "delta")], ["29.7", "26.0", "-3.7"])
 
-    def test_scenario_details_start_collapsed_and_remain_available_without_script(self):
+    def test_all_scenario_scores_are_readable_without_expanding_any_entry(self):
         output = self.build()
         for route in ("index.html", "leaderboard/index.html"):
             parser = RankedResults()
@@ -207,11 +220,37 @@ class WebsiteBuildTests(unittest.TestCase):
             cards = [item for key, item in parser.items.items() if key.endswith(":result-rows") or key == "drs-mean"]
             self.assertEqual(len(cards), 10)
             for card in cards:
-                self.assertIn("disclosure", card, "Each DRS entry needs native, keyboard-accessible details")
-                self.assertFalse(card["disclosure"]["open"])
-                self.assertEqual(card["disclosure"]["summaries"], 1)
-                self.assertCountEqual(card["disclosure"]["fields"],
+                self.assertNotIn("disclosure", card, "Scenario scores must not require an expand action")
+                self.assertCountEqual(card["fields"],
                                       ["delay", "stale", "conflict", "replay", "partial", "failure", "scope", "straggler", "calls"])
+
+    def test_every_ranked_model_and_detail_page_has_its_local_brand_icon(self):
+        output = self.build()
+        icons = {
+            "claude-sonnet-5": "claude-color.svg", "gpt-5.6-terra": "openai.svg",
+            "qwen3.7-plus": "qwen-color.svg", "glm-5.3-flash": "zai.svg",
+            "gpt-5.6-luna": "openai.svg", "deepseek-v4-pro": "deepseek-color.svg",
+            "qwen3.5-27b": "qwen-color.svg", "kimi-k2.5": "kimi-color.svg",
+            "gemini-3-flash-preview-thinking-high": "gemini-color.svg",
+        }
+        for route, lists in (("index.html", ["result-rows"]),
+                             ("leaderboard/index.html", ["result-rows", "success-rows"])):
+            parser = RankedResults()
+            parser.feed((output / route).read_text(encoding="utf-8"))
+            for list_id in lists:
+                for model, filename in icons.items():
+                    images = parser.items[model + ":" + list_id]["icons"]
+                    self.assertEqual(len(images), 1, (route, model))
+                    self.assertEqual(images[0]["src"], f"/Async-RBench/assets/model-icons/{filename}")
+                    self.assertEqual(images[0].get("alt"), "", "Adjacent model text supplies the accessible name")
+        for model, filename in icons.items():
+            parser = ModelIcons()
+            parser.feed((output / f"runs/{model}/index.html").read_text(encoding="utf-8"))
+            self.assertEqual([i["src"] for i in parser.icons], [f"/Async-RBench/assets/model-icons/{filename}"])
+            self.assertTrue((output / "assets/model-icons" / filename).is_file())
+        license_text = (output / "assets/model-icons/LICENSE").read_text(encoding="utf-8")
+        self.assertIn("MIT License", license_text)
+        self.assertIn("Copyright", license_text)
 
     def test_model_scenarios_are_readable_without_a_table(self):
         output = self.build()
