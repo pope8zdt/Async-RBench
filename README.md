@@ -10,7 +10,7 @@
 [![Tasks](https://img.shields.io/badge/Tasks-200-6F52B5.svg)](data/async-rbench/registry.json)
 [![Version](https://img.shields.io/badge/Version-11.0.0-2E8B57.svg)](CITATION.cff)
 
-[Overview](#overview) · [Results](#main-results) · [Dataset](#dataset) · [Quick start](#quick-start) · [Evaluation](#evaluation) · [Documentation](#documentation)
+[Website](https://pope8zdt.github.io/Async-RBench/) · [Overview](#overview) · [Results](#main-results) · [Dataset](#dataset) · [Quick start](#quick-start) · [Evaluation](#evaluation) · [Documentation](#documentation)
 
 </div>
 
@@ -41,12 +41,15 @@ Release: `v11.0-paper`
 - Mean task success falls from **29.7% under Batched delivery to 26.0% under
   Async delivery**. All nine agents have a lower Async point estimate.
 - Full-rebuild raises DRS from 39.7 to 42.3 for Terra, 31.1 to 34.6 for Luna,
-  and 19.2 to 21.9 for Gemini, while increasing mean model calls by 7.5–10.2%.
+  and 19.2 to 21.9 for Gemini. The paper text reports 7.5–10.2% more model calls.
 
 <p align="center">
   <img src="assets/drs-validation.png" width="48%" alt="DRS validation with Oracle, Native, and Frozen responses">
   <img src="assets/full-rebuild.png" width="48%" alt="DRS and model calls under Native and Full-rebuild execution">
 </p>
+
+Figure 6 is rendered from the supplied manuscript. Its call counts and the
+text's reported increase do not fully reconcile; both are preserved as reported.
 
 The paper evaluates Claude Sonnet 5, GPT-5.6 Terra, Qwen3.7 Plus, GLM5.3
 Flash, GPT-5.6 Luna, DeepSeek V4 Pro, Qwen3.5 27B, Kimi K2.5, and Gemini 3

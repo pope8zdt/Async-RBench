@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "status": "paper_reported",
+  "scale": "DRS: 0-100; task success: percent; delta: percentage points; calls: mean responses per Async run",
+  "source": {
+    "title": "Async-RBench: Benchmarking Asynchronous Task Execution in LLM Agents",
+    "manuscript_snapshot": "2026-09-26",
+    "sha256": "21a4babf4e9399381a2780c2306f7dd225d17a8a6480bf41f8338d4a8afc0aa2",
+    "drs": "Table 3, page 7",
+    "task_success": "Table 4, page 9",
+    "validation": "Figure 3, page 7",
+    "full_rebuild": "Figure 6 and Section 4.5, page 9",
+    "note": "Transcribed paper aggregates, not recomputed from released traces or independently reproduced. Delta S is retained as reported: the paper calculates differences before rounding. The private manuscript PDF is not distributed by this website."
+  },
+  "protocol": {"tasks": 200, "agents": 9, "modes": 2, "repetitions": 3, "episodes": 10800},
+  "scenario_order": ["delay", "stale", "conflict", "replay", "partial", "failure", "scope", "straggler"],
+  "records": [
+    {"id": "claude-sonnet-5", "model": "Claude Sonnet 5", "drs": 45.1, "calls": 77.1, "batched": 42.3, "async": 38.2, "delta": -4.2,
+      "scenario_means": [38.7, 53.4, 39.9, 15.5, 29.8, 35.8, 66.9, 80.5],
+      "scenario_sds": [1.8, 1.2, 2.1, 1.2, 1.7, 1.3, 1.9, 1.5]},
+    {"id": "gpt-5.6-terra", "model": "GPT-5.6 Terra", "drs": 39.7, "calls": 48.1, "batched": 41.3, "async": 38.8, "delta": -2.5,
+      "scenario_means": [34.2, 43.9, 41.5, 18.5, 21.4, 16.2, 69.4, 72.2],
+      "scenario_sds": [1.5, 2.9, 1.3, 1.6, 1.3, 1.9, 2.0, 2.4]},
+    {"id": "qwen3.7-plus", "model": "Qwen3.7 Plus", "drs": 38.2, "calls": 75.9, "batched": 21.3, "async": 18.7, "delta": -2.7,
+      "scenario_means": [33.0, 45.5, 38.8, 12.6, 21.2, 6.9, 61.8, 85.9],
+      "scenario_sds": [1.3, 2.9, 1.5, 1.6, 2.4, 1.5, 2.4, 2.6]},
+    {"id": "glm-5.3-flash", "model": "GLM5.3 Flash", "drs": 33.4, "calls": 76.5, "batched": 25.5, "async": 20.8, "delta": -4.7,
+      "scenario_means": [29.0, 47.8, 27.0, 11.6, 31.2, 5.0, 53.5, 62.3],
+      "scenario_sds": [2.7, 2.2, 2.3, 2.2, 2.1, 0.6, 2.4, 1.4]},
+    {"id": "gpt-5.6-luna", "model": "GPT-5.6 Luna", "drs": 31.1, "calls": 45.5, "batched": 40.2, "async": 34.3, "delta": -5.8,
+      "scenario_means": [34.0, 47.8, 31.7, 4.2, 22.2, 14.9, 43.8, 50.5],
+      "scenario_sds": [1.2, 1.2, 1.4, 0.3, 1.2, 1.2, 1.3, 2.2]},
+    {"id": "deepseek-v4-pro", "model": "DeepSeek V4 Pro", "drs": 30.6, "calls": 108.0, "batched": 35.7, "async": 34.7, "delta": -1.0,
+      "scenario_means": [16.2, 47.6, 20.8, 2.7, 24.2, 16.8, 62.0, 54.7],
+      "scenario_sds": [1.6, 2.2, 3.2, 0.7, 2.4, 2.8, 2.1, 3.2]},
+    {"id": "qwen3.5-27b", "model": "Qwen3.5 27B", "drs": 29.8, "calls": 119.6, "batched": 19.7, "async": 17.0, "delta": -2.7,
+      "scenario_means": [28.7, 32.0, 31.5, 6.1, 20.0, 4.2, 61.1, 54.6],
+      "scenario_sds": [1.4, 2.9, 3.1, 0.2, 1.0, 0.2, 1.4, 2.2]},
+    {"id": "kimi-k2.5", "model": "Kimi K2.5", "drs": 26.1, "calls": 125.2, "batched": 23.2, "async": 19.2, "delta": -4.0,
+      "scenario_means": [27.5, 30.0, 20.4, 3.1, 12.9, 8.5, 51.4, 55.3],
+      "scenario_sds": [2.3, 1.9, 1.3, 0.4, 1.3, 1.3, 1.2, 2.3]},
+    {"id": "gemini-3-flash-preview-thinking-high", "model": "Gemini 3 Flash High", "drs": 19.2, "calls": 95.0, "batched": 18.3, "async": 12.3, "delta": -6.0,
+      "scenario_means": [20.7, 13.8, 29.3, 2.7, 8.5, 1.7, 47.2, 29.9],
+      "scenario_sds": [1.1, 0.4, 1.3, 0.4, 1.1, 0.4, 2.4, 2.3]}
+  ],
+  "mean": {"drs": 32.6, "calls": 85.7, "batched": 29.7, "async": 26.0, "delta": -3.7},
+  "validation": [
+    {"model": "GPT-5.6 Terra", "oracle": 98.8, "native": 39.7, "frozen": 16.1},
+    {"model": "GPT-5.6 Luna", "oracle": 98.5, "native": 31.1, "frozen": 8.5},
+    {"model": "Gemini 3 Flash High", "oracle": 96.4, "native": 19.2, "frozen": 3.7}
+  ],
+  "full_rebuild": [
+    {"model": "GPT-5.6 Terra", "native": 39.7, "full_rebuild": 42.3},
+    {"model": "GPT-5.6 Luna", "native": 31.1, "full_rebuild": 34.6},
+    {"model": "Gemini 3 Flash High", "native": 19.2, "full_rebuild": 21.9}
+  ]
+}
