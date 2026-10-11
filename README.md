@@ -48,8 +48,9 @@ Release: `v11.0-paper`
   <img src="assets/full-rebuild.png" width="48%" alt="DRS and model calls under Native and Full-rebuild execution">
 </p>
 
-Figure 6 is rendered from the supplied manuscript. Its call counts and the
-text's reported increase do not fully reconcile; both are preserved as reported.
+Figures and reported results follow manuscript version 26 (September 29, 2026).
+The leaderboard contains paper-reported aggregates, not results recomputed by
+the repaired scoring implementation.
 
 The paper evaluates Claude Sonnet 5, GPT-5.6 Terra, Qwen3.7 Plus, GLM5.3
 Flash, GPT-5.6 Luna, DeepSeek V4 Pro, Qwen3.5 27B, Kimi K2.5, and Gemini 3
@@ -79,6 +80,13 @@ does not include solutions, hidden tests, event schedules, verifier logic,
 credentials, or experiment traces. Formal scoring uses a separately distributed
 judge bundle.
 
+Runtime qualification is not complete: 46 source-rebound cases remain pending,
+including 38 with conflicting legacy participant materials. They are retained
+for recovery, not certified as executable paper tasks. The release-certification
+command rejects these cases; source labels and corpus totals alone are not
+evidence of reproducibility. Four additional MultiAgentBench cases await
+container and quality qualification, bringing the pending total to 50.
+
 ## Quick start
 
 Python 3.11 or newer is required.
@@ -101,7 +109,8 @@ A valid checkout reports:
 
 ## Evaluation
 
-Create and run a manifest after obtaining the matching judge bundle:
+After task setup qualification and compatible frozen judge bindings are available,
+the formal evaluation commands are:
 
 ```bash
 async-rbench validate-judge --judge-root <judge-root>
@@ -118,6 +127,10 @@ async-rbench-eval make-manifest \
 async-rbench-eval run-manifest \
   --manifest manifest.json \
   --output <run-directory> \
+  --profile reference_scaffold_api \
+  --runtime-mode api_only \
+  --config <profile.yaml> \
+  --official-track \
   --judge-root <judge-root>
 ```
 
@@ -125,6 +138,13 @@ The paper reports Batched task success, Async task success, and Async Dynamic
 Replanning Score (DRS). For an event, the process score `P` averages the
 applicable Change, Preserve, Forbid, and Verify components. With event outcome
 `O`, `DRS_event = 100 × (P + O) / 2`.
+
+Task success is binary per run: every registered task goal must pass. The repaired
+policy, `async-rbench-paper26-binary-presentation-1`, uses actual main-request
+presentation and retains observed intermediate changes. It cannot be mixed with
+legacy scores. Official runs require frozen ERC point weights and adequate
+response-window observations; the current endpoint observer cannot certify
+Preserve/Forbid obligations, so those official runs are blocked before model calls.
 
 Machine-readable outputs retain the field names `linear_base_task_score`,
 `async_base_task_score`, and `async_dynamic_replanning_score`. They store values

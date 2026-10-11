@@ -11,8 +11,8 @@ from .event_taxonomy import (
 
 
 EXECUTION_MODES = ("linear", "async")
-# Fixed harness resource ceiling for benchmark-owned initial work. Recovery
-# children use the participant profile's separate concurrency budget.
+# Maximum declared initial workstreams, not simultaneous executions. Initial
+# and recovery children share the participant profile's live concurrency limit.
 MAX_INITIAL_WORKSTREAMS = 8
 
 CAPABILITY_CATEGORIES = frozenset({

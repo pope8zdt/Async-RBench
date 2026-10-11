@@ -253,7 +253,7 @@ def test_bts_consumes_only_base_task_domain() -> None:
         _check("b2", domain="base_task", passed=False),
         _check("e1", domain="async_replanning", event_id="evt.x", passed=True),
     ]
-    assert score_base_task(results) == 0.5
+    assert score_base_task(results) == 0.0
 
 
 def test_async_outcome_ignores_other_events_and_base_task() -> None:

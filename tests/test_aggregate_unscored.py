@@ -132,7 +132,7 @@ def test_paper_official_run_accepts_all_three_registry_splits() -> None:
 
 def test_opportunity_counts_are_reported() -> None:
     rec = _record("case-a", "async", 0.75)
-    rec["base_task_score"] = 0.8
+    rec["base_task_score"] = 1.0
     rec["async_drs"] = 0.5
     rec["event_opportunity_counts"] = {
         "declared_events": 2, "provisional_established": 1,

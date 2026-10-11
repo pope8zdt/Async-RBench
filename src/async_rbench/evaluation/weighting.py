@@ -31,7 +31,7 @@ GATE_DYNAMIC_DIMENSIONS = {
     "resource_triage": "plan_revision",
 }
 
-SCORE_POLICY_VERSION = "dtbench-v9-causal-groups-2"
+SCORE_POLICY_VERSION = "async-rbench-paper26-binary-presentation-1"
 DYNAMIC_COMPONENT_MASS = 0.80
 SEMANTIC_COMPONENT_MASS = 0.20
 DYNAMIC_SUCCESS_THRESHOLD = 0.75

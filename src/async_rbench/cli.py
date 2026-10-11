@@ -10,7 +10,7 @@ import yaml
 from .evaluation.registry_audit import validate_semantic_registries
 from .judge import JudgeBundleProvider, compose_runtime_case, load_judge_case
 from .paths import registered_case_dir
-from .release import build_judge_release, build_public_release, validate_paired_release
+from .release import build_judge_release, build_public_release, validate_paired_release, validate_source_execution
 from .spec import discover_case_instances, discover_cases, load_case, validate_case
 
 
@@ -94,6 +94,12 @@ def cmd_validate_judge(args: argparse.Namespace) -> int:
 
 def cmd_certify_release(args: argparse.Namespace) -> int:
     root = _selected_root(args)
+    source_errors = [error for case in discover_cases(root)
+                     for error in validate_source_execution(registered_case_dir(root, case.case_id))]
+    if source_errors:
+        for error in source_errors:
+            print(error, file=sys.stderr)
+        return 1
     provider = JudgeBundleProvider(Path(args.judge_root))
     public_release = build_public_release(root)
     judge_release = build_judge_release(root, provider.root, public_release)

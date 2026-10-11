@@ -40,6 +40,7 @@ from .observation import (
 from .case_contract import assert_participant_safe
 from .case_contract import public_delivery, public_rejection
 from .case_contract import validate_scoring_domains
+from .control_flow_gates import validate_drs_registry
 from .case_bundle import public_case_bundle_sha256
 from .version import EVALUATION_CONTRACT_STATUS, EVALUATION_CONTRACT_VERSION
 from .weighting import DYNAMIC_CONTROL_DIMENSIONS, SCORE_POLICY_VERSION
@@ -1254,6 +1255,11 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     task_yaml = yaml.safe_load(
         (public_case_root / "task/task.yaml").read_text(encoding="utf-8")
     )
+    if config.official_track:
+        from ..release import validate_source_execution
+        source_errors = validate_source_execution(public_case_root)
+        if source_errors:
+            raise ValueError("source execution is not qualified: " + "; ".join(source_errors))
     semantic_registry_path = evaluator_dir / "semantic_checks.json"
     semantic_registry = json.loads(semantic_registry_path.read_text(encoding="utf-8"))
     # Hard gate (pre-run): every frozen semantic check must declare exactly one
@@ -1272,6 +1278,14 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
             + "; ".join(domain_errors)
             + f" [registry: {semantic_registry_path}]"
         )
+    control_flow_registry_path = evaluator_dir / "control_flow_checks.json"
+    control_flow_registry = json.loads(control_flow_registry_path.read_text(encoding="utf-8"))
+    drs_errors = validate_drs_registry(
+        list(control_flow_registry.get("event_contracts") or []), semantic_registry,
+        official=config.official_track, case_spec=case_spec,
+    )
+    if drs_errors:
+        raise ValueError("DRS contract cannot be evaluated: " + "; ".join(drs_errors))
     evaluation_contract_version, evaluation_contract_sha256 = _evaluation_contract_identity(root)
     recorder = TraceRecorder(config.episode_id)
     controller = DeliveryController(config.execution_mode, case_spec)
@@ -1795,8 +1809,6 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
         ),
         encoding="utf-8",
     )
-    control_flow_registry_path = evaluator_dir / "control_flow_checks.json"
-    control_flow_registry = json.loads(control_flow_registry_path.read_text(encoding="utf-8"))
     score = score_trace(
         store.events, case_spec, config.execution_mode,
         semantic_registry=semantic_registry,

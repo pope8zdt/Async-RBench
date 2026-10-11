@@ -40,6 +40,42 @@ def normalize_release_source(value: Any) -> str:
     return aliases.get(normalized, normalized)
 
 
+def validate_source_execution(case_dir: Path) -> list[str]:
+    """Reject known source/runtime contradictions, not certify execution by labels.
+
+    Passing this static check still requires setup qualification and a compatible
+    external judge. In particular, source metadata alone is not an executable pack.
+    """
+    task_path = case_dir / "task/task.yaml"
+    task = yaml.safe_load(task_path.read_text(encoding="utf-8")) or {}
+    errors = []
+    status = str(task.get("runtime_status") or "")
+    if "pending" in status:
+        errors.append(f"{case_dir.name}: runtime_pending; setup has not been qualified")
+    binding_path = case_dir / "public/source_binding.json"
+    if not binding_path.is_file():
+        return errors
+    binding = json.loads(binding_path.read_text(encoding="utf-8"))
+    source = normalize_release_source(binding.get("benchmark"))
+    if not status:
+        errors.append(f"{case_dir.name}: missing source-bound runtime qualification status")
+    material_path = case_dir / "task/task_file/source_task.json"
+    if not material_path.is_file():
+        errors.append(f"{case_dir.name}: missing source task input")
+    else:
+        material = json.loads(material_path.read_text(encoding="utf-8"))
+        for field in ("benchmark", "source_task_id", "source_revision", "source_sha256",
+                      "objective_binding_sha256", "environment_binding_sha256", "acceptance_binding_sha256"):
+            if binding.get(field) != material.get(field):
+                errors.append(f"{case_dir.name}: source task binding mismatch: {field}")
+    participant_path = case_dir / "task/task_file/participant_task.json"
+    if participant_path.is_file():
+        participant = json.loads(participant_path.read_text(encoding="utf-8"))
+        if normalize_release_source(participant.get("benchmark")) != source:
+            errors.append(f"{case_dir.name}: participant source mismatch")
+    return errors
+
+
 @dataclass(frozen=True)
 class CorpusStats:
     case_count: int

@@ -1153,6 +1153,16 @@ def aggregate_reports(
     theme_by_case: dict[str, str] | None = None,
     minimum_theme_test_instances: int | None = None,
 ) -> dict[str, Any]:
+    policies = {str(item.get("score_policy_version") or "legacy-or-missing") for item in records}
+    if len(policies) > 1:
+        raise ValueError("mixed scoring policies cannot share a headline; aggregate each policy separately")
+    if policies == {SCORE_POLICY_VERSION}:
+        if any(item.get("base_task_score") not in (None, 0, 1) for item in records):
+            raise ValueError("current-policy task success must be a binary per-run outcome")
+    else:
+        # Retain historical diagnostic scores, but do not reinterpret fractional
+        # task checks or delivery-only DRS as the repaired paper metrics.
+        records = [dict(item, base_task_score=None, async_drs=None) for item in records]
     invalid_modes = sorted({_mode(item) for item in records} - set(EXECUTION_MODES))
     official = [
         item for item in records

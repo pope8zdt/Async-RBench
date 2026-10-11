@@ -550,17 +550,8 @@ class SubagentManager:
         return max(0, self.config.max_total_child_spawns - self.recovery_spawn_count())
 
     def _concurrency_limit(self) -> int:
-        # The initial wave is benchmark-owned scenario construction, not a
-        # participant delegation choice. Admit the complete bounded wave so a
-        # case with more workstreams than the participant recovery limit still
-        # creates the declared concurrent opportunity. Once it is admitted, later
-        # recovery/redelegation children use the participant profile limit.
-        # Linear runs the same benchmark-owned wave concurrently — the only
-        # difference from async is that the main model is shown ONE atomic bundle
-        # at the end instead of per-result asynchronous interruptions.
-        initial_records = self._initial_records()
-        if any(record.status == "queued" for record in initial_records):
-            return max(self.config.max_concurrent_children, len(initial_records))
+        # Initial work and recovery share the same live capacity in both modes.
+        # The separate recovery-spawn allowance is a count budget, not capacity.
         return self.config.max_concurrent_children
 
     def _launch_queued(self) -> None:

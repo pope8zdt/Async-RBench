@@ -197,7 +197,7 @@ def test_partial_finish_keeps_unreached_event_in_drs_denominator() -> None:
         *_constructed_initial_wave(),
         {
             "type": "artifact_committed", "seq": 6,
-            "artifact_id": "final", "observed_digest": "before",
+            "artifact_id": "final", "observed_digest": "a" * 64, "evaluator_observed": True,
         },
         {
             "type": "result_delivery_evaluator_fact", "seq": 7,
@@ -209,12 +209,15 @@ def test_partial_finish_keeps_unreached_event_in_drs_denominator() -> None:
             "type": "result_delivered", "seq": 8,
             "completion_id": "observed", "child_id": "authority-child",
         },
+        {"type": "result_available", "seq": 9, "completion_id": "observed", "delivery_occurrence_id": "occ-1"},
+        {"type": "adapter_queued", "seq": 10, "completion_id": "observed", "delivery_occurrence_id": "occ-1"},
+        {"type": "result_presented", "seq": 11, "completion_id": "observed", "delivery_occurrence_id": "occ-1"},
+        {"type": "artifact_committed", "seq": 12, "artifact_id": "final",
+         "observed_digest": "a" * 64, "evaluator_observed": True},
+        {"type": "verification_requested", "seq": 13, "check_id": "evt.observed.closed",
+         "passed": True, "evaluator_owned": True},
         {
-            "type": "artifact_committed", "seq": 9,
-            "artifact_id": "final", "observed_digest": "after",
-        },
-        {
-            "type": "verifier_result", "seq": 10,
+            "type": "verifier_result", "seq": 17,
             "semantic_check_results": [{
                 "id": "evt.observed.closed", "measurement_type": "semantic",
                 "score_domain": "async_replanning", "event_id": "evt.observed",
@@ -223,12 +226,12 @@ def test_partial_finish_keeps_unreached_event_in_drs_denominator() -> None:
             "test_point_pass_rate": 1.0,
         },
         {
-            "type": "finish_invoked", "seq": 11,
+            "type": "finish_invoked", "seq": 15,
             "requested_status": "completed", "pending_occurrence_count": 0,
             "active_response_window": False, "final_commit_current": True,
             "verification_current": True, "closure_complete": False,
         },
-        {"type": "episode_ended", "seq": 12, "local_status": "completed"},
+        {"type": "episode_ended", "seq": 16, "local_status": "completed"},
     ]
     contracts = [
         {
@@ -245,7 +248,8 @@ def test_partial_finish_keeps_unreached_event_in_drs_denominator() -> None:
 
     score = score_trace(
         events, _minimal_dynamic_case(), "async",
-        semantic_registry={"checks": [{"id": "evt.observed.closed"}]},
+        semantic_registry={"checks": [{"id": "evt.observed.closed",
+                                      "score_domain": "async_replanning", "event_id": "evt.observed"}]},
         control_flow_checks=[], event_contracts=contracts,
     )
 

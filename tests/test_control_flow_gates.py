@@ -306,7 +306,7 @@ def test_base_task_consumes_only_base_task_domain_ignoring_async_and_tier():
         {"id": "event.a", "score_domain": "async_replanning", "event_id": "evt.a", "passed": True, "relevance_tier": "critical"},
         {"id": "event.b", "score_domain": "async_replanning", "event_id": "evt.a", "passed": False, "relevance_tier": "direct"},
     ]
-    assert score_base_task(results) == 0.5
+    assert score_base_task(results) == 0.0
 
 
 def test_no_replan_full_process_versus_required_revision_unchanged_zero():
@@ -315,7 +315,7 @@ def test_no_replan_full_process_versus_required_revision_unchanged_zero():
         "required_changes": [], "required_preservation": ["prior"],
         "forbidden_changes": ["saved"], "closure_checks": ["evt.a.close"],
     }
-    state = {"prior": "same", "saved": "provisional"}
+    state = {"prior": "same", "saved": "provisional", "stable": "unchanged"}
     passed = [
         {"id": "evt.a.close", "score_domain": "async_replanning", "event_id": "evt.a", "passed": True},
     ]

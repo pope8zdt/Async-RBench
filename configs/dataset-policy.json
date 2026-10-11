@@ -81,10 +81,11 @@
       "closure"
     ],
     "minimum_critical_dynamic_points": 1,
-    "score_policy_version": "dtbench-v9-causal-groups-2",
-    "primary_metric": "dynamic_control_score",
-    "dynamic_component_mass": 0.8,
-    "semantic_component_mass": 0.2,
+    "score_policy_version": "async-rbench-paper26-binary-presentation-1",
+    "primary_metric": ["batched_task_success", "async_task_success", "async_dynamic_replanning_score"],
+    "drs_process_mass": 0.5,
+    "drs_outcome_mass": 0.5,
+    "legacy_dt_score": {"dynamic_component_mass": 0.8, "semantic_component_mass": 0.2},
     "dynamic_success_threshold": 0.75
   },
   "split_freeze": {

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import defaultdict, deque
 from typing import Any
 
 from .protocol import canonical_digest
@@ -197,6 +197,7 @@ def _contract_carries_scoring_fields(contract: dict[str, Any]) -> bool:
         or contract.get("required_verification") or contract.get("expected_disposition")
         or contract.get("applicable_components") or contract.get("requires_provisional")
         or contract.get("event_status")
+        or contract.get("scoring_points")
     )
 
 
@@ -205,18 +206,104 @@ def _event_state_snapshots(
     related_artifacts: set[str],
     boundary_seq: int,
 ) -> tuple[dict[str, str], dict[str, str]]:
-    """Build before/after digest snapshots around an event's boundary."""
+    """Compatibility projection of observed baseline and final state."""
+    terminal_seq = max(
+        (int(item.get("seq", 0)) for commits in artifact_commits.values() for item in commits),
+        default=boundary_seq,
+    )
+    before, after, _ = _event_state_evidence(
+        artifact_commits, related_artifacts, boundary_seq, terminal_seq,
+    )
+    return before, after
+
+
+def _event_state_evidence(
+    artifact_commits: dict[str, list[dict[str, Any]]],
+    related_artifacts: set[str],
+    boundary_seq: int,
+    terminal_seq: int,
+) -> tuple[dict[str, str], dict[str, str], dict[str, list[dict[str, Any]]]]:
+    """Keep every observed transition from presentation through termination."""
     before: dict[str, str] = {}
     after: dict[str, str] = {}
+    history: dict[str, list[dict[str, Any]]] = {}
     for artifact_id in related_artifacts:
-        commits = artifact_commits.get(str(artifact_id), [])
+        commits = sorted(
+            (item for item in artifact_commits.get(str(artifact_id), [])
+             if int(item.get("seq", 0)) <= terminal_seq),
+            key=lambda item: int(item.get("seq", 0)),
+        )
         pre = [item for item in commits if int(item.get("seq", 0)) < boundary_seq]
         post = [item for item in commits if int(item.get("seq", 0)) >= boundary_seq]
         if pre:
-            before[artifact_id] = str(max(pre, key=lambda item: int(item.get("seq", 0))).get("observed_digest", ""))
+            before[artifact_id] = str(pre[-1].get("observed_digest", ""))
+            after[artifact_id] = before[artifact_id]
         if post:
-            after[artifact_id] = str(max(post, key=lambda item: int(item.get("seq", 0))).get("observed_digest", ""))
-    return before, after
+            after[artifact_id] = str(post[-1].get("observed_digest", ""))
+        history[artifact_id] = list(post)
+    return before, after, history
+
+
+def _event_presentation_boundaries(
+    events: list[dict[str, Any]],
+    contracts: list[dict[str, Any]],
+    authoritative_kind: str | None,
+) -> dict[str, int]:
+    """Join gateway deliveries to Main receipt without conflating replays.
+
+    Gateway truth stays private. The adapter's available/queued/presented
+    records provide occurrence identity, so repeated completion IDs consume
+    their own gateway delivery in receive order rather than the latest result.
+    """
+    pending: dict[str, deque[dict[str, Any]]] = defaultdict(deque)
+    available: dict[str, dict[str, Any]] = {}
+    queued: set[str] = set()
+    presented: set[str] = set()
+    boundaries: dict[str, int] = {}
+    for event in sorted(events, key=lambda item: int(item.get("seq", 0))):
+        kind = event.get("type")
+        completion = str(event.get("completion_id") or "")
+        occurrence = str(event.get("delivery_occurrence_id") or "")
+        if kind == "result_delivered":
+            pending[completion].append(event)
+        elif kind == "result_available":
+            if not occurrence or occurrence in available or not pending[completion]:
+                raise ValueError("presentation availability has no unique gateway delivery")
+            available[occurrence] = pending[completion].popleft()
+        elif kind in {"adapter_queued", "result_presented"}:
+            delivery = available.get(occurrence)
+            if delivery is None or str(delivery.get("completion_id") or "") != completion:
+                raise ValueError("presentation occurrence does not match its available delivery")
+            if kind == "adapter_queued":
+                queued.add(occurrence)
+                continue
+            if occurrence not in queued or occurrence in presented:
+                raise ValueError("presentation occurrence was not uniquely queued")
+            presented.add(occurrence)
+            delivered_event = str(delivery.get("benchmark_event_id") or "")
+            for contract in contracts:
+                event_id = str(contract.get("event_id") or "")
+                matches = delivered_event == event_id
+                if contract.get("allow_legacy_authority_descendant") is True:
+                    matches = matches or (
+                        delivered_event.startswith(event_id + ".")
+                        and delivery.get("result_kind") == authoritative_kind
+                    )
+                if event_id and matches:
+                    boundaries.setdefault(event_id, int(event.get("seq", 0)))
+    return boundaries
+
+
+def _termination_seq(events: list[dict[str, Any]]) -> int:
+    """First actual Main termination, before cleanup and saved-state judging."""
+    terminals = [
+        int(event.get("seq", 0)) for event in events
+        if event.get("type") in {"finish_invoked", "main_implicit_stop", "episode_ended"}
+        or (event.get("type") == "step_limit_reached" and event.get("role") == "main")
+    ]
+    return min(terminals) if terminals else max(
+        (int(event.get("seq", 0)) for event in events), default=0,
+    )
 
 
 def _weighted_control_flow_counts(
@@ -255,6 +342,7 @@ def score_trace(
     event_contracts: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     events = _materialize_private_delivery_facts(events)
+    terminal_seq = _termination_seq(events)
     protocol_valid = not _events_of(events, "protocol_violation")
     gateway_violation_count = sum(
         1 for event in _events_of(events, "protocol_violation") if event.get("gateway") is True
@@ -325,11 +413,9 @@ def score_trace(
     )
     initial_wave_started_as_designed = bool(
         initial_wave_declared_as_designed
-        and (
-            bool(initial_wave_children & set(started))
-            if execution_mode == "linear"
-            else initial_wave_children <= set(started)
-        )
+        # Queued work need not have started before a participant chooses to
+        # finish. Real initial child overlap is checked separately below.
+        and bool(initial_wave_children & set(started))
     )
     construction_failure_events = [
         event for event in infrastructure_failure_events
@@ -1011,7 +1097,7 @@ def score_trace(
     )
     # Base Task Score: only ``score_domain == base_task`` checks feed BTS, so
     # async replanning evidence never leaks into the mode-neutral task score.
-    base_task_score = score_base_task(semantic_results)
+    base_task_score = score_base_task(semantic_results, semantic_registry=semantic_registry)
     dynamic_dimension_rates = dynamic_dimension_scores(control_flow_results)
     dynamic_group_rates = dynamic_decision_group_scores(control_flow_results)
     process_dynamic_score = dynamic_process_score(control_flow_results)
@@ -1033,6 +1119,14 @@ def score_trace(
     if execution_mode == "async" and contracts:
         if not scenario_constructed:
             dynamic_scenario_errors.append("benchmark scenario construction failed")
+        try:
+            presentation_boundaries = _event_presentation_boundaries(
+                [event for event in events if int(event.get("seq", 0)) <= terminal_seq],
+                contracts, authoritative_kind,
+            )
+        except ValueError as exc:
+            presentation_boundaries = {}
+            dynamic_scenario_errors.append(str(exc))
         for failure in infrastructure_failure_events:
             if failure.get("component") == "delivery_intervention":
                 dynamic_scenario_errors.append(
@@ -1119,10 +1213,8 @@ def score_trace(
             event_id = str(contract.get("event_id") or "")
             if not _contract_carries_scoring_fields(contract):
                 continue
-            event_deliveries = list(deliveries_by_event.get(event_id) or [])
-            event_rejections = list(rejections_by_event.get(event_id) or [])
-            boundary_events = [*event_deliveries, *event_rejections]
-            if not boundary_events:
+            boundary_seq = presentation_boundaries.get(event_id)
+            if boundary_seq is None:
                 # The participant had a declared opportunity but ended before
                 # its evaluator-observed boundary. Keep the event in the fixed
                 # DRS denominator as zero. True evaluator-owned unscored event
@@ -1133,18 +1225,34 @@ def score_trace(
                 event_drs_scores.append(event_drs)
                 async_event_drs[event_id] = _event_drs_to_dict(event_drs)
                 continue
-            boundary_seq = min(int(item.get("seq", 0)) for item in boundary_events)
             delta = contract.get("state_delta") or {}
             related_artifacts = {str(item) for item in delta.get("affected_artifacts") or []}
             related_artifacts |= {str(item) for item in delta.get("unaffected_artifacts") or []}
             related_artifacts |= {str(item) for item in contract.get("required_changes") or []}
             related_artifacts |= {str(item) for item in contract.get("required_preservation") or []}
             related_artifacts |= {str(item) for item in contract.get("forbidden_changes") or []}
-            before, after = _event_state_snapshots(
-                artifact_commits, related_artifacts, boundary_seq,
+            related_artifacts |= {
+                str(point["artifact_id"])
+                for points in (contract.get("scoring_points") or {}).values()
+                for point in points if point.get("artifact_id")
+            }
+            # Process constraints concern real observed state, including damage
+            # with invalid result lineage; useful-delegation filtering above
+            # must not erase a prohibited side effect from the DRS evidence.
+            observed_commits: dict[str, list[dict[str, Any]]] = defaultdict(list)
+            for observed in _events_of(events, "artifact_committed"):
+                if (observed.get("evaluator_observed") is True
+                        and len(str(observed.get("observed_digest", ""))) == 64):
+                    observed_commits[str(observed.get("artifact_id"))].append(observed)
+            before, after, artifact_history = _event_state_evidence(
+                observed_commits, related_artifacts, boundary_seq, terminal_seq,
             )
             event_drs = score_event_replanning(
                 contract, before, after, semantic_results,
+                artifact_history=artifact_history,
+                semantic_registry=semantic_registry,
+                response_events=[event for event in events
+                                 if boundary_seq <= int(event.get("seq", 0)) <= terminal_seq],
             )
             if contract.get("requires_provisional") is True:
                 if _provisional_missing(contract, before):
@@ -1225,6 +1333,9 @@ def score_trace(
     denominator_contract = {
         "score_policy_version": SCORE_POLICY_VERSION,
         "execution_mode": execution_mode,
+        "event_response_contracts": sorted(contracts, key=lambda item: str(item.get("event_id", ""))),
+        "task_goal_ids": sorted(str(item["id"]) for item in registry_semantic_checks
+                                if item.get("score_domain") == "base_task"),
         "semantic": sorted([
             {
                 "id": point_id,

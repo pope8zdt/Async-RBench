@@ -19,6 +19,7 @@ readable for reproducibility.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import math
 from typing import Any
 
 from .weighting import (
@@ -571,6 +572,111 @@ COMPONENT_ORDER = (
 PROCESS_BLEND_WEIGHT = 0.5
 
 
+def validate_drs_points(contract: dict[str, Any]) -> list[str]:
+    """Validate optional frozen point bindings; never derive weights from results."""
+    points = contract.get("scoring_points")
+    if points is None:
+        return []  # Historical list contracts remain diagnostic inputs.
+    if not isinstance(points, dict) or not points:
+        return ["scoring_points must be a nonempty mapping"]
+    errors = []
+    for component, entries in points.items():
+        if component not in {*COMPONENT_ORDER, "async_outcome"}:
+            errors.append(f"unknown DRS component: {component}")
+        if not isinstance(entries, list) or not entries:
+            errors.append(f"{component}: point list must be nonempty")
+            continue
+        seen = set()
+        for point in entries:
+            if not isinstance(point, dict):
+                errors.append(f"{component}: point must be a mapping")
+                continue
+            identity = point.get("id")
+            if not isinstance(identity, str) or not identity or identity in seen:
+                errors.append(f"{component}: missing or duplicate point id")
+            else:
+                seen.add(identity)
+            weight = point.get("weight")
+            if (type(weight) not in (int, float) or not math.isfinite(weight) or weight <= 0):
+                errors.append(f"{component}: weight must be finite and positive")
+            fields = (["check_id"] if component in {"closure", "async_outcome"}
+                      else ["artifact_id", "check_id"] if component == "required_effect_coverage"
+                      else ["artifact_id"])
+            for name in fields:
+                if not isinstance(point.get(name), str) or not point[name]:
+                    errors.append(f"{component}: missing {name}")
+    applicable = contract.get("applicable_components")
+    if applicable is not None and set(applicable) != set(points) - {"async_outcome"}:
+        errors.append("applicable_components must match frozen process point lists")
+    if "async_outcome" not in points:
+        errors.append("scoring_points requires async_outcome points")
+    if not any(points.get(name) for name in COMPONENT_ORDER):
+        errors.append("scoring_points requires a nonempty process denominator")
+    return errors
+
+
+def _weighted_points(points: list[dict[str, Any]], predicate: Any) -> float:
+    total = sum(point["weight"] for point in points)
+    return sum(point["weight"] for point in points if predicate(point)) / total
+
+
+def validate_drs_registry(
+    contracts: list[dict[str, Any]], semantic_registry: dict[str, Any], *, official: bool = False,
+    case_spec: dict[str, Any] | None = None,
+) -> list[str]:
+    """Pre-run binding checks. Snapshot observers cannot certify operation history."""
+    errors = []
+    checks = {str(item.get("id")): item for item in semantic_registry.get("checks", [])}
+    artifacts = {str(item.get("id")): item for item in (case_spec or {}).get("artifacts", [])}
+    commands = (case_spec or {}).get("hidden_reverification_commands") or {}
+    if official and case_spec is None:
+        errors.append("official scoring requires executable process-evidence bindings")
+    seen = set()
+    for contract in contracts:
+        event_id = str(contract.get("event_id") or "")
+        if not event_id or event_id in seen:
+            errors.append("DRS contract has missing or duplicate event_id")
+        seen.add(event_id)
+        invalid = validate_drs_points(contract)
+        errors.extend(f"{event_id}: {error}" for error in invalid)
+        if invalid:
+            continue
+        points = contract.get("scoring_points")
+        if points is None:
+            if official:
+                errors.append(f"{event_id}: official scoring requires frozen scoring_points and weights")
+            continue
+        for component, entries in points.items():
+            for point in entries:
+                check_id = point.get("check_id")
+                if component != "closure" and check_id is not None and check_id not in checks:
+                    errors.append(f"{event_id}: unknown check binding {check_id}")
+                if component in {"async_outcome", "required_effect_coverage"}:
+                    check = checks.get(check_id, {})
+                    if (check.get("score_domain") != "async_replanning"
+                            or str(check.get("event_id")) != event_id):
+                        errors.append(f"{event_id}: {component} point must bind its own event check")
+                if case_spec is not None:
+                    if component == "closure" and not str(commands.get(check_id) or "").strip():
+                        errors.append(f"{event_id}: Verify point has no runtime verification command")
+                    artifact_id = point.get("artifact_id")
+                    if artifact_id is not None:
+                        artifact = artifacts.get(artifact_id, {})
+                        path = str(artifact.get("path") or "")
+                        supported = bool(str(artifact.get("observer_command") or "").strip()) or (
+                            path.startswith("/") and ":" not in path[1:])
+                        if not supported:
+                            errors.append(f"{event_id}: artifact {artifact_id} has no supported observer")
+        # The current runtime observes command endpoints. A command may damage
+        # and restore state between observations; those snapshots are insufficient
+        # for paper-level R/F certification, even when their hashes are equal.
+        if official and (points.get("preservation") or points.get("forbidden_effect_compliance")):
+            errors.append(f"{event_id}: full response-window operation observer is not available")
+    if official and not contracts:
+        errors.append("official scoring requires frozen event response contracts")
+    return errors
+
+
 @dataclass
 class EventDRS:
     """A single event's Dynamic Replanning Score with component attribution.
@@ -630,19 +736,21 @@ def _required_effect_coverage(
 
 def _preservation_score(
     contract: dict[str, Any], before: Any, after: Any,
+    artifact_history: dict[str, list[dict[str, Any]]] | None = None,
 ) -> float | None:
     preserved = [str(item) for item in (contract.get("required_preservation") or [])]
     if not preserved:
         return None
     consistent = sum(
         1 for artifact_id in preserved
-        if _state_token(before, artifact_id) == _state_token(after, artifact_id)
+        if _artifact_preserved(before, after, artifact_id, artifact_history)
     )
     return consistent / len(preserved)
 
 
 def _forbidden_effect_compliance(
     contract: dict[str, Any], before: Any, after: Any,
+    artifact_history: dict[str, list[dict[str, Any]]] | None = None,
 ) -> float | None:
     forbidden = [str(item) for item in (contract.get("forbidden_changes") or [])]
     if not forbidden:
@@ -650,13 +758,27 @@ def _forbidden_effect_compliance(
     compliant = sum(
         1 for artifact_id in forbidden
         # A forbidden artifact must remain unchanged: a change is a violation.
-        if _state_token(before, artifact_id) == _state_token(after, artifact_id)
+        if _artifact_preserved(before, after, artifact_id, artifact_history)
     )
     return compliant / len(forbidden)
 
 
+def _artifact_preserved(
+    before: Any, after: Any, artifact_id: str,
+    artifact_history: dict[str, list[dict[str, Any]]] | None,
+) -> bool:
+    baseline = _state_token(before, artifact_id)
+    if baseline is None or baseline != _state_token(after, artifact_id):
+        return False
+    return all(
+        item.get("observed_digest") == baseline
+        for item in (artifact_history or {}).get(artifact_id, [])
+    )
+
+
 def _closure_score(
     contract: dict[str, Any], semantic_results: list[dict[str, Any]] | None,
+    response_events: list[dict[str, Any]] | None = None,
 ) -> float | None:
     checks = [
         str(item)
@@ -664,6 +786,13 @@ def _closure_score(
     ]
     if not checks:
         return None
+    if response_events is not None:
+        verified = {
+            str(item.get("check_id")) for item in response_events
+            if item.get("type") == "verification_requested"
+            and item.get("evaluator_owned") is True and item.get("passed") is True
+        }
+        return sum(check_id in verified for check_id in checks) / len(checks)
     by_id = {str(item.get("id")): item for item in (semantic_results or [])}
     passed = sum(1 for check_id in checks if by_id.get(check_id, {}).get("passed") is True)
     return passed / len(checks)
@@ -680,6 +809,8 @@ def _component_applicability(contract: dict[str, Any]) -> set[str]:
     declared = contract.get("applicable_components")
     if declared is not None:
         return set(str(item) for item in declared)
+    if contract.get("scoring_points") is not None:
+        return set(contract["scoring_points"]) - {"async_outcome"}
     applicable = set()
     if contract.get("required_changes"):
         applicable.add("required_effect_coverage")
@@ -694,12 +825,29 @@ def _component_applicability(contract: dict[str, Any]) -> set[str]:
 
 def _event_async_outcome(
     event_id: str | None, semantic_results: list[dict[str, Any]] | None,
+    semantic_registry: dict[str, Any] | list[dict[str, Any]] | None = None,
+    points: list[dict[str, Any]] | None = None,
 ) -> float | None:
     checks = [
         item for item in (semantic_results or [])
         if item.get("score_domain") == "async_replanning"
         and str(item.get("event_id")) == str(event_id)
     ]
+    by_id: dict[str, list[dict[str, Any]]] = {}
+    for item in checks:
+        by_id.setdefault(str(item.get("id")), []).append(item)
+    def passed(point: dict[str, Any]) -> bool:
+        matching = by_id.get(point["check_id"], [])
+        return len(matching) == 1 and matching[0].get("passed") is True
+    if points is not None:
+        return _weighted_points(points, passed)
+    if semantic_registry is not None:
+        registered = (semantic_registry.get("checks", [])
+                      if isinstance(semantic_registry, dict) else semantic_registry)
+        points = [{"check_id": str(item["id"]), "weight": 1} for item in registered
+                  if item.get("score_domain") == "async_replanning"
+                  and str(item.get("event_id")) == str(event_id)]
+        return _weighted_points(points, passed) if points else None
     if not checks:
         return None
     passed = sum(1 for item in checks if item.get("passed") is True)
@@ -721,30 +869,83 @@ def _provisional_missing(contract: dict[str, Any], before: Any) -> bool:
 def _component_value(
     name: str, contract: dict[str, Any], before: Any, after: Any,
     semantic_results: list[dict[str, Any]] | None,
+    artifact_history: dict[str, list[dict[str, Any]]] | None = None,
+    response_events: list[dict[str, Any]] | None = None,
 ) -> float | None:
+    if contract.get("scoring_points") is not None:
+        points = contract["scoring_points"].get(name)
+        if not points:
+            return None
+        verified = {str(item.get("check_id")) for item in (response_events or [])
+                    if item.get("type") == "verification_requested"
+                    and item.get("evaluator_owned") is True and item.get("passed") is True}
+        change_results: dict[str, list[dict[str, Any]]] = {}
+        for item in semantic_results or []:
+            if (item.get("score_domain") == "async_replanning"
+                    and str(item.get("event_id")) == str(contract.get("event_id"))):
+                change_results.setdefault(str(item.get("id")), []).append(item)
+        def satisfied(point: dict[str, Any]) -> bool:
+            if name == "closure":
+                return point["check_id"] in verified
+            artifact = point["artifact_id"]
+            if name == "required_effect_coverage":
+                # Change is evaluator evidence of a correct effect, independent
+                # of whether the participant requested the separate Verify step.
+                matching = change_results.get(point["check_id"], [])
+                return (len(matching) == 1 and matching[0].get("passed") is True
+                        and _state_token(after, artifact) is not None
+                        and _state_token(before, artifact) != _state_token(after, artifact))
+            return _artifact_preserved(before, after, artifact, artifact_history)
+        return _weighted_points(points, satisfied)
     if name == "required_effect_coverage":
         return _required_effect_coverage(contract, before, after)
     if name == "preservation":
-        return _preservation_score(contract, before, after)
+        return _preservation_score(contract, before, after, artifact_history)
     if name == "forbidden_effect_compliance":
-        return _forbidden_effect_compliance(contract, before, after)
+        return _forbidden_effect_compliance(contract, before, after, artifact_history)
     if name == "closure":
-        return _closure_score(contract, semantic_results)
+        return _closure_score(contract, semantic_results, response_events)
     return None
 
 
 def score_base_task(
     semantic_results: list[dict[str, Any]] | None,
+    semantic_registry: dict[str, Any] | list[dict[str, Any]] | None = None,
 ) -> float | None:
-    """Base Task Score: fraction of ``score_domain == base_task`` checks passing."""
+    """Binary task success, independent of event-specific replanning checks.
+
+    A supplied registry fixes the task-goal set: missing or duplicate results
+    cannot shrink it. With no registry, callers must supply the complete parsed
+    result set. No declared task goals means success cannot be measured.
+    """
     checks = [
         item for item in (semantic_results or [])
         if item.get("score_domain") == "base_task"
     ]
+    if semantic_registry is not None:
+        registered = (
+            semantic_registry.get("checks", [])
+            if isinstance(semantic_registry, dict) else semantic_registry
+        )
+        task_ids = [
+            item.get("id") for item in (registered or [])
+            if isinstance(item, dict) and item.get("score_domain") == "base_task"
+        ]
+        if not task_ids or any(not isinstance(item, str) or not item for item in task_ids):
+            return None
+        if len(set(task_ids)) != len(task_ids):
+            return None
+        by_id: dict[str, list[dict[str, Any]]] = {}
+        for item in checks:
+            by_id.setdefault(str(item.get("id") or ""), []).append(item)
+        return float(all(
+            len(by_id.get(check_id, [])) == 1
+            and by_id[check_id][0].get("passed") is True
+            for check_id in task_ids
+        ))
     if not checks:
         return None
-    passed = sum(1 for item in checks if item.get("passed") is True)
-    return passed / len(checks)
+    return float(all(item.get("passed") is True for item in checks))
 
 
 def score_event_replanning(
@@ -752,6 +953,10 @@ def score_event_replanning(
     before: Any,
     after: Any,
     semantic_results: list[dict[str, Any]] | None,
+    *,
+    artifact_history: dict[str, list[dict[str, Any]]] | None = None,
+    response_events: list[dict[str, Any]] | None = None,
+    semantic_registry: dict[str, Any] | list[dict[str, Any]] | None = None,
 ) -> EventDRS:
     """Score a single event's replanning (DRS).
 
@@ -761,6 +966,9 @@ def score_event_replanning(
     the trajectory.
     """
     contract = dict(contract or {})
+    errors = validate_drs_points(contract)
+    if errors:
+        raise ValueError("; ".join(errors))
     disposition = str(contract.get("expected_disposition") or "")
     status = str(contract.get("event_status") or "scored")
     empty_components = {name: None for name in COMPONENT_ORDER}
@@ -779,10 +987,15 @@ def score_event_replanning(
 
     applicability = _component_applicability(contract)
     component_scores = {
-        name: _component_value(name, contract, before, after, semantic_results)
+        name: _component_value(
+            name, contract, before, after, semantic_results, artifact_history, response_events,
+        )
         for name in COMPONENT_ORDER
     }
     applicable = {name: name in applicability for name in COMPONENT_ORDER}
+    for name in applicability & set(COMPONENT_ORDER):
+        if component_scores[name] is None:
+            component_scores[name] = 0.0
 
     # Spec 9.4: participant failure to create the required provisional within
     # the complete pre-event window yields a related DRS of 0.
@@ -803,7 +1016,10 @@ def score_event_replanning(
     process_score = (
         sum(applicable_values) / len(applicable_values) if applicable_values else None
     )
-    async_outcome = _event_async_outcome(contract.get("event_id"), semantic_results)
+    async_outcome = _event_async_outcome(
+        contract.get("event_id"), semantic_results, semantic_registry,
+        (contract.get("scoring_points") or {}).get("async_outcome"),
+    )
     return EventDRS(
         process_score=process_score,
         async_outcome=async_outcome,

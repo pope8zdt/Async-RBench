@@ -28,9 +28,10 @@ they are not comparable to the paper's reported results.
   the main agent continues working. The kernel controls release boundaries but
   does not prescribe a model-generated completion order.
 
-The benchmark-owned initial wave has separate bounded capacity (currently at
-most eight workstreams), independent of the participant's replacement-child
-concurrency limit. `scenario_constructed` audits only whether the harness
+Initial and recovery children share a limit of three concurrent executions in
+both modes. Up to eight initial workstreams may be declared; excess work queues
+until a slot opens. The recovery-spawn count is a separate allowance, not extra
+concurrency. `scenario_constructed` audits only whether the harness
 established the declared execution opportunity. Infrastructure failure makes an
 episode unscored. If the participant ends before all designed async results are
 observed, the episode remains scored: `scenario_exposure_complete` is false and
@@ -111,3 +112,38 @@ set. The denominator digest binds score-policy version, point id, measurement
 type, dynamic dimension, relevance weight and criticality. Paper-comparable
 episodes use the fixed harness, isolated containers, the reference API adapter,
 matching digests, and the current score policy.
+
+### Executable policy and qualification
+
+`async-rbench-paper26-binary-presentation-1` uses binary task success: every
+registered task-level check must pass; missing, failed, skipped or duplicate
+results cannot earn success. Old policies remain diagnostic records, and cannot
+be aggregated with the new policy or relabeled as its task-success results.
+
+DRS starts at the target result's actual presentation in a main-agent request,
+not its gateway delivery or queue insertion. Replay occurrences are joined
+separately. Process evidence ends at participant termination; observed changes
+remain in the history even if later repaired. Missing observations cannot earn
+preservation credit. Verify uses evaluator-confirmed participant validation
+inside that interval, not a final hidden check.
+
+Evaluator-only ERCs may define `scoring_points` for each applicable component
+and `async_outcome`. Each point has a unique `id` and a positive finite `weight`.
+Change points bind `artifact_id` and `check_id`; Preserve/Forbid bind
+`artifact_id`; Verify/Outcome bind `check_id`. Outcome checks must belong to that
+event, as must Change checks. Change credit uses the observed effect and its
+evaluator check, independently of the participant requesting validation. Verify
+binds an executable runtime validation command, not a hidden final-state check.
+Preflight verifies artifact observers and these command bindings. Each contract
+must have a nonempty process denominator. Scores use weighted means within each
+component and equal means across
+applicable process components. Missing point evidence contributes zero. The
+denominator fingerprint includes the frozen ERCs and task-goal membership.
+
+Historical list contracts remain development diagnostics, not proof of the
+paper's frozen point weights. Official preflight rejects missing weights. The
+current observer samples command endpoints and cannot detect a change restored
+within one command; it therefore cannot certify full-window Preserve/Forbid
+obligations. Official runs requiring them are blocked. Runtime-pending source
+materials also prevent release certification. These implementation checks do not
+retrospectively validate the paper-reported experimental scores.

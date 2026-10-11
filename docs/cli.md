@@ -65,6 +65,10 @@ Run, score, aggregate, and audit:
 async-rbench-eval run-manifest \
   --manifest manifest.json \
   --output <run-directory> \
+  --profile reference_scaffold_api \
+  --runtime-mode api_only \
+  --config <profile.yaml> \
+  --official-track \
   --judge-root <judge-root>
 
 async-rbench-eval score \
@@ -85,6 +89,11 @@ async-rbench-eval audit-run \
 ```
 
 ## Adapter conformance
+
+These formal commands are gated, not a claim that the current package is ready
+for a paper reproduction. Runtime-pending source bindings, missing frozen ERC
+weights, and unsupported response-window observations block certification or
+official execution. Old and repaired scoring policies must be aggregated separately.
 
 ```bash
 async-rbench-eval conformance \

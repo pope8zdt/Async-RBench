@@ -21,7 +21,7 @@ to the site or its public inputs and publishes only the generated artifact.
 ## Sources and maintenance
 
 - `data/paper-results.json` transcribes Tables 3 and 4 and Figures 3 and 6 of the
-  manuscript supplied on 2026-09-26. The source SHA-256 and score scales travel
+  manuscript version 26 dated 2026-09-29. The source SHA-256 and score scales travel
   with the JSON download. These are paper-reported values, not a recomputation
   or independent reproduction of experiments.
 - Keep the paper's reported task-success differences: they were calculated
