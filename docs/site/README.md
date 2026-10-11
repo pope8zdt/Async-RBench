@@ -42,8 +42,10 @@ to the site or its public inputs and publishes only the generated artifact.
   0–100, including the mean and model-detail score; do not normalize to the best
   model or introduce unreported performance bands. Numeric labels remain visible.
 - The leaderboard presents Table 3 data as ranked cards, not a reproduction of
-  the paper's table layout. Each card shows rank, agent, DRS, Calls and all eight
-  scenario means with sample SD. Scenario maxima are bold; Calls is cost, not a
+  the paper's table layout. Each compact card shows rank, agent and the DRS bar.
+  Its native disclosure starts closed and reveals Calls and all eight scenario
+  means with sample SD, including without JavaScript. The paper-mean summary
+  uses the same disclosure. Scenario maxima are bold; Calls is cost, not a
   performance score. Paper means remain in a separate, unranked summary.
 - Table 4 task success has its own ranked list. Both lists start in paper order
   and share the agent search. DRS ranking can also use a scenario mean; task

@@ -83,14 +83,20 @@ def scenario_scores(scenarios, maxima=None, detailed=False):
     return f'<dl class="scenario-scores {"scenario-detail" if detailed else ""}">{"".join(items)}</dl>'
 
 
+def scenario_disclosure(scenarios, calls, label_zh, label_en, maxima=None):
+    return f'''<details class="rank-details"><summary class="rank-toggle"><span class="sr-only">{t(label_zh + '：八场景成绩', label_en + ': eight scenario scores')}</span><span class="disclosure-icon" aria-hidden="true"></span></summary>
+{scenario_scores(scenarios, maxima)}<dl class="call-count"><dt>Calls</dt><dd data-field="calls">{calls:.1f}</dd></dl></details>'''
+
+
 def result_rows(base, paper):
     maxima = {key: max(r["scenarios"][key]["mean"] for r in paper["records"]) for key in paper["scenario_order"]}
     rows = []
     for rank, record in enumerate(sorted(paper["records"], key=lambda r: -r["drs"]), 1):
+        label = record.get('paper_label', record['model'])
         rows.append(f'''<li class="rank-card" data-record="{record['id']}" data-place="{rank}" value="{rank}"><article>
-<div class="rank-card-heading"><span class="rank-number" aria-hidden="true">{rank:02d}</span><div class="rank-identity"><h3><a href="{base}/runs/{record['id']}/">{escape(record.get('paper_label', record['model']))}</a></h3><dl class="call-count"><dt>Calls</dt><dd data-field="calls">{record['calls']:.1f}</dd></dl></div>
+<div class="rank-card-heading"><span class="rank-number" aria-hidden="true">{rank:02d}</span><div class="rank-identity"><h3><a href="{base}/runs/{record['id']}/">{escape(label)}</a></h3></div>
 <div class="rank-score"><span class="score-label">DRS <small>/ 100</small></span>{score_bar(record['drs'], record['model'] + ' DRS')}</div></div>
-{scenario_scores(record['scenarios'], maxima)}</article></li>''')
+{scenario_disclosure(record['scenarios'], record['calls'], label, label, maxima)}</article></li>''')
     return ''.join(rows)
 
 
@@ -100,10 +106,10 @@ def leaderboard(base, paper, compact=False):
 <label>{t('排名依据','Rank by')}<select id="metric" aria-controls="result-rows"><option value="drs">DRS ↓</option>{scenario_options}</select></label>
 <div class="result-downloads"><a href="{base}/data/leaderboard.json" download>JSON</a><a href="{base}/data/leaderboard.csv" download>CSV</a></div></div>"""
     mean = paper['mean']
-    return f"""{controls}<p class="ranking-caption">{t('异步执行下的动态重规划分数。八项场景成绩为三次重复的均值 ± 样本标准差。','Dynamic Replanning Score under Async execution. Scenario scores show mean ± sample SD over three repetitions.')}</p>
+    return f"""{controls}<p class="ranking-caption">{t('点击右侧箭头展开八场景成绩（均值 ± 样本标准差）与 Calls。','Use the arrows to expand eight scenario scores (mean ± sample SD) and Calls.')}</p>
 <ol id="result-rows" class="rank-list" role="list" aria-label="DRS leaderboard">{result_rows(base,paper)}</ol>
 <p id="result-empty" class="empty-state" role="status" hidden>{t('没有匹配的模型。请尝试其他关键词。','No matching agents. Try another search.')}</p>
-<aside class="ranking-mean" data-summary="drs-mean"><div class="rank-card-heading"><div class="rank-identity"><h3>{t('九模型均值','Nine-agent mean')}</h3><dl class="call-count"><dt>Calls</dt><dd data-field="calls">{mean['calls']:.1f}</dd></dl></div><div class="rank-score"><span class="score-label">DRS <small>/ 100</small></span>{score_bar(mean['drs'], 'Mean DRS')}</div></div>{scenario_scores(mean['scenarios'])}</aside>
+<aside class="ranking-mean drs-mean" data-summary="drs-mean"><div class="rank-card-heading"><div class="rank-identity"><h3>{t('九模型均值','Nine-agent mean')}</h3></div><div class="rank-score"><span class="score-label">DRS <small>/ 100</small></span>{score_bar(mean['drs'], 'Mean DRS')}</div></div>{scenario_disclosure(mean['scenarios'], mean['calls'], '九模型均值', 'Nine-agent mean')}</aside>
 <div class="ranking-notes"><p>{t('粗体标出各场景最高分。Calls 是每次 Async 运行中主代理与全部子代理的平均响应总数，不是得分。','Bold marks the best score in each scenario. Calls is the mean number of main-agent and subagent responses per Async run, not a score.')}</p>
 <p>{t('DRS 条统一采用 0–100 刻度。点击模型名称可查看详情。','DRS bars use a fixed 0–100 scale. Open an agent for its detail view.')}</p></div>{source_note(base,3)}"""
 

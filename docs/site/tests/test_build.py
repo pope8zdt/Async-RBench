@@ -41,6 +41,7 @@ class RankedResults(HTMLParser):
         self.items = {}
         self.list_id = self.item = self.field = None
         self.table_count = 0
+        self.in_details = False
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -56,9 +57,16 @@ class RankedResults(HTMLParser):
         elif tag == "aside" and "data-summary" in attrs:
             self.item = {"fields": {}}
             self.items[attrs["data-summary"]] = self.item
+        if tag == "details" and self.item is not None:
+            self.in_details = True
+            self.item["disclosure"] = {"open": "open" in attrs, "fields": [], "summaries": 0}
+        elif tag == "summary" and self.in_details:
+            self.item["disclosure"]["summaries"] += 1
         if self.item is not None and "data-field" in attrs:
             self.field = {"text": "", "bold": False}
             self.item["fields"][attrs["data-field"]] = self.field
+            if self.in_details:
+                self.item["disclosure"]["fields"].append(attrs["data-field"])
         elif tag == "strong" and self.field is not None:
             self.field["bold"] = True
 
@@ -73,6 +81,8 @@ class RankedResults(HTMLParser):
             self.item = None
         elif tag == "ol":
             self.list_id = None
+        elif tag == "details":
+            self.in_details = False
 
 
 class WebsiteBuildTests(unittest.TestCase):
@@ -188,6 +198,20 @@ class WebsiteBuildTests(unittest.TestCase):
         self.assertEqual([sonnet[k]["text"] for k in ("batched", "async", "delta")],
                          ["42.3", "38.2", "-4.2"])
         self.assertEqual([parser.items["success-mean"]["fields"][k]["text"] for k in ("batched", "async", "delta")], ["29.7", "26.0", "-3.7"])
+
+    def test_scenario_details_start_collapsed_and_remain_available_without_script(self):
+        output = self.build()
+        for route in ("index.html", "leaderboard/index.html"):
+            parser = RankedResults()
+            parser.feed((output / route).read_text(encoding="utf-8"))
+            cards = [item for key, item in parser.items.items() if key.endswith(":result-rows") or key == "drs-mean"]
+            self.assertEqual(len(cards), 10)
+            for card in cards:
+                self.assertIn("disclosure", card, "Each DRS entry needs native, keyboard-accessible details")
+                self.assertFalse(card["disclosure"]["open"])
+                self.assertEqual(card["disclosure"]["summaries"], 1)
+                self.assertCountEqual(card["disclosure"]["fields"],
+                                      ["delay", "stale", "conflict", "replay", "partial", "failure", "scope", "straggler", "calls"])
 
     def test_model_scenarios_are_readable_without_a_table(self):
         output = self.build()
