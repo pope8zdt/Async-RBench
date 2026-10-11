@@ -1,13 +1,14 @@
 export function rankResults(records, metric = 'drs') {
+  const score = record => record.scenarios?.[metric]?.mean ?? record[metric];
   const rows = records.map(record => ({ ...record })).sort((a, b) => {
-    const av = Number.isFinite(a[metric]) ? a[metric] : -Infinity;
-    const bv = Number.isFinite(b[metric]) ? b[metric] : -Infinity;
+    const av = Number.isFinite(score(a)) ? score(a) : -Infinity;
+    const bv = Number.isFinite(score(b)) ? score(b) : -Infinity;
     return bv - av || a.id.localeCompare(b.id);
   });
   let previous;
   let rank = null;
   return rows.map((row, index) => {
-    const value = row[metric];
+    const value = score(row);
     if (!Number.isFinite(value)) return { ...row, rank: null };
     if (value !== previous) rank = index + 1;
     previous = value;
@@ -17,7 +18,7 @@ export function rankResults(records, metric = 'drs') {
 
 export function filterResults(records, query = '') {
   const term = query.trim().toLocaleLowerCase();
-  return records.filter(row => `${row.id} ${row.model}`.toLocaleLowerCase().includes(term));
+  return records.filter(row => `${row.id} ${row.model} ${row.paper_label || ''}`.toLocaleLowerCase().includes(term));
 }
 
 export function filterTasks(tasks, { query = '', source = '', difficulty = '' } = {}) {

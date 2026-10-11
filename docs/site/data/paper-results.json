@@ -39,11 +39,12 @@
     {"id": "kimi-k2.5", "model": "Kimi K2.5", "drs": 26.1, "calls": 125.2, "batched": 23.2, "async": 19.2, "delta": -4.0,
       "scenario_means": [27.5, 30.0, 20.4, 3.1, 12.9, 8.5, 51.4, 55.3],
       "scenario_sds": [2.3, 1.9, 1.3, 0.4, 1.3, 1.3, 1.2, 2.3]},
-    {"id": "gemini-3-flash-preview-thinking-high", "model": "Gemini 3 Flash High", "drs": 19.2, "calls": 95.0, "batched": 18.3, "async": 12.3, "delta": -6.0,
+    {"id": "gemini-3-flash-preview-thinking-high", "model": "Gemini 3 Flash High", "paper_label": "Gemini 3 Flash-H", "drs": 19.2, "calls": 95.0, "batched": 18.3, "async": 12.3, "delta": -6.0,
       "scenario_means": [20.7, 13.8, 29.3, 2.7, 8.5, 1.7, 47.2, 29.9],
       "scenario_sds": [1.1, 0.4, 1.3, 0.4, 1.1, 0.4, 2.4, 2.3]}
   ],
-  "mean": {"drs": 32.6, "calls": 85.7, "batched": 29.7, "async": 26.0, "delta": -3.7},
+  "mean": {"drs": 32.6, "calls": 85.7, "batched": 29.7, "async": 26.0, "delta": -3.7,
+    "scenarios": {"delay": 29.1, "stale": 40.2, "conflict": 31.2, "replay": 8.6, "partial": 21.3, "failure": 12.2, "scope": 57.5, "straggler": 60.7}},
   "validation": [
     {"model": "GPT-5.6 Terra", "oracle": 98.8, "native": 39.7, "frozen": 16.1},
     {"model": "GPT-5.6 Luna", "oracle": 98.5, "native": 31.1, "frozen": 8.5},

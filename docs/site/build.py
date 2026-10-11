@@ -102,9 +102,13 @@ def build_site(repo_root: Path, output: Path, base_path: str):
         (data_dir / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     with (data_dir / "leaderboard.csv").open("w", newline="", encoding="utf-8") as stream:
         fields = ["model", "drs", "calls", "batched", "async", "delta"]
+        fields += [f"{key}_{stat}" for key in paper["scenario_order"] for stat in ("mean", "sd")]
         writer = csv.DictWriter(stream, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
-        writer.writerows(paper["records"])
+        for record in paper["records"]:
+            scenario_fields = {f"{key}_{stat}": record["scenarios"][key][stat]
+                               for key in paper["scenario_order"] for stat in ("mean", "sd")}
+            writer.writerow({**record, **scenario_fields})
     shutil.copyfile(repo_root / "configs/model-profiles/experiment-profile.template.yaml", data_dir / "experiment-profile.template.yaml")
     (output / ".nojekyll").touch()
     return {"pages": len(pages), "tasks": len(corpus["tasks"]), "paper_models": len(paper["records"])}

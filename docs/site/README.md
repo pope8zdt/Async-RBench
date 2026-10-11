@@ -41,6 +41,13 @@ to the site or its public inputs and publishes only the generated artifact.
 - DRS bars are static score meters, not loading indicators. Their scale is always
   0–100, including the mean and model-detail score; do not normalize to the best
   model or introduce unreported performance bands. Numeric labels remain visible.
+- The main leaderboard follows Table 3: Agent, eight scenario means with sample
+  SD, Calls, then DRS. Scenario mean-row values are transcribed from the manuscript,
+  not recalculated from rounded rows. Score-column maxima are bold; Calls is cost,
+  not a performance score. Table 4 task success is a separate table.
+- Both tables start in paper order and share the agent search. Main-table sorting
+  uses DRS or a scenario mean; the success table has its own ordering control.
+  CSV retains its original aggregate columns and appends scenario means and SDs.
 - Old provisional result links show a historical-record notice. The original
   website and snapshots remain in Git history; they are not paper leaderboard rows.
 

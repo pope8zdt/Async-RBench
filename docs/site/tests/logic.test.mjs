@@ -31,3 +31,23 @@ test('task filters combine source, difficulty and case-insensitive title or id s
   assert.equal(filterTasks(tasks, { query: 'case-b', source: 'gaia2' }).length, 0);
   assert.equal(filterTasks(tasks, {}).length, 2);
 });
+
+test('scenario sorting uses the selected mean while preserving its uncertainty', async () => {
+  const { rankResults } = await load();
+  const rows = [
+    { id: 'a', drs: 45.1, scenarios: { replay: { mean: 15.5, sd: 1.2 } } },
+    { id: 'b', drs: 39.7, scenarios: { replay: { mean: 18.5, sd: 1.6 } } },
+    { id: 'missing', scenarios: {} },
+  ];
+  const ranked = rankResults(rows, 'replay');
+  assert.deepEqual(ranked.map(r => [r.id, r.rank]), [['b', 1], ['a', 2], ['missing', null]]);
+  assert.equal(ranked[0].scenarios.replay.sd, 1.6);
+  assert.deepEqual(rows.map(r => r.id), ['a', 'b', 'missing']);
+});
+
+test('agent search accepts the model abbreviation printed in the paper table', async () => {
+  const { filterResults } = await load();
+  const rows = [{ id: 'gemini', model: 'Gemini 3 Flash High', paper_label: 'Gemini 3 Flash-H' }];
+  assert.equal(filterResults(rows, 'Gemini 3 Flash-H').length, 1);
+  assert.equal(filterResults(rows, 'Flash High').length, 1);
+});

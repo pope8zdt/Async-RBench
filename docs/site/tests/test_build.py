@@ -34,6 +34,38 @@ class ScoreMeters(HTMLParser):
             self.meters.append(dict(attrs))
 
 
+class ResultTables(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.tables = {}
+        self.table = self.row = self.cell = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "table":
+            self.table = self.tables.setdefault(attrs.get("id", ""), [])
+        elif tag == "tr" and self.table is not None:
+            self.row = {"id": attrs.get("data-record"), "cells": []}
+            self.table.append(self.row)
+        elif tag in {"th", "td"} and self.row is not None:
+            self.cell = {"text": "", "bold": False, **attrs}
+            self.row["cells"].append(self.cell)
+        elif tag == "strong" and self.cell is not None:
+            self.cell["bold"] = True
+
+    def handle_data(self, data):
+        if self.cell is not None:
+            self.cell["text"] += data
+
+    def handle_endtag(self, tag):
+        if tag in {"td", "th"}:
+            self.cell = None
+        elif tag == "tr":
+            self.row = None
+        elif tag == "table":
+            self.table = None
+
+
 class WebsiteBuildTests(unittest.TestCase):
     def build(self, base="/Async-RBench"):
         temporary = tempfile.TemporaryDirectory()
@@ -116,6 +148,47 @@ class WebsiteBuildTests(unittest.TestCase):
         meter = parser.meters[0]
         self.assertEqual((meter["value"], meter["min"], meter["max"]), ("45.1", "0", "100"))
         self.assertIn("DRS", meter["aria-label"])
+
+    def test_main_table_matches_paper_scenarios_uncertainty_and_column_order(self):
+        output = self.build()
+        for route in ("index.html", "leaderboard/index.html"):
+            parser = ResultTables()
+            parser.feed((output / route).read_text(encoding="utf-8"))
+            self.assertIn("main-results", parser.tables)
+            rows = parser.tables["main-results"]
+            self.assertEqual([c.get("data-column") for c in rows[0]["cells"]],
+                             ["model", "delay", "stale", "conflict", "replay", "partial", "failure", "scope", "straggler", "calls", "drs"])
+            self.assertEqual(len(rows), 11)  # Header, nine agents, paper mean.
+            sonnet = next(r for r in rows if r["id"] == "claude-sonnet-5")
+            self.assertEqual([c["text"] for c in sonnet["cells"][1:10]],
+                             ["38.7 ±1.8", "53.4 ±1.2", "39.9 ±2.1", "15.5 ±1.2", "29.8 ±1.7", "35.8 ±1.3", "66.9 ±1.9", "80.5 ±1.5", "77.1"])
+            self.assertEqual([c["bold"] for c in sonnet["cells"][1:9]],
+                             [True, True, False, False, False, True, False, False])
+            self.assertEqual([c["text"] for c in rows[-1]["cells"][1:10]],
+                             ["29.1", "40.2", "31.2", "8.6", "21.3", "12.2", "57.5", "60.7", "85.7"])
+
+    def test_task_success_is_a_separate_table_with_reported_deltas(self):
+        output = self.build()
+        parser = ResultTables()
+        parser.feed((output / "leaderboard/index.html").read_text(encoding="utf-8"))
+        self.assertIn("success-results", parser.tables)
+        rows = parser.tables["success-results"]
+        sonnet = next(r for r in rows if r["id"] == "claude-sonnet-5")
+        self.assertEqual([c["text"] for c in sonnet["cells"]],
+                         ["Claude Sonnet 5", "42.3", "38.2", "-4.2"])
+        self.assertEqual([c["text"] for c in rows[-1]["cells"][1:]], ["29.7", "26.0", "-3.7"])
+
+    def test_scenario_mean_row_and_csv_keep_paper_values(self):
+        import csv
+        output = self.build()
+        data = json.loads((output / "data/leaderboard.json").read_text(encoding="utf-8"))
+        self.assertEqual(data["mean"].get("scenarios"),
+                         {"delay": 29.1, "stale": 40.2, "conflict": 31.2, "replay": 8.6,
+                          "partial": 21.3, "failure": 12.2, "scope": 57.5, "straggler": 60.7})
+        with (output / "data/leaderboard.csv").open(encoding="utf-8", newline="") as stream:
+            sonnet = next(csv.DictReader(stream))
+        self.assertEqual((sonnet.get("delay_mean"), sonnet.get("delay_sd")), ("38.7", "1.8"))
+        self.assertEqual(sonnet["delta"], "-4.2")
 
     def test_builder_refuses_nonempty_output_instead_of_overwriting_files(self):
         with tempfile.TemporaryDirectory() as temporary:

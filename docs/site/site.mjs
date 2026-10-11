@@ -35,31 +35,33 @@ refreshLabels();
 
 const dataElement = document.getElementById('site-data');
 const data = dataElement ? JSON.parse(dataElement.textContent) : null;
-const resultBody = document.getElementById('result-rows');
-const resultRows = resultBody ? new Map([...resultBody.children].map(row => [row.dataset.record, row])) : null;
-const metric = document.getElementById('metric');
 const modelSearch = document.getElementById('model-search');
 
-function updateResults() {
+function connectResults(bodyId, metricId, emptyId) {
+  const resultBody = document.getElementById(bodyId);
   if (!resultBody || !data) return;
-  const key = metric?.value || 'drs';
-  const ranked = rankResults(data.paper.records, key);
-  const shown = new Set(filterResults(ranked, modelSearch?.value || '').map(row => row.id));
-  for (const record of ranked) {
-    const row = resultRows.get(record.id);
-    row.hidden = !shown.has(record.id);
-    row.querySelector('.rank').textContent = record.rank === null ? '—' : String(record.rank).padStart(2, '0');
-    resultBody.append(row);
+  const resultRows = new Map([...resultBody.children].map(row => [row.dataset.record, row]));
+  const metric = document.getElementById(metricId);
+  function updateResults() {
+    const key = metric?.value || 'drs';
+    const ranked = rankResults(data.paper.records, key);
+    const shown = new Set(filterResults(ranked, modelSearch?.value || '').map(row => row.id));
+    for (const record of ranked) {
+      const row = resultRows.get(record.id);
+      row.hidden = !shown.has(record.id);
+      resultBody.append(row);
+    }
+    const table = resultBody.closest('table');
+    table.querySelectorAll('thead th').forEach(th => th.removeAttribute('aria-sort'));
+    table.querySelector(`thead th[data-column="${key}"]`)?.setAttribute('aria-sort', 'descending');
+    document.getElementById(emptyId).hidden = shown.size !== 0;
   }
-  const table = resultBody.closest('table');
-  table.querySelectorAll('thead th').forEach(th => th.removeAttribute('aria-sort'));
-  const column = { drs: 2, batched: 3, async: 4, delta: 5 }[key];
-  table.querySelectorAll('thead th')[column].setAttribute('aria-sort', 'descending');
-  document.getElementById('result-empty').hidden = shown.size !== 0;
+  metric?.addEventListener('change', updateResults);
+  modelSearch?.addEventListener('input', updateResults);
+  updateResults();
 }
-metric?.addEventListener('change', updateResults);
-modelSearch?.addEventListener('input', updateResults);
-updateResults();
+connectResults('result-rows', 'metric', 'result-empty');
+connectResults('success-rows', 'success-metric', 'success-empty');
 
 const taskBody = document.getElementById('task-rows');
 const taskSearch = document.getElementById('task-search');

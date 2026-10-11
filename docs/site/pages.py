@@ -35,7 +35,7 @@ def document(base, route, title, body):
 <link rel="stylesheet" href="{base}/assets/site.css">
 <script>try{{const p=JSON.parse(localStorage.getItem('async-rbench-paper-preferences')||'{{}}');document.documentElement.lang=p.language==='en'?'en':'zh';document.documentElement.dataset.theme=p.theme==='dark'||(!p.theme&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'}}catch{{}}</script>
 <script type="module" src="{base}/assets/site.mjs"></script></head>
-<body data-base="{base}"><a class="skip-link" href="#main">{t('跳转到内容','Skip to content')}</a>
+<body data-base="{base}" class="{'leaderboard-page' if route == 'leaderboard/' else ''}"><a class="skip-link" href="#main">{t('跳转到内容','Skip to content')}</a>
 <header class="site-header"><div class="header-inner"><a class="brand" href="{base}/">Async-RBench</a>
 <nav aria-label="Main navigation">{links}</nav><div class="preferences" hidden data-enhance>
 <button id="language" type="button">English</button><button id="theme" type="button">{t('深色','Dark')}</button></div></div></header>
@@ -54,35 +54,75 @@ def heading(label, zh, en, lead_zh, lead_en):
     return f'<section class="page-heading"><h1>{t(zh,en)}</h1><p class="lead">{t(lead_zh,lead_en)}</p></section>'
 
 
-def source_note(base):
-    return f'<p class="source-note">{t("来源：2026-09-26 论文稿，表 3、表 4。", "Source: manuscript dated 2026-09-26, Tables 3 and 4.")} <a href="{base}/docs/#sources">{t("数据说明", "Data notes")}</a></p>'
+def source_note(base, table=None):
+    zh = f'来源：2026-09-26 论文稿，表 {table}。' if table else '来源：2026-09-26 论文稿，表 3、表 4。'
+    en = f'Source: manuscript dated 2026-09-26, Table {table}.' if table else 'Source: manuscript dated 2026-09-26, Tables 3 and 4.'
+    return f'<p class="source-note">{t(zh,en)} <a href="{base}/docs/#sources">{t("数据说明", "Data notes")}</a></p>'
 
 
 def score_bar(value, label):
     return f'<span class="score"><meter min="0" max="100" value="{value:.1f}" aria-label="{escape(label)}" aria-valuetext="{value:.1f} / 100">{value:.1f} / 100</meter><span class="score-value" aria-hidden="true">{value:.1f}</span></span>'
 
 
+SCENARIO_LABELS = dict(zip(
+    [s[0] for s in SCENARIOS],
+    ["Delay", "Stale", "Conflict", "Replay", "Partial", "Failure", "Scope", "Strag."],
+    strict=True,
+))
+
+
 def result_rows(base, paper):
+    maxima = {key: max(r["scenarios"][key]["mean"] for r in paper["records"]) for key in paper["scenario_order"]}
+    best_drs = max(r["drs"] for r in paper["records"])
     rows = []
-    for rank, record in enumerate(sorted(paper["records"], key=lambda r: -r["drs"]), 1):
-        rows.append(f'''<tr data-record="{record['id']}"><td class="rank">{rank:02}</td><th scope="row"><a href="{base}/runs/{record['id']}/">{escape(record['model'])}</a></th>
-<td class="drs-cell">{score_bar(record['drs'], record['model'] + ' DRS')}</td>
-<td>{record['batched']:.1f}</td><td>{record['async']:.1f}</td><td class="delta">{record['delta']:+.1f}</td><td>{record['calls']:.1f}</td></tr>''')
+    for record in sorted(paper["records"], key=lambda r: -r["drs"]):
+        cells = []
+        for key in paper["scenario_order"]:
+            result = record["scenarios"][key]
+            tag = "strong" if result["mean"] == maxima[key] else "span"
+            cells.append(f'<td class="scenario-cell"><{tag}>{result["mean"]:.1f}</{tag}> <small class="uncertainty">±{result["sd"]:.1f}</small></td>')
+        rows.append(f"""<tr data-record="{record['id']}"><th scope="row"><a href="{base}/runs/{record['id']}/">{escape(record.get('paper_label', record['model']))}</a></th>
+{''.join(cells)}<td class="calls-cell">{record['calls']:.1f}</td><td class="drs-cell {'column-best' if record['drs'] == best_drs else ''}">{score_bar(record['drs'], record['model'] + ' DRS')}</td></tr>""")
     return ''.join(rows)
 
 
 def leaderboard(base, paper, compact=False):
-    controls = '' if compact else f'''<div class="filters" data-enhance hidden><label>{t('搜索模型','Search models')}<input id="model-search" type="search" autocomplete="off"></label>
-<label>{t('排序指标','Rank by')}<select id="metric"><option value="drs">DRS ↓</option><option value="async">Async S ↓</option><option value="batched">Batched S ↓</option><option value="delta">ΔS ↓</option></select></label>
-<a class="button subtle" href="{base}/data/leaderboard.json" download>JSON</a><a class="button subtle" href="{base}/data/leaderboard.csv" download>CSV</a></div>'''
+    scenario_options = ''.join(f'<option value="{key}">{SCENARIO_LABELS[key]} ↓</option>' for key in paper["scenario_order"])
+    controls = '' if compact else f"""<div class="filters result-filters" data-enhance hidden><label>{t('搜索模型（两张表）','Search agents in both tables')}<input id="model-search" type="search" autocomplete="off" aria-controls="result-rows success-rows"></label>
+<label>{t('主表排序','Main table order')}<select id="metric"><option value="drs">DRS ↓</option>{scenario_options}</select></label>
+<div class="table-downloads"><a href="{base}/data/leaderboard.json" download>JSON</a><a href="{base}/data/leaderboard.csv" download>CSV</a></div></div>"""
     mean = paper['mean']
-    return f'''{controls}<div class="table-wrap" tabindex="0" role="region" aria-label="Paper results table"><table class="results-table">
-<caption class="sr-only">{t('论文九模型结果；DRS 为 0–100，S 为百分比，ΔS 为百分点。','Nine paper agents: DRS on 0–100, S in percent, ΔS in percentage points.')}</caption>
-<thead><tr><th>{t('排名','Rank')}</th><th>{t('模型','Model')}</th><th class="score-heading">DRS ↑ <small>0–100</small></th><th>Batched S ↑</th><th>Async S ↑</th><th>ΔS ↑</th><th>{t('调用次数','Calls')}</th></tr></thead>
-<tbody id="result-rows">{result_rows(base,paper)}</tbody><tfoot><tr><td></td><th>{t('均值','Mean')}</th><td class="drs-cell">{score_bar(mean['drs'], 'Mean DRS')}</td><td>{mean['batched']:.1f}</td><td>{mean['async']:.1f}</td><td>{mean['delta']:+.1f}</td><td>{mean['calls']:.1f}</td></tr></tfoot></table></div>
-<p id="result-empty" class="empty-state" hidden>{t('没有匹配的模型。请尝试其他关键词。','No matching models. Try another search.')}</p>
-<p class="fine">{t('ΔS = Async − Batched，单位为百分点；保留论文按未舍入数据计算的差值。调用次数为每次 Async 运行中主代理与全部子代理的平均响应总数。', 'ΔS = Async − Batched, in percentage points; differences retain the paper’s pre-rounding calculations. Calls is the mean total number of main-agent and subagent responses per Async run.')}</p>{source_note(base)}'''
+    headers = ''.join(f'<th scope="col" data-column="{key}"><abbr title="{escape(next(s[2] for s in SCENARIOS if s[0] == key))}">{SCENARIO_LABELS[key]}</abbr></th>' for key in paper["scenario_order"])
+    mean_cells = ''.join(f'<td>{mean["scenarios"][key]:.1f}</td>' for key in paper["scenario_order"])
+    return f"""{controls}<p class="table-caption">{t('表 3 · 异步执行下的 DRS。场景列报告三次重复的均值与样本标准差。','Table 3 · DRS under asynchronous execution. Scenario columns report mean and sample SD over three repetitions.')}</p>
+<div class="table-wrap paper-table-wrap" tabindex="0" role="region" aria-label="Table 3: asynchronous DRS"><table id="main-results" class="results-table paper-table">
+<caption class="sr-only">{t('模型、八场景、调用次数与 DRS；列顺序与论文表 3 一致。','Agent, eight scenarios, Calls and DRS, in the order of paper Table 3.')}</caption>
+<thead><tr><th scope="col" data-column="model">Agent</th>{headers}<th scope="col" data-column="calls">Calls</th><th scope="col" data-column="drs" class="score-heading">DRS <small>0–100</small></th></tr></thead>
+<tbody id="result-rows">{result_rows(base,paper)}</tbody><tfoot><tr><th scope="row">Mean</th>{mean_cells}<td class="calls-cell">{mean['calls']:.1f}</td><td class="drs-cell">{score_bar(mean['drs'], 'Mean DRS')}</td></tr></tfoot></table></div>
+<p id="result-empty" class="empty-state" hidden>{t('没有匹配的模型。请尝试其他关键词。','No matching agents. Try another search.')}</p>
+<div class="table-notes"><p>{t('粗体标出各得分列的最大值；Mean 为九模型均值。Calls 为每次 Async 运行中主代理与全部子代理的平均响应总数，不是得分。','Bold marks maxima in score columns. Mean averages the nine agents. Calls counts mean main-agent and subagent responses per Async run; it is not a score.')}</p>
+<p>{t('DRS 条统一采用 0–100 刻度。表格可横向滚动，点击模型可查看单模型详情。','DRS bars share a fixed 0–100 scale. Scroll the table horizontally or open an agent for its detail view.')}</p></div>{source_note(base,3)}"""
 
+
+def success_table(base, paper):
+    rows = []
+    maxima = {key: max(r[key] for r in paper["records"]) for key in ("batched", "async")}
+    for record in paper["records"]:
+        cells = []
+        for key in ("batched", "async"):
+            tag = "strong" if record[key] == maxima[key] else "span"
+            cells.append(f'<td><{tag}>{record[key]:.1f}</{tag}></td>')
+        rows.append(f'<tr data-record="{record["id"]}"><th scope="row"><a href="{base}/runs/{record["id"]}/">{escape(record.get("paper_label", record["model"]))}</a></th>{"".join(cells)}<td class="delta">{record["delta"]:+.1f}</td></tr>')
+    mean = paper["mean"]
+    return f"""<section class="section success-section" id="task-success"><div class="section-title"><div><p class="table-label">TABLE 4</p><h2>{t('任务成功率','Task success')}</h2></div>
+<label class="inline-filter" data-enhance hidden>{t('排序','Order')}<select id="success-metric"><option value="drs" data-zh="论文顺序" data-en="Paper order">论文顺序</option><option value="batched">Batched ↓</option><option value="async">Async ↓</option><option value="delta">ΔS ↓</option></select></label></div>
+<p class="table-caption">{t('Batched 与 Async 的任务成功率 S（%）。与上方 DRS 分开报告。','Task success S (%) under Batched and Async delivery, reported separately from DRS above.')}</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table 4: task success"><table id="success-results" class="success-table">
+<caption class="sr-only">{t('论文表 4，任务成功率与百分点差值。','Paper Table 4: task success and differences in percentage points.')}</caption>
+<thead><tr><th scope="col" rowspan="2" data-column="model">Agent</th><th scope="colgroup" colspan="2">Task success S (%)</th><th scope="colgroup">Change</th></tr><tr><th scope="col" data-column="batched">Batched</th><th scope="col" data-column="async">Async</th><th scope="col" data-column="delta">ΔS</th></tr></thead>
+<tbody id="success-rows">{''.join(rows)}</tbody><tfoot><tr><th scope="row">Mean</th><td>{mean["batched"]:.1f}</td><td>{mean["async"]:.1f}</td><td class="delta">{mean["delta"]:+.1f}</td></tr></tfoot></table></div>
+<p id="success-empty" class="empty-state" hidden>{t('没有匹配的模型。请调整上方搜索。','No matching agents. Adjust the search above.')}</p>
+<p class="fine">{t('ΔS = Async − Batched，单位为百分点。差值沿用论文按未舍入数据计算的结果，不从显示值重新相减。','ΔS = Async − Batched, in percentage points. Differences retain the paper’s pre-rounding calculations rather than subtracting displayed rates.')}</p>{source_note(base,4)}</section>"""
 
 def home(base, corpus, paper):
     stats = ''.join(f'<div><strong>{n}</strong><span>{t(zh,en)}</span></div>' for n, zh, en in [(str(corpus['task_count']),'任务','tasks'), ('8','异步场景','async scenarios'), ('9','模型','agents'), ('10,800','主实验运行','main-experiment runs')])
@@ -116,9 +156,9 @@ def task_page(base, corpus):
 
 
 def results_page(base, paper):
-    header = heading('PAPER RESULTS','论文结果','Paper results','每个系统的主代理和子代理使用同一模型。九个系统采用相同工具接口与评测协议。','Each system uses the same model for its main agent and subagents. All nine systems share the tool interface and evaluation protocol.')
-    context = f'<div class="result-context"><strong>9 {t("模型", "agents")} · 200 {t("任务", "tasks")} · 3 {t("次重复", "repetitions")}</strong><p>{t("DRS 衡量对异步事件的响应，范围 0–100；任务成功率 S 单独报告。", "DRS measures responses to asynchronous events on a 0–100 scale; task success S is reported separately.")} <a href="{base}/docs/#scoring">{t("指标定义", "Metric definitions")} →</a></p></div>'
-    return header + context + leaderboard(base,paper) + f'''<section class="section"><h2>{t('场景结果','Scenario results')}</h2><p>{t('点击模型名称查看八场景的均值与样本标准差，每个场景基于三次重复实验。总体 DRS 对八场景等权平均；表中排名不代表统计显著性。','Open a model to inspect mean and sample SD across three repetitions in each scenario. Overall DRS weights the eight scenarios equally; rankings do not imply statistical significance.')}</p></section>
+    header = heading('PAPER RESULTS','论文榜单','Leaderboard','九个模型，200 个任务，每种交付模式重复三次。主代理与子代理使用同一模型。','Nine agents, 200 tasks and three repetitions per delivery mode. Each system uses the same model for its main agent and subagents.')
+    context = f'<nav class="results-nav" aria-label="Results sections"><a href="#main-table">{t("主表 · DRS", "Main table · DRS")}</a><a href="#task-success">{t("任务成功率", "Task success")}</a><a href="{base}/docs/#scoring">{t("指标定义", "Metric definitions")}</a></nav>'
+    return header + context + f'<section id="main-table" class="main-table-section">{leaderboard(base,paper)}</section>' + success_table(base,paper) + f'''<p class="fine">{t('每场景包含 25 个任务，总体 DRS 对八场景等权平均。排名不代表统计显著性。','Each scenario contains 25 tasks; overall DRS weights all eight scenarios equally. Rankings do not imply statistical significance.')}</p>
 <section class="section"><h2>{t('DRS 验证与计划重建','DRS validation & plan rebuilding')}</h2><div class="two-col figure-grid"><article>{figure(base,'drs-validation.png','图 3. 相同目标事件上的 Oracle / Native / Frozen。','Figure 3. Oracle / Native / Frozen on the same target events.')}<p>{t('Oracle 为知晓事件要求的参考恢复程序，不是能力匹配的基线。Frozen 使用同一模型在看不到目标结果时生成的后续动作。','Oracle is a reference recovery program with knowledge of event requirements, not a capability-matched baseline. Frozen uses a continuation generated by the same model without the target result.')}</p></article><article>{figure(base,'full-rebuild.png','图 6. Full-rebuild 与 Native 的 DRS 和调用代价。','Figure 6. DRS and call costs under Full-rebuild and Native.')}<p>{t('Full-rebuild 在每次子代理结果交付后重建剩余计划，同时保留已完成工作。该三模型干预实验独立于主实验。','Full-rebuild reconstructs the remaining plan after each subagent result while retaining completed work. This three-agent intervention is separate from the main experiment.')}</p><p class="fine">{t('图 6 取自论文原稿，Gemini Native 的子代理调用数为 55.5。图中调用数与正文报告的 7.5–10.2% 增幅不能完全对应；此处均保留原值。','Figure 6 is taken from the manuscript, where Gemini Native has 55.5 subagent calls. The plotted counts do not fully reconcile with the text’s reported 7.5–10.2% increase; both are retained as reported.')}</p></article></div></section>'''
 
 
