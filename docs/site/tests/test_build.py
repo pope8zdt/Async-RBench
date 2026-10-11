@@ -24,6 +24,16 @@ class Links(HTMLParser):
         self.links.extend(value for key, value in attrs if key in {"href", "src"})
 
 
+class ScoreMeters(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.meters = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "meter":
+            self.meters.append(dict(attrs))
+
+
 class WebsiteBuildTests(unittest.TestCase):
     def build(self, base="/Async-RBench"):
         temporary = tempfile.TemporaryDirectory()
@@ -84,6 +94,28 @@ class WebsiteBuildTests(unittest.TestCase):
         for record in data["records"]:
             self.assertEqual(len(record["scenarios"]), 8)
             self.assertAlmostEqual(sum(s["mean"] for s in record["scenarios"].values()) / 8, record["drs"], delta=0.06)
+
+    def test_main_scores_have_accessible_fixed_scale_meters_on_both_leaderboards(self):
+        output = self.build()
+        for route in ("index.html", "leaderboard/index.html"):
+            with self.subTest(route=route):
+                parser = ScoreMeters()
+                parser.feed((output / route).read_text(encoding="utf-8"))
+                self.assertEqual([float(m["value"]) for m in parser.meters],
+                                 [45.1, 39.7, 38.2, 33.4, 31.1, 30.6, 29.8, 26.1, 19.2, 32.6])
+                for meter in parser.meters:
+                    self.assertEqual((meter["min"], meter["max"]), ("0", "100"))
+                    self.assertIn("DRS", meter["aria-label"])
+                    self.assertEqual(meter.get("aria-valuetext"), f'{meter["value"]} / 100')
+
+    def test_model_detail_exposes_the_same_drs_scale(self):
+        output = self.build()
+        parser = ScoreMeters()
+        parser.feed((output / "runs/claude-sonnet-5/index.html").read_text(encoding="utf-8"))
+        self.assertGreaterEqual(len(parser.meters), 1)
+        meter = parser.meters[0]
+        self.assertEqual((meter["value"], meter["min"], meter["max"]), ("45.1", "0", "100"))
+        self.assertIn("DRS", meter["aria-label"])
 
     def test_builder_refuses_nonempty_output_instead_of_overwriting_files(self):
         with tempfile.TemporaryDirectory() as temporary:

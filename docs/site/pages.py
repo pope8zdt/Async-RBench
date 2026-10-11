@@ -58,11 +58,15 @@ def source_note(base):
     return f'<p class="source-note">{t("来源：2026-09-26 论文稿，表 3、表 4。", "Source: manuscript dated 2026-09-26, Tables 3 and 4.")} <a href="{base}/docs/#sources">{t("数据说明", "Data notes")}</a></p>'
 
 
+def score_bar(value, label):
+    return f'<span class="score"><meter min="0" max="100" value="{value:.1f}" aria-label="{escape(label)}" aria-valuetext="{value:.1f} / 100">{value:.1f} / 100</meter><span class="score-value" aria-hidden="true">{value:.1f}</span></span>'
+
+
 def result_rows(base, paper):
     rows = []
     for rank, record in enumerate(sorted(paper["records"], key=lambda r: -r["drs"]), 1):
         rows.append(f'''<tr data-record="{record['id']}"><td class="rank">{rank:02}</td><th scope="row"><a href="{base}/runs/{record['id']}/">{escape(record['model'])}</a></th>
-<td class="drs-cell"><strong>{record['drs']:.1f}</strong></td>
+<td class="drs-cell">{score_bar(record['drs'], record['model'] + ' DRS')}</td>
 <td>{record['batched']:.1f}</td><td>{record['async']:.1f}</td><td class="delta">{record['delta']:+.1f}</td><td>{record['calls']:.1f}</td></tr>''')
     return ''.join(rows)
 
@@ -74,8 +78,8 @@ def leaderboard(base, paper, compact=False):
     mean = paper['mean']
     return f'''{controls}<div class="table-wrap" tabindex="0" role="region" aria-label="Paper results table"><table class="results-table">
 <caption class="sr-only">{t('论文九模型结果；DRS 为 0–100，S 为百分比，ΔS 为百分点。','Nine paper agents: DRS on 0–100, S in percent, ΔS in percentage points.')}</caption>
-<thead><tr><th>{t('排名','Rank')}</th><th>{t('模型','Model')}</th><th>DRS ↑</th><th>Batched S ↑</th><th>Async S ↑</th><th>ΔS ↑</th><th>{t('调用次数','Calls')}</th></tr></thead>
-<tbody id="result-rows">{result_rows(base,paper)}</tbody><tfoot><tr><td></td><th>{t('均值','Mean')}</th><td>{mean['drs']:.1f}</td><td>{mean['batched']:.1f}</td><td>{mean['async']:.1f}</td><td>{mean['delta']:+.1f}</td><td>{mean['calls']:.1f}</td></tr></tfoot></table></div>
+<thead><tr><th>{t('排名','Rank')}</th><th>{t('模型','Model')}</th><th class="score-heading">DRS ↑ <small>0–100</small></th><th>Batched S ↑</th><th>Async S ↑</th><th>ΔS ↑</th><th>{t('调用次数','Calls')}</th></tr></thead>
+<tbody id="result-rows">{result_rows(base,paper)}</tbody><tfoot><tr><td></td><th>{t('均值','Mean')}</th><td class="drs-cell">{score_bar(mean['drs'], 'Mean DRS')}</td><td>{mean['batched']:.1f}</td><td>{mean['async']:.1f}</td><td>{mean['delta']:+.1f}</td><td>{mean['calls']:.1f}</td></tr></tfoot></table></div>
 <p id="result-empty" class="empty-state" hidden>{t('没有匹配的模型。请尝试其他关键词。','No matching models. Try another search.')}</p>
 <p class="fine">{t('ΔS = Async − Batched，单位为百分点；保留论文按未舍入数据计算的差值。调用次数为每次 Async 运行中主代理与全部子代理的平均响应总数。', 'ΔS = Async − Batched, in percentage points; differences retain the paper’s pre-rounding calculations. Calls is the mean total number of main-agent and subagent responses per Async run.')}</p>{source_note(base)}'''
 
@@ -83,15 +87,19 @@ def leaderboard(base, paper, compact=False):
 def home(base, corpus, paper):
     stats = ''.join(f'<div><strong>{n}</strong><span>{t(zh,en)}</span></div>' for n, zh, en in [(str(corpus['task_count']),'任务','tasks'), ('8','异步场景','async scenarios'), ('9','模型','agents'), ('10,800','主实验运行','main-experiment runs')])
     return f'''<section class="hero"><h1>Async-RBench</h1><p class="hero-subtitle">Benchmarking Asynchronous Task Execution in LLM Agents</p>
-<p class="lead">{t('Async-RBench 评测主代理如何处理并行子代理陆续返回的结果。任务要求代理修改受影响的工作，保留仍然有效的成果，避免禁止的更改，并重新验证。','Async-RBench evaluates how a main agent handles results arriving from concurrent subagents. Tasks require the agent to revise affected work, preserve valid artifacts, avoid forbidden changes and repeat the necessary checks.')}</p>
-<div class="actions"><a class="button primary" href="{REPO}">{t('代码与任务集','Code & dataset')}</a><a class="button" href="{base}/leaderboard/">{t('实验结果','Results')}</a><a class="text-link" href="{base}/evaluate/">{t('运行说明','Run instructions')}</a></div></section>
-<section class="stats" aria-label="Benchmark statistics">{stats}</section>
-{figure(base,'overview.png','图 1. 异步执行中的结果整合与重规划。','Figure 1. Result integration and replanning during asynchronous execution.')}
+<p class="lead">{t('当子代理的结果陆续返回，主代理能否正确调整后续工作？Async-RBench 在八类异步场景中，评测代理如何修改计划、保留有效成果并完成必要验证。','Can an agent revise its work as subagent results arrive? Async-RBench evaluates plan revision, preservation of valid work and verification across eight asynchronous scenarios.')}</p>
+<div class="stats hero-stats" aria-label="Benchmark statistics">{stats}</div>
+<div class="actions"><a class="button primary" href="#results">{t('查看榜单','View leaderboard')}</a><a class="button" href="{REPO}">{t('代码与任务集','Code & dataset')}</a><a class="button" href="{base}/docs/">{t('评测协议','Evaluation protocol')}</a></div></section>
+<section class="section overview-section" id="overview"><div class="section-intro"><h2>{t('评测什么','What the benchmark measures')}</h2><p>{t('结果不再一次性到齐。代理需要判断何时等待、何时修改，以及哪些工作可以保留。','Results do not arrive all at once. Agents must decide when to wait, what to revise and which work remains valid.')}</p></div>
+{figure(base,'overview.png','图 1. 异步执行中的结果整合与重规划。','Figure 1. Result integration and replanning during asynchronous execution.')}</section>
+<section class="section" id="results"><div class="section-title"><div><h2>{t('论文榜单','Paper leaderboard')}</h2><p>{t('九个模型，按动态重规划分数 DRS 排序。','Nine agents ranked by Dynamic Replanning Score (DRS).')}</p></div><a href="{base}/leaderboard/">{t('完整榜单与场景结果','Full leaderboard & scenario results')} →</a></div>{leaderboard(base,paper,True)}</section>
+<section class="section"><div class="section-intro"><h2>{t('主要发现','What we found')}</h2></div><div class="findings">
+<article><span class="finding-number">01</span><h3>{t('异步响应仍有明显缺口','Room for better event responses')}</h3><p>{t('九个模型的 Async DRS 为 19.2–45.1。重复结果和子代理失败是平均得分最低的两个场景。','Async DRS ranges from 19.2 to 45.1 across nine agents. Duplication and replay, and subagent failure, have the lowest mean scenario scores.')}</p></article>
+<article><span class="finding-number">02</span><h3>{t('更早收到结果，不保证更高成功率','Earlier results do not ensure success')}</h3><p>{t('在论文协议下，九模型的 Async 任务成功率点估计均低于 Batched，平均成功率从 29.7% 降至 26.0%。这一比较不代表所有异步系统的因果结论。','Under the paper protocol, all nine agents have lower task-success point estimates with Async delivery. Mean success falls from 29.7% to 26.0%. This comparison does not establish a causal claim about asynchronous systems in general.')}</p></article>
+<article><span class="finding-number">03</span><h3>{t('重建计划有收益，也有代价','Replanning has benefits and costs')}</h3><p>{t('要求 Terra、Luna 和 Gemini 在收到结果后重建剩余计划，DRS 分别从 39.7、31.1、19.2 升至 42.3、34.6、21.9。论文正文报告调用次数增加 7.5–10.2%；图文数值差异见结果页。','Requiring Terra, Luna and Gemini to rebuild the remaining plan after a result arrives raises DRS from 39.7, 31.1 and 19.2 to 42.3, 34.6 and 21.9, respectively. The paper text reports 7.5–10.2% more calls; a figure/text discrepancy is noted on the results page.')}</p></article></div></section>
 <section class="section"><h2>{t('两种结果交付模式','Result delivery modes')}</h2><div class="two-col text-columns"><article><h3>Batched</h3><p>{t('子代理并行执行。所有必需工作流结束后，结果一次性交给主代理。','Subagents run concurrently. Results are presented together after all required workflows terminate.')}</p></article><article><h3>Async</h3><p>{t('主代理继续工作，控制器在约定任务状态下逐个交付合格结果。主代理自行判断是否以及如何修改后续计划。','The main agent continues working while the controller presents eligible results at predefined task states. The agent decides whether and how to revise its remaining plan.')}</p></article></div><p class="fine">{t('两种模式使用相同任务、工作流和资源限制，但分别运行子代理，生成结果与后续动作可能不同。','Both modes use the same tasks, workflows and resource limits. Subagents execute separately in each mode, so generated results and subsequent actions may differ.')}</p></section>
-<section class="section"><div class="section-title"><h2>{t('实验结果','Results')}</h2><a href="{base}/leaderboard/">{t('场景结果与数据下载','Scenario results and downloads')}</a></div>{leaderboard(base,paper,True)}</section>
-<section class="section prose"><h2>{t('主要发现','Findings')}</h2><p>{t('九个模型的 Async DRS 为 19.2–45.1。重复结果和子代理失败是平均得分最低的两个场景。','Async DRS ranges from 19.2 to 45.1 across nine agents. Duplication and replay, and subagent failure, have the lowest mean scenario scores.')}</p><p>{t('在论文协议下，九模型的 Async 任务成功率点估计均低于 Batched，平均成功率从 29.7% 降至 26.0%。这一比较不代表所有异步系统的因果结论。','Under the paper protocol, all nine agents have lower task-success point estimates with Async delivery. Mean success falls from 29.7% to 26.0%. This comparison does not establish a causal claim about asynchronous systems in general.')}</p><p>{t('要求 Terra、Luna 和 Gemini 在收到结果后重建剩余计划，DRS 分别从 39.7、31.1、19.2 升至 42.3、34.6、21.9。论文正文报告调用次数增加 7.5–10.2%；图文数值差异见结果页。','Requiring Terra, Luna and Gemini to rebuild the remaining plan after a result arrives raises DRS from 39.7, 31.1 and 19.2 to 42.3, 34.6 and 21.9, respectively. The paper text reports 7.5–10.2% more calls; a figure/text discrepancy is noted on the results page.')}</p></section>
-<section class="section"><h2>{t('资料','Resources')}</h2><ul class="resource-list"><li><a href="{base}/tasks/">{t('任务目录','Task catalog')}</a></li><li><a href="{base}/docs/">{t('评测协议与指标','Protocol and metrics')}</a></li><li><a href="{base}/evaluate/">{t('安装与运行','Installation and evaluation')}</a></li><li><a href="{REPO}/blob/main/CITATION.cff">{t('引用信息','Citation metadata')}</a></li></ul></section>'''
 
+<section class="section resource-section"><div><h2>{t('使用 Async-RBench','Work with Async-RBench')}</h2><p>{t('浏览公开任务，了解判分协议，或在本地配置测评。','Explore the public tasks, inspect the scoring protocol or set up a local evaluation.')}</p></div><ul class="resource-list"><li><a href="{base}/tasks/">{t('任务目录','Task catalog')} →</a></li><li><a href="{base}/evaluate/">{t('安装与运行','Installation & evaluation')} →</a></li><li><a href="{REPO}/blob/main/CITATION.cff">{t('引用信息','Citation metadata')} →</a></li></ul></section>'''
 
 def task_page(base, corpus):
     scenarios = ''.join(f'<div><dt>{t(zh,en)}</dt><dd>{t(zd,ed)}</dd></div>' for _,zh,en,zd,ed in SCENARIOS)
@@ -109,14 +117,15 @@ def task_page(base, corpus):
 
 def results_page(base, paper):
     header = heading('PAPER RESULTS','论文结果','Paper results','每个系统的主代理和子代理使用同一模型。九个系统采用相同工具接口与评测协议。','Each system uses the same model for its main agent and subagents. All nine systems share the tool interface and evaluation protocol.')
-    return header + leaderboard(base,paper) + f'''<section class="section"><h2>{t('场景结果','Scenario results')}</h2><p>{t('点击模型名称查看八场景的均值与样本标准差，每个场景基于三次重复实验。总体 DRS 对八场景等权平均；表中排名不代表统计显著性。','Open a model to inspect mean and sample SD across three repetitions in each scenario. Overall DRS weights the eight scenarios equally; rankings do not imply statistical significance.')}</p></section>
+    context = f'<div class="result-context"><strong>9 {t("模型", "agents")} · 200 {t("任务", "tasks")} · 3 {t("次重复", "repetitions")}</strong><p>{t("DRS 衡量对异步事件的响应，范围 0–100；任务成功率 S 单独报告。", "DRS measures responses to asynchronous events on a 0–100 scale; task success S is reported separately.")} <a href="{base}/docs/#scoring">{t("指标定义", "Metric definitions")} →</a></p></div>'
+    return header + context + leaderboard(base,paper) + f'''<section class="section"><h2>{t('场景结果','Scenario results')}</h2><p>{t('点击模型名称查看八场景的均值与样本标准差，每个场景基于三次重复实验。总体 DRS 对八场景等权平均；表中排名不代表统计显著性。','Open a model to inspect mean and sample SD across three repetitions in each scenario. Overall DRS weights the eight scenarios equally; rankings do not imply statistical significance.')}</p></section>
 <section class="section"><h2>{t('DRS 验证与计划重建','DRS validation & plan rebuilding')}</h2><div class="two-col figure-grid"><article>{figure(base,'drs-validation.png','图 3. 相同目标事件上的 Oracle / Native / Frozen。','Figure 3. Oracle / Native / Frozen on the same target events.')}<p>{t('Oracle 为知晓事件要求的参考恢复程序，不是能力匹配的基线。Frozen 使用同一模型在看不到目标结果时生成的后续动作。','Oracle is a reference recovery program with knowledge of event requirements, not a capability-matched baseline. Frozen uses a continuation generated by the same model without the target result.')}</p></article><article>{figure(base,'full-rebuild.png','图 6. Full-rebuild 与 Native 的 DRS 和调用代价。','Figure 6. DRS and call costs under Full-rebuild and Native.')}<p>{t('Full-rebuild 在每次子代理结果交付后重建剩余计划，同时保留已完成工作。该三模型干预实验独立于主实验。','Full-rebuild reconstructs the remaining plan after each subagent result while retaining completed work. This three-agent intervention is separate from the main experiment.')}</p><p class="fine">{t('图 6 取自论文原稿，Gemini Native 的子代理调用数为 55.5。图中调用数与正文报告的 7.5–10.2% 增幅不能完全对应；此处均保留原值。','Figure 6 is taken from the manuscript, where Gemini Native has 55.5 subagent calls. The plotted counts do not fully reconcile with the text’s reported 7.5–10.2% increase; both are retained as reported.')}</p></article></div></section>'''
 
 
 def model_page(base, record):
     rows = ''.join(f'<tr><th scope="row">{t(zh,en)}</th><td>{record["scenarios"][key]["mean"]:.1f}</td><td>± {record["scenarios"][key]["sd"]:.1f}</td></tr>' for key,zh,en,*_ in SCENARIOS)
     return f'<a class="back-link" href="{base}/leaderboard/">← {t("返回论文结果","All paper results")}</a>' + heading('AGENT RESULTS', record['model'], record['model'], '论文表 3、表 4 的聚合结果。','Aggregate results from Tables 3 and 4.') + f'''
-<div class="stats"><div><strong>{record['drs']:.1f}</strong><span>Async DRS</span></div><div><strong>{record['batched']:.1f}%</strong><span>Batched S</span></div><div><strong>{record['async']:.1f}%</strong><span>Async S</span></div><div><strong>{record['delta']:+.1f}</strong><span>ΔS · {t('百分点','pp')}</span></div></div>
+<div class="model-summary"><div class="main-score"><span>Async DRS</span>{score_bar(record['drs'], record['model'] + ' DRS')}<small>{t('固定刻度 0–100','Fixed scale · 0–100')}</small></div><div class="stats"><div><strong>{record['batched']:.1f}%</strong><span>Batched S</span></div><div><strong>{record['async']:.1f}%</strong><span>Async S</span></div><div><strong>{record['delta']:+.1f}</strong><span>ΔS · {t('百分点','pp')}</span></div></div></div>
 <section class="section narrow"><h2>{t('场景 DRS','Scenario DRS')}</h2><div class="table-wrap"><table><thead><tr><th>{t('场景','Scenario')}</th><th>{t('均值','Mean')}</th><th>{t('样本标准差','Sample SD')}</th></tr></thead><tbody>{rows}</tbody></table></div><p class="fine">{t('每场景 25 个任务，每模式 3 次重复；每模型每模式 600 次运行。','25 tasks per scenario, three repetitions per mode; 600 runs per agent per mode.')} {t('平均 Async 调用次数：','Mean Async calls: ')}{record['calls']:.1f}.</p>{source_note(base)}</section>'''
 
 

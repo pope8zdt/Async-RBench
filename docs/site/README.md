@@ -38,6 +38,9 @@ to the site or its public inputs and publishes only the generated artifact.
   download is the current public template.
 - Update Chinese and English text together. Preserve URL paths, keyboard access,
   horizontal table scrolling on mobile and readable content without JavaScript.
+- DRS bars are static score meters, not loading indicators. Their scale is always
+  0–100, including the mean and model-detail score; do not normalize to the best
+  model or introduce unreported performance bands. Numeric labels remain visible.
 - Old provisional result links show a historical-record notice. The original
   website and snapshots remain in Git history; they are not paper leaderboard rows.
 
