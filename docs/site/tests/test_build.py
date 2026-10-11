@@ -34,36 +34,45 @@ class ScoreMeters(HTMLParser):
             self.meters.append(dict(attrs))
 
 
-class ResultTables(HTMLParser):
+class RankedResults(HTMLParser):
     def __init__(self):
         super().__init__()
-        self.tables = {}
-        self.table = self.row = self.cell = None
+        self.lists = {}
+        self.items = {}
+        self.list_id = self.item = self.field = None
+        self.table_count = 0
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag == "table":
-            self.table = self.tables.setdefault(attrs.get("id", ""), [])
-        elif tag == "tr" and self.table is not None:
-            self.row = {"id": attrs.get("data-record"), "cells": []}
-            self.table.append(self.row)
-        elif tag in {"th", "td"} and self.row is not None:
-            self.cell = {"text": "", "bold": False, **attrs}
-            self.row["cells"].append(self.cell)
-        elif tag == "strong" and self.cell is not None:
-            self.cell["bold"] = True
+            self.table_count += 1
+        if tag == "ol":
+            self.list_id = attrs.get("id")
+            self.lists[self.list_id] = []
+        elif tag == "li" and self.list_id:
+            self.item = {"rank": attrs.get("value"), "fields": {}}
+            self.items[attrs["data-record"] + ":" + self.list_id] = self.item
+            self.lists[self.list_id].append(attrs["data-record"])
+        elif tag == "aside" and "data-summary" in attrs:
+            self.item = {"fields": {}}
+            self.items[attrs["data-summary"]] = self.item
+        if self.item is not None and "data-field" in attrs:
+            self.field = {"text": "", "bold": False}
+            self.item["fields"][attrs["data-field"]] = self.field
+        elif tag == "strong" and self.field is not None:
+            self.field["bold"] = True
 
     def handle_data(self, data):
-        if self.cell is not None:
-            self.cell["text"] += data
+        if self.field is not None:
+            self.field["text"] += data
 
     def handle_endtag(self, tag):
-        if tag in {"td", "th"}:
-            self.cell = None
-        elif tag == "tr":
-            self.row = None
-        elif tag == "table":
-            self.table = None
+        if tag == "dd":
+            self.field = None
+        elif tag in {"li", "aside"}:
+            self.item = None
+        elif tag == "ol":
+            self.list_id = None
 
 
 class WebsiteBuildTests(unittest.TestCase):
@@ -133,9 +142,10 @@ class WebsiteBuildTests(unittest.TestCase):
             with self.subTest(route=route):
                 parser = ScoreMeters()
                 parser.feed((output / route).read_text(encoding="utf-8"))
-                self.assertEqual([float(m["value"]) for m in parser.meters],
+                drs_meters = [m for m in parser.meters if "DRS" in m["aria-label"]]
+                self.assertEqual([float(m["value"]) for m in drs_meters],
                                  [45.1, 39.7, 38.2, 33.4, 31.1, 30.6, 29.8, 26.1, 19.2, 32.6])
-                for meter in parser.meters:
+                for meter in drs_meters:
                     self.assertEqual((meter["min"], meter["max"]), ("0", "100"))
                     self.assertIn("DRS", meter["aria-label"])
                     self.assertEqual(meter.get("aria-valuetext"), f'{meter["value"]} / 100')
@@ -149,34 +159,42 @@ class WebsiteBuildTests(unittest.TestCase):
         self.assertEqual((meter["value"], meter["min"], meter["max"]), ("45.1", "0", "100"))
         self.assertIn("DRS", meter["aria-label"])
 
-    def test_main_table_matches_paper_scenarios_uncertainty_and_column_order(self):
+    def test_ranked_cards_keep_all_paper_scenarios_uncertainty_and_mean(self):
         output = self.build()
         for route in ("index.html", "leaderboard/index.html"):
-            parser = ResultTables()
+            parser = RankedResults()
             parser.feed((output / route).read_text(encoding="utf-8"))
-            self.assertIn("main-results", parser.tables)
-            rows = parser.tables["main-results"]
-            self.assertEqual([c.get("data-column") for c in rows[0]["cells"]],
-                             ["model", "delay", "stale", "conflict", "replay", "partial", "failure", "scope", "straggler", "calls", "drs"])
-            self.assertEqual(len(rows), 11)  # Header, nine agents, paper mean.
-            sonnet = next(r for r in rows if r["id"] == "claude-sonnet-5")
-            self.assertEqual([c["text"] for c in sonnet["cells"][1:10]],
-                             ["38.7 ±1.8", "53.4 ±1.2", "39.9 ±2.1", "15.5 ±1.2", "29.8 ±1.7", "35.8 ±1.3", "66.9 ±1.9", "80.5 ±1.5", "77.1"])
-            self.assertEqual([c["bold"] for c in sonnet["cells"][1:9]],
+            self.assertEqual(parser.table_count, 0)
+            self.assertEqual(len(parser.lists.get("result-rows", [])), 9)
+            self.assertEqual(parser.lists["result-rows"][0], "claude-sonnet-5")
+            sonnet = parser.items["claude-sonnet-5:result-rows"]
+            self.assertEqual(sonnet["rank"], "1")
+            fields = sonnet["fields"]
+            keys = ["delay", "stale", "conflict", "replay", "partial", "failure", "scope", "straggler"]
+            self.assertEqual([fields[k]["text"] for k in keys],
+                             ["38.7 ±1.8", "53.4 ±1.2", "39.9 ±2.1", "15.5 ±1.2", "29.8 ±1.7", "35.8 ±1.3", "66.9 ±1.9", "80.5 ±1.5"])
+            self.assertEqual(fields["calls"]["text"], "77.1")
+            self.assertEqual([fields[k]["bold"] for k in keys],
                              [True, True, False, False, False, True, False, False])
-            self.assertEqual([c["text"] for c in rows[-1]["cells"][1:10]],
+            self.assertEqual([parser.items["drs-mean"]["fields"][k]["text"] for k in keys + ["calls"]],
                              ["29.1", "40.2", "31.2", "8.6", "21.3", "12.2", "57.5", "60.7", "85.7"])
 
-    def test_task_success_is_a_separate_table_with_reported_deltas(self):
+    def test_success_ranked_list_keeps_reported_rates_deltas_and_mean(self):
         output = self.build()
-        parser = ResultTables()
+        parser = RankedResults()
         parser.feed((output / "leaderboard/index.html").read_text(encoding="utf-8"))
-        self.assertIn("success-results", parser.tables)
-        rows = parser.tables["success-results"]
-        sonnet = next(r for r in rows if r["id"] == "claude-sonnet-5")
-        self.assertEqual([c["text"] for c in sonnet["cells"]],
-                         ["Claude Sonnet 5", "42.3", "38.2", "-4.2"])
-        self.assertEqual([c["text"] for c in rows[-1]["cells"][1:]], ["29.7", "26.0", "-3.7"])
+        self.assertEqual(len(parser.lists.get("success-rows", [])), 9)
+        sonnet = parser.items["claude-sonnet-5:success-rows"]["fields"]
+        self.assertEqual([sonnet[k]["text"] for k in ("batched", "async", "delta")],
+                         ["42.3", "38.2", "-4.2"])
+        self.assertEqual([parser.items["success-mean"]["fields"][k]["text"] for k in ("batched", "async", "delta")], ["29.7", "26.0", "-3.7"])
+
+    def test_model_scenarios_are_readable_without_a_table(self):
+        output = self.build()
+        page = (output / "runs/claude-sonnet-5/index.html").read_text(encoding="utf-8")
+        self.assertNotIn("<table", page)
+        self.assertIn('data-field="straggler"', page)
+        self.assertIn("±1.5", page)
 
     def test_scenario_mean_row_and_csv_keep_paper_values(self):
         import csv

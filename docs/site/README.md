@@ -37,16 +37,18 @@ to the site or its public inputs and publishes only the generated artifact.
   note on the results page. The private PDF is not included. The profile
   download is the current public template.
 - Update Chinese and English text together. Preserve URL paths, keyboard access,
-  horizontal table scrolling on mobile and readable content without JavaScript.
+  responsive ranking cards and readable content without JavaScript.
 - DRS bars are static score meters, not loading indicators. Their scale is always
   0–100, including the mean and model-detail score; do not normalize to the best
   model or introduce unreported performance bands. Numeric labels remain visible.
-- The main leaderboard follows Table 3: Agent, eight scenario means with sample
-  SD, Calls, then DRS. Scenario mean-row values are transcribed from the manuscript,
-  not recalculated from rounded rows. Score-column maxima are bold; Calls is cost,
-  not a performance score. Table 4 task success is a separate table.
-- Both tables start in paper order and share the agent search. Main-table sorting
-  uses DRS or a scenario mean; the success table has its own ordering control.
+- The leaderboard presents Table 3 data as ranked cards, not a reproduction of
+  the paper's table layout. Each card shows rank, agent, DRS, Calls and all eight
+  scenario means with sample SD. Scenario maxima are bold; Calls is cost, not a
+  performance score. Paper means remain in a separate, unranked summary.
+- Table 4 task success has its own ranked list. Both lists start in paper order
+  and share the agent search. DRS ranking can also use a scenario mean; task
+  success has an independent ordering control. Tied scores share a rank;
+  filtering preserves ranks from the full nine-agent comparison.
   CSV retains its original aggregate columns and appends scenario means and SDs.
 - Old provisional result links show a historical-record notice. The original
   website and snapshots remain in Git history; they are not paper leaderboard rows.

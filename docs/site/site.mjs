@@ -49,11 +49,15 @@ function connectResults(bodyId, metricId, emptyId) {
     for (const record of ranked) {
       const row = resultRows.get(record.id);
       row.hidden = !shown.has(record.id);
+      row.value = record.rank;
+      row.dataset.place = record.rank;
+      row.querySelector('.rank-number').textContent = String(record.rank).padStart(2, '0');
+      row.querySelectorAll('[data-field]').forEach(field => {
+        field.classList.toggle('is-ranked', field.dataset.field === key);
+      });
       resultBody.append(row);
     }
-    const table = resultBody.closest('table');
-    table.querySelectorAll('thead th').forEach(th => th.removeAttribute('aria-sort'));
-    table.querySelector(`thead th[data-column="${key}"]`)?.setAttribute('aria-sort', 'descending');
+    resultBody.dataset.metric = key;
     document.getElementById(emptyId).hidden = shown.size !== 0;
   }
   metric?.addEventListener('change', updateResults);
