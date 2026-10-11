@@ -102,6 +102,31 @@ class WebsiteBuildTests(unittest.TestCase):
             "c6779afabc2252bfb3abf8ddd24ac3e48efd16ef86520adcc45da1deb32218b3",
         )
 
+    def test_task_catalog_precedes_scenario_reference(self):
+        output = self.build()
+        page = (output / "tasks/index.html").read_text(encoding="utf-8")
+        self.assertTrue('id="scenarios"' in page, "Scenario reference is missing")
+        self.assertLess(page.index('id="task-search"'), page.index('id="scenarios"'))
+
+    def test_each_page_has_one_bilingual_main_heading(self):
+        output = self.build()
+        for path in output.rglob("*.html"):
+            page = path.read_text(encoding="utf-8")
+            self.assertEqual(page.count("<h1>"), 1, str(path))
+            heading = page.split("<h1>")[1].split("</h1>")[0]
+            # Proper model/project names are shared across languages.
+            if 'class="i18n"' in heading:
+                self.assertIn('lang="zh"', heading)
+                self.assertIn('lang="en"', heading)
+
+    def test_missing_page_and_historical_results_have_distinct_explanations(self):
+        output = self.build()
+        missing = (output / "404.html").read_text(encoding="utf-8")
+        archived = (output / "runs/e87590fa970dc29a/index.html").read_text(encoding="utf-8")
+        history_url = "https://github.com/pope8zdt/Async-RBench/tree/19e21e50fbea45812a3d845e1ade8c3a842ca9a9/website"
+        self.assertTrue(history_url in archived, "Archived result must link to its original record")
+        self.assertFalse(history_url in missing, "An unknown URL must not be described as an archived experiment")
+
 
 if __name__ == "__main__":
     unittest.main()
