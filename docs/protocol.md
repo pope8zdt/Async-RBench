@@ -113,7 +113,11 @@ type, dynamic dimension, relevance weight and criticality. Paper-comparable
 episodes use the fixed harness, isolated containers, the reference API adapter,
 matching digests, and the current score policy.
 
-### Executable policy and qualification
+### Executable policy and prerequisites
+
+Designed child timeouts and crashes stop the child before its slot is reused.
+For blocking HTTP requests, cancellation waits for the in-flight request to
+finish or reach its configured timeout before releasing capacity.
 
 `async-rbench-paper26-binary-presentation-1` uses binary task success: every
 registered task-level check must pass; missing, failed, skipped or duplicate
@@ -140,10 +144,9 @@ component and equal means across
 applicable process components. Missing point evidence contributes zero. The
 denominator fingerprint includes the frozen ERCs and task-goal membership.
 
-Historical list contracts remain development diagnostics, not proof of the
-paper's frozen point weights. Official preflight rejects missing weights. The
-current observer samples command endpoints and cannot detect a change restored
-within one command; it therefore cannot certify full-window Preserve/Forbid
-obligations. Official runs requiring them are blocked. Runtime-pending source
-materials also prevent release certification. These implementation checks do not
-retrospectively validate the paper-reported experimental scores.
+Historical list contracts are supported for development diagnostics. Official
+runs require frozen point weights and source-runtime qualification records.
+The built-in observer samples command endpoints, so a change restored within
+one command is outside its observation coverage. Official contracts requiring
+full-window Preserve/Forbid observations are blocked before model calls.
+Paper-reported experimental scores are stored separately from newly scored runs.

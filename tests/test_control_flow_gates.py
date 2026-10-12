@@ -320,7 +320,11 @@ def test_no_replan_full_process_versus_required_revision_unchanged_zero():
         {"id": "evt.a.close", "score_domain": "async_replanning", "event_id": "evt.a", "passed": True},
     ]
     # Correct no-replan: an unchanged state is not a failure; full process score.
-    assert score_event_replanning(no_replan, state, state, passed).process_score == 1.0
+    validation = [{"type": "verification_requested", "check_id": "evt.a.close",
+                   "evaluator_owned": True, "passed": True}]
+    assert score_event_replanning(
+        no_replan, state, state, passed, response_events=validation,
+    ).process_score == 1.0
 
     revise = {
         "event_id": "evt.b", "expected_disposition": "revise",
@@ -328,6 +332,6 @@ def test_no_replan_full_process_versus_required_revision_unchanged_zero():
         "forbidden_changes": ["stable"], "closure_checks": ["evt.a.close"],
     }
     # Required revision with unchanged state -> zero RequiredEffectCoverage.
-    score = score_event_replanning(revise, state, state, passed)
+    score = score_event_replanning(revise, state, state, passed, response_events=validation)
     assert score.component_scores["required_effect_coverage"] == 0.0
     assert score.process_score == 0.75

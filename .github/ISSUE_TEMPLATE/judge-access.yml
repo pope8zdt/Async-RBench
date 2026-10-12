@@ -1,0 +1,37 @@
+name: Judge bundle access
+description: Ask about a judge bundle compatible with your checkout.
+title: "[Judge access] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Judge bundles are distributed separately. This request does not grant access or certify a release.
+        Issues are public: do not attach credentials, answers, hidden tests, judge files or private traces.
+  - type: input
+    id: commit
+    attributes:
+      label: Repository commit
+      description: Paste the output of git rev-parse HEAD.
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Intended use
+      description: Describe the evaluation you plan to run and the model or adapter you will use. No personal contact details are needed here.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Runtime environment
+      description: Operating system, Python version, Docker availability, and any sanitized setup errors.
+    validations:
+      required: true
+  - type: checkboxes
+    id: public-boundary
+    attributes:
+      label: Public information only
+      options:
+        - label: I have not included credentials, hidden scoring material or private traces.
+          required: true

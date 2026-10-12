@@ -122,7 +122,23 @@ class OpenAICompatibleBackend:
             payload["temperature"] = self.config.temperature
         payload.update(self.config.request_body_extra)
         async with self._semaphore:
-            return await asyncio.to_thread(self._request, payload, role)
+            request_task = asyncio.create_task(asyncio.to_thread(self._request, payload, role))
+            try:
+                return await asyncio.shield(request_task)
+            except asyncio.CancelledError:
+                # Cancelling to_thread does not stop its blocking HTTP request.
+                # Keep both API capacity and the caller's child slot occupied
+                # until it finishes (or reaches the configured request timeout).
+                while not request_task.done():
+                    try:
+                        await asyncio.shield(request_task)
+                    except asyncio.CancelledError:
+                        continue
+                    except Exception:
+                        break
+                if not request_task.cancelled():
+                    request_task.exception()
+                raise
 
     def _request(self, payload: dict[str, Any], role: str) -> ModelTurn:
         headers = {

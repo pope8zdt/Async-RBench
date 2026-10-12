@@ -23,6 +23,10 @@ only participant-visible files and work without a judge bundle.
 
 Formal scoring requires an explicit external judge root:
 
+First follow [judge access and setup](judge-bundle.md) to request a bundle for
+your exact checkout. A version label is not sufficient; task and scoring
+bindings must match. Keep the bundle outside this repository.
+
 ```bash
 async-rbench validate-judge --judge-root <judge-root>
 async-rbench certify-release --judge-root <judge-root>
@@ -90,10 +94,9 @@ async-rbench-eval audit-run \
 
 ## Adapter conformance
 
-These formal commands are gated, not a claim that the current package is ready
-for a paper reproduction. Runtime-pending source bindings, missing frozen ERC
-weights, and unsupported response-window observations block certification or
-official execution. Old and repaired scoring policies must be aggregated separately.
+Formal commands check source-runtime qualification records, frozen ERC weights
+and response-window observations before execution. A failed prerequisite stops
+the run before model calls. Aggregate each scoring policy separately.
 
 ```bash
 async-rbench-eval conformance \

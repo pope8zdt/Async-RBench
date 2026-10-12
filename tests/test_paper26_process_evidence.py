@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from async_rbench.evaluation.control_flow_gates import score_event_replanning
 from async_rbench.evaluation import scoring
 
@@ -49,6 +51,18 @@ def test_pre_presentation_validation_does_not_satisfy_verify() -> None:
     )
     assert result.component_scores["closure"] == 0.0
     assert result.async_outcome == 1.0
+
+
+@pytest.mark.parametrize("evidence", ["omitted", None, []])
+def test_final_check_cannot_replace_missing_participant_validation(evidence) -> None:
+    kwargs = {} if evidence == "omitted" else {"response_events": evidence}
+    result = score_event_replanning(
+        {"event_id": "evt", "closure_checks": ["out"]},
+        {}, {}, _outcome(), **kwargs,
+    )
+    assert result.component_scores["closure"] == 0.0
+    assert result.async_outcome == 1.0
+    assert result.total == 0.5
 
 
 def test_evaluator_observed_response_validation_satisfies_verify() -> None:

@@ -1104,6 +1104,15 @@ class SubagentManager:
                 LOGGER.error("gateway delivered unknown completion %s", completion_id)
                 return
         record = self.children[child_id]
+        if delivery.get("terminal_outcome") and record.asyncio_task is not None:
+            # A designed timeout/crash is not a real completion. Stop its live
+            # execution before "delivered" releases the slot to queued work.
+            if not record.asyncio_task.done():
+                record.asyncio_task.cancel()
+                try:
+                    await record.asyncio_task
+                except asyncio.CancelledError:
+                    pass
         record.delivery = delivery
         record.status = "delivered"
         record.presented = False

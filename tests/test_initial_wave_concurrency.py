@@ -16,14 +16,21 @@ class ControlledBackend:
         self.release = asyncio.Event()
         self.calls = 0
         self.peak = 0
+        self.live_calls = 0
+        self.peak_live_calls = 0
         self.manager = None
 
     async def complete(self, **kwargs):
         self.calls += 1
         self.peak = max(self.peak, self.manager.active_count())
-        await self.release.wait()
-        return ModelTurn(assistant_message={"role": "assistant", "content": "done"},
-                         tool_calls=[], total_tokens=1)
+        self.live_calls += 1
+        self.peak_live_calls = max(self.peak_live_calls, self.live_calls)
+        try:
+            await self.release.wait()
+            return ModelTurn(assistant_message={"role": "assistant", "content": "done"},
+                             tool_calls=[], total_tokens=1)
+        finally:
+            self.live_calls -= 1
 
     def runtime_metadata(self):
         return {}
@@ -84,6 +91,38 @@ def test_cancellation_releases_one_slot():
         assert await manager.wait_linear_bundle(2)
         assert active_after_cancel <= 3 and fourth_admitted
         assert manager.children["child-1"].status == "cancelled"
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("mode", ["async", "linear"])
+@pytest.mark.parametrize("terminal_outcome", ["timeout", "crash"])
+def test_designed_terminal_stops_live_execution_before_releasing_capacity(mode, terminal_outcome):
+    async def run():
+        manager, backend = _manager(mode)
+        manager.spawn_initial_wave()
+        try:
+            assert await manager.wait_initial_wave_ready()
+            async def wait_for_calls(count):
+                while backend.calls < count:
+                    await asyncio.sleep(0)
+            await asyncio.wait_for(wait_for_calls(3), 2)
+            await manager.handle_delivery({
+                "completion_id": "terminal:event-1", "child_id": "child-1",
+                "terminal_outcome": terminal_outcome, "payload": {},
+            })
+            await manager.cancel("child-2", "cancel another workstream")
+            await asyncio.wait_for(wait_for_calls(5), 2)
+            assert backend.peak_live_calls <= 3
+            assert backend.live_calls <= 3
+            assert manager.children["child-1"].asyncio_task.done()
+            assert manager.children["child-1"].status == "delivered"
+            backend.release.set()
+            assert await manager.wait_linear_bundle(2)
+            assert manager.children["child-1"].status == "delivered"
+            assert backend.calls == 6
+        finally:
+            backend.release.set()
+            await manager.wait_linear_bundle(2)
     asyncio.run(run())
 
 

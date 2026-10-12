@@ -13,11 +13,16 @@ credentials, provider endpoints, traces, answers, ERC truth, or verifier
 contents. The matching judge bundle is distributed separately and is not part
 of the GitHub repository.
 
-Regenerate the file after release certification:
+This manifest and its digests identify the paper's historical experiment
+snapshot. New experiments use separate manifests for their task metadata,
+scoring code and judge bindings. See [judge setup](../docs/judge-bundle.md)
+for the compatibility checks required when preparing a new experiment.
+
+Generate a separate manifest for a new experiment after release certification:
 
     python scripts/build_paper_manifest.py \
         --judge-root <private-judge-root> \
-        --output paper_artifacts/experiment_manifest.json
+        --output <new-experiment-manifest.json>
 
 Runtime API URLs, account routing, and secret environment values are
 intentionally not recorded.

@@ -36,7 +36,7 @@ Version: 11.0.0 · Contract: frozen · Release: `v11.0-paper`
 
 **Manuscript v26, Tables 3 and 4** (September 29, 2026): nine agents, 200 tasks,
 three repetitions per mode, and the same model for main and subagents.
-These are paper-reported aggregates, not a new evaluation of the public framework.
+The tables below reproduce the paper-reported aggregates.
 
 ### Dynamic Replanning Score — Table 3
 
@@ -110,12 +110,8 @@ does not include solutions, hidden tests, event schedules, verifier logic,
 credentials, or experiment traces. Formal scoring uses a separately distributed
 judge bundle.
 
-Runtime qualification is not complete: 46 source-rebound cases remain pending,
-including 38 with conflicting legacy participant materials. They are retained
-for recovery, not certified as executable paper tasks. The release-certification
-command rejects these cases; source labels and corpus totals alone are not
-evidence of reproducibility. Four additional MultiAgentBench cases await
-container and quality qualification, bringing the pending total to 50.
+Source-family labels follow the paper. `legacy_benchmark_label` preserves earlier
+labels for traceability; task contents and registered IDs remain unchanged.
 
 ## Quick start
 
@@ -123,6 +119,7 @@ Requires Python 3.11+.
 
 ```bash
 python -m venv .venv
+# Activate: source .venv/bin/activate (bash) or .venv\Scripts\Activate.ps1 (PowerShell)
 python -m pip install -U pip
 python -m pip install -e ".[test]"
 
@@ -139,8 +136,11 @@ A valid checkout reports:
 
 ## Evaluation
 
-After task setup qualification and compatible frozen judge bindings are available,
-the formal evaluation commands are:
+Use the [judge access form](https://github.com/pope8zdt/Async-RBench/issues/new?template=judge-access.yml)
+and [setup guide](docs/judge-bundle.md). The maintainer must confirm availability
+and delivery; never post hidden scoring material in a public issue.
+
+After task setup qualification and judge validation:
 
 ```bash
 async-rbench validate-judge --judge-root <judge-root>
@@ -169,16 +169,15 @@ Replanning Score (DRS). For an event, the process score `P` averages the
 applicable Change, Preserve, Forbid, and Verify components. With event outcome
 `O`, `DRS_event = 100 × (P + O) / 2`.
 
-Task success is binary per run: every registered task goal must pass. The repaired
+Task success is binary per run: every registered task goal must pass. The scoring
 policy, `async-rbench-paper26-binary-presentation-1`, uses actual main-request
 presentation and retains observed intermediate changes. It cannot be mixed with
-legacy scores. Official runs require frozen ERC point weights and adequate
-response-window observations; the current endpoint observer cannot certify
-Preserve/Forbid obligations, so those official runs are blocked before model calls.
+legacy scores. Official runs require frozen ERC point weights and full-window
+process evidence. The built-in observer records command endpoints; contracts
+requiring full-window Preserve/Forbid observations are blocked before model calls.
 
-Machine-readable outputs retain the field names `linear_base_task_score`,
-`async_base_task_score`, and `async_dynamic_replanning_score`. They store values
-on `[0, 1]`; paper tables display percentages.
+Outputs retain `linear_base_task_score`, `async_base_task_score`, and
+`async_dynamic_replanning_score` on `[0, 1]`; paper tables display percentages.
 
 ## Documentation
 
@@ -187,6 +186,7 @@ on `[0, 1]`; paper tables display percentages.
 | [Evaluation protocol](docs/protocol.md) | Delivery modes, limits, information boundary, and scoring |
 | [Adapter protocol](docs/adapter-protocol.md) | JSONL interface and delivery lifecycle |
 | [CLI reference](docs/cli.md) | Validation, manifests, execution, and aggregation |
+| [Judge access and setup](docs/judge-bundle.md) | Requesting a compatible bundle and checking its bindings |
 | [Dataset guide](docs/dataset.md) | Public case layout and provenance |
 | [Kernel contract](docs/kernel-contract.md) | Kernel-owned scheduling and verification |
 | [Adapter contract](docs/adapter-contract.md) | Participant-facing runtime boundary |
@@ -215,6 +215,5 @@ Async-RBench/
 
 See [`CITATION.cff`](CITATION.cff). Authors remain anonymized during double-blind review.
 
-Async-RBench code and documentation are released under Apache-2.0. Transformed
-task materials retain their upstream terms; see [`NOTICE`](NOTICE) and
-[`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+Code and documentation use Apache-2.0; task materials retain upstream terms.
+See [`NOTICE`](NOTICE) and [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).

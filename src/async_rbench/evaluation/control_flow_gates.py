@@ -786,16 +786,14 @@ def _closure_score(
     ]
     if not checks:
         return None
-    if response_events is not None:
-        verified = {
-            str(item.get("check_id")) for item in response_events
-            if item.get("type") == "verification_requested"
-            and item.get("evaluator_owned") is True and item.get("passed") is True
-        }
-        return sum(check_id in verified for check_id in checks) / len(checks)
-    by_id = {str(item.get("id")): item for item in (semantic_results or [])}
-    passed = sum(1 for check_id in checks if by_id.get(check_id, {}).get("passed") is True)
-    return passed / len(checks)
+    # A final-state check establishes an outcome, not participant validation.
+    # Missing response evidence must fail the obligation for every caller.
+    verified = {
+        str(item.get("check_id")) for item in (response_events or [])
+        if item.get("type") == "verification_requested"
+        and item.get("evaluator_owned") is True and item.get("passed") is True
+    }
+    return sum(check_id in verified for check_id in checks) / len(checks)
 
 
 def _component_applicability(contract: dict[str, Any]) -> set[str]:

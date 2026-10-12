@@ -5,6 +5,8 @@
 - [Adapter protocol](adapter-protocol.md): JSONL messages and the result-delivery
   lifecycle.
 - [CLI reference](cli.md): validation, manifests, execution, and aggregation.
+- [Judge access and setup](judge-bundle.md): requesting a compatible bundle and
+  checking its release bindings before formal evaluation.
 - [Dataset guide](dataset.md): public case layout, registry, and provenance.
 - [Kernel contract](kernel-contract.md): benchmark-owned scheduling, isolation,
   observation, and verification.

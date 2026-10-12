@@ -119,6 +119,30 @@ class WebsiteBuildTests(unittest.TestCase):
                            "--config <profile.yaml>", "--official-track", "--judge-root <judge-root>"):
                 self.assertIn(option, command, path)
 
+    def test_evaluation_links_to_judge_request_form_and_setup_guide(self):
+        output = self.build()
+        page = (output / "evaluate/index.html").read_text(encoding="utf-8")
+        links = Links()
+        links.feed(page)
+        self.assertIn(
+            "https://github.com/pope8zdt/Async-RBench/issues/new?template=judge-access.yml",
+            links.links,
+        )
+        self.assertIn(
+            "https://github.com/pope8zdt/Async-RBench/blob/main/docs/judge-bundle.md",
+            links.links,
+        )
+
+    def test_evaluation_describes_requirements_without_editorial_status_labels(self):
+        output = self.build()
+        page = (output / "evaluate/index.html").read_text(encoding="utf-8")
+        for label in ("未认证", "未验证", "未复核", "待验收", "The maintainer has reviewed",
+                      "This update standardizes", "not a reproduction claim"):
+            self.assertNotIn(label, page)
+        for requirement in ("external judge", "frozen ERC", "command endpoints",
+                            "blocked before model calls"):
+            self.assertIn(requirement, page)
+
     def build(self, base="/Async-RBench"):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

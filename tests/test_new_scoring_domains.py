@@ -106,11 +106,15 @@ passed_async_checks = [
     _check("evt.late_authority.preserve", domain="async_replanning", event_id="evt.late_authority", passed=True),
 ]
 
+stale_validation = [{"type": "verification_requested", "check_id": "evt.late_authority.closure",
+                     "evaluator_owned": True, "passed": True}]
+
 
 def test_stale_result_correctly_preserves_state_for_full_process_score() -> None:
     score = score_event_replanning(
         contract=reject_stale_contract, before=S0, after=S0,
         semantic_results=passed_async_checks,
+        response_events=stale_validation,
     )
     assert score.component_scores["preservation"] == 1.0
     assert score.component_scores["forbidden_effect_compliance"] == 1.0
@@ -127,6 +131,7 @@ def test_no_state_change_is_not_a_failure_for_no_replan_disposition() -> None:
     score = score_event_replanning(
         contract=reject_stale_contract, before=S0, after=S0,
         semantic_results=passed_async_checks,
+        response_events=stale_validation,
     )
     assert score.process_score == 1.0
     assert score.total == 1.0
@@ -155,12 +160,16 @@ passed_async_checks_revision = [
     _check("evt.required_revision.closed", domain="async_replanning", event_id="evt.required_revision", passed=True),
 ]
 
+revision_validation = [{"type": "verification_requested", "check_id": "evt.required_revision.closed",
+                        "evaluator_owned": True, "passed": True}]
+
 
 def test_required_revision_with_unchanged_state_gets_zero_effect_coverage() -> None:
     # before == after: every required_change was left at its provisional value.
     score = score_event_replanning(
         contract=revise_contract, before=unchanged_revision_state,
         after=unchanged_revision_state, semantic_results=passed_async_checks_revision,
+        response_events=revision_validation,
     )
     assert score.component_scores["required_effect_coverage"] == 0.0
     assert score.component_scores["preservation"] == 1.0
@@ -179,6 +188,7 @@ def test_required_revision_with_unchanged_state_scores_below_full_even_when_base
     score = score_event_replanning(
         contract=revise_contract, before=unchanged_revision_state,
         after=unchanged_revision_state, semantic_results=passed_async_checks_revision,
+        response_events=revision_validation,
     )
     assert score.process_score < 1.0
     assert score.total == pytest.approx(0.5 * 0.75 + 0.5 * 1.0)
@@ -201,6 +211,7 @@ def test_event_drs_is_half_process_half_async_outcome() -> None:
     score = score_event_replanning(
         contract=revise_contract, before=unchanged_revision_state,
         after=revision_after_state, semantic_results=passed_async_checks_revision,
+        response_events=revision_validation,
     )
     assert score.component_scores["required_effect_coverage"] == 1.0
     assert score.process_score == 1.0
@@ -232,6 +243,10 @@ def test_component_ratios_track_partial_compliance() -> None:
     ]
     score = score_event_replanning(
         contract=contract, before=before, after=after, semantic_results=closure_results,
+        response_events=[
+            {"type": "verification_requested", "check_id": "k1", "evaluator_owned": True, "passed": True},
+            {"type": "verification_requested", "check_id": "k2", "evaluator_owned": True, "passed": False},
+        ],
     )
     assert score.component_scores["required_effect_coverage"] == 0.5
     assert score.component_scores["preservation"] == 0.5
@@ -290,6 +305,7 @@ def test_async_drs_aggregates_scored_events_ignoring_base_task_failure() -> None
     score = score_event_replanning(
         contract=reject_stale_contract, before=S0, after=S0,
         semantic_results=passed_async_checks,
+        response_events=stale_validation,
     )
     assert score.total == 1.0
     assert score_async_drs([score]) == 1.0

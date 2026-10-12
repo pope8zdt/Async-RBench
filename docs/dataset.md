@@ -1,5 +1,9 @@
 # Dataset
 
+Source-family labels follow the paper's five groups. Where a participant file
+had an older family label, `legacy_benchmark_label` preserves that exact value.
+Task contents and registered case IDs remain unchanged.
+
 Async-RBench contains 200 registered cases, each with one registered instance.
 A case is the registration unit; an instance is one executable variant of it.
 
