@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from collections import Counter
+from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -110,8 +111,9 @@ class WebsiteBuildTests(unittest.TestCase):
                          "ff345cfe9be663a4cec013192b882ec1a067a8a6ff8e9f89d89c34a2ab5a8954")
 
     def test_formal_cli_examples_select_runtime_and_external_judge(self):
-        for path in (ROOT / "README.md", ROOT / "docs/cli.md"):
-            text = path.read_text(encoding="utf-8")
+        output = self.build()
+        for path in (ROOT / "README.md", output / "evaluate/index.html"):
+            text = unescape(path.read_text(encoding="utf-8"))
             command = text.split("async-rbench-eval run-manifest", 1)[1].split("\n\n", 1)[0]
             for option in ("--profile reference_scaffold_api", "--runtime-mode api_only",
                            "--config <profile.yaml>", "--official-track", "--judge-root <judge-root>"):
