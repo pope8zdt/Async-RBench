@@ -28,33 +28,63 @@ holds their results until every required workflow terminates. **Async** presents
 eligible results as they arrive while the main agent continues working. The task,
 subagent workflows, limits, and scoring rules are otherwise held fixed.
 
-Version: 11.0.0  
-Contract: frozen  
-Release: `v11.0-paper`
+Version: 11.0.0 · Contract: frozen · Release: `v11.0-paper`
 
 ![Async-RBench benchmark and scoring mechanism](assets/benchmark-mechanism.png)
 
 ## Main results
 
-- Across nine evaluated agents, Async DRS ranges from **19.2 to 45.1**. Oracle
-  responses score **96.4–98.8** on the same events.
-- Mean task success falls from **29.7% under Batched delivery to 26.0% under
-  Async delivery**. All nine agents have a lower Async point estimate.
-- Full-rebuild raises DRS from 39.7 to 42.3 for Terra, 31.1 to 34.6 for Luna,
-  and 19.2 to 21.9 for Gemini. The paper text reports 7.5–10.2% more model calls.
+**Manuscript v26, Tables 3 and 4** (September 29, 2026): nine agents, 200 tasks,
+three repetitions per mode, and the same model for main and subagents.
+These are paper-reported aggregates, not a new evaluation of the public framework.
+
+### Dynamic Replanning Score — Table 3
+
+Scenario scores are **mean ± sample SD** across three repetitions; DRS averages all eight (0–100).
+**Bold** marks the best scores. Calls counts mean main-agent and subagent responses per Async run.
+
+| Model | Delay | Stale | Conflict | Replay | Partial | Failure | Scope | Straggler | DRS ↑ | Calls |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Claude Sonnet 5 | **38.7 ± 1.8** | **53.4 ± 1.2** | 39.9 ± 2.1 | 15.5 ± 1.2 | 29.8 ± 1.7 | **35.8 ± 1.3** | 66.9 ± 1.9 | 80.5 ± 1.5 | **45.1** | 77.1 |
+| GPT-5.6 Terra | 34.2 ± 1.5 | 43.9 ± 2.9 | **41.5 ± 1.3** | **18.5 ± 1.6** | 21.4 ± 1.3 | 16.2 ± 1.9 | **69.4 ± 2.0** | 72.2 ± 2.4 | 39.7 | 48.1 |
+| Qwen3.7 Plus | 33.0 ± 1.3 | 45.5 ± 2.9 | 38.8 ± 1.5 | 12.6 ± 1.6 | 21.2 ± 2.4 | 6.9 ± 1.5 | 61.8 ± 2.4 | **85.9 ± 2.6** | 38.2 | 75.9 |
+| GLM5.3 Flash | 29.0 ± 2.7 | 47.8 ± 2.2 | 27.0 ± 2.3 | 11.6 ± 2.2 | **31.2 ± 2.1** | 5.0 ± 0.6 | 53.5 ± 2.4 | 62.3 ± 1.4 | 33.4 | 76.5 |
+| GPT-5.6 Luna | 34.0 ± 1.2 | 47.8 ± 1.2 | 31.7 ± 1.4 | 4.2 ± 0.3 | 22.2 ± 1.2 | 14.9 ± 1.2 | 43.8 ± 1.3 | 50.5 ± 2.2 | 31.1 | 45.5 |
+| DeepSeek V4 Pro | 16.2 ± 1.6 | 47.6 ± 2.2 | 20.8 ± 3.2 | 2.7 ± 0.7 | 24.2 ± 2.4 | 16.8 ± 2.8 | 62.0 ± 2.1 | 54.7 ± 3.2 | 30.6 | 108.0 |
+| Qwen3.5 27B | 28.7 ± 1.4 | 32.0 ± 2.9 | 31.5 ± 3.1 | 6.1 ± 0.2 | 20.0 ± 1.0 | 4.2 ± 0.2 | 61.1 ± 1.4 | 54.6 ± 2.2 | 29.8 | 119.6 |
+| Kimi K2.5 | 27.5 ± 2.3 | 30.0 ± 1.9 | 20.4 ± 1.3 | 3.1 ± 0.4 | 12.9 ± 1.3 | 8.5 ± 1.3 | 51.4 ± 1.2 | 55.3 ± 2.3 | 26.1 | 125.2 |
+| Gemini 3 Flash-H | 20.7 ± 1.1 | 13.8 ± 0.4 | 29.3 ± 1.3 | 2.7 ± 0.4 | 8.5 ± 1.1 | 1.7 ± 0.4 | 47.2 ± 2.4 | 29.9 ± 2.3 | 19.2 | 95.0 |
+| Mean | 29.1 | 40.2 | 31.2 | 8.6 | 21.3 | 12.2 | 57.5 | 60.7 | 32.6 | 85.7 |
+
+### Task success — Table 4
+
+Success S is separate from DRS. ΔS = Async − Batched (percentage points), using
+the paper's pre-rounding differences. Rows follow DRS order; bold marks each mode's best rate.
+
+| Model | Batched S (%) ↑ | Async S (%) ↑ | ΔS (pp) |
+|---|---:|---:|---:|
+| Claude Sonnet 5 | **42.3** | 38.2 | -4.2 |
+| GPT-5.6 Terra | 41.3 | **38.8** | -2.5 |
+| Qwen3.7 Plus | 21.3 | 18.7 | -2.7 |
+| GLM5.3 Flash | 25.5 | 20.8 | -4.7 |
+| GPT-5.6 Luna | 40.2 | 34.3 | -5.8 |
+| DeepSeek V4 Pro | 35.7 | 34.7 | -1.0 |
+| Qwen3.5 27B | 19.7 | 17.0 | -2.7 |
+| Kimi K2.5 | 23.2 | 19.2 | -4.0 |
+| Gemini 3 Flash-H | 18.3 | 12.3 | -6.0 |
+| Mean | 29.7 | 26.0 | -3.7 |
+
+[Leaderboard](https://pope8zdt.github.io/Async-RBench/leaderboard/) · [Result data](docs/site/data/paper-results.json) · [Scenarios](https://pope8zdt.github.io/Async-RBench/tasks/#scenarios)
+
+### Validation and plan rebuilding
+
+Oracle scores **96.4–98.8** on the same events. Full-rebuild raises DRS from 39.7
+to 42.3 (Terra), 31.1 to 34.6 (Luna), and 19.2 to 21.9 (Gemini), with 7.5–10.2% more calls reported in the paper text.
 
 <p align="center">
   <img src="assets/drs-validation.png" width="48%" alt="DRS validation with Oracle, Native, and Frozen responses">
   <img src="assets/full-rebuild.png" width="48%" alt="DRS and model calls under Native and Full-rebuild execution">
 </p>
-
-Figures and reported results follow manuscript version 26 (September 29, 2026).
-The leaderboard contains paper-reported aggregates, not results recomputed by
-the repaired scoring implementation.
-
-The paper evaluates Claude Sonnet 5, GPT-5.6 Terra, Qwen3.7 Plus, GLM5.3
-Flash, GPT-5.6 Luna, DeepSeek V4 Pro, Qwen3.5 27B, Kimi K2.5, and Gemini 3
-Flash High. The main agent and its subagents use the same model in each run.
 
 ## Dataset
 
@@ -89,7 +119,7 @@ container and quality qualification, bringing the pending total to 50.
 
 ## Quick start
 
-Python 3.11 or newer is required.
+Requires Python 3.11+.
 
 ```bash
 python -m venv .venv
@@ -183,8 +213,7 @@ Async-RBench/
 
 ## Citation and license
 
-Citation metadata is available in [`CITATION.cff`](CITATION.cff). Author names
-remain anonymized during double-blind review.
+See [`CITATION.cff`](CITATION.cff). Authors remain anonymized during double-blind review.
 
 Async-RBench code and documentation are released under Apache-2.0. Transformed
 task materials retain their upstream terms; see [`NOTICE`](NOTICE) and
