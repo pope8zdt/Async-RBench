@@ -20,7 +20,8 @@ from .report_contract import (
 )
 from .result_contract import validate_payload_contract
 from .termination import classify_child_terminals
-from ..spec import case_instance_key, discover_case_instances
+from ..spec import CaseSpec, case_instance_key, discover_case_instances
+from ..judge import JudgeBundleProvider, compose_runtime_case, load_judge_case
 
 
 #: Every hard-fail reason an ``audit_run`` report can carry.  ``audit-run`` maps
@@ -49,8 +50,8 @@ def child_terminal_integrity_violations(
       rejection reason codes but no actionable public code — a private check
       leaked into the gateway verdict (Task 4);
     * an *unknown terminal* is a row still classified ``in_flight`` after its
-      episode closed — the spawned child never reached a concrete runtime
-      terminal (Task 1/8).
+      episode closed without an explicit scaffold shutdown receipt. Shutdown
+      cleanup is known, but is not credited as a main-agent cancellation.
 
     Neither is ever a model submission verdict; both block a certification.
     """
@@ -62,7 +63,7 @@ def child_terminal_integrity_violations(
             row.get("reason_codes")
         ) and not (row.get("public_codes")):
             private_only.append(row)
-        elif terminal_class == "in_flight":
+        elif terminal_class == "in_flight" and row.get("shutdown_cancelled") is not True:
             unknown.append(row)
     return private_only, unknown
 
@@ -358,6 +359,7 @@ def audit_contract_fixtures(
     *,
     validator_timeout: float | None = 30.0,
     progress: bool = False,
+    judge_root: Path | None = None,
 ) -> dict[str, Any]:
     """Audit every case's workstream contract fixtures (public + private).
 
@@ -370,8 +372,11 @@ def audit_contract_fixtures(
     emits a running counter to stderr for long CLI runs.
     """
     jobs: list[tuple[Any, Any, dict[str, Any], dict[str, Any]]] = []
+    provider = JudgeBundleProvider(judge_root) if judge_root is not None else None
     for instance in discover_case_instances(root):
         case = instance.load()
+        if provider is not None:
+            case = CaseSpec(case.path, compose_runtime_case(case, load_judge_case(case, provider)))
         sufficiency = {
             str(item.get("workstream_id")): item
             for item in case.raw.get("information_sufficiency") or []
@@ -574,6 +579,7 @@ def _episode_audit(score_path: Path) -> tuple[dict[str, Any], list[dict[str, Any
 
 def audit_run(
     root: Path, benchmark_root: Path, *, contract_fixtures: dict[str, Any] | None = None,
+    judge_root: Path | None = None,
 ) -> dict[str, Any]:
     # Imported lazily to keep the audit helpers usable without initializing the
     # episode runner during module import.
@@ -632,7 +638,7 @@ def audit_run(
     # A caller (e.g. a session-scoped test fixture) may hand over a pre-computed
     # full-corpus audit rather than pay the subprocess-heavy scan again.
     fixtures = (
-        audit_contract_fixtures(benchmark_root)
+        audit_contract_fixtures(benchmark_root, judge_root=judge_root)
         if contract_fixtures is None else contract_fixtures
     )
     current_source_digest = _source_digest(benchmark_root)
@@ -792,9 +798,10 @@ def audit_run(
             "episodes_with_unknown_child_terminal": unknown_terminal_episode_ids,
             "official_linear_zero_main_episode_ids": official_linear_zero_main_episode_ids,
             "note": (
-                "Each spawned child must reach exactly one concrete terminal once "
-                "its episode closes; a private-only rejection and an in-flight "
-                "close are mechanism defects, never model submission verdicts."
+                "Each spawned child must have a concrete terminal or explicit "
+                "shutdown cleanup once its episode closes. Shutdown is not a "
+                "main-agent cancellation. Private-only rejection and an "
+                "unexplained in-flight close are mechanism defects."
             ),
         },
         "hard_fail": bool(hard_fail_reasons),

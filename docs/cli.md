@@ -93,6 +93,7 @@ async-rbench-eval aggregate \
 
 async-rbench-eval audit-run \
   --root <run-directory> \
+  --judge-root <judge-root> \
   --output audit.json
 ```
 

@@ -733,7 +733,9 @@ def _required_effect_coverage(
         return None
     changed = sum(
         1 for artifact_id in required
-        if _state_token(before, artifact_id) != _state_token(after, artifact_id)
+        if _state_token(before, artifact_id) is not None
+        and _state_token(after, artifact_id) is not None
+        and _state_token(before, artifact_id) != _state_token(after, artifact_id)
     )
     return changed / len(required)
 
@@ -856,7 +858,10 @@ def _event_async_outcome(
     return passed / len(checks)
 
 
-def _provisional_missing(contract: dict[str, Any], before: Any) -> bool:
+def _provisional_missing(
+    contract: dict[str, Any], before: Any,
+    before_existence: dict[str, bool] | None = None,
+) -> bool:
     """Spec 9.4: participant failed to create a required provisional state."""
     if contract.get("requires_provisional") is not True:
         return False
@@ -864,7 +869,8 @@ def _provisional_missing(contract: dict[str, Any], before: Any) -> bool:
         return True
     artifact = contract.get("provisional_artifact")
     if artifact is not None:
-        return _state_token(before, str(artifact)) is None
+        return (_state_token(before, str(artifact)) is None
+                or (before_existence or {}).get(str(artifact)) is False)
     return False
 
 
@@ -959,6 +965,7 @@ def score_event_replanning(
     artifact_history: dict[str, list[dict[str, Any]]] | None = None,
     response_events: list[dict[str, Any]] | None = None,
     semantic_registry: dict[str, Any] | list[dict[str, Any]] | None = None,
+    before_existence: dict[str, bool] | None = None,
 ) -> EventDRS:
     """Score a single event's replanning (DRS).
 
@@ -1001,7 +1008,7 @@ def score_event_replanning(
 
     # Spec 9.4: participant failure to create the required provisional within
     # the complete pre-event window yields a related DRS of 0.
-    if _provisional_missing(contract, before):
+    if _provisional_missing(contract, before, before_existence):
         return EventDRS(
             process_score=0.0,
             async_outcome=0.0,

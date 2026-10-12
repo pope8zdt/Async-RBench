@@ -385,6 +385,10 @@ def classify_child_terminals(
             "attempt_number": attempt_number,
             "retry": attempt_number >= 2,
             "terminal_class": terminal_class,
+            "shutdown_cancelled": any(
+                str(event.get("initiated_by") or "") == "scaffold_shutdown"
+                for event in _by_child(cancelled, child_id)
+            ),
             "completion_id": completion_id,
             "sealed_submission": terminal_class in SUBMISSION_CLASSES,
             "gateway_verdict": terminal_class in GATEWAY_VERDICT_CLASSES,

@@ -128,3 +128,44 @@ def test_finish_with_queued_initial_work_is_measured_not_infrastructure_failure(
     result = scoring.score_trace(events, case, "async", event_contracts=contracts)
     assert result["scenario_constructed"] is True
     assert result["async_drs"] == 0.0
+
+
+@pytest.mark.parametrize("missing_boundary", ["before", "after"])
+def test_failed_artifact_observation_cannot_earn_change_credit(missing_boundary):
+    events, case, _ = _trace(present=True)
+    for event in events:
+        if event["type"] == "artifact_committed":
+            event.update(type="artifact_state_observed", source="kernel", exists=True)
+            if missing_boundary == "before":
+                event.update(observed_digest=None, observation_error="unreadable")
+        if event["type"] == "verifier_result":
+            event["semantic_check_results"][0]["passed"] = False
+    index = next(i for i, e in enumerate(events) if e["type"] == "finish_invoked")
+    events.insert(index, {"type": "artifact_state_observed", "source": "kernel",
+                         "artifact_id": "protected", "evaluator_observed": True,
+                         "observed_digest": None if missing_boundary == "after" else "b" * 64})
+    for seq, event in enumerate(events, 1):
+        event["seq"] = seq
+    result = scoring.score_trace(events, case, "async", event_contracts=[{
+        "event_id": "evt", "required_changes": ["protected"]}])
+    assert result["async_event_drs"]["evt"]["component_scores"]["required_effect_coverage"] == 0.0
+    assert result["async_drs"] == 0.0
+
+
+@pytest.mark.parametrize("requires_provisional,expected", [(True, 0.0), (False, 1.0)])
+def test_observed_absence_is_valid_change_evidence_but_not_a_provisional(requires_provisional, expected):
+    events, case, _ = _trace(present=True)
+    for event in events:
+        if event["type"] == "artifact_committed":
+            event.update(type="artifact_state_observed", source="kernel", exists=False)
+    index = next(i for i, e in enumerate(events) if e["type"] == "finish_invoked")
+    events.insert(index, {"type": "artifact_state_observed", "source": "kernel",
+                         "artifact_id": "protected", "evaluator_observed": True,
+                         "exists": True, "observed_digest": "b" * 64})
+    for seq, event in enumerate(events, 1):
+        event["seq"] = seq
+    result = scoring.score_trace(events, case, "async", event_contracts=[{
+        "event_id": "evt", "required_changes": ["protected"],
+        "requires_provisional": requires_provisional, "provisional_artifact": "protected"}])
+    assert result["async_drs"] == expected
+    assert result["event_opportunity_counts"]["participant_provisional_failure"] == int(requires_provisional)

@@ -1237,6 +1237,8 @@ def score_trace(
             related_artifacts |= {str(item) for item in contract.get("required_changes") or []}
             related_artifacts |= {str(item) for item in contract.get("required_preservation") or []}
             related_artifacts |= {str(item) for item in contract.get("forbidden_changes") or []}
+            if contract.get("provisional_artifact") is not None:
+                related_artifacts.add(str(contract["provisional_artifact"]))
             related_artifacts |= {
                 str(point["artifact_id"])
                 for points in (contract.get("scoring_points") or {}).values()
@@ -1260,15 +1262,26 @@ def score_trace(
             before, after, artifact_history = _event_state_evidence(
                 observed_commits, related_artifacts, boundary_seq, terminal_seq,
             )
+            # Absence is a valid state token for change/preservation, but it is
+            # not evidence that a required provisional artifact was created.
+            before_existence = {}
+            for artifact_id in related_artifacts:
+                prior = [item for item in observed_commits.get(artifact_id, [])
+                         if int(item.get("seq", 0)) < boundary_seq]
+                if prior:
+                    latest = max(prior, key=lambda item: int(item.get("seq", 0)))
+                    if isinstance(latest.get("exists"), bool):
+                        before_existence[artifact_id] = latest["exists"]
             event_drs = score_event_replanning(
                 contract, before, after, semantic_results,
                 artifact_history=artifact_history,
                 semantic_registry=semantic_registry,
+                before_existence=before_existence,
                 response_events=[event for event in events
                                  if boundary_seq <= int(event.get("seq", 0)) <= terminal_seq],
             )
             if contract.get("requires_provisional") is True:
-                if _provisional_missing(contract, before):
+                if _provisional_missing(contract, before, before_existence):
                     participant_provisional_failure += 1
                 else:
                     provisional_established += 1

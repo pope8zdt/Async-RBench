@@ -87,3 +87,20 @@ def test_unknown_validator_stage_fails_closed(monkeypatch) -> None:
 
     assert report["passed"] is False
     assert report["workstreams"][0]["validator_stage_valid"] is False
+
+
+def test_contract_audit_composes_the_explicit_external_judge(tmp_path, monkeypatch):
+    workstream = {**_base_workstream(), "validator_stage": "semantic_evidence",
+                  "public_result_contract": {"kind": "payload_only"}}
+    instance = _instance(workstream)
+    raw = instance.load().raw
+    public = SimpleNamespace(case_id="fixture-case", raw={}, path=tmp_path / "public/case.yaml")
+    instance.load = lambda: public
+    monkeypatch.setattr(audit_module, "discover_case_instances", lambda root: [instance])
+    received = []
+    monkeypatch.setattr(audit_module, "load_judge_case",
+                        lambda case, provider: received.append(provider.root) or "private")
+    monkeypatch.setattr(audit_module, "compose_runtime_case", lambda case, private: raw)
+    report = audit_contract_fixtures(tmp_path, judge_root=tmp_path / "judge")
+    assert received == [tmp_path / "judge"]
+    assert report["passed"] is True

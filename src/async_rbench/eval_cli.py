@@ -304,7 +304,7 @@ def cmd_aggregate(args) -> int:
 
 def cmd_audit_run(args) -> int:
     root = Path(args.root).resolve()
-    report = audit_run(root, ROOT)
+    report = audit_run(root, ROOT, judge_root=Path(args.judge_root).resolve())
     gates = {
         "contract_fixtures_passed": report["contract_fixtures"]["passed"] is True,
         # A run with zero audited episodes certifies nothing about the manifest.
@@ -710,6 +710,7 @@ def build_parser() -> argparse.ArgumentParser:
     audit = sub.add_parser("audit-run")
     audit.add_argument("--root", required=True, help="Directory containing episode score/event-source files")
     audit.add_argument("--output", required=True, help="Path for the machine-readable audit report")
+    audit.add_argument("--judge-root", required=True, help="Explicit external judge for public/private contract audit")
     audit.set_defaults(func=cmd_audit_run)
     conformance = sub.add_parser("conformance")
     conformance.add_argument("--output", required=True)

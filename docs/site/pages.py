@@ -194,7 +194,7 @@ def evaluate_page(base):
     validate = 'async-rbench validate-judge --judge-root <judge-root>\nasync-rbench certify-release --judge-root <judge-root>'
     manifest = 'async-rbench-eval make-manifest --output manifest.json --repetitions 3 --guidance incentive --seed 2026 --execution-modes linear async --model <model-id> --judge-root <judge-root>'
     run = 'async-rbench-eval run-manifest --manifest manifest.json --output <run-directory> --profile reference_scaffold_api --runtime-mode api_only --config <profile.yaml> --judge-root <judge-root>'
-    aggregate = 'async-rbench-eval aggregate --root <run-directory> --manifest manifest.json --output aggregate.json\nasync-rbench-eval audit-run --root <run-directory> --output audit.json'
+    aggregate = 'async-rbench-eval aggregate --root <run-directory> --manifest manifest.json --output aggregate.json\nasync-rbench-eval audit-run --root <run-directory> --judge-root <judge-root> --output audit.json'
     return heading('RUN LOCALLY','运行测评','Run the benchmark','在本地安装公开框架，检查任务材料，并运行配对实验。','Install the public framework locally, inspect the tasks and run paired experiments.') + f'''
 <div class="notice">{t('使用外置运行版 judge、Docker 和模型配置，即可运行这 200 个任务。新运行结果单独记录，网站保留论文报告值。','Use an external judge for new runs, Docker and a model profile to run these 200 tasks. New scores are recorded separately; the website retains paper-reported results.')}</div>
 <section class="step"><span class="step-number">01</span><div><h2>{t('安装并检查公开任务','Install and validate public tasks')}</h2><p>Python 3.11+ · Git · Docker (Linux containers)</p>{code(setup)}</div></section>

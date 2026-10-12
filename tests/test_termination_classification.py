@@ -85,6 +85,16 @@ def _rows(events: list[dict]) -> dict[str, dict]:
     }
 
 
+def test_scaffold_shutdown_is_a_known_cleanup_not_main_cancel():
+    from async_rbench.evaluation.audit import child_terminal_integrity_violations
+    row = _rows([_spawn("queued"), _cancelled("queued", "scaffold_shutdown")])["queued"]
+    assert row["terminal_class"] == IN_FLIGHT
+    assert row["shutdown_cancelled"] is True
+    assert row["gateway_verdict"] is False
+    assert child_terminal_integrity_violations([row]) == ([], [])
+    assert child_terminal_integrity_violations([{"terminal_class": IN_FLIGHT}])[1]
+
+
 def test_every_class_maps_to_a_distinct_terminal() -> None:
     assert len(TERMINAL_CLASSES) == 12
     assert len(set(TERMINAL_CLASSES)) == len(TERMINAL_CLASSES)

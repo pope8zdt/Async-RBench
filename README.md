@@ -111,7 +111,7 @@ credentials, or experiment traces. Formal scoring uses a separately distributed
 judge bundle.
 
 Source-family labels follow the paper. `legacy_benchmark_label` preserves earlier
-labels for traceability; task contents and registered IDs remain unchanged.
+labels for traceability; registered task IDs remain unchanged.
 
 ## Quick start
 
