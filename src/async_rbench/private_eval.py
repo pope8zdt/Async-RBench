@@ -43,8 +43,16 @@ class PrivateVerificationResult:
 
 
 def _load_semantic_registry(verifier_dir: Path) -> dict | None:
-    path = verifier_dir / "tests" / "semantic_checks.json"
-    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+    # Split judge bundles keep contracts beside tests under evaluator/. The
+    # legacy layout stored a copy inside tests/. Do not silently select stale
+    # membership when both are supplied.
+    paths = [verifier_dir / "evaluator" / "semantic_checks.json",
+             verifier_dir / "tests" / "semantic_checks.json"]
+    registries = [json.loads(path.read_text(encoding="utf-8"))
+                  for path in paths if path.is_file()]
+    if any(registry != registries[0] for registry in registries[1:]):
+        raise ValueError("conflicting semantic registries in private judge bundle")
+    return registries[0] if registries else None
 
 
 def _docker(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -90,7 +98,10 @@ def tree_sha256(paths: list[Path]) -> str:
 
 def verifier_bundle_sha256(verifier_dir: Path) -> str:
     """Digest the exact private tests and runner used for one case."""
-    return tree_sha256([verifier_dir / "tests", verifier_dir / "run-tests.sh"])
+    paths = [verifier_dir / "tests", verifier_dir / "run-tests.sh"]
+    paths.extend(path for name in ("semantic_checks.json", "control_flow_checks.json")
+                 if (path := verifier_dir / "evaluator" / name).is_file())
+    return tree_sha256(paths)
 
 
 def audit_participant_container(
@@ -123,6 +134,12 @@ def _copy_private_bundle(container: str, verifier_dir: Path) -> None:
     tests = verifier_dir / "tests"
     runner = verifier_dir / "run-tests.sh"
     _docker("cp", str(tests.resolve()), f"{container}:/async_rbench_tests")
+    # Legacy test modules import these contracts from their test directory.
+    # Supply them only inside the frozen verifier clone, never the participant.
+    for name in ("semantic_checks.json", "control_flow_checks.json"):
+        registry = verifier_dir / "evaluator" / name
+        if registry.is_file():
+            _docker("cp", str(registry.resolve()), f"{container}:/async_rbench_tests/{name}")
     _docker("exec", container, "mkdir", "-p", "/async_rbench-private")
     _docker("cp", str(runner.resolve()), f"{container}:/async_rbench-private/run-tests.sh")
     _docker("exec", container, "sed", "-i", r"s/\r$//", "/async_rbench-private/run-tests.sh")
@@ -158,7 +175,12 @@ def run_isolated_verifier(
         _copy_private_bundle(container, verifier_dir)
         try:
             result = subprocess.run(
-                ["docker", "exec", container, "/bin/bash", "/async_rbench-private/run-tests.sh"],
+                # Every frozen point needs a named outcome, including passes.
+                # Legacy runners use pytest -q, whose default summary hides
+                # passing nodes. Own this option in the isolated judge, not in
+                # participant state or the model's environment.
+                ["docker", "exec", "--env", "PYTEST_ADDOPTS=-rA", container,
+                 "/bin/bash", "/async_rbench-private/run-tests.sh"],
                 check=False,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,

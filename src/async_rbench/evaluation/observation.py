@@ -155,7 +155,7 @@ def snapshot_observation_command(point: ObservationPoint) -> str:
             "print(json.dumps(val, sort_keys=True, separators=(',',':'), ensure_ascii=False))\n"
         )
         return (
-            f"python -c {shlex.quote(script)} "
+            f"python3 -c {shlex.quote(script)} "
             f"{shlex.quote(point.path)} {shlex.quote(point.filter_path or '')}"
         )
     if point.kind == "file":
@@ -163,16 +163,16 @@ def snapshot_observation_command(point: ObservationPoint) -> str:
             "import hashlib,pathlib,sys; p=pathlib.Path(sys.argv[1]); "
             "assert p.exists(), f'missing:{p}'; print(hashlib.sha256(p.read_bytes()).hexdigest())"
         )
-        return f"python -c {shlex.quote(script)} {shlex.quote(point.path)}"
+        return f"python3 -c {shlex.quote(script)} {shlex.quote(point.path)}"
     if point.kind == "dir":
         script = (
             "import hashlib,pathlib,sys; p=pathlib.Path(sys.argv[1]); "
             "assert p.exists(), f'missing:{p}'; h=hashlib.sha256(); "
             "files=sorted(q for q in p.rglob('*') if q.is_file()); "
-            "[(h.update(q.relative_to(p).as_posix().encode()), h.update(b'\\0'), "
+            "[(h.update(q.relative_to(p).as_posix().encode('utf-8','surrogateescape')), h.update(b'\\0'), "
             "h.update(q.read_bytes()), h.update(b'\\0')) for q in files]; print(h.hexdigest())"
         )
-        return f"python -c {shlex.quote(script)} {shlex.quote(point.path)}"
+        return f"python3 -c {shlex.quote(script)} {shlex.quote(point.path)}"
     raise ValueError(f"unsupported observation point kind: {point.kind!r}")
 
 

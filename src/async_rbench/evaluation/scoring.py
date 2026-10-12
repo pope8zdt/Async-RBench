@@ -236,10 +236,16 @@ def _event_state_evidence(
         pre = [item for item in commits if int(item.get("seq", 0)) < boundary_seq]
         post = [item for item in commits if int(item.get("seq", 0)) >= boundary_seq]
         if pre:
-            before[artifact_id] = str(pre[-1].get("observed_digest", ""))
-            after[artifact_id] = before[artifact_id]
+            token = pre[-1].get("observed_digest")
+            if token:
+                before[artifact_id] = str(token)
+                after[artifact_id] = before[artifact_id]
         if post:
-            after[artifact_id] = str(post[-1].get("observed_digest", ""))
+            token = post[-1].get("observed_digest")
+            if token:
+                after[artifact_id] = str(token)
+            else:
+                after.pop(artifact_id, None)
         history[artifact_id] = list(post)
     return before, after, history
 
@@ -1243,6 +1249,13 @@ def score_trace(
             for observed in _events_of(events, "artifact_committed"):
                 if (observed.get("evaluator_observed") is True
                         and len(str(observed.get("observed_digest", ""))) == 64):
+                    observed_commits[str(observed.get("artifact_id"))].append(observed)
+            # Independent snapshots feed process history, not participant
+            # integration or useful-delegation credit. Retain failed observations
+            # too, so missing evidence cannot preserve a previous good digest.
+            for observed in _events_of(events, "artifact_state_observed"):
+                if ((observed.get("source") or observed.get("actor")) == "kernel"
+                        and observed.get("evaluator_observed") is True):
                     observed_commits[str(observed.get("artifact_id"))].append(observed)
             before, after, artifact_history = _event_state_evidence(
                 observed_commits, related_artifacts, boundary_seq, terminal_seq,

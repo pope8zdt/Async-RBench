@@ -21,7 +21,7 @@ only participant-visible files and work without a judge bundle.
 
 ## Judge validation
 
-Formal scoring requires an explicit external judge root:
+Task scoring requires an explicit external judge root:
 
 First follow [judge access and setup](judge-bundle.md) to request a bundle for
 your exact checkout. A version label is not sufficient; task and scoring
@@ -46,7 +46,11 @@ an environment variable.
 
 ## Evaluation
 
-Create the paper's paired Batched/Async plan:
+Start Docker in Linux-container mode and configure a copy of
+[`experiment-profile.template.yaml`](../configs/model-profiles/experiment-profile.template.yaml).
+Set its API-key environment variable locally. Use the same model identifier in
+the profile and manifest; the paper uses the same model for main and children.
+Create a paired Batched/Async plan over all 200 tasks:
 
 ```bash
 async-rbench-eval make-manifest \
@@ -55,6 +59,7 @@ async-rbench-eval make-manifest \
   --guidance incentive \
   --seed 2026 \
   --execution-modes linear async \
+  --model <model-id> \
   --judge-root <judge-root>
 ```
 
@@ -72,7 +77,6 @@ async-rbench-eval run-manifest \
   --profile reference_scaffold_api \
   --runtime-mode api_only \
   --config <profile.yaml> \
-  --official-track \
   --judge-root <judge-root>
 
 async-rbench-eval score \
@@ -92,15 +96,31 @@ async-rbench-eval audit-run \
   --output audit.json
 ```
 
+Add `--resume` to `run-manifest` to continue in the same output directory without
+rerunning completed episodes. Keep the manifest, judge and profile unchanged.
+The commands above retain containers and the adapter conformance gate by default.
+Normal runs are reported in `aggregate.json` under `development_summary`, with per-episode
+scores in each episode's `score.json`. They do not update the website leaderboard.
+
+The runtime judge uses `command-boundaries-v1`: uniform point means within
+applicable components, equal C/R/F/V component means, and a 50:50 process/outcome
+blend. Artifact state is observed at presentation, after main terminal commands,
+promotions and runtime verification, and at participant termination. This is not
+an intra-command operation journal. New scores use
+`async-rbench-runtime-boundaries-1`; aggregate different policies separately.
+
+`--official-track` is a separate strict paper-protocol check, not a prerequisite
+for these commands. It requires explicit weighted ERCs and refuses R/F contracts
+without full-window operation evidence. Do not use it with the runtime judge.
+
 ## Adapter conformance
 
-Formal commands check source-runtime qualification records, frozen ERC weights
-and response-window observations before execution. A failed prerequisite stops
-the run before model calls. Aggregate each scoring policy separately.
+To check protocol behavior without running a task-solving model:
 
 ```bash
 async-rbench-eval conformance \
   --profile <profile.yaml> \
+  --judge-root <judge-root> \
   --output conformance.json
 ```
 

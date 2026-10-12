@@ -110,14 +110,17 @@ class WebsiteBuildTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(numeric_snapshot).hexdigest(),
                          "ff345cfe9be663a4cec013192b882ec1a067a8a6ff8e9f89d89c34a2ab5a8954")
 
-    def test_formal_cli_examples_select_runtime_and_external_judge(self):
+    def test_default_cli_examples_select_runtime_and_external_judge(self):
         output = self.build()
-        for path in (ROOT / "README.md", output / "evaluate/index.html"):
+        for path in (ROOT / "README.md", ROOT / "docs/cli.md", output / "evaluate/index.html"):
             text = unescape(path.read_text(encoding="utf-8"))
-            command = text.split("async-rbench-eval run-manifest", 1)[1].split("\n\n", 1)[0]
+            command = text.split("async-rbench-eval run-manifest", 1)[1].split("\n\n", 1)[0].split("</code>", 1)[0]
             for option in ("--profile reference_scaffold_api", "--runtime-mode api_only",
-                           "--config <profile.yaml>", "--official-track", "--judge-root <judge-root>"):
+                           "--config <profile.yaml>", "--judge-root <judge-root>"):
                 self.assertIn(option, command, path)
+            self.assertNotIn("--official-track", command, path)
+            manifest = text.split("async-rbench-eval make-manifest", 1)[1].split("\n\n", 1)[0].split("</code>", 1)[0]
+            self.assertIn("--model <model-id>", manifest, path)
 
     def test_evaluation_links_to_judge_request_form_and_setup_guide(self):
         output = self.build()
@@ -139,8 +142,8 @@ class WebsiteBuildTests(unittest.TestCase):
         for label in ("未认证", "未验证", "未复核", "待验收", "The maintainer has reviewed",
                       "This update standardizes", "not a reproduction claim"):
             self.assertNotIn(label, page)
-        for requirement in ("external judge", "frozen ERC", "command endpoints",
-                            "blocked before model calls"):
+        for requirement in ("external judge", "command boundaries", "new runs",
+                            "paper-reported results"):
             self.assertIn(requirement, page)
 
     def build(self, base="/Async-RBench"):

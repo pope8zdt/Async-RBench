@@ -31,7 +31,15 @@ GATE_DYNAMIC_DIMENSIONS = {
     "resource_triage": "plan_revision",
 }
 
-SCORE_POLICY_VERSION = "async-rbench-paper26-binary-presentation-1"
+SCORE_POLICY_VERSION = "async-rbench-runtime-boundaries-1"
+RUNTIME_SCORING = {
+    "version": "command-boundaries-v1", "point_weight": 1.0,
+    "component_aggregation": "mean_of_registered_points",
+    "process_aggregation": "mean_of_applicable_components",
+    "outcome_aggregation": "mean_of_registered_event_checks",
+    "process_weight": 0.5, "outcome_weight": 0.5,
+    "observation_scope": "command_boundaries",
+}
 DYNAMIC_COMPONENT_MASS = 0.80
 SEMANTIC_COMPONENT_MASS = 0.20
 DYNAMIC_SUCCESS_THRESHOLD = 0.75

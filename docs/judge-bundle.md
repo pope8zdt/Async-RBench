@@ -1,7 +1,7 @@
 # Judge bundle access and setup
 
 The public repository contains the framework and 200 participant-visible task
-bundles. Formal scoring additionally requires a separately distributed judge
+bundles. Task scoring additionally requires a separately distributed judge
 bundle. There is no automatic judge download or online scoring endpoint.
 
 ## Request a compatible bundle
@@ -9,7 +9,8 @@ bundle. There is no automatic judge download or online scoring endpoint.
 Use the [judge access request](https://github.com/pope8zdt/Async-RBench/issues/new?template=judge-access.yml)
 to provide your repository commit, intended evaluation and runtime environment.
 The maintainer must confirm availability, compatibility and a separate delivery
-channel before you can run formal scoring. Opening an issue does not grant
+channel before you can run scoring. Request the `command-boundaries-v1` runtime
+bundle for new runs. Opening an issue does not grant
 access or establish that a compatible bundle is available.
 
 Issues are public. Do not attach API keys, answers, hidden tests, ERCs, judge
@@ -36,11 +37,26 @@ Do not proceed if a check fails. Do not use `--write-manifests` to force an old
 bundle to match changed public tasks: maintainers must verify the task,
 verifier and event bindings before generating new release manifests.
 
-The current executable policy is
-`async-rbench-paper26-binary-presentation-1`. Formal runs require frozen ERC
-point weights, source-runtime qualification records and executable evidence
-bindings. The built-in observer records command endpoints. Official contracts
-requiring full-window Preserve/Forbid observations are blocked before model calls.
+The current runtime scoring policy is `async-rbench-runtime-boundaries-1`.
+It records evaluator-owned artifact state at command boundaries and uses the
+runtime judge's frozen equal-weight requirements. A change restored within one
+command is outside this observation scope. The bundle is for new runs, not a
+reconstruction of the original paper's private ERCs. Paper results remain fixed.
+
+For maintainers migrating an existing private bundle, the following creates a
+new external directory, preserves existing tests and schedules, and refuses to
+overwrite the source or write the judge inside the checkout:
+
+```sh
+python scripts/prepare_runtime_judge.py --source <existing-judge> --output <new-judge-root>
+async-rbench validate-judge --judge-root <new-judge-root>
+async-rbench certify-release --judge-root <new-judge-root>
+```
+
+This command does not download private materials or prove task-solving quality.
+Do not regenerate either judge after starting an experiment. The strict optional
+`--official-track` requires weighted ERCs and full-window operation evidence;
+the ordinary runtime commands do not select it.
 
 Once the requirements pass, follow the [evaluation commands](cli.md#evaluation)
 with your local model profile. These runs can incur model API charges. Historical

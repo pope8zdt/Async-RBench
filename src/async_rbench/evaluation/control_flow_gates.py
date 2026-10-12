@@ -28,6 +28,7 @@ from .weighting import (
     DYNAMIC_SUCCESS_THRESHOLD,
     GATE_DYNAMIC_DIMENSIONS,
     SEMANTIC_COMPONENT_MASS,
+    RUNTIME_SCORING,
     control_flow_weight, semantic_weight,
     semantic_weight_map,
 )
@@ -637,6 +638,9 @@ def validate_drs_registry(
         if not event_id or event_id in seen:
             errors.append("DRS contract has missing or duplicate event_id")
         seen.add(event_id)
+        if "runtime_scoring" in contract:
+            if contract["runtime_scoring"] != RUNTIME_SCORING or contract.get("scoring_points") is not None:
+                errors.append(f"{event_id}: unsupported runtime_scoring policy")
         invalid = validate_drs_points(contract)
         errors.extend(f"{event_id}: {error}" for error in invalid)
         if invalid:

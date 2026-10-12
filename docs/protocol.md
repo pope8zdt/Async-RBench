@@ -119,7 +119,7 @@ Designed child timeouts and crashes stop the child before its slot is reused.
 For blocking HTTP requests, cancellation waits for the in-flight request to
 finish or reach its configured timeout before releasing capacity.
 
-`async-rbench-paper26-binary-presentation-1` uses binary task success: every
+`async-rbench-runtime-boundaries-1` uses binary task success: every
 registered task-level check must pass; missing, failed, skipped or duplicate
 results cannot earn success. Old policies remain diagnostic records, and cannot
 be aggregated with the new policy or relabeled as its task-success results.
@@ -144,9 +144,18 @@ component and equal means across
 applicable process components. Missing point evidence contributes zero. The
 denominator fingerprint includes the frozen ERCs and task-goal membership.
 
-Historical list contracts are supported for development diagnostics. Official
-runs require frozen point weights and source-runtime qualification records.
-The built-in observer samples command endpoints, so a change restored within
-one command is outside its observation coverage. Official contracts requiring
-full-window Preserve/Forbid observations are blocked before model calls.
-Paper-reported experimental scores are stored separately from newly scored runs.
+The external `command-boundaries-v1` runtime judge freezes list-based contracts
+for new runs. Points within a component have equal weight; applicable process
+components are averaged equally, then combined 50:50 with the event outcome.
+The kernel records private artifact snapshots at presentation, after completed
+main terminal commands, promotions and runtime verification, and at termination.
+These observations do not require a participant `commit_artifact` call and do
+not themselves earn participant integration or verification credit. Failed
+observations remain missing evidence rather than an unchanged state.
+
+The default run path retains container isolation and adapter conformance. Results
+are reported in the aggregate's `development_summary` section. A change restored within
+one command is outside this observer's coverage. Strict `--official-track` runs
+require frozen point weights and refuse full-window Preserve/Forbid contracts
+that this observer cannot satisfy. Paper-reported scores remain separate from
+newly scored runs; neither the runtime judge nor setup checks reproduce them.

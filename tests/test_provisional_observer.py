@@ -212,6 +212,8 @@ def test_snapshot_command_for_file_and_json_are_bounded() -> None:
     assert "json.loads" in json_cmd
     # The path is never interpolated into a shell the caller does not own.
     assert "main.db" in file_cmd
+    assert file_cmd.startswith("python3 -c ")
+    assert json_cmd.startswith("python3 -c ")
 
 
 def test_empty_observation_points_cannot_establish_provisional(tmp_path: Path) -> None:

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import copy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -11,10 +12,69 @@ import yaml
 from .evaluation.case_contract import assert_participant_safe
 from .evaluation.public_result_validation import validate_public_contract_definition
 from .evaluation.report_contract import render_validator_command
+from .evaluation.weighting import RUNTIME_SCORING
 from .public_spec import PublicCaseSpec
 
 
 CASE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,127}$")
+
+
+def runtime_verifier_script(script: str) -> str:
+    """Let task checks report an uninstalled/misconfigured participant service.
+
+    The nginx task asks the participant to install and configure the server.
+    An empty or incorrect submission must reach the frozen checks, rather than
+    abort the whole verifier before it can report their outcomes.
+    """
+    return script.replace(
+        "\nnginx -t\nnginx\n",
+        "\nif command -v nginx >/dev/null 2>&1 && nginx -t; then\n"
+        "  nginx || true\nfi\n",
+    )
+
+
+def runtime_event_contract(
+    public: dict[str, Any], private: dict[str, Any],
+    control_registry: dict[str, Any], semantic_registry: dict[str, Any],
+) -> dict[str, Any]:
+    """Freeze existing list-based requirements for new command-boundary runs.
+
+    This is a new runtime contract, not a reconstruction of an historical ERC.
+    Existing requirements and point membership remain intact. Legacy components
+    already use a mean over their listed points, represented here as unit weights.
+    """
+    contracts = control_registry.get("event_contracts") or private.get("event_contracts") or []
+    if len(contracts) > 1:
+        raise ValueError("runtime release requires a unique target event per task")
+    if contracts:
+        contract = copy.deepcopy(contracts[0])
+        if contract.get("scoring_points") is not None:
+            raise ValueError("weighted ERC migration requires its own explicit policy")
+    else:
+        authority = private.get("authoritative_result_kind")
+        scheduled = (private.get("scenarios", {}).get("async", {}).get("events") or [])
+        targets = [e for e in scheduled if authority and e.get("result") == authority]
+        if len(targets) != 1:
+            raise ValueError("cannot resolve a unique target from the existing async schedule")
+        target = targets[0]["id"]
+        checks = [c for c in semantic_registry.get("checks", [])
+                  if c.get("score_domain") == "async_replanning"]
+        if not checks or any(c.get("event_id") != target for c in checks):
+            raise ValueError("target event does not match the existing outcome checks")
+        affected = [a["id"] for a in public.get("artifacts", [])]
+        if not affected:
+            raise ValueError("target event has no declared observable artifacts")
+        contract = {"event_id": target,
+                    "event_theme": private.get("classification", {}).get("primary_event_theme"),
+                    "state_delta": {"affected_artifacts": affected, "unaffected_artifacts": []}}
+    delta = contract.get("state_delta") or {}
+    contract.setdefault("required_changes", list(delta.get("affected_artifacts") or []))
+    contract.setdefault("required_preservation", list(delta.get("unaffected_artifacts") or []))
+    contract.setdefault("forbidden_changes", [])
+    contract.setdefault("closure_checks", [])
+    contract.setdefault("event_status", "scored")
+    contract["runtime_scoring"] = dict(RUNTIME_SCORING)
+    return contract
 
 
 @dataclass(frozen=True)

@@ -43,8 +43,8 @@ def normalize_release_source(value: Any) -> str:
 def validate_source_execution(case_dir: Path) -> list[str]:
     """Reject known source/runtime contradictions, not certify execution by labels.
 
-    Passing this static check still requires setup qualification and a compatible
-    external judge. In particular, source metadata alone is not an executable pack.
+    Public workflow labels are not runtime evidence. This check validates actual
+    source/material bindings; container setup and execution are separate checks.
     """
     task_path = case_dir / "task/task.yaml"
     task = yaml.safe_load(task_path.read_text(encoding="utf-8")) or {}
@@ -57,15 +57,17 @@ def validate_source_execution(case_dir: Path) -> list[str]:
         return errors
     binding = json.loads(binding_path.read_text(encoding="utf-8"))
     source = normalize_release_source(binding.get("benchmark"))
-    if not status:
-        errors.append(f"{case_dir.name}: missing source-bound runtime qualification status")
+    fields = ("benchmark", "source_task_id", "source_revision", "source_sha256",
+              "objective_binding_sha256", "environment_binding_sha256", "acceptance_binding_sha256")
+    for field in fields:
+        if not isinstance(binding.get(field), str) or not binding[field].strip():
+            errors.append(f"{case_dir.name}: missing source binding field: {field}")
     material_path = case_dir / "task/task_file/source_task.json"
     if not material_path.is_file():
         errors.append(f"{case_dir.name}: missing source task input")
     else:
         material = json.loads(material_path.read_text(encoding="utf-8"))
-        for field in ("benchmark", "source_task_id", "source_revision", "source_sha256",
-                      "objective_binding_sha256", "environment_binding_sha256", "acceptance_binding_sha256"):
+        for field in fields:
             if binding.get(field) != material.get(field):
                 errors.append(f"{case_dir.name}: source task binding mismatch: {field}")
     participant_path = case_dir / "task/task_file/participant_task.json"

@@ -248,6 +248,7 @@ def cmd_conformance(args) -> int:
         config_path=config_path,
         output_dir=output,
         case_ids=case_ids,
+        judge_root=Path(args.judge_root).resolve(),
     ))
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if result["conformance_passed"] else 1
@@ -521,6 +522,7 @@ async def _run_manifest(args) -> int:
             ),
             output_dir=output_root / ".conformance",
             case_ids=sorted({str(item["case_id"]) for item in manifest["episodes"]}),
+            judge_root=Path(args.judge_root).resolve(),
             progress=(
                 (lambda message: print(message, flush=True))
                 if not getattr(args, "no_progress", False) else None
@@ -711,6 +713,7 @@ def build_parser() -> argparse.ArgumentParser:
     audit.set_defaults(func=cmd_audit_run)
     conformance = sub.add_parser("conformance")
     conformance.add_argument("--output", required=True)
+    conformance.add_argument("--judge-root", required=True, help="Explicit external judge for task protocol bindings")
     conformance.add_argument(
         "--cases", nargs="*",
         help="Case ids to run conformance against (default: all discovered cases)",

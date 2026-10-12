@@ -41,6 +41,7 @@ from .case_contract import assert_participant_safe
 from .case_contract import public_delivery, public_rejection
 from .case_contract import validate_scoring_domains
 from .control_flow_gates import validate_drs_registry
+from .artifact_observation import artifact_snapshot_command
 from .case_bundle import public_case_bundle_sha256
 from .version import EVALUATION_CONTRACT_STATUS, EVALUATION_CONTRACT_VERSION
 from .weighting import DYNAMIC_CONTROL_DIMENSIONS, SCORE_POLICY_VERSION
@@ -169,8 +170,10 @@ def _docker(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     )
 
 
-def _cleanup_workspace_resources(workspace_run_id: str) -> None:
+def _cleanup_workspace_resources(workspace_run_id: str, *, use_container: bool = True) -> None:
     """Remove only child resources carrying this evaluator-issued run label."""
+    if not use_container:
+        return
     if not workspace_run_id or not all(ch in "0123456789abcdef" for ch in workspace_run_id):
         raise ValueError("invalid workspace_run_id for Docker cleanup")
     label = f"label=async_rbench.workspace_run_id={workspace_run_id}"
@@ -233,10 +236,26 @@ def _prepare_container(
     _docker("rm", "-f", container, check=False)
     _docker(
         "run", "-d", "--name", container,
-        "--label", "async_rbench.managed=participant", image,
+        "--label", "async_rbench.managed=participant", image, *participant_command(task),
     )
     image_id = _docker("image", "inspect", "--format", "{{.Id}}", image).stdout.strip()
     return image, container, image_id
+
+
+def participant_command(task: Path) -> list[str]:
+    """Apply the client command declared by the public task's Compose file."""
+    compose = task / "docker-compose.yaml"
+    if not compose.is_file():
+        return []  # Preserve the image's default CMD.
+    service = (yaml.safe_load(compose.read_text(encoding="utf-8")) or {}).get("services", {}).get("client", {})
+    command = service.get("command")
+    if command is None:
+        return []
+    if isinstance(command, str):
+        return shlex.split(command)
+    if not isinstance(command, list) or not all(isinstance(item, str) for item in command):
+        raise ValueError("task client command must be a string or list of strings")
+    return command
 
 
 def _source_digest(root: Path) -> str:
@@ -637,11 +656,11 @@ async def _observe_artifact_private(
             "import hashlib,pathlib,sys; p=pathlib.Path(sys.argv[1]); "
             "assert p.exists(), f'missing artifact: {p}'; h=hashlib.sha256(); "
             "files=[p] if p.is_file() else sorted(q for q in p.rglob('*') if q.is_file()); "
-            "[(h.update((q.name if p.is_file() else q.relative_to(p).as_posix()).encode()), "
+            "[(h.update((q.name if p.is_file() else q.relative_to(p).as_posix()).encode('utf-8','surrogateescape')), "
             "h.update(b'\\0'), h.update(q.read_bytes()), h.update(b'\\0')) for q in files]; "
             "print(h.hexdigest())"
         )
-        command = f"python -c {shlex.quote(script)} {shlex.quote(path)}"
+        command = f"python3 -c {shlex.quote(script)} {shlex.quote(path)}"
     result = await workspace.main_terminal(command, 900)
     if result.exit_code != 0:
         raise ValueError(f"artifact observation failed for {artifact_id!r}")
@@ -657,6 +676,43 @@ async def _observe_artifact_private(
     if not digest:
         raise ValueError(f"artifact observer failed for {artifact_id!r}")
     return {"observed_digest": digest, "observed_path": path}
+
+
+async def _observe_artifact_states_private(
+    workspace: WorkspaceRuntime, case_spec: dict[str, Any],
+    recorder: TraceRecorder, reason: str,
+) -> None:
+    """Observe declared artifacts without relying on participant commit calls."""
+    if isinstance(workspace, DisabledWorkspaceRuntime):
+        return  # A synthetic workspace is not physical process evidence.
+    artifacts = list(case_spec.get("artifacts") or [])
+    files = [item for item in artifacts if not item.get("observer_command")]
+    rows = []
+    if files:
+        try:
+            result = await workspace.main_terminal(artifact_snapshot_command(files), 120)
+            if result.exit_code != 0:
+                raise ValueError("artifact snapshot command failed")
+            rows = json.loads(result.output.strip().splitlines()[-1])
+            if not isinstance(rows, list) or {r["artifact_id"] for r in rows} != {a["id"] for a in files}:
+                raise ValueError("artifact snapshot membership mismatch")
+        except Exception as exc:
+            rows = [{"artifact_id": item["id"], "observed_digest": None,
+                     "observation_error": str(exc)} for item in files]
+    for item in artifacts:
+        if not item.get("observer_command"):
+            continue
+        try:
+            observation = await _observe_artifact_private(workspace, item["id"], {item["id"]: item})
+            rows.append({"artifact_id": item["id"], **observation})
+        except Exception as exc:
+            rows.append({"artifact_id": item["id"], "observed_digest": None,
+                         "observation_error": str(exc)})
+    for row in rows:
+        recorder.record({**row, "type": "artifact_state_observed",
+                         "evaluator_observed": True, "reason": reason,
+                         "visibility": "kernel_private",
+                         "observation_scope": "command_boundaries"}, "kernel")
 
 
 async def _verify_current_state_private(
@@ -761,6 +817,7 @@ async def _prepare_result_presentation_private(
     """
     points = _observation_points_for_case(case_spec)
     provider = _build_snapshot_provider(workspace)
+    await _observe_artifact_states_private(workspace, case_spec, recorder, "presentation")
     snapshot = await provider(points)
     if not snapshot.complete:
         return {
@@ -1044,6 +1101,8 @@ async def _dispatch_capability(
                 "output_sha256": hashlib.sha256(b"").hexdigest(),
                 "output_truncated": False,
             }, "kernel")
+    if recorder is not None and capability in {"main_terminal", "promote", "verify_current_state"}:
+        await _observe_artifact_states_private(workspace, case_spec or {}, recorder, str(capability))
     await _send(process, response, lock=write_lock)
 
 
@@ -1466,6 +1525,10 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
                 except ProtocolError as exc:
                     recorder.record({"type": "protocol_violation", "detail": str(exc), "raw": raw.decode(errors="replace")}, "benchmark")
                     continue
+            if event.get("type") in {"finish_invoked", "main_implicit_stop", "episode_ended"} or (
+                event.get("type") == "step_limit_reached" and event.get("role") == "main"
+            ):
+                await _observe_artifact_states_private(workspace, case_spec, recorder, "termination")
             recorded = recorder.record(event, "adapter")
             controller_recorded = recorded
             violation = None
@@ -1758,7 +1821,7 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
             # remove child snapshots, but it must never precede the audit and
             # frozen-filesystem commit of the participant container.
             await workspace.cleanup()
-            _cleanup_workspace_resources(workspace_run_id)
+            _cleanup_workspace_resources(workspace_run_id, use_container=config.use_container)
             if container and not config.keep_container:
                 _docker("rm", "-f", container, check=False)
             raise
@@ -1789,7 +1852,7 @@ async def run_episode(root: Path, config: EpisodeConfig) -> dict[str, Any]:
     # labelled child sweep is deliberately after that boundary as a second
     # defence against lifecycle changes in workspace adapters.
     await workspace.cleanup()
-    _cleanup_workspace_resources(workspace_run_id)
+    _cleanup_workspace_resources(workspace_run_id, use_container=config.use_container)
 
     trace_path = config.output_dir / "trace.jsonl"
     recorder.write(trace_path)

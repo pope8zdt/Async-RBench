@@ -105,6 +105,16 @@ def test_restored_final_outcome_does_not_erase_forbidden_operation() -> None:
     assert result["async_drs"] == 0.5
 
 
+@pytest.mark.parametrize("actor,expected", [("kernel", 1.0), ("adapter", 0.0)])
+def test_process_scoring_uses_only_kernel_owned_artifact_snapshots(actor, expected):
+    events, case, contracts = _trace(present=True)
+    for event in events:
+        if event["type"] == "artifact_committed":
+            event.update(type="artifact_state_observed", actor=actor)
+    result = scoring.score_trace(events, case, "async", event_contracts=contracts)
+    assert result["async_event_drs"]["evt"]["component_scores"]["forbidden_effect_compliance"] == expected
+
+
 def test_finish_with_queued_initial_work_is_measured_not_infrastructure_failure():
     events, case, contracts = _trace(present=False)
     for index in range(4):

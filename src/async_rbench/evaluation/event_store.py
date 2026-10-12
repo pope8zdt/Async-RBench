@@ -48,6 +48,7 @@ _KERNEL_PRIVATE_TYPES = frozenset({
     # snapshot digest and source case event id are evaluator-private, so this
     # event never reaches a model, and may carry them without leaking.
     "presentation_prepared",
+    "artifact_state_observed",
 })
 _REPLAY_TYPES = frozenset({"event_source_integrity"})
 

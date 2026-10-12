@@ -140,7 +140,7 @@ Use the [judge access form](https://github.com/pope8zdt/Async-RBench/issues/new?
 and [setup guide](docs/judge-bundle.md). The maintainer must confirm availability
 and delivery; never post hidden scoring material in a public issue.
 
-After task setup qualification and judge validation:
+Start Docker (Linux containers), copy a [model profile](configs/model-profiles/experiment-profile.template.yaml), and set its API-key environment variable. Validate the external judge and run all 200 tasks:
 
 ```bash
 async-rbench validate-judge --judge-root <judge-root>
@@ -152,6 +152,7 @@ async-rbench-eval make-manifest \
   --guidance incentive \
   --seed 2026 \
   --execution-modes linear async \
+  --model <model-id> \
   --judge-root <judge-root>
 
 async-rbench-eval run-manifest \
@@ -160,7 +161,6 @@ async-rbench-eval run-manifest \
   --profile reference_scaffold_api \
   --runtime-mode api_only \
   --config <profile.yaml> \
-  --official-track \
   --judge-root <judge-root>
 ```
 
@@ -170,14 +170,15 @@ applicable Change, Preserve, Forbid, and Verify components. With event outcome
 `O`, `DRS_event = 100 × (P + O) / 2`.
 
 Task success is binary per run: every registered task goal must pass. The scoring
-policy, `async-rbench-paper26-binary-presentation-1`, uses actual main-request
-presentation and retains observed intermediate changes. It cannot be mixed with
-legacy scores. Official runs require frozen ERC point weights and full-window
-process evidence. The built-in observer records command endpoints; contracts
-requiring full-window Preserve/Forbid observations are blocked before model calls.
+policy, `async-rbench-runtime-boundaries-1`, uses actual main-request presentation
+and evaluator-owned state observations at command boundaries. The runtime judge
+freezes equal-weight requirements for new runs; these scores are separate from
+the paper-reported results above. Changes restored within one command are outside
+the observer's coverage. The optional `--official-track` has stricter ERC and
+full-window evidence requirements and is not needed for the run command above.
 
-Outputs retain `linear_base_task_score`, `async_base_task_score`, and
-`async_dynamic_replanning_score` on `[0, 1]`; paper tables display percentages.
+Outputs retain `linear_base_task_score`, `async_base_task_score`, and `async_dynamic_replanning_score` on `[0, 1]` in `development_summary`; paper tables display percentages.
+See [CLI usage](docs/cli.md#evaluation) for scoring, aggregation and resuming runs.
 
 ## Documentation
 

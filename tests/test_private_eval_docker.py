@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import json
 import subprocess
 import uuid
 from pathlib import Path
@@ -23,9 +24,18 @@ def test_hidden_verifier_bundle_exists_only_in_private_clone(tmp_path: Path) -> 
     (tests / "sentinel.txt").write_text("private-sentinel", encoding="utf-8")
     runner = task / "run-tests.sh"
     runner.write_text(
-        "#!/bin/sh\nset -eu\ntest \"$(cat /async_rbench_tests/sentinel.txt)\" = private-sentinel\n",
+        "#!/bin/sh\nset -eu\ntest \"$(cat /async_rbench_tests/sentinel.txt)\" = private-sentinel\n"
+        "echo 'PASSED test_sentinel.py::test_sentinel'\necho '1 passed in 0.01s'\n",
         encoding="utf-8",
     )
+    (task / "evaluator").mkdir()
+    (task / "evaluator/semantic_checks.json").write_text(json.dumps({
+        "version": "1", "checks": [{"id": "sentinel", "score_domain": "base_task",
+        "pytest_node": "test_sentinel.py::test_sentinel"}]}), encoding="utf-8")
+    (task / "evaluator/control_flow_checks.json").write_text('{"checks": []}', encoding="utf-8")
+    runner.write_text(runner.read_text(encoding="utf-8") +
+        "test -s /async_rbench_tests/control_flow_checks.json\n"
+        'test "$PYTEST_ADDOPTS" = -rA\n', encoding="utf-8")
     subprocess.run(
         ["docker", "run", "-d", "--name", participant, "ubuntu:24.04", "sleep", "300"],
         check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -46,6 +56,7 @@ def test_hidden_verifier_bundle_exists_only_in_private_clone(tmp_path: Path) -> 
             main_container=participant, verifier_dir=task, episode_id=f"private-test-{suffix}", timeout_sec=30,
         )
         assert result.success
+        assert result.semantic_check_counts == {"passed": 1, "total": 1}
         absent = subprocess.run(
             ["docker", "exec", participant, "test", "!", "-e", "/async_rbench_tests"],
             check=False,

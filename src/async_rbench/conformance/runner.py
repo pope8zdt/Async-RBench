@@ -48,6 +48,7 @@ async def run_conformance(
     config_path: Path | None = None,
     output_dir: Path,
     case_ids: list[str],
+    judge_root: Path,
     progress: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
     if adapter_command is None:
@@ -75,6 +76,7 @@ async def run_conformance(
             output_dir=episode_output,
             instance_id=instance_id,
             use_container=False,
+            judge_root=judge_root,
             timeout_sec=120,
         )
         await run_episode(root, config)
