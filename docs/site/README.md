@@ -21,7 +21,7 @@ to the site or its public inputs and publishes only the generated artifact.
 ## Sources and maintenance
 
 - `data/paper-results.json` transcribes Tables 3 and 4 and Figures 3 and 6 of the
-  manuscript supplied on 2026-09-26. The source SHA-256 and score scales travel
+  manuscript v26 dated 2026-09-29. The source SHA-256 and score scales travel
   with the JSON download. These are paper-reported values, not a recomputation
   or independent reproduction of experiments.
 - Keep the paper's reported task-success differences: they were calculated
@@ -30,14 +30,15 @@ to the site or its public inputs and publishes only the generated artifact.
   manifest and `public/case.yaml`. The catalog allowlist excludes private
   per-task scenario labels, solutions, verifiers and traces.
 - Figures are reused from the repository's `assets/`; Figure 6 was refreshed
-  from page 9 of the supplied manuscript (300 dpi; crop in pixels: x=450,
-  y=346, width=1650, height=692). It preserves the manuscript's Gemini Native
-  subagent value, 55.5. The figure's call bars and the prose's reported
-  7.5–10.2% increase do not fully reconcile; both remain as reported, with a
-  note on the results page. The private PDF is not included. The profile
-  download is the current public template.
+  from page 9 of manuscript v26 (200 dpi; crop in pixels: x=294,
+  y=230, width=1114, height=459). Gemini Native's subagent value is 58.1.
+  The private PDF is not included. The profile download is the current
+  public template.
 - Update Chinese and English text together. Preserve URL paths, keyboard access,
   responsive ranking cards and readable content without JavaScript.
+- Use body text for explanations and reserve secondary color for short metadata.
+  Consolidate repeated notes; keep provenance and qualification limits visible.
+  Check the README result tables against the same frozen data as the website.
 - DRS bars are static score meters, not loading indicators. Their scale is always
   0–100, including the mean and model-detail score; do not normalize to the best
   model or introduce unreported performance bands. Numeric labels remain visible.

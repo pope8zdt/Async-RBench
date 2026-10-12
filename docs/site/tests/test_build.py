@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from collections import Counter
+from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -99,6 +100,25 @@ class RankedResults(HTMLParser):
 
 
 class WebsiteBuildTests(unittest.TestCase):
+    def test_paper26_snapshot_and_main_table_values_are_locked(self):
+        data = json.loads((SITE / "data/paper-results.json").read_text(encoding="utf-8"))
+        self.assertEqual(data["source"]["sha256"],
+                         "a715e6f55535b2f8e50dc3c4c8d9284e745e214fc17f6f1cd535c2db626458d9")
+        self.assertEqual(data["source"]["task_success"], "Table 4, page 8")
+        numeric_snapshot = json.dumps({"records": data["records"], "mean": data["mean"]},
+                                      sort_keys=True, separators=(",", ":")).encode()
+        self.assertEqual(hashlib.sha256(numeric_snapshot).hexdigest(),
+                         "ff345cfe9be663a4cec013192b882ec1a067a8a6ff8e9f89d89c34a2ab5a8954")
+
+    def test_formal_cli_examples_select_runtime_and_external_judge(self):
+        output = self.build()
+        for path in (ROOT / "README.md", output / "evaluate/index.html"):
+            text = unescape(path.read_text(encoding="utf-8"))
+            command = text.split("async-rbench-eval run-manifest", 1)[1].split("\n\n", 1)[0]
+            for option in ("--profile reference_scaffold_api", "--runtime-mode api_only",
+                           "--config <profile.yaml>", "--official-track", "--judge-root <judge-root>"):
+                self.assertIn(option, command, path)
+
     def build(self, base="/Async-RBench"):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
@@ -282,10 +302,10 @@ class WebsiteBuildTests(unittest.TestCase):
 
     def test_full_rebuild_figure_is_the_frozen_manuscript_render(self):
         output = self.build()
-        # Figure 6 contains 55.5, not the older repository plot's 58.1.
+        # Exact paper26 Figure 6 extraction; Gemini Native subagent calls = 58.1.
         self.assertEqual(
             hashlib.sha256((output / "assets/full-rebuild.png").read_bytes()).hexdigest(),
-            "c6779afabc2252bfb3abf8ddd24ac3e48efd16ef86520adcc45da1deb32218b3",
+            "24879dd1ad91d3599d67c0e0c17cef53c62967319e77368de841d88caac12dd0",
         )
 
     def test_task_catalog_precedes_scenario_reference(self):
