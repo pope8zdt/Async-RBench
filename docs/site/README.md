@@ -2,8 +2,6 @@
 
 The GitHub Pages source lives here; only generated static files are deployed.
 There is no online evaluation service, credential collection or submission backend.
-The trajectory visualizer reads `event_source.jsonl` and `score.json` entirely in
-the browser, displays an allowlist of replay-safe fields and uploads nothing.
 
 ## Build and check
 
@@ -28,8 +26,6 @@ to the site or its public inputs and publishes only the generated artifact.
   or independent reproduction of experiments.
 - Keep the paper's reported task-success differences: they were calculated
   before rounding, so subtracting the displayed rates can change the last digit.
-- The homepage architecture overview is native HTML/CSS so it remains responsive,
-  bilingual and theme-aware without a separate image export.
 - Task counts and catalog metadata come from the public registry, release
   manifest and `public/case.yaml`. The catalog allowlist excludes private
   per-task scenario labels, solutions, verifiers and traces.
