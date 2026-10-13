@@ -645,7 +645,9 @@ h4 {
   margin: 16px 0;
   line-height: 1.8;
 }
-.dark .error-text { color: #ffa99a; }
+.dark .error-text {
+  color: #ffa99a;
+}
 .docs-content code {
   font-family: Consolas, monospace;
 }
@@ -977,6 +979,537 @@ h4 {
   }
   .panel {
     padding: 18px;
+  }
+}
+
+/* Benchmark overview and local trajectory replay */
+:root {
+  --diagram-blue: #e8f2fb;
+  --diagram-blue-strong: #cfe5f7;
+  --diagram-green: #e7f4ed;
+  --diagram-yellow: #fff4d6;
+  --diagram-ink: #31526f;
+}
+.dark {
+  --diagram-blue: #1d2c39;
+  --diagram-blue-strong: #243e52;
+  --diagram-green: #1c342a;
+  --diagram-yellow: #3a321f;
+  --diagram-ink: #b9d7f0;
+}
+.home-hero {
+  max-width: 900px;
+  padding: 42px 0 54px;
+}
+.home-hero .eyebrow {
+  margin-bottom: 13px;
+}
+.home-hero p {
+  max-width: 820px;
+  font-size: clamp(19px, 2.2vw, 25px);
+  line-height: 1.55;
+}
+.hero-text-link {
+  align-self: center;
+  margin-left: 6px;
+}
+.benchmark-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.benchmark-facts > div {
+  min-height: 112px;
+  padding: 22px 20px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+.benchmark-facts > div:first-child {
+  padding-left: 0;
+}
+.benchmark-facts > div:last-child {
+  border-right: 0;
+}
+.benchmark-facts strong {
+  font-size: 21px;
+  letter-spacing: -0.5px;
+}
+.benchmark-facts span {
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.home-section {
+  margin-top: 82px;
+}
+.home-section-heading {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(320px, 1.1fr);
+  gap: 58px;
+  align-items: end;
+  margin-bottom: 27px;
+}
+.home-section-heading.compact {
+  display: block;
+}
+.home-section-heading .eyebrow {
+  margin-bottom: 7px;
+}
+.home-section-heading > p {
+  font-size: 16px;
+  line-height: 1.7;
+}
+.benchmark-diagram {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--muted) 38%, var(--background));
+  padding: 10px;
+  overflow-x: auto;
+}
+.benchmark-diagram svg {
+  display: block;
+  width: 100%;
+  min-width: 820px;
+  height: auto;
+}
+.diagram-node > rect {
+  fill: var(--background);
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.diagram-input > rect {
+  fill: var(--diagram-yellow);
+}
+.diagram-agent > rect {
+  fill: var(--diagram-green);
+}
+.diagram-kernel > rect {
+  fill: var(--diagram-blue);
+  stroke: var(--primary);
+}
+.diagram-runtime > rect {
+  fill: var(--diagram-blue);
+}
+.diagram-output > rect {
+  fill: var(--foreground);
+  stroke: var(--foreground);
+}
+.diagram-module rect,
+.diagram-runtime-box rect {
+  fill: var(--background);
+  stroke: color-mix(in srgb, var(--primary) 32%, var(--border));
+  stroke-width: 1.2;
+}
+.diagram-node line {
+  stroke: color-mix(in srgb, var(--foreground) 22%, transparent);
+}
+.diagram-title {
+  fill: var(--foreground);
+  font-size: 20px;
+  font-weight: 700;
+}
+.diagram-label {
+  fill: var(--foreground);
+  font-size: 15px;
+  font-weight: 600;
+}
+.diagram-small,
+.diagram-edge-label {
+  fill: var(--muted-foreground);
+  font-size: 12px;
+}
+.diagram-kicker {
+  fill: var(--diagram-ink);
+  font-size: 12px;
+  font-family: 'Cascadia Code', Consolas, monospace;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+.diagram-score {
+  fill: var(--background);
+  font-size: 15px;
+  font-family: 'Cascadia Code', Consolas, monospace;
+  font-weight: 700;
+}
+.diagram-output .diagram-label {
+  fill: var(--background);
+}
+.diagram-flow {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 2;
+}
+.diagram-flow-return {
+  stroke-dasharray: 6 5;
+}
+.diagram-arrow-head {
+  fill: var(--foreground);
+}
+.home-track-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.home-track-card {
+  display: grid;
+  grid-template-columns: 62px 1fr;
+  gap: 22px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.track-index {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--foreground);
+  color: var(--background);
+  font-family: 'Cascadia Code', Consolas, monospace;
+  font-weight: 700;
+}
+.home-track-card h3 {
+  font-size: 20px;
+}
+.home-track-card p,
+.workflow-card p {
+  margin: 8px 0 17px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.workflow-card {
+  padding: 28px 28px 28px 0;
+  border-right: 1px solid var(--border);
+}
+.workflow-card + .workflow-card {
+  padding-left: 28px;
+}
+.workflow-card:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+.workflow-icon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  color: var(--primary);
+}
+.workflow-icon span {
+  font:
+    12px 'Cascadia Code',
+    Consolas,
+    monospace;
+  color: var(--muted-foreground);
+}
+.home-results {
+  margin-top: 82px;
+  padding-top: 0;
+  border-top: 0;
+}
+.visualizer-title {
+  max-width: 760px;
+}
+.trajectory-viewer {
+  margin-top: 32px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.trajectory-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--border);
+}
+.trajectory-toolbar .eyebrow {
+  margin-bottom: 2px;
+}
+.trajectory-files {
+  display: flex;
+  gap: 9px;
+}
+.file-button {
+  position: relative;
+  overflow: hidden;
+}
+.file-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.trajectory-error {
+  padding: 12px 22px;
+  color: #a32d22;
+  background: #fff1ef;
+  border-bottom: 1px solid #f0c5bf;
+}
+.dark .trajectory-error {
+  color: #ffb7ae;
+  background: #3a211f;
+  border-color: #64413d;
+}
+.trajectory-stage {
+  display: grid;
+  grid-template-columns: 260px minmax(320px, 1fr) 220px;
+  min-height: 510px;
+}
+.trajectory-events {
+  padding: 12px;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  max-height: 620px;
+}
+.trajectory-event {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 11px;
+  text-align: left;
+  padding: 12px 11px;
+  border: 0;
+  border-radius: 7px;
+  color: var(--foreground);
+  background: transparent;
+}
+.trajectory-event:hover,
+.trajectory-event.active {
+  background: var(--muted);
+}
+.trajectory-event.active .trajectory-dot {
+  background: var(--primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 16%, transparent);
+}
+.trajectory-dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 7px;
+  border: 1px solid var(--primary);
+  border-radius: 50%;
+}
+.trajectory-event strong {
+  display: block;
+  font-size: 13px;
+}
+.trajectory-event small {
+  display: block;
+  color: var(--muted-foreground);
+  margin-top: 3px;
+}
+.trajectory-inspector {
+  position: relative;
+  padding: 34px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.trajectory-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--muted);
+}
+.trajectory-progress span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.25s;
+}
+.trajectory-inspector h2 {
+  margin-top: 18px;
+}
+.trajectory-details {
+  width: 100%;
+  margin: 24px 0 34px;
+}
+.trajectory-details div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.trajectory-details dt {
+  color: var(--muted-foreground);
+  text-transform: capitalize;
+}
+.trajectory-details dd {
+  margin: 0;
+  font-family: 'Cascadia Code', Consolas, monospace;
+  font-size: 13px;
+  text-align: right;
+}
+.trajectory-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+.trajectory-controls button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--foreground);
+  background: var(--background);
+}
+.trajectory-controls .play-button {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+}
+.trajectory-score {
+  padding: 30px 22px;
+  border-left: 1px solid var(--border);
+  background: color-mix(in srgb, var(--muted) 46%, var(--background));
+}
+.score-fact {
+  padding: 17px 0;
+  border-bottom: 1px solid var(--border);
+}
+.score-fact span {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+.score-fact strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 21px;
+}
+.trajectory-privacy {
+  padding: 15px 22px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+@media (max-width: 900px) {
+  .benchmark-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .benchmark-facts > div:nth-child(2) {
+    border-right: 0;
+  }
+  .benchmark-facts > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--border);
+  }
+  .benchmark-facts > div:nth-child(3) {
+    padding-left: 0;
+  }
+  .home-section-heading {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .trajectory-stage {
+    grid-template-columns: 220px 1fr;
+  }
+  .trajectory-score {
+    grid-column: 1 / -1;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .trajectory-score .eyebrow {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .home-hero {
+    padding-top: 20px;
+  }
+  .hero-text-link {
+    width: 100%;
+    margin: 4px 0 0;
+  }
+  .benchmark-facts {
+    grid-template-columns: 1fr;
+  }
+  .benchmark-facts > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    padding-left: 0;
+    min-height: 90px;
+  }
+  .benchmark-facts > div:last-child {
+    border-bottom: 0;
+  }
+  .home-section,
+  .home-results {
+    margin-top: 58px;
+  }
+  .home-track-grid,
+  .workflow-grid {
+    grid-template-columns: 1fr;
+  }
+  .home-track-card {
+    grid-template-columns: 50px 1fr;
+    padding: 22px;
+  }
+  .track-index {
+    width: 44px;
+    height: 44px;
+  }
+  .workflow-card,
+  .workflow-card + .workflow-card,
+  .workflow-card:last-child {
+    padding: 24px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .workflow-card:last-child {
+    border-bottom: 0;
+  }
+  .workflow-icon {
+    margin-bottom: 16px;
+  }
+  .trajectory-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .trajectory-files {
+    width: 100%;
+    flex-direction: column;
+  }
+  .trajectory-files .btn {
+    width: 100%;
+  }
+  .trajectory-stage {
+    display: flex;
+    flex-direction: column;
+  }
+  .trajectory-events {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    max-height: 290px;
+  }
+  .trajectory-inspector {
+    min-height: 430px;
+    padding: 28px 22px;
+  }
+  .trajectory-score {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -10,6 +10,7 @@ const links = [
   ['/', '首页', 'Home'],
   ['/tasks', '任务', 'Tasks'],
   ['/leaderboard', '榜单', 'Leaderboard'],
+  ['/visualizer', '轨迹', 'Visualizer'],
   ['/evaluate', '运行', 'Run'],
   ['/docs', '教程', 'Docs'],
 ];

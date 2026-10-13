@@ -83,6 +83,7 @@ export function PreferencesProvider({
   const titles = [
     ['/tasks', '任务库', 'Tasks'],
     ['/leaderboard', '排行榜', 'Leaderboard'],
+    ['/visualizer', '轨迹回放', 'Trajectory visualizer'],
     ['/evaluate', '开始评测', 'Run the benchmark'],
     ['/docs', '教程', 'Docs'],
     ['/runs/', '实验详情', 'Run details'],
