@@ -161,7 +161,7 @@ class WebsiteBuildTests(unittest.TestCase):
         for base in ("/Async-RBench", ""):
             with self.subTest(base=base):
                 output = self.build(base)
-                for route in ("", "tasks", "leaderboard", "evaluate", "docs"):
+                for route in ("", "tasks", "leaderboard", "evaluate", "visualizer", "docs"):
                     page = output / route / "index.html"
                     self.assertTrue(page.is_file(), route)
                 for page in output.rglob("*.html"):
@@ -177,6 +177,22 @@ class WebsiteBuildTests(unittest.TestCase):
                         if parts.path.endswith("/"):
                             target /= "index.html"
                         self.assertTrue(target.is_file(), (page, link))
+
+    def test_home_explains_pipeline_and_public_actions_concisely(self):
+        output = self.build()
+        page = (output / "index.html").read_text(encoding="utf-8")
+        for marker in ('class="benchmark-architecture"', 'Track A', 'Track B',
+                       'event_source.jsonl', 'score.json', '/visualizer/'):
+            self.assertIn(marker, page)
+        self.assertIn("201 个高质量任务", page)
+        self.assertNotIn("47-case", page)
+
+    def test_visualizer_is_local_only_and_has_replay_controls(self):
+        output = self.build()
+        page = (output / "visualizer/index.html").read_text(encoding="utf-8")
+        for marker in ('id="trace-file"', 'id="score-file"', 'id="replay-play"',
+                       'id="replay-timeline"', '仅在浏览器本地读取'):
+            self.assertIn(marker, page)
 
     def test_catalog_exports_only_public_registered_metadata(self):
         output = self.build()

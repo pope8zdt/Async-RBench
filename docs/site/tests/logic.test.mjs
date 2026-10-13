@@ -51,3 +51,27 @@ test('agent search accepts the model abbreviation printed in the paper table', a
   assert.equal(filterResults(rows, 'Gemini 3 Flash-H').length, 1);
   assert.equal(filterResults(rows, 'Flash High').length, 1);
 });
+
+test('trajectory parser sorts JSONL and exposes only replay-safe fields', async () => {
+  const { parseTrace, publicEvent } = await load();
+  const events = parseTrace('{"seq":2,"actor":"child","instruction":"secret"}\n{"seq":1,"status":"started"}\n');
+  assert.deepEqual(events.map(event => event.seq), [1, 2]);
+  assert.deepEqual(publicEvent(events[1]), { seq: 2, actor: 'child' });
+});
+
+test('trajectory parser reports the bad line without echoing private contents', async () => {
+  const { parseTrace } = await load();
+  assert.throws(() => parseTrace('{"seq":1}\nPRIVATE-BAD-LINE'), error => {
+    assert.match(error.message, /line 2/i);
+    assert.doesNotMatch(error.message, /PRIVATE-BAD-LINE/);
+    return true;
+  });
+});
+
+test('score summary keeps public metrics and omits verifier internals', async () => {
+  const { scoreSummary } = await load();
+  assert.deepEqual(scoreSummary({ mode: 'async', drs: 0.451, bts: 0.82, status: 'complete', private_truth: true }),
+    { mode: 'async', drs: 0.451, bts: 0.82, status: 'complete' });
+  assert.deepEqual(scoreSummary({ execution_mode: 'async', async_drs: 0.451, base_task_score: 1, termination_reason: 'explicit_finish' }),
+    { mode: 'async', drs: 0.451, bts: 1, status: 'explicit_finish' });
+});
