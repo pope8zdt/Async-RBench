@@ -46,8 +46,12 @@ jobs:
         run: python -m unittest discover -s docs/site/tests -p 'test_*.py'
       - name: Test ranking and task filters
         run: node --test docs/site/tests/logic.test.mjs
+      - name: Validate public snapshot and selected evidence
+        run: python -m unittest discover -s docs/site/publication-tests -p 'test_*.py'
+      - name: Test public trajectories and evaluation guide
+        run: node --test docs/site/publication-tests/publication.test.mjs
       - name: Build GitHub Pages artifact
-        run: python docs/site/build.py --output dist/site --base-path /Async-RBench
+        run: python docs/site/publication.py --output dist/site --base-path /Async-RBench
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist/site

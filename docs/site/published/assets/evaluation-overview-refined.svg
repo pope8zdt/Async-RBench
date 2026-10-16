@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="800" viewBox="0 0 1440 800" role="img" aria-labelledby="title desc">
+  <title id="title">Async-RBench evaluation framework</title>
+  <desc id="desc">Public task materials feed a main agent and up to three concurrently running children. Child results are presented individually while the main agent continues working. Actions and artifacts provide evidence to an external judge, which scores event response DRS and task success S separately. Batch is an experimental baseline, not the primary setting.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#4c5d67"/></marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#25313a;font-size:20px}
+      .heading{font-size:25px;font-weight:600}.section{font-size:17px;font-weight:600;fill:#394953;letter-spacing:.5px}.small{font-size:19px;fill:#394953}.tiny{font-size:17px;fill:#394953}.mono{font-family:Consolas,'Courier New',monospace;font-size:19px}.wire{fill:none;stroke:#4c5d67;stroke-width:1.5}.arrow{fill:none;stroke:#4c5d67;stroke-width:1.5;marker-end:url(#arrow)}.panel{stroke:#a6b2b8;stroke-width:1;rx:5}.row{stroke:#d6dedf;stroke-width:1}
+    </style>
+  </defs>
+  <rect width="1440" height="800" fill="white"/>
+  <text x="24" y="37" class="section">TASK MATERIALS</text>
+  <text x="356" y="37" class="section">ASYNCHRONOUS EXECUTION</text>
+  <text x="1035" y="37" class="section">OBSERVED EVIDENCE</text>
+
+  <rect x="24" y="59" width="286" height="511" fill="#edf3e8" class="panel"/>
+  <text x="48" y="101" class="heading">Public task package</text>
+  <text x="48" y="140">User instruction</text>
+  <text x="48" y="167" class="small">Goal and constraints</text>
+  <line x1="48" y1="191" x2="286" y2="191" class="row"/>
+  <text x="48" y="225" class="small">Files in each case</text>
+  <path d="M59 249V355M59 260H79M59 303H79M59 346H79" class="wire"/>
+  <text x="89" y="266" class="mono">public/</text>
+  <text x="89" y="309" class="mono">task/</text>
+  <text x="89" y="352" class="mono">PROVENANCE.md</text>
+  <line x1="48" y1="382" x2="286" y2="382" class="row"/>
+  <text x="48" y="420">Initial subtasks</text>
+  <text x="48" y="448" class="small">Parallel workstreams</text>
+  <text x="48" y="508" font-size="24" font-weight="600">200 tasks</text>
+  <text x="48" y="537" class="small">5 sources · 8 scenarios</text>
+
+  <rect x="356" y="59" width="628" height="511" fill="#edf3f8" class="panel"/>
+  <text x="382" y="101" class="heading">Async agent runtime</text>
+  <rect x="400" y="133" width="514" height="77" fill="#fff9e9" class="panel"/>
+  <text x="657" y="165" text-anchor="middle">Main agent</text>
+  <text x="657" y="193" class="small" text-anchor="middle">Plan · act · incorporate new results</text>
+  <path d="M657 211V249H471M657 249H842" class="wire"/>
+  <path d="M471 249V279" class="arrow"/>
+  <path d="M657 249V279" class="arrow"/>
+  <path d="M842 249V279" class="arrow"/>
+  <text x="687" y="240" class="tiny">delegate</text>
+  <rect x="400" y="282" width="142" height="61" fill="#e1efe7" class="panel"/>
+  <rect x="586" y="282" width="142" height="61" fill="#e1efe7" class="panel"/>
+  <rect x="771" y="282" width="142" height="61" fill="#e1efe7" class="panel"/>
+  <text x="471" y="319" text-anchor="middle">Child 1</text>
+  <text x="657" y="319" text-anchor="middle">Child 2</text>
+  <text x="842" y="319" text-anchor="middle">Child 3</text>
+  <path d="M471 344V378H842V344M657 344V378" class="wire"/>
+  <path d="M657 378V414" class="arrow"/>
+  <text x="680" y="402" class="tiny">returned results</text>
+  <rect x="428" y="417" width="485" height="70" fill="#f7e8ec" class="panel"/>
+  <text x="670" y="448" text-anchor="middle">Asynchronous result delivery</text>
+  <text x="670" y="474" class="small" text-anchor="middle">Present eligible results individually</text>
+  <path d="M914 452H955V173H916" class="arrow"/>
+  <text x="382" y="524" class="small">Main agent keeps working while results arrive.</text>
+  <text x="382" y="550" class="tiny">Up to 3 live children; additional work queues.</text>
+  <path d="M310 173H397" class="arrow"/>
+  <path d="M984 173H1030" class="arrow"/>
+
+  <rect x="1035" y="59" width="381" height="511" fill="#faf7ed" class="panel"/>
+  <text x="1060" y="101" class="heading">Actions &amp; artifacts</text>
+  <text x="1060" y="145">Main-agent response</text>
+  <text x="1060" y="174" class="small">After each result presentation</text>
+  <line x1="1060" y1="198" x2="1390" y2="198" class="row"/>
+  <text x="1060" y="236" class="mono">commands · acknowledgments</text>
+  <text x="1060" y="266" class="mono">revisions · file transfers</text>
+  <line x1="1060" y1="294" x2="1390" y2="294" class="row"/>
+  <text x="1060" y="332" class="small">Response requirements</text>
+  <text x="1060" y="368">C</text><text x="1095" y="368" class="small">Change affected work</text>
+  <text x="1060" y="405">R</text><text x="1095" y="405" class="small">Retain valid work</text>
+  <text x="1060" y="442">F</text><text x="1095" y="442" class="small">Avoid forbidden actions</text>
+  <text x="1060" y="479">V</text><text x="1095" y="479" class="small">Verify revised state</text>
+  <text x="1060" y="542" class="tiny">Recorded evidence, not self-reported scores</text>
+
+  <path d="M1226 571V614" class="arrow"/>
+  <rect x="356" y="618" width="1060" height="123" rx="5" fill="#f8eef0" stroke="#ae969e" stroke-width="1.2" stroke-dasharray="6 5"/>
+  <text x="383" y="658" class="heading">External judge</text>
+  <text x="383" y="690" class="small">Private response contracts</text>
+  <text x="383" y="715" class="small">and task verifiers</text>
+  <line x1="664" y1="640" x2="664" y2="719" stroke="#c9b6be"/>
+  <text x="694" y="658">Event response</text>
+  <text x="694" y="689" class="small">Process P + outcome O</text>
+  <text x="694" y="715" class="mono">DRS = 100 × (P + O) / 2</text>
+  <line x1="1022" y1="640" x2="1022" y2="719" stroke="#c9b6be"/>
+  <text x="1052" y="658">Task success S</text>
+  <text x="1052" y="689" class="small">Binary task completion</text>
+  <text x="1052" y="715" class="small">Scored separately from DRS</text>
+  <text x="24" y="644" class="small">Async is the main setting.</text>
+  <text x="24" y="671" class="small">Batch is a comparison baseline.</text>
+  <text x="356" y="776" class="small">The judge remains outside the public repository.</text>
+<style id="editorial-figure-type">
+text,tspan {font-family:Georgia,'Times New Roman','Songti SC','SimSun',serif!important;font-weight:400!important}
+.heading,.module-title,.metric,.example-title {font-weight:400!important;letter-spacing:-.025em}
+.code,.code tspan,.mono,.mono tspan,.hash,.case-hash,.case-command,.case-ref,.case-file,
+.source-file,.source-gutter,.window-title,.svg-mono {font-family:Consolas,'Courier New',monospace!important}
+</style></svg>

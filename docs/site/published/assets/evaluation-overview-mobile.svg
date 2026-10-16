@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="1030" viewBox="0 0 640 1030" role="img" aria-labelledby="title desc">
+  <title id="title">Async-RBench: asynchronous evaluation, vertical layout</title>
+  <desc id="desc">The main Async setting: public tasks, concurrent agent execution, individual result presentation under controlled release rules, replanning and external evaluation. DRS and binary task success are separate. Up to three subagents run concurrently while the main agent continues working.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#343b42"/></marker><style>text{font-family:Arial,'Helvetica Neue',sans-serif;fill:#26333b;font-size:25px}.title{font-size:29px;font-weight:600}.note{font:21px Arial,sans-serif}.box{stroke:#58636b;stroke-width:1.6;rx:4}.flow{fill:none;stroke:#343b42;stroke-width:1.8;marker-end:url(#arrow)}.wire{fill:none;stroke:#343b42;stroke-width:1.8}</style></defs>
+  <rect width="640" height="1030" fill="#fff"/>
+  <rect class="box" x="22" y="18" width="596" height="160" fill="#edf3e8"/>
+  <text class="title" x="320" y="59" text-anchor="middle">01  Public task package</text>
+  <text x="320" y="102" text-anchor="middle">Goal · input materials · initial subtasks</text>
+  <text class="note" x="320" y="144" text-anchor="middle">200 tasks · 5 sources · 8 scenarios</text>
+  <path class="flow" d="M320 178V210"/>
+  <rect class="box" x="22" y="214" width="596" height="370" fill="#edf3f8"/>
+  <text class="title" x="320" y="257" text-anchor="middle">02  Asynchronous execution</text>
+  <rect class="box" x="65" y="280" width="510" height="56" fill="#fff9e9"/><text x="320" y="316" text-anchor="middle">Main agent</text>
+  <path class="wire" d="M320 336V354H145M320 354H495"/><path class="flow" d="M145 354V377"/><path class="flow" d="M320 354V377"/><path class="flow" d="M495 354V377"/>
+  <rect class="box" x="65" y="381" width="160" height="53" fill="#e2f0e7"/><text x="145" y="415" text-anchor="middle">Child 1</text><rect class="box" x="240" y="381" width="160" height="53" fill="#e2f0e7"/><text x="320" y="415" text-anchor="middle">Child 2</text><rect class="box" x="415" y="381" width="160" height="53" fill="#e2f0e7"/><text x="495" y="415" text-anchor="middle">Child 3</text>
+  <path class="wire" d="M145 434V450H495V434M320 434V450"/><path class="flow" d="M320 450V468"/>
+  <rect class="box" x="65" y="472" width="510" height="56" fill="#f6e7eb"/><text x="320" y="508" text-anchor="middle">Present eligible results individually</text><path class="flow" d="M575 500H598V308H577"/>
+  <text class="note" x="320" y="563" text-anchor="middle">Up to 3 live children; main agent keeps working</text>
+  <path class="flow" d="M320 584V616"/>
+  <rect class="box" x="22" y="620" width="596" height="157" fill="#faf6e9"/>
+  <text class="title" x="320" y="663" text-anchor="middle">03  Respond &amp; replan</text>
+  <text x="320" y="708" text-anchor="middle">Change · preserve · avoid forbidden acts</text><text x="320" y="745" text-anchor="middle">Verify revised work → recorded evidence</text>
+  <path class="flow" d="M320 777V808"/>
+  <rect x="22" y="812" width="596" height="192" rx="8" fill="#f8eef0" stroke="#947e87" stroke-width="1.6" stroke-dasharray="6 5"/>
+  <text class="title" x="320" y="855" text-anchor="middle">04  External private judge</text>
+  <rect class="box" x="47" y="879" width="265" height="60" fill="#e2f0e7"/><text x="179" y="918" text-anchor="middle">DRS: event response</text>
+  <rect class="box" x="328" y="879" width="265" height="60" fill="#e2e7f6"/><text x="460" y="918" text-anchor="middle">S: task success</text>
+  <text class="note" x="320" y="977" text-anchor="middle">Event response and task success: separate</text>
+<style id="editorial-figure-type">
+text,tspan {font-family:Georgia,'Times New Roman','Songti SC','SimSun',serif!important;font-weight:400!important}
+.heading,.module-title,.metric,.example-title {font-weight:400!important;letter-spacing:-.025em}
+.code,.code tspan,.mono,.mono tspan,.hash,.case-hash,.case-command,.case-ref,.case-file,
+.source-file,.source-gutter,.window-title,.svg-mono {font-family:Consolas,'Courier New',monospace!important}
+</style></svg>

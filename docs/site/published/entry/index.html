@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Async-RBench — 评测智能体在异步结果到达时的任务执行与调整。">
+<meta name="color-scheme" content="light"><title>Async-RBench</title>
+<link rel="stylesheet" href="/assets/landing.css?v=20261016-public1">
+<script>try{const p=JSON.parse(localStorage.getItem('async-rbench-paper-preferences')||'{}');document.documentElement.lang=p.language==='zh'?'zh':'en'}catch{}</script>
+<script type="module" src="/assets/landing.mjs?v=20261016-public1"></script><link rel="stylesheet" href="/edition.css" data-edition="20261015">
+<link rel="stylesheet" href="/compact.css?v=20261016-public1" data-compact="20261016">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=20261016-public1"><link rel="stylesheet" href="/portal.css?v=20261016-public1"><link rel="stylesheet" href="/editorial.css?v=20261016-public1"><script type="module" src="/entry-route.mjs?v=20261016-public1"></script></head>
+<body data-research-root="/benchmark/" class="entry-page" data-section="entry">
+<div class="ambient" aria-hidden="true"><section class="ambient-scene is-active" data-scene="release" data-phase="0"><div class="scene-reel"><div class="scene-plane">
+        <div class="scene-topline"><span><span class="i18n" lang="zh">代码版本变化</span><span class="i18n" lang="en">Revision changes</span></span><code>secure-release-1-async-7dabe929</code></div>
+        <div class="scene-workspace"><div class="record-column"><div class="archive-event" data-event="0"><div class="event-label"><b>#165</b><span>02:10.500</span><span>result_delivered</span></div><pre>{
+  &quot;evidence&quot;: {
+    &quot;tested_main_head&quot;: &quot;f2ff20b7b19c7e24d8050e2589db973206727857&quot;,
+    &quot;tested_dev_head&quot;: &quot;d7659db8a15f09e933cae547ff74ad19789a751c&quot;
+  }
+}</pre></div><div class="archive-event" data-event="1"><div class="event-label"><b>#195</b><span>02:18.328</span><span>result_delivered</span></div><pre>{
+  &quot;evidence&quot;: {
+    &quot;main_head&quot;: &quot;4f8b595fa29a1798808c478bd17e8e67f2d544be&quot;,
+    &quot;dev_head&quot;: &quot;c9757b12c48941e2a48ed25246947aaab2273856&quot;
+  }
+}</pre></div><div class="archive-event" data-event="2"><div class="event-label"><b>#289</b><span>03:11.906</span><span>main_action</span></div><pre>{
+  &quot;command&quot;: &quot;cd /app/repo; git checkout main; grep -n -A12 -B3 &#x27;def _hkey&#x27; bottle.py; git diff f2ff20b..4f8b595 -- bottle.py | head -100; git show f2ff20b:bottle.py | grep -n -A10 -B2 &#x27;def _hkey&#x27;&quot;
+}</pre></div><div class="archive-event" data-event="3"><div class="event-label"><b>#303</b><span>03:27.828</span><span>main_action_finished</span></div><pre>{
+  &quot;exit_code&quot;: 128
+}</pre></div><div class="archive-event" data-event="4"><div class="event-label"><b>#315</b><span>03:41.938</span><span>main_action</span></div><pre>{
+  &quot;command_excerpt&quot;: &quot;python3 /app/deliverables/validation_test.py&quot;
+}</pre></div><div class="archive-event" data-event="5"><div class="event-label"><b>#316</b><span>03:42.781</span><span>main_action_finished</span></div><pre>{
+  &quot;exit_code&quot;: 0
+}</pre></div></div><div class="visual-column"><svg viewBox="0 0 760 700"><text x="44" y="72" class="svg-title">bottle.py</text><text x="44" y="134" class="svg-label">main</text><path class="wire" d="M70 180H680"/><circle class="old-node" cx="100" cy="180" r="13"/><circle class="new-node" cx="590" cy="180" r="15"/><text x="44" y="231" class="svg-mono">f2ff20b7b19c</text><text x="500" y="231" class="svg-mono">4f8b595fa29a</text><text x="44" y="324" class="svg-label">dev</text><path class="wire" d="M70 370H680"/><circle class="old-node" cx="100" cy="370" r="13"/><circle class="new-node" cx="590" cy="370" r="15"/><text x="44" y="421" class="svg-mono">d7659db8a15f</text><text x="500" y="421" class="svg-mono">c9757b12c489</text><text x="44" y="527" class="svg-label">validation_test.py</text><path class="wire muted-wire" d="M55 565H650"/><text x="44" y="607" class="svg-error">#303  exit 128</text><text x="480" y="607" class="svg-success">#316  exit 0</text></svg></div></div>
+      </div><div class="scene-plane">
+        <div class="scene-topline"><span><span class="i18n" lang="zh">代码版本变化</span><span class="i18n" lang="en">Revision changes</span></span><code>secure-release-1-async-7dabe929</code></div>
+        <div class="scene-workspace"><div class="record-column"><div class="archive-event" data-event="0"><div class="event-label"><b>#165</b><span>02:10.500</span><span>result_delivered</span></div><pre>{
+  &quot;evidence&quot;: {
+    &quot;tested_main_head&quot;: &quot;f2ff20b7b19c7e24d8050e2589db973206727857&quot;,
+    &quot;tested_dev_head&quot;: &quot;d7659db8a15f09e933cae547ff74ad19789a751c&quot;
+  }
+}</pre></div><div class="archive-event" data-event="1"><div class="event-label"><b>#195</b><span>02:18.328</span><span>result_delivered</span></div><pre>{
+  &quot;evidence&quot;: {
+    &quot;main_head&quot;: &quot;4f8b595fa29a1798808c478bd17e8e67f2d544be&quot;,
+    &quot;dev_head&quot;: &quot;c9757b12c48941e2a48ed25246947aaab2273856&quot;
+  }
+}</pre></div><div class="archive-event" data-event="2"><div class="event-label"><b>#289</b><span>03:11.906</span><span>main_action</span></div><pre>{
+  &quot;command&quot;: &quot;cd /app/repo; git checkout main; grep -n -A12 -B3 &#x27;def _hkey&#x27; bottle.py; git diff f2ff20b..4f8b595 -- bottle.py | head -100; git show f2ff20b:bottle.py | grep -n -A10 -B2 &#x27;def _hkey&#x27;&quot;
+}</pre></div><div class="archive-event" data-event="3"><div class="event-label"><b>#303</b><span>03:27.828</span><span>main_action_finished</span></div><pre>{
+  &quot;exit_code&quot;: 128
+}</pre></div><div class="archive-event" data-event="4"><div class="event-label"><b>#315</b><span>03:41.938</span><span>main_action</span></div><pre>{
+  &quot;command_excerpt&quot;: &quot;python3 /app/deliverables/validation_test.py&quot;
+}</pre></div><div class="archive-event" data-event="5"><div class="event-label"><b>#316</b><span>03:42.781</span><span>main_action_finished</span></div><pre>{
+  &quot;exit_code&quot;: 0
+}</pre></div></div><div class="visual-column"><svg viewBox="0 0 760 700"><text x="44" y="72" class="svg-title">bottle.py</text><text x="44" y="134" class="svg-label">main</text><path class="wire" d="M70 180H680"/><circle class="old-node" cx="100" cy="180" r="13"/><circle class="new-node" cx="590" cy="180" r="15"/><text x="44" y="231" class="svg-mono">f2ff20b7b19c</text><text x="500" y="231" class="svg-mono">4f8b595fa29a</text><text x="44" y="324" class="svg-label">dev</text><path class="wire" d="M70 370H680"/><circle class="old-node" cx="100" cy="370" r="13"/><circle class="new-node" cx="590" cy="370" r="15"/><text x="44" y="421" class="svg-mono">d7659db8a15f</text><text x="500" y="421" class="svg-mono">c9757b12c489</text><text x="44" y="527" class="svg-label">validation_test.py</text><path class="wire muted-wire" d="M55 565H650"/><text x="44" y="607" class="svg-error">#303  exit 128</text><text x="480" y="607" class="svg-success">#316  exit 0</text></svg></div></div>
+      </div></div></section><section class="ambient-scene " data-scene="replay" data-phase="0"><div class="scene-reel"><div class="scene-plane">
+        <div class="scene-topline"><span><span class="i18n" lang="zh">同一结果再次交付</span><span class="i18n" lang="en">Repeated delivery</span></span><code>mab-late-test-evidence-60efb2bdee-0-async-e255accb</code></div>
+        <div class="scene-workspace"><div class="record-column"><div class="archive-event" data-event="0"><div class="event-label"><b>#292</b><span>02:06.203</span><span>result_delivered</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;child_id&quot;: &quot;child-4&quot;
+}</pre></div><div class="archive-event" data-event="1"><div class="event-label"><b>#317</b><span>02:16.688</span><span>result_presented</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;delivery_occurrence_id&quot;: &quot;occ-2&quot;
+}</pre></div><div class="archive-event" data-event="2"><div class="event-label"><b>#432</b><span>03:12.969</span><span>main_action</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;decision&quot;: &quot;reject&quot;
+}</pre></div><div class="archive-event" data-event="3"><div class="event-label"><b>#720</b><span>07:59.469</span><span>main_action</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;decision&quot;: &quot;use&quot;
+}</pre></div><div class="archive-event" data-event="4"><div class="event-label"><b>#722</b><span>07:59.469</span><span>result_delivery_evaluator_fact</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;replayed&quot;: true,
+  &quot;delivery_occurrence_id&quot;: &quot;gateway-occ-5&quot;,
+  &quot;replay_of_occurrence_id&quot;: &quot;gateway-occ-2&quot;
+}</pre></div><div class="archive-event" data-event="5"><div class="event-label"><b>#754</b><span>08:14.656</span><span>result_presented</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;delivery_occurrence_id&quot;: &quot;occ-5&quot;
+}</pre></div><div class="archive-event" data-event="6"><div class="event-label"><b>#800</b><span>08:49.735</span><span>main_action</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;decision&quot;: &quot;use&quot;
+}</pre></div></div><div class="visual-column"><svg viewBox="0 0 760 700"><text x="35" y="72" class="svg-title">completion-2</text><text x="47" y="138" class="svg-label">child-4</text><path class="lifeline" d="M90 155V640"/><text x="297" y="138" class="svg-label">gateway</text><path class="lifeline" d="M340 155V640"/><text x="577" y="138" class="svg-label">main</text><path class="lifeline" d="M620 155V640"/><path class="wire" d="M90 205H340m-9 -6L340 205l-9 6"/><text x="103" y="193" class="svg-mono">completion-2</text><path class="wire" d="M340 265H620m-9 -6L620 265l-9 6"/><text x="353" y="253" class="svg-mono">occ-2</text><path class="wire" d="M620 325H340m9 -6L340 325l9 6"/><text x="353" y="313" class="svg-mono">reject</text><path class="wire" d="M620 385H340m9 -6L340 385l9 6"/><text x="353" y="373" class="svg-mono">use</text><path class="replay-wire" d="M340 445c100 -55 130 55 0 0"/><text x="353" y="433" class="svg-mono">gateway-occ-5</text><path class="wire" d="M340 505H620m-9 -6L620 505l-9 6"/><text x="353" y="493" class="svg-mono">occ-5</text><path class="wire" d="M620 565H340m9 -6L340 565l9 6"/><text x="353" y="553" class="svg-mono">use</text></svg></div></div>
+      </div><div class="scene-plane">
+        <div class="scene-topline"><span><span class="i18n" lang="zh">同一结果再次交付</span><span class="i18n" lang="en">Repeated delivery</span></span><code>mab-late-test-evidence-60efb2bdee-0-async-e255accb</code></div>
+        <div class="scene-workspace"><div class="record-column"><div class="archive-event" data-event="0"><div class="event-label"><b>#292</b><span>02:06.203</span><span>result_delivered</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;child_id&quot;: &quot;child-4&quot;
+}</pre></div><div class="archive-event" data-event="1"><div class="event-label"><b>#317</b><span>02:16.688</span><span>result_presented</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;delivery_occurrence_id&quot;: &quot;occ-2&quot;
+}</pre></div><div class="archive-event" data-event="2"><div class="event-label"><b>#432</b><span>03:12.969</span><span>main_action</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;decision&quot;: &quot;reject&quot;
+}</pre></div><div class="archive-event" data-event="3"><div class="event-label"><b>#720</b><span>07:59.469</span><span>main_action</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;decision&quot;: &quot;use&quot;
+}</pre></div><div class="archive-event" data-event="4"><div class="event-label"><b>#722</b><span>07:59.469</span><span>result_delivery_evaluator_fact</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;replayed&quot;: true,
+  &quot;delivery_occurrence_id&quot;: &quot;gateway-occ-5&quot;,
+  &quot;replay_of_occurrence_id&quot;: &quot;gateway-occ-2&quot;
+}</pre></div><div class="archive-event" data-event="5"><div class="event-label"><b>#754</b><span>08:14.656</span><span>result_presented</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;delivery_occurrence_id&quot;: &quot;occ-5&quot;
+}</pre></div><div class="archive-event" data-event="6"><div class="event-label"><b>#800</b><span>08:49.735</span><span>main_action</span></div><pre>{
+  &quot;completion_id&quot;: &quot;completion-2&quot;,
+  &quot;decision&quot;: &quot;use&quot;
+}</pre></div></div><div class="visual-column"><svg viewBox="0 0 760 700"><text x="35" y="72" class="svg-title">completion-2</text><text x="47" y="138" class="svg-label">child-4</text><path class="lifeline" d="M90 155V640"/><text x="297" y="138" class="svg-label">gateway</text><path class="lifeline" d="M340 155V640"/><text x="577" y="138" class="svg-label">main</text><path class="lifeline" d="M620 155V640"/><path class="wire" d="M90 205H340m-9 -6L340 205l-9 6"/><text x="103" y="193" class="svg-mono">completion-2</text><path class="wire" d="M340 265H620m-9 -6L620 265l-9 6"/><text x="353" y="253" class="svg-mono">occ-2</text><path class="wire" d="M620 325H340m9 -6L340 325l9 6"/><text x="353" y="313" class="svg-mono">reject</text><path class="wire" d="M620 385H340m9 -6L340 385l9 6"/><text x="353" y="373" class="svg-mono">use</text><path class="replay-wire" d="M340 445c100 -55 130 55 0 0"/><text x="353" y="433" class="svg-mono">gateway-occ-5</text><path class="wire" d="M340 505H620m-9 -6L620 505l-9 6"/><text x="353" y="493" class="svg-mono">occ-5</text><path class="wire" d="M620 565H340m9 -6L340 565l9 6"/><text x="353" y="553" class="svg-mono">use</text></svg></div></div>
+      </div></div></section><section class="ambient-scene " data-scene="early-stop" data-phase="0"><div class="scene-reel"><div class="scene-plane">
+        <div class="scene-topline"><span><span class="i18n" lang="zh">文件交付与任务结束</span><span class="i18n" lang="en">Artifacts and the episode endpoint</span></span><code>scheduler-selective-replan-2-async-8bcd0aac</code></div>
+        <div class="scene-workspace"><div class="record-column"><div class="archive-event" data-event="0"><div class="event-label"><b>#265</b><span>01:27.469</span><span>child_path_promotion_result</span></div><pre>{
+  &quot;child_id&quot;: &quot;child-1&quot;,
+  &quot;destination_path&quot;: &quot;/app/task_file/output_data/plan_b1.jsonl&quot;,
+  &quot;success&quot;: false,
+  &quot;exit_code&quot;: 1
+}</pre></div><div class="archive-event" data-event="1"><div class="event-label"><b>#300</b><span>01:39.578</span><span>child_path_promotion_result</span></div><pre>{
+  &quot;child_id&quot;: &quot;child-1&quot;,
+  &quot;destination_path&quot;: &quot;/app/task_file/output_data/plan_b1.jsonl&quot;,
+  &quot;success&quot;: true,
+  &quot;exit_code&quot;: 0
+}</pre></div><div class="archive-event" data-event="2"><div class="event-label"><b>#368</b><span>02:01.172</span><span>child_path_promotion_result</span></div><pre>{
+  &quot;child_id&quot;: &quot;child-5&quot;,
+  &quot;destination_path&quot;: &quot;/app/task_file/output_data/validator_reports/bucket2.json&quot;,
+  &quot;success&quot;: true,
+  &quot;exit_code&quot;: 0
+}</pre></div><div class="archive-event" data-event="3"><div class="event-label"><b>#428</b><span>02:50.313</span><span>child_cancelled</span></div><pre>{
+  &quot;child_id&quot;: &quot;child-2&quot;,
+  &quot;initiated_by&quot;: &quot;scaffold_shutdown&quot;
+}</pre></div><div class="archive-event" data-event="4"><div class="event-label"><b>#430</b><span>02:52.735</span><span>episode_ended</span></div><pre>{
+  &quot;local_status&quot;: &quot;incomplete&quot;
+}</pre></div></div><div class="visual-column"><svg viewBox="0 0 760 700"><text x="36" y="72" class="svg-title">output_data/</text><path class="file-tree" d="M63 115V422M63 180H110M63 340H110M130 375V420H165"/><path class="file-icon" d="M119 134h44l17 17v50h-61zM163 134v17h17"/><text x="205" y="171" class="svg-mono">plan_b1.jsonl</text><text x="205" y="204" class="svg-success">#300  child-1  transferred</text><path class="file-icon" d="M119 294h44l17 17v50h-61zM163 294v17h17"/><text x="205" y="331" class="svg-mono">validator_reports</text><text x="205" y="364" class="svg-success">#368  child-5  transferred</text><text x="183" y="431" class="svg-mono">bucket2.json</text><path class="muted-wire" d="M36 513H700"/><text x="36" y="558" class="svg-error">#428  child-2  cancelled</text><text x="36" y="607" class="svg-error">local_status: incomplete</text></svg></div></div>
+      </div><div class="scene-plane">
+        <div class="scene-topline"><span><span class="i18n" lang="zh">文件交付与任务结束</span><span class="i18n" lang="en">Artifacts and the episode endpoint</span></span><code>scheduler-selective-replan-2-async-8bcd0aac</code></div>
+        <div class="scene-workspace"><div class="record-column"><div class="archive-event" data-event="0"><div class="event-label"><b>#265</b><span>01:27.469</span><span>child_path_promotion_result</span></div><pre>{
+  &quot;child_id&quot;: &quot;child-1&quot;,
+  &quot;destination_path&quot;: &quot;/app/task_file/output_data/plan_b1.jsonl&quot;,
+  &quot;success&quot;: false,
+  &quot;exit_code&quot;: 1
+}</pre></div><div class="archive-event" data-event="1"><div class="event-label"><b>#300</b><span>01:39.578</span><span>child_path_promotion_result</span></div><pre>{
+  &quot;child_id&quot;: &quot;child-1&quot;,
+  &quot;destination_path&quot;: &quot;/app/task_file/output_data/plan_b1.jsonl&quot;,
+  &quot;success&quot;: true,
+  &quot;exit_code&quot;: 0
+}</pre></div><div class="archive-event" data-event="2"><div class="event-label"><b>#368</b><span>02:01.172</span><span>child_path_promotion_result</span></div><pre>{
+  &quot;child_id&quot;: &quot;child-5&quot;,
+  &quot;destination_path&quot;: &quot;/app/task_file/output_data/validator_reports/bucket2.json&quot;,
+  &quot;success&quot;: true,
+  &quot;exit_code&quot;: 0
+}</pre></div><div class="archive-event" data-event="3"><div class="event-label"><b>#428</b><span>02:50.313</span><span>child_cancelled</span></div><pre>{
+  &quot;child_id&quot;: &quot;child-2&quot;,
+  &quot;initiated_by&quot;: &quot;scaffold_shutdown&quot;
+}</pre></div><div class="archive-event" data-event="4"><div class="event-label"><b>#430</b><span>02:52.735</span><span>episode_ended</span></div><pre>{
+  &quot;local_status&quot;: &quot;incomplete&quot;
+}</pre></div></div><div class="visual-column"><svg viewBox="0 0 760 700"><text x="36" y="72" class="svg-title">output_data/</text><path class="file-tree" d="M63 115V422M63 180H110M63 340H110M130 375V420H165"/><path class="file-icon" d="M119 134h44l17 17v50h-61zM163 134v17h17"/><text x="205" y="171" class="svg-mono">plan_b1.jsonl</text><text x="205" y="204" class="svg-success">#300  child-1  transferred</text><path class="file-icon" d="M119 294h44l17 17v50h-61zM163 294v17h17"/><text x="205" y="331" class="svg-mono">validator_reports</text><text x="205" y="364" class="svg-success">#368  child-5  transferred</text><text x="183" y="431" class="svg-mono">bucket2.json</text><path class="muted-wire" d="M36 513H700"/><text x="36" y="558" class="svg-error">#428  child-2  cancelled</text><text x="36" y="607" class="svg-error">local_status: incomplete</text></svg></div></div>
+      </div></div></section></div><div class="entry-veil" aria-hidden="true"></div>
+<div class="entry-tools"><button id="entry-language" type="button" hidden>English</button></div>
+<main class="entry-main" id="main">
+<h1>Async-RBench</h1>
+<p class="entry-description"><span class="i18n" lang="zh">评测智能体在异步结果到达时的任务执行与调整。</span><span class="i18n" lang="en">A benchmark for agents working with asynchronous results.</span></p>
+<a class="enter-link" href="/benchmark/"><span class="i18n" lang="zh">进入测评</span><span class="i18n" lang="en">Enter benchmark</span><span class="entry-arrow" aria-hidden="true">→</span></a>
+</main>
+<div class="entry-bottom"><a class="archive-caption" href="/benchmark/?case=release#trajectories"><span class="archive-mark" aria-hidden="true"></span><span><span class="i18n" lang="zh">归档轨迹可视化</span><span class="i18n" lang="en">Archived trace visualization</span></span><span class="caption-separator" aria-hidden="true">/</span><span data-caption="0" ><span class="i18n" lang="zh">代码版本变化</span><span class="i18n" lang="en">Revision changes</span></span><span data-caption="1" hidden><span class="i18n" lang="zh">同一结果再次交付</span><span class="i18n" lang="en">Repeated delivery</span></span><span data-caption="2" hidden><span class="i18n" lang="zh">文件交付与任务结束</span><span class="i18n" lang="en">Artifacts and the episode endpoint</span></span></a>
+<button id="entry-motion" type="button" aria-pressed="false" hidden><span class="motion-symbol" aria-hidden="true">Ⅱ</span><span data-motion-label><span class="i18n" lang="zh">暂停背景</span><span class="i18n" lang="en">Pause background</span></span></button></div>
+<script type="module" src="/compact.mjs?v=20261016-public1"></script>
+</body></html>

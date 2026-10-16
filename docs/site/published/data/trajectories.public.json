@@ -1,0 +1,1133 @@
+{
+  "version": 1,
+  "publication": "reviewed-excerpts-v1",
+  "cases": [
+    {
+      "id": "release",
+      "title": {
+        "zh": "旧验证遇到新版本",
+        "en": "Old tests, new revision"
+      },
+      "description": {
+        "zh": "补丁先报告测试通过，清理结果随后带来新的仓库版本。沿着版本比较、修复尝试和重新测试，看主代理如何继续工作。",
+        "en": "A patch reports passing tests before cleanup returns a new repository revision. Follow the comparison, repair attempt and retest."
+      },
+      "model": "gpt-5.6-terra",
+      "episode_id": "secure-release-1-async-7dabe929",
+      "milestones": [
+        {
+          "seq": 165,
+          "title": {
+            "zh": "补丁报告先到",
+            "en": "Patch report arrives"
+          },
+          "note": {
+            "zh": "子代理报告在旧 main/dev 快照上测试通过。这是子代理报告内容，不等于最终工作区已经通过测试。",
+            "en": "The child reports passing tests on the old main/dev snapshots. This is a child report, not verification of the final workspace."
+          }
+        },
+        {
+          "seq": 180,
+          "title": {
+            "zh": "报告呈现给主代理",
+            "en": "Report presented"
+          },
+          "note": {
+            "zh": "首次呈现 completion-1。呈现与到达是两条不同记录。",
+            "en": "First presentation of completion-1. Arrival and presentation have distinct records."
+          }
+        },
+        {
+          "seq": 195,
+          "title": {
+            "zh": "清理带来新版本",
+            "en": "Cleanup changes the base"
+          },
+          "note": {
+            "zh": "main_head 变为 4f8b595…，与前一份测试报告的 f2ff20b… 不同。",
+            "en": "main_head is now 4f8b595…, different from f2ff20b… in the earlier test report."
+          }
+        },
+        {
+          "seq": 228,
+          "title": {
+            "zh": "新结果被呈现",
+            "en": "New result presented"
+          },
+          "note": {
+            "zh": "completion-2 在此处呈现给主代理；后续动作可以与这个时间点对齐。",
+            "en": "completion-2 is presented here, providing a reference point for subsequent actions."
+          }
+        },
+        {
+          "seq": 289,
+          "title": {
+            "zh": "比较两个版本",
+            "en": "Compare revisions"
+          },
+          "note": {
+            "zh": "论文图 1 的 #289：主代理实际执行 git diff，检查新旧 bottle.py 的差异。",
+            "en": "Figure 1, #289: the main agent executes git diff to inspect the changed bottle.py."
+          }
+        },
+        {
+          "seq": 303,
+          "title": {
+            "zh": "首次修改命令失败",
+            "en": "First repair command fails"
+          },
+          "note": {
+            "zh": "前一条复合命令返回 128。回放保留失败步骤，不将“调用了测试”画成“测试通过”。",
+            "en": "The preceding compound command returns 128. An attempted test is not shown as a passed test."
+          }
+        },
+        {
+          "seq": 315,
+          "title": {
+            "zh": "修正后重新测试",
+            "en": "Repair and retest"
+          },
+          "note": {
+            "zh": "这条命令重新提交修复并调用 validation_test.py。这里只摘录原始测试调用；下一条记录给出退出码。",
+            "en": "This command commits the repair and calls validation_test.py. Only the original test invocation is excerpted; the next record provides the exit code."
+          }
+        },
+        {
+          "seq": 316,
+          "title": {
+            "zh": "命令退出码为 0",
+            "en": "Command exits with 0"
+          },
+          "note": {
+            "zh": "日志记录该命令成功退出。这不是整项任务的成功率或 DRS 分数。",
+            "en": "The log records successful command completion, not task success or a DRS score."
+          }
+        },
+        {
+          "seq": 546,
+          "title": {
+            "zh": "查看运行结尾",
+            "en": "Episode endpoint"
+          },
+          "note": {
+            "zh": "此处展示归档运行的结束状态；论文总体数字保持独立，不从这条案例重新计算。",
+            "en": "This is the archived episode endpoint. Paper aggregates remain separate and are not recomputed from this example."
+          }
+        }
+      ],
+      "source_sha256": "97d3338e49dd0b506f881f8abed90ac219331dcb295d5bdbcf45c263f6adf17c",
+      "mode": "async",
+      "lanes": [
+        {
+          "id": "main",
+          "label": "Main agent"
+        },
+        {
+          "id": "delivery",
+          "label": "Result delivery"
+        },
+        {
+          "id": "child-1",
+          "label": "security_patch"
+        },
+        {
+          "id": "child-2",
+          "label": "sanitize_history"
+        },
+        {
+          "id": "child-3",
+          "label": "release_infrastructure"
+        }
+      ],
+      "source_event_count": 547,
+      "events": [
+        {
+          "seq": 165,
+          "event_id": "secure-release-1-async-7dabe929:165",
+          "elapsed_ms": 130500.0,
+          "type": "result_delivered",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-1",
+            "workstream_id": "security_patch",
+            "child_id": "child-1",
+            "evidence": {
+              "tested_main_head": "f2ff20b7b19c7e24d8050e2589db973206727857",
+              "tested_dev_head": "d7659db8a15f09e933cae547ff74ad19789a751c",
+              "crlf_test_result": "validation_test.py passed against independently exported and patched main and dev snapshots; it confirmed ValueError for LF, CR, and NUL in response/HeaderDict header names and values."
+            }
+          }
+        },
+        {
+          "seq": 180,
+          "event_id": "secure-release-1-async-7dabe929:180",
+          "elapsed_ms": 134406.0,
+          "type": "result_presented",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-1",
+            "delivery_occurrence_id": "occ-1"
+          }
+        },
+        {
+          "seq": 195,
+          "event_id": "secure-release-1-async-7dabe929:195",
+          "elapsed_ms": 138328.0,
+          "type": "result_delivered",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-2",
+            "workstream_id": "sanitize_history",
+            "child_id": "child-2",
+            "evidence": {
+              "main_head": "4f8b595fa29a1798808c478bd17e8e67f2d544be",
+              "dev_head": "c9757b12c48941e2a48ed25246947aaab2273856"
+            }
+          }
+        },
+        {
+          "seq": 228,
+          "event_id": "secure-release-1-async-7dabe929:228",
+          "elapsed_ms": 152344.0,
+          "type": "result_presented",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-2",
+            "delivery_occurrence_id": "occ-2"
+          }
+        },
+        {
+          "seq": 289,
+          "event_id": "secure-release-1-async-7dabe929:289",
+          "elapsed_ms": 191906.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "tool": "terminal",
+            "action_id": "main-action-14",
+            "kind": "terminal",
+            "command": "cd /app/repo; git checkout main; grep -n -A12 -B3 'def _hkey' bottle.py; git diff f2ff20b..4f8b595 -- bottle.py | head -100; git show f2ff20b:bottle.py | grep -n -A10 -B2 'def _hkey'"
+          }
+        },
+        {
+          "seq": 303,
+          "event_id": "secure-release-1-async-7dabe929:303",
+          "elapsed_ms": 207828.0,
+          "type": "main_action_finished",
+          "lane": "main",
+          "record": {
+            "success": true,
+            "exit_code": 128,
+            "action_id": "main-action-15",
+            "kind": "terminal"
+          }
+        },
+        {
+          "seq": 315,
+          "event_id": "secure-release-1-async-7dabe929:315",
+          "elapsed_ms": 221938.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "tool": "terminal",
+            "action_id": "main-action-16",
+            "kind": "terminal",
+            "command_excerpt": "python3 /app/deliverables/validation_test.py"
+          }
+        },
+        {
+          "seq": 316,
+          "event_id": "secure-release-1-async-7dabe929:316",
+          "elapsed_ms": 222781.0,
+          "type": "main_action_finished",
+          "lane": "main",
+          "record": {
+            "success": true,
+            "exit_code": 0,
+            "action_id": "main-action-16",
+            "kind": "terminal"
+          }
+        },
+        {
+          "seq": 546,
+          "event_id": "secure-release-1-async-7dabe929:546",
+          "elapsed_ms": 560641.0,
+          "type": "episode_ended",
+          "lane": "main",
+          "record": {
+            "local_status": "completed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "replay",
+      "title": {
+        "zh": "同一个结果，又到了一次",
+        "en": "The same result arrives again"
+      },
+      "description": {
+        "zh": "OfficeTaskScheduler 的 completion-2 被再次交付。对照结果标识、呈现次数和确认动作，区分重复消息与重复执行。",
+        "en": "OfficeTaskScheduler receives completion-2 again. Compare result identity, presentation count and acknowledgments without assuming duplicate execution."
+      },
+      "model": "claude-sonnet-5",
+      "episode_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb",
+      "milestones": [
+        {
+          "seq": 292,
+          "title": {
+            "zh": "首次交付",
+            "en": "First delivery"
+          },
+          "note": {
+            "zh": "completion-2 来自 child-4。后续是否重复，应依据这个完成标识核对。",
+            "en": "completion-2 comes from child-4. Use this completion identity to recognize the later replay."
+          }
+        },
+        {
+          "seq": 432,
+          "title": {
+            "zh": "最初拒绝",
+            "en": "Initially rejected"
+          },
+          "note": {
+            "zh": "主代理对 completion-2 记录 reject。",
+            "en": "The main agent records reject for completion-2."
+          }
+        },
+        {
+          "seq": 720,
+          "title": {
+            "zh": "重放前已经采纳",
+            "en": "Accepted before replay"
+          },
+          "note": {
+            "zh": "主代理先改为 use，之后才发生重放。不能把这次改判归因于重复消息。",
+            "en": "The decision changes to use before the replay. The replay cannot be credited with this earlier change."
+          }
+        },
+        {
+          "seq": 722,
+          "title": {
+            "zh": "同一完成结果被重放",
+            "en": "Same completion replayed"
+          },
+          "note": {
+            "zh": "重放事实仍指向 completion-2，并链接原交付 occurrence；它不是新的子任务完成。",
+            "en": "The replay fact points to completion-2 and its original delivery occurrence, not a new child completion."
+          }
+        },
+        {
+          "seq": 754,
+          "title": {
+            "zh": "再次呈现",
+            "en": "Presented again"
+          },
+          "note": {
+            "zh": "completion-2 第二次呈现给主代理，使用新的呈现 occurrence。",
+            "en": "completion-2 is presented to the main agent a second time with a new presentation occurrence."
+          }
+        },
+        {
+          "seq": 800,
+          "title": {
+            "zh": "再次确认 use",
+            "en": "Acknowledged again"
+          },
+          "note": {
+            "zh": "主代理再次记录 use。重复确认已被观察到，但这条记录本身不能证明重复副作用。",
+            "en": "The main agent records use again. A repeated acknowledgment alone does not establish repeated side effects."
+          }
+        },
+        {
+          "seq": 817,
+          "title": {
+            "zh": "读取执行收据",
+            "en": "Inspect execution receipt"
+          },
+          "note": {
+            "zh": "日志记录读取 event_receipt.json 的命令；没有终端输出正文时，播放器不补造收据内容。",
+            "en": "The log records a command reading event_receipt.json. The player does not invent receipt contents where terminal output is absent."
+          }
+        },
+        {
+          "seq": 995,
+          "title": {
+            "zh": "运行结束",
+            "en": "Episode ends"
+          },
+          "note": {
+            "zh": "回放到归档运行结尾；这里不把运行状态转换为新的榜单分数。",
+            "en": "Replay reaches the archived endpoint without turning its status into a new leaderboard score."
+          }
+        }
+      ],
+      "source_sha256": "59b3a9cefc4f1a017319e54a7f57e36ddbf45bc8dee6e0ff1f3c72a9a50a4902",
+      "mode": "async",
+      "lanes": [
+        {
+          "id": "main",
+          "label": "Main agent"
+        },
+        {
+          "id": "delivery",
+          "label": "Result delivery"
+        },
+        {
+          "id": "child-1",
+          "label": "requirement_worker_01"
+        },
+        {
+          "id": "child-2",
+          "label": "requirement_worker_02"
+        },
+        {
+          "id": "child-3",
+          "label": "requirement_worker_03"
+        },
+        {
+          "id": "child-4",
+          "label": "requirement_worker_04"
+        }
+      ],
+      "source_event_count": 996,
+      "events": [
+        {
+          "seq": 292,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:292",
+          "elapsed_ms": 126203.0,
+          "type": "result_delivered",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-2",
+            "workstream_id": "requirement_worker_04",
+            "child_id": "child-4"
+          }
+        },
+        {
+          "seq": 317,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:317",
+          "elapsed_ms": 136688.0,
+          "type": "result_presented",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-2",
+            "delivery_occurrence_id": "occ-2"
+          }
+        },
+        {
+          "seq": 432,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:432",
+          "elapsed_ms": 192969.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "completion_id": "completion-2",
+            "tool": "acknowledge_result",
+            "decision": "reject",
+            "action_id": "main-action-21",
+            "kind": "acknowledge_result"
+          }
+        },
+        {
+          "seq": 720,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:720",
+          "elapsed_ms": 479469.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "completion_id": "completion-2",
+            "tool": "acknowledge_result",
+            "decision": "use",
+            "action_id": "main-action-63",
+            "kind": "acknowledge_result"
+          }
+        },
+        {
+          "seq": 722,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:722",
+          "elapsed_ms": 479469.0,
+          "type": "result_delivery_evaluator_fact",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-2",
+            "replayed": true,
+            "delivery_occurrence_id": "gateway-occ-5",
+            "replay_of_completion_id": "completion-2",
+            "replay_of_occurrence_id": "gateway-occ-2"
+          }
+        },
+        {
+          "seq": 754,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:754",
+          "elapsed_ms": 494656.0,
+          "type": "result_presented",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-2",
+            "delivery_occurrence_id": "occ-5"
+          }
+        },
+        {
+          "seq": 800,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:800",
+          "elapsed_ms": 529735.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "completion_id": "completion-2",
+            "tool": "acknowledge_result",
+            "decision": "use",
+            "action_id": "main-action-75",
+            "kind": "acknowledge_result"
+          }
+        },
+        {
+          "seq": 817,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:817",
+          "elapsed_ms": 541406.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "tool": "terminal",
+            "action_id": "main-action-77",
+            "kind": "terminal",
+            "command": "cat /app/output_data/event_receipt.json\necho \"---\"\nls -la /app/output_data"
+          }
+        },
+        {
+          "seq": 995,
+          "event_id": "mab-late-test-evidence-60efb2bdee-0-async-e255accb:995",
+          "elapsed_ms": 693875.0,
+          "type": "episode_ended",
+          "lane": "main",
+          "record": {
+            "local_status": "completed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "early-stop",
+      "title": {
+        "zh": "任务结束了，产物还没回来",
+        "en": "The run stops before the artifact arrives"
+      },
+      "description": {
+        "zh": "Qwen3.5 27B 收到第二个桶的验证报告时，对应规划子任务仍未完成。随后运行结束，规划子任务被关闭流程取消。",
+        "en": "Qwen3.5 27B receives bucket 2's validation report while its planning child is still unfinished. The run then ends and shutdown cancels that child."
+      },
+      "model": "qwen3.5-27b",
+      "episode_id": "scheduler-selective-replan-2-async-8bcd0aac",
+      "milestones": [
+        {
+          "seq": 229,
+          "title": {
+            "zh": "第一个规划结果到达",
+            "en": "First plan arrives"
+          },
+          "note": {
+            "zh": "bucket1_optimizer 返回 completion-1，另一个桶的规划仍在运行。",
+            "en": "bucket1_optimizer returns completion-1 while the other bucket's planner is still running."
+          }
+        },
+        {
+          "seq": 264,
+          "title": {
+            "zh": "转入第一个计划",
+            "en": "Promote the first plan"
+          },
+          "note": {
+            "zh": "这是文件转移请求；完成情况应查看后续 promotion/result 记录，不能只看调用。",
+            "en": "This is a file-promotion request. Its completion must be checked in the following promotion/result record."
+          }
+        },
+        {
+          "seq": 319,
+          "title": {
+            "zh": "保存首轮快照",
+            "en": "Save a first-pass snapshot"
+          },
+          "note": {
+            "zh": "主代理调用 cp 保存 plan_b1.jsonl 的首轮快照。",
+            "en": "The main agent invokes cp to preserve the first-pass plan_b1.jsonl snapshot."
+          }
+        },
+        {
+          "seq": 359,
+          "title": {
+            "zh": "验证报告先于计划呈现",
+            "en": "Validation precedes the plan"
+          },
+          "note": {
+            "zh": "completion-2 是 bucket2_validator 的报告，而不是 bucket2_optimizer 的规划文件。两个工作流不能混为一谈。",
+            "en": "completion-2 is the bucket2_validator report, not the bucket2_optimizer plan. These are separate workflows."
+          }
+        },
+        {
+          "seq": 367,
+          "title": {
+            "zh": "转入验证报告",
+            "en": "Promote the validation report"
+          },
+          "note": {
+            "zh": "转移目标是 validator_reports/bucket2.json。收到这份报告并不意味着 plan_b2.jsonl 已进入主工作区。",
+            "en": "The target is validator_reports/bucket2.json. Receiving that report does not mean plan_b2.jsonl is in the main workspace."
+          }
+        },
+        {
+          "seq": 428,
+          "title": {
+            "zh": "未完成的规划被取消",
+            "en": "Unfinished planner cancelled"
+          },
+          "note": {
+            "zh": "child-2 被 scaffold_shutdown 取消，原因是 episode ended。不是主代理主动发出的取消工具调用。",
+            "en": "scaffold_shutdown cancels child-2 because the episode ended. This is not an explicit cancellation tool call by the main agent."
+          }
+        },
+        {
+          "seq": 430,
+          "title": {
+            "zh": "结束状态：incomplete",
+            "en": "Endpoint: incomplete"
+          },
+          "note": {
+            "zh": "归档日志记录 local_status=incomplete；没有 finish 工具调用，不改写成显式 finish。",
+            "en": "The archived log records local_status=incomplete. There is no finish tool call; it is not relabeled as explicit finish."
+          }
+        }
+      ],
+      "source_sha256": "19852847c96c14a5c71c76c98870be0c492eaef6efd760b1dd2616891c1d6be9",
+      "mode": "async",
+      "lanes": [
+        {
+          "id": "main",
+          "label": "Main agent"
+        },
+        {
+          "id": "delivery",
+          "label": "Result delivery"
+        },
+        {
+          "id": "child-1",
+          "label": "bucket1_optimizer"
+        },
+        {
+          "id": "child-2",
+          "label": "bucket2_optimizer"
+        },
+        {
+          "id": "child-3",
+          "label": "global_shape_allocator"
+        },
+        {
+          "id": "child-4",
+          "label": "bucket1_validator"
+        },
+        {
+          "id": "child-5",
+          "label": "bucket2_validator"
+        }
+      ],
+      "source_event_count": 431,
+      "events": [
+        {
+          "seq": 10,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:10",
+          "elapsed_ms": 3094.0,
+          "type": "child_started",
+          "lane": "child-2",
+          "record": {
+            "child_id": "child-2"
+          }
+        },
+        {
+          "seq": 229,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:229",
+          "elapsed_ms": 78328.0,
+          "type": "result_delivered",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-1",
+            "workstream_id": "bucket1_optimizer",
+            "child_id": "child-1"
+          }
+        },
+        {
+          "seq": 264,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:264",
+          "elapsed_ms": 87250.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "completion_id": "completion-1",
+            "tool": "promote_child_path",
+            "source_path": "/app/task_file/output_data/plan_b1.jsonl",
+            "destination_path": "/app/task_file/output_data/plan_b1.jsonl",
+            "action_id": "main-action-3",
+            "kind": "promote_child_path"
+          }
+        },
+        {
+          "seq": 265,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:265",
+          "elapsed_ms": 87469.0,
+          "type": "child_path_promotion_result",
+          "lane": "main",
+          "record": {
+            "completion_id": "completion-1",
+            "success": false,
+            "exit_code": 1,
+            "child_id": "child-1",
+            "source_path": "/app/task_file/output_data/plan_b1.jsonl",
+            "destination_path": "/app/task_file/output_data/plan_b1.jsonl",
+            "action_id": "main-action-3"
+          }
+        },
+        {
+          "seq": 300,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:300",
+          "elapsed_ms": 99578.0,
+          "type": "child_path_promotion_result",
+          "lane": "main",
+          "record": {
+            "completion_id": "completion-1",
+            "success": true,
+            "exit_code": 0,
+            "child_id": "child-1",
+            "source_path": "/app/task_file/output_data/plan_b1.jsonl",
+            "destination_path": "/app/task_file/output_data/plan_b1.jsonl",
+            "action_id": "main-action-5"
+          }
+        },
+        {
+          "seq": 319,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:319",
+          "elapsed_ms": 104578.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "tool": "terminal",
+            "action_id": "main-action-6",
+            "kind": "terminal",
+            "command": "cp /app/task_file/output_data/plan_b1.jsonl /app/task_file/output_data/first_pass/plan_b1.jsonl"
+          }
+        },
+        {
+          "seq": 359,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:359",
+          "elapsed_ms": 120906.0,
+          "type": "result_presented",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-2",
+            "delivery_occurrence_id": "occ-2"
+          }
+        },
+        {
+          "seq": 367,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:367",
+          "elapsed_ms": 120906.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "completion_id": "completion-2",
+            "tool": "promote_child_path",
+            "source_path": "/app/task_file/output_data/validator_reports/bucket2.json",
+            "destination_path": "/app/task_file/output_data/validator_reports/bucket2.json",
+            "action_id": "main-action-9",
+            "kind": "promote_child_path"
+          }
+        },
+        {
+          "seq": 368,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:368",
+          "elapsed_ms": 121172.0,
+          "type": "child_path_promotion_result",
+          "lane": "main",
+          "record": {
+            "completion_id": "completion-2",
+            "success": true,
+            "exit_code": 0,
+            "child_id": "child-5",
+            "source_path": "/app/task_file/output_data/validator_reports/bucket2.json",
+            "destination_path": "/app/task_file/output_data/validator_reports/bucket2.json",
+            "action_id": "main-action-9"
+          }
+        },
+        {
+          "seq": 428,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:428",
+          "elapsed_ms": 170313.0,
+          "type": "child_cancelled",
+          "lane": "child-2",
+          "record": {
+            "initiated_by": "scaffold_shutdown",
+            "reason": "episode ended",
+            "child_id": "child-2"
+          }
+        },
+        {
+          "seq": 430,
+          "event_id": "scheduler-selective-replan-2-async-8bcd0aac:430",
+          "elapsed_ms": 172735.0,
+          "type": "episode_ended",
+          "lane": "main",
+          "record": {
+            "local_status": "incomplete"
+          }
+        }
+      ]
+    },
+    {
+      "id": "reconsider",
+      "title": {
+        "zh": "从拒绝，到采纳",
+        "en": "From reject to use"
+      },
+      "description": {
+        "zh": "同一完成结果的决策发生变化；这里不推断改判原因。",
+        "en": "The decision changes for the same completion; this excerpt does not establish why."
+      },
+      "model": "claude-sonnet-5",
+      "episode_id": "mab-dependency-unblock-940b9b95f0-2-async-1919e93a",
+      "milestones": [
+        {
+          "seq": 305,
+          "title": {
+            "zh": "结果到达",
+            "en": "Result arrives"
+          },
+          "note": {
+            "zh": "child-3 的 completion-4 被交付。",
+            "en": "completion-4 from child-3 is delivered."
+          }
+        },
+        {
+          "seq": 382,
+          "title": {
+            "zh": "拒绝",
+            "en": "Reject"
+          },
+          "note": {
+            "zh": "主代理对 completion-4 记录 reject。",
+            "en": "The main agent records reject for completion-4."
+          }
+        },
+        {
+          "seq": 684,
+          "title": {
+            "zh": "采纳",
+            "en": "Use"
+          },
+          "note": {
+            "zh": "同一 completion-4 后来记录 use；此处不推断改判原因。",
+            "en": "The same completion-4 later receives use; this record does not establish why."
+          }
+        }
+      ],
+      "source_sha256": "63dcdd3bd6a6ee9b501993116bb4dfbaac1332788dcc0b40717cc5d453cc14e9",
+      "mode": "async",
+      "lanes": [
+        {
+          "id": "main",
+          "label": "Main agent"
+        },
+        {
+          "id": "delivery",
+          "label": "Result delivery"
+        },
+        {
+          "id": "child-1",
+          "label": "requirement_worker_01"
+        },
+        {
+          "id": "child-2",
+          "label": "requirement_worker_02"
+        },
+        {
+          "id": "child-3",
+          "label": "requirement_worker_03"
+        },
+        {
+          "id": "child-4",
+          "label": "requirement_worker_04"
+        }
+      ],
+      "source_event_count": 745,
+      "events": [
+        {
+          "seq": 305,
+          "event_id": "mab-dependency-unblock-940b9b95f0-2-async-1919e93a:305",
+          "elapsed_ms": 88203.0,
+          "type": "result_delivered",
+          "lane": "delivery",
+          "record": {
+            "workstream_id": "requirement_worker_03",
+            "completion_id": "completion-4",
+            "child_id": "child-3"
+          }
+        },
+        {
+          "seq": 382,
+          "event_id": "mab-dependency-unblock-940b9b95f0-2-async-1919e93a:382",
+          "elapsed_ms": 188750.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "kind": "acknowledge_result",
+            "completion_id": "completion-4",
+            "decision": "reject",
+            "action_id": "main-action-18",
+            "tool": "acknowledge_result"
+          }
+        },
+        {
+          "seq": 684,
+          "event_id": "mab-dependency-unblock-940b9b95f0-2-async-1919e93a:684",
+          "elapsed_ms": 496985.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "kind": "acknowledge_result",
+            "completion_id": "completion-4",
+            "decision": "use",
+            "action_id": "main-action-55",
+            "tool": "acknowledge_result"
+          }
+        }
+      ]
+    },
+    {
+      "id": "defer",
+      "title": {
+        "zh": "先暂缓，再采纳",
+        "en": "Defer now, use later"
+      },
+      "description": {
+        "zh": "同一完成结果先被暂缓，随后被采纳。",
+        "en": "The same completion is deferred, then used."
+      },
+      "model": "claude-sonnet-5",
+      "episode_id": "mab-late-constraint-eb55acdb83-2-async-1919e93a",
+      "milestones": [
+        {
+          "seq": 146,
+          "title": {
+            "zh": "结果呈现",
+            "en": "Result shown"
+          },
+          "note": {
+            "zh": "completion-1 向主代理呈现。",
+            "en": "completion-1 is presented to the main agent."
+          }
+        },
+        {
+          "seq": 150,
+          "title": {
+            "zh": "暂缓",
+            "en": "Defer"
+          },
+          "note": {
+            "zh": "主代理暂缓处理 completion-1。",
+            "en": "The main agent defers completion-1."
+          }
+        },
+        {
+          "seq": 316,
+          "title": {
+            "zh": "采纳",
+            "en": "Use"
+          },
+          "note": {
+            "zh": "同一 completion-1 后来被采纳。",
+            "en": "The same completion-1 is later used."
+          }
+        }
+      ],
+      "source_sha256": "7391ef9f233fccb54ccdbde2f160c9c7247c62ae472a490a78295753f7f16db3",
+      "mode": "async",
+      "lanes": [
+        {
+          "id": "main",
+          "label": "Main agent"
+        },
+        {
+          "id": "delivery",
+          "label": "Result delivery"
+        },
+        {
+          "id": "child-1",
+          "label": "requirement_worker_01"
+        },
+        {
+          "id": "child-2",
+          "label": "requirement_worker_02"
+        },
+        {
+          "id": "child-3",
+          "label": "requirement_worker_03"
+        }
+      ],
+      "source_event_count": 511,
+      "events": [
+        {
+          "seq": 146,
+          "event_id": "mab-late-constraint-eb55acdb83-2-async-1919e93a:146",
+          "elapsed_ms": 53437.0,
+          "type": "result_presented",
+          "lane": "delivery",
+          "record": {
+            "completion_id": "completion-1",
+            "delivery_occurrence_id": "occ-1"
+          }
+        },
+        {
+          "seq": 150,
+          "event_id": "mab-late-constraint-eb55acdb83-2-async-1919e93a:150",
+          "elapsed_ms": 53437.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "kind": "acknowledge_result",
+            "completion_id": "completion-1",
+            "decision": "defer",
+            "action_id": "main-action-3",
+            "tool": "acknowledge_result"
+          }
+        },
+        {
+          "seq": 316,
+          "event_id": "mab-late-constraint-eb55acdb83-2-async-1919e93a:316",
+          "elapsed_ms": 286312.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "kind": "acknowledge_result",
+            "completion_id": "completion-1",
+            "decision": "use",
+            "action_id": "main-action-19",
+            "tool": "acknowledge_result"
+          }
+        }
+      ]
+    },
+    {
+      "id": "continue",
+      "title": {
+        "zh": "一个中断，另一个返回",
+        "en": "One stops. Another returns."
+      },
+      "description": {
+        "zh": "child-1 被基础设施取消；child-2 随后完成。这不是主代理主动取消的证据。",
+        "en": "Infrastructure cancels child-1; child-2 later completes. This is not evidence of agent-directed cancellation."
+      },
+      "model": "claude-sonnet-5",
+      "episode_id": "swe-late-test-evidence-cb3e057923-2-async-1919e93a",
+      "milestones": [
+        {
+          "seq": 387,
+          "title": {
+            "zh": "系统取消",
+            "en": "Cancelled"
+          },
+          "note": {
+            "zh": "child-1 被基础设施取消，不是主代理主动取消的证据。",
+            "en": "Infrastructure cancels child-1; this is not agent-directed cancellation."
+          }
+        },
+        {
+          "seq": 476,
+          "title": {
+            "zh": "另一子任务完成",
+            "en": "Another returns"
+          },
+          "note": {
+            "zh": "child-2 返回 completion-1。",
+            "en": "child-2 returns completion-1."
+          }
+        },
+        {
+          "seq": 505,
+          "title": {
+            "zh": "采纳结果",
+            "en": "Use result"
+          },
+          "note": {
+            "zh": "主代理采纳 completion-1；不代表整项任务成功。",
+            "en": "The main agent uses completion-1; this is not a whole-task success claim."
+          }
+        }
+      ],
+      "source_sha256": "d66db8839f5de5487dbad78e105f3acc0d3884632b307bb3790a715defadb47e",
+      "mode": "async",
+      "lanes": [
+        {
+          "id": "main",
+          "label": "Main agent"
+        },
+        {
+          "id": "delivery",
+          "label": "Result delivery"
+        },
+        {
+          "id": "child-1",
+          "label": "requirement_worker_01"
+        },
+        {
+          "id": "child-2",
+          "label": "requirement_worker_02"
+        },
+        {
+          "id": "child-3",
+          "label": "requirement_worker_03"
+        },
+        {
+          "id": "child-4",
+          "label": "requirement_worker_04"
+        }
+      ],
+      "source_event_count": 741,
+      "events": [
+        {
+          "seq": 387,
+          "event_id": "swe-late-test-evidence-cb3e057923-2-async-1919e93a:387",
+          "elapsed_ms": 90984.0,
+          "type": "child_cancelled",
+          "lane": "child-1",
+          "record": {
+            "initiated_by": "infrastructure",
+            "reason": "child failure: model API HTTP 429: {\"error\": {\"message\": \"Anthropic upstream HTTP 429\"}}",
+            "child_id": "child-1"
+          }
+        },
+        {
+          "seq": 476,
+          "event_id": "swe-late-test-evidence-cb3e057923-2-async-1919e93a:476",
+          "elapsed_ms": 204015.0,
+          "type": "child_completed",
+          "lane": "child-2",
+          "record": {
+            "completion_id": "completion-1",
+            "child_id": "child-2"
+          }
+        },
+        {
+          "seq": 505,
+          "event_id": "swe-late-test-evidence-cb3e057923-2-async-1919e93a:505",
+          "elapsed_ms": 221078.0,
+          "type": "main_action",
+          "lane": "main",
+          "record": {
+            "kind": "acknowledge_result",
+            "completion_id": "completion-1",
+            "decision": "use",
+            "action_id": "main-action-23",
+            "tool": "acknowledge_result"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+/* Local visitor-first prototype. Flat editorial layout; no decorative cards. */
+.usage-intro{padding:45px 0 38px}
+.usage-intro h1{font-size:38px;line-height:1.25;margin:0 0 20px;font-weight:600;text-wrap:balance}
+.usage-headline{font-size:26px;line-height:1.65;max-width:850px;margin:0 0 16px;font-weight:500;text-wrap:balance}
+.usage-description{font-size:17px;line-height:1.85;max-width:850px;margin:0}
+.usage-actions{display:flex;align-items:center;flex-wrap:wrap;gap:18px 27px;margin:25px 0 22px;font-size:15px}
+.usage-primary{display:inline-block;background:var(--text);color:var(--bg)!important;padding:9px 16px;border-radius:3px;text-decoration:none;line-height:1.6;font-size:15px}
+.usage-primary:hover{opacity:.86;text-decoration:none}
+.usage-primary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.usage-facts{font-size:14px;margin:0;color:var(--text)}
+.usage-section{margin:0;padding:32px 0;border-top:1px solid var(--border)}
+.usage-section h2,.usage-step h2{font-size:23px;font-weight:500;margin:0 0 15px;line-height:1.5}
+.usage-section h3,.usage-step h3{font-size:17px;font-weight:600;margin:20px 0 10px}
+.usage-section p{font-size:15px;line-height:1.85;margin:12px 0 17px}
+.usage-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:22px}
+.usage-section-head h2{margin:0}.usage-section-head>a{font-size:13px;white-space:nowrap}
+.usage-diagram{margin:0 auto;width:min(100%,900px,100svh);background:#fff}
+.usage-diagram>a{padding:0}.usage-diagram>a,.usage-diagram picture{display:block}.usage-diagram img{display:block;width:100%;height:auto}
+.usage-section .diagram-key{font-size:14px;margin:20px 0 0;max-width:920px;color:var(--text)}
+.usage-case-links{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px 25px;font-size:14px;margin-top:14px}.usage-case-links>span{font-weight:600}
+.usage-start{display:grid;grid-template-columns:1fr 1fr;gap:55px;padding-top:36px;padding-bottom:36px}
+.usage-start p{max-width:440px}.usage-start h3{margin-top:3px}.usage-start ul{margin:0 0 12px;padding-left:18px;font-size:15px;line-height:2}
+.usage-start>div+div{border-left:1px solid var(--border);padding-left:35px}
+.usage-metrics{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:32px;margin:25px 0 4px}
+.usage-metrics dt{font-size:18px;font-weight:600;margin:0 0 11px}.usage-metrics dd{margin:0;font-size:15px;line-height:1.85}
+.usage-explore{display:grid;grid-template-columns:1.3fr 1fr;gap:55px}.usage-explore a{font-size:15px}
+.usage-kicker{font-size:13px;letter-spacing:.4px;margin:0 0 13px;color:var(--muted)}
+.guide-intro h1{font-size:31px;margin-bottom:17px}.guide-intro{padding-bottom:24px}
+.usage-jump{display:flex;gap:14px 26px;flex-wrap:wrap;font-size:14px;margin:22px 0 0}
+.usage-requirements{display:flex;gap:10px 24px;flex-wrap:wrap;align-items:baseline;font-size:14px;padding:18px 0;border-block:1px solid var(--border)}
+.usage-requirements strong{font-weight:600}.usage-requirements span{font-size:13px}
+.usage-step{display:grid;grid-template-columns:54px minmax(0,1fr);gap:20px;padding:35px 0;border-bottom:1px solid var(--border)}
+.usage-step-no{font:24px/1.5 Arial,sans-serif;color:var(--muted);padding-top:1px}
+.usage-step p{font-size:15px;line-height:1.9;margin:13px 0;max-width:900px}
+.usage-step a{font-size:15px}.usage-step pre{margin:14px 0;padding:17px 19px;background:var(--soft);border:1px solid var(--border);border-radius:3px;font:13px/1.9 Consolas,'Courier New',monospace;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2;color:var(--text)}
+.usage-step pre code,.usage-expansion pre code{padding:0;background:none;font:inherit;color:inherit}
+.usage-step .shell-pair{display:grid;grid-template-columns:1fr 1fr;gap:22px}.shell-pair p{margin:0 0 6px;font-size:12px!important}.usage-step .shell-pair pre{margin:0}
+.usage-step details,.usage-section details{margin:20px 0 0;padding:14px 0 0;border-top:1px solid var(--border)}
+.usage-step summary,.usage-section summary{cursor:pointer;font-size:15px;font-weight:500;line-height:1.7;color:var(--text)}
+.usage-output{margin:20px 0}.usage-output>div{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:13px 0;border-block-end:1px solid var(--border)}
+.usage-output dt{font:14px/1.7 Consolas,monospace}.usage-output dd{font-size:15px;line-height:1.8;margin:0}
+.usage-section .usage-expansion{padding:18px 0 0;margin:0 0 18px}.usage-expansion pre{padding:17px 19px;background:var(--soft);border:1px solid var(--border);border-radius:3px;font:13px/1.9 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.usage-step+#scale{border-top:0}.usage-section .case-figure-link{font-size:15px}
+.usage-field-section{border-top:0;padding:18px 0 32px 74px}.usage-result-fields code,.usage-result-fields p{overflow-wrap:anywhere}.usage-result-fields h3{margin-top:0}.usage-result-fields .usage-output dd{line-height:2}
+@media(max-width:900px){.usage-start,.usage-explore{gap:30px}.usage-start>div+div{padding-left:25px}.usage-metrics{gap:24px}.usage-headline{font-size:24px}}
+@media(max-width:720px){.usage-field-section{padding-left:0}.usage-case-links{gap:12px 18px}.usage-case-links>span{flex-basis:100%}.usage-diagram img{aspect-ratio:auto!important}}
+@media(max-width:720px){.usage-intro{padding-top:28px}.usage-intro h1{font-size:31px;margin-bottom:17px}.usage-headline{font-size:22px;line-height:1.7}.usage-description{font-size:16px}.usage-actions{gap:17px 23px;margin-top:23px}.usage-section{padding:27px 0}.usage-section h2,.usage-step h2{font-size:21px}.usage-section-head{align-items:baseline;gap:10px}.usage-section-head>a{font-size:12px}.usage-diagram{width:100%;left:auto;transform:none}.usage-diagram img{aspect-ratio:480 / 1190}.usage-start,.usage-explore{grid-template-columns:1fr;gap:24px}.usage-start>div+div{padding-left:0;border-left:0;border-top:1px solid var(--border);padding-top:23px}.usage-metrics{grid-template-columns:1fr;gap:21px;margin-top:20px}.usage-metrics dt{font-size:17px;margin-bottom:5px}.usage-start p{max-width:none}.usage-section .diagram-key{font-size:14px;margin-top:17px}.guide-intro h1{font-size:27px}.usage-jump{gap:12px 19px}.usage-requirements{display:grid;grid-template-columns:1fr;gap:8px}.usage-step{grid-template-columns:1fr;gap:8px;padding:26px 0}.usage-step-no{font-size:20px}.usage-step .shell-pair{grid-template-columns:1fr;gap:13px}.usage-step pre,.usage-expansion pre{padding:14px;font-size:12px}.usage-output>div{grid-template-columns:1fr;gap:5px}.usage-output dd{font-size:14px}}

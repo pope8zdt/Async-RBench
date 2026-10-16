@@ -1,0 +1,476 @@
+{
+  "schema_version": 1,
+  "status": "paper_reported",
+  "scale": "DRS: 0-100; task success: percent; delta: percentage points; calls: mean responses per Async run",
+  "source": {
+    "title": "Async-RBench: Benchmarking Asynchronous Task Execution in LLM Agents",
+    "manuscript_snapshot": "2026-09-29 (version 26)",
+    "sha256": "a715e6f55535b2f8e50dc3c4c8d9284e745e214fc17f6f1cd535c2db626458d9",
+    "drs": "Table 3, page 7",
+    "task_success": "Table 4, page 8",
+    "validation": "Figure 3, page 7",
+    "full_rebuild": "Figure 6 and Section 4.5, page 9",
+    "note": "Transcribed paper aggregates, not recomputed from released traces or independently reproduced. Delta S is retained as reported: the paper calculates differences before rounding. The private manuscript PDF is not distributed by this website."
+  },
+  "protocol": {
+    "tasks": 200,
+    "agents": 9,
+    "modes": 2,
+    "repetitions": 3,
+    "episodes": 10800
+  },
+  "scenario_order": [
+    "delay",
+    "stale",
+    "conflict",
+    "replay",
+    "partial",
+    "failure",
+    "scope",
+    "straggler"
+  ],
+  "records": [
+    {
+      "id": "claude-sonnet-5",
+      "model": "Claude Sonnet 5",
+      "drs": 45.1,
+      "calls": 77.1,
+      "batched": 42.3,
+      "async": 38.2,
+      "delta": -4.2,
+      "scenarios": {
+        "delay": {
+          "mean": 38.7,
+          "sd": 1.8
+        },
+        "stale": {
+          "mean": 53.4,
+          "sd": 1.2
+        },
+        "conflict": {
+          "mean": 39.9,
+          "sd": 2.1
+        },
+        "replay": {
+          "mean": 15.5,
+          "sd": 1.2
+        },
+        "partial": {
+          "mean": 29.8,
+          "sd": 1.7
+        },
+        "failure": {
+          "mean": 35.8,
+          "sd": 1.3
+        },
+        "scope": {
+          "mean": 66.9,
+          "sd": 1.9
+        },
+        "straggler": {
+          "mean": 80.5,
+          "sd": 1.5
+        }
+      }
+    },
+    {
+      "id": "gpt-5.6-terra",
+      "model": "GPT-5.6 Terra",
+      "drs": 39.7,
+      "calls": 48.1,
+      "batched": 41.3,
+      "async": 38.8,
+      "delta": -2.5,
+      "scenarios": {
+        "delay": {
+          "mean": 34.2,
+          "sd": 1.5
+        },
+        "stale": {
+          "mean": 43.9,
+          "sd": 2.9
+        },
+        "conflict": {
+          "mean": 41.5,
+          "sd": 1.3
+        },
+        "replay": {
+          "mean": 18.5,
+          "sd": 1.6
+        },
+        "partial": {
+          "mean": 21.4,
+          "sd": 1.3
+        },
+        "failure": {
+          "mean": 16.2,
+          "sd": 1.9
+        },
+        "scope": {
+          "mean": 69.4,
+          "sd": 2.0
+        },
+        "straggler": {
+          "mean": 72.2,
+          "sd": 2.4
+        }
+      }
+    },
+    {
+      "id": "qwen3.7-plus",
+      "model": "Qwen3.7 Plus",
+      "drs": 38.2,
+      "calls": 75.9,
+      "batched": 21.3,
+      "async": 18.7,
+      "delta": -2.7,
+      "scenarios": {
+        "delay": {
+          "mean": 33.0,
+          "sd": 1.3
+        },
+        "stale": {
+          "mean": 45.5,
+          "sd": 2.9
+        },
+        "conflict": {
+          "mean": 38.8,
+          "sd": 1.5
+        },
+        "replay": {
+          "mean": 12.6,
+          "sd": 1.6
+        },
+        "partial": {
+          "mean": 21.2,
+          "sd": 2.4
+        },
+        "failure": {
+          "mean": 6.9,
+          "sd": 1.5
+        },
+        "scope": {
+          "mean": 61.8,
+          "sd": 2.4
+        },
+        "straggler": {
+          "mean": 85.9,
+          "sd": 2.6
+        }
+      }
+    },
+    {
+      "id": "glm-5.3-flash",
+      "model": "GLM5.3 Flash",
+      "drs": 33.4,
+      "calls": 76.5,
+      "batched": 25.5,
+      "async": 20.8,
+      "delta": -4.7,
+      "scenarios": {
+        "delay": {
+          "mean": 29.0,
+          "sd": 2.7
+        },
+        "stale": {
+          "mean": 47.8,
+          "sd": 2.2
+        },
+        "conflict": {
+          "mean": 27.0,
+          "sd": 2.3
+        },
+        "replay": {
+          "mean": 11.6,
+          "sd": 2.2
+        },
+        "partial": {
+          "mean": 31.2,
+          "sd": 2.1
+        },
+        "failure": {
+          "mean": 5.0,
+          "sd": 0.6
+        },
+        "scope": {
+          "mean": 53.5,
+          "sd": 2.4
+        },
+        "straggler": {
+          "mean": 62.3,
+          "sd": 1.4
+        }
+      }
+    },
+    {
+      "id": "gpt-5.6-luna",
+      "model": "GPT-5.6 Luna",
+      "drs": 31.1,
+      "calls": 45.5,
+      "batched": 40.2,
+      "async": 34.3,
+      "delta": -5.8,
+      "scenarios": {
+        "delay": {
+          "mean": 34.0,
+          "sd": 1.2
+        },
+        "stale": {
+          "mean": 47.8,
+          "sd": 1.2
+        },
+        "conflict": {
+          "mean": 31.7,
+          "sd": 1.4
+        },
+        "replay": {
+          "mean": 4.2,
+          "sd": 0.3
+        },
+        "partial": {
+          "mean": 22.2,
+          "sd": 1.2
+        },
+        "failure": {
+          "mean": 14.9,
+          "sd": 1.2
+        },
+        "scope": {
+          "mean": 43.8,
+          "sd": 1.3
+        },
+        "straggler": {
+          "mean": 50.5,
+          "sd": 2.2
+        }
+      }
+    },
+    {
+      "id": "deepseek-v4-pro",
+      "model": "DeepSeek V4 Pro",
+      "drs": 30.6,
+      "calls": 108.0,
+      "batched": 35.7,
+      "async": 34.7,
+      "delta": -1.0,
+      "scenarios": {
+        "delay": {
+          "mean": 16.2,
+          "sd": 1.6
+        },
+        "stale": {
+          "mean": 47.6,
+          "sd": 2.2
+        },
+        "conflict": {
+          "mean": 20.8,
+          "sd": 3.2
+        },
+        "replay": {
+          "mean": 2.7,
+          "sd": 0.7
+        },
+        "partial": {
+          "mean": 24.2,
+          "sd": 2.4
+        },
+        "failure": {
+          "mean": 16.8,
+          "sd": 2.8
+        },
+        "scope": {
+          "mean": 62.0,
+          "sd": 2.1
+        },
+        "straggler": {
+          "mean": 54.7,
+          "sd": 3.2
+        }
+      }
+    },
+    {
+      "id": "qwen3.5-27b",
+      "model": "Qwen3.5 27B",
+      "drs": 29.8,
+      "calls": 119.6,
+      "batched": 19.7,
+      "async": 17.0,
+      "delta": -2.7,
+      "scenarios": {
+        "delay": {
+          "mean": 28.7,
+          "sd": 1.4
+        },
+        "stale": {
+          "mean": 32.0,
+          "sd": 2.9
+        },
+        "conflict": {
+          "mean": 31.5,
+          "sd": 3.1
+        },
+        "replay": {
+          "mean": 6.1,
+          "sd": 0.2
+        },
+        "partial": {
+          "mean": 20.0,
+          "sd": 1.0
+        },
+        "failure": {
+          "mean": 4.2,
+          "sd": 0.2
+        },
+        "scope": {
+          "mean": 61.1,
+          "sd": 1.4
+        },
+        "straggler": {
+          "mean": 54.6,
+          "sd": 2.2
+        }
+      }
+    },
+    {
+      "id": "kimi-k2.5",
+      "model": "Kimi K2.5",
+      "drs": 26.1,
+      "calls": 125.2,
+      "batched": 23.2,
+      "async": 19.2,
+      "delta": -4.0,
+      "scenarios": {
+        "delay": {
+          "mean": 27.5,
+          "sd": 2.3
+        },
+        "stale": {
+          "mean": 30.0,
+          "sd": 1.9
+        },
+        "conflict": {
+          "mean": 20.4,
+          "sd": 1.3
+        },
+        "replay": {
+          "mean": 3.1,
+          "sd": 0.4
+        },
+        "partial": {
+          "mean": 12.9,
+          "sd": 1.3
+        },
+        "failure": {
+          "mean": 8.5,
+          "sd": 1.3
+        },
+        "scope": {
+          "mean": 51.4,
+          "sd": 1.2
+        },
+        "straggler": {
+          "mean": 55.3,
+          "sd": 2.3
+        }
+      }
+    },
+    {
+      "id": "gemini-3-flash-preview-thinking-high",
+      "model": "Gemini 3 Flash High",
+      "paper_label": "Gemini 3 Flash-H",
+      "drs": 19.2,
+      "calls": 95.0,
+      "batched": 18.3,
+      "async": 12.3,
+      "delta": -6.0,
+      "scenarios": {
+        "delay": {
+          "mean": 20.7,
+          "sd": 1.1
+        },
+        "stale": {
+          "mean": 13.8,
+          "sd": 0.4
+        },
+        "conflict": {
+          "mean": 29.3,
+          "sd": 1.3
+        },
+        "replay": {
+          "mean": 2.7,
+          "sd": 0.4
+        },
+        "partial": {
+          "mean": 8.5,
+          "sd": 1.1
+        },
+        "failure": {
+          "mean": 1.7,
+          "sd": 0.4
+        },
+        "scope": {
+          "mean": 47.2,
+          "sd": 2.4
+        },
+        "straggler": {
+          "mean": 29.9,
+          "sd": 2.3
+        }
+      }
+    }
+  ],
+  "mean": {
+    "drs": 32.6,
+    "calls": 85.7,
+    "batched": 29.7,
+    "async": 26.0,
+    "delta": -3.7,
+    "scenarios": {
+      "delay": 29.1,
+      "stale": 40.2,
+      "conflict": 31.2,
+      "replay": 8.6,
+      "partial": 21.3,
+      "failure": 12.2,
+      "scope": 57.5,
+      "straggler": 60.7
+    }
+  },
+  "validation": [
+    {
+      "model": "GPT-5.6 Terra",
+      "oracle": 98.8,
+      "native": 39.7,
+      "frozen": 16.1
+    },
+    {
+      "model": "GPT-5.6 Luna",
+      "oracle": 98.5,
+      "native": 31.1,
+      "frozen": 8.5
+    },
+    {
+      "model": "Gemini 3 Flash High",
+      "oracle": 96.4,
+      "native": 19.2,
+      "frozen": 3.7
+    }
+  ],
+  "full_rebuild": [
+    {
+      "model": "GPT-5.6 Terra",
+      "native": 39.7,
+      "full_rebuild": 42.3
+    },
+    {
+      "model": "GPT-5.6 Luna",
+      "native": 31.1,
+      "full_rebuild": 34.6
+    },
+    {
+      "model": "Gemini 3 Flash High",
+      "native": 19.2,
+      "full_rebuild": 21.9
+    }
+  ]
+}

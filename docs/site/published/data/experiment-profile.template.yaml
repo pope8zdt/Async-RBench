@@ -1,0 +1,37 @@
+# Async-RBench v11.0.0 model profile template.
+# Copy this file and replace every YOUR_* value. Keep the key itself in the
+# environment; only the environment-variable name belongs here.
+
+backend: openai_compatible
+api_url: https://YOUR_RELAY_HOST/v1/chat/completions
+api_key_env: YOUR_MODEL_API_KEY
+api_key_required: true
+main_model: YOUR_MAIN_MODEL_ID
+child_model: YOUR_CHILD_MODEL_ID
+
+temperature: null
+max_output_tokens: 16384
+max_tokens_parameter: max_tokens
+send_seed: false
+request_body_extra: {}
+
+# Fixed model-step horizons and the non-scoring emergency runaway fuse.
+
+max_main_steps: 100
+max_child_steps: 40
+max_concurrent_children: 3
+max_total_child_spawns: 5
+max_api_concurrency: 4
+emergency_total_token_cap: 5000000
+main_terminal_timeout_sec: 180
+child_terminal_timeout_sec: 180
+child_timeout_sec: 1200
+start_barrier_timeout_sec: 120
+live_cancellation_grace_sec: 60
+workspace_mode: container_clone
+keep_child_workspaces: false
+max_tool_output_chars: 20000
+request_timeout_sec: 600
+
+# Batch settings are launcher arguments, not model-profile fields:
+#   --repeat 3 --lanes 2 --jobs 30
