@@ -268,6 +268,8 @@ def cmd_aggregate(args) -> int:
         else root.parent / "manifest.json"
     )
     planned_episodes = None
+    if getattr(args, "manifest", None) and not manifest_path.is_file():
+        raise ValueError("aggregate manifest file is missing")
     if manifest_path.is_file():
         manifest_bytes = manifest_path.read_bytes()
         manifest = json.loads(manifest_bytes)
@@ -275,7 +277,7 @@ def cmd_aggregate(args) -> int:
         manifest_digest = hashlib.sha256(manifest_bytes).hexdigest()
         mismatched = [
             str(item.get("episode_id")) for item in records
-            if item.get("manifest_sha256") not in {None, manifest_digest}
+            if item.get("manifest_sha256") != manifest_digest
         ]
         if mismatched:
             raise ValueError(
@@ -315,9 +317,13 @@ def cmd_audit_run(args) -> int:
             if int(report["episode_count"]) > 0 else False
         ),
     }
-    manifest_path = root.parent / "manifest.json"
+    manifest_path = (
+        Path(args.manifest).resolve() if getattr(args, "manifest", None)
+        else root.parent / "manifest.json"
+    )
     if manifest_path.is_file():
-        manifest = json.loads(manifest_path.read_bytes())
+        manifest_bytes = manifest_path.read_bytes()
+        manifest = json.loads(manifest_bytes)
         planned_ids = {
             str(item["episode_id"]) for item in manifest.get("episodes") or []
             if item.get("episode_id") is not None
@@ -328,14 +334,27 @@ def cmd_audit_run(args) -> int:
         planned_case_ids = {
             str(item.get("case_id")) for item in manifest.get("episodes") or []
         }
-        gates["manifest_complete"] = bool(planned_ids) and planned_case_ids <= audited_case_ids
+        audited_ids = [item.get("episode_id") for item in report["resources"]["episodes"]]
+        gates["manifest_complete"] = (
+            bool(planned_ids) and len(planned_ids) == len(manifest.get("episodes") or [])
+            and len(audited_ids) == len(set(audited_ids))
+            and set(audited_ids) == planned_ids
+            and len(audited_ids) == int(report["episode_count"])
+        )
+        score_records = load_reports(root)
+        gates["manifest_digest_match"] = bool(score_records) and all(
+            item.get("manifest_sha256") == hashlib.sha256(manifest_bytes).hexdigest()
+            for item in score_records
+        )
         report["manifest_audit"] = {
             "planned_episode_count": len(planned_ids),
             "observed_episode_count": int(report["episode_count"]),
             "missing_case_ids": sorted(planned_case_ids - audited_case_ids),
+            "missing_episode_ids": sorted(planned_ids - set(audited_ids)),
+            "unexpected_episode_ids": sorted(str(value) for value in set(audited_ids) - planned_ids),
         }
     else:
-        gates["manifest_complete"] = None  # no manifest bound to this run root
+        gates["manifest_complete"] = False  # unbound diagnostics cannot certify a run
     # Task 10: surface every audit hard-fail reason as an explicit pass-gate so
     # audit-run exits nonzero when the contract fixtures fail, a submission-stage
     # validator hides a private constraint, a private-only rejection reached the
@@ -709,6 +728,7 @@ def build_parser() -> argparse.ArgumentParser:
     aggregate.set_defaults(func=cmd_aggregate)
     audit = sub.add_parser("audit-run")
     audit.add_argument("--root", required=True, help="Directory containing episode score/event-source files")
+    audit.add_argument("--manifest", help="Exact run manifest; defaults to the run root's parent manifest.json")
     audit.add_argument("--output", required=True, help="Path for the machine-readable audit report")
     audit.add_argument("--judge-root", required=True, help="Explicit external judge for public/private contract audit")
     audit.set_defaults(func=cmd_audit_run)

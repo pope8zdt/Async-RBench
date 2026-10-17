@@ -1157,8 +1157,12 @@ def aggregate_reports(
     if len(policies) > 1:
         raise ValueError("mixed scoring policies cannot share a headline; aggregate each policy separately")
     if policies == {SCORE_POLICY_VERSION}:
-        if any(item.get("base_task_score") not in (None, 0, 1) for item in records):
+        if any(isinstance(item.get("base_task_score"), bool) or item.get("base_task_score") not in (None, 0, 1) for item in records):
             raise ValueError("current-policy task success must be a binary per-run outcome")
+        for item in records:
+            value = item.get("async_drs")
+            if value is not None and (type(value) not in (int, float) or not 0 <= value <= 1):
+                raise ValueError("current-policy DRS must be a finite number between 0 and 1")
     else:
         # Retain historical diagnostic scores, but do not reinterpret fractional
         # task checks or delivery-only DRS as the repaired paper metrics.
@@ -1223,6 +1227,18 @@ def aggregate_reports(
     # 200-task registry, so calibration/development/test are organizational
     # labels rather than leaderboard-exclusion labels.
     hard_fail_reasons: list[str] = []
+    episode_ids = [item.get("episode_id") for item in records]
+    if len(episode_ids) != len(set(episode_ids)):
+        hard_fail_reasons.append("duplicate_episode_ids")
+    if any(not isinstance(value, str) or not value.strip() for value in episode_ids):
+        hard_fail_reasons.append("missing_episode_identity")
+    if planned_episodes is not None:
+        if not planned_ids or len(planned_ids) != len(planned):
+            hard_fail_reasons.append("invalid_manifest_episode_ids")
+        if observed_ids - planned_ids:
+            hard_fail_reasons.append("unexpected_episodes")
+    if any(item.get("conformance_passed") is not True for item in official):
+        hard_fail_reasons.append("official_conformance_failed")
     if missing_episode_ids:
         hard_fail_reasons.append("missing_episodes")
     if official_comparability is False:
@@ -1293,7 +1309,7 @@ def aggregate_reports(
 
     return {
         "architecture_version": "8.0",
-        "leaderboard": [
+        "leaderboard": [] if hard_fail_reasons else [
             {
                 "guidance": guidance,
                 "model": model,

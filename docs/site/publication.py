@@ -15,6 +15,9 @@ import re
 import shutil
 from urllib.parse import unquote, urlsplit
 
+from async_rbench.submissions.artifacts import strict_json
+from async_rbench.submissions.publication import validate_public_board
+
 SITE = Path(__file__).resolve().parent
 TEXT_EXTENSIONS = {'.html', '.css', '.mjs', '.svg', '.json', '.yaml', '.csv', '.cff', '.md', '.txt'}
 ALLOWED_EXTENSIONS = TEXT_EXTENSIONS | {'.png', '.pdf', '.woff2'}
@@ -183,9 +186,23 @@ def build(source: Path, output: Path, base: str) -> dict:
         target = output / file.relative_to(source)
         target.parent.mkdir(parents=True, exist_ok=True)
         if file.suffix in {'.html', '.css', '.mjs'}:
-            target.write_text(prefix_paths(file.read_text(encoding='utf-8'), base), encoding='utf-8')
+            content = file.read_text(encoding='utf-8')
+            if file.relative_to(source).as_posix() == 'benchmark/index.html':
+                ui = SITE.parent / 'submissions/ui'
+                section = (ui/'github-section.html').read_text(encoding='utf-8').replace(
+                    'data-github-submission-root', 'data-github-submission-root data-static-mode="true" data-community-url="/data/community.json"')
+                content = content.replace('href="#sharing"', 'href="#participate"')
+                content = content.replace('</main>', section + '</main>')
+                content = content.replace('</head>', '<link rel="stylesheet" href="/assets/submissions/github-style.css"><script type="module" src="/assets/submissions/github-app.mjs"></script></head>')
+            target.write_text(prefix_paths(content, base), encoding='utf-8')
         else:
             shutil.copyfile(file, target)
+    assets = output/'assets/submissions'
+    assets.mkdir(parents=True, exist_ok=True)
+    for name in ('github-app.mjs', 'github-static.mjs', 'github-style.css'):
+        shutil.copyfile(SITE.parent/'submissions/ui'/name, assets/name)
+    board = validate_public_board(strict_json((SITE.parent/'submissions/community.json').read_bytes()))
+    (output/'data/community.json').write_text(json.dumps(board, ensure_ascii=False, allow_nan=False, indent=2) + '\n', encoding='utf-8')
     return validate_site(output, base)
 
 

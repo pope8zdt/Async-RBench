@@ -66,6 +66,14 @@ class PublicationTests(unittest.TestCase):
             self.assertNotIn('Local preview', page)
             self.assertNotIn('Put your agent to the test.', page)
             self.assertIn('Run an evaluation', page)
+            self.assertIn('data-github-submission-root', page)
+            self.assertIn('data-static-mode="true"', page)
+            self.assertIn('data-community-url="/Async-RBench/data/community.json"', page)
+            self.assertIn('href="#participate"', page)
+            for name in ('github-app.mjs', 'github-static.mjs', 'github-style.css'):
+                self.assertTrue((output/'assets/submissions'/name).is_file())
+            board = json.loads((output/'data/community.json').read_text(encoding='utf-8'))
+            self.assertEqual(board, {'schema': 'async-rbench-community-board-1', 'entries': []})
 
     def test_build_never_overwrites_existing_content(self):
         with tempfile.TemporaryDirectory() as directory:

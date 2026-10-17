@@ -1,0 +1,22 @@
+<section id="participate" class="research-chapter" data-submission-root aria-labelledby="submission-heading">
+  <div class="page-heading">
+    <h2 id="submission-heading"><span class="i18n" lang="zh">提交结果</span><span class="i18n" lang="en">Submit Results</span></h2>
+  </div>
+  <p class="submission-notice"><span class="i18n" lang="zh">本地模拟，社区结果与论文榜单独立。</span><span class="i18n" lang="en">Local simulation. Community results stay separate from the paper leaderboard.</span></p>
+  <div class="submission-toolbar">
+    <nav aria-label="Submission workflow">
+      <button type="button" data-view="submit" aria-current="page"><span class="i18n" lang="zh">提交</span><span class="i18n" lang="en">Submit</span></button>
+      <button type="button" data-view="review"><span class="i18n" lang="zh">审核</span><span class="i18n" lang="en">Review</span></button>
+      <button type="button" data-view="community"><span class="i18n" lang="zh">社区结果</span><span class="i18n" lang="en">Community</span></button>
+    </nav>
+    <label class="submission-identity"><span id="submission-identity-label"><span class="i18n" lang="zh">模拟身份</span><span class="i18n" lang="en">Demo identity</span></span><select id="submission-identity" aria-labelledby="submission-identity-label">
+      <option value="" disabled data-zh="选择身份" data-en="Choose identity">Choose identity</option>
+      <option value="participant" data-zh="参评者" data-en="Participant">Participant</option>
+      <option value="other-participant" data-zh="另一位参评者" data-en="Another participant">Another participant</option>
+      <option value="maintainer" data-zh="维护者" data-en="Maintainer">Maintainer</option>
+    </select></label>
+  </div>
+  <div id="submission-message" role="status" aria-live="polite"></div>
+  <div id="submission-app" aria-busy="true"></div>
+  <noscript>Please enable JavaScript to use the local submission preview.</noscript>
+</section>

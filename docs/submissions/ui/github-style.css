@@ -1,0 +1,55 @@
+/* Editorial, public-only contribution section. The paper site is untouched. */
+#participate {scroll-margin-top:110px;--contribution-accent:var(--accent,#285b4b)}
+#participate .page-heading {text-align:center}
+#participate :is(button,input,textarea) {font:inherit;color:inherit}
+#participate :is(button,a,input,summary):focus-visible {outline:2px solid var(--contribution-accent);outline-offset:5px}
+#participate .contribution-tabs {display:flex;gap:36px;border-bottom:1px solid var(--border);margin:0 0 38px}
+#participate button {cursor:pointer;background:none;border:0;padding:12px 0;line-height:1.5}
+#participate .contribution-tabs button {font-size:22px;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px}
+#participate .contribution-tabs [aria-current=page] {border-color:currentColor;color:var(--contribution-accent)}
+#participate h3 {font:400 clamp(26px,2.2vw,34px)/1.3 var(--reading-font);margin:0 0 18px;letter-spacing:-.02em}
+#participate p {font-size:20px;line-height:1.6;margin:0 0 24px}
+#participate a {color:var(--contribution-accent);text-decoration:none}
+#participate a:hover {text-decoration:underline}
+#participate .contribution-layout {display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+#participate .receipt-picker {display:inline-flex;align-items:center;justify-content:center;position:relative;padding:12px 28px;background:var(--contribution-accent);color:var(--surface,#fff);border:1px solid var(--contribution-accent);border-radius:4px;font-size:20px;cursor:pointer;line-height:1.5}
+#participate .receipt-picker input {position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+#participate .receipt-picker:focus-within {outline:2px solid var(--contribution-accent);outline-offset:5px}
+#participate .contribution-info {border-left:1px solid var(--border);padding:2px 0 0 38px}
+#participate .contribution-info p {font-size:20px;max-width:26ch}
+#participate .contribution-info strong {font-weight:400;color:var(--contribution-accent)}
+#participate .receipt-name {font-size:18px;overflow-wrap:anywhere;margin:16px 0 0}
+#participate details {border:0;border-top:1px solid var(--border);border-radius:0;background:none;box-shadow:none;margin:28px 0 0;padding:0}
+#participate summary {padding:20px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:20px}
+#participate summary::-webkit-details-marker {display:none}
+#participate summary::after {content:'';height:7px;width:7px;border-bottom:1px solid;border-right:1px solid;transform:rotate(45deg);margin:0 5px 5px 20px}
+#participate details[open]>summary::after {transform:rotate(225deg)}
+#participate pre {font:15px/1.75 ui-monospace,Consolas,monospace;padding:20px;background:var(--edition-wash,var(--surface));overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;border:0;border-radius:0;margin:0 0 20px}
+#participate .receipt-summary {margin:0 0 26px}
+#participate .receipt-summary>div {display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;padding:9px 0;border-bottom:1px solid var(--border);font-size:20px}
+#participate dt {color:var(--contribution-accent)}
+#participate dd {margin:0;overflow-wrap:anywhere}
+#participate .public-consent {display:flex;align-items:flex-start;gap:12px;font-size:18px;line-height:1.55;margin:22px 0}
+#participate .public-consent input {accent-color:var(--contribution-accent);margin:5px 0 0;width:18px;height:18px;flex:none}
+#participate .github-link {display:inline-flex;align-items:center;gap:22px;padding:12px 24px;border:1px solid var(--contribution-accent);border-radius:4px;font-size:20px;background:var(--contribution-accent);color:var(--surface,#fff)}
+#participate .github-link[aria-disabled=true] {opacity:.45;cursor:not-allowed}
+#participate .github-link:not([aria-disabled=true]):hover {filter:brightness(1.12);text-decoration:none}
+#participate #contribution-message:empty {display:none}
+#participate #contribution-message {font-size:19px;line-height:1.55;border-left:2px solid var(--contribution-accent);padding:10px 18px;margin:0 0 26px}
+#participate #contribution-message.error {border-color:#b04c3d}
+#participate .community-empty {padding:16px 0 34px}
+#participate .community-table {overflow:auto}
+#participate table {border-collapse:collapse;width:100%;background:transparent}
+#participate :is(th,td) {padding:20px 16px;border-bottom:1px solid var(--border);text-align:left;font-size:19px}
+#participate th {font-weight:400;color:var(--contribution-accent)}
+#participate :is(th,td):first-child {padding-left:0}
+#participate :is(th,td):last-child {padding-right:0;text-align:right}
+#participate .community-score {font-size:28px;font-variant-numeric:tabular-nums}
+#participate .community-footer {margin-top:26px}
+@media(max-width:760px) {
+  #participate .contribution-layout {grid-template-columns:minmax(0,1fr);gap:28px}
+  #participate .contribution-info {border-left:0;border-top:1px solid var(--border);padding:24px 0 0}
+  #participate .contribution-info p {max-width:none}
+  #participate .contribution-tabs {margin-bottom:28px}
+  #participate .receipt-summary>div {grid-template-columns:90px minmax(0,1fr);font-size:18px}
+}

@@ -1,0 +1,96 @@
+/* Scoped to the local submission section; the paper site keeps its own styles. */
+#participate {--submission-accent:var(--accent,#285b4b);scroll-margin-top:110px}
+#participate .page-heading {text-align:center}
+#participate .submission-notice {text-align:center;color:var(--muted);font-size:16px;margin:0 0 36px}
+#participate .submission-toolbar {display:flex;justify-content:space-between;align-items:center;gap:24px;border-bottom:1px solid var(--border);margin-bottom:28px}
+#participate .submission-toolbar nav {display:flex;gap:28px;align-self:stretch;margin:0}
+#participate button,#participate input,#participate select,#participate textarea {font:inherit;color:inherit}
+#participate button {border:1px solid var(--border);border-radius:4px;background:transparent;padding:9px 17px;cursor:pointer;box-shadow:none;line-height:1.5}
+#participate button:hover {background:var(--edition-wash,var(--surface))}
+#participate button:disabled {opacity:.45;cursor:not-allowed}
+#participate :is(button,a,input,select,textarea,summary):focus-visible {outline:2px solid var(--submission-accent);outline-offset:4px}
+#participate .submission-toolbar button {padding:15px 0;border:0;border-bottom:2px solid transparent;border-radius:0;font-size:20px}
+#participate .submission-toolbar button[aria-current=page] {color:var(--submission-accent);border-bottom-color:currentColor}
+#participate .submission-identity {display:flex;align-items:center;gap:12px;font-size:16px;color:var(--muted)}
+#participate select {border:1px solid var(--border);border-radius:4px;background:var(--surface);padding:7px 28px 7px 10px;max-width:100%}
+#participate #submission-message:empty {display:none}
+#participate #submission-message {margin:0 0 20px;padding:10px 14px;border-left:2px solid var(--submission-accent);background:var(--edition-wash);font-size:16px}
+#participate #submission-message.error {border-color:#b35340}
+#participate #submission-app {scroll-margin-top:110px;min-height:180px}
+#participate h3 {font:400 26px/1.3 var(--reading-font);margin:0 0 12px;letter-spacing:-.02em}
+#participate h4 {font:400 21px/1.4 var(--reading-font);margin:0 0 16px}
+#participate p {margin:12px 0}
+#participate .muted {color:var(--muted)}
+#participate .small {font-size:16px}
+#participate .package-row {display:flex;align-items:center;justify-content:space-between;gap:24px;padding:12px 0 28px}
+#participate .package-row h3 {margin:0}
+#participate .actions {display:flex;align-items:center;gap:12px 22px;flex-wrap:wrap}
+#participate a {color:var(--submission-accent);text-decoration:none}
+#participate a:hover {text-decoration:underline}
+#participate .text-button {border:0;padding:8px 0;color:var(--submission-accent)}
+#participate .primary {background:var(--submission-accent);color:var(--surface);border-color:var(--submission-accent)}
+#participate .primary:hover {filter:brightness(1.12);background:var(--submission-accent)}
+#participate .upload {display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:4px;padding:9px 17px;cursor:pointer;position:relative}
+#participate .upload input {position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+#participate .upload:focus-within {outline:2px solid var(--submission-accent);outline-offset:4px}
+#participate .upload:hover {background:var(--edition-wash)}
+#participate .validation {border-top:1px solid var(--border);padding:24px 0;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+#participate .validation h4 {margin:0 0 8px}
+#participate .metrics {display:flex;gap:30px;margin:18px 0}
+#participate .metrics>div {display:flex;flex-direction:column;gap:4px}
+#participate .metrics strong {font:400 29px/1.2 var(--reading-font);font-variant-numeric:tabular-nums}
+#participate .metrics span {font-size:16px;color:var(--muted)}
+#participate details {border:0;border-top:1px solid var(--border);margin:12px 0 0;padding:0;border-radius:0;background:transparent;box-shadow:none}
+#participate summary {padding:18px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none}
+#participate summary::-webkit-details-marker {display:none}
+#participate summary::after {content:'';width:7px;height:7px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);margin:0 4px 4px 14px;flex:none}
+#participate details[open]>summary::after {transform:rotate(225deg);margin-bottom:0}
+#participate .entry {display:flex;align-items:center;gap:24px;padding:20px 0;border-top:1px solid var(--border)}
+#participate .entry:first-child {border-top:0}
+#participate .entry-main {flex:1;min-width:0}
+#participate .entry h4,#participate .entry p {margin:0}
+#participate .status {font-size:16px;color:var(--muted);white-space:nowrap}
+#participate .status.approved,#participate .success {color:var(--submission-accent)}
+#participate .status.rejected,#participate .status.withdrawn,#participate .danger {color:#a84e40}
+#participate .empty {padding:28px 0;color:var(--muted)}
+#participate .details-head {display:flex;align-items:center;gap:24px;justify-content:space-between;margin-bottom:22px}
+#participate .details-head h3 {margin:0}
+#participate .split {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
+#participate .meta {margin:0 0 22px}
+#participate .meta>div {display:grid;grid-template-columns:130px minmax(0,1fr);gap:18px;padding:6px 0;font-size:16px}
+#participate dt {color:var(--muted)}
+#participate dd {margin:0;overflow-wrap:anywhere}
+#participate .hash {overflow-wrap:anywhere;font:14px/1.6 ui-monospace,Consolas,monospace;color:var(--muted)}
+#participate .evidence-select {width:100%;font-size:16px}
+#participate .timeline {display:flex;flex-wrap:wrap;gap:14px 28px;padding:0;list-style:none;margin:24px 0;font-size:16px}
+#participate .timeline li:not(:last-child)::after {content:'→';margin-left:20px;color:var(--muted)}
+#participate .checklist {display:grid;gap:12px;margin:18px 0 24px}
+#participate .checklist label {display:flex;align-items:flex-start;gap:10px;font-size:16px}
+#participate input[type=checkbox] {accent-color:var(--submission-accent);width:17px;height:17px;flex:none;margin-top:5px}
+#participate textarea {display:block;box-sizing:border-box;width:100%;min-height:90px;resize:vertical;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:12px;margin:10px 0 16px;font-size:16px}
+#participate .review-note {border-left:2px solid var(--border);padding-left:18px;margin-bottom:24px}
+#participate .review-note p {overflow-wrap:anywhere}
+#participate .history {padding-left:20px;font-size:16px}
+#participate .history li {padding-bottom:16px}
+#participate .history time {display:block;color:var(--muted)}
+#participate .table-wrap {overflow:auto}
+#participate table {width:100%;border-collapse:collapse;background:transparent}
+#participate th {font-size:16px;font-weight:400;color:var(--muted);text-align:left}
+#participate td,#participate th {padding:18px 10px;border-bottom:1px solid var(--border)}
+#participate td:first-child,#participate th:first-child {padding-left:0}
+#participate td:last-child,#participate th:last-child {padding-right:0;text-align:right}
+#participate td h4 {margin:0}
+#participate .score {font-size:28px;font-variant-numeric:tabular-nums}
+#participate .errors {padding-left:20px;max-height:240px;overflow:auto;color:#a84e40;font-size:16px}
+#participate .back-row {margin-top:26px}
+@media(max-width:760px) {
+  #participate .submission-toolbar {align-items:flex-start;flex-direction:column;gap:14px;padding-bottom:18px}
+  #participate .submission-toolbar nav {gap:26px}
+  #participate .submission-toolbar button {font-size:18px}
+  #participate .package-row {align-items:flex-start;flex-direction:column}
+  #participate .split {grid-template-columns:1fr;gap:24px}
+  #participate .entry {flex-wrap:wrap;gap:12px}
+  #participate .entry-main {flex-basis:65%}
+  #participate .metrics {gap:24px}
+  #participate .meta>div {grid-template-columns:100px minmax(0,1fr)}
+}
