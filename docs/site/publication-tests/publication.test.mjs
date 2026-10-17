@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
+import {readdir} from 'node:fs/promises';
+import {runInNewContext} from 'node:vm';
 import {loadArchive} from '../published/assets/evidence-loader.mjs';
 import {defaultEvents,keyEvents,readEvidenceLocation} from '../published/assets/evidence-state.mjs';
 import {focusEvidence,recordPreview} from '../published/assets/evidence-view.mjs';
@@ -9,6 +11,49 @@ import {legacyDestination} from '../published/entry-route.mjs';
 import {isFigureLink} from '../published/figure-viewer.mjs';
 
 const archive = JSON.parse(await readFile(new URL('../published/data/trajectories.public.json', import.meta.url)));
+
+async function htmlPages(directory) {
+  const pages = [];
+  for (const item of await readdir(directory, {withFileTypes:true})) {
+    const path = new URL(item.name + (item.isDirectory() ? '/' : ''), directory);
+    if (item.isDirectory()) pages.push(...await htmlPages(path));
+    else if (item.name.endsWith('.html')) pages.push(path);
+  }
+  return pages;
+}
+
+test('every page starts in English even with an old Chinese preference or blocked storage', async () => {
+  for (const path of await htmlPages(new URL('../published/', import.meta.url))) {
+    const html = await readFile(path, 'utf8');
+    const head = html.split('</head>')[0];
+    const scripts = [...head.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)]
+      .filter(([,attrs]) => !/\bsrc=/.test(attrs) && !attrs.includes('application/json'));
+    for (const blocked of [false, true]) {
+      const root = {lang:html.match(/<html[^>]*lang="([^"]+)"/)[1],dataset:{}};
+      const context = {document:{documentElement:root}, matchMedia:()=>({matches:false}),
+        localStorage:{getItem:()=>{if (blocked) throw new Error('storage unavailable'); return '{"language":"zh","theme":"dark"}';}}};
+      for (const [,,script] of scripts) runInNewContext(script,context);
+      assert.equal(root.lang,'en',`${path.pathname}; blocked storage=${blocked}`);
+      if (!blocked && !['/index.html','/entry/index.html'].some(suffix=>path.pathname.endsWith('/published'+suffix))) {
+        assert.equal(root.dataset.theme,'dark',`${path.pathname}: preserve the saved theme`);
+      }
+    }
+  }
+});
+
+test('cover routing does not overwrite the English initializer with a saved language', async t => {
+  const root = {lang:'en'};
+  for (const [name,value] of Object.entries({document:{documentElement:root},
+    localStorage:{getItem:()=>'{"language":"zh"}'},
+    location:{href:'https://example.org/',replace:()=>assert.fail('unexpected redirect')},
+  })) {
+    const prior=Object.getOwnPropertyDescriptor(globalThis,name);
+    Object.defineProperty(globalThis,name,{value,configurable:true});
+    t.after(()=>prior?Object.defineProperty(globalThis,name,prior):delete globalThis[name]);
+  }
+  await import('../published/entry-route.mjs?language-default-test');
+  assert.equal(root.lang,'en');
+});
 
 test('figure zoom works under the deployed project path', () => {
   assert.equal(isFigureLink('/assets/getting-started-en.svg?v=1'),true);
