@@ -42,8 +42,17 @@ labels. `publication_views.py` fills the marked placeholders from the protected
 public data at build time; do not hand-edit leaderboard numbers in HTML.
 Preserve pause controls, reduced-motion styles and keyboard access.
 Evaluation instructions live in the repository, not in a homepage wizard.
-After editing, run both test suites and inspect
-desktop and mobile views before publishing. Pages deploys only after validation.
+After editing, run both test suites and inspect desktop views before publishing.
+The owner requests desktop-only visual work; retain existing small-screen rules
+without extending that scope. Pages deploys only after validation.
+
+For desktop typography checks, compare the framework, chart and guide subheadings,
+the two charts' count labels, and the guide's step/prose left edges in both
+languages. The guide uses the homepage's outer frame and a narrower reading column;
+keep its prose aligned with step text rather than the step numbers.
+Desktop Tasks charts reuse the experiment figures' teal, coral and slate-blue
+fills. Keep labels in the site's text color and retain explicit counts and
+category names, so color is not the only way to read the charts.
 
 The October 19 editorial pass makes framework explanations visible, combines the
 paper metrics into one table, replaces scrolling dataset badges with distribution

@@ -15,3 +15,20 @@ main{max-width:1160px;margin:auto;padding:0 42px}.intro{text-align:center;paddin
 @media(max-width:620px){.task-chart-grid{grid-template-columns:1fr;gap:30px;margin-bottom:32px}.task-chart figcaption{font-size:20px;margin-bottom:16px}.difficulty-body{min-height:160px;gap:22px}.difficulty-ring{width:clamp(120px,35vw,150px);height:clamp(120px,35vw,150px)}.difficulty-ring>div{width:75%;height:75%}.difficulty-legend{max-width:160px}.scenario-summary dl{grid-template-columns:1fr}.scenario-heading h3{font-size:20px}.scenario-summary dl>div{font-size:16px}}
 .submission-guide{max-width:1040px}.submission-guide .browser-heading{text-align:center}.submission-guide .browser-heading>p{max-width:720px;margin-inline:auto}.submission-guide .hero-links{display:flex;justify-content:center;align-items:center;gap:24px;flex-wrap:wrap;margin:30px 0 20px}.submission-guide .prose{margin-top:0}.guide-steps{padding:0;margin:0;list-style:none;counter-reset:guide}.guide-steps li{position:relative;padding:24px 0 24px 52px;border-top:1px solid var(--rule);counter-increment:guide}.guide-steps li:first-child{border-top:0;padding-top:0}.guide-steps li:before{content:counter(guide,decimal-leading-zero);position:absolute;left:0;color:var(--accent);font-size:22px;line-height:1.4}.guide-steps h3{margin:0 0 12px}.guide-steps p{line-height:1.8;margin:0}.guide-steps strong{font-weight:600}
 @media(max-width:950px){#records{scroll-margin-top:125px}}
+/* Desktop editorial rhythm shared by the overview and submission guide. */
+@media(min-width:951px){
+  /* Match the paper's experiment-figure fills; keep text in the site ink. */
+  .task-chart-grid,:root[data-theme=dark] .task-chart-grid{--chart-ink:#79b7a6;--chart-soft:#e89575;--chart-bar:#a1acc9}
+  .subtask-bar{background:var(--chart-bar)}
+  #framework-explanation h3,.task-chart figcaption,.scenario-heading h3,.guide-steps h3{font-size:23px;line-height:1.4;letter-spacing:-.025em}
+  #framework-explanation h3{margin:0 0 16px}
+  #framework-explanation p:last-child,.submission-guide .prose p:last-child{margin-bottom:0}
+  .difficulty-body{min-height:224px}
+  .difficulty-legend dd,.subtask-value{font-size:20px;line-height:1.4}
+  .submission-guide{max-width:1160px}
+  .submission-guide .guide-steps{max-width:920px;margin-inline:auto}
+  .submission-guide .prose{padding-left:52px}
+  .submission-guide .prose+.guide-steps{margin-top:24px}
+  .submission-guide #submission-controls>p{max-width:720px;margin:0 auto;line-height:1.8}
+  .guide-steps li:before{font-size:23px;line-height:1.4;font-variant-numeric:tabular-nums}
+}
