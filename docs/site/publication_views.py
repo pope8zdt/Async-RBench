@@ -30,6 +30,43 @@ def bi(en, zh):
     return f'<span class="i18n" lang="en">{esc(en)}</span><span class="i18n" lang="zh">{esc(zh)}</span>'
 
 
+def task_charts(corpus):
+    """Count public task metadata; no source breakdown or private annotations."""
+    tasks = corpus['tasks']
+    difficulty = Counter(task['difficulty'] for task in tasks)
+    total = len(tasks)
+    medium_share = 100 * difficulty['medium'] / total if total else 0
+    legend = ''.join(
+        f'<div data-difficulty-count="{key}" data-count="{difficulty[key]}">'
+        f'<dt><i class="difficulty-key {key}" aria-hidden="true"></i>{bi(en, zh)}</dt>'
+        f'<dd>{difficulty[key]} <span>· {100 * difficulty[key] / total if total else 0:g}%</span></dd></div>'
+        for key, en, zh in [('medium', 'Medium', '中等'), ('hard', 'Hard', '困难')])
+    subtasks = Counter(task['subtasks'] for task in tasks)
+    groups = [('2', '2', subtasks[2]), ('3', '3', subtasks[3]),
+              ('4+', '≥4', sum(count for number, count in subtasks.items() if number >= 4))]
+    peak = max((count for _, _, count in groups), default=0) or 1
+    bars = ''.join(
+        f'<li data-subtask-count="{key}" data-count="{count}" '
+        f'style="--bar-height:{100 * count / peak:g}%">'
+        f'<div class="subtask-column"><span class="subtask-value">{count}'
+        f'<span class="sr-only"> {bi("task" if count == 1 else "tasks", "个任务")}</span></span>'
+        '<span class="subtask-bar" aria-hidden="true"></span></div>'
+        f'<span class="subtask-bin">{label}<span class="sr-only"> '
+        f'{bi("initial subtasks per task", "个初始子任务／任务")}</span></span></li>'
+        for key, label, count in groups)
+    return (
+        '<figure class="task-chart difficulty-chart"><figcaption>'
+        + bi('Difficulty distribution', '难度分布') + '</figcaption>'
+        '<div class="difficulty-body"><div class="difficulty-ring" '
+        f'style="--medium-share:{medium_share:g}%" aria-hidden="true">'
+        f'<div>{total}<span>{bi("tasks", "个任务")}</span></div></div>'
+        f'<dl class="difficulty-legend">{legend}</dl></div></figure>'
+        '<figure class="task-chart subtask-chart"><figcaption>'
+        + bi('Initial subtasks per task', '每个任务的初始子任务数') + '</figcaption>'
+        '<div class="subtask-axis" aria-hidden="true">' + bi('Tasks', '任务数') + '</div>'
+        f'<ol class="subtask-bars">{bars}</ol></figure>')
+
+
 def configure_participation(content, settings):
     """Opt-in rendering only; never activates a GitHub workflow or grants access."""
     guide = 'data-submission-guide' in content
@@ -98,16 +135,11 @@ def render(content, source):
         scenarios = ''.join(f'<div><dt>{bi(en, zh)}</dt><dd>{r["scenarios"][key]["mean"]:.1f} <span>± {r["scenarios"][key]["sd"]:.1f}</span></dd></div>' for key, _, en, zh in SCENARIOS)
         rows.append(f'<tr data-paper-record="{esc(r["id"])}"><td>{rank:02}</td><th scope="row">{esc(r["model"])}</th>{scores}</tr><tr class="scenario-row"><td colspan="7"><dl>{scenarios}</dl></td></tr>')
     content = content.replace('<!-- PAPER_ROWS -->', '\n'.join(rows))
-    counts = Counter((task['source'], task['difficulty']) for task in corpus['tasks'])
-    source_rows = []
-    for key, name in SOURCES.items():
-        medium, hard = counts[key, 'medium'], counts[key, 'hard']
-        source_rows.append(f'<tr><th scope="row">{name}</th><td>{medium + hard}</td><td>{medium}</td><td>{hard}</td></tr>')
-    content = content.replace('<!-- SOURCE_ROWS -->', ''.join(source_rows))
-    medium = sum(counts[key, 'medium'] for key in SOURCES)
-    hard = sum(counts[key, 'hard'] for key in SOURCES)
-    content = content.replace('<!-- SOURCE_TOTALS -->', f'<td>{medium + hard}</td><td>{medium}</td><td>{hard}</td>')
-    content = content.replace('<!-- SCENARIO_ROWS -->', ''.join(f'<tr><th scope="row">{bi(*FULL_SCENARIOS[short])}</th><td>{corpus["scenario_counts"][key]}</td></tr>' for short, key, _, _ in SCENARIOS))
+    content = content.replace('<!-- TASK_CHARTS -->', task_charts(corpus))
+    content = content.replace('<!-- SCENARIO_COUNTS -->', ''.join(
+        f'<div data-scenario-count="{short}" data-count="{corpus["scenario_counts"][key]}">'
+        f'<dt>{bi(*FULL_SCENARIOS[short])}</dt><dd>{corpus["scenario_counts"][key]}</dd></div>'
+        for short, key, _, _ in SCENARIOS))
     tasks = []
     for t in corpus['tasks']:
         tasks.append(f'<article class="task-entry" data-task="{esc(t["id"])}" data-source="{esc(t["source"])}" data-difficulty="{esc(t["difficulty"])}"><p class="task-meta">{esc(SOURCES[t["source"]])} · {bi("Medium" if t["difficulty"]=="medium" else "Hard", "中等" if t["difficulty"]=="medium" else "困难")} · {t["subtasks"]} {bi("initial subtasks", "初始子任务")}</p><h3><a href="{esc(t["url"], quote=True)}">{esc(t["title"])}</a></h3><code>{esc(t["id"])}</code></article>')

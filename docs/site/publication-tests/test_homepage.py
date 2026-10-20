@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import re
+import shutil
 from pathlib import Path
 import sys
 import tempfile
@@ -78,23 +79,62 @@ class HomepageTests(unittest.TestCase):
         self.assertIn('/Async-RBench/data/trajectories.public.json', html)
         self.assertNotIn('story-rail.mjs', html)
 
-    def test_tasks_starts_with_distribution_and_links_to_data_viewer(self):
+    def test_task_charts_show_counts_from_the_public_corpus(self):
         section = re.search(r'<section id="tasks".*?</section>', self.html, re.S)[0]
-        self.assertLess(section.index('<table'), section.index('<div class="prose">'))
-        for source, counts in {
-            'GAIA2': (40, 16, 24), 'MultiAgentBench': (40, 15, 25),
-            'OSWorld': (40, 40, 0), 'SWE-bench': (40, 15, 25),
-            'Terminal-Bench': (40, 18, 22),
-        }.items():
-            row = re.search(r'<tr><th scope="row">' + source + r'</th>(.*?)</tr>', section)[1]
-            self.assertEqual([int(v) for v in re.findall(r'<td>(\d+)</td>', row)], list(counts))
-        totals = re.search(r'<tfoot>(.*?)</tfoot>', section)[1]
-        self.assertEqual(re.findall(r'<td>(\d+)</td>', totals), ['200', '104', '96'])
+        nodes = Elements(section).elements
+        difficulty = {a['data-difficulty-count']: int(a['data-count'])
+                      for _, a in nodes if 'data-difficulty-count' in a}
+        subtasks = {a['data-subtask-count']: int(a['data-count'])
+                    for _, a in nodes if 'data-subtask-count' in a}
+        self.assertEqual(difficulty, {'medium': 104, 'hard': 96})
+        self.assertEqual(subtasks, {'2': 73, '3': 40, '4+': 87})
+        scenario_counts = [int(a['data-count']) for _, a in nodes
+                           if 'data-scenario-count' in a]
+        self.assertEqual(scenario_counts, [25] * 8)
         self.assertIn('href="/Async-RBench/tasks/"', section)
-        self.assertIn('Data viewer', section)
         self.assertNotIn('data-task=', self.html)
         viewer = (self.output / 'tasks/index.html').read_text(encoding='utf-8')
         self.assertIn('<title>Data viewer — Async-RBench</title>', viewer)
+
+    def test_chart_geometry_changes_with_the_underlying_task_counts(self):
+        # Catch a chart frozen to today's 104/96 split or counting subtasks
+        # instead of tasks on the histogram's vertical axis.
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            (source / 'data').mkdir()
+            for name in ('leaderboard.json', 'trajectories.public.json'):
+                shutil.copyfile(SITE / 'published/data' / name, source / 'data' / name)
+            corpus = json.loads((SITE / 'published/data/corpus.json').read_text())
+            corpus['tasks'] = corpus['tasks'][:4]
+            for task, difficulty, subtasks in zip(
+                    corpus['tasks'], ('medium', 'hard', 'hard', 'hard'), (2, 2, 4, 6)):
+                task.update(difficulty=difficulty, subtasks=subtasks)
+            (source / 'data/corpus.json').write_text(json.dumps(corpus), encoding='utf-8')
+            html = publication._views.render('<!-- TASK_CHARTS -->', source)
+            nodes = Elements(html).elements
+            self.assertTrue(any(a.get('class') == 'difficulty-ring'
+                                and '--medium-share:25%' in a.get('style', '')
+                                for _, a in nodes))
+            bars = {a['data-subtask-count']: a for _, a in nodes
+                    if 'data-subtask-count' in a}
+            self.assertEqual({key: int(a['data-count']) for key, a in bars.items()},
+                             {'2': 2, '3': 0, '4+': 2})
+            self.assertIn('--bar-height:100%', bars['2']['style'])
+            self.assertIn('--bar-height:100%', bars['4+']['style'])
+            self.assertIn('--bar-height:0%', bars['3']['style'])
+
+    def test_guide_navigation_reaches_submission_review_and_sync_instructions(self):
+        guide = (self.output / 'submission-guide/index.html').read_text(encoding='utf-8')
+        nodes = Elements(guide).elements
+        ids = {attrs.get('id') for _, attrs in nodes}
+        links = {attrs.get('href') for tag, attrs in nodes if tag == 'a'}
+        for target in ('participant-steps', 'reviewer-steps', 'sync-status'):
+            self.assertIn(target, ids)
+            self.assertIn('#' + target, links)
+        self.assertIn('/Async-RBench/benchmark/#community-panel', links)
+        self.assertIn(
+            'https://github.com/pope8zdt/Async-RBench-reviews/actions/workflows/private-review.yml',
+            links)
 
     def test_citation_is_inline_and_copyable(self):
         self.assertIn('@misc{async_rbench', self.html)
@@ -120,12 +160,6 @@ class HomepageTests(unittest.TestCase):
                              for _, a in nodes))
         self.assertNotIn('data-destination', guide)  # must not be rewritten as a legacy redirect
         self.assertIn('/Async-RBench/benchmark/#participate', guide)
-
-    def test_framework_uses_paper_score_notation_and_explains_construction(self):
-        self.assertIn('100 × (P + Q) / 2', self.html)
-        self.assertIn('Q scores the outcome requirements O', self.html)
-        self.assertIn('Researchers', self.html)
-        self.assertIn('LLM-assisted', self.html)
 
     def test_old_pages_point_to_canonical_content(self):
         old = (self.output / 'trajectories/index.html').read_text(encoding='utf-8')

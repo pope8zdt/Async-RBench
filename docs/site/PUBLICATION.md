@@ -51,11 +51,18 @@ tables, and moves the catalog and six selected archives into `/tasks/`. Legacy
 page URLs redirect to the corresponding canonical section. The archived excerpts
 are explicitly not a full trajectory replay. The cover and margin movement remain.
 
-The Tasks overview also shows difficulty counts for each source, computed from
-the public corpus rather than entered in the template. Its Data viewer link opens
-the separate task catalog and archived records; no individual tasks appear on
-the homepage. Per-task scenario labels and detailed evaluation annotations stay
-private.
+The Tasks overview uses a difficulty ring and an initial-subtask histogram,
+computed from the protected public corpus, followed by compact scenario counts.
+It does not display task sources or introductory prose. The histogram counts
+tasks, not subtasks; its horizontal labels are initial subtasks per task,
+grouped as 2, 3 and ≥4 (73, 40 and 87 tasks in the current corpus).
+Its Data viewer link opens the separate task catalog and archived records; no
+individual tasks appear on the homepage. Per-task scenario labels and detailed
+evaluation annotations stay private.
+
+The homepage framework explanation summarizes the execution and evaluation flow.
+It expands ERC and DRS on first use, but leaves formulas and scoring details to
+the paper and the existing protocol link beside the leaderboard.
 
 Community results use a separate tab. Both approved public-summary schemas are
 validated before rendering; original evidence, receipt identifiers and review
@@ -79,7 +86,9 @@ publishing. Raw evidence and private policy are never deployment assets.
 the maintainer, template and App. Both pages stay closed by default; an authorized
 enabled build adds repository-creation and App-installation links to both pages.
 Neither page uploads files or grants permissions. Disabling a previously enabled
-snapshot removes those links again.
+snapshot removes those links again. Participant submission, maintainer review and
+sync confirmation have separate linked sections. The guide distinguishes an
+Actions run succeeding from a particular result appearing in the Community tab.
 
 Build without a repository configuration for the local preview so community
 loading stays local too. To verify the release configuration locally without
