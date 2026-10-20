@@ -6,11 +6,11 @@
       "id": "release",
       "title": {
         "zh": "旧验证遇到新版本",
-        "en": "Old tests, new revision"
+        "en": "Old test report, new revision"
       },
       "description": {
         "zh": "补丁先报告测试通过，清理结果随后带来新的仓库版本。沿着版本比较、修复尝试和重新测试，看主代理如何继续工作。",
-        "en": "A patch reports passing tests before cleanup returns a new repository revision. Follow the comparison, repair attempt and retest."
+        "en": "The patch report says tests passed; cleanup then returns a new repository revision. Follow the main agent's comparison, repair attempt and retest."
       },
       "model": "gpt-5.6-terra",
       "episode_id": "secure-release-1-async-7dabe929",
@@ -19,18 +19,18 @@
           "seq": 165,
           "title": {
             "zh": "补丁报告先到",
-            "en": "Patch report arrives"
+            "en": "Patch report arrives first"
           },
           "note": {
             "zh": "子代理报告在旧 main/dev 快照上测试通过。这是子代理报告内容，不等于最终工作区已经通过测试。",
-            "en": "The child reports passing tests on the old main/dev snapshots. This is a child report, not verification of the final workspace."
+            "en": "The subagent reports passing tests on the old main/dev snapshots. This report does not establish that the final workspace passed."
           }
         },
         {
           "seq": 180,
           "title": {
             "zh": "报告呈现给主代理",
-            "en": "Report presented"
+            "en": "Report presented to the main agent"
           },
           "note": {
             "zh": "首次呈现 completion-1。呈现与到达是两条不同记录。",
@@ -41,7 +41,7 @@
           "seq": 195,
           "title": {
             "zh": "清理带来新版本",
-            "en": "Cleanup changes the base"
+            "en": "Cleanup returns a new revision"
           },
           "note": {
             "zh": "main_head 变为 4f8b595…，与前一份测试报告的 f2ff20b… 不同。",
@@ -56,7 +56,7 @@
           },
           "note": {
             "zh": "completion-2 在此处呈现给主代理；后续动作可以与这个时间点对齐。",
-            "en": "completion-2 is presented here, providing a reference point for subsequent actions."
+            "en": "completion-2 is presented to the main agent here. Subsequent actions can be aligned with this point."
           }
         },
         {
@@ -67,7 +67,7 @@
           },
           "note": {
             "zh": "论文图 1 的 #289：主代理实际执行 git diff，检查新旧 bottle.py 的差异。",
-            "en": "Figure 1, #289: the main agent executes git diff to inspect the changed bottle.py."
+            "en": "Figure 1, #289: the main agent runs git diff to compare the old and new versions of bottle.py."
           }
         },
         {
@@ -77,8 +77,8 @@
             "en": "First repair command fails"
           },
           "note": {
-            "zh": "前一条复合命令返回 128。回放保留失败步骤，不将“调用了测试”画成“测试通过”。",
-            "en": "The preceding compound command returns 128. An attempted test is not shown as a passed test."
+            "zh": "前一条复合命令返回 128。这里保留失败记录，调用测试不等于测试通过。",
+            "en": "The preceding compound command returns 128. This failure is retained; calling a test does not mean it passed."
           }
         },
         {
@@ -88,8 +88,8 @@
             "en": "Repair and retest"
           },
           "note": {
-            "zh": "这条命令重新提交修复并调用 validation_test.py。这里只摘录原始测试调用；下一条记录给出退出码。",
-            "en": "This command commits the repair and calls validation_test.py. Only the original test invocation is excerpted; the next record provides the exit code."
+            "zh": "这条命令重新尝试修复并调用 validation_test.py。这里只摘录原始测试调用；下一条记录给出退出码。",
+            "en": "This command retries the repair and calls validation_test.py. Only the original test invocation is excerpted; the next record gives the exit code."
           }
         },
         {
@@ -107,11 +107,11 @@
           "seq": 546,
           "title": {
             "zh": "查看运行结尾",
-            "en": "Episode endpoint"
+            "en": "View the run's end state"
           },
           "note": {
             "zh": "此处展示归档运行的结束状态；论文总体数字保持独立，不从这条案例重新计算。",
-            "en": "This is the archived episode endpoint. Paper aggregates remain separate and are not recomputed from this example."
+            "en": "This shows the archived run's end state. Paper aggregates remain separate and are not recomputed from this example."
           }
         }
       ],
@@ -332,7 +332,7 @@
           "seq": 800,
           "title": {
             "zh": "再次确认 use",
-            "en": "Acknowledged again"
+            "en": "Use confirmed again"
           },
           "note": {
             "zh": "主代理再次记录 use。重复确认已被观察到，但这条记录本身不能证明重复副作用。",
@@ -346,8 +346,8 @@
             "en": "Inspect execution receipt"
           },
           "note": {
-            "zh": "日志记录读取 event_receipt.json 的命令；没有终端输出正文时，播放器不补造收据内容。",
-            "en": "The log records a command reading event_receipt.json. The player does not invent receipt contents where terminal output is absent."
+            "zh": "日志记录读取 event_receipt.json 的命令；没有终端输出正文时，不补写收据内容。",
+            "en": "The log records a command reading event_receipt.json. Receipt contents are not added when terminal output is absent."
           }
         },
         {
@@ -357,8 +357,8 @@
             "en": "Episode ends"
           },
           "note": {
-            "zh": "回放到归档运行结尾；这里不把运行状态转换为新的榜单分数。",
-            "en": "Replay reaches the archived endpoint without turning its status into a new leaderboard score."
+            "zh": "这里展示归档运行结尾，不把运行状态转换为新的榜单分数。",
+            "en": "This shows the end of the archived run. Its status is not converted into a new leaderboard score."
           }
         }
       ],
@@ -539,7 +539,7 @@
           },
           "note": {
             "zh": "这是文件转移请求；完成情况应查看后续 promotion/result 记录，不能只看调用。",
-            "en": "This is a file-promotion request. Its completion must be checked in the following promotion/result record."
+            "en": "This is a file-transfer request. Check completion in the later promotion/result record, not from the request alone."
           }
         },
         {
@@ -1034,7 +1034,7 @@
           },
           "note": {
             "zh": "child-1 被基础设施取消，不是主代理主动取消的证据。",
-            "en": "Infrastructure cancels child-1; this is not agent-directed cancellation."
+            "en": "Infrastructure cancels child-1; this is not evidence of agent-directed cancellation."
           }
         },
         {

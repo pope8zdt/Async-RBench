@@ -8,7 +8,7 @@ SOURCES = {'gaia2': 'GAIA2', 'multiagentbench': 'MultiAgentBench', 'osworld': 'O
 SCENARIOS = [
     ('delay', 'delayed_authoritative_result', 'Delayed authority', '权威结果延迟'),
     ('stale', 'late_or_out_of_order_superseded_result', 'Stale / out-of-order', '过时或乱序结果'),
-    ('conflict', 'conflicting_valid_results', 'Conflicting results', '有效结果冲突'),
+    ('conflict', 'conflicting_valid_results', 'Conflicting results', '结果冲突'),
     ('replay', 'duplicate_or_replayed_completion', 'Duplicate / replayed', '重复或重放结果'),
     ('partial', 'partial_then_complete_result', 'Partial → complete', '部分到完整结果'),
     ('failure', 'child_failure_or_implicit_error', 'Subagent failure', '子代理失败'),
@@ -71,7 +71,7 @@ def configure_participation(content, settings):
     """Opt-in rendering only; never activates a GitHub workflow or grants access."""
     guide = 'data-submission-guide' in content
     guide_link = ('' if guide else '<a class="text-link" href="/submission-guide/">'
-                  + bi('Submission guide', '提交与审核说明') + ' →</a>')
+                  + bi('Submission and review', '提交与审核说明') + ' →</a>')
     controls = ('<p class="submission-status">' + bi(
         'PR submissions are not open yet. The workflow is being tested locally.',
         'PR 提交尚未开放，工作流正在本地测试。') + '</p>' + guide_link)
@@ -99,7 +99,7 @@ def configure_participation(content, settings):
         controls = ('<div class="hero-links"><a class="button" href="https://github.com/'
                    + esc(settings['template']) + '/generate">' + bi(
                        'Create a private submission repository' if guide else 'Create private repository',
-                       '创建私有提交仓库')
+                       '创建私有提交仓库' if guide else '创建私有仓库')
                    + '</a><a href="https://github.com/apps/' + esc(settings['app']) + '/installations/new">'
                    + bi('Install the review App', '安装审核 App') + ' ↗</a></div><p>'
                    + bi('Choose Private and invite @' + settings['maintainer'] + ' as a collaborator before opening your PR. Install the App on only this repository.',
