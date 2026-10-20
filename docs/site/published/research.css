@@ -36,10 +36,14 @@ main{max-width:1160px;margin:auto;padding:0 42px}.intro{text-align:center;paddin
   .submission-guide #submission-controls>p{max-width:720px;margin:0 auto;line-height:1.8}
   .guide-steps li:before{font-size:23px;line-height:1.4;font-variant-numeric:tabular-nums}
 }
-/* Keep the homepage submission path concise and its actions on one clear row. */
+/* One participant entry; setup actions belong beside their guide steps. */
+.submission-entry{text-align:center;margin-top:28px}
+.submission-entry>.button{font-size:19px;min-width:230px;padding:12px 24px}
+.guide-action{margin-top:18px}
+.submission-guide #submission-controls:empty{display:none}
+.submission-guide .guide-start{font-size:18px;margin-bottom:0}
+.guide-steps>li[id]{scroll-margin-top:110px}
 @media(min-width:951px){
-  #participate{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:28px}
-  #participate>h2,#participate>.section-intro,#participate>.submission-steps{grid-column:1/-1}
   #participate>.section-intro{max-width:710px;margin-bottom:0;font-size:19px}
   #participate .submission-steps{gap:36px;margin:36px 0 32px}
   #participate .submission-steps li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-content:start;border-top:2px solid #79b7a6;padding-top:20px}
@@ -48,11 +52,7 @@ main{max-width:1160px;margin:auto;padding:0 42px}.intro{text-align:center;paddin
   #participate .submission-steps li:before{font-size:18px;line-height:32.2px;font-variant-numeric:tabular-nums}
   #participate .submission-steps h3{margin:0;font-size:23px;line-height:1.4}
   #participate .submission-steps p{grid-column:1/-1;margin:0;font-size:18px;line-height:1.7}
-  #participate>.hero-links{grid-column:1;grid-row:4;display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin:0}
-  #participate>.hero-links a{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;padding:9px 18px;border:1px solid var(--rule);border-radius:4px;background:var(--surface);font-size:17px;line-height:1.5;text-decoration:none}
-  #participate>.hero-links a:first-child{background:var(--accent);border-color:var(--accent);color:var(--bg)}
-  #participate>.hero-links a:hover{border-color:var(--accent)}
-  #participate>.text-link{grid-column:2;grid-row:4;align-self:center;justify-self:end;margin:0;padding:9px 0;font-size:17px;white-space:nowrap}
-  #participate>p:not(.section-intro):not(.submission-status){grid-column:1/-1;grid-row:5;max-width:900px;margin:16px 0 0;font-size:17px;line-height:1.7}
-  #participate>.submission-status{grid-column:1;grid-row:4;margin:0;padding:0;border:0;align-self:center}
+  #participate .step-link{grid-column:1/-1;justify-self:start;font-size:17px}
+  #participate>.submission-status{margin:0;padding:0;border:0}
+  #participate>.text-link{margin-top:16px;font-size:18px}
 }

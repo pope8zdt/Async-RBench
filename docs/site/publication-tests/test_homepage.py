@@ -145,7 +145,6 @@ class HomepageTests(unittest.TestCase):
         self.assertNotIn('issues/new', self.html)
         self.assertNotIn('data-github-submission-root', self.html)
         self.assertIn('data-submission-status="closed"', self.html)
-        self.assertIn('private pull requests (PRs)', self.html)
 
     def test_closed_submission_has_a_local_read_only_guide(self):
         section = re.search(r'<section id="participate".*?</section>', self.html, re.S)[0]
@@ -183,9 +182,14 @@ class HomepageTests(unittest.TestCase):
             publication.build(SITE / 'published', output, '/Async-RBench', 'github-private', config)
             html = (output/'benchmark/index.html').read_text(encoding='utf-8')
             self.assertIn('data-submission-status="open"', html)
-            self.assertIn('https://github.com/owner/template/generate', html)
-            self.assertIn('https://github.com/apps/review-app/installations/new', html)
-            self.assertIn('review-owner', html)
+            section = re.search(r'<section id="participate".*?</section>', html, re.S)[0]
+            actions = [attrs for tag, attrs in Elements(section).elements
+                       if tag == 'a' and 'button' in attrs.get('class', '').split()]
+            self.assertEqual([a['href'] for a in actions], ['/Async-RBench/submission-guide/'])
+            # The public entry must lead to the instructions, not grant access
+            # or create a repository before the participant knows what to submit.
+            self.assertNotIn('/generate', section)
+            self.assertNotIn('/installations/new', section)
             self.assertNotIn('issues/new', html)
             self.assertEqual((output/'data/leaderboard.json').read_bytes(),
                              (SITE/'published/data/leaderboard.json').read_bytes())
@@ -199,8 +203,16 @@ class HomepageTests(unittest.TestCase):
             publication.build(SITE / 'published', output, '/Async-RBench', 'github-private', config)
             guide = (output/'submission-guide/index.html').read_text(encoding='utf-8')
             self.assertIn('data-submission-status="open"', guide)
-            self.assertIn('https://github.com/owner/template/generate', guide)
-            self.assertIn('https://github.com/apps/review-app/installations/new', guide)
+            create_step = re.search(r'<li id="create-repository".*?</li>', guide, re.S)
+            access_step = re.search(r'<li id="review-access".*?</li>', guide, re.S)
+            self.assertIsNotNone(create_step)
+            self.assertIsNotNone(access_step)
+            self.assertIn('https://github.com/owner/template/generate', create_step[0])
+            self.assertIn('https://github.com/apps/review-app/installations/new', access_step[0])
+            self.assertIn('@review-owner', access_step[0])
+            header = re.search(r'<section class="chapter browser-heading".*?</section>', guide, re.S)[0]
+            self.assertNotIn('/generate', header)
+            self.assertNotIn('/installations/new', header)
             self.assertIn('@review-owner', guide)
             self.assertNotIn('@pope8zdt', guide)
             self.assertNotIn('submissions are not open', guide)
@@ -214,9 +226,10 @@ class HomepageTests(unittest.TestCase):
             for page in ('benchmark/index.html', 'submission-guide/index.html'):
                 html = (output/page).read_text(encoding='utf-8')
                 self.assertIn('data-submission-status="open"', html)
-                self.assertIn('https://github.com/pope8zdt/Async-RBench-submission-template/generate', html)
-                self.assertIn('https://github.com/apps/async-rbench-review-pope8zdt/installations/new', html)
                 self.assertNotIn('issues/new', html)
+            guide = (output/'submission-guide/index.html').read_text(encoding='utf-8')
+            self.assertIn('https://github.com/pope8zdt/Async-RBench-submission-template/generate', guide)
+            self.assertIn('https://github.com/apps/async-rbench-review-pope8zdt/installations/new', guide)
             self.assertEqual(
                 json.loads((output/'data/community.json').read_text(encoding='utf-8'))['entries'], [])
             self.assertEqual((output/'data/leaderboard.json').read_bytes(),

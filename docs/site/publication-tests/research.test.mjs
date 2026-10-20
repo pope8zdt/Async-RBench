@@ -12,7 +12,7 @@ test('navigation tracks the section at the header, independent of viewport aspec
   assert.equal(sectionAt([{id:'framework',top:600}],144),null);
 });
 test('empty community snapshot is distinct from invalid or unapproved data',()=>{
-  assert.match(communityMarkup({schema:'async-rbench-community-board-1',entries:[]},'en'),/No reviewed/);
+  assert.match(communityMarkup({schema:'async-rbench-community-board-1',entries:[]},'en'),/class="repository-empty"/);
   assert.throws(()=>communityMarkup({schema:'other',entries:[]}));
   assert.throws(()=>communityMarkup({schema:'async-rbench-community-board-2',entries:[{metrics:{drs:99},evidence:'private'}]}));
 });

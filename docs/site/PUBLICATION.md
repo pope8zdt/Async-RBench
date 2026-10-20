@@ -73,6 +73,40 @@ The homepage framework explanation summarizes the execution and evaluation flow.
 It expands ERC and DRS on first use, but leaves formulas and scoring details to
 the paper and the existing protocol link beside the leaderboard.
 
+### Interface terminology
+
+Keep the same English term for the same concept across the homepage, submission
+guide and Data viewer. Use sentence case for interface headings and labels.
+Use these pairs when editing explanatory copy:
+
+| English | Chinese | Usage |
+| --- | --- | --- |
+| evaluation | 测评 | The benchmark procedure; `benchmark` names the benchmark itself. |
+| main agent / subagent | 主代理 / 子代理 | Actors; a `subtask` is the work assigned, not the actor. |
+| run / repetition | 运行 / 重复 | One execution versus a repetition of an evaluation setting. |
+| result delivery / result presentation | 结果交付 / 结果呈现 | Distinct recorded events; do not use interchangeably. |
+| task success / task success rate | 任务成功 / 任务成功率 | A run's outcome versus an aggregate percentage. |
+| validation / maintainer review / approval | 校验 / 维护者审核 / 审核通过 | Automated checks, human review and the approval decision are distinct. |
+| review decision | 审核结果 | Do not label it `evaluation result` or `Check your result`. |
+| result summary / original evidence | 结果摘要 / 原始证据 | The public summary versus private supporting files. |
+| community results / community leaderboard | 社区结果 / 社区榜单 | The results tab versus the destination leaderboard. |
+| archived records / trace | 归档记录 / 轨迹 | Selected event records are not a complete trace. |
+| receipt / workflow | 回执 / 工作流 | Use `workstream` for concurrent agent work, not a GitHub workflow. |
+
+Retain the paper names Dynamic Replanning Score (DRS) and Event Response Contract
+(ERC), and the result-delivery labels Async and Batched. The eight short scenario
+labels follow the paper: Delay, Stale, Conflict, Replay, Partial, Failure, Scope
+and Straggler; the Tasks section spells out their meanings. Evaluation task
+selection and repetitions are configurable; the paper's 200-task, three-repeat
+experiment is not a universal instruction for running the benchmark. Editorial
+changes do not alter the community submission validation policy.
+
+Do not rename API fields, CLI options, filenames, original event identifiers or
+quoted log values to match this prose vocabulary. Preserve the paper abstract,
+task release titles and figure labels unless the scientific source is revised.
+Compare both languages for quantities, negation, scope and uncertainty; shorten
+wording only when the meaning remains intact.
+
 Community results use a separate tab. Both approved public-summary schemas are
 validated before rendering; original evidence, receipt identifiers and review
 links are never inserted into the board. The native PR worker is implemented;
@@ -92,10 +126,11 @@ the default preview remains closed. Its community URL must be reachable before
 publishing. Raw evidence and private policy are never deployment assets.
 
 `/submission-guide/` uses the same entry configuration as the homepage, including
-the maintainer, template and App. Both pages stay closed by default; an authorized
-enabled build adds repository-creation and App-installation links to both pages.
-Neither page uploads files or grants permissions. Disabling a previously enabled
-snapshot removes those links again. Participant submission, maintainer review and
+the maintainer, template and App. Both pages stay closed by default. An authorized
+enabled build shows one submission button on the homepage; repository creation
+and review-access links appear beside their steps in the guide. Neither page
+uploads files or grants permissions. Disabling a previously enabled snapshot
+removes those setup links again. Participant submission, maintainer review and
 sync confirmation have separate linked sections. The guide distinguishes an
 Actions run succeeding from a particular result appearing in the Community tab.
 

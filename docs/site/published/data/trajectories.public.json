@@ -78,7 +78,7 @@
           },
           "note": {
             "zh": "前一条复合命令返回 128。这里保留失败记录，调用测试不等于测试通过。",
-            "en": "The preceding compound command returns 128. This failure is retained; calling a test does not mean it passed."
+            "en": "The preceding compound command returns exit code 128. This failure record is retained; running a test does not mean it passed."
           }
         },
         {
@@ -96,10 +96,10 @@
           "seq": 316,
           "title": {
             "zh": "命令退出码为 0",
-            "en": "Command exits with 0"
+            "en": "Command exits with code 0"
           },
           "note": {
-            "zh": "日志记录该命令成功退出。这不是整项任务的成功率或 DRS 分数。",
+            "zh": "日志记录该命令成功退出。这不代表整项任务成功，也不是 DRS 分数。",
             "en": "The log records successful command completion, not task success or a DRS score."
           }
         },
@@ -314,7 +314,7 @@
           },
           "note": {
             "zh": "重放事实仍指向 completion-2，并链接原交付 occurrence；它不是新的子任务完成。",
-            "en": "The replay fact points to completion-2 and its original delivery occurrence, not a new child completion."
+            "en": "The replay record points to completion-2 and its original delivery occurrence, not a newly completed subtask."
           }
         },
         {
@@ -342,11 +342,11 @@
         {
           "seq": 817,
           "title": {
-            "zh": "读取执行收据",
-            "en": "Inspect execution receipt"
+            "zh": "读取执行回执",
+            "en": "Read the execution receipt"
           },
           "note": {
-            "zh": "日志记录读取 event_receipt.json 的命令；没有终端输出正文时，不补写收据内容。",
+            "zh": "日志记录读取 event_receipt.json 的命令；没有终端输出正文时，不补写回执内容。",
             "en": "The log records a command reading event_receipt.json. Receipt contents are not added when terminal output is absent."
           }
         },
@@ -354,7 +354,7 @@
           "seq": 995,
           "title": {
             "zh": "运行结束",
-            "en": "Episode ends"
+            "en": "Run ends"
           },
           "note": {
             "zh": "这里展示归档运行结尾，不把运行状态转换为新的榜单分数。",
@@ -515,7 +515,7 @@
       },
       "description": {
         "zh": "Qwen3.5 27B 收到第二个桶的验证报告时，对应规划子任务仍未完成。随后运行结束，规划子任务被关闭流程取消。",
-        "en": "Qwen3.5 27B receives bucket 2's validation report while its planning child is still unfinished. The run then ends and shutdown cancels that child."
+        "en": "Qwen3.5 27B receives bucket 2's validation report while the corresponding planning subtask is still unfinished. The run then ends, and shutdown cancels the planning subtask."
       },
       "model": "qwen3.5-27b",
       "episode_id": "scheduler-selective-replan-2-async-8bcd0aac",
@@ -535,7 +535,7 @@
           "seq": 264,
           "title": {
             "zh": "转入第一个计划",
-            "en": "Promote the first plan"
+            "en": "Transfer the first plan"
           },
           "note": {
             "zh": "这是文件转移请求；完成情况应查看后续 promotion/result 记录，不能只看调用。",
@@ -557,18 +557,18 @@
           "seq": 359,
           "title": {
             "zh": "验证报告先于计划呈现",
-            "en": "Validation precedes the plan"
+            "en": "Validation report presented before the plan"
           },
           "note": {
             "zh": "completion-2 是 bucket2_validator 的报告，而不是 bucket2_optimizer 的规划文件。两个工作流不能混为一谈。",
-            "en": "completion-2 is the bucket2_validator report, not the bucket2_optimizer plan. These are separate workflows."
+            "en": "completion-2 is the bucket2_validator report, not the bucket2_optimizer plan. These are separate workstreams."
           }
         },
         {
           "seq": 367,
           "title": {
             "zh": "转入验证报告",
-            "en": "Promote the validation report"
+            "en": "Transfer the validation report"
           },
           "note": {
             "zh": "转移目标是 validator_reports/bucket2.json。收到这份报告并不意味着 plan_b2.jsonl 已进入主工作区。",
@@ -583,14 +583,14 @@
           },
           "note": {
             "zh": "child-2 被 scaffold_shutdown 取消，原因是 episode ended。不是主代理主动发出的取消工具调用。",
-            "en": "scaffold_shutdown cancels child-2 because the episode ended. This is not an explicit cancellation tool call by the main agent."
+            "en": "scaffold_shutdown cancels child-2 with the recorded reason 'episode ended'. This is not a cancellation tool call made by the main agent."
           }
         },
         {
           "seq": 430,
           "title": {
             "zh": "结束状态：incomplete",
-            "en": "Endpoint: incomplete"
+            "en": "Final status: incomplete"
           },
           "note": {
             "zh": "归档日志记录 local_status=incomplete；没有 finish 工具调用，不改写成显式 finish。",
@@ -916,7 +916,7 @@
           "seq": 146,
           "title": {
             "zh": "结果呈现",
-            "en": "Result shown"
+            "en": "Result presented"
           },
           "note": {
             "zh": "completion-1 向主代理呈现。",
@@ -1030,7 +1030,7 @@
           "seq": 387,
           "title": {
             "zh": "系统取消",
-            "en": "Cancelled"
+            "en": "Cancelled by infrastructure"
           },
           "note": {
             "zh": "child-1 被基础设施取消，不是主代理主动取消的证据。",
@@ -1041,7 +1041,7 @@
           "seq": 476,
           "title": {
             "zh": "另一子任务完成",
-            "en": "Another returns"
+            "en": "Another subtask completes"
           },
           "note": {
             "zh": "child-2 返回 completion-1。",
@@ -1056,7 +1056,7 @@
           },
           "note": {
             "zh": "主代理采纳 completion-1；不代表整项任务成功。",
-            "en": "The main agent uses completion-1; this is not a whole-task success claim."
+            "en": "The main agent uses completion-1; this does not establish that the whole task succeeded."
           }
         }
       ],

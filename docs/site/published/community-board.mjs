@@ -19,6 +19,6 @@ export function communityMarkup(board,language='en'){
     if(!login(r.submitter)||!login(r.reviewer)||r.submitter.toLowerCase()===r.reviewer.toLowerCase()||r.verification!=='maintainer-reviewed'||r.score_policy_version!=='async-rbench-runtime-boundaries-1'||typeof r.reviewed_at!=='string'||!/^\d{4}-\d\d-\d\dT.*(?:Z|[+-]\d\d:\d\d)$/.test(r.reviewed_at)||!Number.isFinite(Date.parse(r.reviewed_at)))throw Error('Invalid review');
   }
   const zh=language==='zh';
-  if(!board.entries.length)return `<p class="repository-empty">${zh?'暂无已审核的社区结果。':'No reviewed community results yet.'}</p>`;
+  if(!board.entries.length)return `<p class="repository-empty">${zh?'暂无审核通过的社区结果。':'No approved community results yet.'}</p>`;
   return `<div class="table-scroll"><table><caption>${zh?'社区结果':'Community results'}</caption><thead><tr><th scope="col">${zh?'智能体 / 模型':'Agent / model'}</th><th scope="col">${zh?'提交者':'Submitter'}</th><th scope="col">DRS</th><th scope="col">S · Async %</th><th scope="col">${zh?'任务 × 重复':'Tasks × repetitions'}</th></tr></thead><tbody>${board.entries.slice().sort((a,b)=>b.metrics.drs-a.metrics.drs||String(a.id??a.issue).localeCompare(String(b.id??b.issue))).map(r=>`<tr><th scope="row">${safe(r.metadata.agent)} / ${safe(r.metadata.model)}</th><td>${safe(r.submitter)}</td><td>${r.metrics.drs.toFixed(1)}</td><td>${r.metrics.success.toFixed(1)}</td><td>${r.metrics.tasks} × ${r.metrics.repetitions}</td></tr>`).join('')}</tbody></table></div>`;
 }

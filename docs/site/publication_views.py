@@ -6,23 +6,23 @@ import re
 
 SOURCES = {'gaia2': 'GAIA2', 'multiagentbench': 'MultiAgentBench', 'osworld': 'OSWorld', 'swe-bench': 'SWE-bench', 'terminal-bench': 'Terminal-Bench'}
 SCENARIOS = [
-    ('delay', 'delayed_authoritative_result', 'Delayed authority', '权威结果延迟'),
-    ('stale', 'late_or_out_of_order_superseded_result', 'Stale / out-of-order', '过时或乱序结果'),
-    ('conflict', 'conflicting_valid_results', 'Conflicting results', '结果冲突'),
-    ('replay', 'duplicate_or_replayed_completion', 'Duplicate / replayed', '重复或重放结果'),
-    ('partial', 'partial_then_complete_result', 'Partial → complete', '部分到完整结果'),
-    ('failure', 'child_failure_or_implicit_error', 'Subagent failure', '子代理失败'),
-    ('scope', 'task_scope_or_dependency_change', 'Scope / dependencies', '范围或依赖变化'),
-    ('straggler', 'straggler_under_resource_pressure', 'Resource stragglers', '资源压力下的慢任务'),
+    ('delay', 'delayed_authoritative_result', 'Delay', '延迟'),
+    ('stale', 'late_or_out_of_order_superseded_result', 'Stale', '过时'),
+    ('conflict', 'conflicting_valid_results', 'Conflict', '冲突'),
+    ('replay', 'duplicate_or_replayed_completion', 'Replay', '重放'),
+    ('partial', 'partial_then_complete_result', 'Partial', '部分'),
+    ('failure', 'child_failure_or_implicit_error', 'Failure', '失败'),
+    ('scope', 'task_scope_or_dependency_change', 'Scope', '范围'),
+    ('straggler', 'straggler_under_resource_pressure', 'Straggler', '慢任务'),
 ]
 FULL_SCENARIOS = {
     'delay': ('Delayed authoritative result', '权威结果延迟'),
-    'stale': ('Late or out-of-order superseded result', '已被替代的结果迟到或乱序到达'),
+    'stale': ('Superseded result arriving late or out of order', '已被替代的结果迟到或乱序到达'),
     'conflict': ('Conflicting valid-looking results', '表面有效的结果相互冲突'),
     'replay': ('Duplicate or replayed completion', '完成结果重复或重放'),
     'partial': ('Partial, then complete result', '部分结果后续补全'),
     'failure': ('Subagent failure or implicit error', '子代理失败或隐性错误'),
-    'scope': ('Task scope or dependency change', '任务范围或依赖变化'),
+    'scope': ('Change in task scope or dependencies', '任务范围或依赖变化'),
     'straggler': ('Straggler under resource pressure', '资源压力下的慢任务'),
 }
 
@@ -71,7 +71,7 @@ def configure_participation(content, settings):
     """Opt-in rendering only; never activates a GitHub workflow or grants access."""
     guide = 'data-submission-guide' in content
     guide_link = ('' if guide else '<a class="text-link" href="/submission-guide/">'
-                  + bi('Submission and review', '提交与审核说明') + ' →</a>')
+                  + bi('Submission instructions', '提交说明') + ' →</a>')
     controls = ('<p class="submission-status">' + bi(
         'PR submissions are not open yet. The workflow is being tested locally.',
         'PR 提交尚未开放，工作流正在本地测试。') + '</p>' + guide_link)
@@ -95,19 +95,26 @@ def configure_participation(content, settings):
     if native:
         content = re.sub(r'(<span data-review-maintainer>).*?(</span>)',
                          lambda m: m[1] + '@' + esc(settings['maintainer']) + m[2], content)
+    repository_control = access_control = ''
     if enabled:
-        controls = ('<div class="hero-links"><a class="button" href="https://github.com/'
-                   + esc(settings['template']) + '/generate">' + bi(
-                       'Create a private submission repository' if guide else 'Create private repository',
-                       '创建私有提交仓库' if guide else '创建私有仓库')
-                   + '</a><a href="https://github.com/apps/' + esc(settings['app']) + '/installations/new">'
-                   + bi('Install the review App', '安装审核 App') + ' ↗</a></div><p>'
-                   + bi('Choose Private and invite @' + settings['maintainer'] + ' as a collaborator before opening your PR. Install the App on only this repository.',
-                        '选择 Private，并在发起 PR 前邀请 @' + settings['maintainer'] + ' 为协作者。App 仅授权这个仓库。') + '</p>' + guide_link)
-    return _participation_controls(content, controls, enabled)
+        if guide:
+            controls = ''
+            repository_control = (
+                '<div class="guide-action"><a class="button primary" href="https://github.com/'
+                + esc(settings['template']) + '/generate">'
+                + bi('Create private repository', '创建私有仓库') + ' ↗</a></div>')
+            access_control = (
+                '<div class="guide-action"><a class="button" href="https://github.com/apps/'
+                + esc(settings['app']) + '/installations/new">'
+                + bi('Authorize review access', '授权审核访问') + ' ↗</a></div>')
+        else:
+            controls = (
+                '<div class="submission-entry"><a class="button primary" href="/submission-guide/">'
+                + bi('Submit evaluation results', '提交测评结果') + ' →</a></div>')
+    return _participation_controls(content, controls, enabled, repository_control, access_control)
 
 
-def _participation_controls(content, controls, enabled):
+def _participation_controls(content, controls, enabled, repository_control='', access_control=''):
     """Replace the whole controls area, including on previously built snapshots."""
     if 'data-submission-guide' in content:
         replacement = ('<!-- SUBMISSION_CONTROLS --><div id="submission-controls" data-submission-status="'
@@ -117,6 +124,15 @@ def _participation_controls(content, controls, enabled):
                                 lambda _: replacement, content, count=1, flags=re.S)
         if count != 1:
             raise ValueError('Missing submission guide controls area')
+        for marker, control in [('PRIVATE_REPOSITORY_CONTROL', repository_control),
+                                ('REVIEW_ACCESS_CONTROL', access_control)]:
+            content, count = re.subn(
+                rf'<!-- {marker} -->.*?<!-- /{marker} -->',
+                lambda _, marker=marker, control=control:
+                    f'<!-- {marker} -->{control}<!-- /{marker} -->',
+                content, count=1, flags=re.S)
+            if count != 1:
+                raise ValueError('Missing submission guide setup area')
         return content
     def replace(match):
         prefix = re.sub(r'data-submission-status="[^"]*"',
