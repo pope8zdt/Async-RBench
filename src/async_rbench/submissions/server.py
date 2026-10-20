@@ -17,6 +17,7 @@ from urllib.parse import unquote, urlsplit
 from .demo import ROOT, demo_bundle, demo_policy
 from .store import PARTICIPANTS, REVIEW_CHECKS, Store, WorkflowError
 from .validation import validate_bundle
+from .local_site import render_public_html, overlay_participation
 
 LIMIT = 2 * 1024 * 1024
 
@@ -94,6 +95,9 @@ class Handler(BaseHTTPRequestHandler):
         try:
             self.guard()
             path = urlsplit(self.path).path
+            if path == '/data/community.json':
+                # Demo identities never become verified public leaderboard entries.
+                return self.send({'schema': 'async-rbench-community-board-2', 'entries': []})
             if path == "/api/session":
                 sid, session = self.session(False)
                 if session is None:
@@ -136,12 +140,14 @@ class Handler(BaseHTTPRequestHandler):
                 raise WorkflowError("File not found.", 404)
             kind = "text/javascript" if target.suffix == ".mjs" else mimetypes.guess_type(target.name)[0] or "application/octet-stream"
             content = target.read_bytes()
+            if not portal and target.suffix == '.html':
+                content = render_public_html(content)
             if target == (ROOT / "docs/site/published/benchmark/index.html").resolve():
                 # Local response overlay only: the committed site and paper assets stay byte-identical.
                 content = content.replace(b'href="#sharing"', b'href="#participate"')
                 section, stylesheet, script = getattr(self.server, "portal_assets", ("section.html", "embedded.css", "app.mjs"))
                 fragment = (ROOT / "docs/submissions/ui" / section).read_bytes()
-                content = content.replace(b"</main>", fragment + b"</main>", 1)
+                content = overlay_participation(content, fragment)
                 overlay = f'<link rel="stylesheet" href="/participate/{stylesheet}"><script type="module" src="/participate/{script}"></script></head>'.encode()
                 content = content.replace(b"</head>", overlay, 1)
             # Authorize exact trusted static bootstraps (language/theme restoration),

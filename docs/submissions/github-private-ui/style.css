@@ -1,0 +1,57 @@
+/* Inherit the paper site's editorial typography, colors and dark mode. */
+.repository-participation {--repository-accent:var(--accent,#285b4b);scroll-margin-top:110px}
+.repository-participation :is(button,a,summary):focus-visible {outline:2px solid var(--repository-accent);outline-offset:5px}
+.repository-participation .repository-intro {display:grid;grid-template-columns:1fr 1fr;gap:72px;margin:42px 0 30px;align-items:start}
+.repository-participation h3 {font:400 clamp(26px,2.3vw,34px)/1.3 var(--reading-font,Georgia,serif);letter-spacing:-.025em;margin:0 0 20px}
+.repository-participation p {font-size:20px;line-height:1.6;margin:0 0 26px}
+.repository-participation .repository-primary {display:inline-block;font:inherit;font-size:19px;line-height:1.5;color:var(--surface,#fff);background:var(--repository-accent);padding:14px 26px;border:1px solid var(--repository-accent);border-radius:3px;text-decoration:none;cursor:pointer}
+.repository-participation .repository-primary:disabled {background:transparent;color:var(--repository-accent);cursor:not-allowed}
+.repository-participation .repository-steps {list-style:none;padding:0;margin:0}
+.repository-participation .repository-steps li {display:grid;grid-template-columns:42px 1fr;gap:16px;padding:0 0 22px;margin:0 0 22px;border-bottom:1px solid var(--border,#deded5)}
+.repository-participation .repository-steps li:last-child {border-bottom:0;margin-bottom:0;padding-bottom:0}
+.repository-participation .step-no {font-size:23px;color:var(--repository-accent);font-variant-numeric:tabular-nums}
+.repository-participation .repository-steps strong {font-size:22px;font-weight:400;line-height:1.3}
+.repository-participation .repository-steps p {font-size:18px;margin:8px 0 0}
+.repository-participation .repository-privacy {display:flex;gap:14px;align-items:center;border-top:1px solid var(--border,#deded5);border-bottom:1px solid var(--border,#deded5);padding:22px 0;margin:32px 0 0;color:var(--repository-accent);font-size:19px}
+.repository-participation .repository-instructions {background:none;border:0;border-radius:0;padding:0;margin:0;box-shadow:none}
+.repository-participation .repository-instructions summary {font-size:19px;padding:22px 0;cursor:pointer}
+.repository-participation .repository-instructions p {font-size:18px;max-width:75ch}
+.repository-participation .repository-instructions a {color:var(--repository-accent);font-size:18px}
+.repository-participation .repository-community-heading {border-top:1px solid var(--border,#deded5);display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin:30px 0 0;padding-top:30px}
+.repository-participation .repository-community-heading>span {font-size:17px;color:var(--repository-accent)}
+.repository-participation .repository-empty {margin:12px 0 24px;padding:20px 0}
+.repository-participation .repository-table {overflow-x:auto}
+.repository-participation table {border-collapse:collapse;width:100%;background:transparent}
+.repository-participation :is(th,td) {font-size:19px;line-height:1.5;padding:20px 14px;text-align:left;border-bottom:1px solid var(--border,#deded5)}
+.repository-participation th {font-weight:400;color:var(--repository-accent)}
+.repository-participation :is(th,td):first-child {padding-left:0}
+.repository-participation :is(th,td):last-child {text-align:right;padding-right:0}
+.repository-participation td strong {font-weight:400;font-size:22px;display:block}
+.repository-participation td span {display:block;font-size:17px;margin-top:5px}
+.repository-participation .repository-score {font-size:27px;font-variant-numeric:tabular-nums}
+.repository-simulator {--accent:#285b4b;--border:#deded5;--surface:#fff;--reading-font:Georgia,serif;font:19px/1.6 Georgia,'Times New Roman',serif;background:#faf9f5;color:#252824;margin:0}
+.repository-simulator header,.repository-simulator main {max-width:1020px;margin:auto;padding:26px 28px}
+.repository-simulator header {display:flex;justify-content:space-between;border-bottom:1px solid var(--border)}
+.repository-simulator a {color:var(--accent);text-decoration:none}
+.repository-simulator h1 {font-size:clamp(34px,4vw,50px);line-height:1.15;font-weight:400;margin:35px 0 22px}
+.repository-simulator .simulation-label {color:var(--accent);font-size:18px}
+.repository-simulator article {border-top:1px solid var(--border);padding:24px 0}
+.repository-simulator h2 {font-size:27px;font-weight:400;margin:0 0 18px}
+.repository-simulator button {font:inherit;padding:10px 20px;background:var(--accent);color:white;border:1px solid var(--accent);border-radius:3px;cursor:pointer}
+.repository-simulator button:disabled {cursor:wait;opacity:.6}
+.repository-simulator button.secondary {background:none;color:var(--accent)}
+.repository-simulator textarea {display:block;box-sizing:border-box;width:100%;min-height:90px;padding:14px;font:inherit;border:1px solid var(--border);background:var(--surface);margin:15px 0}
+.repository-simulator .actions {display:flex;gap:12px;flex-wrap:wrap}
+.repository-simulator .receipt {white-space:pre-wrap;border-left:2px solid var(--accent);padding:10px 20px;overflow-wrap:anywhere}
+.repository-simulator #simulation-message {color:var(--accent)}
+.repository-simulator :focus-visible {outline:2px solid var(--accent);outline-offset:4px}
+@media(max-width:760px) {
+ .repository-participation .repository-intro {grid-template-columns:minmax(0,1fr);gap:36px;margin-top:28px}
+ .repository-participation .repository-community-heading {display:block}
+ .repository-participation .repository-community-heading h3 {margin-bottom:12px}
+ .repository-participation :is(th,td) {font-size:17px;padding:16px 10px}
+ .repository-participation td strong {font-size:20px}
+ .repository-participation .repository-score {font-size:22px}
+ .repository-participation .repository-table table {min-width:560px}
+ .repository-simulator header,.repository-simulator main {padding:20px}
+}

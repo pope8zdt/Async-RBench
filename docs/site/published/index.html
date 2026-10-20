@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Async-RBench — 评测智能体在异步结果到达时的任务执行与调整。">
+<meta name="description" content="Async-RBench evaluates how agents revise ongoing work as asynchronous results arrive.">
 <meta name="color-scheme" content="light"><title>Async-RBench</title>
 <link rel="stylesheet" href="/assets/landing.css?v=20261016-public1">
 <script>document.documentElement.lang='en'</script>
@@ -103,7 +103,7 @@
   &quot;decision&quot;: &quot;use&quot;
 }</pre></div></div><div class="visual-column"><svg viewBox="0 0 760 700"><text x="35" y="72" class="svg-title">completion-2</text><text x="47" y="138" class="svg-label">child-4</text><path class="lifeline" d="M90 155V640"/><text x="297" y="138" class="svg-label">gateway</text><path class="lifeline" d="M340 155V640"/><text x="577" y="138" class="svg-label">main</text><path class="lifeline" d="M620 155V640"/><path class="wire" d="M90 205H340m-9 -6L340 205l-9 6"/><text x="103" y="193" class="svg-mono">completion-2</text><path class="wire" d="M340 265H620m-9 -6L620 265l-9 6"/><text x="353" y="253" class="svg-mono">occ-2</text><path class="wire" d="M620 325H340m9 -6L340 325l9 6"/><text x="353" y="313" class="svg-mono">reject</text><path class="wire" d="M620 385H340m9 -6L340 385l9 6"/><text x="353" y="373" class="svg-mono">use</text><path class="replay-wire" d="M340 445c100 -55 130 55 0 0"/><text x="353" y="433" class="svg-mono">gateway-occ-5</text><path class="wire" d="M340 505H620m-9 -6L620 505l-9 6"/><text x="353" y="493" class="svg-mono">occ-5</text><path class="wire" d="M620 565H340m9 -6L340 565l9 6"/><text x="353" y="553" class="svg-mono">use</text></svg></div></div>
       </div></div></section><section class="ambient-scene " data-scene="early-stop" data-phase="0"><div class="scene-reel"><div class="scene-plane">
-        <div class="scene-topline"><span><span class="i18n" lang="zh">文件交付与任务结束</span><span class="i18n" lang="en">Artifacts and the episode endpoint</span></span><code>scheduler-selective-replan-2-async-8bcd0aac</code></div>
+        <div class="scene-topline"><span><span class="i18n" lang="zh">文件交付与任务结束</span><span class="i18n" lang="en">File delivery and run termination</span></span><code>scheduler-selective-replan-2-async-8bcd0aac</code></div>
         <div class="scene-workspace"><div class="record-column"><div class="archive-event" data-event="0"><div class="event-label"><b>#265</b><span>01:27.469</span><span>child_path_promotion_result</span></div><pre>{
   &quot;child_id&quot;: &quot;child-1&quot;,
   &quot;destination_path&quot;: &quot;/app/task_file/output_data/plan_b1.jsonl&quot;,
@@ -126,7 +126,7 @@
   &quot;local_status&quot;: &quot;incomplete&quot;
 }</pre></div></div><div class="visual-column"><svg viewBox="0 0 760 700"><text x="36" y="72" class="svg-title">output_data/</text><path class="file-tree" d="M63 115V422M63 180H110M63 340H110M130 375V420H165"/><path class="file-icon" d="M119 134h44l17 17v50h-61zM163 134v17h17"/><text x="205" y="171" class="svg-mono">plan_b1.jsonl</text><text x="205" y="204" class="svg-success">#300  child-1  transferred</text><path class="file-icon" d="M119 294h44l17 17v50h-61zM163 294v17h17"/><text x="205" y="331" class="svg-mono">validator_reports</text><text x="205" y="364" class="svg-success">#368  child-5  transferred</text><text x="183" y="431" class="svg-mono">bucket2.json</text><path class="muted-wire" d="M36 513H700"/><text x="36" y="558" class="svg-error">#428  child-2  cancelled</text><text x="36" y="607" class="svg-error">local_status: incomplete</text></svg></div></div>
       </div><div class="scene-plane">
-        <div class="scene-topline"><span><span class="i18n" lang="zh">文件交付与任务结束</span><span class="i18n" lang="en">Artifacts and the episode endpoint</span></span><code>scheduler-selective-replan-2-async-8bcd0aac</code></div>
+        <div class="scene-topline"><span><span class="i18n" lang="zh">文件交付与任务结束</span><span class="i18n" lang="en">File delivery and run termination</span></span><code>scheduler-selective-replan-2-async-8bcd0aac</code></div>
         <div class="scene-workspace"><div class="record-column"><div class="archive-event" data-event="0"><div class="event-label"><b>#265</b><span>01:27.469</span><span>child_path_promotion_result</span></div><pre>{
   &quot;child_id&quot;: &quot;child-1&quot;,
   &quot;destination_path&quot;: &quot;/app/task_file/output_data/plan_b1.jsonl&quot;,
@@ -153,7 +153,7 @@
 <main class="entry-main" id="main">
 <h1>Async-RBench</h1>
 <p class="entry-description"><span class="i18n" lang="zh">评测智能体在异步结果到达时的任务执行与调整。</span><span class="i18n" lang="en">A benchmark for agents working with asynchronous results.</span></p>
-<a class="enter-link" href="/benchmark/"><span class="i18n" lang="zh">进入测评</span><span class="i18n" lang="en">Enter benchmark</span><span class="entry-arrow" aria-hidden="true">→</span></a>
+<a class="enter-link" href="/benchmark/"><span class="i18n" lang="zh">进入测评</span><span class="i18n" lang="en">Explore the benchmark</span><span class="entry-arrow" aria-hidden="true">→</span></a>
 </main>
 <script type="module" src="/compact.mjs?v=20261016-public1"></script>
 </body></html>

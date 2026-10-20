@@ -9,7 +9,7 @@ From the repository root, with Python 3.11+, the package dependencies and Node 2
 
 ```sh
 python -m unittest discover -s docs/site/tests -p "test_*.py"
-node --test docs/site/tests/logic.test.mjs
+node --test docs/site/tests/logic.test.mjs docs/site/tests/trajectory.test.mjs
 python docs/site/build.py --output dist/site --base-path /Async-RBench
 ```
 
@@ -17,6 +17,43 @@ The output must be new or empty. For a local root-path preview, use an empty bas
 path and a different output directory, then serve it with `python -m http.server`.
 No npm dependencies are required. The Pages workflow runs these checks on changes
 to the site or its public inputs and publishes only the generated artifact.
+
+## Local trajectory preview
+
+The homepage player is opt-in and does not change the default published page.
+Keep source logs, the curation manifest and exported replay data outside the
+repository. The exporter reads logs only: it never executes recorded commands,
+calls model APIs, starts Docker, or invokes the judge.
+
+```sh
+python docs/site/trajectories.py --manifest <local-curation.json> --output <new-local-replay.json>
+python docs/site/build.py --output dist/trajectory-preview --base-path "" --local-trajectories <new-local-replay.json>
+python -m http.server 8766 --bind 127.0.0.1 --directory dist/trajectory-preview
+```
+
+Each curation entry names the episode, model, source SHA-256, bilingual labels,
+milestone event sequences and explicitly reviewed command/evidence fields.
+The exporter preserves event IDs, order and elapsed time; it omits unapproved
+payloads, final answers, hidden checks and model reasoning. The hash must match
+before export. Review the selected text before including it: pattern checks are
+an additional guard, not a substitute for review. Do not serve the raw archive.
+
+The player has key-moment and all-displayed-event views, with compressed playback
+cadence over a true elapsed-time axis. "All displayed" is the filtered export,
+not every raw record. Narration is separate from source fields. Presentations,
+acknowledgments, file promotions and task success must not be conflated. Preserve
+historical workflow counts even when the current protocol differs. Single-run
+statuses do not update the frozen paper leaderboard.
+
+The selected event leads with its recorded command, command excerpt or evidence
+fields. Full exported JSON and cumulative state are available in disclosures;
+opening or focusing a record pauses playback to preserve reading position.
+Key moments form a chapter list beside the evidence (a horizontal strip on
+phones). The event picker is available in the all-displayed-event view.
+
+Preview builds reject the normal project base path; the player also refuses
+non-loopback hosts. These checks are not access control for static files: never
+upload a preview build. Default builds neither discover nor copy local logs.
 
 ## Sources and maintenance
 
@@ -35,7 +72,9 @@ to the site or its public inputs and publishes only the generated artifact.
   The private PDF is not included. The profile download is the current
   public template.
 - Update Chinese and English text together. Preserve URL paths, keyboard access,
-  responsive ranking cards and readable content without JavaScript.
+  responsive ranked lists and readable content without JavaScript. The homepage
+  presents examples and results before framework details; avoid decorative
+  section numbering, repeated promotional copy and nested card containers.
 - Use body text for explanations and reserve secondary color for short metadata.
   Consolidate repeated notes; keep provenance and runtime requirements clear.
   Check the README result tables against the same frozen data as the website.
@@ -59,6 +98,15 @@ to the site or its public inputs and publishes only the generated artifact.
   success has an independent ordering control. Tied scores share a rank;
   filtering preserves ranks from the full nine-agent comparison.
   CSV retains its original aggregate columns and appends scenario means and SDs.
+- The overview uses a three-agent preview; the complete nine-agent comparison,
+  unranked paper mean and task-success results remain on the leaderboard page.
+- Editable SVG diagrams in `assets/` explain the Async evaluation pipeline
+  and evidence flow. The narrow-screen overview uses a vertical layout.
+  Async is the main setting; Batched appears as an experimental baseline in
+  the task-success comparison and protocol, not as a parallel homepage focus.
+  These are website schematics, not manuscript figure replacements or runtime
+  traces. The duplication walkthrough is explicitly illustrative. Original
+  manuscript result figures and the frozen numerical data remain unchanged.
 - Old provisional result links show a historical-record notice. The original
   website and snapshots remain in Git history; they are not paper leaderboard rows.
 

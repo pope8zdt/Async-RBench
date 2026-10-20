@@ -146,6 +146,8 @@ def test_existing_share_link_enters_local_flow_without_modifying_site(server):
     assert parser.section_in_main
     assert parser.ids.count("main") == 1
     assert len(parser.ids) == len(set(parser.ids))
+    assert client.call('/benchmark/')[1].count('data-paper-record=') == 9
+    assert client.call('/data/community.json')[1]['entries'] == []
     assert len(parser.assets) == 2
     for asset in parser.assets:
         assert client.call(asset)[0] == 200

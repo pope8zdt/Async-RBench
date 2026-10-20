@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="650" viewBox="0 0 1440 650" role="img" aria-labelledby="title desc">
+  <title id="title">Async-RBench: asynchronous evaluation overview</title>
+  <desc id="desc">The main Async setting: public tasks feed a main agent and concurrent subagents. The main agent keeps working while a controller presents eligible results individually under controlled release rules. The main agent revises and verifies its work. An external private judge scores event responses with DRS and task success with S separately. Up to three subagents run concurrently; extra work queues.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#343b42"/></marker>
+    <style>text{font-family:Georgia,'Times New Roman',serif;fill:#26333b;font-size:20px}.title{font-size:25px;font-weight:600}.label{font-size:17px}.note{font:16px Arial,sans-serif;fill:#45535b}.box{stroke:#58636b;stroke-width:1.6;rx:8}.flow{fill:none;stroke:#343b42;stroke-width:1.7;marker-end:url(#arrow)}.wire{fill:none;stroke:#343b42;stroke-width:1.7}.step{font:600 14px Arial,sans-serif;letter-spacing:1.2px;fill:#58656c}</style>
+  </defs>
+  <rect width="1440" height="650" fill="#fff"/>
+  <text x="30" y="33" class="step">01  PUBLIC TASKS</text><text x="321" y="33" class="step">02  ASYNCHRONOUS EXECUTION</text><text x="790" y="33" class="step">03  RESPONSE</text><text x="1090" y="33" class="step">04  EVALUATION</text>
+  <rect class="box" x="24" y="58" width="244" height="494" fill="#e8f0df" stroke="#87977e"/>
+  <text class="title" x="146" y="101" text-anchor="middle">Task package</text>
+  <rect class="box" x="45" y="139" width="202" height="75" fill="#fff9df"/><text x="146" y="172" text-anchor="middle">User goal</text><text class="label" x="146" y="197" text-anchor="middle">What to accomplish</text>
+  <path class="flow" d="M146 214V245"/>
+  <rect class="box" x="45" y="249" width="202" height="75" fill="#d9eef0"/><text x="146" y="281" text-anchor="middle">Input materials</text><text class="label" x="146" y="306" text-anchor="middle">Files · initial state</text>
+  <path class="flow" d="M146 324V355"/>
+  <rect class="box" x="45" y="359" width="202" height="75" fill="#e2e7f6"/><text x="146" y="391" text-anchor="middle">Initial subtasks</text><text class="label" x="146" y="416" text-anchor="middle">Workstream contracts</text>
+  <text x="146" y="483" text-anchor="middle">200 tasks</text><text class="note" x="146" y="511" text-anchor="middle">5 sources · 8 scenarios</text>
+  <path class="flow" d="M268 176H312"/>
+  <rect class="box" x="316" y="58" width="422" height="494" fill="#dfeaf5" stroke="#8195aa"/>
+  <text class="title" x="527" y="101" text-anchor="middle">Async agent runtime</text>
+  <rect class="box" x="342" y="139" width="370" height="75" fill="#fff9df"/><text x="527" y="171" text-anchor="middle">Main agent</text><text class="label" x="527" y="196" text-anchor="middle">Plan · act · integrate results</text>
+  <path class="wire" d="M527 214V242H397M527 242H657"/>
+  <path class="flow" d="M397 242V268"/><path class="flow" d="M527 242V268"/><path class="flow" d="M657 242V268"/>
+  <rect class="box" x="342" y="272" width="110" height="57" fill="#d5eee3"/><text x="397" y="307" text-anchor="middle">Child 1</text>
+  <rect class="box" x="472" y="272" width="110" height="57" fill="#d5eee3"/><text x="527" y="307" text-anchor="middle">Child 2</text>
+  <rect class="box" x="602" y="272" width="110" height="57" fill="#d5eee3"/><text x="657" y="307" text-anchor="middle">Child 3</text>
+  <path class="wire" d="M397 329V376H657V329M527 329V376"/><path class="flow" d="M527 376V401"/>
+  <rect class="box" x="342" y="405" width="370" height="76" fill="#f9e1e6"/><text x="527" y="437" text-anchor="middle">Async result delivery</text><text class="label" x="527" y="463" text-anchor="middle">Present eligible results individually</text>
+  <path class="flow" d="M712 444H726V176H714"/>
+  <text class="note" x="527" y="508" text-anchor="middle">Up to 3 live subagents; extra work queues</text>
+  <text class="note" x="527" y="534" text-anchor="middle">Main agent continues as results arrive</text>
+  <path class="flow" d="M738 176H760V176H783"/>
+  <rect class="box" x="787" y="58" width="250" height="494" fill="#fff5df" stroke="#a6977a"/>
+  <text class="title" x="912" y="101" text-anchor="middle">Respond &amp; replan</text>
+  <rect class="box" x="807" y="139" width="210" height="75" fill="#f9e1e6"/><text x="912" y="171" text-anchor="middle">Main response</text><text class="label" x="912" y="196" text-anchor="middle">After result presentation</text>
+  <path class="flow" d="M912 214V248"/>
+  <rect class="box" x="807" y="252" width="210" height="152" fill="#fffdf4"/>
+  <text class="label" x="823" y="283">C   Change affected work</text><text class="label" x="823" y="315">R   Preserve valid work</text><text class="label" x="823" y="347">F   Avoid forbidden acts</text><text class="label" x="823" y="379">V   Verify revised state</text>
+  <path class="flow" d="M912 404V434"/>
+  <rect class="box" x="807" y="438" width="210" height="62" fill="#d9eef0"/><text x="912" y="464" text-anchor="middle">Actions &amp; artifacts</text><text class="label" x="912" y="487" text-anchor="middle">Recorded evidence</text>
+  <rect x="1085" y="58" width="331" height="494" rx="8" fill="#f8e8eb" stroke="#947e87" stroke-width="1.6" stroke-dasharray="6 5"/>
+  <text class="title" x="1250" y="101" text-anchor="middle">External judge</text>
+  <rect class="box" x="1109" y="139" width="282" height="75" fill="#fff9df"/><text x="1250" y="171" text-anchor="middle">Event response contract</text><text class="label" x="1250" y="196" text-anchor="middle">Private requirements &amp; checks</text>
+  <path class="flow" d="M1250 214V249"/>
+  <rect class="box" x="1109" y="253" width="282" height="81" fill="#d5eee3"/><text x="1250" y="286" text-anchor="middle">Process P + outcome O</text><text class="label" x="1250" y="313" text-anchor="middle">DRS = 100 × (P + O) / 2</text>
+  <text class="note" x="1250" y="369" text-anchor="middle">Event response and task success: separate</text>
+  <rect class="box" x="1109" y="391" width="282" height="81" fill="#e2e7f6"/><text x="1250" y="424" text-anchor="middle">Task success S</text><text class="label" x="1250" y="451" text-anchor="middle">Binary completion of task goals</text>
+  <text class="note" x="1250" y="522" text-anchor="middle">Judge stays outside the public package</text>
+  <path class="wire" d="M1017 469H1058V294"/><path class="flow" d="M1058 294H1107"/><path class="flow" d="M1058 432H1107"/>
+  <text class="note" x="30" y="592">Async is the main evaluation setting: continue working, integrate new evidence, revise and verify.</text>
+  <text class="note" x="30" y="623">Public tasks and framework</text><path d="M240 618H278" stroke="#343b42" stroke-width="1.6"/><text class="note" x="295" y="623">Execution &amp; evidence flow</text><rect x="535" y="607" width="30" height="19" rx="3" fill="#f8e8eb" stroke="#947e87" stroke-dasharray="4 3"/><text class="note" x="578" y="623">Evaluator-private boundary</text>
+</svg>

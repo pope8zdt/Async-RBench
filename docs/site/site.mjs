@@ -24,6 +24,7 @@ languageButton.addEventListener('click', () => {
   savePreferences();
   refreshLabels();
   updateTasks();
+  document.dispatchEvent(new Event('site-language-change'));
 });
 themeButton.addEventListener('click', () => {
   root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -44,7 +45,7 @@ function connectResults(bodyId, metricId, emptyId) {
   const metric = document.getElementById(metricId);
   function updateResults() {
     const key = metric?.value || 'drs';
-    const ranked = rankResults(data.paper.records, key);
+    const ranked = rankResults(data.paper.records, key).filter(record => resultRows.has(record.id));
     const shown = new Set(filterResults(ranked, modelSearch?.value || '').map(row => row.id));
     for (const record of ranked) {
       const row = resultRows.get(record.id);
@@ -89,3 +90,9 @@ document.getElementById('task-reset')?.addEventListener('click', () => {
   updateTasks();
 });
 updateTasks();
+
+if (document.getElementById('trajectory-player')) {
+  import('./trajectory-player.mjs').then(module => module.mountTrajectoryPlayer()).catch(() => {
+    document.querySelector('#trajectory-player .trace-loading').textContent = choose('回放未能加载，请刷新本地预览。', 'Replay could not load. Refresh the local preview.');
+  });
+}

@@ -12,6 +12,7 @@ import shutil
 import yaml
 
 from pages import MODEL_ICONS, render_pages
+from trajectories import validate_bundle
 
 SITE = Path(__file__).resolve().parent
 ROOT = SITE.parents[1]
@@ -76,15 +77,18 @@ def load_public_data(root: Path):
     return corpus, paper
 
 
-def build_site(repo_root: Path, output: Path, base_path: str):
+def build_site(repo_root: Path, output: Path, base_path: str, local_trajectories: Path | None = None):
     if base_path and not re.fullmatch(r"/(?:[A-Za-z0-9_-]+/)*[A-Za-z0-9_-]+", base_path):
         raise ValueError("Base path must be empty or a slash-prefixed project path without a trailing slash")
     output = output.resolve()
     # Never delete, merge into, or overwrite an existing directory's contents.
     if output.exists() and (not output.is_dir() or any(output.iterdir())):
         raise ValueError("Output must be a new or empty directory")
+    if local_trajectories is not None and base_path:
+        raise ValueError('Local trajectory previews must use an empty base path, not the publication path')
+    trajectories = validate_bundle(read_json(local_trajectories)) if local_trajectories else None
     corpus, paper = load_public_data(repo_root)
-    pages = render_pages(base_path, corpus, paper)
+    pages = render_pages(base_path, corpus, paper, trajectories=trajectories)
     output.mkdir(parents=True, exist_ok=True)
     for relative, contents in pages.items():
         target = output / relative
@@ -94,14 +98,21 @@ def build_site(repo_root: Path, output: Path, base_path: str):
     assets.mkdir()
     for name in ("site.css", "site.mjs", "logic.mjs"):
         shutil.copyfile(SITE / name, assets / name)
+    if trajectories:
+        for name in ('trajectory-player.mjs', 'trajectory-logic.mjs'):
+            shutil.copyfile(SITE / name, assets / name)
     for name in ("overview.png", "benchmark-mechanism.png", "drs-validation.png", "full-rebuild.png"):
         shutil.copyfile(repo_root / "assets" / name, assets / name)
+    for name in ("evaluation-overview.svg", "evaluation-overview-mobile.svg", "delivery-modes.svg", "evaluation-loop.svg"):
+        shutil.copyfile(SITE / "assets" / name, assets / name)
     icons = assets / "model-icons"
     icons.mkdir()
     for name in sorted(set(MODEL_ICONS.values()) | {"LICENSE", "README.md"}):
         shutil.copyfile(SITE / "assets/model-icons" / name, icons / name)
     data_dir = output / "data"
     data_dir.mkdir()
+    if trajectories:
+        (data_dir / 'trajectories.local.json').write_text(json.dumps(trajectories, ensure_ascii=False), encoding='utf-8')
     for name, data in (("corpus.json", corpus), ("leaderboard.json", paper)):
         (data_dir / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     with (data_dir / "leaderboard.csv").open("w", newline="", encoding="utf-8") as stream:
@@ -122,5 +133,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=ROOT / "dist/site")
     parser.add_argument("--base-path", default="/Async-RBench")
+    parser.add_argument('--local-trajectories', type=Path, help='Reviewed local-only trajectory JSON; never included by default')
     args = parser.parse_args()
-    print(json.dumps(build_site(ROOT, args.output, args.base_path)))
+    print(json.dumps(build_site(ROOT, args.output, args.base_path, args.local_trajectories)))

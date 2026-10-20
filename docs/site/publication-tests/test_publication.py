@@ -12,9 +12,10 @@ spec.loader.exec_module(publication)
 
 class PublicationTests(unittest.TestCase):
     def test_project_prefix_is_idempotent(self):
-        text = '<a href="/benchmark/#guide">Run</a><a href="#guide">Jump</a><a href="https://github.com/x">Source</a><img src="/assets/a.svg">'
+        text = '<a href="/benchmark/#guide">Run</a><a href="/submission-guide/">Submit guide</a><a href="#guide">Jump</a><a href="https://github.com/x">Source</a><img src="/assets/a.svg">'
         result = publication.prefix_paths(text, '/Async-RBench')
         self.assertIn('href="/Async-RBench/benchmark/#guide"', result)
+        self.assertIn('href="/Async-RBench/submission-guide/"', result)
         self.assertIn('src="/Async-RBench/assets/a.svg"', result)
         self.assertIn('href="#guide"', result)
         self.assertIn('href="https://github.com/x"', result)
@@ -58,16 +59,17 @@ class PublicationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)/'site'
             result = publication.build(SITE/'published', output, '/Async-RBench')
-            self.assertEqual(result['pages'], 22)
+            self.assertEqual(result['pages'], 23)
             self.assertFalse(list(output.rglob('*.local.json')))
             self.assertFalse((output/'docs').exists())
             page = (output/'benchmark/index.html').read_text(encoding='utf-8')
-            self.assertIn('/Async-RBench/data/trajectories.public.json', page)
+            browser = (output/'tasks/index.html').read_text(encoding='utf-8')
+            self.assertIn('/Async-RBench/data/trajectories.public.json', browser)
             self.assertNotIn('Local preview', page)
             self.assertNotIn('Put your agent to the test.', page)
-            self.assertIn('Run an evaluation', page)
-            self.assertIn('data-github-submission-root', page)
-            self.assertIn('data-static-mode="true"', page)
+            self.assertNotIn('id="guide"', page)
+            self.assertNotIn('data-github-submission-root', page)
+            self.assertIn('data-submission-status="closed"', page)
             self.assertIn('data-community-url="/Async-RBench/data/community.json"', page)
             self.assertIn('href="#participate"', page)
             for name in ('github-app.mjs', 'github-static.mjs', 'github-style.css'):

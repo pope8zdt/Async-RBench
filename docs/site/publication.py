@@ -8,8 +8,10 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+from html import escape
 from html.parser import HTMLParser
 import json
+import importlib.util
 from pathlib import Path
 import re
 import shutil
@@ -19,6 +21,9 @@ from async_rbench.submissions.artifacts import strict_json
 from async_rbench.submissions.publication import validate_public_board
 
 SITE = Path(__file__).resolve().parent
+_views_spec = importlib.util.spec_from_file_location('publication_views', SITE / 'publication_views.py')
+_views = importlib.util.module_from_spec(_views_spec)
+_views_spec.loader.exec_module(_views)
 TEXT_EXTENSIONS = {'.html', '.css', '.mjs', '.svg', '.json', '.yaml', '.csv', '.cff', '.md', '.txt'}
 ALLOWED_EXTENSIONS = TEXT_EXTENSIONS | {'.png', '.pdf', '.woff2'}
 CASE_POINTS = {
@@ -85,7 +90,7 @@ def prefix_paths(content: str, base: str) -> str:
     if not base:
         return content
     # All public route/asset namespaces are explicit; /app in evidence is not a URL.
-    roots = r'(?:assets/|data/|paper/|runs/|benchmark/|entry/|tasks/|leaderboard/|evaluate/|overview/|trajectories/|CITATION\.cff|index\.html|[a-z][a-z-]*\.(?:css|mjs))'
+    roots = r'(?:assets/|data/|paper/|runs/|benchmark/|entry/|tasks/|leaderboard/|evaluate/|overview/|trajectories/|submission-guide/|CITATION\.cff|index\.html|[a-z][a-z-]*\.(?:css|mjs))'
     content = re.sub(r'([\"\x27`(])/(?=' + roots + r')', lambda m: m[1] + base + '/', content)
     content = re.sub(r'(href=[\"\x27])/(\??[\"\x27])', lambda m: m[1] + base + '/' + m[2], content)
     content = content.replace('data-base=""', f'data-base="{base}"')
@@ -172,7 +177,9 @@ def validate_snapshot(source: Path) -> None:
     validate_site(source)
 
 
-def build(source: Path, output: Path, base: str) -> dict:
+def build(source: Path, output: Path, base: str, participation: str = 'legacy', repository_config=None) -> dict:
+    if participation not in {'legacy', 'github-private'}:
+        raise ValueError('Unsupported participation mode')
     validate_snapshot(source)
     source, output = source.resolve(), output.resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
@@ -180,6 +187,7 @@ def build(source: Path, output: Path, base: str) -> dict:
     if output.exists() and any(output.iterdir()):
         raise ValueError('Use a new or empty output directory')
     output.mkdir(parents=True, exist_ok=True)
+    editorial_snapshot = 'data-editorial-home' in (source/'benchmark/index.html').read_text(encoding='utf-8')
     for file in source.rglob('*'):
         if not file.is_file():
             continue
@@ -187,21 +195,51 @@ def build(source: Path, output: Path, base: str) -> dict:
         target.parent.mkdir(parents=True, exist_ok=True)
         if file.suffix in {'.html', '.css', '.mjs'}:
             content = file.read_text(encoding='utf-8')
-            if file.relative_to(source).as_posix() == 'benchmark/index.html':
-                ui = SITE.parent / 'submissions/ui'
-                section = (ui/'github-section.html').read_text(encoding='utf-8').replace(
-                    'data-github-submission-root', 'data-github-submission-root data-static-mode="true" data-community-url="/data/community.json"')
+            if file.suffix == '.html' and editorial_snapshot:
+                content = _views.legacy_page(file.relative_to(source).as_posix()) or content
+            editorial = file.suffix == '.html' and 'data-editorial-home' in content
+            if '<!-- MARGIN_BACKGROUND -->' in content:
+                content = _views.render(content, source)
+            if editorial or file.suffix == '.html' and 'data-submission-guide' in content:
+                content = _views.configure_participation(content, repository_config)
+            if file.relative_to(source).as_posix() == 'benchmark/index.html' and not editorial:
+                if participation == 'github-private':
+                    ui = SITE.parent / 'submissions/github-private-ui'
+                    section = (ui/'section.html').read_text(encoding='utf-8')
+                    if repository_config is not None:
+                        settings = repository_config
+                        if (not isinstance(settings,dict) or set(settings)!={'enabled','template','app','community_url'}
+                                or type(settings['enabled']) is not bool
+                                or not re.fullmatch(r'[A-Za-z0-9-]+/[A-Za-z0-9_.-]+',str(settings['template']))
+                                or not re.fullmatch(r'[a-z0-9-]+',str(settings['app']))
+                                or not re.fullmatch(r'https://[A-Za-z0-9-]+\.github\.io/[A-Za-z0-9_.-]+/community\.json',str(settings['community_url']))):
+                            raise ValueError('Invalid public-only repository configuration')
+                        public_settings = {k:settings[k] for k in ('enabled','template','app')}
+                        section = section.replace('data-private-repository-root', 'data-private-repository-root data-repository-config="'+escape(json.dumps(public_settings),quote=True)+'"')
+                        section = section.replace('data-community-url="/data/community.json"','data-community-url="'+escape(settings['community_url'],quote=True)+'"')
+                    includes = '<link rel="stylesheet" href="/assets/submissions/private-style.css"><script type="module" src="/assets/submissions/private-app.mjs"></script>'
+                else:
+                    ui = SITE.parent / 'submissions/ui'
+                    section = (ui/'github-section.html').read_text(encoding='utf-8').replace(
+                        'data-github-submission-root', 'data-github-submission-root data-static-mode="true" data-community-url="/data/community.json"')
+                    includes = '<link rel="stylesheet" href="/assets/submissions/github-style.css"><script type="module" src="/assets/submissions/github-app.mjs"></script>'
                 content = content.replace('href="#sharing"', 'href="#participate"')
                 content = content.replace('</main>', section + '</main>')
-                content = content.replace('</head>', '<link rel="stylesheet" href="/assets/submissions/github-style.css"><script type="module" src="/assets/submissions/github-app.mjs"></script></head>')
+                content = content.replace('</head>', includes + '</head>')
             target.write_text(prefix_paths(content, base), encoding='utf-8')
         else:
             shutil.copyfile(file, target)
     assets = output/'assets/submissions'
     assets.mkdir(parents=True, exist_ok=True)
-    for name in ('github-app.mjs', 'github-static.mjs', 'github-style.css'):
-        shutil.copyfile(SITE.parent/'submissions/ui'/name, assets/name)
-    board = validate_public_board(strict_json((SITE.parent/'submissions/community.json').read_bytes()))
+    if participation == 'github-private':
+        for name in ('app.mjs', 'style.css'):
+            shutil.copyfile(SITE.parent/'submissions/github-private-ui'/name, assets/('private-' + name))
+        from async_rbench.submissions.private_review.projection import SCHEMA
+        board = {'schema': SCHEMA, 'entries': []}
+    else:
+        for name in ('github-app.mjs', 'github-static.mjs', 'github-style.css'):
+            shutil.copyfile(SITE.parent/'submissions/ui'/name, assets/name)
+        board = validate_public_board(strict_json((SITE.parent/'submissions/community.json').read_bytes()))
     (output/'data/community.json').write_text(json.dumps(board, ensure_ascii=False, allow_nan=False, indent=2) + '\n', encoding='utf-8')
     return validate_site(output, base)
 
@@ -211,9 +249,12 @@ if __name__ == '__main__':
     parser.add_argument('--source', type=Path, default=SITE / 'published')
     parser.add_argument('--output', type=Path)
     parser.add_argument('--base-path', default='')
+    parser.add_argument('--participation',choices=['legacy','github-private'],default='legacy')
+    parser.add_argument('--repository-config',type=Path)
     args = parser.parse_args()
     if args.output:
-        print(json.dumps(build(args.source, args.output, args.base_path)))
+        settings = strict_json(args.repository_config.read_bytes()) if args.repository_config else None
+        print(json.dumps(build(args.source, args.output, args.base_path, args.participation, settings)))
     else:
         validate_snapshot(args.source)
         print(json.dumps(validate_site(args.source)))

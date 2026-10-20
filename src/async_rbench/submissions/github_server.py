@@ -17,6 +17,9 @@ class GitHubPortalHandler(Handler):
         try:
             self.guard()
             path = urlsplit(self.path).path
+            if path == '/data/community.json':
+                from .publication import public_board
+                return self.send(public_board(self.server.store))
             if path == "/api/community":
                 return self.send({"entries": self.server.store.entries(), "verification": "maintainer-reviewed"})
             if path.startswith("/api/"):

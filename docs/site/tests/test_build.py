@@ -10,6 +10,7 @@ from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
+import xml.etree.ElementTree as ET
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -23,6 +24,9 @@ class Links(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         self.links.extend(value for key, value in attrs if key in {"href", "src"})
+        for key, value in attrs:
+            if key == "srcset":
+                self.links.extend(candidate.strip().split()[0] for candidate in value.split(",") if candidate.strip())
 
 
 class ScoreMeters(HTMLParser):
@@ -213,8 +217,9 @@ class WebsiteBuildTests(unittest.TestCase):
                 parser = ScoreMeters()
                 parser.feed((output / route).read_text(encoding="utf-8"))
                 drs_meters = [m for m in parser.meters if "DRS" in m["aria-label"]]
-                self.assertEqual([float(m["value"]) for m in drs_meters],
-                                 [45.1, 39.7, 38.2, 33.4, 31.1, 30.6, 29.8, 26.1, 19.2, 32.6])
+                expected = ([45.1, 39.7, 38.2] if route == "index.html" else
+                            [45.1, 39.7, 38.2, 33.4, 31.1, 30.6, 29.8, 26.1, 19.2, 32.6])
+                self.assertEqual([float(m["value"]) for m in drs_meters], expected)
                 for meter in drs_meters:
                     self.assertEqual((meter["min"], meter["max"]), ("0", "100"))
                     self.assertIn("DRS", meter["aria-label"])
@@ -235,7 +240,7 @@ class WebsiteBuildTests(unittest.TestCase):
             parser = RankedResults()
             parser.feed((output / route).read_text(encoding="utf-8"))
             self.assertEqual(parser.table_count, 0)
-            self.assertEqual(len(parser.lists.get("result-rows", [])), 9)
+            self.assertEqual(len(parser.lists.get("result-rows", [])), 3 if route == "index.html" else 9)
             self.assertEqual(parser.lists["result-rows"][0], "claude-sonnet-5")
             sonnet = parser.items["claude-sonnet-5:result-rows"]
             self.assertEqual(sonnet["rank"], "1")
@@ -246,8 +251,9 @@ class WebsiteBuildTests(unittest.TestCase):
             self.assertEqual(fields["calls"]["text"], "77.1")
             self.assertEqual([fields[k]["bold"] for k in keys],
                              [True, True, False, False, False, True, False, False])
-            self.assertEqual([parser.items["drs-mean"]["fields"][k]["text"] for k in keys + ["calls"]],
-                             ["29.1", "40.2", "31.2", "8.6", "21.3", "12.2", "57.5", "60.7", "85.7"])
+            if route != "index.html":
+                self.assertEqual([parser.items["drs-mean"]["fields"][k]["text"] for k in keys + ["calls"]],
+                                 ["29.1", "40.2", "31.2", "8.6", "21.3", "12.2", "57.5", "60.7", "85.7"])
 
     def test_success_ranked_list_keeps_reported_rates_deltas_and_mean(self):
         output = self.build()
@@ -265,7 +271,7 @@ class WebsiteBuildTests(unittest.TestCase):
             parser = RankedResults()
             parser.feed((output / route).read_text(encoding="utf-8"))
             cards = [item for key, item in parser.items.items() if key.endswith(":result-rows") or key == "drs-mean"]
-            self.assertEqual(len(cards), 10)
+            self.assertEqual(len(cards), 3 if route == "index.html" else 10)
             for card in cards:
                 self.assertNotIn("disclosure", card, "Scenario scores must not require an expand action")
                 self.assertCountEqual(card["fields"],
@@ -286,6 +292,8 @@ class WebsiteBuildTests(unittest.TestCase):
             parser.feed((output / route).read_text(encoding="utf-8"))
             for list_id in lists:
                 for model, filename in icons.items():
+                    if route == "index.html" and model not in list(icons)[:3]:
+                        continue
                     images = parser.items[model + ":" + list_id]["icons"]
                     self.assertEqual(len(images), 1, (route, model))
                     self.assertEqual(images[0]["src"], f"/Async-RBench/assets/model-icons/{filename}")
@@ -340,6 +348,37 @@ class WebsiteBuildTests(unittest.TestCase):
         page = (output / "tasks/index.html").read_text(encoding="utf-8")
         self.assertTrue('id="scenarios"' in page, "Scenario reference is missing")
         self.assertLess(page.index('id="task-search"'), page.index('id="scenarios"'))
+
+    def test_home_leads_with_examples_and_results_before_protocol_details(self):
+        output = self.build()
+        page = (output / "index.html").read_text(encoding="utf-8")
+        sections = ['id="example"', 'id="results"',
+                    'id="overview"', 'id="coverage"', 'id="start"']
+        for section in sections:
+            self.assertIn(section, page)
+        self.assertEqual(sorted(page.index(s) for s in sections), [page.index(s) for s in sections])
+        self.assertIn('data-example="illustrative"', page)
+        self.assertIn('/Async-RBench/leaderboard/', page)
+        links = Links()
+        links.feed(page)
+        self.assertIn('/Async-RBench/docs/#baseline', links.links)
+        protocol = (output / 'docs/index.html').read_text(encoding='utf-8')
+        self.assertTrue('id="baseline"' in protocol, 'Baseline comparison destination is missing')
+        self.assertTrue('/assets/delivery-modes.svg' in protocol, 'Comparison diagram must remain accessible from the protocol')
+
+    def test_new_diagrams_are_local_accessible_vector_assets(self):
+        output = self.build()
+        for filename in ("evaluation-overview.svg", "evaluation-overview-mobile.svg",
+                         "delivery-modes.svg", "evaluation-loop.svg"):
+            asset = output / "assets" / filename
+            self.assertTrue(asset.is_file(), filename)
+            svg = ET.parse(asset).getroot()
+            self.assertEqual(svg.tag, "{http://www.w3.org/2000/svg}svg")
+            self.assertTrue(svg.get("viewBox"))
+            self.assertIsNotNone(svg.find("{http://www.w3.org/2000/svg}title"))
+            self.assertIsNotNone(svg.find("{http://www.w3.org/2000/svg}desc"))
+            for element in svg.iter():
+                self.assertNotIn(element.tag.rsplit("}", 1)[-1], ("script", "foreignObject", "image"))
 
     def test_each_page_has_one_bilingual_main_heading(self):
         output = self.build()

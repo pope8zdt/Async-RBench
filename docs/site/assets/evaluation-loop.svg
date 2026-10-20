@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="560" viewBox="0 0 1280 560" role="img" aria-labelledby="title desc">
+  <title id="title">Event response evidence and external evaluation</title>
+  <desc id="desc">The scoring interval starts when the target result enters a real main-model request and continues through participant termination, across subsequent responses and actions. Artifact states are observed at command boundaries; later repairs do not erase earlier forbidden actions. A private event response contract evaluates process and event outcome for Async DRS. Binary task success is checked separately in both delivery modes.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#343b42"/></marker><style>text{font-family:Georgia,'Times New Roman',serif;fill:#26333b;font-size:22px}.title{font-size:27px;font-weight:600}.note{font:18px Arial,sans-serif}.box{stroke:#647079;stroke-width:1.6;rx:8}.flow{fill:none;stroke:#343b42;stroke-width:1.7;marker-end:url(#arrow)}.wire{fill:none;stroke:#343b42;stroke-width:1.6}</style></defs>
+  <rect width="1280" height="560" fill="#fff"/>
+  <rect class="box" x="22" y="24" width="725" height="440" fill="#dfeaf5"/><text class="title" x="48" y="68">Scoring interval: presentation → termination</text>
+  <rect class="box" x="46" y="106" width="190" height="86" fill="#e8f0df"/><text x="141" y="140" text-anchor="middle">Before-state</text><text x="141" y="169" text-anchor="middle">S⁻</text>
+  <path class="flow" d="M236 149H282"/>
+  <rect class="box" x="286" y="106" width="198" height="86" fill="#f9e1e6"/><text x="385" y="140" text-anchor="middle">Result presented</text><text class="note" x="385" y="169" text-anchor="middle">Real main request</text>
+  <path class="flow" d="M484 149H530"/>
+  <rect class="box" x="534" y="106" width="189" height="86" fill="#fff9df"/><text x="628" y="140" text-anchor="middle">Main responses</text><text class="note" x="628" y="169" text-anchor="middle">All later actions</text>
+  <path class="flow" d="M628 192V239"/>
+  <rect class="box" x="534" y="243" width="189" height="80" fill="#e8f0df"/><text x="628" y="276" text-anchor="middle">Terminal state</text><text class="note" x="628" y="305" text-anchor="middle">Participant ends</text>
+  <text class="note" x="267" y="256" text-anchor="middle">Observations accumulate</text><text class="note" x="267" y="284" text-anchor="middle">across response turns</text>
+  <path class="wire" d="M141 192V360H628V323M385 192V360"/><path class="flow" d="M385 360V386"/>
+  <rect class="box" x="46" y="390" width="677" height="50" fill="#d9eef0"/><text x="385" y="423" text-anchor="middle">Evidence: state changes · retained work · executed checks</text>
+  <rect x="794" y="24" width="464" height="440" rx="8" fill="#f8e8eb" stroke="#947e87" stroke-width="1.6" stroke-dasharray="6 5"/>
+  <text class="title" x="822" y="68">External judge</text><text class="note" x="1232" y="68" text-anchor="end">DRS: Async only</text>
+  <rect class="box" x="820" y="106" width="412" height="60" fill="#fff9df"/><text x="1026" y="144" text-anchor="middle">Private event response contract</text><path class="flow" d="M1026 166V197"/>
+  <rect class="box" x="820" y="201" width="412" height="77" fill="#d5eee3"/><text x="1026" y="233" text-anchor="middle">C · R · F · V → process P</text><text class="note" x="1026" y="260" text-anchor="middle">Applicable components only</text><path class="flow" d="M1026 278V307"/>
+  <rect class="box" x="820" y="311" width="412" height="59" fill="#d9eef0"/><text x="1026" y="349" text-anchor="middle">DRS = 100 × (P + O) / 2</text>
+  <rect class="box" x="820" y="390" width="412" height="50" fill="#e2e7f6"/><text x="1026" y="423" text-anchor="middle">S: separate binary task-goal check</text>
+  <path class="wire" d="M723 415H770V240"/><path class="flow" d="M770 240H818"/><path class="flow" d="M770 340H818"/><path class="flow" d="M770 415H818"/>
+  <text class="note" x="25" y="511">O is the event's final outcome. Later repairs do not erase forbidden actions already recorded.</text>
+  <text class="note" x="25" y="542">The runtime records artifact states at command boundaries; this diagram does not imply continuous observation.</text>
+</svg>

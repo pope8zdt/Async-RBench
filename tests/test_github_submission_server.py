@@ -43,6 +43,9 @@ def test_main_page_has_only_public_participation_and_no_role_switch(local_servic
     assert controls.views == ["submit", "community"]
     assert "submission-identity" not in controls.ids
     assert len(controls.ids) == len(set(controls.ids))
+    assert '<!-- PAPER_ROWS -->' not in page
+    assert page.count('data-paper-record=') == 9
+    assert client.call('/data/community.json')[1]['schema'] == 'async-rbench-community-board-1'
     for url in controls.assets: assert client.call(url)[0] == 200
     for path in ["/api/session", "/api/demo-package", "/api/submissions", "/participate/app.mjs"]:
         assert client.call(path)[0] == 404
