@@ -71,7 +71,7 @@ def configure_participation(content, settings):
     """Opt-in rendering only; never activates a GitHub workflow or grants access."""
     guide = 'data-submission-guide' in content
     guide_link = ('' if guide else '<a class="text-link" href="/submission-guide/">'
-                  + bi('Submission and review guide', '提交与审核说明') + ' →</a>')
+                  + bi('Submission guide', '提交与审核说明') + ' →</a>')
     controls = ('<p class="submission-status">' + bi(
         'PR submissions are not open yet. The workflow is being tested locally.',
         'PR 提交尚未开放，工作流正在本地测试。') + '</p>' + guide_link)
@@ -97,7 +97,9 @@ def configure_participation(content, settings):
                          lambda m: m[1] + '@' + esc(settings['maintainer']) + m[2], content)
     if enabled:
         controls = ('<div class="hero-links"><a class="button" href="https://github.com/'
-                   + esc(settings['template']) + '/generate">' + bi('Create a private submission repository', '创建私有提交仓库')
+                   + esc(settings['template']) + '/generate">' + bi(
+                       'Create a private submission repository' if guide else 'Create private repository',
+                       '创建私有提交仓库')
                    + '</a><a href="https://github.com/apps/' + esc(settings['app']) + '/installations/new">'
                    + bi('Install the review App', '安装审核 App') + ' ↗</a></div><p>'
                    + bi('Choose Private and invite @' + settings['maintainer'] + ' as a collaborator before opening your PR. Install the App on only this repository.',
