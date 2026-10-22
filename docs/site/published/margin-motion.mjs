@@ -8,16 +8,20 @@ function mount(){
   const media=matchMedia('(prefers-reduced-motion: reduce)');
   let paused=false;
   try{paused=sessionStorage.getItem('margin-motion-paused')==='true';}catch{}
-  const control=document.createElement('button');
-  control.type='button';control.className='margin-motion-control';
-  document.querySelector('footer')?.append(control);
+  const control=document.querySelector('[data-submission-guide]')?null:document.createElement('button');
+  if(control){
+    control.type='button';control.className='margin-motion-control';
+    document.querySelector('footer')?.append(control);
+  }
   function update(){
     backdrop.dataset.moving=String(canMove({hidden:document.hidden,reduced:media.matches,paused}));
-    control.textContent=motionLabel(paused,document.documentElement.lang);
-    control.setAttribute('aria-pressed',String(paused));
-    control.hidden=media.matches;
+    if(control){
+      control.textContent=motionLabel(paused,document.documentElement.lang);
+      control.setAttribute('aria-pressed',String(paused));
+      control.hidden=media.matches;
+    }
   }
-  control.addEventListener('click',()=>{
+  control?.addEventListener('click',()=>{
     paused=!paused;
     try{sessionStorage.setItem('margin-motion-paused',String(paused));}catch{}
     update();

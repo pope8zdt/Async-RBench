@@ -123,18 +123,20 @@ class HomepageTests(unittest.TestCase):
             self.assertIn('--bar-height:100%', bars['4+']['style'])
             self.assertIn('--bar-height:0%', bars['3']['style'])
 
-    def test_guide_navigation_reaches_submission_review_and_sync_instructions(self):
+    def test_participant_guide_links_resolve_without_private_maintainer_destinations(self):
         guide = (self.output / 'submission-guide/index.html').read_text(encoding='utf-8')
         nodes = Elements(guide).elements
         ids = {attrs.get('id') for _, attrs in nodes}
         links = {attrs.get('href') for tag, attrs in nodes if tag == 'a'}
-        for target in ('participant-steps', 'reviewer-steps', 'sync-status'):
+        for target in ('participant-steps', 'sync-status'):
             self.assertIn(target, ids)
             self.assertIn('#' + target, links)
+        for link in links:
+            if link and link.startswith('#'):
+                self.assertIn(link[1:], ids)
+        self.assertNotIn('reviewer-steps', ids)
         self.assertIn('/Async-RBench/benchmark/#community-panel', links)
-        self.assertIn(
-            'https://github.com/pope8zdt/Async-RBench-reviews/actions/workflows/private-review.yml',
-            links)
+        self.assertFalse(any('/Async-RBench-reviews/' in link for link in links if link))
 
     def test_citation_is_inline_and_copyable(self):
         self.assertIn('@misc{async_rbench', self.html)
@@ -153,7 +155,7 @@ class HomepageTests(unittest.TestCase):
         guide = (self.output / 'submission-guide/index.html').read_text(encoding='utf-8')
         nodes = Elements(guide).elements
         self.assertTrue(any(a.get('id') == 'participant-steps' for _, a in nodes))
-        self.assertTrue(any(a.get('id') == 'reviewer-steps' for _, a in nodes))
+        self.assertTrue(any(a.get('id') == 'sync-status' for _, a in nodes))
         self.assertFalse(any(tag in {'form', 'input'} for tag, _ in nodes))
         self.assertFalse(any('/generate' in a.get('href', '') or '/installations/new' in a.get('href', '')
                              for _, a in nodes))

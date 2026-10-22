@@ -40,7 +40,10 @@ Edit the snapshot's HTML, CSS and modules directly. Keep diagrams in English;
 Chinese and English interface text lives in paired language spans or module
 labels. `publication_views.py` fills the marked placeholders from the protected
 public data at build time; do not hand-edit leaderboard numbers in HTML.
-Preserve pause controls, reduced-motion styles and keyboard access.
+Preserve reduced-motion styles and keyboard access. The submission guide omits
+the footer background-pause button at the owner's request; other pages retain
+their controls. Background motion still respects reduced-motion preferences
+and pauses while the page is hidden.
 Evaluation instructions live in the repository, not in a homepage wizard.
 After editing, run both test suites and inspect desktop views before publishing.
 The owner requests desktop-only visual work; retain existing small-screen rules
@@ -130,9 +133,14 @@ the maintainer, template and App. Both pages stay closed by default. An authoriz
 enabled build shows one submission button on the homepage; repository creation
 and review-access links appear beside their steps in the guide. Neither page
 uploads files or grants permissions. Disabling a previously enabled snapshot
-removes those setup links again. Participant submission, maintainer review and
-sync confirmation have separate linked sections. The guide distinguishes an
-Actions run succeeding from a particular result appearing in the Community tab.
+removes those setup links again. The public guide covers participant submission
+and checking the community result; maintainer operations remain documented in
+`../submissions/PR_REVIEW.md`, not on this page. Do not link participants to the
+private central workflow. Explain where to read their PR receipt, distinguish
+validation from approval and a `published` receipt from a cached page, and use
+only fields visible on the community leaderboard when describing how to find
+an entry. Missing results should be discussed on the original private PR without
+duplicating submissions or exposing evidence.
 
 Build without a repository configuration for the local preview so community
 loading stays local too. To verify the release configuration locally without
